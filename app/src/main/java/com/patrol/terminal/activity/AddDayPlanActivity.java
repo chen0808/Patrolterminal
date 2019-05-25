@@ -56,12 +56,7 @@ public class AddDayPlanActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
-    @BindView(R.id.month_plan_name)
-    EditText monthPlanName;
-    @BindView(R.id.month_plan_date)
-    TextView monthPlanDate;
-    @BindView(R.id.month_plan_class)
-    TextView monthPlanClass;
+
     @BindView(R.id.month_plan_type)
     TextView monthPlanType;
     @BindView(R.id.month_plan_month)
@@ -112,7 +107,6 @@ public class AddDayPlanActivity extends BaseActivity {
         week = DateUatil.getWeekNum() + "";
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         inteDate();
-        monthPlanDate.setText(time);
         titleName.setText(time + "计划制定");
         adapter = new AddDayAdapter(this, linList);
         monthPlanTypeLv.setAdapter(adapter);
@@ -141,7 +135,7 @@ public class AddDayPlanActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.title_back, R.id.month_plan_line, R.id.month_plan_type,R.id.month_yes, R.id.trouble_more,R.id.month_plan_date})
+    @OnClick({R.id.title_back, R.id.month_plan_line, R.id.month_plan_type,R.id.month_yes, R.id.trouble_more})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -156,9 +150,6 @@ public class AddDayPlanActivity extends BaseActivity {
                 break;
             case R.id.month_plan_type:
                 showType();
-                break;
-            case R.id.month_plan_date:
-//                showDay();
                 break;
             case R.id.month_yes:
                 saveWeek();
@@ -365,7 +356,7 @@ public class AddDayPlanActivity extends BaseActivity {
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 time = DateUatil.getDay(date);
                 inteDate();
-                monthPlanDate.setText(time);
+
 
             }
         })

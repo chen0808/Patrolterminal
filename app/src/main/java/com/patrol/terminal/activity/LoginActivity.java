@@ -79,24 +79,7 @@ public class LoginActivity extends BaseActivity {
                                     SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPNAME, results.getDep_name());
                                     SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPID, results.getDep_id());
 
-                            if (results.getSysJobList().size() > 1) {
-                                Intent intent =  new Intent(LoginActivity.this, DepChooseActivity.class);
-
-                                List<LoginReqBean.SysJobListBean> groupInfos = results.getSysJobList();
-                                String[] jobNames = new String[groupInfos.size()];
-                                String[] jobTypes = new String[groupInfos.size()];
-                                for (int i = 0; i < groupInfos.size(); i++) {
-                                    jobNames[i] = groupInfos.get(i).getName();
-                                    jobTypes[i] = groupInfos.get(i).getSign();
-                                }
-
-                                intent.putExtra(Constant.USERJOBNAME, jobNames);
-                                intent.putExtra(Constant.JOBTYPE, jobTypes);
-
-
-
-                                startActivityForResult(intent, DEP_CHOOSE_REQUEST);
-                            } else if (results.getSysJobList().size() == 1) {
+                          if (results.getSysJobList().size() >1) {
                                 String jobSign = results.getSysJobList().get(0).getSign();
                                 SPUtil.putString(LoginActivity.this, Constant.USER, Constant.JOBTYPE, jobSign);
                                 goToMainActivity(jobSign);
