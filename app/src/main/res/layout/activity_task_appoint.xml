@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".activity.TaskAppointActivity">
+
+    <include layout="@layout/include_title"/>
+
+
+        <LinearLayout style="@style/plan_ll_styl"
+
+            >
+
+            <TextView
+                style="@style/plan_tv_styl"
+                android:text="线路名称" />
+
+            <EditText
+                android:id="@+id/week_plan_name"
+                style="@style/plan_et_styl"
+                android:background="@null"
+                android:drawableRight="@mipmap/icon_go"
+                android:layout_marginRight="@dimen/dp_20"
+                android:hint="请输入线路名称" />
+        </LinearLayout>
+
+        <View style="@style/line_styl" />
+
+        <LinearLayout style="@style/plan_ll_styl">
+
+            <TextView
+                style="@style/plan_tv_styl"
+                android:text="任务类型" />
+
+            <TextView
+                android:id="@+id/week_plan_type"
+                style="@style/plan_et_styl"
+                android:drawableRight="@mipmap/icon_go"
+                android:layout_marginRight="@dimen/dp_20"
+                android:hint="@string/hint_plan_type" />
+
+        </LinearLayout>
+
+        <View style="@style/line_styl" />
+
+        <LinearLayout style="@style/plan_ll_styl">
+
+            <TextView
+                style="@style/plan_tv_styl"
+                android:text="执行班组" />
+
+            <TextView
+                android:id="@+id/week_plan_class"
+                style="@style/plan_et_styl"
+                android:text="巡检一班" />
+        </LinearLayout>
+
+        <View style="@style/line_styl" />
+
+        <LinearLayout style="@style/plan_ll_styl">
+
+            <TextView
+                style="@style/plan_tv_styl"
+                android:text="执行日期" />
+
+            <TextView
+                android:id="@+id/week_num"
+                style="@style/plan_et_styl"
+                android:text="请输入时间" />
+        </LinearLayout>
+        <View style="@style/line_styl" />
+        <LinearLayout
+            android:id="@+id/task_group_personal_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/plan_tv_styl"
+                android:layout_height="@dimen/dp_40"
+                android:text="指派小组长" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.patrol.terminal.widget.FlowGroupView
+                    android:id="@+id/task_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="@dimen/dp_60"
+                    android:layout_marginBottom="5dp"></com.patrol.terminal.widget.FlowGroupView>
+
+                <ImageView
+                    android:id="@+id/add_incontinuity_tower_group"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="@color/day_color"
+                    android:scaleType="center"
+                    android:src="@mipmap/add_black" />
+            </RelativeLayout>
+
+        </LinearLayout>
+        <View style="@style/line_styl" />
+        <LinearLayout
+            android:id="@+id/task_personal_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+            <TextView
+                style="@style/plan_tv_styl"
+                android:layout_height="@dimen/dp_40"
+                android:text="指派组员" />
+            <ImageView
+                android:id="@+id/add_incontinuity_tower"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_20"
+                android:background="@color/gray_plan"
+                android:scaleType="center"
+                android:src="@mipmap/add_black" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.patrol.terminal.widget.FlowGroupView
+                    android:id="@+id/incontinuity_tower"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_100"
+                    android:layout_marginLeft="@dimen/dp_30"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/day_white_bg"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_10"></com.patrol.terminal.widget.FlowGroupView>
+            </RelativeLayout>
+            <View style="@style/line_styl" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_30"
+                android:layout_marginRight="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:textColor="@color/color_33"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:text="描述" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_100"
+                    android:background="@drawable/day_white_bg"
+                    android:textSize="@dimen/sp_13"
+                    android:gravity="left"
+                    android:padding="@dimen/dp_10"
+                    android:hint="请输入您要描述的信息" />
+            </LinearLayout>
+        </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/group_task_submit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:background="@color/gray_plan"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+    </RelativeLayout>
+</LinearLayout>

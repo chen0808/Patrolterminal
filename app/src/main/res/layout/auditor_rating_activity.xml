@@ -1,0 +1,1099 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="被评分人：张浩"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <ImageView android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/hint_color"></ImageView>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="标准分"
+                android:gravity="center_vertical"
+                android:textColor="@color/home_red"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="日常工作："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="视频巡视："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="无人机巡视："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="无人机巡视："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="人员巡视"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="正常巡视特殊巡视："></TextView>
+
+                <EditText android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/stoke_gray"></EditText>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="夜间巡视："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="故障巡视："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="设备安装调试："></TextView>
+
+                <EditText android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/stoke_gray"></EditText>
+
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="检测"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="测温："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="接地："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="交跨："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="杆塔倾斜："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="导地线驰度："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="悬挂标牌喷涂杆号："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="消缺"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="一般缺陷："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="严重缺陷："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="危机缺陷："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="外破"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="联系/检查："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="严重缺陷："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="蹲守："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="验收"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="塔上："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="严重缺陷："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="塔下："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="管理："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="树木"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="树上："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="严重缺陷："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="树下："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="管理："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="其它"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="现场踏勘："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="严重缺陷："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="培训学习："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/hint_color"></ImageView>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="加分"
+                android:gravity="center_vertical"
+                android:textColor="@color/home_red"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"></TextView>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="巡视"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="现场巡视发现严重缺陷："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="无人机巡视发现危机隐患："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="检测"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="测温异常："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="接地异常："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_gray"></EditText>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="交跨异常："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_gray"></EditText>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="验收"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="无法供电的重大隐患："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="外破"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="签订安全协议："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="新闻报道"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="省公司及地方报刊发表："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="QC"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="完成一项："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/hint_color"></ImageView>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="减分"
+                android:gravity="center_vertical"
+                android:textColor="@color/home_red"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"></TextView>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="巡视"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="现场巡视发现严重缺陷："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="无人机巡视发现危机隐患："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="检测"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="测温异常："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="接地异常："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_gray"></EditText>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="交跨异常："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_gray"></EditText>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="验收"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="无法供电的重大隐患："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="外破"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="签订安全协议："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="新闻报道"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="省公司及地方报刊发表："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="QC"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="完成一项："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/stoke_gray"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

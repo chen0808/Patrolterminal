@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="work_ticket_arrays">
+        <item>电力线路第一种工作票</item>
+        <item>电力线路第二种工作票 </item>
+        <item>电力线路第三种工作票</item>
+        <item>电力线路带电作业工作票</item>
+    </string-array>
+
+    <!--read and write-->
+    <string-array name="tag_area">
+        <item>REVERSE</item>
+        <item>EPC</item>
+        <item>TID</item>
+        <item>USER</item>
+    </string-array>
+</resources>

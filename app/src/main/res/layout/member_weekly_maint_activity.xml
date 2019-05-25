@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@color/gray_plan"
+        >
+        <TextView
+            android:id="@+id/week_maintenace_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="周检查工作"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dp_20"
+            android:paddingRight="@dimen/dp_20"
+            android:background="@drawable/date_white_bg"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/date_color"
+            />
+
+        <TextView
+            android:id="@+id/other_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="ZY201902010"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dp_20"
+            android:paddingRight="@dimen/dp_20"
+            android:background="@drawable/date_grey_bg"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/week_maintenace_tv"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/weekly_maintenance_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_alignParentTop="true">
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="停电线路名称：1#kv"></TextView>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="停电计划时间：2019年4月20号"
+                android:layout_marginTop="10dp"></TextView>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="工作内容：XXX"
+                android:layout_marginTop="10dp"></TextView>
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="任务来源：XXX"
+                android:layout_marginTop="10dp"></TextView>
+
+            <TextView
+                android:id="@+id/work_ticket_tv"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="请按时到现场完成本次XX工作保电方案，接受工作"
+                android:background="@color/line_color"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                ></TextView>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp">
+
+            <Button  android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:text="接受工作"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                ></Button>
+
+            <Button  android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:text="放弃工作"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                ></Button>
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

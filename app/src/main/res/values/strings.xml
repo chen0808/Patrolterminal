@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">巡检终端</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">首页</string>
+    <string name="title_dashboard">待办</string>
+    <string name="title_analyze">分析</string>
+    <string name="title_me">我的</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="month_plan">月计划</string>
+    <string name="week_plan">周计划</string>
+    <string name="day_plan">日计划</string>
+    <string name="change_time">选择时间&#160;&#160;▽</string>
+    <string name="plan_name">计划名称</string>
+    <string name="hint_plan_name">请输入计划名称</string>
+    <string name="plan_type">计划类型</string>
+    <string name="hint_plan_type">请选择计划类型</string>
+    <string name="plan">计划</string>
+    <string name="task">任务</string>
+    <string name="patrol_standar1">（1）向线路设施射击、抛掷物体 （2）攀登杆塔或在杆塔上架设电力线、通信线、广播线，以及安装广播喇叭 （3）利用杆塔拉线作起重牵引地锚，在杆塔拉线上栓牲畜，悬挂物件 （4）在杆塔内(不含杆塔与杆塔之间)或杆塔与拉线之间修建车道 （5）在杆塔拉线基础周围取土、打桩、钻探、开挖或倾倒酸、碱、盐及其他有害化学物品 （6）在线路保护区内兴建建筑物、烧窑、烧荒或堆放谷物、草料、垃圾、矿渣、易燃物、易爆物及其他影响供电安全的物品 （7）在线路保护区内种植有可能影响线路安全运行的树木和植物 （8）在线路保护区内进行农田水利基本建设及打桩、钻探、开挖、地下采掘等作业 （9）在线路保护区内有进入或穿越保护区的超高机械 （10）在线路附近有危及线路安全及线路导线风偏摆动时，可能引起放电的树木或其他设施 （11）在线路附近(约300m区域内)施工爆破、开山采石、放风筝</string>
+    <string name="patrol_standar2">（1）塔倾斜、横担歪扭及杆塔部件锈蚀变形、缺损 （2）杆塔部件固定螺栓松动、缺螺栓或螺帽，螺栓丝扣长度不够，铆焊处裂纹、开焊、绑线断裂或松动 （3）混凝土杆出现裂纹或裂纹扩展，混凝土脱落、钢筋外露，脚钉缺损 （4）拉线及部件锈蚀、松弛、断股抽筋、张力分配不均，缺螺栓、螺帽等，部件丢失和被破坏等现象 （5）杆塔及拉线的基础变异，周围土壤突起或沉陷，基础裂纹、损坏、下沉或上拔，护基沉塌或被冲刷 （6）基础保护帽上部塔材被埋入土或废弃物堆中，塔材锈蚀</string>
+    <string name="patrol_standar3">（1）导线、地线锈蚀、断股、损伤或闪络烧伤 （2）导线、地线弧垂变化；导线、地线上扬、振动、舞动、脱冰跳跃 （3）导线、地线接续金具过热、变色、变形、滑移；导线在线夹内滑动 （4）跳线断股、歪扭变形，跳线与杆塔空气间隙变化，跳线间扭绞；跳线舞动、摆动过大 （5）导线对地、对交叉跨越设施及对其他物体距离变化；导线、地线上悬挂有异物</string>
+    <string name="patrol_standar4">（1）瓷质裂纹、破碎，钢化玻璃绝缘子爆裂， 钢脚弯曲，合成绝缘子伞裙破裂 （2）绝缘子串偏斜，金具、均压环变形、扭曲，开口销及弹簧销缺损或脱出</string>
+    <string name="patrol_standar5">（1）避雷器、避雷针等防雷装置和其他设备的连接、固定情况 （2）地线、接地引下线、接地装置、连续接地线间的连接、固定以及锈蚀情况</string>
+    <string name="patrol_standar6">（1）)防振锤移位、脱落、偏斜、钢丝断股，阻尼线变形、烧伤，绑线松动 （2）相位、警告、指示及防护等标志缺损、丢失，线路名称、杆塔编号字迹不清</string>
+    <string name="work_ticket_time">&#160;&#160;&#160;&#160;年&#160;&#160;月&#160;&#160;日&#160;&#160;时&#160;&#160;分</string>
+
+    <string-array name="backlog_list">
+        <item>"组立直线塔（基）"</item>
+        <item>"安装三跨警示牌（套）"</item>
+        <item>"复合绝缘子单串改造（处）"</item>
+    </string-array>
+    <string-array name="task_list">
+        <item>"防外力破坏"</item>
+        <item>"老旧线路改造"</item>
+        <item>"地质灾害隐患治理"</item>
+    </string-array>
+
+    <string-array name="method_of_notification">
+        <item>"当面通知"</item>
+        <item>"电话通知"</item>
+        <item>"派人传达"</item>
+    </string-array>
+
+    <string-array name="renwu_worker_names">
+        <item>"李泽旭"</item>
+        <item>"林梦"</item>
+        <item>"席梦晓"</item>
+    </string-array>
+
+
+    <string name="main_label">超高频接口测试</string>
+    <string name="btn_init">初始化</string>
+    <string name="btn_search">开始搜索</string>
+    <string name="btn_search_stop">停止搜索</string>
+    <string name="btn_open">打开电源</string>
+    <string name="btn_close">关闭电源</string>
+    <string name="tv_result">%1$s \n %2$s</string>
+
+    <!--tag operation-->
+    <string name="label_rw">读写操作</string>
+    <string name="label_id">标签 ID：</string>
+    <string name="label_area">数据区：</string>
+    <string name="label_access_pwd">访问密码：</string>
+    <string name="label_destroy_pwd">销毁密码：</string>
+    <string name="label_offset">起始位置：</string>
+    <string name="label_length">长度：</string>
+    <string name="label_write_data">写入数据：</string>
+    <string name="hint_access">设置访问密码（8 位）</string>
+    <string name="hint_destroy">设置销毁密码（8 位）</string>
+    <string name="hint_unit">单位为字，1 字 = 2 字节</string>
+    <string name="hint_write_data">输入写数据</string>
+    <string name="btn_read">读取</string>
+    <string name="btn_write">写入</string>
+    <string name="btn_set_access">设置访问密码</string>
+    <string name="btn_set_destroy">设置销毁密码</string>
+    <string name="btn_del_access">删除访问密码</string>
+    <string name="btn_del_destroy">删除销毁密码</string>
+</resources>

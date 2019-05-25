@@ -1,0 +1,1418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="@color/bg_gray"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="违章类别"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"></TextView>
+
+        <ImageView android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:src="@color/write_order_grat"></ImageView>
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="检查内容"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"></TextView>
+
+        <ImageView android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:src="@color/write_order_grat"></ImageView>
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="违章级别"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"></TextView>
+
+        <ImageView android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:src="@color/write_order_grat"></ImageView>
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="扣分"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"></TextView>
+
+        <ImageView android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:src="@color/write_order_grat"></ImageView>
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="检查人"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"></TextView>
+    </LinearLayout>
+
+    <ImageView android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="@color/write_order_grat"></ImageView>
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--管理违章-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                >
+
+                <TextView android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="管理违章"
+                    android:layout_marginRight="2dp"
+                    android:layout_gravity="center_vertical"></TextView>
+
+                <ImageView android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:src="@color/write_order_grat"></ImageView>
+
+               <!-- <LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:orientation="vertical">
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="未按规定配置现场安全防护装置、安全工器具和个人防护用品。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="安全工器具未按规定试验、存放和报废。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="基坑开挖、沟道、高处作业等临边无警示标志。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="现场作业内容与工作计划不符。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="监护人员参与现场作业。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="立杆、架线未设专人指挥。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="外来施工人员未按要求办理、佩戴“胸卡证”。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="2"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                </LinearLayout>-->
+
+                <com.patrol.terminal.widget.NoScrollListView
+                    android:id="@+id/guanliweizhang_lv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:divider="@null"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
+                    ></com.patrol.terminal.widget.NoScrollListView>
+            </LinearLayout>
+
+            <ImageView android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/write_order_grat"></ImageView>
+
+
+            <!--行为违章-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                >
+
+                <TextView android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="行为违章"
+                    android:layout_marginRight="2dp"
+                    android:layout_gravity="center_vertical"></TextView>
+
+                <ImageView android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:src="@color/write_order_grat"></ImageView>
+
+                <!--<LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:orientation="vertical">
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="工作票中装设的接地线与工作终结时拆除的接地线数量不一致。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="工作票、操作票、作业卡漏签名、提前签名、代签名、签错位置。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="利用绳索、拉线上下杆塔或顺杆下滑。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="携带器材上下杆塔。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="高处作业时上下抛掷工器具、材料。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="2"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="工作票所列工作班成员人数与现场工作人数不符。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="2"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="工作人员跨越、翻越围栏。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="2"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="工作人员签名不清楚、潦草看不清姓名。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="1"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="个人保安线代替工作接地线。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="2"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="作业现场工作负责人未穿红马甲或作业人员穿戴红马甲。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="3"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="现场作业人员未穿全棉长袖工作服、绝缘鞋。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="2"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="工作票、作业卡不按规定打勾、填写、签名、盖章。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="1-3"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                </LinearLayout>-->
+
+                <com.patrol.terminal.widget.NoScrollListView
+                    android:id="@+id/xingweiweizhang_lv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:divider="@null"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
+                    ></com.patrol.terminal.widget.NoScrollListView>
+            </LinearLayout>
+
+            <ImageView android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/write_order_grat"></ImageView>
+
+
+            <!--装置违章-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                >
+
+                <TextView android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="装置违章"
+                    android:layout_marginRight="2dp"
+                    android:layout_gravity="center_vertical"></TextView>
+
+                <ImageView android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:src="@color/write_order_grat"></ImageView>
+
+                <!--<LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:orientation="vertical">
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="安全带（绳）断股、霉变、损伤或铁环有裂纹、挂钩变形、缝线脱开等。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="脚扣表面有裂纹、防滑衬层破裂、脚套带不完整或有伤痕等。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="接地线严重断股、连接不良，塑料护套破损。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="安全帽过期，帽壳破损、缺少帽衬（帽箍、顶衬、后箍），缺少下颚带等。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="使用不合格的地脚螺栓。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="严重"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="6"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="个人保安线的绝缘护套损伤、导线断股、中间有接头、连接不牢固等。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="3"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                    <ImageView android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="5"
+                            android:layout_height="match_parent"
+                            android:text="金属抱杆玩去严重、表面严重腐蚀、裂纹、脱焊。"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="一般"
+                            android:gravity="center"
+                            ></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="2"
+                            android:gravity="center"></TextView>
+
+                        <ImageView android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <EditText android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center"></EditText>
+                    </LinearLayout>
+
+                </LinearLayout>-->
+
+                <com.patrol.terminal.widget.NoScrollListView
+                    android:id="@+id/zhuagnzhiweizhang_lv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:divider="@null"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
+                    ></com.patrol.terminal.widget.NoScrollListView>
+            </LinearLayout>
+
+            <ImageView android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/write_order_grat"></ImageView>
+
+
+            <TextView
+                android:id="@+id/control_card_submit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@color/gray_plan"
+                android:gravity="center"
+                android:text="提交"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_16" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+
+
+
+
+
+
+
+</LinearLayout>

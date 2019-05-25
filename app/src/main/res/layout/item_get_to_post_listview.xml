@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:orientation="horizontal"
+            >
+
+                <TextView
+                    android:id="@+id/get_to_post_content_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="match_parent"
+                    android:text="现场作业内容是否和作业计划一致，工作票所列安全措施是否满足作业要求并与现场一致"></TextView>
+
+                <ImageView android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:src="@color/write_order_grat"
+                    android:layout_marginLeft="17dp"></ImageView>
+
+
+                <CheckBox
+                    android:id="@+id/get_to_post_content_cb"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"></CheckBox>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/item_line_iv"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:src="@color/write_order_grat"></ImageView>
+
+
+
+
+</LinearLayout>

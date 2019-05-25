@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.ControlCardActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/plan_ll_styl"
+            android:layout_marginTop="@dimen/dp_20">
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:text="作业名称 :" />
+
+            <TextView
+                android:id="@+id/tv_control_name"
+                style="@style/control_card_tv_style" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/plan_ll_styl"
+            android:layout_marginTop="@dimen/dp_5">
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:text="作业性质 :" />
+
+            <TextView
+                android:id="@+id/control_card_type"
+                style="@style/control_card_tv_style"
+                android:layout_width="@dimen/dp_100" />
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:text="作业班组 :" />
+
+            <TextView
+                android:id="@+id/control_card_dep"
+                style="@style/control_card_tv_style" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/plan_ll_styl"
+            android:layout_marginTop="@dimen/dp_5">
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:text="工作负责人 :" />
+
+            <TextView
+                android:id="@+id/control_card_personal"
+                style="@style/control_card_tv_style"
+                android:layout_width="@dimen/dp_100" />
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:text="工作票号 :" />
+
+            <TextView
+                android:id="@+id/control_card_ticket"
+                style="@style/control_card_tv_style" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/plan_ll_styl"
+            android:layout_marginTop="@dimen/dp_5">
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:layout_width="@dimen/dp_90"
+                android:text="执行工作时间 :" />
+
+            <TextView
+                android:id="@+id/control_card_start_time"
+                style="@style/control_card_tv_style"
+                android:layout_width="@dimen/dp_100"
+                android:hint="选择开始时间" />
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:layout_width="@dimen/dp_30"
+                android:text="至 :" />
+
+            <TextView
+                android:id="@+id/control_card_end_time"
+                style="@style/control_card_tv_style"
+                android:layout_width="@dimen/dp_100"
+                android:hint="选择结束时间" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/plan_ll_styl"
+            android:layout_marginTop="@dimen/dp_10">
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:text="1.人员分工 :" />
+        </LinearLayout>
+
+        <View style="@style/control_line_styl" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_33" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="序号"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_33" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:gravity="center"
+                android:text="作业项目"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_33" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="作业人员"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_33" />
+        </LinearLayout>
+
+        <View style="@style/control_line_styl" />
+
+        <com.patrol.terminal.widget.NoScrollListView
+            android:id="@+id/control_card_div"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:divider="@null"></com.patrol.terminal.widget.NoScrollListView>
+
+        <LinearLayout
+            style="@style/plan_ll_styl"
+            android:layout_marginTop="@dimen/dp_10">
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:text="2.危险点分析及安全措施指南 :" />
+        </LinearLayout>
+
+        <View style="@style/control_line_styl" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_33" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="序号"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_33" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="危险点分析"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_33" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:text="安全控制措施"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_33" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="负责人"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_33" />
+        </LinearLayout>
+
+        <View style="@style/control_line_styl" />
+
+        <com.patrol.terminal.widget.NoScrollListView
+            android:id="@+id/control_card_guide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:divider="@null"></com.patrol.terminal.widget.NoScrollListView>
+
+        <LinearLayout
+            style="@style/plan_ll_styl"
+            android:layout_marginTop="@dimen/dp_10">
+
+            <TextView
+                style="@style/control_tv_styl"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:text="3.确认签字(必要时) :" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="我已知晓上述停电时间、范围、工作内容、地点、人员分工、危险因素及防范措施，全体工作人员已确认并在工作票上签字。"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_12" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="工作人员签字 : "
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_12" />
+
+            <ImageView
+                android:id="@+id/iv_signature_pad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/stoke_gray" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/control_card_submit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_20"
+            android:background="@color/gray_plan"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_10"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/plan_ll_styl"
+        android:layout_marginTop="@dimen/dp_10">
+
+        <TextView
+            style="@style/plan_tv_styl"
+            android:text="线路名称" />
+
+        <TextView
+            android:id="@+id/week_line_name"
+            style="@style/plan_et_styl"
+            android:hint="请输入线路名称" />
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout style="@style/plan_ll_styl">
+
+        <TextView
+            style="@style/plan_tv_styl"
+            android:text="线路编号" />
+
+        <TextView
+            android:id="@+id/week_line_no"
+            style="@style/plan_et_styl"
+            android:hint="请输入线路编号" />
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout style="@style/plan_ll_styl">
+
+        <TextView
+            style="@style/plan_tv_styl"
+            android:text="线路等级" />
+
+        <TextView
+            android:id="@+id/week_line_level"
+            style="@style/plan_et_styl"
+            android:hint="请输入线路等级" />
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout style="@style/plan_ll_styl">
+
+        <TextView
+            style="@style/plan_tv_styl"
+            android:text="电压等级" />
+
+        <TextView
+            android:id="@+id/week_line_type"
+            style="@style/plan_et_styl"
+            android:hint="请输入电压等级" />
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/plan_tv_styl"
+            android:layout_height="@dimen/dp_40"
+            android:text="不连续杆塔" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.patrol.terminal.widget.FlowGroupView
+                android:id="@+id/incontinuity_tower"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="@dimen/dp_60"
+                android:layout_marginBottom="5dp"></com.patrol.terminal.widget.FlowGroupView>
+
+            <ImageView
+                android:id="@+id/add_incontinuity_tower"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_20"
+                android:background="@color/gray_plan"
+                android:scaleType="center"
+                android:src="@mipmap/add_black" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="连续杆塔"
+            android:textColor="@color/color_33"
+            android:textSize="@dimen/sp_14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout style="@style/plan_ll_styl">
+
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:layout_width="wrap_content"
+                    android:text="起" />
+
+                <TextView
+                    android:id="@+id/week_line_start"
+                    style="@style/plan_et_styl"
+                    android:hint="请选择起始杆塔" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/plan_ll_styl">
+
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:layout_width="wrap_content"
+                    android:text="终" />
+
+                <TextView
+                    android:id="@+id/week_line_end"
+                    style="@style/plan_et_styl"
+                    android:hint="请选择终点杆塔" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

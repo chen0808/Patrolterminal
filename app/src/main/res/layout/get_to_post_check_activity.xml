@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="@color/bg_gray"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="检查类别"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"></TextView>
+
+        <ImageView android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:src="@color/write_order_grat"></ImageView>
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="检查内容"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"></TextView>
+
+        <ImageView android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:src="@color/write_order_grat"></ImageView>
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="检查人勾选"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"></TextView>
+    </LinearLayout>
+
+    <ImageView android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="@color/write_order_grat"></ImageView>
+
+    <!--重点检查-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="重点检查"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"></TextView>
+
+        <ImageView android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:src="@color/write_order_grat"></ImageView>
+
+        <com.patrol.terminal.widget.NoScrollListView
+            android:id="@+id/work_task_lv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:divider="@null"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            ></com.patrol.terminal.widget.NoScrollListView>
+
+    </LinearLayout>
+
+    <ImageView android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="@color/write_order_grat"></ImageView>
+
+    <!--安全检查-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="安全检查"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"></TextView>
+
+        <ImageView android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:src="@color/write_order_grat"></ImageView>
+
+        <com.patrol.terminal.widget.NoScrollListView
+            android:id="@+id/safe_lv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:divider="@null"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            ></com.patrol.terminal.widget.NoScrollListView>
+
+    </LinearLayout>
+
+    <ImageView android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="@color/write_order_grat"></ImageView>
+
+
+    <TextView
+        android:id="@+id/control_card_submit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@color/gray_plan"
+        android:gravity="center"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16" />
+
+</LinearLayout>

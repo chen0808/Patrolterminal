@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".overhaul.OverhaulAddYearPlanActivity">
+
+    <include layout="@layout/include_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/train_name_ll"
+                style="@style/overhaul_ll_styl">
+
+                <TextView
+                    style="@style/train_new_plan_tv_styl"
+                    android:text="培训名称" />
+
+                <EditText
+                    android:id="@+id/train_name_et"
+                    style="@style/plan_et_styl"
+                    android:background="@null"
+                    android:hint="输入培训计划名称" />
+            </LinearLayout
+                >
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:id="@+id/start_time_ll"
+                style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/start_time_title"
+                    style="@style/train_new_plan_tv_styl"
+                    android:text="开始时间" />
+
+                <TextView
+                    android:id="@+id/start_time_tv"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:id="@+id/end_time_ll"
+                style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/end_time_title"
+                    style="@style/train_new_plan_tv_styl"
+                    android:text="结束时间" />
+
+                <TextView
+                    android:id="@+id/end_time_tv"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:id="@+id/train_days_ll"
+                style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/train_days_title"
+                    style="@style/train_new_plan_tv_styl"
+                    android:text="培训时长" />
+
+                <TextView
+                    android:id="@+id/train_days_tv"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:id="@+id/train_level_ll"
+                style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/train_level_title"
+                    android:text="培训层级"
+                    style="@style/train_new_plan_tv_styl" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/train_level_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    ></org.angmarch.views.NiceSpinner>
+
+                <TextView
+                    android:id="@+id/train_level_spinner_tv"
+                    style="@style/plan_et_styl"
+                    android:visibility="gone"></TextView>
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:id="@+id/train_unit_ll"
+                style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/train_unit_title"
+                    style="@style/train_new_plan_tv_styl"
+                    android:text="主办单位" />
+
+                <EditText
+                    android:id="@+id/train_unit_et"
+                    style="@style/plan_et_styl"
+                    android:background="@null"
+                    android:hint="输入主办单位名称" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout android:id="@+id/train_position_ll"
+                style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/train_position_title"
+                    style="@style/train_new_plan_tv_styl"
+                    android:text="培训地点" />
+
+                <EditText
+                    android:id="@+id/train_position_et"
+                    style="@style/plan_et_styl"
+                    android:background="@null"
+                    android:hint="输入培训地点" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:id="@+id/train_type_ll"
+                style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/train_type_title"
+                    android:text="培训类别"
+                    style="@style/train_new_plan_tv_styl" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/train_type_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    ></org.angmarch.views.NiceSpinner>
+
+                <TextView
+                    android:id="@+id/train_type_spinner_tv"
+                    style="@style/plan_et_styl"
+                    android:visibility="gone"></TextView>
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:id="@+id/train_teacher_ll"
+                style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/train_teacher_title"
+                    style="@style/train_new_plan_tv_styl"
+                    android:text="授课人" />
+
+                <EditText
+                    android:id="@+id/train_teacher_et"
+                    style="@style/plan_et_styl"
+                    android:background="@null"
+                    android:hint="输入授课人" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    style="@style/train_new_plan_tv_styl"
+                    android:height="@dimen/dp_30"
+                    android:text="培训内容详情" />
+
+                <EditText
+                    android:id="@+id/week_plan_content"
+                    style="@style/plan_et_styl"
+                    android:layout_height="@dimen/dp_100"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:background="@drawable/btn_white"
+                    android:gravity="left"
+                    android:hint="请输入这次的培训内容详情"
+                    android:padding="@dimen/dp_10" />
+            </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/train_person_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+
+            <LinearLayout
+                android:id="@+id/train_person_ll_enter"
+                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/train_person_title"
+                    android:text="培训人员"
+                    style="@style/overhaul_tv_styl" />
+
+                <TextView
+                    android:id="@+id/train_person_tv"
+                    android:layout_width="match_parent"
+                    android:minHeight="@dimen/dp_40"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"></TextView>
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/train_auditor_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    style="@style/overhaul_ll_styl">
+
+                    <TextView
+                        android:id="@+id/train_auditor_title"
+                        android:text="审核人"
+                        style="@style/overhaul_tv_styl" />
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/train_auditor_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="5dp"
+                        android:gravity="center"
+                        android:textColor="@color/white"></org.angmarch.views.NiceSpinner>
+                </LinearLayout>
+
+                <View style="@style/line_styl" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/person_remark_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    style="@style/train_new_plan_tv_styl"
+                    android:height="@dimen/dp_30"
+                    android:text="人员描述" />
+
+                <EditText
+                    android:id="@+id/person_detail"
+                    style="@style/plan_et_styl"
+                    android:layout_height="@dimen/dp_100"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:background="@drawable/btn_white"
+                    android:gravity="left"
+                    android:hint="人员描述"
+                    android:padding="@dimen/dp_10" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

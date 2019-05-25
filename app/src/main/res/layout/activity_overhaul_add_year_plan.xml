@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".overhaul.OverhaulAddYearPlanActivity">
+
+    <include layout="@layout/include_title" />
+
+    <LinearLayout style="@style/overhaul_ll_styl">
+
+        <TextView
+            style="@style/overhaul_tv_styl"
+            android:text="申请单位" />
+
+        <EditText
+            android:id="@+id/year_plan_nuit"
+            style="@style/plan_et_styl"
+            android:background="@null"
+            android:hint="请输入申请单位" />
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout style="@style/overhaul_ll_styl">
+
+        <TextView
+            style="@style/overhaul_tv_styl"
+            android:text="设备名称" />
+
+        <EditText
+            android:id="@+id/year_plan_device_name"
+            style="@style/plan_et_styl"
+            android:background="@null"
+            android:hint="输入设备名称" />
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout style="@style/overhaul_ll_styl">
+
+        <TextView
+            android:id="@+id/month_plan_month"
+            style="@style/overhaul_tv_styl"
+            android:text="电压等级" />
+
+        <TextView
+            android:id="@+id/year_plan_"
+            style="@style/plan_et_styl"
+            android:layout_marginRight="@dimen/dp_20"
+            android:drawableRight="@mipmap/icon_go"
+            android:text="点击选择电压等级" />
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout style="@style/overhaul_ll_styl">
+
+        <TextView
+            style="@style/overhaul_tv_styl"
+            android:text="是否需要停电" />
+
+        <RadioGroup
+            android:id="@+id/year_plan_rg"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/year_plan_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="是" />
+
+            <RadioButton
+                android:id="@+id/year_plan_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:checked="true"
+                android:text="否" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/power_failure_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <View style="@style/line_styl" />
+
+        <LinearLayout style="@style/overhaul_ll_styl">
+
+            <TextView
+                style="@style/overhaul_tv_styl"
+                android:text="停电天数" />
+
+            <EditText
+                android:id="@+id/year_plan_day_num"
+                style="@style/plan_et_styl"
+                android:background="@null"
+                android:hint="请输入停电天数" />
+        </LinearLayout>
+        <View style="@style/line_styl" />
+
+        <LinearLayout style="@style/overhaul_ll_styl">
+
+            <TextView
+                style="@style/overhaul_tv_styl"
+                android:text="停电范围" />
+
+            <TextView
+                android:id="@+id/year_plan_range"
+                style="@style/plan_et_styl"
+                android:layout_marginRight="@dimen/dp_20"
+                android:drawableRight="@mipmap/icon_go"
+                android:hint="点击选择停电范围" />
+        </LinearLayout>
+
+        <View style="@style/line_styl" />
+
+        <LinearLayout style="@style/overhaul_ll_styl">
+
+            <TextView
+                style="@style/overhaul_tv_styl"
+                android:text="任务来源" />
+
+            <TextView
+                android:id="@+id/year_plan_source"
+                style="@style/plan_et_styl"
+                android:layout_marginRight="@dimen/dp_20"
+                android:drawableRight="@mipmap/icon_go"
+                android:hint="请输入任务来源" />
+        </LinearLayout>
+
+        <View style="@style/line_styl" />
+
+        <LinearLayout style="@style/overhaul_ll_styl">
+
+            <TextView
+                style="@style/overhaul_tv_styl"
+                android:text="申请开始时间" />
+
+            <TextView
+                android:id="@+id/year_plan_time_start"
+                style="@style/plan_et_styl"
+                android:layout_marginRight="@dimen/dp_20"
+                android:drawableRight="@mipmap/icon_go"
+                android:hint="点击选择开始时间" />
+        </LinearLayout>
+
+        <View style="@style/line_styl" />
+
+        <LinearLayout style="@style/overhaul_ll_styl">
+
+            <TextView
+                style="@style/overhaul_tv_styl"
+                android:text="申请结束时间" />
+
+            <TextView
+                android:id="@+id/year_plan_time_end"
+                style="@style/plan_et_styl"
+                android:layout_marginRight="@dimen/dp_20"
+                android:drawableRight="@mipmap/icon_go"
+                android:hint="点击选择结束时间" />
+        </LinearLayout>
+        <View style="@style/line_styl" />
+        <LinearLayout style="@style/overhaul_ll_styl">
+
+            <TextView
+                style="@style/overhaul_tv_styl"
+                android:text="上次停电维修时间" />
+
+            <EditText
+                android:id="@+id/year_plan_time_before"
+                style="@style/plan_et_styl"
+                android:background="@null"
+                android:hint="请输入上次停电维修时间" />
+        </LinearLayout>
+        <View style="@style/line_styl" />
+        <LinearLayout style="@style/overhaul_ll_styl">
+
+            <TextView
+                style="@style/overhaul_tv_styl"
+                android:text="风险等级" />
+
+            <TextView
+                android:id="@+id/year_plan_rish_level"
+                style="@style/plan_et_styl"
+                android:layout_marginRight="@dimen/dp_20"
+                android:drawableRight="@mipmap/icon_go"
+                android:hint="点击选择风险等级" />
+        </LinearLayout>
+    </LinearLayout>
+    <View style="@style/line_styl" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            style="@style/overhaul_tv_styl"
+            android:height="@dimen/dp_30"
+            android:text="检修内容" />
+
+        <EditText
+            android:id="@+id/year_plan_content"
+            style="@style/plan_et_styl"
+            android:layout_height="@dimen/dp_100"
+            android:gravity="left"
+            android:layout_marginRight="@dimen/dp_20"
+            android:padding="@dimen/dp_10"
+            android:background="@drawable/btn_white"
+            android:hint="请输入这次的检修内容" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/year_plan_submit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:background="@color/gray_plan"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+    </RelativeLayout>
+</LinearLayout>

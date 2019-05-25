@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.CreatePlanActivity">
+<include layout="@layout/include_title"/>
+
+    <TextView
+        android:id="@+id/carete_plan_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_50"
+        android:text="月计划列表"
+        android:textStyle="bold"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:drawableLeft="@mipmap/grouo_icon"
+        android:gravity="center_vertical"
+        android:drawablePadding="@dimen/dp_5"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/color_33"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/create_plan_Rc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/carete_plan_tv"
+        android:layout_marginBottom="@dimen/dp_40"
+        ></androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/create_plan_submit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_alignParentBottom="true"
+        android:background="@color/gray_plan"
+        android:gravity="center"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16" />
+</RelativeLayout>

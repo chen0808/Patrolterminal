@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".overhaul.OverhaulAddYearPlanActivity">
+
+    <include layout="@layout/include_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout style="@style/overhaul_ll_styl">
+
+                <TextView
+                    style="@style/overhaul_tv_styl"
+                    android:text="设备名称" />
+
+                <TextView
+                    android:id="@+id/week_plan_device_name"
+                    style="@style/plan_et_styl"
+                    android:background="@null"
+                    android:hint="输入设备名称" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/month_plan_month"
+                    style="@style/overhaul_tv_styl"
+                    android:text="停电天数" />
+
+                <TextView
+                    android:id="@+id/week_plan_time"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/work_of_task"
+                    style="@style/overhaul_tv_styl"
+                    android:text="任务来源" />
+
+                <TextView
+                    android:id="@+id/work_of_task_tv"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/risk_level"
+                    style="@style/overhaul_tv_styl"
+                    android:text="风险等级" />
+
+                <TextView
+                    android:id="@+id/risk_level_tv"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/overhaul_tv_styl"
+                    android:height="@dimen/dp_30"
+                    android:text="工作内容" />
+
+                <TextView
+                    android:id="@+id/week_plan_content"
+                    style="@style/plan_et_styl"
+                    android:layout_height="@dimen/dp_100"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:background="@drawable/btn_white"
+                    android:gravity="left"
+                    android:hint="请输入这次的工作内容"
+                    android:padding="@dimen/dp_10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/task_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="center_horizontal">
+
+
+                    <TextView
+                        android:id="@+id/control_card_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="添加工作任务"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/add_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="添加"
+                        android:layout_marginLeft="10dp"
+                        ></Button>
+                </LinearLayout>
+
+                <View style="@style/control_line_styl"
+                    android:layout_marginTop="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_33" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="序号"
+                        android:textColor="@color/color_33"
+                        android:textSize="@dimen/sp_12" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_33" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:gravity="center"
+                        android:text="任务内容"
+                        android:textColor="@color/color_33"
+                        android:textSize="@dimen/sp_12" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_33" />
+                </LinearLayout>
+                <View style="@style/control_line_styl" />
+
+                <com.patrol.terminal.widget.NoScrollListView
+                    android:id="@+id/work_task_lv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@null"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
+                    ></com.patrol.terminal.widget.NoScrollListView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    style="@style/overhaul_tv_styl"
+                    android:height="@dimen/dp_30"
+                    android:text="备注" />
+
+                <TextView
+                    android:id="@+id/week_plan_remark"
+                    style="@style/plan_et_styl"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="@drawable/btn_white"
+                    android:gravity="left"
+                    android:hint="请输入备注信息"
+                    android:padding="@dimen/dp_10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_person"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="接收人"></TextView>
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/tv_accept"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/stoke_gray"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="签发人"></TextView>
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/tv_sign"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/stoke_gray"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="签发人2"></TextView>
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/tv_sign2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/stoke_gray"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="许可人"></TextView>
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/tv_licence"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/stoke_gray"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--工作票控制卡-->
+         <!--   <LinearLayout
+                android:id="@+id/ll_work_ticket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/work_ticket_tv"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/btn_bg"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="查看工作票"
+                    android:textColor="@color/white" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/ns_work_ticket"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:visibility="gone"></org.angmarch.views.NiceSpinner>
+            </LinearLayout>
+
+            <org.angmarch.views.NiceSpinner
+                android:id="@+id/ns_work_ticket2"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="121dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:visibility="gone"></org.angmarch.views.NiceSpinner>
+
+            <LinearLayout
+                android:id="@+id/ll_control_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/control_card"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/btn_bg"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="查看控制卡"
+                    android:textColor="@color/white" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/ns_control_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:visibility="gone"></org.angmarch.views.NiceSpinner>
+            </LinearLayout>-->
+
+            <LinearLayout
+                android:id="@+id/need_upload_ll"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_20"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是否需要上传保电方案" />
+
+                <RadioGroup
+                    android:id="@+id/need_upload_rg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/need_upload_yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_20"
+                        android:checked="true"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/need_upload_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_20"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_upload_file"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="@dimen/dp_20"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btn_file"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_bg"
+                    android:text="上传文档"
+                    android:textColor="@color/white" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/ns_file"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_marginRight="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="horizontal"
+                >
+                <RelativeLayout
+                    android:id="@+id/power_preservation_rl"
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:layout_marginRight="@dimen/dp_20"
+                    >
+                    <ImageView
+                        android:id="@+id/power_preservation_iv"
+                        android:layout_width="@dimen/dp_60"
+                        android:layout_height="@dimen/dp_60"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_33"
+                        android:layout_below="@id/power_preservation_iv"
+                        android:layout_gravity="center_horizontal"
+                        android:text="保电方案"
+                        />
+                    <TextView
+                        android:id="@+id/power_preservation_grogress"
+                        android:layout_width="@dimen/dp_60"
+                        android:layout_height="@dimen/dp_60"
+                        android:visibility="gone"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_18"
+                        android:text="0%"
+                        android:background="@color/mengban"
+                        />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/acceptance_plan_rl"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+                    <ImageView
+                        android:id="@+id/acceptance_plan_iv"
+                        android:layout_width="@dimen/dp_60"
+                        android:layout_height="@dimen/dp_60" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:textColor="@color/color_33"
+                        android:layout_below="@id/acceptance_plan_iv"
+                        android:layout_gravity="center_horizontal"
+                        android:text="验收方案"
+                        />
+                    <TextView
+                        android:id="@+id/acceptance_plan_grogress"
+                        android:layout_width="@dimen/dp_60"
+                        android:layout_height="@dimen/dp_60"
+                        android:visibility="gone"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_18"
+                        android:text="0%"
+                        android:background="@color/mengban"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/fragment_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_bottom_tab" />
+
+
+        <!-- 底部tab -->
+        <RadioGroup
+            android:id="@+id/ll_bottom_tab"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_alignParentBottom="true"
+            android:background="@color/home_bottom_bar_bg"
+            android:baselineAligned="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/main_home_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="@string/title_home"
+                android:gravity="center"
+                android:textColor="@drawable/selector_main_tv_color"
+                android:checked="true"
+                android:drawableTop="@drawable/selector_home_rb"
+                android:button="@null"
+                />
+            <RadioButton
+                android:id="@+id/main_exame_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="@string/title_dashboard"
+                android:gravity="center"
+                android:textColor="@drawable/selector_main_tv_color"
+                android:drawableTop="@drawable/selector_exame_rb"
+                android:button="@null"
+                />
+            <RadioButton
+                android:id="@+id/main_history_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="@string/title_analyze"
+                android:gravity="center"
+                android:textColor="@drawable/selector_main_tv_color"
+                android:drawableTop="@drawable/selector_history_rb"
+                android:button="@null"
+                />
+            <RadioButton
+                android:id="@+id/main_my_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="@string/title_me"
+                android:gravity="center"
+                android:textColor="@drawable/selector_main_tv_color"
+                android:drawableTop="@drawable/selector_home_rb"
+                android:button="@null"
+                />
+
+
+        </RadioGroup>
+
+</RelativeLayout>

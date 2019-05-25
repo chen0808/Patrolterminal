@@ -1,0 +1,1405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/unit_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="单位："
+                    android:textColor="@color/black"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_unit_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:text="输电线运检室"
+                    android:textColor="@color/more_color"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/number_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/et_ticket_number"
+                        android:text="编号："
+                        android:textColor="@color/black"></TextView>
+
+                    <TextView
+                        android:id="@+id/et_ticket_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:gravity="center_vertical"
+                        android:padding="4dp"
+                        android:text="2019-04-001"
+                        android:textColor="@color/more_color"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/teams_and_groups_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/tv_dep_id"
+                        android:text="班组："
+                        android:textColor="@color/black"></TextView>
+
+                    <TextView
+                        android:id="@+id/tv_dep_id"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:gravity="center_vertical"
+                        android:padding="4dp"
+                        android:text="带电作业班"></TextView>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/bg_gray"></View>
+
+            <!-- 1.工作负责人-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="8dp"
+                android:text="1.工作负责人："
+                android:textColor="@color/black"></TextView>
+
+            <TextView
+                android:id="@+id/tv_leader_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/stoke_gray"
+                android:gravity="center_vertical"
+                android:padding="4dp"
+                android:text="叶怀刚"></TextView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/bg_gray"></View>
+
+            <!-- 2.工作班人员 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/staff_in_the_workshop_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="2.工作班人员："
+                    android:textColor="@color/black"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_person"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="(共0人)"></TextView>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_crew_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/stoke_gray"
+                android:gravity="center_vertical"
+                android:padding="4dp"></TextView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/bg_gray"></View>
+            <!-- 3.工作的线路或设备双重名称 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3.工作的线路或设备双重名称(多回路应证明双重称号）："
+                    android:textColor="@color/black"></TextView>
+
+                <EditText
+                    android:id="@+id/et_double_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toLeftOf="@+id/persons_tv"
+                    android:layout_toRightOf="@+id/staff_in_the_workshop_tv"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="top"
+                    android:padding="5dp"></EditText>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/bg_gray"></View>
+            <!-- 4.工作任务 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="4.工作任务"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:id="@+id/iv_task_add"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="center"
+                    android:src="@mipmap/add_black" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/bg_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="工作地点或地段"></TextView>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/write_order_grat"></View>
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="工作内容"></TextView>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_task_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/bg_gray"></View>
+
+            <!-- 5.计划工作时间 -->
+
+            <TextView
+                android:id="@+id/planned_working_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="5.计划工作时间："
+                android:textColor="@color/black"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:id="@+id/tv_s_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="center"
+                    android:padding="4dp"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:text="至"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_e_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/stoke_gray"
+                    android:drawableRight="@color/home_red"
+                    android:gravity="center"
+                    android:padding="4dp"></TextView>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/bg_gray"></View>
+
+            <!-- 6.安全措施 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6.安全措施"
+                    android:textColor="@color/black"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="  6.1 应改为检修状态的线路间隔名称和应拉开的断路器（开关）、隔离开关（刀闸）、熔断点（包括分支线、用户线路和配合停电线路）："></TextView>
+
+                <EditText
+                    android:id="@+id/et_switch_safe"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="top"
+                    android:padding="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="  6.2 保留或邻近的带电线路、设备："></TextView>
+
+                <EditText
+                    android:id="@+id/et_device_safe"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="top"
+                    android:padding="4dp"></EditText>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="  6.3 其他安全措施和注意事项："></TextView>
+
+                <TextView
+                    android:id="@+id/et_remark_safe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/stoke_gray"
+                    android:padding="4dp"></TextView>
+
+                <!-- 6.4 应挂的接地线 -->
+                <!--  <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="10dp"
+                      android:orientation="vertical"
+                      >-->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/ground_lines_to_hang_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="10dp"
+                        android:text="  6.4 应挂的接地线："></TextView>
+
+                    <ImageView
+                        android:id="@+id/iv_ground_lines_add"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:scaleType="center"
+                        android:src="@mipmap/add_black" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/ground_lines_to_hang_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/bg_gray"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal"
+                        android:text="挂设位置（线路名称及杆号）"></TextView>
+
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:text="接地线编号"></TextView>
+
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal"
+                        android:text="挂设时间"></TextView>
+
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal"
+                        android:text="拆除时间"></TextView>
+                </LinearLayout>
+
+                <com.patrol.terminal.widget.NoScrollListView
+                    android:id="@+id/ground_lines_to_hang_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"></com.patrol.terminal.widget.NoScrollListView>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:src="@color/write_order_grat"></ImageView>
+
+                <!--<LinearLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/ground_lines_to_hang_tv"
+                    android:layout_toLeftOf="@+id/ground_lines_to_hang_iv"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="center_vertical">
+
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1."
+                        android:layout_marginLeft="10dp"></TextView>
+
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="2."
+                        android:layout_marginLeft="10dp"></TextView>
+
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="3."
+                        android:layout_marginLeft="10dp"></TextView>
+                </LinearLayout>-->
+                <!--<ImageView
+                    android:id="@+id/ground_lines_to_hang_iv"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@color/home_red"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"></ImageView>-->
+                <!--</LinearLayout>-->
+
+                <!--工作票签发人 1-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="4dp"
+                        android:text="工作票签发人：" />
+
+                    <ImageView
+                        android:id="@+id/iv_signature_pad"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <!--默认当前时间-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/time_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></CheckBox>
+
+                    <TextView
+                        android:id="@+id/tv_group_time_a"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/work_ticket_time"></TextView>
+                </LinearLayout>
+
+                <!--  <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="2019年04月26日12时35分"
+                      android:layout_gravity="right"></TextView>-->
+
+
+                <!--工作票签发人 2 -->
+                <!--<LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="工作票签发人："></TextView>
+
+                    <EditText android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/image_overlay_false"
+                        ></EditText>
+                </LinearLayout>
+                <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    >
+
+                    <EditText
+                        android:id="@+id/year_et_2"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/year_tv_2"
+                        android:background="@color/image_overlay_false"
+                        android:layout_marginRight="10dp"
+                        ></EditText>
+
+                    <TextView
+                        android:id="@+id/year_tv_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/month_et_2"
+                        android:text="年"
+                        android:layout_marginRight="5dp"></TextView>
+
+                    <EditText
+                        android:id="@+id/month_et_2"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/month_tv_2"
+                        android:background="@color/image_overlay_false"
+                        android:layout_marginRight="10dp"
+                        ></EditText>
+
+                    <TextView
+                        android:id="@+id/month_tv_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/day_et_2"
+                        android:text="月"
+                        android:layout_marginRight="5dp"></TextView>
+
+                    <EditText
+                        android:id="@+id/day_et_2"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/day_tv_2"
+                        android:background="@color/image_overlay_false"
+                        android:layout_marginRight="10dp"
+                        ></EditText>
+
+                    <TextView
+                        android:id="@+id/day_tv_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/time_et_2"
+                        android:text="日"
+                        android:layout_marginRight="5dp"></TextView>
+
+                    <EditText
+                        android:id="@+id/time_et_2"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/time_tv_2"
+                        android:background="@color/image_overlay_false"
+                        android:layout_marginRight="10dp"
+                        ></EditText>
+
+                    <TextView
+                        android:id="@+id/time_tv_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/separate_et_2"
+                        android:text="时"
+                        android:layout_marginRight="5dp"></TextView>
+
+                    <EditText
+                        android:id="@+id/separate_et_2"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/separate_tv_2"
+                        android:background="@color/image_overlay_false"
+                        android:layout_marginRight="5dp"
+                        ></EditText>
+
+                    <TextView
+                        android:id="@+id/separate_tv_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="分"
+                        android:layout_alignParentRight="true"></TextView>
+                </RelativeLayout>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="4dp"
+                        android:text="工作票签发人：" />
+
+                    <ImageView
+                        android:id="@+id/iv_signature_pad_2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <!--默认当前时间-->
+                <!--<TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2019年04月26日12时35分"
+                    android:layout_gravity="right"></TextView>-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/time_checkbox_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></CheckBox>
+
+                    <TextView
+                        android:id="@+id/tv_group_time_b"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/work_ticket_time"></TextView>
+                </LinearLayout>
+
+
+                <!--工作票签发人 3-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="4dp"
+                        android:text="工作票负责人：" />
+
+                    <ImageView
+                        android:id="@+id/iv_signature_pad_3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <!--默认当前时间-->
+                <!--<TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2019年04月26日12时35分"
+                    android:layout_gravity="right"></TextView>-->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/time_checkbox_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></CheckBox>
+
+                    <TextView
+                        android:id="@+id/tv_group_time_c"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/work_ticket_time"></TextView>
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/bg_gray"></View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="10dp"
+                            android:text="7.确认本工作1~6项,许可工作开始"
+                            android:textColor="@color/black"></TextView>
+
+                        <ImageView
+                            android:id="@+id/iv_licensing_started_add"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentRight="true"
+                            android:scaleType="center"
+                            android:src="@mipmap/add_black" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/licensing_started_ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/bg_gray"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3.5"
+                            android:gravity="center_horizontal"
+                            android:text="许可方式"></TextView>
+
+                        <ImageView
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="许可人"></TextView>
+
+                        <ImageView
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2.5"
+                            android:gravity="center_horizontal"
+                            android:text="工作负责人签名"></TextView>
+
+                        <ImageView
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:src="@color/write_order_grat"></ImageView>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:gravity="center_horizontal"
+                            android:text="许可工作的时间"></TextView>
+
+                    </LinearLayout>
+
+
+                    <com.patrol.terminal.widget.NoScrollListView
+                        android:id="@+id/licensing_started_listView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"></com.patrol.terminal.widget.NoScrollListView>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:src="@color/write_order_grat"></ImageView>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/bg_gray"></View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:text="8.确认工作负责人布置的工作任务和安全措施"
+                    android:textColor="@color/black"></TextView>
+
+                <!--工作票签发人 4-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="4dp"
+                        android:text="工作班组人员签名：" />
+
+                    <ImageView
+                        android:id="@+id/iv_signature_pad_4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <!--默认当前时间-->
+                <!-- <TextView android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="2019年04月26日12时35分"
+                     android:layout_gravity="right"></TextView>-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/time_checkbox_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></CheckBox>
+
+                    <TextView
+                        android:id="@+id/time_tv_7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/work_ticket_time"></TextView>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/bg_gray"></View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:text="9.工作人员变动情况"
+                    android:textColor="@color/black"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="原工作负责人"></TextView>
+
+                    <EditText
+                        android:id="@+id/et_old_leader"
+                        android:layout_width="65dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp"></EditText>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="离去，变更"></TextView>
+
+                    <EditText
+                        android:layout_width="65dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp"></EditText>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="为工作负责人"></TextView>
+                </LinearLayout>
+
+                <!--工作票签发人-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="4dp"
+                        android:text="工作票签发人签名：" />
+
+                    <ImageView
+                        android:id="@+id/iv_signature_pad_5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/time_checkbox_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></CheckBox>
+
+                    <TextView
+                        android:id="@+id/tv_change_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/work_ticket_time"></TextView>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/bg_gray"></View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:text="10.作业人员变动情况（变动人员姓名、日期及时间）"
+                    android:textColor="@color/black"></TextView>
+
+                <EditText
+                    android:id="@+id/et_person_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="top"
+                    android:padding="4dp"></EditText>
+
+                <!--工作负责人签名-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="4dp"
+                        android:text="工作负责人签名：" />
+
+                    <ImageView
+                        android:id="@+id/iv_signature_pad_6"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/time_checkbox_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></CheckBox>
+
+                    <TextView
+                        android:id="@+id/tv_delay_a_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/work_ticket_time"></TextView>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/bg_gray"></View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:text="11.工作票延期"
+                    android:textColor="@color/black"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="有效期延长到："></TextView>
+
+                    <TextView
+                        android:id="@+id/tv_postpone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/stoke_gray"
+                        android:gravity="center"
+                        android:padding="4dp"></TextView>
+                </LinearLayout>
+
+                <!--工作负责人签名-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="4dp"
+                        android:text="工作负责人签名：" />
+
+                    <ImageView
+                        android:id="@+id/iv_signature_pad_7"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/time_checkbox_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></CheckBox>
+
+                    <TextView
+                        android:id="@+id/tv_delay_b_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/work_ticket_time"></TextView>
+                </LinearLayout>
+
+                <!--工作许可人签名-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="4dp"
+                        android:text="工作许可人签名：" />
+
+                    <ImageView
+                        android:id="@+id/iv_signature_pad_8"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/time_checkbox_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></CheckBox>
+
+                    <TextView
+                        android:id="@+id/tv_delay_c_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/work_ticket_time"></TextView>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/bg_gray"></View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:text="12.工作票终结"
+                    android:textColor="@color/black"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  12.1现场所挂的接地电线编号" />
+
+                    <EditText
+                        android:id="@+id/et_remove_ground_no"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="共" />
+
+                    <EditText
+                        android:id="@+id/et_remove_ground_num"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="组，" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:text="已全部拆除，带回。" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="  12.2工作终结报告"></TextView>
+
+                    <ImageView
+                        android:id="@+id/iv_licensing_end_add"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:scaleType="center"
+                        android:src="@mipmap/add_black" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/work_end_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/bg_gray"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:gravity="center_horizontal"
+                        android:text="许可方式"></TextView>
+
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:text="许可人"></TextView>
+
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.5"
+                        android:gravity="center_horizontal"
+                        android:text="工作负责人签名"></TextView>
+
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:src="@color/write_order_grat"></ImageView>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center_horizontal"
+                        android:text="许可工作的时间"></TextView>
+
+                </LinearLayout>
+
+
+                <com.patrol.terminal.widget.NoScrollListView
+                    android:id="@+id/licensing_end_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"></com.patrol.terminal.widget.NoScrollListView>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:src="@color/write_order_grat"></ImageView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/bg_gray"></View>
+
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="13.备注"
+                    android:textColor="@color/black" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="指定专责监护人" />
+
+                    <EditText
+                        android:id="@+id/et_custody_man"
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="负责监护(人员,地点及具体工作)" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/et_custody_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="top"
+                    android:padding="4dp" />
+
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(2)其他事项" />
+
+                <EditText
+                    android:layout_height="100dp"
+                    android:id="@+id/et_other"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="top"
+                    android:padding="4dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

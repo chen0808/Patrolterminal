@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_zero_monitering"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="1dp"
+        android:background="@color/bg_gray"
+        android:text="绝缘子零值检测" />
+
+    <Button
+        android:id="@+id/btn_grounded_electronic_measurement"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="1dp"
+        android:background="@color/bg_gray"
+        android:text="接地电子测量" />
+
+    <Button
+        android:id="@+id/btn_infrared_thermometry"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="1dp"
+        android:background="@color/bg_gray"
+        android:text="红外测温" />
+
+    <Button
+        android:id="@+id/btn_incline_thermometry"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="1dp"
+        android:background="@color/bg_gray"
+        android:text="斜杆塔倾斜测温" />
+
+</LinearLayout>

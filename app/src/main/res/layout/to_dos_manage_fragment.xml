@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+  <!--  <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/order_light_line"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/name_logo_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/name_iv"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@color/home_red"></ImageView>
+
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="杨刚"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/black"></TextView>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/classes_and_grades_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="兰州运维班"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_toRightOf="@+id/name_logo_ll"
+            android:layout_toLeftOf="@+id/position_tv"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"></TextView>
+
+        <TextView
+            android:id="@+id/position_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="班长"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"></TextView>
+    </RelativeLayout>-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@color/gray_plan"
+        >
+        <TextView
+            android:id="@+id/to_do_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="待办"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dp_20"
+            android:paddingRight="@dimen/dp_20"
+            android:background="@drawable/date_white_bg"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/date_color"
+            />
+
+        <TextView
+            android:id="@+id/done_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="已办"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dp_20"
+            android:paddingRight="@dimen/dp_20"
+            android:background="@drawable/date_grey_bg"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/to_do_tv"
+            />
+    </RelativeLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/frag_todo_ref"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/frag_todo_rv"
+            android:layout_width="match_parent"
+            android:overScrollMode="never"
+            android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+</LinearLayout>

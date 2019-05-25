@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/item_content_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="match_parent"
+                    android:text="未按规定配置现场安全防护装置、安全工器具和个人防护用品。"></TextView>
+
+                <ImageView android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:src="@color/write_order_grat"></ImageView>
+
+                <TextView
+                    android:id="@+id/level_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="严重"
+                    android:gravity="center"
+                    ></TextView>
+
+                <ImageView android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:src="@color/write_order_grat"></ImageView>
+
+                <TextView
+                    android:id="@+id/score_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="6"
+                    android:gravity="center"></TextView>
+
+                <ImageView android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:src="@color/write_order_grat"></ImageView>
+
+                <EditText
+                    android:id="@+id/check_person_et"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center"></EditText>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/item_line_iv"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:src="@color/write_order_grat"></ImageView>
+
+
+</LinearLayout>

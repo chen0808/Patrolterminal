@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".overhaul.OverhaulAddYearPlanActivity">
+
+    <include layout="@layout/include_title" />
+
+
+    <LinearLayout style="@style/overhaul_ll_styl">
+
+        <TextView
+            style="@style/overhaul_tv_styl"
+            android:text="设备名称" />
+
+        <EditText
+            android:id="@+id/week_plan_device_name"
+            style="@style/plan_et_styl"
+            android:background="@null"
+            android:hint="输入设备名称" />
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout style="@style/overhaul_ll_styl">
+
+        <TextView
+            android:id="@+id/month_plan_month"
+            style="@style/overhaul_tv_styl"
+            android:text="停电工作时间" />
+
+        <TextView
+            android:id="@+id/week_plan_time"
+            style="@style/plan_et_styl"
+            android:layout_marginRight="@dimen/dp_20"
+            android:drawableRight="@mipmap/icon_go"
+            android:text="点击选择停电工作时间" />
+    </LinearLayout>
+
+    <View style="@style/line_styl" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            style="@style/overhaul_tv_styl"
+            android:height="@dimen/dp_30"
+            android:text="工作内容" />
+
+        <EditText
+            android:id="@+id/week_plan_content"
+            style="@style/plan_et_styl"
+            android:layout_height="@dimen/dp_100"
+            android:gravity="left"
+            android:layout_marginRight="@dimen/dp_20"
+            android:padding="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:background="@drawable/btn_white"
+            android:hint="请输入这次的工作内容" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            style="@style/overhaul_tv_styl"
+            android:height="@dimen/dp_30"
+            android:text="备注" />
+
+        <EditText
+            android:id="@+id/week_plan_remark"
+            style="@style/plan_et_styl"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="left"
+            android:layout_marginRight="@dimen/dp_20"
+            android:padding="@dimen/dp_10"
+            android:background="@drawable/btn_white"
+            android:hint="请输入备注信息" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/week_plan_submit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:background="@color/gray_plan"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+    </RelativeLayout>
+</LinearLayout>

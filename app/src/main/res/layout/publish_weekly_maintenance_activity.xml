@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@color/gray_plan"
+        >
+        <TextView
+            android:id="@+id/week_maintenace_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="周检修工作"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dp_20"
+            android:paddingRight="@dimen/dp_20"
+            android:background="@drawable/date_white_bg"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/date_color"
+            />
+
+        <TextView
+            android:id="@+id/other_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="ZY201902010"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dp_20"
+            android:paddingRight="@dimen/dp_20"
+            android:background="@drawable/date_grey_bg"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/week_maintenace_tv"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/weekly_maintenance_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:id="@+id/weekly_maintenance_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/weekly_maintenance_ll">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="设备名称："
+                    android:layout_gravity="center_vertical"></TextView>
+
+                <TextView
+                    android:id="@+id/outage_line_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="1#kv"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/weekly_maintenance_ll">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="停电天数："
+                    android:layout_gravity="center_vertical"></TextView>
+
+                <TextView
+                    android:id="@+id/outage_plan_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/weekly_maintenance_ll">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="工作内容："
+                    android:layout_gravity="center_vertical"></TextView>
+
+                <TextView
+                    android:id="@+id/work_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/weekly_maintenance_ll">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="任务来源："
+                    android:layout_gravity="center_vertical"></TextView>
+
+                <TextView
+                    android:id="@+id/task_sourse"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/weekly_maintenance_ll">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="风险等级："
+                    android:layout_gravity="center_vertical"></TextView>
+
+                <TextView
+                    android:id="@+id/rist_level"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"></TextView>
+            </LinearLayout>
+        <!--    <Spinner
+                android:id="@+id/work_ticket_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:entries="@array/work_ticket_arrays"
+                android:layout_marginTop="10dp"
+                ></Spinner>-->
+
+           <!-- <TextView
+                android:id="@+id/control_card"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="班组作业控制卡"
+                android:background="@drawable/btn_bg"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                ></TextView>-->
+        </LinearLayout>
+
+        <!--展示上传的图片-->
+     <!--   <GridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_margin="15dp"
+            android:columnWidth="60dp"
+            android:horizontalSpacing="10dp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="10dp"
+            android:layout_below="@+id/weekly_maintenance_ll"/>-->
+
+        <!--  <LinearLayout
+            android:id="@+id/work_lines"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/gridView"
+            android:background="@color/bg_gray"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            >
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="工作环节"
+                android:layout_marginTop="10dp"></TextView>
+
+            <ImageView android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:src="@color/write_order_grat"></ImageView>
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="任务内容"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"></TextView>
+
+            <ImageView android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:src="@color/write_order_grat"></ImageView>
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="接收人"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"></TextView>
+
+        </LinearLayout>-->
+        <!--     <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_below="@+id/work_lines"
+            android:layout_above="@+id/send_btn"
+            ></ListView>-->
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/weekly_maintenance_ll">
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选择负责人："
+                android:gravity="center_vertical"></TextView>
+
+            <Spinner
+                android:id="@+id/select_member_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:entries="@array/renwu_worker_names"
+                ></Spinner>
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/send_btn"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:text="发送"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/examing_bg"
+            ></Button>
+
+    </RelativeLayout>
+
+</LinearLayout>

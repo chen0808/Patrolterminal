@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/item_type_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:gravity="center_vertical"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_half"
+        android:background="@color/main_bg"
+        />
+    <LinearLayout
+        android:id="@+id/add_plan_start_ll"
+        style="@style/plan_ll_styl">
+
+        <TextView
+            style="@style/plan_tv_styl"
+            android:text="杆段起点" />
+
+        <TextView
+            android:id="@+id/month_plan_tower_start"
+            style="@style/plan_et_styl"
+            android:layout_marginRight="@dimen/dp_20"
+            android:drawableRight="@mipmap/icon_go"
+            android:text="点击选择杆段起点" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_half"
+        android:layout_marginLeft="@dimen/dp_40"
+        android:layout_marginRight="@dimen/dp_40"
+        android:background="@color/main_bg"
+        />
+    <LinearLayout
+        android:id="@+id/add_plan_end_ll"
+        style="@style/plan_ll_styl">
+
+        <TextView
+            style="@style/plan_tv_styl"
+            android:text="杆段终点" />
+
+        <TextView
+            android:id="@+id/month_plan_tower_end"
+            style="@style/plan_et_styl"
+            android:layout_marginRight="@dimen/dp_20"
+            android:drawableRight="@mipmap/icon_go"
+            android:text="点击选择杆段终点" />
+    </LinearLayout>
+</LinearLayout>

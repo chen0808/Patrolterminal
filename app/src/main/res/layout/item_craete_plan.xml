@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_40"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/item_carete_plan_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="2019年4月桃开一线月计划"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_20"
+        />
+    <CheckBox
+        android:id="@+id/item_carete_plan_check"
+        android:layout_width="@dimen/dp_60"
+        android:paddingLeft="@dimen/dp_20"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_half"
+        android:layout_alignParentBottom="true"
+        android:background="@color/line_color"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        />
+</RelativeLayout>

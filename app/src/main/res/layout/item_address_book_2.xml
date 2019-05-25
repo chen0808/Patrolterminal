@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp">
+
+    <CheckBox
+        android:id="@+id/check_box"
+        android:layout_width="48dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="32dp"
+        android:button="@drawable/selector_check" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="54dp"
+        android:text="sss"
+        android:textSize="18sp"
+        android:textColor="@color/blue_commit"/>
+
+
+    <TextView
+        android:id="@+id/tv_content_bz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sss"
+        android:layout_toRightOf="@+id/tv_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"></TextView>
+
+    <TextView
+        android:id="@+id/tv_content_job"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sss"
+        android:layout_toRightOf="@+id/tv_content_bz"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"></TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_gray"></View>
+</RelativeLayout>

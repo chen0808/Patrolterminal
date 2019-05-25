@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@color/main_bg"
+    tools:context=".activity.WeekPlanMakeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_title" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/dp_50"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:orientation="vertical">
+
+                <LinearLayout style="@style/plan_ll_styl"
+
+                    >
+
+                    <TextView
+                        style="@style/plan_tv_styl"
+                        android:text="@string/plan_name" />
+
+                    <EditText
+                        android:id="@+id/week_plan_name"
+                        style="@style/plan_et_styl"
+                        android:background="@null"
+                        android:hint="@string/hint_plan_name" />
+                </LinearLayout>
+
+                <View style="@style/line_styl" />
+
+                <LinearLayout style="@style/plan_ll_styl">
+
+                    <TextView
+                        style="@style/plan_tv_styl"
+                        android:text="@string/plan_type" />
+
+                        <TextView
+                            android:id="@+id/week_plan_type"
+                            style="@style/plan_et_styl"
+                            android:hint="@string/hint_plan_type" />
+
+                </LinearLayout>
+
+                <View style="@style/line_styl" />
+
+                <LinearLayout style="@style/plan_ll_styl">
+
+                    <TextView
+                        style="@style/plan_tv_styl"
+                        android:text="执行班组" />
+
+                    <TextView
+                        android:id="@+id/week_plan_class"
+                        style="@style/plan_et_styl"
+                        android:text="巡检一班" />
+                </LinearLayout>
+
+                <View style="@style/line_styl" />
+
+                <LinearLayout style="@style/plan_ll_styl">
+
+                    <TextView
+                        android:id="@+id/week_start_date_tv"
+                        style="@style/plan_tv_styl"
+                        android:text="开始日期" />
+
+                    <TextView
+                        android:id="@+id/week_start_date"
+                        style="@style/plan_et_styl"
+                        android:drawableRight="@mipmap/icon_go"
+                        android:layout_marginRight="@dimen/dp_20"
+                        android:text="选择开始日期" />
+                </LinearLayout>
+                <View
+                    android:id="@+id/date_line"
+                    style="@style/line_styl" />
+                <LinearLayout
+                    android:id="@+id/week_end_date_11"
+                    style="@style/plan_ll_styl">
+
+                    <TextView
+                        style="@style/plan_tv_styl"
+                        android:text="结束日期" />
+
+                    <TextView
+                        android:id="@+id/week_end_date"
+                        style="@style/plan_et_styl"
+                        android:drawableRight="@mipmap/icon_go"
+                        android:layout_marginRight="@dimen/dp_20"
+                        android:text="选择结束日期" />
+                </LinearLayout>
+                <View style="@style/line_styl" />
+
+                <LinearLayout style="@style/plan_ll_styl">
+
+                    <TextView
+                        style="@style/plan_tv_styl"
+                        android:text="所属周期" />
+
+                    <TextView
+                        android:id="@+id/week_num"
+                        style="@style/plan_et_styl"
+                        android:text="请输入几月几周" />
+                </LinearLayout>
+                <View style="@style/line_styl" />
+                <LinearLayout
+                    android:id="@+id/task_personal_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        style="@style/plan_tv_styl"
+                        android:layout_height="@dimen/dp_40"
+                        android:text="指派人员" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.patrol.terminal.widget.FlowGroupView
+                            android:id="@+id/incontinuity_tower"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_10"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="@dimen/dp_60"
+                            android:layout_marginBottom="5dp"></com.patrol.terminal.widget.FlowGroupView>
+
+                        <ImageView
+                            android:id="@+id/add_incontinuity_tower"
+                            android:layout_width="@dimen/dp_40"
+                            android:layout_height="@dimen/dp_40"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/dp_20"
+                            android:background="@color/gray_plan"
+                            android:scaleType="center"
+                            android:src="@mipmap/add_black" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+                <!--<View style="@style/line_styl" />-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:background="@color/white"
+                    >
+
+                    <TextView
+                     android:layout_width="@dimen/dp_70"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_33"
+                        android:textSize="@dimen/sp_14"
+                        android:layout_marginLeft="31dp"
+                        android:text="详情" />
+
+                    <EditText
+                        android:id="@+id/week_plan_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_100"
+                        android:layout_margin="@dimen/dp_10"
+                        android:background="@drawable/week_white_bg"
+                        android:gravity="left"
+                        android:hint="请描述详情"
+                        android:padding="@dimen/dp_10"
+                        android:textSize="@dimen/sp_13" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/week_plan_line_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/week_add_line"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:gravity="center"
+            android:text="添加线路"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+        <TextView
+            android:id="@+id/week_delet_line"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:background="@color/write_red"
+            android:gravity="center"
+            android:text="删除线路"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <TextView
+            android:id="@+id/week_yes"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="2"
+            android:background="@color/gray_plan"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+    </LinearLayout>
+</RelativeLayout>
