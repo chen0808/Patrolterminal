@@ -158,9 +158,9 @@
         <activity
             android:name=".activity.SignActivity"
             android:screenOrientation="landscape" />
-       <!-- <activity
+        <activity
             android:name=".activity.MapActivity"
-            android:screenOrientation="portrait" />-->
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.DayPlanDetailActivity"
             android:screenOrientation="portrait" />
@@ -296,7 +296,6 @@
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService">
         </service>
-
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.MapActivity;
 import com.patrol.terminal.activity.MyPerformanceActivity;
 import com.patrol.terminal.activity.ScoreListActivity;
 import com.patrol.terminal.activity.SendCarActivity;
@@ -49,6 +50,8 @@ public class MeFragement extends BaseFragment {
     TextView myName;
     @BindView(R.id.my_dep)
     TextView myDep;
+    @BindView(R.id.rl_my_position)
+    RelativeLayout rlMyPosition;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +67,7 @@ public class MeFragement extends BaseFragment {
         myName.setText( SPUtil.getString(getContext(), Constant.USER, Constant.USERNAME,""));
     }
 
-    @OnClick({R.id.rl_team_assessment, R.id.rl_my_performance, R.id.rl_send_car, R.id.rl_setting, R.id.rl_send_car_temporary})
+    @OnClick({R.id.rl_team_assessment, R.id.rl_my_performance, R.id.rl_send_car, R.id.rl_setting, R.id.rl_send_car_temporary, R.id.rl_my_position})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_team_assessment:
@@ -81,6 +84,9 @@ public class MeFragement extends BaseFragment {
                 break;
             case R.id.rl_setting:
                 startActivityForResult(new Intent(getActivity(), SettingActivity.class), 10);
+                break;
+            case R.id.rl_my_position:
+                startActivity(new Intent(getActivity(), MapActivity.class));
                 break;
         }
     }

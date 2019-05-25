@@ -55,6 +55,8 @@ import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PlanRepairBean;
 import com.patrol.terminal.bean.PlanTypeBean;
 import com.patrol.terminal.bean.PlanWeekReqBean;
+import com.patrol.terminal.bean.PositionInfo;
+import com.patrol.terminal.bean.PositionListBean;
 import com.patrol.terminal.bean.RfInfo;
 import com.patrol.terminal.bean.SavaMonthDefDanBean;
 import com.patrol.terminal.bean.SaveDefMonthReqBean;
@@ -758,4 +760,12 @@ public interface ApiServise {
     //个人任务详情
     @POST("task/agents/audit/updatePOST")
     Observable<BaseResult<TypeBean>> saveTodoAudit(@Body SaveTodoReqbean reqbean);
+
+    //上传个人位置信息
+    @POST("task/gps/pda/updatePOST")
+    Observable<BaseResult<TypeBean>> setPosition(@Body PositionInfo positionInfo);
+
+    //获取个人轨迹集合
+    @GET("task/gps/listGET")
+    Observable<BaseResult<List<PositionListBean>>> getPositonList(@Query("user_id") String user_id, @Query("loc_time like") String date);
 }

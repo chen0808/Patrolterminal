@@ -23,6 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="增加模拟位置坐标" />
+            android:text="播放轨迹" />
     </RelativeLayout>
 </LinearLayout>

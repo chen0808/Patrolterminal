@@ -103,6 +103,12 @@ public class DateUatil {
         return format.format(date);
     }
 
+    public static String getTime() {
+        Date date=new Date(System.currentTimeMillis());
+        SimpleDateFormat format  = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
     /**
      *
      * @return 该毫秒数转换为 * days * hours * minutes * seconds 后的格式
