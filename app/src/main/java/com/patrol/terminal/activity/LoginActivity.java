@@ -79,7 +79,7 @@ public class LoginActivity extends BaseActivity {
                                     SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPNAME, results.getDep_name());
                                     SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPID, results.getDep_id());
 
-                          if (results.getSysJobList().size() >1) {
+                          if (results.getSysJobList().size() >0) {
                                 String jobSign = results.getSysJobList().get(0).getSign();
                                 SPUtil.putString(LoginActivity.this, Constant.USER, Constant.JOBTYPE, jobSign);
                                 goToMainActivity(jobSign);
