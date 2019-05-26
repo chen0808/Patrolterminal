@@ -18,6 +18,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddMonthPlanActivity;
 import com.patrol.terminal.activity.MonthPlanDetailActivity;
@@ -27,6 +28,9 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.MonthPlanBean;
+import com.patrol.terminal.bean.PatrolContentBean;
+import com.patrol.terminal.bean.PatrolLevel1;
+import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.bean.SubmitPlanReqBean;
 import com.patrol.terminal.bean.SubmitPlanReqStateBean;
 import com.patrol.terminal.bean.Tower;
@@ -132,12 +136,10 @@ public class MonthPlanFrgment extends BaseFragment {
                 MonthPlanBean bean = planData.get(position);
                 Intent intent = new Intent();
 
-                if (bean.getMonth_id() != null) {
+                if (bean.getId() != null) {
                     intent.setClass(getContext(), MonthPlanDetailActivity.class);
                     intent.putExtra("year", bean.getYear());
                     intent.putExtra("month", bean.getMonth());
-                    intent.putExtra("id", bean.getLine_id());
-                    intent.putExtra("month_id", bean.getMonth_id());
                 } else {
 //                    intent.setClass(getContext(), SpecialPlanDetailActivity.class);
 //                    intent.putExtra("from","month");
@@ -169,24 +171,24 @@ public class MonthPlanFrgment extends BaseFragment {
                             List<MonthPlanBean> result = t.getResults();
                             for (int i = 0; i < result.size(); i++) {
                                 MonthPlanBean bean1 = result.get(i);
-                                if (bean1.getMonth_id() != null) {
+                                if (bean1.getMonth_line_id() != null) {
                                     //当身份是专责时，获取需要审批的列表
                                     if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(result.get(i).getAudit_status())) {
                                         MonthPlanBean bean = result.get(i);
                                         Tower lineBean = new Tower();
-                                        lineBean.setLine_id(bean.getLine_id());
+                                        lineBean.setLine_id(bean.getId());
                                         lineList.add(lineBean);
                                         //当身份是主管时，获取需要审批的列表
                                     } else if (mJobType.equals(Constant.RUN_SUPERVISOR) && "2".equals(result.get(i).getAudit_status())) {
                                         MonthPlanBean bean = result.get(i);
                                         Tower lineBean = new Tower();
-                                        lineBean.setLine_id(bean.getLine_id());
+                                        lineBean.setLine_id(bean.getId());
                                         lineList.add(lineBean);
                                         //当身份是专责时，获取需要发布的列表
                                     } else if (mJobType.equals(Constant.RUNNING_SQUAD_LEADER) && "0".equals(result.get(i).getAudit_status())) {
                                         MonthPlanBean bean = result.get(i);
                                         Tower lineBean = new Tower();
-                                        lineBean.setLine_id(bean.getLine_id());
+                                        lineBean.setLine_id(bean.getId());
                                         lineList.add(lineBean);
                                     }
                                     planData.add(bean1);
@@ -388,5 +390,22 @@ public class MonthPlanFrgment extends BaseFragment {
                     }
                 });
 
+    }
+
+    private List<MultiItemEntity> getData(List<PatrolContentBean> results) {
+        List<MultiItemEntity> list = new ArrayList<>();
+        for (int i = 0; i < results.size(); i++) {
+            PatrolLevel1 level1 = new PatrolLevel1(results.get(i).getName());
+            for (int j = 0; j < results.get(i).getValue().size(); j++) {
+                PatrolLevel2 level2 = new PatrolLevel2(results.get(i).getValue().get(j).getREMARKS()
+                        , results.get(i).getValue().get(j).getISDEFECT().equals("N") ? true : false
+                        , results.get(i).getValue().get(j).getCATEGORY()
+                        , results.get(i).getValue().get(j).getNAME(),
+                        results.get(i).getValue().get(j).getID());
+                level1.addSubItem(j, level2);
+            }
+            list.add(level1);
+        }
+        return list;
     }
 }

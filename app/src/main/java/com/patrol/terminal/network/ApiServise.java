@@ -119,7 +119,7 @@ public interface ApiServise {
     Observable<BaseResult<List<MonthPlanBean>>> getMonthPlanList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("state") String state);
 
     //月计划列表
-    @GET("plan/month/planByDepIdGET")
+    @GET("plan/month/monthGET")
     Observable<BaseResult<List<MonthPlanBean>>> getMonthPlan(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("audit_status") String audit_status);
 
     //周计划添加获取月计划列表

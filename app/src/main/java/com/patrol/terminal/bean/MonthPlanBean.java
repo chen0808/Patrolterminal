@@ -3,51 +3,53 @@ package com.patrol.terminal.bean;
 public class MonthPlanBean {
 
 
+
         /**
-         * full_plan : 接地电阻,定期巡视
-         * plan_type : 1
+         * type_name : 定期巡视
+         * month_line_id : 80E9D39DCD5B482E9E3396FA4B1B8393
          * dep_id : BBE359C6F29042A1A5AF96F9C1B68ED8
-         * month : 6
+         * done_status : 0
          * year : 2019
-         * month_id : 12E39DC62F604886973E69BC4E0AA44B
-         * line_name : 新川线
+         * audit_status : 0
          * dep_name : 西固运维班
-         * line_id : CA4C0F9B205C4FF1833A82E002CB09FA
+         * allot_status : 0
+         * month : 5
+         * data_id : CB63577720E64099A4A93DDB19E989EE
+         * name : #001-#014
+         * line_name : 1111安刘线
+         * id : D88C1F30C08A49E5AD92F303BD2FDEFF
+         * tower_type : 1
          */
 
-        private String full_plan;
-        private String plan_type;
+        private String type_name;
+        private String month_line_id;
         private String dep_id;
-        private int month;
+        private String done_status;
         private int year;
         private String audit_status;
-        private String month_id;
-        private String line_name;
         private String dep_name;
-        private String line_id;
+        private String allot_status;
+        private int month;
+        private String data_id;
+        private String name;
+        private String line_name;
+        private String id;
+        private String tower_type;
 
-    public String getAudit_status() {
-        return audit_status;
-    }
-
-    public void setAudit_status(String audit_status) {
-        this.audit_status = audit_status;
-    }
-
-    public String getFull_plan() {
-            return full_plan;
+        public String getType_name() {
+            return type_name;
         }
 
-        public void setFull_plan(String full_plan) {
-            this.full_plan = full_plan;
+        public void setType_name(String type_name) {
+            this.type_name = type_name;
         }
 
-        public String getPlan_type() {
-            return plan_type;
+        public String getMonth_line_id() {
+            return month_line_id;
         }
 
-        public void setPlan_type(String plan_type) {
-            this.plan_type = plan_type;
+        public void setMonth_line_id(String month_line_id) {
+            this.month_line_id = month_line_id;
         }
 
         public String getDep_id() {
@@ -58,12 +60,12 @@ public class MonthPlanBean {
             this.dep_id = dep_id;
         }
 
-        public int getMonth() {
-            return month;
+        public String getDone_status() {
+            return done_status;
         }
 
-        public void setMonth(int month) {
-            this.month = month;
+        public void setDone_status(String done_status) {
+            this.done_status = done_status;
         }
 
         public int getYear() {
@@ -74,20 +76,12 @@ public class MonthPlanBean {
             this.year = year;
         }
 
-        public String getMonth_id() {
-            return month_id;
+        public String getAudit_status() {
+            return audit_status;
         }
 
-        public void setMonth_id(String month_id) {
-            this.month_id = month_id;
-        }
-
-        public String getLine_name() {
-            return line_name;
-        }
-
-        public void setLine_name(String line_name) {
-            this.line_name = line_name;
+        public void setAudit_status(String audit_status) {
+            this.audit_status = audit_status;
         }
 
         public String getDep_name() {
@@ -98,11 +92,60 @@ public class MonthPlanBean {
             this.dep_name = dep_name;
         }
 
-        public String getLine_id() {
-            return line_id;
+        public String getAllot_status() {
+            return allot_status;
         }
 
-        public void setLine_id(String line_id) {
-            this.line_id = line_id;
+        public void setAllot_status(String allot_status) {
+            this.allot_status = allot_status;
         }
+
+        public int getMonth() {
+            return month;
+        }
+
+        public void setMonth(int month) {
+            this.month = month;
+        }
+
+        public String getData_id() {
+            return data_id;
+        }
+
+        public void setData_id(String data_id) {
+            this.data_id = data_id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getLine_name() {
+            return line_name;
+        }
+
+        public void setLine_name(String line_name) {
+            this.line_name = line_name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getTower_type() {
+            return tower_type;
+        }
+
+        public void setTower_type(String tower_type) {
+            this.tower_type = tower_type;
+        }
+
 }
