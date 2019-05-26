@@ -33,8 +33,10 @@ import com.patrol.terminal.bean.HwcwBean;
 import com.patrol.terminal.bean.JDDZbean;
 import com.patrol.terminal.bean.JYZbean;
 import com.patrol.terminal.bean.LineBean;
+import com.patrol.terminal.bean.LineCheckBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.LoginReqBean;
+import com.patrol.terminal.bean.MonthListBean;
 import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.bean.MonthPlanDetailBean;
 import com.patrol.terminal.bean.OvaTodoBean;
@@ -58,6 +60,7 @@ import com.patrol.terminal.bean.PlanWeekReqBean;
 import com.patrol.terminal.bean.PositionInfo;
 import com.patrol.terminal.bean.PositionListBean;
 import com.patrol.terminal.bean.RfInfo;
+import com.patrol.terminal.bean.SavaLineBean;
 import com.patrol.terminal.bean.SavaMonthDefDanBean;
 import com.patrol.terminal.bean.SaveDefMonthReqBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
@@ -119,8 +122,12 @@ public interface ApiServise {
     Observable<BaseResult<List<MonthPlanBean>>> getMonthPlanList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("state") String state);
 
     //月计划列表
-    @GET("plan/month/monthGET")
-    Observable<BaseResult<List<MonthPlanBean>>> getMonthPlan(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("audit_status") String audit_status);
+    @GET("plan/month/planGET")
+    Observable<BaseResult<MonthListBean>> getMonthPlan(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("audit_status") String audit_status);
+
+    //月计划列表
+    @GET("eq/line/partGET")
+    Observable<BaseResult<List<LineCheckBean>>> getLineList();
 
     //周计划添加获取月计划列表
     @GET("plan/month/line/monthGET")
@@ -148,6 +155,13 @@ public interface ApiServise {
     Observable<BaseResult<List<LineTypeBean>>> addDayPlan(@Body PlanWeekReqBean bean);
 
 
+    //添加日计划
+    @POST("/plan/month/line/electricPOST")
+    Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body LineCheckBean bean);
+
+    //添加日计划
+    @POST("/plan/month/line/tempPOST")
+    Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body SavaLineBean bean);
     //获取月缺陷库
     @GET("/task/defect/listGET")
     Observable<BaseResult<List<DefectBean>>> getDefect(@Query("line_id") String line_id, @Query("status") String status, @Query("audit_status") String audit_status);

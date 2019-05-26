@@ -95,11 +95,7 @@ public class TimeUtil {
 				// 当前日期数+7 比较 当月天数
 				if ((midNum + 7) <= days) {
 					int beginNum = midNum + 1;
-					System.out.println("begin:" + beginNum);
-
 					int endNum = midNum + 7;
-					System.out.println("end:" + endNum);
-
 					String time1 = date + "-" + getNum(beginNum);
 					String time2 = date + "-" + getNum(endNum);
 					Map<String, Object> data = new HashMap<String, Object>();

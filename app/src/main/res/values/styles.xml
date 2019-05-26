@@ -172,7 +172,10 @@
         <item name="android:textColor">@color/main_blue</item>
         <item name="android:textSize">@dimen/sp_14</item>
     </style>
-
+    <style name="AnimTools" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/push_in</item>
+        <item name="android:windowExitAnimation">@anim/push_out</item>
+    </style>
     <style name="Theme_Dialog_Progress" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>

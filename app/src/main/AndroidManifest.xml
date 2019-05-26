@@ -31,7 +31,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MakeDutyActivity"></activity>
+        <activity android:name=".activity.TemporaryActivity"></activity>
+        <activity android:name=".activity.MakeDutyActivity" />
         <activity android:name=".activity.ChangePlanActivity" />
         <activity android:name=".overhaul.OverhaulWeekPlanActivity" />
         <activity android:name=".activity.SpecialPlanDetailActivity" />
@@ -289,7 +290,7 @@
             android:name="com.amap.api.v2.apikey"
             android:value="f997b2a5b39654038602347a7203462f" /> <!-- 69ef137e2112474f49cece1036dfc50b -->
         <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService"></service>
+        <service android:name="com.amap.api.location.APSService" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -302,6 +303,7 @@
         </provider>
 
         <activity android:name=".training.NewTrainPlanActivity" />
+        <activity android:name=".activity.LineCheckActivity" />
     </application>
 
 </manifest>

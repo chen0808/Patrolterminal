@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_40"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10"
+        >
+        <RadioButton
+            android:id="@+id/line_check_rb"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:checked="false"
+            android:clickable="false"
+            android:focusable="false"
+            android:layout_weight="3"
+            android:paddingLeft="@dimen/dp_10"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            />
+        <TextView
+            android:id="@+id/line_check_line_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:textSize="@dimen/sp_13"
+            android:text="计划名称"
+            android:textColor="@color/color_33"
+            />
+
+        <TextView
+            android:id="@+id/line_check_dep_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:textSize="@dimen/sp_13"
+            android:text="定期巡视"
+            android:textColor="@color/color_33"
+            />
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/image_overlay_false"
+        android:layout_alignParentBottom="true"
+        />
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/dp_half"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@color/image_overlay_true"-->
+        <!--android:layout_marginLeft="@dimen/dp_20"-->
+        <!--android:layout_marginRight="@dimen/dp_20"-->
+        <!--/>-->
+</RelativeLayout>

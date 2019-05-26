@@ -22,11 +22,17 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddMonthPlanActivity;
 import com.patrol.terminal.activity.MonthPlanDetailActivity;
+import com.patrol.terminal.activity.TemporaryActivity;
 import com.patrol.terminal.adapter.MonthPlanAdapter;
+import com.patrol.terminal.adapter.MonthPlanListAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.DefectBean;
+import com.patrol.terminal.bean.EleBean;
+import com.patrol.terminal.bean.MonthLevel1;
+import com.patrol.terminal.bean.MonthListBean;
 import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.bean.PatrolContentBean;
 import com.patrol.terminal.bean.PatrolLevel1;
@@ -39,6 +45,7 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.CancelOrOkDialog;
+import com.patrol.terminal.widget.PopMenmuDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
@@ -77,14 +84,16 @@ public class MonthPlanFrgment extends BaseFragment {
     RadioButton mYsjh;
     @BindView(R.id.aqjh)
     RadioButton mAqjh;
-
-
+    @BindView(R.id.task_screen)
+    ImageView taskScreen;
 
     private MonthPlanAdapter monthPlanAdapter;
     private TimePickerView pvTime;
-    private List<MonthPlanBean> planData = new ArrayList<>();
     private List<Tower> lineList = new ArrayList<>();
     private List<Tower> relList = new ArrayList<>();
+    private List<MonthPlanBean> data = new ArrayList<>();
+    private List<MonthPlanBean> data1 = new ArrayList<>();
+    private List<MonthPlanBean> data2 = new ArrayList<>();
     private String time;
     private String typeId;
     private String month, year;
@@ -92,6 +101,7 @@ public class MonthPlanFrgment extends BaseFragment {
     private String state;
     private String mJobType;
     private String depId;
+    private PopMenmuDialog popWinShare;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,7 +112,8 @@ public class MonthPlanFrgment extends BaseFragment {
     @Override
     protected void initData() {
         mContext = getActivity();
-        taskAdd.setVisibility(View.INVISIBLE);
+        taskScreen.setVisibility(View.VISIBLE);
+        taskAdd.setVisibility(View.VISIBLE);
         planSubmit.setVisibility(View.VISIBLE);
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
@@ -119,7 +130,6 @@ public class MonthPlanFrgment extends BaseFragment {
             planSubmit.setVisibility(View.VISIBLE);
             planCreate.setVisibility(View.INVISIBLE);
         }
-
         time = DateUatil.getCurMonth();
         String[] years = time.split("年");
         String[] months = years[1].split("月");
@@ -128,18 +138,21 @@ public class MonthPlanFrgment extends BaseFragment {
         taskDate.setText(time);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
-        monthPlanAdapter = new MonthPlanAdapter(R.layout.fragment_plan_item, planData, year, month, state);
+        monthPlanAdapter = new MonthPlanAdapter(R.layout.fragment_plan_item, data, state, mJobType);
         planRv.setAdapter(monthPlanAdapter);
         monthPlanAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                MonthPlanBean bean = planData.get(position);
+
+                MonthPlanBean bean = (MonthPlanBean) data.get(position);
                 Intent intent = new Intent();
 
-                if (bean.getId() != null) {
+                if (bean.getMonth_id() != null) {
                     intent.setClass(getContext(), MonthPlanDetailActivity.class);
                     intent.putExtra("year", bean.getYear());
                     intent.putExtra("month", bean.getMonth());
+                    intent.putExtra("month_id", bean.getMonth_id());
+                    intent.putExtra("id", bean.getLine_id());
                 } else {
 //                    intent.setClass(getContext(), SpecialPlanDetailActivity.class);
 //                    intent.putExtra("from","month");
@@ -149,6 +162,7 @@ public class MonthPlanFrgment extends BaseFragment {
                 }
                 startActivity(intent);
             }
+
         });
 
         getMonthPlanList();
@@ -156,53 +170,22 @@ public class MonthPlanFrgment extends BaseFragment {
 
     //获取月计划列表
     public void getMonthPlanList() {
-        planData.clear();
         ProgressDialog.show(getContext(), false, "正在加载中");
         BaseRequest.getInstance().getService()
                 .getMonthPlan(Integer.parseInt(year), Integer.parseInt(month), depId, state)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<MonthPlanBean>>(getContext()) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<MonthPlanBean>> t) throws Exception {
+                .subscribe(new BaseObserver<MonthListBean>(getContext()) {
 
-                        if (t.getResults().size() > 0) {
+                    @Override
+                    protected void onSuccees(BaseResult<MonthListBean> t) throws Exception {
+
+                        if (t.getCode() == 1) {
+                            MonthListBean results = t.getResults();
                             lineList.clear();
-                            List<MonthPlanBean> result = t.getResults();
-                            for (int i = 0; i < result.size(); i++) {
-                                MonthPlanBean bean1 = result.get(i);
-                                if (bean1.getMonth_line_id() != null) {
-                                    //当身份是专责时，获取需要审批的列表
-                                    if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(result.get(i).getAudit_status())) {
-                                        MonthPlanBean bean = result.get(i);
-                                        Tower lineBean = new Tower();
-                                        lineBean.setLine_id(bean.getId());
-                                        lineList.add(lineBean);
-                                        //当身份是主管时，获取需要审批的列表
-                                    } else if (mJobType.equals(Constant.RUN_SUPERVISOR) && "2".equals(result.get(i).getAudit_status())) {
-                                        MonthPlanBean bean = result.get(i);
-                                        Tower lineBean = new Tower();
-                                        lineBean.setLine_id(bean.getId());
-                                        lineList.add(lineBean);
-                                        //当身份是专责时，获取需要发布的列表
-                                    } else if (mJobType.equals(Constant.RUNNING_SQUAD_LEADER) && "0".equals(result.get(i).getAudit_status())) {
-                                        MonthPlanBean bean = result.get(i);
-                                        Tower lineBean = new Tower();
-                                        lineBean.setLine_id(bean.getId());
-                                        lineList.add(lineBean);
-                                    }
-                                    planData.add(bean1);
-                                } else {
-//                                    List<InnerPlanbean> planCheckList = bean1.getPlanCheckList();
-//                                    for (int j = 0; j < planCheckList.size(); j++) {
-//                                        InnerPlanbean planbean = planCheckList.get(j);
-//                                        MonthPlanBean monthPlanBean = new MonthPlanBean();
-//                                        monthPlanBean.setPlanCheck(planbean);
-//                                        planData.add(monthPlanBean);
-//                                    }
-                                }
-                            }
-                            monthPlanAdapter.setNewData(planData);
+                            getData(results);
+                            monthPlanAdapter.setNewData(data);
+
                             ProgressDialog.cancle();
 
                         }
@@ -288,11 +271,15 @@ public class MonthPlanFrgment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.task_date, R.id.task_add, R.id.plan_create, R.id.plan_submit})
+    @OnClick({R.id.task_date, R.id.task_add, R.id.plan_create, R.id.plan_submit,R.id.task_screen})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:
                 showMonth();
+                break;
+            case R.id.task_add:
+               Intent intent=new Intent(getContext(), TemporaryActivity.class);
+               getActivity().startActivityForResult(intent,10);
                 break;
             case R.id.plan_submit:
                 if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)) {
@@ -334,15 +321,53 @@ public class MonthPlanFrgment extends BaseFragment {
                     dialog.show();
                 }
                 break;
-            case R.id.task_add:
-                startActivityForResult(new Intent(getContext(), AddMonthPlanActivity.class), 10);
-                break;
-            case R.id.plan_create:
+            case R.id.task_screen:
+                if (popWinShare == null) {
+                    //自定义的单击事件
+                    OnClickLintener paramOnClickListener = new OnClickLintener();
+                    popWinShare = new PopMenmuDialog(getActivity(), paramOnClickListener, dip2px(getContext(), 140), dip2px(getContext(), 120));
+                    //监听窗口的焦点事件，点击窗口外面则取消显示
+                    popWinShare.getContentView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (!hasFocus) {
+                                popWinShare.dismiss();
+                            }
+                        }
+                    });
+                }
+               //设置默认获取焦点
+                popWinShare.setFocusable(true);
+               //以某个控件的x和y的偏移量位置开始显示窗口
+                popWinShare.showAsDropDown(taskAdd, 0, 0);
+               //如果窗口存在，则更新
+                popWinShare.update();
                 break;
+
         }
     }
 
+    class OnClickLintener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.all:
+                    monthPlanAdapter.setNewData(data);
+                case R.id.popmenmu1:
+                    monthPlanAdapter.setNewData(data1);
+                    break;
+                case R.id.popmenmu2:
+                    monthPlanAdapter.setNewData(data2);
+                    break;
+                default:
+                    break;
+            }
+            popWinShare.dismiss();
+        }
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -392,20 +417,46 @@ public class MonthPlanFrgment extends BaseFragment {
 
     }
 
-    private List<MultiItemEntity> getData(List<PatrolContentBean> results) {
-        List<MultiItemEntity> list = new ArrayList<>();
-        for (int i = 0; i < results.size(); i++) {
-            PatrolLevel1 level1 = new PatrolLevel1(results.get(i).getName());
-            for (int j = 0; j < results.get(i).getValue().size(); j++) {
-                PatrolLevel2 level2 = new PatrolLevel2(results.get(i).getValue().get(j).getREMARKS()
-                        , results.get(i).getValue().get(j).getISDEFECT().equals("N") ? true : false
-                        , results.get(i).getValue().get(j).getCATEGORY()
-                        , results.get(i).getValue().get(j).getNAME(),
-                        results.get(i).getValue().get(j).getID());
-                level1.addSubItem(j, level2);
+    private void getData(MonthListBean results) {
+
+        List<MonthPlanBean> patrol = results.getPatrol();
+        List<MonthPlanBean> ele = results.getEle();
+        List<MonthPlanBean> repair = results.getRepair();
+        if (patrol != null) {
+            data1 = patrol;
+            data.addAll(patrol);
+            for (int j = 0; j < patrol.size(); j++) {
+                MonthPlanBean monthPlanBean = patrol.get(j);
+                //当身份是专责时，获取需要审批的列表
+                if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
+                    Tower lineBean = new Tower();
+                    lineBean.setLine_id(monthPlanBean.getMonth_id());
+                    lineList.add(lineBean);
+                    //当身份是主管时，获取需要审批的列表
+                } else if (mJobType.equals(Constant.RUN_SUPERVISOR) && "2".equals(monthPlanBean.getAudit_status())) {
+                    Tower lineBean = new Tower();
+                    lineBean.setLine_id(monthPlanBean.getMonth_id());
+                    lineList.add(lineBean);
+                    //当身份是班长时，获取需要审核的列表
+                } else if (mJobType.equals(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())) {
+                    Tower lineBean = new Tower();
+                    lineBean.setLine_id(monthPlanBean.getMonth_id());
+                    lineList.add(lineBean);
+                }
             }
-            list.add(level1);
         }
-        return list;
+        if (repair != null) {
+            data.addAll(repair);
+            data2.addAll(repair);
+        }
+        if (ele != null) {
+            data.addAll(ele);
+            data2.addAll(ele);
+        }
+    }
+
+    public static int dip2px(Context context, float dipValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * scale + 0.5f);
     }
 }

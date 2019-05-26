@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddMonthPlanActivity;
+import com.patrol.terminal.activity.LineCheckActivity;
 import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.StringUtil;
@@ -18,20 +19,17 @@ import androidx.annotation.Nullable;
 
 public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHolder> {
 
-    private String year, month;
     private String state;
+    private String jobType;
 
-    public MonthPlanAdapter(int layoutResId, @Nullable List<MonthPlanBean> data, String year, String month,String state) {
+    public MonthPlanAdapter(int layoutResId, @Nullable List<MonthPlanBean> data,String state,String jovType) {
         super(layoutResId, data);
-        this.year = year;
-        this.month = month;
         this.state=state;
+        this.jobType=jovType;
     }
 
     public MonthPlanAdapter(int layoutResId, @Nullable List<MonthPlanBean> data) {
         super(layoutResId, data);
-        this.year = year;
-        this.month = month;
     }
 
 
@@ -61,15 +59,13 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
         viewHolder.setText(R.id.item_line_status, StringUtil.getYXBstate(item.getAudit_status()));
         horizontalLineView.setStatus(item.getAudit_status());
            horizontalLineView.setVisibility(View.VISIBLE);
-        viewHolder.setText(R.id.item_plan_device_name, item.getLine_name() + year + "年" + month + "月计划")
+        viewHolder.setText(R.id.item_plan_device_name, item.getLine_name())
                 .setText(R.id.item_plan_content, "类型 : " + item.getFull_plan());
         viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
                 intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
-                intent.putExtra("month_id", item.getMonth_id());
-                intent.putExtra("line_id", item.getLine_id());
                 intent.putExtra("line_name", item.getLine_name());
                 intent.putExtra("year", item.getYear()+"");
                 intent.putExtra("month", item.getMonth()+"");
@@ -78,34 +74,21 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
             }
         });
     }else {
-//           InnerPlanbean planCheck = item.getPlanCheck();
-//           String plan_type = planCheck.getPlan_type();
-//           switch (plan_type){
-//               case "1":
-//                   viewHolder.setText(R.id.item_plan_date_tv, "保")
-//                      .setVisible(R.id.plan_to_change,true);
-//                   viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
-//                       @Override
-//                       public void onClick(View v) {
-//                           Intent intent = new Intent(mContext, ChangePlanActivity.class);
-//                           intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
-//                           intent.putExtra("month_id", item.getM_ID());
-//                           intent.putExtra("line_id", item.getLINE_ID());
-//                           mContext.startActivity(intent);
-//                       }
-//                   });
-//                   break;
-//               case "2":
-//                   viewHolder.setText(R.id.item_plan_date_tv, "验") .setVisible(R.id.plan_to_change,true);
-//                   break;
-//               case "3":
-//                   viewHolder.setText(R.id.item_plan_date_tv, "安") .setVisible(R.id.plan_to_change,true);
-//                   break;
-//           }
-//           viewHolder.setText(R.id.item_plan_device_name, planCheck.getPlan_name())
-//                   .setVisible(R.id.item_plan_status,false)
-//                   .setText(R.id.item_plan_content, "开始时间 : " + planCheck.getBegin_time())
-//                   .setText(R.id.item_line_status, "结束时间 : " + planCheck.getEnd_time());;
+
+                   viewHolder.setText(R.id.item_plan_date_tv, "保")
+                      .setVisible(R.id.plan_to_change,true);
+                   viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           Intent intent = new Intent(mContext, LineCheckActivity.class);
+                           intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
+                           intent.putExtra("id", item.getId());
+                           mContext.startActivity(intent);
+                       }
+                   });
+           viewHolder.setText(R.id.item_plan_device_name, "基于"+item.getLine_name()+"的保电计划")
+                   .setText(R.id.item_plan_content, "停电区域 : " + item.getBlackout_range())
+                   .setText(R.id.item_line_status, "停电时间 : " + item.getStart_time() + " - " + item.getEnd_time());
 
        }
     }
