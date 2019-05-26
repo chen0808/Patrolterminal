@@ -111,7 +111,7 @@ public class PatrolRecordActivity extends BaseActivity {
     private String line_name, jobType;
     private String tower_id;
     private String tower_name, task_id, sign, typename, id;
-    private  List<File> fileList=new ArrayList<>();
+    private List<File> fileList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,26 +215,27 @@ public class PatrolRecordActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-                if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)||jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+
+                    CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
+                        @Override
+                        public void ok() {
+                            super.ok();
+                            saveTodoAudit("1");   //同意
+                            dismiss();
+                        }
+
+                        @Override
+                        public void cancel() {
+                            super.cancel();
+                            saveTodoAudit("2");  //不同意
+                            dismiss();
+                        }
+                    };
+                    dialog.show();
+                } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                     commitPatrolRecord();
-                }else if ( jobType.equals(Constant.RUNNING_SQUAD_LEADER)){
-
-                CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
-                    @Override
-                    public void ok() {
-                        super.ok();
-                        saveTodoAudit("1");   //同意
-                        dismiss();
-                    }
-
-                    @Override
-                    public void cancel() {
-                        super.cancel();
-                        saveTodoAudit("2");  //不同意
-                        dismiss();
-                    }
-                };
-                dialog.show();}
+                }
                 break;
             case R.id.iv_photo1:
                 selectPic();
@@ -287,23 +288,23 @@ public class PatrolRecordActivity extends BaseActivity {
                         break;
                     case 2:
                         Glide.with(this).load(compressPath).into(ivPhoto2);
-                        fileList.add(new File( compressPath));
+                        fileList.add(new File(compressPath));
                         break;
                     case 3:
                         Glide.with(this).load(compressPath).into(ivPhoto3);
-                        fileList.add(new File( compressPath));
+                        fileList.add(new File(compressPath));
                         break;
                     case 4:
                         Glide.with(this).load(compressPath).into(ivPhoto4);
-                        fileList.add(new File(  compressPath));
+                        fileList.add(new File(compressPath));
                         break;
                     case 5:
                         Glide.with(this).load(compressPath).into(ivPhoto5);
-                        fileList.add(new File( compressPath));
+                        fileList.add(new File(compressPath));
                         break;
                     case 6:
                         Glide.with(this).load(compressPath).into(ivPhoto6);
-                        fileList.add(new File( compressPath));
+                        fileList.add(new File(compressPath));
                         break;
                 }
 
@@ -355,13 +356,13 @@ public class PatrolRecordActivity extends BaseActivity {
 
                     @Override
                     protected void onSuccees(BaseResult<List<OverhaulFileBean>> t) throws Exception {
-                        if (t.getCode()==1){
+                        if (t.getCode() == 1) {
                             List<OverhaulFileBean> results = t.getResults();
                             for (int i = 0; i < results.size(); i++) {
                                 OverhaulFileBean overhaulFileBean = results.get(i);
                                 String file_path = overhaulFileBean.getFile_path();
-                                String compressPath= BaseUrl.BASE_URL+file_path.substring(1,file_path.length())+overhaulFileBean.getFilename();
-                                switch (i+1) {
+                                String compressPath = BaseUrl.BASE_URL + file_path.substring(1, file_path.length()) + overhaulFileBean.getFilename();
+                                switch (i + 1) {
                                     case 1:
                                         Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto1);
                                         break;
@@ -394,50 +395,54 @@ public class PatrolRecordActivity extends BaseActivity {
 
                 });
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscribe!=null){
+        if (subscribe != null) {
             subscribe.dispose();
         }
     }
 
     private void commitPatrolRecord() {
-        if (fileList.size()<6){
+        if (fileList.size() < 6) {
             Toast.makeText(PatrolRecordActivity.this, "请上传6张对应图片！", Toast.LENGTH_SHORT).show();
             return;
         }
-        ProgressDialog.show(this,false,"正在上传。。。");
+        ProgressDialog.show(this, false, "正在上传。。。");
         for (int i = 0; i < fileList.size(); i++) {
             File file = fileList.get(i);
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            params.put("file"+(i+1)+"\"; filename=\"" + file.getName(), requestFile);
+            params.put("file" + (i + 1) + "\"; filename=\"" + file.getName(), requestFile);
         }
 
         params.put("user_id", toRequestBody(SPUtil.getUserId(this)));
         params.put("name", toRequestBody("关于" + line_name + tower_name + "的" + typename));
-        params.put("type_sign",toRequestBody(sign) );
+        params.put("type_sign", toRequestBody(sign));
         params.put("audit_id", toRequestBody(SPUtil.getDepId(this)));
-        params.put("id",toRequestBody(task_id) );
+        params.put("id", toRequestBody(task_id));
         BaseRequest.getInstance().getService().commitPatrolRecord(params).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver(this) {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
-                        ProgressDialog.cancle();Toast.makeText(PatrolRecordActivity.this, "保存成功！", Toast.LENGTH_SHORT).show();
-                        if (t.getCode()==1){
+                        ProgressDialog.cancle();
                         Toast.makeText(PatrolRecordActivity.this, "保存成功！", Toast.LENGTH_SHORT).show();
-                        finish();}
+                        if (t.getCode() == 1) {
+                            Toast.makeText(PatrolRecordActivity.this, "保存成功！", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
-                        Log.i("11111",e.toString());
+                        Log.i("11111", e.toString());
                         Toast.makeText(PatrolRecordActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
     public RequestBody toRequestBody(String value) {
         if (value != null) {
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
@@ -457,35 +462,38 @@ public class PatrolRecordActivity extends BaseActivity {
 
                     @Override
                     protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
-                        if (t.getCode()==1){
+                        if (t.getCode() == 1) {
                             List<TodoListBean> results = t.getResults();
-                            if (results.size()>0){
+                            if (results.size() > 0) {
                                 TodoListBean todoListBean = results.get(0);
                                 String audit_status = todoListBean.getAudit_status();
-                                if ("0".equals(audit_status)){
-                                    if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)) {
+                                if ("0".equals(audit_status)) {
+                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                                         titleSetting.setVisibility(View.VISIBLE);
                                         titleSettingTv.setText("审批");
                                     }
-
-                                }else if ("2".equals(audit_status)){
-                                    if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)||jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+                                } else if ("2".equals(audit_status)) {
+                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                                        titleSetting.setVisibility(View.GONE);
+                                    }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                                         titleSetting.setVisibility(View.VISIBLE);
                                         titleSettingTv.setText("上传图片");
-                                    }else {
+                                    } else {
                                         titleSetting.setVisibility(View.GONE);
 
                                     }
 
-                                }else {
+                                } else {
                                     titleSetting.setVisibility(View.GONE);
 
                                 }
-                            }else {
-                                if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)||jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+                            } else {
+                                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                                    titleSetting.setVisibility(View.GONE);
+                                }else   if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                                     titleSetting.setVisibility(View.VISIBLE);
                                     titleSettingTv.setText("上传图片");
-                                }else {
+                                } else {
                                     titleSetting.setVisibility(View.GONE);
                                 }
 
@@ -500,6 +508,7 @@ public class PatrolRecordActivity extends BaseActivity {
                     }
                 });
     }
+
     //保存待办信息
     public void saveTodoAudit(String state) {
 

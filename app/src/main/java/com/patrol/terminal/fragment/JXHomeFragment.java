@@ -119,16 +119,13 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         rlPlan.setVisibility(View.VISIBLE);
             rlTask.setVisibility(View.GONE);
         //运行班组长和组员进来隐藏计划
-        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER) || jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-            rlPlan.setVisibility(View.GONE);
-        }
-        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.equals(Constant.SAFETY_SPECIALIZED)) {
+        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED)) {
             status = "1,2,3,4,5";
         } else if (jobType.endsWith("_zz") && !jobType.contains("b_")) {
             status = "4,5";
         }
 
-        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)||jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)){
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)||jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)){
             getOverhaulTodo();
         }
 
@@ -204,13 +201,13 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
             case R.id.rl_plan:
                 //startActivity(new Intent(getActivity(), OverhaulPlanActivity.class));
                 Log.w("linmeng", "jobType:" + jobType);
-                if (jobType.equals(Constant.RUNNING_SQUAD_LEADER) || jobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)
-                        || jobType.equals(Constant.RUN_SUPERVISOR) || jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)
+                        || jobType.contains(Constant.RUN_SUPERVISOR) || jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
                     startActivity(new Intent(getActivity(), NewPlanActivity.class));
-                } else if (jobType.equals(Constant.REFURBISHMENT_LEADER) || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)
-                        || jobType.equals(Constant.REFURBISHMENT_MEMBER)
-                        || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.equals(Constant.SAFETY_SPECIALIZED)
-                        ||jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.MAINTENANCE_SUPERVISOR)) {      //TODO其他还没加
+                } else if (jobType.contains(Constant.REFURBISHMENT_LEADER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
+                        || jobType.contains(Constant.REFURBISHMENT_MEMBER)
+                        || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED)
+                        ||jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) {      //TODO其他还没加
                     //startActivity(new Intent(getActivity(), OverhaulWeekPlanActivity.class));
                     startActivity(new Intent(getActivity(), OverhaulPlanActivity.class));
                 }

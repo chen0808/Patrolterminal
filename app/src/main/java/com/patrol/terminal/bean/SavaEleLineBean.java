@@ -1,7 +1,15 @@
 package com.patrol.terminal.bean;
 
 public class SavaEleLineBean {
-   private String line_id,line_name,year,month;
+   private String line_id,line_name,year,month,repair_id;
+
+    public String getRepair_id() {
+        return repair_id;
+    }
+
+    public void setRepair_id(String repair_id) {
+        this.repair_id = repair_id;
+    }
 
     public String getLine_id() {
         return line_id;

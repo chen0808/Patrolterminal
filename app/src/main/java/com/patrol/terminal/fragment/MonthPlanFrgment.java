@@ -111,8 +111,6 @@ public class MonthPlanFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-        int weekNumOfMonth = DateUatil.getWeekNumOfMonth("2019", "1");
-
         mContext = getActivity();
         taskScreen.setVisibility(View.VISIBLE);
         taskAdd.setVisibility(View.VISIBLE);
@@ -120,12 +118,12 @@ public class MonthPlanFrgment extends BaseFragment {
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         //判断
-        if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+        if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             state = "1,2,3,4,5";
             depId = null;
             planSubmit.setText("审核");
             planCreate.setVisibility(View.INVISIBLE);
-        } else if (mJobType.equals(Constant.RUN_SUPERVISOR)) {
+        } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
             state = "2,3,4,5";
             planSubmit.setText("审核");
             depId = null;
@@ -173,6 +171,9 @@ public class MonthPlanFrgment extends BaseFragment {
     //获取月计划列表
     public void getMonthPlanList() {
         ProgressDialog.show(getContext(), false, "正在加载中");
+        data.clear();
+        data1.clear();
+        data2.clear();
         BaseRequest.getInstance().getService()
                 .getMonthPlan(Integer.parseInt(year), Integer.parseInt(month), depId, state)
                 .subscribeOn(Schedulers.io())
@@ -283,7 +284,7 @@ public class MonthPlanFrgment extends BaseFragment {
                getActivity().startActivityForResult(intent,10);
                 break;
             case R.id.plan_submit:
-                if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "一键审核", "不同意", "同意") {
                         @Override
                         public void ok() {
@@ -301,9 +302,9 @@ public class MonthPlanFrgment extends BaseFragment {
                     };
                     dialog.show();
 
-                } else if (mJobType.equals((Constant.RUNNING_SQUAD_LEADER))) {
+                } else if (mJobType.contains((Constant.RUNNING_SQUAD_LEADER))) {
                     submitMonthPlan("1");
-                } else if (mJobType.equals(Constant.RUN_SUPERVISOR)) {
+                } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "一键审核", "不同意", "同意") {
                         @Override
                         public void ok() {
@@ -428,17 +429,17 @@ public class MonthPlanFrgment extends BaseFragment {
             for (int j = 0; j < patrol.size(); j++) {
                 MonthPlanBean monthPlanBean = patrol.get(j);
                 //当身份是专责时，获取需要审批的列表
-                if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
+                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
                     Tower lineBean = new Tower();
                     lineBean.setLine_id(monthPlanBean.getLine_id());
                     lineList.add(lineBean);
                     //当身份是主管时，获取需要审批的列表
-                } else if (mJobType.equals(Constant.RUN_SUPERVISOR) && "2".equals(monthPlanBean.getAudit_status())) {
+                } else if (mJobType.contains(Constant.RUN_SUPERVISOR) && "2".equals(monthPlanBean.getAudit_status())) {
                     Tower lineBean = new Tower();
                     lineBean.setLine_id(monthPlanBean.getLine_id());
                     lineList.add(lineBean);
                     //当身份是班长时，获取需要审核的列表
-                } else if (mJobType.equals(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())){
+                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())){
                     Tower lineBean = new Tower();
                     lineBean.setLine_id(monthPlanBean.getLine_id());
                     lineList.add(lineBean);

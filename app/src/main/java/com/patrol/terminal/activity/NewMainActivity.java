@@ -116,25 +116,25 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         // init fragment
         mFragments = new ArrayList<>(4);
         String jobType = SPUtil.getString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)||jobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)||jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)||jobType.equals(Constant.REFURBISHMENT_LEADER)){
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)||jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)||jobType.contains(Constant.REFURBISHMENT_LEADER)){
             mainExameRb.setVisibility(View.VISIBLE);
         }
-        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
             getGroupName();
 
         }
-        if (jobType.equals(Constant.TRAINING_SPECIALIZED)) {
+        if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {
             mFragments.add(new TrainingHomeFragment());  //培训专责
-        }  else  if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)||jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)){
-            mFragments.add(new ZyHomeFragment());
-        }else  if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)){
+        }  else if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
             mFragments.add(new HomeFragment());;
-        }else{
+        }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+            mFragments.add(new ZyHomeFragment());
+        }else {
             mFragments.add(new JXHomeFragment());
         }
-        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)||jobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)){
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
             mFragments.add(new YXTodosManageFragment());
-        } else if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)||jobType.equals(Constant.REFURBISHMENT_LEADER)){
+        } else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)||jobType.contains(Constant.REFURBISHMENT_LEADER)){
             mFragments.add(new TodosManageFragment());
 
         }
@@ -211,7 +211,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                         if (t.getCode() == 1) {
                             GroupBean results = t.getResults();
                             if (results!=null){
-                                if ("1".equals(results.getIs_boss())){
+                                if ("1".contains(results.getIs_boss())){
                                     SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
                                 }
                             }

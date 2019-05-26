@@ -111,7 +111,7 @@ public class ControlQualityFragment extends BaseFragment {
         String userId = SPUtil.getString(getContext(), Constant.USER, Constant.USERID, "");
         String userName = SPUtil.getString(getContext(), Constant.USER, Constant.USERNAME, "");
 
-        if (jobType.equals(Constant.REFURBISHMENT_MEMBER)||jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)) {
+        if (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {
             leaderName = userName;
             leaderId = userId;
         }
@@ -120,7 +120,7 @@ public class ControlQualityFragment extends BaseFragment {
 //        leaderName = mActivity.getIntent().getStringExtra("leaderName");
 //        leaderId = mActivity.getIntent().getStringExtra("leaderId");
 
-        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {  //专责接受的Bean不一样
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {  //专责接受的Bean不一样
             OverhaulZzTaskBean bean = mActivity.getIntent().getParcelableExtra("bean");
             if (bean != null) {
                 taskId = bean.getId();

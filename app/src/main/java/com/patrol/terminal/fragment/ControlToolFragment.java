@@ -90,7 +90,7 @@ public class ControlToolFragment extends BaseFragment {
         enterType = mActivity.getIntent().getIntExtra(Constant.CONTROL_CARD_ENTER_TYPE, Constant.IS_OTHER_LOOK);  //是否为查看模式
         String jobType = SPUtil.getString(mActivity, Constant.USER, Constant.JOBTYPE, "");
 
-        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {  //专责接受的Bean不一样
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {  //专责接受的Bean不一样
             OverhaulZzTaskBean bean = mActivity.getIntent().getParcelableExtra("bean");
             if (bean != null) {
                 taskId = bean.getId();

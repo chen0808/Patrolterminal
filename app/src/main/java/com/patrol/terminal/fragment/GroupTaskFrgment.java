@@ -76,10 +76,10 @@ public class GroupTaskFrgment extends BaseFragment {
         taskTitle.setText("组任务列表");
 
         String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        if (!jobType.equals(Constant.RUNNING_SQUAD_LEADER)) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
+        if (!jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
             taskAdd.setVisibility(View.GONE);
         }
-        if (jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+        if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
             userId = SPUtil.getUserId(getContext());
         }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());

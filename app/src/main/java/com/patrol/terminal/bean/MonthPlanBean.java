@@ -107,7 +107,15 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
     private Object userName1;
     private Object userId2;
     private Object userName2;
+    private Object allot_status;
 
+    public Object getAllot_status() {
+        return allot_status;
+    }
+
+    public void setAllot_status(Object allot_status) {
+        this.allot_status = allot_status;
+    }
 
     @Override
     public int getLevel() {

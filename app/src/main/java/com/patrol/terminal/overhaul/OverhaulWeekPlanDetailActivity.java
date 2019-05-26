@@ -218,18 +218,18 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
     private void initView() {
         String task_status = overhaulMonthBean.getTask_status();
         Log.w("linmeng", "task_status:" + task_status);
-        if (jobType.equals(Constant.REFURBISHMENT_LEADER)) {  //检修班班长
+        if (jobType.contains(Constant.REFURBISHMENT_LEADER)) {  //检修班班长
             titleSettingTv.setText("派发");
             if ("1".equals(task_status)) {   //待班长分发
                 titleSetting.setVisibility(View.VISIBLE);
             } else {
                 titleSetting.setVisibility(View.GONE);
             }
-//            if ((jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED))) {
+//            if ((jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED))) {
 //                llUploadFile.setVisibility(View.VISIBLE);
 //            }
             //保电专责进来判断是否需要上传保电方案
-//            if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+//            if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
 //                needUploadLl.setVisibility(View.VISIBLE);
 //                titleSettingTv.setText("保存");
 //                titleSetting.setVisibility(View.VISIBLE);
@@ -242,7 +242,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //            }
             controlCard.setText("查看控制卡");
             nsControlCard.setVisibility(View.GONE);
-        } else if (jobType.equals(Constant.REFURBISHMENT_MEMBER)) {  //这里是负责人，负责人是不可以派发的，其他班员无PDA
+        } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {  //这里是负责人，负责人是不可以派发的，其他班员无PDA
             titleSetting.setVisibility(View.GONE);
             if (task_status.equals("2")) {   //待负责人提交
                 titleSetting.setVisibility(View.VISIBLE);
@@ -307,7 +307,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
     private void initTicket1() {
         //专责进来没有选择的时候显示,其他时候隐藏
-//        if (planRepairBean.getTicket_type().equals("0") && jobType.equals(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getStatus())) {
+//        if (planRepairBean.getTicket_type().equals("0") && jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getStatus())) {
             nsWorkTicket.setVisibility(View.VISIBLE);
             nsWorkTicket2.setVisibility(View.VISIBLE);
             workTicketTv.setText("填写工作票");
@@ -455,7 +455,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
                         if (t.getCode() == 1) {
                             allControlCarBean = t.getResults();
-                            if (jobType.equals(Constant.REFURBISHMENT_MEMBER)) {  //负责人进来, 填写过的将数据带过去
+                            if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {  //负责人进来, 填写过的将数据带过去
                                 if (allControlCarBean == null) {   //负责人第一次进来
                                     nsControlCard.setVisibility(View.VISIBLE);
                                 } else {
@@ -734,13 +734,13 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                 break;
             case R.id.title_setting:
                 Intent intent = new Intent();
-                if (jobType.equals(Constant.REFURBISHMENT_LEADER)) { //班长发布周检修工作
+                if (jobType.contains(Constant.REFURBISHMENT_LEADER)) { //班长发布周检修工作
                     intent.setClass(this, OverhaulMonitorPublishActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("bean", overhaulMonthBean);
                     intent.putExtras(bundle);
                     startActivity(intent);
-                }else if(jobType.equals(Constant.REFURBISHMENT_MEMBER) || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)) {  //负责人提交
+                }else if(jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {  //负责人提交
                     sendToMember();
                 }
                 break;
@@ -750,7 +750,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //                    nicePosition2 = Integer.valueOf(planRepairBean.getTicket_task_type());
 //                    Log.d("task__type", "type:" + nicePosition + "------task_type:" + nicePosition2);
 //                }
-//                if (jobType.equals(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getStatus())) {  //负责人进来, 填写过的将数据带过去
+//                if (jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getStatus())) {  //负责人进来, 填写过的将数据带过去
 //                    switch (nicePosition) {
 //                        case 1:
                 Intent intent11 = new Intent(OverhaulWeekPlanDetailActivity.this, FirstWTicketActivity.class);
@@ -835,7 +835,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
             case R.id.control_card:
                 int entenType;
                 String task_status = overhaulMonthBean.getTask_status();
-                if (jobType.equals(Constant.REFURBISHMENT_MEMBER) && "2".equals(task_status)) {  //负责人填写状态,提交后不可填写
+                if (jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(task_status)) {  //负责人填写状态,提交后不可填写
                     if (allControlCarBean == null) {
                         entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
                     } else {
@@ -890,9 +890,9 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
         ProgressDialog.show(this, false, "正在上传....");
         Map<String, RequestBody> params = new HashMap<>();
         params.put("data_id", toRequestBody(overhaulMonthBean.getRepair_id()));
-        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
             params.put("repair_type", toRequestBody("1"));  //0保电1验收
-        } else if (jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+        } else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
             params.put("repair_type", toRequestBody("2"));  //0保电1验收
         }
         File file = new File("/storage/emulated/0/" + fileList.get(filePosition));

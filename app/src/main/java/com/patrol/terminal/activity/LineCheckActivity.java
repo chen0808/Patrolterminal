@@ -239,6 +239,7 @@ public class LineCheckActivity extends BaseActivity {
         bean.setLine_name(selectBean.getName());
         bean.setYear(year+"");
         bean.setMonth(month+"");
+        bean.setRepair_id(id);
         //获取月计划列表
         BaseRequest.getInstance().getService()
                 .saveMonthPlan(bean)
@@ -249,6 +250,7 @@ public class LineCheckActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
                          if (t.getCode()==1){
                               Toast.makeText(LineCheckActivity.this,"制定成功",Toast.LENGTH_SHORT).show();
+                              setResult(RESULT_OK);
                               finish();
                          }
                         ProgressDialog.cancle();

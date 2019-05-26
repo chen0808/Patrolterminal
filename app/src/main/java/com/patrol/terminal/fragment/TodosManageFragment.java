@@ -82,11 +82,11 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         String userId = SPUtil.getString(getContext(), Constant.USER, Constant.USERID, "");
 
-        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)){
+        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)){
             ele_user_id =userId;
-        }else if (jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)){
+        }else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)){
             check_user_id =userId;
-        }else if (jobType.equals(Constant.SAFETY_SPECIALIZED)){
+        }else if (jobType.contains(Constant.SAFETY_SPECIALIZED)){
             safe_user_id =userId;
         }
 

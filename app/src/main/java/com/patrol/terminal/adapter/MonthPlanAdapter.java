@@ -1,5 +1,6 @@
 package com.patrol.terminal.adapter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
@@ -79,6 +80,13 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
 
                    viewHolder.setText(R.id.item_plan_date_tv, "保")
                       .setVisible(R.id.plan_to_change,true);
+                   if ("0".equals(item.getAllot_status())){
+                       viewHolder.setVisible(R.id.plan_to_change,true);
+                       viewHolder.setText(R.id.item_plan_content, "分配状态 : 未分配" );
+                   }else {
+                       viewHolder.setVisible(R.id.plan_to_change,false);
+                       viewHolder.setText(R.id.item_plan_content, "分配状态 : 已分配" );
+                   }
                    viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
@@ -87,11 +95,10 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
                            intent.putExtra("id", item.getId());
                            intent.putExtra("year", item.getYear());
                            intent.putExtra("month", item.getMonth());
-                           mContext.startActivity(intent);
+                           ((Activity)mContext).startActivityForResult(intent,10);
                        }
                    });
            viewHolder.setText(R.id.item_plan_device_name, "基于"+item.getLine_name()+"的保电计划")
-                   .setText(R.id.item_plan_content, "停电区域 : " + item.getBlackout_range())
                    .setText(R.id.item_line_status, "停电时间 : " + item.getStart_time() + " - " + item.getEnd_time());
 
        }
