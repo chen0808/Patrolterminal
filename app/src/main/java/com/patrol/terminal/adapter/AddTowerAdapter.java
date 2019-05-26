@@ -58,19 +58,22 @@ public class AddTowerAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_add_tower, parent, false);
             holder.towerNmae = (TextView) convertView.findViewById(R.id.item_add_tower_name);
             holder.towerCheck = (CheckBox) convertView.findViewById(R.id.item_add_tower_check);
+            holder.towerType = (TextView) convertView.findViewById(R.id.item_add_tower_type);
             convertView.setTag(holder);
         }
 
-        holder.towerNmae.setText(lineTypeBeans.get(position).getTowers());
+
+        holder.towerNmae.setText(lineTypeBeans.get(position).getLine_name() + lineTypeBeans.get(position).getTowers_name()/*lineTypeBeans.get(position).getTowers()*/);
+        holder.towerType.setText(lineTypeBeans.get(position).getType_name());  //TODO
         WeekOfMonthBean listBean = lineTypeBeans.get(position);
      holder.towerCheck.setChecked(false);
         holder.towerCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (holder.towerCheck.isChecked()){
-                    RxRefreshEvent.publish("add@"+listBean.getId()+"@"+listBean.getTowers()+"@"+listBean.getMonth_line_id());
+                    //RxRefreshEvent.publish("add@"+listBean.getPatrol().get(position).getId()+"@"+listBean.getTowers()+"@"+listBean.getMonth_line_id());
                 }else {
-                    RxRefreshEvent.publish("delete@"+listBean.getId());
+                   // RxRefreshEvent.publish("delete@"+listBean.getId());
                 }
 
             }
@@ -88,6 +91,7 @@ public class AddTowerAdapter extends BaseAdapter {
     static class ViewHolder {
       private   TextView towerNmae;
         private   CheckBox towerCheck;
+        private TextView towerType;
 
     }
 

@@ -95,8 +95,8 @@ public class AddWeekPlanActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_week_plan);
         ButterKnife.bind(this);
-//        initdata();
         initview();
+        getWeekInfoList();
         getLineType();
 
     }
@@ -148,6 +148,36 @@ public class AddWeekPlanActivity extends BaseActivity {
         });
     }
 
+    private void getWeekInfoList() {
+        //获取周计划杆段列表
+        BaseRequest.getInstance().getService()
+                .getWeekListWeek(year, month, SPUtil.getDepId(this), type_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<WeekOfMonthBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<WeekOfMonthBean>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        results = t.getResults();
+//                        for (int i = 0; i <results.size(); i++) {
+//                            WeekOfMonthBean bean = results.get(i);
+//                            String line_name = bean.getLine_name();
+//                            if (lineName.indexOf(line_name)==-1){
+//                                lineName.add(line_name);
+//                            }
+//                        }
+
+                        adapter.setData(results);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+
+    }
+
     @OnClick({R.id.title_back, R.id.month_plan_line, R.id.month_plan_type, R.id.month_yes, R.id.trouble_more})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -183,7 +213,7 @@ public class AddWeekPlanActivity extends BaseActivity {
     }
 
     //线路添加选项框
-    private void showLine() {// 不联动的多级选项
+    private void showLine() { // 不联动的多级选项
         if (lineName.size() == 0) {
             Toast.makeText(this, "没有获取到线路信息，请稍后再试", Toast.LENGTH_SHORT).show();
             return;
@@ -293,22 +323,22 @@ public class AddWeekPlanActivity extends BaseActivity {
 
     //保存
     public void saveWeek() {
-        if (type_id.isEmpty()) {
-            Toast.makeText(this, "请选择工作类型", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (lineId.isEmpty()) {
-            Toast.makeText(this, "请选择线路", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (selectType.size() == 0) {
-            Toast.makeText(this, "请添加杆段", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (lineId.isEmpty()) {
-            Toast.makeText(this, "请选择线路", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (type_id.isEmpty()) {
+//            Toast.makeText(this, "请选择工作类型", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (lineId.isEmpty()) {
+//            Toast.makeText(this, "请选择线路", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (selectType.size() == 0) {
+//            Toast.makeText(this, "请添加杆段", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (lineId.isEmpty()) {
+//            Toast.makeText(this, "请选择线路", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         PlanWeekReqBean bean = new PlanWeekReqBean();
         bean.setYear(year+"");
         bean.setMonth(month + "");

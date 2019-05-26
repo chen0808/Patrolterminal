@@ -7,13 +7,24 @@
 
     <TextView
         android:id="@+id/item_add_tower_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginRight="@dimen/dp_80"
         android:text="2019年4月桃开一线月计划"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_20"
+        android:layout_alignParentLeft="true"
         />
+
+    <TextView
+        android:id="@+id/item_add_tower_type"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:text="杆段类型"
+        android:gravity="center"
+        android:layout_toLeftOf="@+id/item_add_tower_check"
+        />
+
     <CheckBox
         android:id="@+id/item_add_tower_check"
         android:layout_width="@dimen/dp_60"

@@ -242,7 +242,7 @@ public class ChangePlanActivity extends AppCompatActivity {
                     protected void onSuccees(BaseResult<List<EqTower>> t) throws Exception {
 //                        eqTowers = t.getResults();
                         for (int i = 0; i < eqTowers.size(); i++) {
-                            towerList.add(eqTowers.get(i).getTowers());
+                            towerList.add(eqTowers.get(i).getTowers_name());
                         }
                         adapter.setData(eqTowers);
                         if (towerList.size()<6){

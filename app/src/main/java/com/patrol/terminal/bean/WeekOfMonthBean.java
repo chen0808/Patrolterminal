@@ -3,127 +3,77 @@ package com.patrol.terminal.bean;
 public class WeekOfMonthBean {
 
 
-        /**
-         * id : 5EA2AB0F591442839BD285A9B0C1A941
-         * line_id : 06CD39FC7726400F92C00D4C89C80F1C
-         * line_name : 桃郑线
-         * towers : #001-#038
-         * start_id : CB07BCAE1869460985102E979E2066E2
-         * end_id : 1396BF2D10F042918C163E7F6541BE49
-         * start_sort : null
-         * end_sort : null
-         * remarks : 与桃建西线1#-37#同塔架设
-         * line_towers : null
-         * towerList : null
-         * month_line_id : E540D7F4C4C74671A6E344757BBD2C51
-         */
+    /**
+     * towers_name :
+     * type_name : 定期巡视
+     * type_id : C7A9A60BDB1B4FE986014CA7DA24A467
+     * type_sign : 1
+     * line_name : 1111桃郑T石线
+     * line_id : 56C007929745424BB9D40598483D16A6
+     * towers_id :
+     */
 
-        private String id;
-        private String line_id;
-        private String line_name;
-        private String towers;
-        private String start_id;
-        private String end_id;
-        private Object start_sort;
-        private Object end_sort;
-        private String remarks;
-        private Object line_towers;
-        private Object towerList;
-        private String month_line_id;
+    private String towers_name;
+    private String type_name;
+    private String type_id;
+    private String type_sign;
+    private String line_name;
+    private String line_id;
+    private String towers_id;
 
-        public String getId() {
-            return id;
-        }
+    public String getTowers_name() {
+        return towers_name;
+    }
 
-        public void setId(String id) {
-            this.id = id;
-        }
+    public void setTowers_name(String towers_name) {
+        this.towers_name = towers_name;
+    }
 
-        public String getLine_id() {
-            return line_id;
-        }
+    public String getType_name() {
+        return type_name;
+    }
 
-        public void setLine_id(String line_id) {
-            this.line_id = line_id;
-        }
+    public void setType_name(String type_name) {
+        this.type_name = type_name;
+    }
 
-        public String getLine_name() {
-            return line_name;
-        }
+    public String getType_id() {
+        return type_id;
+    }
 
-        public void setLine_name(String line_name) {
-            this.line_name = line_name;
-        }
+    public void setType_id(String type_id) {
+        this.type_id = type_id;
+    }
 
-        public String getTowers() {
-            return towers;
-        }
+    public String getType_sign() {
+        return type_sign;
+    }
 
-        public void setTowers(String towers) {
-            this.towers = towers;
-        }
+    public void setType_sign(String type_sign) {
+        this.type_sign = type_sign;
+    }
 
-        public String getStart_id() {
-            return start_id;
-        }
+    public String getLine_name() {
+        return line_name;
+    }
 
-        public void setStart_id(String start_id) {
-            this.start_id = start_id;
-        }
+    public void setLine_name(String line_name) {
+        this.line_name = line_name;
+    }
 
-        public String getEnd_id() {
-            return end_id;
-        }
+    public String getLine_id() {
+        return line_id;
+    }
 
-        public void setEnd_id(String end_id) {
-            this.end_id = end_id;
-        }
+    public void setLine_id(String line_id) {
+        this.line_id = line_id;
+    }
 
-        public Object getStart_sort() {
-            return start_sort;
-        }
+    public String getTowers_id() {
+        return towers_id;
+    }
 
-        public void setStart_sort(Object start_sort) {
-            this.start_sort = start_sort;
-        }
-
-        public Object getEnd_sort() {
-            return end_sort;
-        }
-
-        public void setEnd_sort(Object end_sort) {
-            this.end_sort = end_sort;
-        }
-
-        public String getRemarks() {
-            return remarks;
-        }
-
-        public void setRemarks(String remarks) {
-            this.remarks = remarks;
-        }
-
-        public Object getLine_towers() {
-            return line_towers;
-        }
-
-        public void setLine_towers(Object line_towers) {
-            this.line_towers = line_towers;
-        }
-
-        public Object getTowerList() {
-            return towerList;
-        }
-
-        public void setTowerList(Object towerList) {
-            this.towerList = towerList;
-        }
-
-        public String getMonth_line_id() {
-            return month_line_id;
-        }
-
-        public void setMonth_line_id(String month_line_id) {
-            this.month_line_id = month_line_id;
-        }
+    public void setTowers_id(String towers_id) {
+        this.towers_id = towers_id;
+    }
 }
