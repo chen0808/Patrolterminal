@@ -79,11 +79,27 @@ public class LoginActivity extends BaseActivity {
                                     SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPNAME, results.getDep_name());
                                     SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPID, results.getDep_id());
 
-                          if (results.getSysJobList() != null && results.getSysJobList().size() >0) {
-                                String jobSign = results.getSysJobList().get(0).getSign();
-                                SPUtil.putString(LoginActivity.this, Constant.USER, Constant.JOBTYPE, jobSign);
-                                goToMainActivity(jobSign);
+                          if (results.getSysJobList()!=null) {
+                              String job="";
+                              String firstJob="";
+                              for (int i = 0; i < results.getSysJobList().size(); i++) {
+                                  LoginReqBean.SysJobListBean sysJobListBean = results.getSysJobList().get(i);
+                                  String sign = sysJobListBean.getSign();
+                                  if (i==0){
+                                      job=sign;
+                                      firstJob=sign;
+                                  }else {
+                                      job=job+","+sign;
+                                  }
+                              }
+                                SPUtil.putString(LoginActivity.this, Constant.USER, Constant.JOBTYPE, job);
+
+                                goToMainActivity(firstJob);
                             }
+
+
+
+
 
 //                            startActivity(new Intent(LoginActivity.this, NewMainActivity.class));
 //                            finish();

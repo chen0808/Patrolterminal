@@ -1,5 +1,6 @@
 package com.patrol.terminal.adapter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
@@ -40,9 +41,11 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
                viewHolder.setText(R.id.item_plan_date_tv, "巡");
            }else if (item.getFull_plan().contains("特")){
                viewHolder.setText(R.id.item_plan_date_tv, "特");
+           }else if (item.getFull_plan().contains("保")){
+               viewHolder.setText(R.id.item_plan_date_tv, "保");
            }else {
-               viewHolder.setText(R.id.item_plan_date_tv, "检");
-           }
+                viewHolder.setText(R.id.item_plan_date_tv, "检");
+            }
            if(state!=null){
                viewHolder.setVisible(R.id.plan_to_change, false);
            }else {
@@ -77,17 +80,25 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
 
                    viewHolder.setText(R.id.item_plan_date_tv, "保")
                       .setVisible(R.id.plan_to_change,true);
+                   if ("0".equals(item.getAllot_status())){
+                       viewHolder.setVisible(R.id.plan_to_change,true);
+                       viewHolder.setText(R.id.item_plan_content, "分配状态 : 未分配" );
+                   }else {
+                       viewHolder.setVisible(R.id.plan_to_change,false);
+                       viewHolder.setText(R.id.item_plan_content, "分配状态 : 已分配" );
+                   }
                    viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
                            Intent intent = new Intent(mContext, LineCheckActivity.class);
                            intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
                            intent.putExtra("id", item.getId());
-                           mContext.startActivity(intent);
+                           intent.putExtra("year", item.getYear());
+                           intent.putExtra("month", item.getMonth());
+                           ((Activity)mContext).startActivityForResult(intent,10);
                        }
                    });
            viewHolder.setText(R.id.item_plan_device_name, "基于"+item.getLine_name()+"的保电计划")
-                   .setText(R.id.item_plan_content, "停电区域 : " + item.getBlackout_range())
                    .setText(R.id.item_line_status, "停电时间 : " + item.getStart_time() + " - " + item.getEnd_time());
 
        }

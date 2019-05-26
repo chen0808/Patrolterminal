@@ -84,10 +84,10 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
         planSubmit.setVisibility(View.VISIBLE);
         taskAdd.setVisibility(View.INVISIBLE);
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)){
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)){
             planSubmit.setText("提交");
             //planCreate.setVisibility(View.VISIBLE);
-        }else if (jobType.equals(Constant.MAINTENANCE_SUPERVISOR)){
+        }else if (jobType.contains(Constant.MAINTENANCE_SUPERVISOR)){
             planSubmit.setText("审核");
         }
         time = SPUtil.getString(getContext(), "date", "overhaulTime", DateUatil.getTime(new Date(System.currentTimeMillis())));
@@ -149,19 +149,19 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                             monthAdapter.setNewData(result);
                             for (int i = 0; i < result.size(); i++) {
                                 OverhaulYearBean overhaulYearBean = result.get(i);
-                                if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)&&"0".equals(overhaulYearBean.getMonth_audit_status())){   //专责   审核状态   //0:编制   1:待主管审核   2:审核通过    3:审核不通过
+                                if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)&&"0".equals(overhaulYearBean.getMonth_audit_status())){   //专责   审核状态   //0:编制   1:待主管审核   2:审核通过    3:审核不通过
                                     OverPlanReqBean bean=new OverPlanReqBean();
                                     bean.setId(overhaulYearBean.getId());
                                     bean.setMonth_audit_status("1");
                                     list1.add(bean);
                                 }
-//                                else if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)&&"2".equals(overhaulYearBean.getMonth_audit_status())){   //专责   审核状态
+//                                else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)&&"2".equals(overhaulYearBean.getMonth_audit_status())){   //专责   审核状态
 //                                    OverPlanReqBean bean=new OverPlanReqBean();
 //                                    bean.setId(overhaulYearBean.getId());
 //                                    bean.setAudit_status("2");
 //                                    list2.add(bean);
 //                                }
-                                else if (jobType.equals(Constant.MAINTENANCE_SUPERVISOR)&&"1".equals(overhaulYearBean.getMonth_audit_status())){   //主管   审核状态  目前只做了审核通过  TODO
+                                else if (jobType.contains(Constant.MAINTENANCE_SUPERVISOR)&&"1".equals(overhaulYearBean.getMonth_audit_status())){   //主管   审核状态  目前只做了审核通过  TODO
                                     OverPlanReqBean bean=new OverPlanReqBean();
                                     bean.setId(overhaulYearBean.getId());
                                     bean.setMonth_audit_status("2");
@@ -205,7 +205,7 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                 startActivityForResult(new Intent(getContext(), OverhaulAddMonthPlanActivity.class), 10);
                 break;
             case R.id.plan_submit:
-                if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {
+                if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(getContext(), "是否提交审核?", "取消", "确定") {
                         @Override
                         public void ok() {
@@ -222,7 +222,7 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                     };
                     dialog.show();
 
-                } else if (jobType.equals(Constant.MAINTENANCE_SUPERVISOR)) {
+                } else if (jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(getContext(), "一键处理审核", "不同意", "同意") {
                         @Override
                         public void ok() {

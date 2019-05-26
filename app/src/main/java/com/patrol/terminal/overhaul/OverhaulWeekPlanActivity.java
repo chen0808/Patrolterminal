@@ -97,14 +97,14 @@ public class OverhaulWeekPlanActivity extends AppCompatActivity {
 
 
 
-//        if (jobType.equals(Constant.REFURBISHMENT_LEADER)|| jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)
-//                || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)|| jobType.equals(Constant.SAFETY_SPECIALIZED)) { //班长发布周检修工作
+//        if (jobType.contains(Constant.REFURBISHMENT_LEADER)|| jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)
+//                || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)|| jobType.contains(Constant.SAFETY_SPECIALIZED)) { //班长发布周检修工作
 ////            userId = SPUtil.getUserId(this());
 //            status="1,2,3";
 //
-//        } else if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {   //专责发布周检修工作
+//        } else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {   //专责发布周检修工作
 //
-//        } else if (jobType.equals(Constant.REFURBISHMENT_MEMBER)) {  //班员接受周检修工作   TODO  班员里面分负责人和普通班员
+//        } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {  //班员接受周检修工作   TODO  班员里面分负责人和普通班员
 //            userId = SPUtil.getUserId(this());
 //            status="2,3";
 //        }

@@ -87,18 +87,18 @@ public class OverhaulPlanActivity extends AppCompatActivity {
         List<Fragment> fragmentList = new ArrayList<>();
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
 
-        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.MAINTENANCE_SUPERVISOR)) {   //检修专责能看年月周计划,周任务
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) {   //检修专责能看年月周计划,周任务
             mDataList = Arrays.asList(CHANNELS);
             fragmentList.add(new OverhaulYearPlanFrgment());
             fragmentList.add(new OverhaulMonthPlanFrgment());
             fragmentList.add(new OverhaulWeekPlanFrgment());
             fragmentList.add(new OverhaulZzWeekTaskFrgment());
-        }else if (jobType.equals(Constant.REFURBISHMENT_LEADER)  || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)    //班长,负责人能看周任务
-                || jobType.equals(Constant.REFURBISHMENT_MEMBER)){
+        }else if (jobType.contains(Constant.REFURBISHMENT_LEADER)  || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)    //班长,负责人能看周任务
+                || jobType.contains(Constant.REFURBISHMENT_MEMBER)){
             mDataList = Arrays.asList(CHANNELS_01);
             fragmentList.add(new OverhaulWeekTaskFrgment());
-        }else if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)
-                || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)|| jobType.equals(Constant.SAFETY_SPECIALIZED)) {   //保电,验收,安全能查看周计划
+        }else if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)
+                || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)|| jobType.contains(Constant.SAFETY_SPECIALIZED)) {   //保电,验收,安全能查看周计划
             mDataList = Arrays.asList(CHANNELS_02);
             fragmentList.add(new OverhaulWeekPlanFrgment());
         }

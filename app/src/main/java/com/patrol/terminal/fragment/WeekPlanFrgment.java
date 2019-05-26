@@ -95,7 +95,7 @@ public class WeekPlanFrgment extends BaseFragment {
         planSubmit.setVisibility(View.VISIBLE);
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(getActivity(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+        if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             state="1,2,3,4,5";
             depId=null;
             planSubmit.setText("审核");
@@ -191,13 +191,13 @@ public class WeekPlanFrgment extends BaseFragment {
                             WeekListBean weekListBean = results.get(i);
                                 //当身份是运行班专责时，获取到需要审核的列表
                             if (weekListBean.getWeek_id()!=null){
-                                if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(results.get(i).getAudit_status())) {
+                                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(results.get(i).getAudit_status())) {
                                     WeekListBean bean = results.get(i);
                                     Tower lineBean = new Tower();
                                     lineBean.setId(bean.getId());
                                     lineList.add(lineBean);
                                     //当身份是运行班专责时，获取到需要发布的列表
-                                }  else if (mJobType.equals(Constant.RUNNING_SQUAD_LEADER) && "0".equals(results.get(i).getAudit_status())) {
+                                }  else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(results.get(i).getAudit_status())) {
                                     WeekListBean bean = results.get(i);
                                     Tower lineBean = new Tower();
                                     lineBean.setId(bean.getId());
@@ -236,7 +236,7 @@ public class WeekPlanFrgment extends BaseFragment {
                 showWeek();
                 break;
             case R.id.plan_submit:
-                if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED) || mJobType.equals(Constant.RUN_SUPERVISOR)) {
+                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || mJobType.contains(Constant.RUN_SUPERVISOR)) {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(getActivity(), "一键审核", "不同意", "同意") {
                         @Override
                         public void ok() {
@@ -253,7 +253,7 @@ public class WeekPlanFrgment extends BaseFragment {
                         }
                     };
                     dialog.show();
-                } else if (mJobType.equals((Constant.RUNNING_SQUAD_LEADER))) {
+                } else if (mJobType.contains((Constant.RUNNING_SQUAD_LEADER))) {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(getActivity(), "是否一键提交审核", "取消", "确定") {
                         @Override
                         public void ok() {

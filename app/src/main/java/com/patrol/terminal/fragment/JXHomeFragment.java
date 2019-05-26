@@ -128,24 +128,24 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
 //            rlPlan.setVisibility(View.GONE);
 //        }
 
-        if (jobType.equals(Constant.REFURBISHMENT_MEMBER) || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)) {  //检修班成员只有当前任务和历史任务
+        if (jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {  //检修班成员只有当前任务和历史任务
             llBacklog.setVisibility(View.GONE);
             llLastTask.setVisibility(View.VISIBLE);
-        }else if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.REFURBISHMENT_LEADER)
-                || jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)
-                || jobType.equals(Constant.SAFETY_SPECIALIZED) || jobType.equals(Constant.MAINTENANCE_SUPERVISOR)) { //检修班长和检修专责,保电专责，验收专责，安全专责只有待办和当前任务 //检修主管只在待办审核月计划
+        }else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.REFURBISHMENT_LEADER)
+                || jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)
+                || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) { //检修班长和检修专责,保电专责，验收专责，安全专责只有待办和当前任务 //检修主管只在待办审核月计划
             llBacklog.setVisibility(View.VISIBLE);
             llLastTask.setVisibility(View.GONE);
         }
 
 
-        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.equals(Constant.SAFETY_SPECIALIZED)) {
+        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.equals(Constant.SAFETY_SPECIALIZED)) {
             status = "1,2,3,4,5";
         } else if (jobType.endsWith("_zz") && !jobType.contains("b_")) {
             status = "4,5";
         }
 
-        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
             getOverhaulTodo();
         }
 
@@ -317,6 +317,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
                     }
                 });
     }
+
 
 
 //    @Override

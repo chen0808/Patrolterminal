@@ -61,7 +61,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
-public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */{
+public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */ {
 
 
     @BindView(R.id.iv_header)
@@ -110,7 +110,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     private BackTodoYXAdapter adapter;
     private ProgressDialog progressDialog;
     private BackLogTaskAdapter backLogTaskAdapter;
-    private String year,month,day,time;
+    private String year, month, day, time;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,7 +121,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 
     @Override
     protected void initData() {
-        time= DateUatil.getCurrTime();
+        time = DateUatil.getCurrTime();
         inteDate();
         String name = SPUtil.getString(getContext(), Constant.USER, Constant.USERNAME, "");
         String dep = SPUtil.getDepName(getContext());
@@ -138,10 +138,12 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             rlTask.setVisibility(View.VISIBLE);
         }
         //运行班组长和组员进来隐藏计划
-        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER) || jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            rlPlan.setVisibility(View.VISIBLE);
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             rlPlan.setVisibility(View.GONE);
         }
-        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.equals(Constant.SAFETY_SPECIALIZED)) {
+        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED)) {
             status = "1,2,3,4,5";
         } else if (jobType.endsWith("_zz") && !jobType.contains("b_")) {
             status = "4,5";
@@ -209,23 +211,24 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             }
         });
     }
+
     //获取个人任务列表
     public void getPersonalList() {
 
         BaseRequest.getInstance().getService()
-                .getDepPersonalList(year,month, day, SPUtil.getDepId(getContext()))
+                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
                     @Override
                     protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
-                       taskData = t.getResults();
+                        taskData = t.getResults();
 
                         backLogTaskAdapter.setNewData(taskData);
 
-                        if (taskData.size()==0){
+                        if (taskData.size() == 0) {
                             homeTaskNoData.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             homeTaskNoData.setVisibility(View.GONE);
                         }
                     }
@@ -256,21 +259,19 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     }
 
 
-
-
     @OnClick({R.id.rl_plan, R.id.rl_task, R.id.rl_defact, R.id.rl_trouble, R.id.scanner_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_plan:
                 //startActivity(new Intent(getActivity(), OverhaulPlanActivity.class));
                 Log.w("linmeng", "jobType:" + jobType);
-                if (jobType.equals(Constant.RUNNING_SQUAD_LEADER) || jobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)
-                        || jobType.equals(Constant.RUN_SUPERVISOR) || jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)
+                        || jobType.contains(Constant.RUN_SUPERVISOR) || jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
                     startActivity(new Intent(getActivity(), NewPlanActivity.class));
-                } else if (jobType.equals(Constant.REFURBISHMENT_LEADER) || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)
-                        || jobType.equals(Constant.REFURBISHMENT_MEMBER)
-                        || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.equals(Constant.SAFETY_SPECIALIZED)
-                        ||jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.MAINTENANCE_SUPERVISOR)) {      //TODO其他还没加
+                } else if (jobType.contains(Constant.REFURBISHMENT_LEADER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
+                        || jobType.contains(Constant.REFURBISHMENT_MEMBER)
+                        || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED)
+                        || jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) {      //TODO其他还没加
                     //startActivity(new Intent(getActivity(), OverhaulWeekPlanActivity.class));
                     startActivity(new Intent(getActivity(), OverhaulPlanActivity.class));
                 }
@@ -332,21 +333,20 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 //    }
 
 
-
     public void getYXtodo() {
         BaseRequest.getInstance().getService()
-                .getYXtodo(SPUtil.getDepId(getContext()),"0","CREATE_TIME desc")
+                .getYXtodo(SPUtil.getDepId(getContext()), "0", "CREATE_TIME desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<TodoListBean>>(getContext()) {
 
                     @Override
                     protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
-                        backLogData= t.getResults();
+                        backLogData = t.getResults();
                         adapter.setNewData(backLogData);
-                        if (backLogData.size()==0){
+                        if (backLogData.size() == 0) {
                             homeTodoNoData.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             homeTodoNoData.setVisibility(View.GONE);
                         }
                     }
@@ -382,17 +382,17 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 //        });
 //    }
 
-//    @Override
+    //    @Override
 //    public void callback(boolean b, int i, String s) {
 //        progressDialog.cancle();
 //        Log.w("linmeng", "s:" + s);
 //    }
-public void inteDate(){
-    String[] years = time.split("年");
-    String[] months = years[1].split("月");
-    String[] days = months[1].split("日");
-    month = Integer.parseInt(months[0])+"";
-    year =years[0];
-    day=Integer.parseInt(days[0])+"";
-}
+    public void inteDate() {
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        String[] days = months[1].split("日");
+        month = Integer.parseInt(months[0]) + "";
+        year = years[0];
+        day = Integer.parseInt(days[0]) + "";
+    }
 }

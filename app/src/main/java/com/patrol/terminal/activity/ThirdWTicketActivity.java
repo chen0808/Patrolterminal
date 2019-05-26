@@ -170,7 +170,7 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
         ticketType = getIntent().getStringExtra("type");
         ticketTaskType = getIntent().getStringExtra("task_type");
 
-        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {  //专责接受的Bean不一样
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {  //专责接受的Bean不一样
             OverhaulYearBean bean = getIntent().getParcelableExtra("bean");
 
             if (bean != null) {

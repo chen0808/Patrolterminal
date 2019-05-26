@@ -264,7 +264,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
         String status = results.getWeek_audit_status();
         String is_ele = results.getIs_ele();
         titleSettingTv.setText("派发");
-        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {   //检修专责
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {   //检修专责
             if ("1".equals(status)) {   //待专责分发
                 titleSetting.setVisibility(View.VISIBLE);
                 taskLl.setVisibility(View.VISIBLE);
@@ -273,7 +273,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
                 taskLl.setVisibility(View.GONE);
             }
         } else {
-            if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+            if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
                 needUploadLl.setVisibility(View.VISIBLE);
             }
 
@@ -283,11 +283,11 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
             taskLl.setVisibility(View.GONE);        //不添加任务
         }
 
-        if ((jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED))) {
+        if ((jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED))) {
             llUploadFile.setVisibility(View.VISIBLE);
         }
 //        保电专责进来判断是否需要上传保电方案
-        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
             needUploadLl.setVisibility(View.VISIBLE);
             titleSettingTv.setText("保存");
             titleSetting.setVisibility(View.VISIBLE);
@@ -580,7 +580,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
                 uploadWord();
                 break;
             case R.id.title_setting:
-                if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {   //专责发布周计划生成任务
+                if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {   //专责发布周计划生成任务
                     Intent intent = new Intent();
                     intent.setClass(this, OverhaulPublishActivity.class);
                     Bundle bundle = new Bundle();
@@ -594,7 +594,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
 
                     intent.putExtras(bundle);
                     startActivityForResult(intent, 1001);
-                } else if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {  //保电专责保存数据
+                } else if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {  //保电专责保存数据
                     savaVoStatus();
                 }
                 break;
@@ -706,9 +706,9 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
         ProgressDialog.show(this, false, "正在上传....");
         Map<String, RequestBody> params = new HashMap<>();
         params.put("data_id", toRequestBody(results.getId()));
-        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
             params.put("repair_type", toRequestBody("1"));  //1保电2验收
-        } else if (jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+        } else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
             params.put("repair_type", toRequestBody("2"));  //1保电2验收
         }
         File file = new File("/storage/emulated/0/" + fileList.get(filePosition));

@@ -184,14 +184,18 @@ JueYuanZiLingZhiJianCeActivity extends BaseActivity {
                                 TodoListBean todoListBean = results.get(0);
                                 String audit_status = todoListBean.getAudit_status();
                                 if ("0".equals(audit_status)) {
-                                    if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)) {
+                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                                         titleSetting.setVisibility(View.VISIBLE);
                                         titleSettingTv.setText("审批");
                                     }
                                     mengban.setVisibility(View.VISIBLE);
                                     btnCommit.setVisibility(View.GONE);
                                 } else if ("2".equals(audit_status)) {
-                                    if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER) || jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                                        titleSetting.setVisibility(View.GONE);
+                                        mengban.setVisibility(View.VISIBLE);
+                                        btnCommit.setVisibility(View.GONE);
+                                    }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                                         mengban.setVisibility(View.GONE);
                                         btnCommit.setVisibility(View.VISIBLE);
                                     } else {
@@ -206,7 +210,11 @@ JueYuanZiLingZhiJianCeActivity extends BaseActivity {
                                     btnCommit.setVisibility(View.GONE);
                                 }
                             } else {
-                                if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER) || jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                                    mengban.setVisibility(View.VISIBLE);
+                                    btnCommit.setVisibility(View.GONE);
+                                    titleSetting.setVisibility(View.GONE);
+                                }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                                     mengban.setVisibility(View.GONE);
                                     btnCommit.setVisibility(View.VISIBLE);
                                 } else {

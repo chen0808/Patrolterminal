@@ -86,24 +86,24 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         userId = SPUtil.getUserId(getContext());
 
-        if (jobType.equals(Constant.REFURBISHMENT_LEADER)) {
+        if (jobType.contains(Constant.REFURBISHMENT_LEADER)) {
             sign = "3";
-        }else if (jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)){
+        }else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)){
             sign = "1";
-        }else if (jobType.equals(Constant.SAFETY_SPECIALIZED)) {
+        }else if (jobType.contains(Constant.SAFETY_SPECIALIZED)) {
             sign = "2";
-        }else if (jobType.equals(Constant.REFURBISHMENT_MEMBER)) {
+        }else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {
             sign = "4";
         }
 
-//        if (jobType.equals(Constant.REFURBISHMENT_LEADER)|| jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)
-//                || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)|| jobType.equals(Constant.SAFETY_SPECIALIZED)) { //班长发布周检修工作
+//        if (jobType.contains(Constant.REFURBISHMENT_LEADER)|| jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)
+//                || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)|| jobType.contains(Constant.SAFETY_SPECIALIZED)) { //班长发布周检修工作
 ////            userId = SPUtil.getUserId(getContext());
 //            status="1,2,3";
 //
-//        } else if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {   //专责发布周检修工作
+//        } else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {   //专责发布周检修工作
 //
-//        } else if (jobType.equals(Constant.REFURBISHMENT_MEMBER)) {  //班员接受周检修工作   TODO  班员里面分负责人和普通班员
+//        } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {  //班员接受周检修工作   TODO  班员里面分负责人和普通班员
 //            userId = SPUtil.getUserId(getContext());
 //            status="2,3";
 //        }

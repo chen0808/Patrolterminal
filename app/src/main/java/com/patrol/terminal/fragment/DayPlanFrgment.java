@@ -72,7 +72,7 @@ public class DayPlanFrgment extends BaseFragment {
     @Override
     protected void initData() {
         String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        if (!jobType.equals(Constant.RUNNING_SQUAD_LEADER)) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
+        if (!jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
             taskAdd.setVisibility(View.INVISIBLE);
         }
          time = DateUatil.getDay(new Date(System.currentTimeMillis()));

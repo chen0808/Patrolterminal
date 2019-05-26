@@ -85,7 +85,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
         titleBack.setVisibility(View.GONE);
         titleName.setText("待办管理");
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)){
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
             getYXtodo();
             getYXtodoHave();
         }
@@ -97,7 +97,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
         fragTodoRef.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)){
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
                     getYXtodo();
                     getYXtodoHave();
                 }
@@ -111,7 +111,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
             @Override
             public void accept(String type) throws Exception {
                 if (type.startsWith("todo")) {
-                    if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)){
+                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
                         getYXtodo();
                         getYXtodoHave();
                     }

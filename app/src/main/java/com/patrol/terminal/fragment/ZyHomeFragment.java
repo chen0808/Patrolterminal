@@ -122,10 +122,6 @@ public class ZyHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
             tvDep.setText(dep);
             tvJob.setText(job);
         }
-
-        rlPlan.setVisibility(View.VISIBLE);
-        //运行班才有任务,检修班是计划
-
         initBackLog();
         initTask();
         initPlanFinishRate();
@@ -241,13 +237,13 @@ public class ZyHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
             case R.id.rl_plan:
                 //startActivity(new Intent(getActivity(), OverhaulPlanActivity.class));
                 Log.w("linmeng", "jobType:" + jobType);
-                if (jobType.equals(Constant.RUNNING_SQUAD_LEADER) || jobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)
-                        || jobType.equals(Constant.RUN_SUPERVISOR) || jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)
+                        || jobType.contains(Constant.RUN_SUPERVISOR) || jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
                     startActivity(new Intent(getActivity(), NewPlanActivity.class));
-                } else if (jobType.equals(Constant.REFURBISHMENT_LEADER) || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)
-                        || jobType.equals(Constant.REFURBISHMENT_MEMBER)
-                        || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.equals(Constant.SAFETY_SPECIALIZED)
-                        ||jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.MAINTENANCE_SUPERVISOR)) {      //TODO其他还没加
+                } else if (jobType.contains(Constant.REFURBISHMENT_LEADER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
+                        || jobType.contains(Constant.REFURBISHMENT_MEMBER)
+                        || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED)
+                        ||jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) {      //TODO其他还没加
                     //startActivity(new Intent(getActivity(), OverhaulWeekPlanActivity.class));
                     startActivity(new Intent(getActivity(), OverhaulPlanActivity.class));
                 }
