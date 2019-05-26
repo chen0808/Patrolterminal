@@ -28,7 +28,6 @@ import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.OvaTodoBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PlanFinishRateBean;
-import com.patrol.terminal.bean.TodoListBean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
 import com.patrol.terminal.utils.Constant;
@@ -47,7 +46,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
-public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */{
+public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */ {
 
 
     @BindView(R.id.iv_header)
@@ -84,6 +83,12 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     LinearLayout llPlanFinishRate;
     @BindView(R.id.scanner_iv)
     ImageView scannerIv;
+    @BindView(R.id.rv_last_task)
+    RecyclerView rvLastTask;
+    @BindView(R.id.home_last_task_no_data)
+    TextView homeLastTaskNoData;
+    @BindView(R.id.ll_last_task)
+    RelativeLayout llLastTask;
 
     private String[] typeList = new String[]{};
     private List<String> types = new ArrayList<>();
@@ -117,18 +122,30 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
             tvJob.setText(job);
         }
         rlPlan.setVisibility(View.VISIBLE);
-            rlTask.setVisibility(View.GONE);
+        rlTask.setVisibility(View.GONE);
         //运行班组长和组员进来隐藏计划
-        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER) || jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-            rlPlan.setVisibility(View.GONE);
+//        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER) || jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+//            rlPlan.setVisibility(View.GONE);
+//        }
+
+        if (jobType.equals(Constant.REFURBISHMENT_MEMBER) || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)) {  //检修班成员只有当前任务和历史任务
+            llBacklog.setVisibility(View.GONE);
+            llLastTask.setVisibility(View.VISIBLE);
+        }else if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.REFURBISHMENT_LEADER)
+                || jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)
+                || jobType.equals(Constant.SAFETY_SPECIALIZED) || jobType.equals(Constant.MAINTENANCE_SUPERVISOR)) { //检修班长和检修专责,保电专责，验收专责，安全专责只有待办和当前任务 //检修主管只在待办审核月计划
+            llBacklog.setVisibility(View.VISIBLE);
+            llLastTask.setVisibility(View.GONE);
         }
+
+
         if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.equals(Constant.SAFETY_SPECIALIZED)) {
             status = "1,2,3,4,5";
         } else if (jobType.endsWith("_zz") && !jobType.contains("b_")) {
             status = "4,5";
         }
 
-        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)||jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)){
+        if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
             getOverhaulTodo();
         }
 
@@ -210,7 +227,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
                 } else if (jobType.equals(Constant.REFURBISHMENT_LEADER) || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)
                         || jobType.equals(Constant.REFURBISHMENT_MEMBER)
                         || jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.equals(Constant.SAFETY_SPECIALIZED)
-                        ||jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.MAINTENANCE_SUPERVISOR)) {      //TODO其他还没加
+                        || jobType.equals(Constant.REFURBISHMENT_SPECIALIZED) || jobType.equals(Constant.MAINTENANCE_SUPERVISOR)) {      //TODO其他还没加
                     //startActivity(new Intent(getActivity(), OverhaulWeekPlanActivity.class));
                     startActivity(new Intent(getActivity(), OverhaulPlanActivity.class));
                 }
@@ -300,7 +317,6 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
                     }
                 });
     }
-
 
 
 //    @Override

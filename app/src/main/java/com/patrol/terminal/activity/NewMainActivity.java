@@ -112,30 +112,44 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     }
 
     private void initView() {
+        mFragments = new ArrayList<>(4);
         userId = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
         // init fragment
-        mFragments = new ArrayList<>(4);
         String jobType = SPUtil.getString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)||jobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)||jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)||jobType.equals(Constant.REFURBISHMENT_LEADER)){
-            mainExameRb.setVisibility(View.VISIBLE);
-        }
+
         if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)) {
             getGroupName();
+        }
 
-        }
-        if (jobType.equals(Constant.TRAINING_SPECIALIZED)) {
-            mFragments.add(new TrainingHomeFragment());  //培训专责
-        }  else  if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)||jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)){
-            mFragments.add(new ZyHomeFragment());
-        }else  if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)){
-            mFragments.add(new HomeFragment());;
-        }else{
-            mFragments.add(new JXHomeFragment());
-        }
-        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)||jobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)){
-            mFragments.add(new YXTodosManageFragment());
-        } else if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)||jobType.equals(Constant.REFURBISHMENT_LEADER)){
-            mFragments.add(new TodosManageFragment());
+        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER) || jobType.equals(Constant.REFURBISHMENT_MEMBER)
+                || jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER) || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)
+                || jobType.equals(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
+            mainExameRb.setVisibility(View.GONE);
+
+            if (jobType.equals(Constant.TRAINING_SPECIALIZED)) {     //培训专责
+                mFragments.add(new TrainingHomeFragment());
+            }else  if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)||jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+                mFragments.add(new ZyHomeFragment());
+            }else {
+                mFragments.add(new JXHomeFragment());
+            }
+
+            mFragments.add(new TodosManageFragment());  //只是不显示，以免RideoButton点击错乱
+
+        }else {                                                    //有待办的角色
+            mainExameRb.setVisibility(View.VISIBLE);
+
+            if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)){
+                mFragments.add(new HomeFragment());
+            }else {
+                mFragments.add(new JXHomeFragment());
+            }
+
+            if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)||jobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)){   //运行待办
+                mFragments.add(new YXTodosManageFragment());
+            } else {   //其他角色待办
+                mFragments.add(new TodosManageFragment());
+            }
 
         }
 
@@ -176,7 +190,10 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
+            Log.w("linmeng", "group.getChildCount():" + group.getChildCount());
             for (int i = 0; i < group.getChildCount(); i++) {
+                Log.w("linmeng", "group.getChildAt(i).getId():" + group.getChildAt(i).getId());
+                Log.w("linmeng", "checkedId:" + checkedId);
                 if (group.getChildAt(i).getId() == checkedId) {
                     fragmentVp.setCurrentItem(i);
                     return;

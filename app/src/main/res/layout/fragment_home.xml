@@ -373,6 +373,49 @@
                     android:visibility="gone" />
             </RelativeLayout>
 
+
+            <RelativeLayout
+                android:id="@+id/ll_last_task"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/stoke_home_list">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="历史任务"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_last_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="54dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/home_last_task_no_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="54dp"
+                    android:gravity="center"
+                    android:text="暂无任务"
+                    android:textColor="@color/color_69"
+                    android:textSize="@dimen/sp_22"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/ll_plan_finish_rate"
                 android:layout_width="match_parent"
