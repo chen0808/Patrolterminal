@@ -768,4 +768,13 @@ public interface ApiServise {
     //获取个人轨迹集合
     @GET("task/gps/listGET")
     Observable<BaseResult<List<PositionListBean>>> getPositonList(@Query("user_id") String user_id, @Query("loc_time like") String date);
+
+    //获取检修班班长待办
+    @GET("task/repair/listGET")
+    Observable<BaseResult<List<OverhaulMonthBean>>> getBzAgents(@Query("task_status") String task_status);
+
+    //更新检修班班长待办
+    @POST("task/repair/pda/updatePOST")
+    Observable<BaseResult<List<OverhaulMonthBean>>> updateBzAgents(@Query("task_status") String task_status, @Query("id") String id);
+
 }

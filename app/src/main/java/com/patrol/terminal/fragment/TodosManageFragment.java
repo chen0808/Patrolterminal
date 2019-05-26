@@ -4,6 +4,7 @@ package com.patrol.terminal.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,13 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.OverhaulYearBean;
-import com.patrol.terminal.overhaul.OverhaulWeekAdapter;
-import com.patrol.terminal.overhaul.OverhaulWeekDetailActivity;
+import com.patrol.terminal.bean.DayOfWeekBean;
+import com.patrol.terminal.bean.OverhaulMonthBean;
+import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
+import com.patrol.terminal.overhaul.OverhaulWeekTaskAdapter;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 
 import java.util.ArrayList;
@@ -33,6 +36,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /*待办管理*/
@@ -51,22 +56,25 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
     TextView toDoTv;
     @BindView(R.id.done_tv)
     TextView doneTv;
+    @BindView(R.id.to_do_rl)
+    RelativeLayout toDoRl;
     @BindView(R.id.frag_todo_rv)
     RecyclerView fragTodoRv;
     @BindView(R.id.frag_todo_ref)
     SwipeRefreshLayout fragTodoRef;
     private Activity mActivity;
-    private OverhaulWeekAdapter toDoManageAdapter;
+    private OverhaulWeekTaskAdapter toDoManageAdapter;
     private static final int IS_TODO_PAGE = 0;
     private static final int IS_DONE_PAGE = 1;
     private int isTodoPage = IS_TODO_PAGE;
     private String status;
-    private List<OverhaulYearBean> results=new ArrayList<>();
+    private List<OverhaulMonthBean> results = new ArrayList<>();
     private String jobType;
-    private String time,year,month;
+    private String time, year, month;
     private String ele_user_id;
     private String check_user_id;
     private String safe_user_id;
+    private Disposable subscribe;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,15 +90,15 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         String userId = SPUtil.getString(getContext(), Constant.USER, Constant.USERID, "");
 
-        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)){
-            ele_user_id =userId;
-        }else if (jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)){
-            check_user_id =userId;
-        }else if (jobType.equals(Constant.SAFETY_SPECIALIZED)){
-            safe_user_id =userId;
+        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+            ele_user_id = userId;
+        } else if (jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+            check_user_id = userId;
+        } else if (jobType.equals(Constant.SAFETY_SPECIALIZED)) {
+            safe_user_id = userId;
         }
 
-        time =DateUatil.getCurMonth();
+        time = DateUatil.getCurMonth();
 
         String[] years = time.split("年");
         String[] months = years[1].split("月");
@@ -98,7 +106,8 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
         year = years[0];
         LinearLayoutManager manager = new LinearLayoutManager(mActivity);
         fragTodoRv.setLayoutManager(manager);
-        toDoManageAdapter = new OverhaulWeekAdapter(R.layout.fragment_overhaul_week_item, results);
+
+        toDoManageAdapter = new OverhaulWeekTaskAdapter(R.layout.fragment_overhaul_week_item, results, 2);
         fragTodoRv.setAdapter(toDoManageAdapter);
         toDoManageAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -109,12 +118,46 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
         fragTodoRef.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getOverhaulTodo();
+                if (jobType.equals(Constant.REFURBISHMENT_LEADER)) {
+                    getBzAgentsTodo("4");
+                } else {
+                    getOverhaulTodo();
+                }
             }
         });
 
         toDoManageAdapter.setOnItemClickListener(this);
-        getOverhaulTodo();
+
+        Log.w("linmeng", "toDoManageAdapter jobType:" + jobType);
+        if (jobType.equals(Constant.REFURBISHMENT_LEADER)) {
+            getBzAgentsTodo("4");
+        } else {
+            getOverhaulTodo();
+        }
+
+
+        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.startsWith("todoUpdate")) {
+                    if (isTodoPage == IS_TODO_PAGE) {
+                        getBzAgentsTodo("4");
+                    }else if (isTodoPage == IS_DONE_PAGE) {
+                        getBzAgentsTodo("5,6");
+                    }
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (subscribe != null) {
+            subscribe.dispose();
+        }
     }
 
     @OnClick({R.id.to_do_tv, R.id.done_tv})
@@ -126,8 +169,10 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
                 toDoTv.setTextColor(getResources().getColor(R.color.date_color));
                 doneTv.setTextColor(getResources().getColor(R.color.white));
 
+                getBzAgentsTodo("4");
                 isTodoPage = IS_TODO_PAGE;
-                toDoManageAdapter.setNewData(results);
+                toDoManageAdapter.setIsTodoType(isTodoPage);
+                //toDoManageAdapter.setNewData(results);
 
                 break;
 
@@ -137,8 +182,10 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
                 toDoTv.setTextColor(getResources().getColor(R.color.white));
                 doneTv.setTextColor(getResources().getColor(R.color.date_color));
 
+                getBzAgentsTodo("5,6");
                 isTodoPage = IS_DONE_PAGE;
-                toDoManageAdapter.setNewData(results);
+                toDoManageAdapter.setIsTodoType(isTodoPage);
+                //toDoManageAdapter.setNewData(results);
 
                 break;
         }
@@ -146,8 +193,8 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        Intent intent=new Intent();
-        intent.setClass(getContext(), OverhaulWeekDetailActivity.class);
+        Intent intent = new Intent();
+        intent.setClass(getContext(), OverhaulWeekPlanDetailActivity.class);
         Bundle bundle = new Bundle();
         if (results.get(position) != null) {
             bundle.putString("id", results.get(position).getId());
@@ -155,22 +202,23 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
         intent.putExtras(bundle);
         startActivity(intent);
     }
-    public void getOverhaulTodo() {
-        //安全,验收,保电需要传userId
+
+    private void getBzAgentsTodo(String task_status) {
+        results.clear();
         BaseRequest.getInstance().getService()
-                .getOverhaulPlanList(year,month,null, "2", null,ele_user_id,check_user_id,safe_user_id)
+                .getBzAgents(task_status)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<OverhaulYearBean>>(getContext()) {
+                .subscribe(new BaseObserver<List<OverhaulMonthBean>>(getContext()) {
 
                     @Override
-                    protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<OverhaulMonthBean>> t) throws Exception {
                         fragTodoRef.setRefreshing(false);
-                        List<OverhaulYearBean> overhaulYearBeans = t.getResults();
-                        for (int i = 0; i < overhaulYearBeans.size(); i++) {
-                            if ("2".equals(overhaulYearBeans.get(i).getMonth_audit_status())) {   //只显示审核通过的周计划
-                                results.add(overhaulYearBeans.get(i));
-                            }
+                        List<OverhaulMonthBean> overhaulMonthBeans = t.getResults();
+                        for (int i = 0; i < overhaulMonthBeans.size(); i++) {
+                            //if ("2".equals(overhaulMonthBeans.get(i).getMonth_audit_status())) {   //只显示审核通过的周计划
+                            results.add(overhaulMonthBeans.get(i));
+                            //}
                         }
                         toDoManageAdapter.setNewData(results);
                     }
@@ -180,6 +228,34 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
                         fragTodoRef.setRefreshing(false);
                     }
                 });
+
+    }
+
+    public void getOverhaulTodo() {
+        //安全,验收,保电需要传userId
+//        BaseRequest.getInstance().getService()
+//                .getOverhaulPlanList(year,month,null, "2", null,ele_user_id,check_user_id,safe_user_id)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<List<OverhaulYearBean>>(getContext()) {
+//
+//                    @Override
+//                    protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
+//                        fragTodoRef.setRefreshing(false);
+//                        List<OverhaulYearBean> overhaulYearBeans = t.getResults();
+//                        for (int i = 0; i < overhaulYearBeans.size(); i++) {
+//                            if ("2".equals(overhaulYearBeans.get(i).getMonth_audit_status())) {   //只显示审核通过的周计划
+//                                results.add(overhaulYearBeans.get(i));
+//                            }
+//                        }
+//                        toDoManageAdapter.setNewData(results);
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//                        fragTodoRef.setRefreshing(false);
+//                    }
+//                });
 
     }
 

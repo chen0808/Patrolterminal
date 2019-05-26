@@ -127,7 +127,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         planRv.setOnItemMenuClickListener(mItemMenuClickListener);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
-        weekTaskAdapter = new OverhaulWeekTaskAdapter(R.layout.fragment_overhaul_week_item, results);
+        weekTaskAdapter = new OverhaulWeekTaskAdapter(R.layout.fragment_overhaul_week_item, results, 1);
         planRv.setAdapter(weekTaskAdapter);
         weekTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
