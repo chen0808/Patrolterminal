@@ -13,9 +13,19 @@ public class LineTypeBean {
         private String id;
         private String name;
         private String val;
+        private String sign;
+
         private Object eqTowers;
 
-        public String getId() {
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public String getId() {
             return id;
         }
 

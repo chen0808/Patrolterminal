@@ -1,56 +1,29 @@
 package com.patrol.terminal.bean;
 
-import com.chad.library.adapter.base.entity.AbstractExpandableItem;
-import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.patrol.terminal.adapter.MonthPlanListAdapter;
+public class EleBean {
 
-public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implements MultiItemEntity {
-
-
-
-
-
-
-    /**
-     * full_plan : 定期巡视,接地电阻
-     * plan_type : 1
-     * dep_id : BBE359C6F29042A1A5AF96F9C1B68ED8
-     * month : 5
-     * year : 2019
-     * month_id : 440D30A263F7434DA714523D9782245A
-     * line_name : 1111安刘线
-     * audit_status : 3
-     * dep_name : 西固运维班
-     */
-
-    private String type_name;
-    private String plan_type;
-    private String dep_id;
-    private int month;
-    private int year;
-    private String month_id;
-    private String line_name;
-    private String audit_status;
-    private String dep_name;
     /**
      * id : 161E390898624F04A88E53F832712FEF
      * apply_dep_id : 34B9F165BF9B4527B01ABF328055FBD3
      * apply_dep_name : 兰州供电局
      * voltage_level : 110kv
      * line_id : C0848BA9870747869C86817785BB4091
+     * line_name : 兴前线
      * repair_content : 恢复兴前线1#至门架的导地线
      * is_blackout : 1
      * blackout_range : 安宁区
      * task_source : 停电配合
      * start_time : 2019-05-03
      * end_time : 2019-05-05
-     * blackout_days : 1
+     * blackout_days : 1.0
      * last_repair_time : 2019-01-01
      * risk_level : 6
      * type_id : null
      * type_val : null
      * substation_id : 110kV源泰变电站
      * remark : 22
+     * year : 2019
+     * month : 5
      * week : 1
      * day : 3
      * month_audit_status : 2
@@ -76,19 +49,22 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
     private String apply_dep_name;
     private String voltage_level;
     private String line_id;
+    private String line_name;
     private String repair_content;
     private String is_blackout;
     private String blackout_range;
     private String task_source;
     private String start_time;
     private String end_time;
-    private int blackout_days;
+    private double blackout_days;
     private String last_repair_time;
     private String risk_level;
     private Object type_id;
     private Object type_val;
     private String substation_id;
     private String remark;
+    private int year;
+    private int month;
     private int week;
     private int day;
     private String month_audit_status;
@@ -107,89 +83,6 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
     private Object userName1;
     private Object userId2;
     private Object userName2;
-
-
-    @Override
-    public int getLevel() {
-        return 2;
-    }
-
-    @Override
-    public int getItemType() {
-        return MonthPlanListAdapter.TYPE_2;
-    }
-
-    public String getFull_plan() {
-        return type_name;
-    }
-
-    public void setFull_plan(String full_plan) {
-        this.type_name = full_plan;
-    }
-
-    public String getPlan_type() {
-        return plan_type;
-    }
-
-    public void setPlan_type(String plan_type) {
-        this.plan_type = plan_type;
-    }
-
-    public String getDep_id() {
-        return dep_id;
-    }
-
-    public void setDep_id(String dep_id) {
-        this.dep_id = dep_id;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public String getMonth_id() {
-        return month_id;
-    }
-
-    public void setMonth_id(String month_id) {
-        this.month_id = month_id;
-    }
-
-    public String getLine_name() {
-        return line_name;
-    }
-
-    public void setLine_name(String line_name) {
-        this.line_name = line_name;
-    }
-
-    public String getAudit_status() {
-        return audit_status;
-    }
-
-    public void setAudit_status(String audit_status) {
-        this.audit_status = audit_status;
-    }
-
-    public String getDep_name() {
-        return dep_name;
-    }
-
-    public void setDep_name(String dep_name) {
-        this.dep_name = dep_name;
-    }
 
     public String getId() {
         return id;
@@ -229,6 +122,14 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
 
     public void setLine_id(String line_id) {
         this.line_id = line_id;
+    }
+
+    public String getLine_name() {
+        return line_name;
+    }
+
+    public void setLine_name(String line_name) {
+        this.line_name = line_name;
     }
 
     public String getRepair_content() {
@@ -279,11 +180,11 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
         this.end_time = end_time;
     }
 
-    public int getBlackout_days() {
+    public double getBlackout_days() {
         return blackout_days;
     }
 
-    public void setBlackout_days(int blackout_days) {
+    public void setBlackout_days(double blackout_days) {
         this.blackout_days = blackout_days;
     }
 
@@ -333,6 +234,22 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
     }
 
     public int getWeek() {
