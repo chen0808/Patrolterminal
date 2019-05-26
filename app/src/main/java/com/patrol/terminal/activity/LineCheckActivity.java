@@ -25,6 +25,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.LineCheckBean;
 import com.patrol.terminal.bean.LineTypeBean;
+import com.patrol.terminal.bean.SavaEleLineBean;
 import com.patrol.terminal.bean.SavaLineBean;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -96,7 +97,6 @@ public class LineCheckActivity extends BaseActivity {
 
             }
         });
-
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("完成");
         initData();
@@ -234,9 +234,14 @@ public class LineCheckActivity extends BaseActivity {
     //获取每个班组负责的线路
     public void saveMonthPlan() {
        ProgressDialog.show(this,false,"正在加载。。。");
+        SavaEleLineBean bean=new SavaEleLineBean();
+        bean.setLine_id(selectBean.getId());
+        bean.setLine_name(selectBean.getName());
+        bean.setYear(year+"");
+        bean.setMonth(month+"");
         //获取月计划列表
         BaseRequest.getInstance().getService()
-                .saveMonthPlan(selectBean)
+                .saveMonthPlan(bean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineTypeBean>>(this) {

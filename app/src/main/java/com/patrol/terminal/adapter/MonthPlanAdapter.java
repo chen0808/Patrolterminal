@@ -40,9 +40,11 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
                viewHolder.setText(R.id.item_plan_date_tv, "巡");
            }else if (item.getFull_plan().contains("特")){
                viewHolder.setText(R.id.item_plan_date_tv, "特");
+           }else if (item.getFull_plan().contains("保")){
+               viewHolder.setText(R.id.item_plan_date_tv, "保");
            }else {
-               viewHolder.setText(R.id.item_plan_date_tv, "检");
-           }
+                viewHolder.setText(R.id.item_plan_date_tv, "检");
+            }
            if(state!=null){
                viewHolder.setVisible(R.id.plan_to_change, false);
            }else {
@@ -83,6 +85,8 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
                            Intent intent = new Intent(mContext, LineCheckActivity.class);
                            intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
                            intent.putExtra("id", item.getId());
+                           intent.putExtra("year", item.getYear());
+                           intent.putExtra("month", item.getMonth());
                            mContext.startActivity(intent);
                        }
                    });

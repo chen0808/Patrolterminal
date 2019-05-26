@@ -111,6 +111,8 @@ public class MonthPlanFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
+        int weekNumOfMonth = DateUatil.getWeekNumOfMonth("2019", "1");
+
         mContext = getActivity();
         taskScreen.setVisibility(View.VISIBLE);
         taskAdd.setVisibility(View.VISIBLE);
@@ -185,7 +187,6 @@ public class MonthPlanFrgment extends BaseFragment {
                             lineList.clear();
                             getData(results);
                             monthPlanAdapter.setNewData(data);
-
                             ProgressDialog.cancle();
 
                         }
@@ -390,7 +391,6 @@ public class MonthPlanFrgment extends BaseFragment {
             bean.setLineIds(lineList);
         }
         bean.setState(state);
-
         BaseRequest.getInstance().getService()
                 .submitMonthPlanState(bean)
                 .subscribeOn(Schedulers.io())
@@ -430,17 +430,17 @@ public class MonthPlanFrgment extends BaseFragment {
                 //当身份是专责时，获取需要审批的列表
                 if (mJobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
                     Tower lineBean = new Tower();
-                    lineBean.setLine_id(monthPlanBean.getMonth_id());
+                    lineBean.setLine_id(monthPlanBean.getLine_id());
                     lineList.add(lineBean);
                     //当身份是主管时，获取需要审批的列表
                 } else if (mJobType.equals(Constant.RUN_SUPERVISOR) && "2".equals(monthPlanBean.getAudit_status())) {
                     Tower lineBean = new Tower();
-                    lineBean.setLine_id(monthPlanBean.getMonth_id());
+                    lineBean.setLine_id(monthPlanBean.getLine_id());
                     lineList.add(lineBean);
                     //当身份是班长时，获取需要审核的列表
-                } else if (mJobType.equals(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())) {
+                } else if (mJobType.equals(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())){
                     Tower lineBean = new Tower();
-                    lineBean.setLine_id(monthPlanBean.getMonth_id());
+                    lineBean.setLine_id(monthPlanBean.getLine_id());
                     lineList.add(lineBean);
                 }
             }

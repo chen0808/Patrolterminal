@@ -60,6 +60,7 @@ import com.patrol.terminal.bean.PlanWeekReqBean;
 import com.patrol.terminal.bean.PositionInfo;
 import com.patrol.terminal.bean.PositionListBean;
 import com.patrol.terminal.bean.RfInfo;
+import com.patrol.terminal.bean.SavaEleLineBean;
 import com.patrol.terminal.bean.SavaLineBean;
 import com.patrol.terminal.bean.SavaMonthDefDanBean;
 import com.patrol.terminal.bean.SaveDefMonthReqBean;
@@ -157,7 +158,7 @@ public interface ApiServise {
 
     //添加日计划
     @POST("/plan/month/line/electricPOST")
-    Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body LineCheckBean bean);
+    Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body SavaEleLineBean bean);
 
     //添加日计划
     @POST("/plan/month/line/tempPOST")

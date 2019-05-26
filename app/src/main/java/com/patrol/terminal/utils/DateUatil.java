@@ -55,6 +55,7 @@ public class DateUatil {
         return week;
     }
 
+    //获取一个月有多少天
     public static int getWeekNumOfMonth(String year,String month){
         Calendar c=Calendar.getInstance();
         c.setFirstDayOfWeek(Calendar.MONDAY); //指定从周一开始
