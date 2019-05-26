@@ -256,7 +256,7 @@ public class MapActivity extends BaseActivity implements AMap.OnMyLocationChange
                                 locationList.add(new LatLng(positionListBeans.get(i).getLat(), positionListBeans.get(i).getLon()));
                             }
                             aMap.moveCamera(CameraUpdateFactory.changeLatLng(locationList.get(0)));
-                            aMap.moveCamera(CameraUpdateFactory.zoomTo(12));
+                            aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                             drawLocation();
 
                         }
@@ -271,7 +271,7 @@ public class MapActivity extends BaseActivity implements AMap.OnMyLocationChange
     }
 
     private void addMarkers() {
-        for (int i = 0; i < locationList.size(); i++) {
+        for (int i = 1; i < locationList.size(); i++) {
             MarkerOptions position = new MarkerOptions().position(new LatLng(locationList.get(i).latitude, locationList.get(i).longitude))
                     .title(positionListBeans.get(i).getAddress()).snippet(positionListBeans.get(i).getLoc_time());
             aMap.addMarker(position);
