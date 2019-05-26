@@ -44,6 +44,7 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.LocationBean;
 import com.patrol.terminal.bean.PatrolRecordBean;
 import com.patrol.terminal.bean.PositionListBean;
 import com.patrol.terminal.bean.TypeBean;
@@ -62,7 +63,7 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MapActivity extends BaseActivity implements AMap.OnMyLocationChangeListener, RouteSearch.OnRouteSearchListener,
+public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChangeListener,*/ /*RouteSearch.OnRouteSearchListener,*/
         View.OnClickListener, AMap.OnMarkerClickListener, AMap.OnMapClickListener, AMap.InfoWindowAdapter {
 
     @BindView(R.id.btn_location_test)
@@ -81,8 +82,8 @@ public class MapActivity extends BaseActivity implements AMap.OnMyLocationChange
     private MapView map;
     private AMap aMap;
     private RelativeLayout back;
-    private ArrayList<LatLng> locationList = new ArrayList<>();
-    private List<PositionListBean> positionListBeans = new ArrayList<>();
+    //private ArrayList<LatLng> locationList = new ArrayList<>();
+    private List<LocationBean> locationList = new ArrayList<>();
 
 //    private AMapLocationClient locationClient = null;
 //    private AMapLocationClientOption locationOption = null;
@@ -108,7 +109,7 @@ public class MapActivity extends BaseActivity implements AMap.OnMyLocationChange
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的style
         aMap.setMyLocationEnabled(true);//显示定位蓝点
 
-        aMap.setOnMyLocationChangeListener(this);
+        //aMap.setOnMyLocationChangeListener(this);
 
         //手势交互
         UiSettings aMapUiSettings = aMap.getUiSettings();
@@ -251,11 +252,16 @@ public class MapActivity extends BaseActivity implements AMap.OnMyLocationChange
                     @Override
                     protected void onSuccees(BaseResult<List<PositionListBean>> t) throws Exception {
                         if (t.getCode() == 1) {
-                            positionListBeans = t.getResults();
+                            List<PositionListBean> positionListBeans = t.getResults();
                             for (int i = 0; i < positionListBeans.size(); i++) {
-                                locationList.add(new LatLng(positionListBeans.get(i).getLat(), positionListBeans.get(i).getLon()));
+                                LocationBean locationBean = new LocationBean();
+                                LatLng latLng = new LatLng(positionListBeans.get(i).getLat(), positionListBeans.get(i).getLon());
+                                locationBean.setLatLng(latLng);
+                                locationBean.setPosition(positionListBeans.get(i).getAddress());
+                                locationBean.setTime(positionListBeans.get(i).getLoc_time());
+                                locationList.add(locationBean);
                             }
-                            aMap.moveCamera(CameraUpdateFactory.changeLatLng(locationList.get(0)));
+                            aMap.moveCamera(CameraUpdateFactory.changeLatLng(locationList.get(0).getLatLng()));
                             aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                             drawLocation();
 
@@ -271,52 +277,52 @@ public class MapActivity extends BaseActivity implements AMap.OnMyLocationChange
     }
 
     private void addMarkers() {
-        for (int i = 1; i < locationList.size(); i++) {
-            MarkerOptions position = new MarkerOptions().position(new LatLng(locationList.get(i).latitude, locationList.get(i).longitude))
-                    .title(positionListBeans.get(i).getAddress()).snippet(positionListBeans.get(i).getLoc_time());
+        for (int i = 0; i < locationList.size(); i++) {
+            MarkerOptions position = new MarkerOptions().position(new LatLng(locationList.get(i).getLatLng().latitude, locationList.get(i).getLatLng().longitude))
+                    .title(locationList.get(i).getPosition()).snippet(locationList.get(i).getTime());
             aMap.addMarker(position);
         }
     }
 
-    @Override
-    public void onMyLocationChange(Location location) {
-        locationList.add(new LatLng(location.getLatitude(), location.getLongitude()));
-        Bundle bundle = location.getExtras();
-        String address = bundle.getString("Address");
-        Intent intent = new Intent();
-        intent.putExtra("address", address);
-        setResult(Constant.MAP_REQUEST_CODE, intent);
-    }
-
-    @Override
-    public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
-
-    }
-
-    @Override
-    public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int i) {
-        DrivePath drivePath = driveRouteResult.getPaths().get(0);
-        List<DriveStep> steps = drivePath.getSteps();
-        PolylineOptions option = new PolylineOptions();
-        option.color(Color.RED);
-        for (DriveStep step : steps) {
-            List<LatLonPoint> polyline = step.getPolyline();
-            for (LatLonPoint latLonPoint : polyline) {
-                option.add(new LatLng(latLonPoint.getLatitude(), latLonPoint.getLongitude()));
-            }
-        }
-        aMap.addPolyline(option);
-    }
-
-    @Override
-    public void onWalkRouteSearched(WalkRouteResult walkRouteResult, int i) {
-
-    }
-
-    @Override
-    public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {
-
-    }
+//    @Override
+//    public void onMyLocationChange(Location location) {
+//        locationList.add(new LatLng(location.getLatitude(), location.getLongitude()));
+//        Bundle bundle = location.getExtras();
+//        String address = bundle.getString("Address");
+//        Intent intent = new Intent();
+//        intent.putExtra("address", address);
+//        setResult(Constant.MAP_REQUEST_CODE, intent);
+//    }
+//
+//    @Override
+//    public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
+//
+//    }
+//
+//    @Override
+//    public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int i) {
+////        DrivePath drivePath = driveRouteResult.getPaths().get(0);
+////        List<DriveStep> steps = drivePath.getSteps();
+////        PolylineOptions option = new PolylineOptions();
+////        option.color(Color.RED);
+////        for (DriveStep step : steps) {
+////            List<LatLonPoint> polyline = step.getPolyline();
+////            for (LatLonPoint latLonPoint : polyline) {
+////                option.add(new LatLng(latLonPoint.getLatitude(), latLonPoint.getLongitude()));
+////            }
+////        }
+////        aMap.addPolyline(option);
+//    }
+//
+//    @Override
+//    public void onWalkRouteSearched(WalkRouteResult walkRouteResult, int i) {
+//
+//    }
+//
+//    @Override
+//    public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {
+//
+//    }
 
     @Override
     public void onClick(View v) {
@@ -333,8 +339,15 @@ public class MapActivity extends BaseActivity implements AMap.OnMyLocationChange
     private void drawLocation() {
         if (locationList != null && locationList.size() > 1) {
             addMarkers();
+
+            List<LatLng> latlngList = new ArrayList<>();
+            for (int i = 0; i < locationList.size(); i++) {
+                LatLng latLng = locationList.get(i).getLatLng();
+                latlngList.add(latLng);
+            }
+
             Polyline polyline = aMap.addPolyline(new PolylineOptions().
-                    addAll(locationList).width(10).color(Color.argb(255, 1, 1, 1)));
+                    addAll(latlngList).width(10).color(Color.argb(255, 1, 1, 1)));
         }
     }
 

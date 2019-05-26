@@ -190,10 +190,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
-            Log.w("linmeng", "group.getChildCount():" + group.getChildCount());
             for (int i = 0; i < group.getChildCount(); i++) {
-                Log.w("linmeng", "group.getChildAt(i).getId():" + group.getChildAt(i).getId());
-                Log.w("linmeng", "checkedId:" + checkedId);
                 if (group.getChildAt(i).getId() == checkedId) {
                     fragmentVp.setCurrentItem(i);
                     return;

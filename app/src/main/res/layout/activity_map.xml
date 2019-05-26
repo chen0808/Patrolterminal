@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="播放轨迹" />
+            android:text="播放轨迹"
+            android:visibility="gone"/>
     </RelativeLayout>
 </LinearLayout>
