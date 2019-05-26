@@ -10,7 +10,7 @@
         android:id="@+id/hang_location_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:gravity="center_horizontal"></EditText>
 
     <ImageView android:layout_width="1dp"
@@ -18,7 +18,7 @@
         android:src="@color/write_order_grat"></ImageView>
 
     <EditText
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:id="@+id/ground_line_number_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -41,7 +41,6 @@
             android:layout_height="wrap_content"></CheckBox>
 
         <TextView
-            android:layout_marginLeft="2dp"
             android:id="@+id/hung_time_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +64,6 @@
             android:layout_height="wrap_content"></CheckBox>
 
         <TextView
-            android:layout_marginLeft="2dp"
             android:id="@+id/demolition_time_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

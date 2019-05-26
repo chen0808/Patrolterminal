@@ -1,86 +1,59 @@
 package com.patrol.terminal.adapter;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.drawable.BitmapDrawable;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
+import android.util.Base64;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.SignActivity;
 import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.SignBean;
 import com.patrol.terminal.bean.TicketFirstEnd;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
-import com.patrol.terminal.utils.FileUtil;
-import com.patrol.terminal.widget.SignDialog;
 
-import java.io.File;
+import org.angmarch.views.NiceSpinner;
+import org.angmarch.views.OnSpinnerItemSelectedListener;
+
+import java.util.Arrays;
 import java.util.List;
 
-public class LicensingEndAdapter extends BaseAdapter {
-    private Context context;
-    private List<TicketFirstEnd> mLicensingList;
+import androidx.annotation.Nullable;
 
-    public LicensingEndAdapter(Context context, List<TicketFirstEnd> licensingList) {
-        this.context = context;
-        this.mLicensingList = licensingList;
+public class LicensingEndAdapter extends BaseQuickAdapter<TicketFirstEnd, BaseViewHolder> {
+    public LicensingEndAdapter(int layoutResId, @Nullable List<TicketFirstEnd> data) {
+        super(layoutResId, data);
     }
 
     @Override
-    public int getCount() {
-        if (mLicensingList != null) {
-            return mLicensingList.size();
+    protected void convert(BaseViewHolder helper, TicketFirstEnd item) {
+        NiceSpinner licensingMethodSpinner = helper.getView(R.id.licensing_method_spinner);
+        licensingMethodSpinner.attachDataSource(Arrays.asList(mContext.getResources().getStringArray(R.array.method_of_notification)));
+        if (null != item.getEnd_way() && !item.getEnd_way().equals("")) {
+            licensingMethodSpinner.setSelectedIndex(Integer.parseInt(item.getEnd_way()));
         }
-        return 0;
-    }
+        licensingMethodSpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
+            @Override
+            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
+                item.setEnd_way(String.valueOf(position));
+            }
+        });
 
-    @Override
-    public TicketFirstEnd getItem(int position) {
-        return mLicensingList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView != null) {
-            holder = (ViewHolder) convertView.getTag();
-        } else {
-            holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_licensing_started, parent, false);
-            holder.licensingMethodSpinner = (Spinner) convertView.findViewById(R.id.licensing_method_spinner);
-            holder.licensorEt = (EditText) convertView.findViewById(R.id.licensor_et);
-            holder.signJobManagerIv = (ImageView) convertView.findViewById(R.id.sign_job_manager_iv);
-            holder.timeTv = (TextView) convertView.findViewById(R.id.time_tv);
-            holder.timeCb = (CheckBox) convertView.findViewById(R.id.time_checkbox);
-            convertView.setTag(holder);
-        }
-
-        TicketFirstEnd item = getItem(position);
-//        holder.licensingMethodSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                item.setEnd_way(String.valueOf(position));
-//            }
-//        });
-        holder.licensorEt.setText(item.getPermit_user_name());
-        holder.licensorEt.addTextChangedListener(new TextWatcher() {
+        EditText etLicensor = helper.getView(R.id.licensor_et);
+        etLicensor.setText(item.getPermit_user_name());
+        etLicensor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -93,55 +66,49 @@ public class LicensingEndAdapter extends BaseAdapter {
 
             @Override
             public void afterTextChanged(Editable s) {
-                item.setPermit_user_name(holder.licensorEt.getText().toString());
-            }
-        });
-        Glide.with(context).load(BaseUrl.BASE_URL + item.getFile_path() + item.getFilename()).into(holder.signJobManagerIv);
-        holder.timeTv.setText(item.getEnd_time());
-        holder.signJobManagerIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Dialog dialog = SignDialog.show(context, holder.signJobManagerIv);
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        if (holder.signJobManagerIv.getDrawable() != null) {
-                            File file = SignDialog.saveBitmapFile(((BitmapDrawable) (holder.signJobManagerIv).getDrawable()).getBitmap(), "end");
-                            item.setFile(FileUtil.fileToBase64(file));
-                        }
-                    }
-                });
+                item.setPermit_user_name(etLicensor.getText().toString());
             }
         });
 
-        holder.timeCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        ImageView iv = helper.getView(R.id.sign_job_manager_iv);
+
+        if (SignBean.getIndex() - 200 == helper.getAdapterPosition()) {
+            String file = item.getFile();
+            byte[] decode = Base64.decode(file, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decode, 0, decode.length);
+            iv.setImageBitmap(bitmap);
+            SignBean.setIndex(0);
+        } else {
+            if (item.getFile_path() != null && item.getFilename() != null) {
+                Glide.with(mContext).load(BaseUrl.BASE_URL + item.getFile_path() + item.getFilename()).into(iv);
+            }
+        }
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(mContext, SignActivity.class);
+                mContext.startActivity(intent);
+                SignBean.setIndex(200 + helper.getAdapterPosition());
+            }
+        });
+
+        CheckBox cbTime = helper.getView(R.id.time_checkbox);
+        TextView tvTime = helper.getView(R.id.time_tv);
+        tvTime.setText(item.getEnd_time());
+        if (!item.getEnd_time().equals(Constant.WORK_TICKET_TIME)) {
+            cbTime.setVisibility(View.GONE);
+        }
+        cbTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
-                    holder.timeTv.setText(DateUatil.getCurrTime());
+                    tvTime.setText(DateUatil.getCurrTime());
                 } else {
-                    holder.timeTv.setText(Constant.WORK_TICKET_TIME);
+                    tvTime.setText(Constant.WORK_TICKET_TIME);
                 }
-                item.setEnd_time(holder.timeTv.getText().toString());
+                item.setEnd_time(tvTime.getText().toString());
             }
         });
-
-        return convertView;
     }
-
-    public void setData(List<TicketFirstEnd> licensingStartedList) {
-        mLicensingList = licensingStartedList;
-        notifyDataSetChanged();
-
-    }
-
-
-    private static class ViewHolder {
-        private Spinner licensingMethodSpinner;
-        private EditText licensorEt;
-        private ImageView signJobManagerIv;
-        private TextView timeTv;
-        private CheckBox timeCb;
-    }
-
 }

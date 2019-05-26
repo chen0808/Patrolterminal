@@ -1,17 +1,14 @@
 package com.patrol.terminal.adapter;
 
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.TicketFirstGround;
 import com.patrol.terminal.utils.Constant;
@@ -19,57 +16,25 @@ import com.patrol.terminal.utils.DateUatil;
 
 import java.util.List;
 
-public class GroundLineAdapter extends BaseAdapter {
-    private Context context;
-    private List<TicketFirstGround> mGroundLineList;
+import androidx.annotation.Nullable;
 
-    public GroundLineAdapter(Context context, List<TicketFirstGround> groundLineList) {
-        this.context = context;
-        this.mGroundLineList = groundLineList;
+public class GroundLineAdapter extends BaseQuickAdapter<TicketFirstGround, BaseViewHolder> {
+
+    public GroundLineAdapter(int layoutResId, @Nullable List<TicketFirstGround> data) {
+        super(layoutResId, data);
     }
 
     @Override
-    public int getCount() {
-        if (mGroundLineList != null) {
-            return mGroundLineList.size();
-        }
-        return 0;
-    }
+    protected void convert(BaseViewHolder helper, TicketFirstGround item) {
+        TextView tvHangLocation = helper.getView(R.id.hang_location_tv);
+        TextView tvGroundLineNumber = helper.getView(R.id.ground_line_number_tv);
+        TextView tvHungTime = helper.getView(R.id.hung_time_tv);
+        TextView tvDemolitionTime = helper.getView(R.id.demolition_time_tv);
+        CheckBox cbHungTime = helper.getView(R.id.hung_time_checkbox);
+        CheckBox cbDemolitionTime = helper.getView(R.id.demolition_time_checkbox);
 
-    @Override
-    public TicketFirstGround getItem(int position) {
-        return mGroundLineList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView != null) {
-            holder = (ViewHolder) convertView.getTag();
-        } else {
-            holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_ground_line, parent, false);
-            holder.hangLotionTv = (EditText) convertView.findViewById(R.id.hang_location_tv);
-            holder.groundLineNumberTv = (EditText) convertView.findViewById(R.id.ground_line_number_tv);
-            holder.hungTimeTv = (TextView) convertView.findViewById(R.id.hung_time_tv);
-            holder.demolitionTimeTv = (TextView) convertView.findViewById(R.id.demolition_time_tv);
-            holder.hungTimeCb = (CheckBox) convertView.findViewById(R.id.hung_time_checkbox);
-            holder.demolitionTimeCb = (CheckBox) convertView.findViewById(R.id.demolition_time_checkbox);
-            convertView.setTag(holder);
-        }
-
-        TicketFirstGround item = getItem(position);
-        holder.hangLotionTv.setText(item.getInstall_site());
-        holder.groundLineNumberTv.setText(item.getGround_id());
-        holder.hungTimeTv.setText(item.getInstall_time());
-        holder.demolitionTimeTv.setText(item.getRemove_time());
-
-        holder.hangLotionTv.addTextChangedListener(new TextWatcher() {
+        tvHangLocation.setText(item.getInstall_site());
+        tvHangLocation.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -82,11 +47,12 @@ public class GroundLineAdapter extends BaseAdapter {
 
             @Override
             public void afterTextChanged(Editable s) {
-                item.setInstall_site(holder.hangLotionTv.getText().toString());
+                item.setInstall_site(tvHangLocation.getText().toString());
             }
         });
 
-        holder.groundLineNumberTv.addTextChangedListener(new TextWatcher() {
+        tvGroundLineNumber.setText(item.getGround_id());
+        tvGroundLineNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -99,48 +65,40 @@ public class GroundLineAdapter extends BaseAdapter {
 
             @Override
             public void afterTextChanged(Editable s) {
-                item.setGround_id(holder.groundLineNumberTv.getText().toString());
+                item.setGround_id(tvGroundLineNumber.getText().toString());
             }
         });
 
-        holder.hungTimeCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        tvHungTime.setText(item.getInstall_time());
+        if (!item.getInstall_time().equals(Constant.WORK_TICKET_TIME)) {
+            cbHungTime.setVisibility(View.GONE);
+        }
+        cbHungTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    tvHungTime.setText(DateUatil.getCurrTime());
+                } else {
+                    tvHungTime.setText(Constant.WORK_TICKET_TIME);
+                }
+                item.setInstall_time(tvHungTime.getText().toString());
+            }
+        });
+
+        if (!item.getRemove_time().equals(Constant.WORK_TICKET_TIME)) {
+            cbDemolitionTime.setVisibility(View.GONE);
+        }
+        tvDemolitionTime.setText(item.getRemove_time());
+        cbDemolitionTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
-                    holder.hungTimeTv.setText(DateUatil.getCurrTime());
+                    tvDemolitionTime.setText(DateUatil.getCurrTime());
                 } else {
-                    holder.hungTimeTv.setText(Constant.WORK_TICKET_TIME);
+                    tvDemolitionTime.setText(Constant.WORK_TICKET_TIME);
                 }
-                item.setInstall_time(holder.hungTimeTv.getText().toString());
+                item.setRemove_time(tvDemolitionTime.getText().toString());
             }
         });
-
-        holder.demolitionTimeCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
-                    holder.demolitionTimeTv.setText(DateUatil.getCurrTime());
-                } else {
-                    holder.demolitionTimeTv.setText(Constant.WORK_TICKET_TIME);
-                }
-                item.setRemove_time(holder.demolitionTimeTv.getText().toString());
-            }
-        });
-        return convertView;
     }
-
-    public void setData(List<TicketFirstGround> groundLineList) {
-        mGroundLineList = groundLineList;
-        notifyDataSetChanged();
-    }
-
-    private static class ViewHolder {
-        private EditText hangLotionTv;
-        private EditText groundLineNumberTv;
-        private TextView hungTimeTv;
-        private TextView demolitionTimeTv;
-        private CheckBox hungTimeCb;
-        private CheckBox demolitionTimeCb;
-    }
-
 }

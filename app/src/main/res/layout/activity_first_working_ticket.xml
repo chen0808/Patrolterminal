@@ -414,6 +414,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:textSize="12sp"
                         android:layout_weight="2"
                         android:gravity="center_horizontal"
                         android:text="挂设位置（线路名称及杆号）"></TextView>
@@ -455,12 +456,12 @@
                         android:text="拆除时间"></TextView>
                 </LinearLayout>
 
-                <com.patrol.terminal.widget.NoScrollListView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/ground_lines_to_hang_listView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"></com.patrol.terminal.widget.NoScrollListView>
+                    android:paddingRight="10dp"></androidx.recyclerview.widget.RecyclerView>
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -807,7 +808,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="3.5"
+                            android:layout_weight="1"
                             android:gravity="center_horizontal"
                             android:text="许可方式"></TextView>
 
@@ -831,7 +832,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2.5"
+                            android:layout_weight="1"
                             android:gravity="center_horizontal"
                             android:text="工作负责人签名"></TextView>
 
@@ -843,19 +844,19 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:gravity="center_horizontal"
                             android:text="许可工作的时间"></TextView>
 
                     </LinearLayout>
 
 
-                    <com.patrol.terminal.widget.NoScrollListView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/licensing_started_listView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:paddingRight="10dp"></com.patrol.terminal.widget.NoScrollListView>
+                        android:paddingRight="10dp"></androidx.recyclerview.widget.RecyclerView>
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -948,32 +949,33 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="原工作负责人"></TextView>
+                        android:text="原工作负责人" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/et_old_leader"
                         android:layout_width="65dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/stoke_gray"
-                        android:padding="4dp"></EditText>
+                        android:padding="4dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="离去，变更"></TextView>
+                        android:text="离去，变更" />
 
-                    <EditText
+                    <TextView
+                        android:id="@+id/tv_leader"
                         android:layout_width="65dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/stoke_gray"
-                        android:padding="4dp"></EditText>
+                        android:padding="4dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="为工作负责人"></TextView>
+                        android:text="为工作负责人" />
                 </LinearLayout>
 
                 <!--工作票签发人-->
@@ -1289,7 +1291,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3.5"
+                        android:layout_weight="1"
                         android:gravity="center_horizontal"
                         android:text="许可方式"></TextView>
 
@@ -1313,7 +1315,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5"
+                        android:layout_weight="1"
                         android:gravity="center_horizontal"
                         android:text="工作负责人签名"></TextView>
 
@@ -1325,19 +1327,19 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
+                        android:layout_weight="2"
                         android:gravity="center_horizontal"
                         android:text="许可工作的时间"></TextView>
 
                 </LinearLayout>
 
 
-                <com.patrol.terminal.widget.NoScrollListView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/licensing_end_listView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"></com.patrol.terminal.widget.NoScrollListView>
+                    android:paddingRight="10dp"></androidx.recyclerview.widget.RecyclerView>
 
                 <ImageView
                     android:layout_width="match_parent"

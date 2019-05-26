@@ -17,12 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -53,7 +47,6 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.SignDialog;
 
 import java.io.File;
@@ -62,6 +55,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -118,7 +116,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     @BindView(R.id.ground_lines_to_hang_ll)
     LinearLayout groundLinesToHangLl;
     @BindView(R.id.ground_lines_to_hang_listView)
-    NoScrollListView groundLinesToHangListView;
+    RecyclerView groundLinesToHangListView;
     @BindView(R.id.iv_signature_pad)
     ImageView ivSignaturePad;
     @BindView(R.id.time_checkbox)
@@ -134,7 +132,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     @BindView(R.id.licensing_started_ll)
     LinearLayout licensingStartedLl;
     @BindView(R.id.licensing_started_listView)
-    NoScrollListView licensingStartedListView;
+    RecyclerView licensingStartedListView;
     @BindView(R.id.iv_signature_pad_4)
     ImageView ivSignaturePad4;
     @BindView(R.id.time_checkbox_7)
@@ -172,7 +170,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     @BindView(R.id.tv_group_time_c)
     TextView tvGroupTimeC;
     @BindView(R.id.et_old_leader)
-    EditText etOldLeader;
+    TextView etOldLeader;
     @BindView(R.id.tv_change_time)
     TextView tvChangeTime;
     @BindView(R.id.et_person_change)
@@ -196,7 +194,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     @BindView(R.id.iv_licensing_end_add)
     ImageView ivLicensingEndAdd;
     @BindView(R.id.licensing_end_listView)
-    NoScrollListView licensingEndListView;
+    RecyclerView licensingEndListView;
     @BindView(R.id.tv_postpone)
     TextView tvPostpone;
     Map<String, RequestBody> params = new HashMap<>();
@@ -206,6 +204,8 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     EditText etRemoveGroundNo;
     @BindView(R.id.et_remove_ground_num)
     EditText etRemoveGroundNum;
+    @BindView(R.id.tv_leader)
+    TextView tvLeader;
     private List<TicketFirstWork> workList = new ArrayList<>();
     private List<TicketFirstGround> groundList = new ArrayList<>();
     private List<TicketFirstPermit> permitList = new ArrayList<>();
@@ -336,15 +336,18 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                             workAdapter = new WorkAdapter(R.layout.item_task_content, workList);
                             rvTaskContent.setAdapter(workAdapter);
 
-                            groundLineAdapter = new GroundLineAdapter(FirstWTicketActivity.this, groundList);
+                            licensingStartedListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+                            groundLineAdapter = new GroundLineAdapter(R.layout.item_ground_line, groundList);
                             groundLinesToHangListView.setAdapter(groundLineAdapter);
 
                             //确认工作票1-6页
-                            licensingStartedAdapter = new LicensingStartedAdapter(FirstWTicketActivity.this, permitList);
+                            licensingStartedListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+                            licensingStartedAdapter = new LicensingStartedAdapter(R.layout.item_licensing_started, permitList);
                             licensingStartedListView.setAdapter(licensingStartedAdapter);
 
                             //工作终结报告
-                            licensingEndAdapter = new LicensingEndAdapter(FirstWTicketActivity.this, endList);
+                            licensingEndListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+                            licensingEndAdapter = new LicensingEndAdapter(R.layout.item_licensing_started, endList);
                             licensingEndListView.setAdapter(licensingEndAdapter);
                         } else {
                             setData(results);
@@ -361,7 +364,6 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     //获取界面上的数据
     private FirstTicketBean getData() {
         FirstTicketBean bean = new FirstTicketBean();
-//        bean.setCrew_id(tvCrewId.getText().toString());
         bean.setBegin_time(tvSTime.getText().toString());
         bean.setEnd_time(tvETime.getText().toString());
         bean.setRelate_device_operate(etSwitchSafe.getText().toString());
@@ -376,14 +378,21 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         bean.setPermitList(permitList);
         bean.setEndList(endList);
         bean.setSignList(signList);
+        bean.setUserList(userList);
         return bean;
     }
 
     //从接口获取到的数据展示在界面上
     private void setData(FirstTicketBean results) {
-//        tvCrewId.setText(results.getCrew_id());
-//        String crewId = results.getCrew_id() == null ? "" : results.getCrew_id();
-//        tvPerson.setText("共" + (crewId.length() - crewId.replace(" ", "").length()) + "人");
+        String crew = getCrew(results.getUserList(), "1");
+        tvCrewId.setText(crew);
+        tvPerson.setText("共" + (crew.length() - crew.replace(" ", "").length()) + "人");
+        String crew2 = getCrew(results.getUserList(), "2");
+        etOldLeader.setText(crew2);
+        String crew3 = getCrew(results.getUserList(), "3");
+        tvLeader.setText(crew3);
+        tvLeaderId.setText(crew3);
+        tvPerson.setText(crew2 + crew3);
         tvSTime.setText(results.getBegin_time());
         tvETime.setText(results.getEnd_time());
         etSwitchSafe.setText(results.getRelate_device_operate());
@@ -398,27 +407,43 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             switch (results.getSignList().get(i).getSign()) {
                 case "1":
                     showPic(results.getSignList().get(i), ivSignaturePad, "sign1.jpg");
+                    tvGroupTimeA.setText(results.getSignList().get(i).getSign_time());
+                    timeCheckbox.setVisibility(View.GONE);
                     break;
                 case "2":
                     showPic(results.getSignList().get(i), ivSignaturePad2, "sign2.jpg");
+                    tvGroupTimeB.setText(results.getSignList().get(i).getSign_time());
+                    timeCheckbox2.setVisibility(View.GONE);
                     break;
                 case "3":
                     showPic(results.getSignList().get(i), ivSignaturePad3, "princpial1.jpg");
+                    tvGroupTimeC.setText(results.getSignList().get(i).getSign_time());
+                    timeCheckbox3.setVisibility(View.GONE);
                     break;
                 case "4":
                     showPic(results.getSignList().get(i), ivSignaturePad4, "accept1.jpg");
+                    tvChangeTime.setText(results.getSignList().get(i).getSign_time());
+                    timeCheckbox4.setVisibility(View.GONE);
                     break;
                 case "5":
                     showPic(results.getSignList().get(i), ivSignaturePad5, "sign3.jpg");
+                    tvDelayATime.setText(results.getSignList().get(i).getSign_time());
+                    timeCheckbox5.setVisibility(View.GONE);
                     break;
                 case "6":
                     showPic(results.getSignList().get(i), ivSignaturePad6, "princpial2.jpg");
+                    tvDelayBTime.setText(results.getSignList().get(i).getSign_time());
+                    timeCheckbox6.setVisibility(View.GONE);
                     break;
                 case "7":
                     showPic(results.getSignList().get(i), ivSignaturePad7, "princpial3.jpg");
+                    timeTv7.setText(results.getSignList().get(i).getSign_time());
+                    timeCheckbox7.setVisibility(View.GONE);
                     break;
                 case "8":
                     showPic(results.getSignList().get(i), ivSignaturePad8, "licence1.jpg");
+                    tvDelayCTime.setText(results.getSignList().get(i).getSign_time());
+                    timeCheckbox8.setVisibility(View.GONE);
                     break;
             }
         }
@@ -435,22 +460,38 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         if (results.getGroundList() != null && results.getGroundList().size() > 0) {
             groundList.addAll(results.getGroundList());
         }
-        groundLineAdapter = new GroundLineAdapter(this, groundList);
+        groundLinesToHangListView.setLayoutManager(new LinearLayoutManager(this));
+        groundLineAdapter = new GroundLineAdapter(R.layout.item_ground_line, groundList);
         groundLinesToHangListView.setAdapter(groundLineAdapter);
 
         //确认工作票1-6页
-        if (results.getWorkList() != null && results.getWorkList().size() > 0) {
+        if (results.getWorkList() != null && results.getPermitList().size() > 0) {
             permitList.addAll(results.getPermitList());
         }
-        licensingStartedAdapter = new LicensingStartedAdapter(this, permitList);
+        licensingStartedListView.setLayoutManager(new LinearLayoutManager(this));
+        licensingStartedAdapter = new LicensingStartedAdapter(R.layout.item_licensing_started, permitList);
         licensingStartedListView.setAdapter(licensingStartedAdapter);
 
         //工作终结报告
         if (results.getWorkList() != null && results.getEndList().size() > 0) {
             endList.addAll(results.getEndList());
         }
-        licensingEndAdapter = new LicensingEndAdapter(this, endList);
+        licensingEndListView.setLayoutManager(new LinearLayoutManager(this));
+        licensingEndAdapter = new LicensingEndAdapter(R.layout.item_licensing_started, endList);
         licensingEndListView.setAdapter(licensingEndAdapter);
+    }
+
+    private String getCrew(List<TicketFirstUser> userList, String user_status) {
+        String userName = "";
+        if (userList.size() > 0) {
+            for (int i = 0; i < userList.size(); i++) {
+                if (userList.get(i).getUser_status().equals(user_status)) {
+                    userName += userList.get(i).getUser_name() + " ";
+                    this.userList.add(userList.get(i));
+                }
+            }
+        }
+        return userName;
     }
 
     //图片展示
@@ -506,10 +547,10 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         // PDA许可集合
         if (bean.getPermitList() != null) {
             for (int i = 0; i < bean.getPermitList().size(); i++) {
-                params.put("permissionList[" + i + "].permission_way", toRequestBody(bean.getPermitList().get(i).getPermit_way()));
-                params.put("permissionList[" + i + "].permit_user_name", toRequestBody(bean.getPermitList().get(i).getPermit_user_name()));
-                params.put("permissionList[" + i + "].sign_file_id", toRequestBody(bean.getPermitList().get(i).getSign_file_id()));
-                params.put("permissionList[" + i + "].permit_time", toRequestBody(bean.getPermitList().get(i).getPermit_time()));
+                params.put("permitList[" + i + "].permit_way", toRequestBody(bean.getPermitList().get(i).getPermit_way()));
+                params.put("permitList[" + i + "].permit_user_name", toRequestBody(bean.getPermitList().get(i).getPermit_user_name()));
+                params.put("permitList[" + i + "].sign_file_id", toRequestBody(bean.getPermitList().get(i).getSign_file_id()));
+                params.put("permitList[" + i + "].permit_time", toRequestBody(bean.getPermitList().get(i).getPermit_time()));
             }
         }
 
@@ -523,9 +564,9 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             }
         }
 
-        addPicList();
 
         // PDA人员签名集合
+        addPicList();
         if (bean.getSignList() != null) {
             for (int i = 0; i < bean.getSignList().size(); i++) {
                 params.put("signList[" + i + "].sign", toRequestBody(bean.getSignList().get(i).getSign()));
@@ -534,12 +575,21 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             }
         }
 
+        //PDA工作人员集合
+        if (bean.getUserList() != null) {
+            for (int i = 0; i < bean.getUserList().size(); i++) {
+                params.put("userList[" + i + "].user_name", toRequestBody(bean.getUserList().get(i).getUser_name()));
+                params.put("userList[" + i + "].user_status", toRequestBody(bean.getUserList().get(i).getUser_status()));
+                params.put("userList[" + i + "].sign", toRequestBody(bean.getUserList().get(i).getSign()));
+            }
+        }
         return params;
     }
 
     public RequestBody toRequestBody(String value) {
         if (value != null) {
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            Log.d("Tag", value);
             return requestBody;
         } else {
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
@@ -547,7 +597,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         }
     }
 
-    private void getAllSendToPerson() {
+    private void getAllSendToPerson(String user_status) {
         BaseRequest.getInstance().getService()
                 .getAllClassMember("B7FF21A674F144DE8D13EB8B3B79E64F")
                 .subscribeOn(Schedulers.io())
@@ -566,7 +616,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                                     workers[i] = userName;
                                     workers_id[i] = userId;
                                 }
-                                showSingleChooseDialog("工作班人员", workers);
+                                showSingleChooseDialog("工作班人员", workers, user_status);
                             }
                         }
 
@@ -579,7 +629,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
 
     }
 
-    public void showSingleChooseDialog(String title, String[] workers) {
+    public void showSingleChooseDialog(String title, String[] workers, String user_status) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         boolean[] checkedItems = new boolean[workers.length];
@@ -598,10 +648,18 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                     if (checkedItems[i]) {
                         nameArray += workers[i] + " ";
                         j++;
+                        userList.add(new TicketFirstUser(workers[i], user_status, "2"));
+                        if (user_status.equals("1")) {
+                            tvCrewId.setText(nameArray);
+                            tvPerson.setText("(共" + j + "人)");
+                        } else if (user_status.equals("2")) {
+                            etOldLeader.setText(nameArray);
+                        } else if (user_status.equals("3")) {
+                            tvLeader.setText(nameArray);
+                            tvLeaderId.setText(nameArray);
+                        }
                     }
                 }
-                tvCrewId.setText(nameArray);
-                tvPerson.setText("(共" + j + "人)");
                 dialog.dismiss();
 
             }
@@ -676,7 +734,13 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                 case 8:
                     ivSignaturePad8.setImageBitmap(bitmap);
                     break;
-
+            }
+            if (index >= 100 && index < 200) {
+                permitList.get(index - 100).setFile(FileUtil.fileToBase64(SignDialog.saveBitmapFile(bitmap, "permit.jpg")));
+                licensingStartedAdapter.setData(index - 100, permitList.get(index - 100));
+            } else if (index >= 200) {
+                endList.get(index - 200).setFile(FileUtil.fileToBase64(SignDialog.saveBitmapFile(bitmap, "end.jpg")));
+                licensingEndAdapter.setData(index - 200, this.endList.get(index - 200));
             }
         }
         SignBean.setBitmap(null);
@@ -686,9 +750,16 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             R.id.iv_signature_pad_4, R.id.iv_signature_pad_5, R.id.iv_signature_pad_6, R.id.iv_signature_pad_7,
             R.id.iv_signature_pad_8, R.id.tv_crew_id, R.id.tv_change_time, R.id.tv_delay_a_time,
             R.id.tv_delay_b_time, R.id.tv_delay_c_time, R.id.title_setting, R.id.iv_task_add, R.id.iv_ground_lines_add,
-            R.id.iv_licensing_started_add, R.id.iv_licensing_end_add, R.id.tv_postpone, R.id.tv_s_time, R.id.tv_e_time})
+            R.id.iv_licensing_started_add, R.id.iv_licensing_end_add, R.id.tv_postpone,
+            R.id.tv_s_time, R.id.tv_e_time, R.id.et_old_leader, R.id.tv_leader})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.et_old_leader:
+                getAllSendToPerson("2");
+                break;
+            case R.id.tv_leader:
+                getAllSendToPerson("3");
+                break;
             case R.id.title_back:
                 finish();
                 break;
@@ -782,7 +853,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
 
                 break;
             case R.id.tv_crew_id:
-                getAllSendToPerson();
+                getAllSendToPerson("1");
                 break;
             case R.id.tv_s_time:
                 PickerUtils.showDate(FirstWTicketActivity.this, tvSTime);
@@ -821,15 +892,15 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                 break;
             case R.id.iv_ground_lines_add:
                 groundList.add(new TicketFirstGround("", "", Constant.WORK_TICKET_TIME, Constant.WORK_TICKET_TIME));
-                groundLineAdapter.setData(groundList);
+                groundLineAdapter.setNewData(groundList);
                 break;
             case R.id.iv_licensing_started_add:
                 permitList.add(new TicketFirstPermit("", "", "", Constant.WORK_TICKET_TIME));
-                licensingStartedAdapter.setData(permitList);
+                licensingStartedAdapter.setNewData(permitList);
                 break;
             case R.id.iv_licensing_end_add:
                 endList.add(new TicketFirstEnd("", "", "", Constant.WORK_TICKET_TIME));
-                licensingEndAdapter.setData(endList);
+                licensingEndAdapter.setNewData(endList);
                 break;
             case R.id.tv_postpone:
                 PickerUtils.showDate(FirstWTicketActivity.this, tvPostpone);
