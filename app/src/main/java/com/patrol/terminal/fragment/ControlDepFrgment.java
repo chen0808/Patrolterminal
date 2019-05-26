@@ -27,6 +27,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.AllControlCarBean;
+import com.patrol.terminal.bean.ClassMemberBean;
 import com.patrol.terminal.bean.ControlCardBean;
 import com.patrol.terminal.bean.ControlDepWorkBean;
 import com.patrol.terminal.bean.ControlDepWorkBean2;
@@ -35,6 +36,7 @@ import com.patrol.terminal.bean.ControlDepWorkInfo2;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.bean.OverhaulZzTaskBean;
+import com.patrol.terminal.bean.SelectWorkerBean;
 import com.patrol.terminal.bean.SignBean;
 import com.patrol.terminal.bean.WorkControlCardBean;
 import com.patrol.terminal.bean.WorkProjectUser;
@@ -103,6 +105,8 @@ public class ControlDepFrgment extends BaseFragment {
     private boolean isCanClick = true;  //默认能点击，填写和更新状态
     private AllControlCarBean.WorkControlCardBean workControlCardBean = null;
 
+    private SelectWorkerBean workerSelectList;
+
 
 
     @Override
@@ -140,6 +144,7 @@ public class ControlDepFrgment extends BaseFragment {
 //        leaderName = mActivity.getIntent().getStringExtra("leaderName");
 //        leaderId = mActivity.getIntent().getStringExtra("leaderId");
 
+        workerSelectList =  mActivity.getIntent().getParcelableExtra("selectedUserListBeans");
 
         if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {  //专责接受的Bean不一样
             OverhaulZzTaskBean bean = mActivity.getIntent().getParcelableExtra("bean");
@@ -248,6 +253,9 @@ public class ControlDepFrgment extends BaseFragment {
                 }
                 break;
         }
+
+
+
     }
 
     private void showSign(String url) {
@@ -269,32 +277,6 @@ public class ControlDepFrgment extends BaseFragment {
         }
     }
 
-    /*private void getFzrInfo(String planId, String status) {
-        BaseRequest.getInstance().getService()
-                .getFzrInfoByWeekId(planId, status)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<OverhaulMonthBean>>(mContext) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<OverhaulMonthBean>> t) throws Exception {
-                        if (t.getCode() == 1) {
-                            if (t.getResults() != null && t.getResults().size() > 0 ) {
-                                leaderName = t.getResults().get(0).getUser_name();
-                                leaderId = t.getResults().get(0).getUser_id();
-                                controlCardPersonal.setText(leaderName);
-                            }
-                        } else {
-                            Toast.makeText(mContext, t.getMsg(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-
-        }*/
 
     private void lookDivide(List<AllControlCarBean.WorkControlCardBean.WorkProjectUsersBean> workProjectUsersBeans) {
         mControlDepShowList1.clear();
@@ -313,7 +295,7 @@ public class ControlDepFrgment extends BaseFragment {
             mControlDepShowList1.add(info);
         }
 
-        ControlDepdapter1 depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick);
+        ControlDepdapter1 depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick, workerSelectList.getUserInfos());
         controlCardDiv.setAdapter(depdapter1);
     }
 
@@ -407,7 +389,7 @@ public class ControlDepFrgment extends BaseFragment {
             mControlDepShowList1.add(info);
         }
 
-        ControlDepdapter1 depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick);
+        ControlDepdapter1 depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick, workerSelectList.getUserInfos());
         controlCardDiv.setAdapter(depdapter1);
     }
 

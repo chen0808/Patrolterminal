@@ -31,7 +31,6 @@ import com.patrol.terminal.bean.WeekTaskInfo;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.AddWeekTaskDialog;
 import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -127,6 +126,10 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
     TextView acceptancePlanGrogress;
     @BindView(R.id.acceptance_plan_rl)
     RelativeLayout acceptancePlanRl;
+    @BindView(R.id.dian_risk_level)
+    TextView dianRiskLevel;
+    @BindView(R.id.dian_risk_level_tv)
+    TextView dianRiskLevelTv;
 
     private String jobType;
     private String userId;
@@ -161,7 +164,8 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
 
     private String planId;
 
-    private List<WeekTaskInfo> mWeekTaskList = new ArrayList<>();
+    //private List<WeekTaskInfo> mWeekTaskList = new ArrayList<>();
+    private List<WeekTaskInfo> taskList = new ArrayList<>();
     private WeekTaskAdapter mWeekTaskAdapter;
 
     @Override
@@ -175,22 +179,23 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
         titleName.setText("周检修详情");
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
 
+
         mWeekTaskAdapter = new WeekTaskAdapter(this);
         workTaskLv.setAdapter(mWeekTaskAdapter);
 
-        workTaskLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                AddWeekTaskDialog.update(OverhaulWeekDetailActivity.this, mWeekTaskAdapter, mWeekTaskList, position);
-
-            }
-        });
+//        workTaskLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                AddWeekTaskDialog.update(OverhaulWeekDetailActivity.this, mWeekTaskAdapter, mWeekTaskList, position);
+//
+//            }
+//        });
         initId();
         getFile();
     }
 
     private void initId() {
-        ProgressDialog.show(this,false,"正在加载");
+        ProgressDialog.show(this, false, "正在加载");
         BaseRequest.getInstance().getService().getOverhaulZzWeekPlan(planId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<OverhaulYearBean>>(this) {
@@ -260,6 +265,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
                 });
     }
 
+
     private void initView() {
         String status = results.getWeek_audit_status();
         String is_ele = results.getIs_ele();
@@ -303,8 +309,27 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
         weekPlanTime.setText(results.getBlackout_days() + "天");
         workOfTaskTv.setText(results.getTask_source());
         riskLevelTv.setText(results.getRisk_level());
+        dianRiskLevelTv.setText("2");       //回去在做，电网风险等级   TODO
         weekPlanContent.setText(results.getRepair_content());
         weekPlanRemark.setText(results.getRemark());
+
+        String repairContentStr = results.getRepair_content();
+        if (repairContentStr.contains("；")) {
+            String taskStrs[] = repairContentStr.split("；");
+            for (int i = 0; i < taskStrs.length; i++) {
+                WeekTaskInfo weekTaskInfo = new WeekTaskInfo();
+                weekTaskInfo.setWeekContent(taskStrs[i]);
+                weekTaskInfo.setNum(i);
+                taskList.add(weekTaskInfo);
+            }
+        } else {
+            WeekTaskInfo weekTaskInfo = new WeekTaskInfo();
+            weekTaskInfo.setWeekContent(repairContentStr);
+            weekTaskInfo.setNum(0);
+            taskList.add(weekTaskInfo);
+        }
+        mWeekTaskAdapter.setData(taskList);
+
 
         needUploadRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -586,9 +611,9 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("bean", results);
 
-                    String[] weekTaskStrs = new String[mWeekTaskList.size()];
+                    String[] weekTaskStrs = new String[taskList.size()];
                     for (int i = 0; i < weekTaskStrs.length; i++) {
-                        weekTaskStrs[i] = mWeekTaskList.get(i).getWeekContent();
+                        weekTaskStrs[i] = taskList.get(i).getWeekContent();
                     }
                     intent.putExtra("weekTaskContents", weekTaskStrs);
 
@@ -667,7 +692,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
 //                break;
 
             case R.id.add_btn:
-                AddWeekTaskDialog.show(this, mWeekTaskAdapter, mWeekTaskList);
+                //AddWeekTaskDialog.show(this, mWeekTaskAdapter, mWeekTaskList);
                 break;
         }
     }

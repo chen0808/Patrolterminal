@@ -14,8 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
 import com.liulishuo.filedownloader.FileDownloader;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.ControlCardActivity;
@@ -40,6 +38,7 @@ import org.angmarch.views.NiceSpinner;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -139,6 +138,10 @@ public class OverhaulZzWeekTaskDetailActivity extends BaseActivity {
     RelativeLayout acceptancePlanRl;
     @BindView(R.id.ll_work_ticket)
     LinearLayout llWorkTicket;
+    @BindView(R.id.dian_risk_level)
+    TextView dianRiskLevel;
+    @BindView(R.id.dian_risk_level_tv)
+    TextView dianRiskLevelTv;
     private String jobType;
     private int nicePosition = 0;
     private List<String> nameType = new ArrayList<>();
@@ -215,6 +218,7 @@ public class OverhaulZzWeekTaskDetailActivity extends BaseActivity {
         weekPlanTime.setText(overhaulZzTaskBean.getBlackout_days() + "天");
         workOfTaskTv.setText(overhaulZzTaskBean.getTask_source());
         riskLevelTv.setText(overhaulZzTaskBean.getRisk_level());
+        dianRiskLevelTv.setText("2");
         weekPlanContent.setText(overhaulZzTaskBean.getTask_content());
         weekPlanRemark.setText(overhaulZzTaskBean.getRemark());
 //        needUploadRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

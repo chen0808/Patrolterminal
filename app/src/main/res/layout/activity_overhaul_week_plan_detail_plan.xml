@@ -67,10 +67,25 @@
                 <TextView
                     android:id="@+id/risk_level"
                     style="@style/overhaul_tv_styl"
-                    android:text="风险等级" />
+                    android:text="作业风险等级" />
 
                 <TextView
                     android:id="@+id/risk_level_tv"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/dian_risk_level"
+                    style="@style/overhaul_tv_styl"
+                    android:text="电网风险等级" />
+
+                <TextView
+                    android:id="@+id/dian_risk_level_tv"
                     style="@style/plan_et_styl"
                     android:layout_marginRight="@dimen/dp_20" />
             </LinearLayout>
@@ -119,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="添加工作任务"
+                        android:text="工作任务"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -129,6 +144,7 @@
                         android:layout_height="wrap_content"
                         android:text="添加"
                         android:layout_marginLeft="10dp"
+                        android:visibility="gone"
                         ></Button>
                 </LinearLayout>
 

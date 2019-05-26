@@ -20,6 +20,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.ClassMemberBean;
 import com.patrol.terminal.bean.ControlDepWorkInfo;
 import com.patrol.terminal.bean.OverhaulSendUserBean;
+import com.patrol.terminal.bean.SelectWorkerBean;
 import com.patrol.terminal.overhaul.OverhaulMonitorPublishActivity;
 import com.patrol.terminal.utils.Constant;
 
@@ -33,11 +34,13 @@ public class ControlDepdapter1 extends BaseAdapter {
     private Context context;
     private List<ControlDepWorkInfo> list;
     private boolean isCanClick;
+    private List<SelectWorkerBean.SelectUserInfo> mWorkerSelectList;
 
-    public ControlDepdapter1(Context context, List<ControlDepWorkInfo> traceList, boolean isCanClick) {
+    public ControlDepdapter1(Context context, List<ControlDepWorkInfo> traceList, boolean isCanClick, List<SelectWorkerBean.SelectUserInfo> workerSelectList) {
         this.context = context;
         this.list = traceList;
         this.isCanClick = isCanClick;
+        this.mWorkerSelectList = workerSelectList;
     }
 
     @Override
@@ -124,35 +127,47 @@ public class ControlDepdapter1 extends BaseAdapter {
     }
 
     private void getAllSendToPerson(ViewHolder holder, int position) {
-        BaseRequest.getInstance().getService()
-                .getAllClassMember("B7FF21A674F144DE8D13EB8B3B79E64F")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<ClassMemberBean>>(context) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<ClassMemberBean>> t) throws Exception {
-                        if(t.getCode() == 1) {
-                            if (t.getResults() != null && t.getResults().size() > 0) {
-                                List<ClassMemberBean.UserListBean> userListBeans = t.getResults().get(0).getUserList();
-                                String[] workers = new String[userListBeans.size()];
-                                String[] workers_id = new String[userListBeans.size()];
-                                for (int i = 0; i < userListBeans.size(); i++) {
-                                    String userName = userListBeans.get(i).getName();
-                                    String userId = userListBeans.get(i).getId();
-                                    workers[i] = userName;
-                                    workers_id[i] = userId;
-                                }
+//        BaseRequest.getInstance().getService()
+//                .getAllClassMember("B7FF21A674F144DE8D13EB8B3B79E64F")
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<List<ClassMemberBean>>(context) {
+//                    @Override
+//                    protected void onSuccees(BaseResult<List<ClassMemberBean>> t) throws Exception {
+//                        if(t.getCode() == 1) {
+//                            if (t.getResults() != null && t.getResults().size() > 0) {
+//                                List<ClassMemberBean.UserListBean> userListBeans = t.getResults().get(0).getUserList();
+//                                String[] workers = new String[userListBeans.size()];
+//                                String[] workers_id = new String[userListBeans.size()];
+//                                for (int i = 0; i < userListBeans.size(); i++) {
+//                                    String userName = userListBeans.get(i).getName();
+//                                    String userId = userListBeans.get(i).getId();
+//                                    workers[i] = userName;
+//                                    workers_id[i] = userId;
+//                                }
+//
+//                                showSingleChooseDialog(context, "工作人员", workers, workers_id, holder, position);
+//                            }
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//                    }
+//                });
 
-                                showSingleChooseDialog(context, "工作人员", workers, workers_id, holder, position);
-                            }
-                        }
+        if (mWorkerSelectList != null && mWorkerSelectList.size() > 0) {
+            String[] workers = new String[mWorkerSelectList.size()];
+            String[] workers_id = new String[mWorkerSelectList.size()];
 
-                    }
+            for (int i = 0; i < mWorkerSelectList.size(); i++) {
+                workers[i] = mWorkerSelectList.get(i).getUserName();
+                workers_id[i] = mWorkerSelectList.get(i).getUserId();
+            }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                    }
-                });
+            showSingleChooseDialog(context, "工作人员", workers, workers_id, holder, position);
+        }
 
     }
 

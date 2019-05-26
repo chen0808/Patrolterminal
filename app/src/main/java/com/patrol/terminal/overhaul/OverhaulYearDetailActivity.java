@@ -62,6 +62,8 @@ public class OverhaulYearDetailActivity extends BaseActivity {
     LinearLayout powerFailureLl;
     @BindView(R.id.year_plan_content)
     TextView yearPlanContent;
+    @BindView(R.id.dian_year_plan_rish_level)
+    TextView dianYearPlanRishLevel;
 
     private OverhaulYearBean overhaulYearBean;
 
@@ -84,7 +86,7 @@ public class OverhaulYearDetailActivity extends BaseActivity {
             yearPlanYes.setChecked(false);
             yearPlanNo.setChecked(true);
             powerFailureLl.setVisibility(View.GONE);
-        }else if(overhaulYearBean.getIs_blackout().equals("1")) {
+        } else if (overhaulYearBean.getIs_blackout().equals("1")) {
             yearPlanYes.setChecked(true);
             yearPlanNo.setChecked(false);
             powerFailureLl.setVisibility(View.VISIBLE);
@@ -96,6 +98,7 @@ public class OverhaulYearDetailActivity extends BaseActivity {
             yearPlanTimeEnd.setText(overhaulYearBean.getEnd_time());
             yearPlanTimeBefore.setText(overhaulYearBean.getLast_repair_time());
             yearPlanRishLevel.setText(overhaulYearBean.getRisk_level());
+            dianYearPlanRishLevel.setText("2");
         }
 
         yearPlanContent.setText(overhaulYearBean.getRepair_content());

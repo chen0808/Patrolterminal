@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
-import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
 
 import butterknife.BindView;
@@ -58,6 +57,8 @@ public class OverhaulMonthDetailActivity extends BaseActivity {
     TextView monthPlanContent;
     @BindView(R.id.month_plan_remark)
     TextView monthPlanRemark;
+    @BindView(R.id.dian_month_plan_rish_level)
+    TextView dianMonthPlanRishLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,7 @@ public class OverhaulMonthDetailActivity extends BaseActivity {
         monthPlanTimeStart.setText(overhaulYearBean.getStart_time());
         monthPlanTimeEnd.setText(overhaulYearBean.getEnd_time());
         monthPlanRishLevel.setText(overhaulYearBean.getRisk_level());   //风险等级
+        dianMonthPlanRishLevel.setText("2");
         monthPlanRemark.setText(overhaulYearBean.getRemark());
 
         monthPlanContent.setText(overhaulYearBean.getRepair_content());

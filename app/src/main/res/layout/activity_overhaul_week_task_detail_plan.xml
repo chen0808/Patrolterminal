@@ -67,10 +67,25 @@
                 <TextView
                     android:id="@+id/risk_level"
                     style="@style/overhaul_tv_styl"
-                    android:text="风险等级" />
+                    android:text="作业风险等级" />
 
                 <TextView
                     android:id="@+id/risk_level_tv"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/overhaul_ll_styl">
+
+                <TextView
+                    android:id="@+id/dian_risk_level"
+                    style="@style/overhaul_tv_styl"
+                    android:text="电网风险等级" />
+
+                <TextView
+                    android:id="@+id/dian_risk_level_tv"
                     style="@style/plan_et_styl"
                     android:layout_marginRight="@dimen/dp_20" />
             </LinearLayout>
@@ -319,6 +334,41 @@
                         android:paddingBottom="5dp" />
                 </LinearLayout>
             </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/work_person_select_ll"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="工作人员"
+                    android:layout_gravity="center_vertical"
+                    ></TextView>
+
+                <TextView
+                    android:id="@+id/select_worker_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:background="@drawable/btn_white"
+                    ></TextView>
+
+            </LinearLayout>
+
 
             <!--工作票控制卡-->
             <LinearLayout

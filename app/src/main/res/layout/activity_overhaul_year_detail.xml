@@ -188,10 +188,25 @@
 
             <TextView
                 style="@style/overhaul_tv_styl"
-                android:text="风险等级" />
+                android:text="作业风险等级" />
 
             <TextView
                 android:id="@+id/year_plan_rish_level"
+                style="@style/plan_et_styl"
+                android:layout_marginRight="@dimen/dp_20"
+                android:drawableRight="@mipmap/icon_go"
+                android:hint="点击选择风险等级" />
+        </LinearLayout>
+
+        <View style="@style/line_styl" />
+        <LinearLayout style="@style/overhaul_ll_styl">
+
+            <TextView
+                style="@style/overhaul_tv_styl"
+                android:text="电网风险等级" />
+
+            <TextView
+                android:id="@+id/dian_year_plan_rish_level"
                 style="@style/plan_et_styl"
                 android:layout_marginRight="@dimen/dp_20"
                 android:drawableRight="@mipmap/icon_go"

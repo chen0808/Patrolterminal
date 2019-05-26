@@ -1,9 +1,13 @@
 package com.patrol.terminal.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class ClassMemberBean {
-
+public class ClassMemberBean implements Parcelable {
+    
 
     /**
      * id : B7FF21A674F144DE8D13EB8B3B79E64F
@@ -20,7 +24,7 @@ public class ClassMemberBean {
     private String p_id;
     private String is_work;
     private int sort;
-    private Object detail;
+    private String detail;
     private List<UserListBean> userList;
 
     public String getId() {
@@ -63,11 +67,11 @@ public class ClassMemberBean {
         this.sort = sort;
     }
 
-    public Object getDetail() {
+    public String getDetail() {
         return detail;
     }
 
-    public void setDetail(Object detail) {
+    public void setDetail(String detail) {
         this.detail = detail;
     }
 
@@ -79,7 +83,9 @@ public class ClassMemberBean {
         this.userList = userList;
     }
 
-    public static class UserListBean {
+    public static class UserListBean implements Parcelable {
+
+
         /**
          * id : F9C9737CD8DF427586D96C5A9A9795A1
          * name : 贾来强
@@ -105,18 +111,18 @@ public class ClassMemberBean {
         private String login;
         private String password;
         private String sex;
-        private Object telephone;
+        private String telephone;
         private String birthday;
         private String is_boss;
         private int sort;
-        private Object detail;
-        private Object session_id;
-        private Object jobIds;
-        private Object depIds;
-        private Object roleIds;
-        private Object sysJobList;
-        private Object sysDepList;
-        private Object sysRoleList;
+        private String detail;
+        private String session_id;
+        private String jobIds;
+        private String depIds;
+        private String roleIds;
+        private String sysJobList;
+        private String sysDepList;
+        private String sysRoleList;
 
         public String getId() {
             return id;
@@ -158,11 +164,11 @@ public class ClassMemberBean {
             this.sex = sex;
         }
 
-        public Object getTelephone() {
+        public String getTelephone() {
             return telephone;
         }
 
-        public void setTelephone(Object telephone) {
+        public void setTelephone(String telephone) {
             this.telephone = telephone;
         }
 
@@ -190,68 +196,170 @@ public class ClassMemberBean {
             this.sort = sort;
         }
 
-        public Object getDetail() {
+        public String getDetail() {
             return detail;
         }
 
-        public void setDetail(Object detail) {
+        public void setDetail(String detail) {
             this.detail = detail;
         }
 
-        public Object getSession_id() {
+        public String getSession_id() {
             return session_id;
         }
 
-        public void setSession_id(Object session_id) {
+        public void setSession_id(String session_id) {
             this.session_id = session_id;
         }
 
-        public Object getJobIds() {
+        public String getJobIds() {
             return jobIds;
         }
 
-        public void setJobIds(Object jobIds) {
+        public void setJobIds(String jobIds) {
             this.jobIds = jobIds;
         }
 
-        public Object getDepIds() {
+        public String getDepIds() {
             return depIds;
         }
 
-        public void setDepIds(Object depIds) {
+        public void setDepIds(String depIds) {
             this.depIds = depIds;
         }
 
-        public Object getRoleIds() {
+        public String getRoleIds() {
             return roleIds;
         }
 
-        public void setRoleIds(Object roleIds) {
+        public void setRoleIds(String roleIds) {
             this.roleIds = roleIds;
         }
 
-        public Object getSysJobList() {
+        public String getSysJobList() {
             return sysJobList;
         }
 
-        public void setSysJobList(Object sysJobList) {
+        public void setSysJobList(String sysJobList) {
             this.sysJobList = sysJobList;
         }
 
-        public Object getSysDepList() {
+        public String getSysDepList() {
             return sysDepList;
         }
 
-        public void setSysDepList(Object sysDepList) {
+        public void setSysDepList(String sysDepList) {
             this.sysDepList = sysDepList;
         }
 
-        public Object getSysRoleList() {
+        public String getSysRoleList() {
             return sysRoleList;
         }
 
-        public void setSysRoleList(Object sysRoleList) {
+        public void setSysRoleList(String sysRoleList) {
             this.sysRoleList = sysRoleList;
         }
+
+        public UserListBean() {
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.name);
+            dest.writeString(this.login);
+            dest.writeString(this.password);
+            dest.writeString(this.sex);
+            dest.writeString(this.telephone);
+            dest.writeString(this.birthday);
+            dest.writeString(this.is_boss);
+            dest.writeInt(this.sort);
+            dest.writeString(this.detail);
+            dest.writeString(this.session_id);
+            dest.writeString(this.jobIds);
+            dest.writeString(this.depIds);
+            dest.writeString(this.roleIds);
+            dest.writeString(this.sysJobList);
+            dest.writeString(this.sysDepList);
+            dest.writeString(this.sysRoleList);
+        }
+
+        protected UserListBean(Parcel in) {
+            this.id = in.readString();
+            this.name = in.readString();
+            this.login = in.readString();
+            this.password = in.readString();
+            this.sex = in.readString();
+            this.telephone = in.readString();
+            this.birthday = in.readString();
+            this.is_boss = in.readString();
+            this.sort = in.readInt();
+            this.detail = in.readString();
+            this.session_id = in.readString();
+            this.jobIds = in.readString();
+            this.depIds = in.readString();
+            this.roleIds = in.readString();
+            this.sysJobList = in.readString();
+            this.sysDepList = in.readString();
+            this.sysRoleList = in.readString();
+        }
+
+        public static final Parcelable.Creator<UserListBean> CREATOR = new Parcelable.Creator<UserListBean>() {
+            @Override
+            public UserListBean createFromParcel(Parcel source) {
+                return new UserListBean(source);
+            }
+
+            @Override
+            public UserListBean[] newArray(int size) {
+                return new UserListBean[size];
+            }
+        };
     }
+
+    public ClassMemberBean() {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.p_id);
+        dest.writeString(this.is_work);
+        dest.writeInt(this.sort);
+        dest.writeString(this.detail);
+        dest.writeTypedList(this.userList);
+    }
+
+    protected ClassMemberBean(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.p_id = in.readString();
+        this.is_work = in.readString();
+        this.sort = in.readInt();
+        this.detail = in.readString();
+        this.userList = in.createTypedArrayList(UserListBean.CREATOR);
+    }
+
+    public static final Parcelable.Creator<ClassMemberBean> CREATOR = new Parcelable.Creator<ClassMemberBean>() {
+        @Override
+        public ClassMemberBean createFromParcel(Parcel source) {
+            return new ClassMemberBean(source);
+        }
+
+        @Override
+        public ClassMemberBean[] newArray(int size) {
+            return new ClassMemberBean[size];
+        }
+    };
 }

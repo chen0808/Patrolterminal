@@ -102,16 +102,16 @@ public class OverhaulWeekTaskAdapter extends BaseQuickAdapter<OverhaulMonthBean,
                     .setText(R.id.item_line_status, "状态 : 待负责人提交");
         } else if ("3".equals(item.getTask_status())) {
             viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))
-                    .setText(R.id.item_line_status, "状态 : 已提交");
+                    .setText(R.id.item_line_status, "状态 : 负责人已提交");
         } else if ("4".equals(item.getTask_status())) {
             viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))
                     .setText(R.id.item_line_status, "状态 : 待班长审核");
         }else if ("5".equals(item.getTask_status())) {
             viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))
-                    .setText(R.id.item_line_status, "状态 : 审核通过");
+                    .setText(R.id.item_line_status, "状态 : 班长审核通过");
         }else if ("6".equals(item.getTask_status())) {
             viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))
-                    .setText(R.id.item_line_status, "状态 : 审核不通过");
+                    .setText(R.id.item_line_status, "状态 : 班长审核不通过");
         }
 
         //view.setStatus(item.getStatus());

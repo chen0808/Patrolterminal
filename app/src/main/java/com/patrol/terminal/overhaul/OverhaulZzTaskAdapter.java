@@ -50,7 +50,16 @@ public class OverhaulZzTaskAdapter extends BaseQuickAdapter<OverhaulZzTaskBean, 
                     .setText(R.id.item_line_status, "状态 : 待负责人提交");
         }else if ("3".equals(item.getTask_status())) {
             viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.green))
-                    .setText(R.id.item_line_status, "状态 : 已提交");
+                    .setText(R.id.item_line_status, "状态 : 负责人已提交");
+        }else if ("4".equals(item.getTask_status())) {
+            viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.green))
+                    .setText(R.id.item_line_status, "状态 : 待班长审核");
+        }else if ("5".equals(item.getTask_status())) {
+            viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.green))
+                    .setText(R.id.item_line_status, "状态 : 班长审核通过");
+        }else if ("6".equals(item.getTask_status())) {
+            viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.green))
+                    .setText(R.id.item_line_status, "状态 : 班长审核不通过");
         }
 
         //view.setStatus(item.getStatus());
