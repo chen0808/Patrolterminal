@@ -117,18 +117,20 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         // init fragment
         String jobType = SPUtil.getString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
 
-        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
             getGroupName();
         }
 
-        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER) || jobType.equals(Constant.REFURBISHMENT_MEMBER)
-                || jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER) || jobType.equals(Constant.REFURBISHMENT_TEMA_LEADER)
-                || jobType.equals(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
+        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.REFURBISHMENT_MEMBER)
+                || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
+                || jobType.contains(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
             mainExameRb.setVisibility(View.GONE);
 
-            if (jobType.equals(Constant.TRAINING_SPECIALIZED)) {     //培训专责
+            if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {     //培训专责
                 mFragments.add(new TrainingHomeFragment());
-            }else  if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)||jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+            }else  if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)||jobType.contains(Constant.MAINTENANCE_SUPERVISOR)){
+                mFragments.add(new HomeFragment());
+            }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
                 mFragments.add(new ZyHomeFragment());
             }else {
                 mFragments.add(new JXHomeFragment());
@@ -139,13 +141,13 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         }else {                                                    //有待办的角色
             mainExameRb.setVisibility(View.VISIBLE);
 
-            if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)){
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
                 mFragments.add(new HomeFragment());
             }else {
                 mFragments.add(new JXHomeFragment());
             }
 
-            if (jobType.equals(Constant.RUNNING_SQUAD_LEADER)||jobType.equals(Constant.RUNNING_SQUAD_SPECIALIZED)){   //运行待办
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){   //运行待办
                 mFragments.add(new YXTodosManageFragment());
             } else {   //其他角色待办
                 mFragments.add(new TodosManageFragment());
@@ -225,7 +227,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                         if (t.getCode() == 1) {
                             GroupBean results = t.getResults();
                             if (results!=null){
-                                if ("1".equals(results.getIs_boss())){
+                                if ("1".contains(results.getIs_boss())){
                                     SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
                                 }
                             }

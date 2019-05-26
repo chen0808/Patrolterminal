@@ -90,11 +90,11 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         String userId = SPUtil.getString(getContext(), Constant.USER, Constant.USERID, "");
 
-        if (jobType.equals(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
             ele_user_id = userId;
-        } else if (jobType.equals(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+        } else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
             check_user_id = userId;
-        } else if (jobType.equals(Constant.SAFETY_SPECIALIZED)) {
+        } else if (jobType.contains(Constant.SAFETY_SPECIALIZED)) {
             safe_user_id = userId;
         }
 
@@ -118,7 +118,7 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
         fragTodoRef.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (jobType.equals(Constant.REFURBISHMENT_LEADER)) {
+                if (jobType.contains(Constant.REFURBISHMENT_LEADER)) {
                     getBzAgentsTodo("4");
                 } else {
                     getOverhaulTodo();
@@ -129,7 +129,7 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
         toDoManageAdapter.setOnItemClickListener(this);
 
         Log.w("linmeng", "toDoManageAdapter jobType:" + jobType);
-        if (jobType.equals(Constant.REFURBISHMENT_LEADER)) {
+        if (jobType.contains(Constant.REFURBISHMENT_LEADER)) {
             getBzAgentsTodo("4");
         } else {
             getOverhaulTodo();
