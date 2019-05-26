@@ -26,15 +26,22 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.OvaTodoBean;
+import com.patrol.terminal.bean.OverhaulMonthBean;
+import com.patrol.terminal.bean.OverhaulZzTaskBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PlanFinishRateBean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
+import com.patrol.terminal.overhaul.OverhaulZzWeekTaskDetailActivity;
+import com.patrol.terminal.overhaul.OvhaulHomeOtherTaskAdapter;
+import com.patrol.terminal.overhaul.OvhaulHomeZzTaskAdapter;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -101,6 +108,11 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     private BackLogAdapter adapter;
     private ProgressDialog progressDialog;
 
+    private String year,month;
+    private String week;
+    private String userId;
+    private String sign;
+
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -111,6 +123,13 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
 
     @Override
     protected void initData() {
+        String time = SPUtil.getString(getContext(), "date", "overhaulTime", DateUatil.getTime(new Date(System.currentTimeMillis())));
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        month = Integer.parseInt(months[0]) + "";
+        year = years[0];
+        week = DateUatil.getWeekNum()+"";
+
 
         String name = SPUtil.getString(getContext(), Constant.USER, Constant.USERNAME, "");
         String dep = SPUtil.getDepName(getContext());
@@ -121,6 +140,9 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
             tvDep.setText(dep);
             tvJob.setText(job);
         }
+
+        userId = SPUtil.getUserId(getContext());
+
         rlPlan.setVisibility(View.VISIBLE);
         rlTask.setVisibility(View.GONE);
         //运行班组长和组员进来隐藏计划
@@ -174,18 +196,89 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     }
 
     private void initTask() {
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        rvTask.setLayoutManager(manager);
-        BackLogTaskAdapter adapter = new BackLogTaskAdapter(R.layout.item_back_log, taskData);
-        rvTask.setAdapter(adapter);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), NewTaskActivity.class);
-                startActivity(intent);
-            }
-        });
+        if (jobType.contains(Constant.REFURBISHMENT_LEADER)) {
+            sign = "3";
+        }else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)){
+            sign = "1";
+        }else if (jobType.contains(Constant.SAFETY_SPECIALIZED)) {
+            sign = "2";
+        }else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {
+            sign = "4";
+        }
+
+       if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {
+           getZzWeekList();
+       }else {
+           getWeekList(sign);
+       }
+    }
+
+    //检修专责获取周任务列表
+    public void getZzWeekList() {
+        BaseRequest.getInstance().getService()
+                .getOverhaulZzTaskList(year,month,week)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<OverhaulZzTaskBean>>(getContext()) {
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<OverhaulZzTaskBean>> t) throws Exception {
+                        List<OverhaulZzTaskBean> results = t.getResults();
+                        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+                        rvTask.setLayoutManager(manager);
+                        OvhaulHomeZzTaskAdapter adapter = new OvhaulHomeZzTaskAdapter(R.layout.item_back_log, results);
+                        rvTask.setAdapter(adapter);
+                        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                                Intent intent = new Intent();
+                                intent.setClass(getActivity(), OverhaulZzWeekTaskDetailActivity.class);
+                                intent.putExtra("id", results.get(position).getId());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Log.e("fff", e.toString());
+                    }
+                });
+    }
+
+    //其他人员获取周任务列表
+    public void getWeekList(String sign) {
+        Log.w("linmeng", "sign:" + sign);
+        BaseRequest.getInstance().getService()
+                .getOverhaulTaskList(year,month,week, userId, sign)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<OverhaulMonthBean>>(getContext()) {
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<OverhaulMonthBean>> t) throws Exception {
+                        List<OverhaulMonthBean> results = t.getResults();
+                        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+                        rvTask.setLayoutManager(manager);
+                        OvhaulHomeOtherTaskAdapter adapter = new OvhaulHomeOtherTaskAdapter(R.layout.item_back_log, results);
+                        rvTask.setAdapter(adapter);
+                        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                                Intent intent = new Intent();
+                                intent.setClass(getActivity(), OverhaulWeekPlanDetailActivity.class);
+                                intent.putExtra("id", results.get(position).getId());
+                                startActivity(intent);
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Log.e("fff", e.toString());
+                    }
+                });
     }
 
     private void initPlanFinishRate() {
