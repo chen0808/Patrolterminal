@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".overhaul.OverhaulAddYearPlanActivity">
+    tools:context=".overhaul.OverhaulZzWeekTaskDetailActivity">
 
     <include layout="@layout/include_title" />
 
@@ -109,9 +109,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:orientation="horizontal"
                     android:layout_marginTop="@dimen/dp_10"
-                    android:gravity="center_horizontal">
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
 
 
                     <TextView
@@ -127,13 +127,13 @@
                         android:id="@+id/add_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="添加"
                         android:layout_marginLeft="10dp"
-                        ></Button>
+                        android:text="添加"></Button>
                 </LinearLayout>
 
-                <View style="@style/control_line_styl"
-                    android:layout_marginTop="10dp"/>
+                <View
+                    style="@style/control_line_styl"
+                    android:layout_marginTop="10dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -175,24 +175,24 @@
                         android:layout_height="match_parent"
                         android:background="@color/color_33" />
                 </LinearLayout>
+
                 <View style="@style/control_line_styl" />
 
                 <com.patrol.terminal.widget.NoScrollListView
                     android:id="@+id/work_task_lv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:divider="@null"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:layout_marginRight="@dimen/dp_10"
-                    ></com.patrol.terminal.widget.NoScrollListView>
+                    android:divider="@null"></com.patrol.terminal.widget.NoScrollListView>
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     style="@style/overhaul_tv_styl"
@@ -347,7 +347,7 @@
                     android:layout_marginLeft="5dp"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:visibility="gone"></org.angmarch.views.NiceSpinner>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <org.angmarch.views.NiceSpinner
@@ -359,7 +359,7 @@
                 android:layout_marginRight="16dp"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:visibility="gone"></org.angmarch.views.NiceSpinner>
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/ll_control_card"
@@ -457,73 +457,73 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_20"
-                android:layout_marginRight="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_10"
-                android:orientation="horizontal"
-                >
+                android:layout_marginRight="@dimen/dp_20"
+                android:orientation="horizontal">
+
                 <RelativeLayout
                     android:id="@+id/power_preservation_rl"
                     android:layout_width="@dimen/dp_60"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
                     android:layout_marginRight="@dimen/dp_20"
-                    >
+                    android:visibility="gone">
+
                     <ImageView
                         android:id="@+id/power_preservation_iv"
                         android:layout_width="@dimen/dp_60"
-                        android:layout_height="@dimen/dp_60"
-                        />
+                        android:layout_height="@dimen/dp_60" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_33"
                         android:layout_below="@id/power_preservation_iv"
                         android:layout_gravity="center_horizontal"
                         android:text="保电方案"
-                        />
+                        android:textColor="@color/color_33" />
+
                     <TextView
                         android:id="@+id/power_preservation_grogress"
                         android:layout_width="@dimen/dp_60"
                         android:layout_height="@dimen/dp_60"
-                        android:visibility="gone"
+                        android:background="@color/mengban"
                         android:gravity="center"
+                        android:text="0%"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp_18"
-                        android:text="0%"
-                        android:background="@color/mengban"
-                        />
+                        android:visibility="gone" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:id="@+id/acceptance_plan_rl"
                     android:layout_width="wrap_content"
-                    android:visibility="gone"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    >
+                    android:visibility="gone">
+
                     <ImageView
                         android:id="@+id/acceptance_plan_iv"
                         android:layout_width="@dimen/dp_60"
                         android:layout_height="@dimen/dp_60" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_4"
-                        android:textColor="@color/color_33"
                         android:layout_below="@id/acceptance_plan_iv"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_4"
                         android:text="验收方案"
-                        />
+                        android:textColor="@color/color_33" />
+
                     <TextView
                         android:id="@+id/acceptance_plan_grogress"
                         android:layout_width="@dimen/dp_60"
                         android:layout_height="@dimen/dp_60"
-                        android:visibility="gone"
+                        android:background="@color/mengban"
                         android:gravity="center"
+                        android:text="0%"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp_18"
-                        android:text="0%"
-                        android:background="@color/mengban"
-                        />
+                        android:visibility="gone" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
