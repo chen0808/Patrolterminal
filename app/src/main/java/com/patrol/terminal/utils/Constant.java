@@ -60,7 +60,7 @@ public class Constant {
     public static final String ACCEPTANCE_CHECK_SPECIALIZED = "ys_zz";
 
     public static final String[] JOBS_NAME = {"运行班班长", "运行班组长", "运行班班员", "检修班班长", "检修班组长",
-            "检修班班员", "运行班专责", "检修班专责", "工区主管", "运行主管", "检修主管", "绩效专责", "培训专责",
+            "检修班班员", "运行专责", "检修专责", "工区主管", "运行主管", "检修主管", "绩效专责", "培训专责",
             "汽车班班长", "汽车班班员", "保电专责", "安全专责", "验收专责"};
 
     public static final String WORK_TICKET_TIME = "        年    月    日    时    分";

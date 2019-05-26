@@ -23,6 +23,7 @@ import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.ControlCardActivity;
 import com.patrol.terminal.activity.FirstWTicketActivity;
+import com.patrol.terminal.activity.LoginActivity;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -613,8 +614,14 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
         userInfo3.setUser_name(userData.get(licencePosition).getUser_name());
         userInfo3.setSign("7");
         userList.add(userInfo3);
-
         overhaulFzrSendBean.setUserList(userList);
+
+        overhaulFzrSendBean.setPlan_type_sign("12");
+        String dep_id = SPUtil.getString(this, Constant.USER, Constant.DEPID, "");
+        overhaulFzrSendBean.setDep_id(dep_id);
+        String user_id = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
+        overhaulFzrSendBean.setUser_id(user_id);
+        overhaulFzrSendBean.setTask_content(overhaulMonthBean.getTask_content());
 
         BaseRequest.getInstance().getService()
                 .sendOverhaulFzrPlan(overhaulFzrSendBean)
@@ -625,13 +632,13 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<OverhaulSendUserBean>> t) throws Exception {
                         if(t.getCode() == 1) {
                             //result = t.getResults();
-                            Toast.makeText(OverhaulWeekPlanDetailActivity.this, "分发成功！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OverhaulWeekPlanDetailActivity.this, "提交成功！", Toast.LENGTH_SHORT).show();
                             //产生待办
-                            deal();
+                            //deal();
                             //更新详情状态
                             initId();
                         }else {
-                            Toast.makeText(OverhaulWeekPlanDetailActivity.this, "分发失败！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OverhaulWeekPlanDetailActivity.this, "提交失败！", Toast.LENGTH_SHORT).show();
                         }
                     }
 

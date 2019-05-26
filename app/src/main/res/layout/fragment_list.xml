@@ -87,7 +87,7 @@
             android:id="@+id/task_date"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:layout_marginLeft="13dp"
+            android:layout_marginLeft="14dp"
             android:layout_toRightOf="@id/task_title"
             android:gravity="center_vertical"
             android:text="2019年4月" />

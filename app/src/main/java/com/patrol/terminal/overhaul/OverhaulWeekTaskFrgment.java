@@ -32,6 +32,7 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
@@ -113,7 +114,12 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         year = years[0];
         week = DateUatil.getWeekNum()+"";
         taskTitle.setText("周计划列表");
-        taskDate.setText(time + "第" + week + "周");
+       // taskDate.setText(time + "第" + week + "周");
+
+        Map<String ,Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), DateUatil.getWeekNum());
+        String beginDate = (String)taskDateStr.get("beginDate");
+        String endDate = (String)taskDateStr.get("endDate");
+        taskDate.setText(beginDate + "至" + endDate + "（" +  "第" + week + "周"+ "）");
 
         // 设置监听器。
         planRv.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -229,7 +235,13 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
                 year=years.get(options1).split("年")[0];
                 month= months.get(options1).get(option2).split("月")[0];
                 week=  weeks.get(options1).get(option2).get(options3).substring(1,2);
-                taskDate.setText(time);
+                //taskDate.setText(time);
+
+                Map<String ,Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month),  Integer.parseInt(week));
+                String beginDate = (String)taskDateStr.get("beginDate");
+                String endDate = (String)taskDateStr.get("endDate");
+                taskDate.setText(beginDate + "至" + endDate + "（" +  "第" + week + "周"+ "）");
+
                 getWeekList();
             }
         }).build();
