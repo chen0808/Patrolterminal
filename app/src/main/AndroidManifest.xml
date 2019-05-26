@@ -14,19 +14,14 @@
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
-
-
     <!-- 需要运行时注册的权限 -->
     <!-- 用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!-- 用于提高GPS定位速度 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-
-    <!--FRID用到的权限-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 用于提高GPS定位速度 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> <!-- FRID用到的权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
 
     <application
         android:allowBackup="true"
@@ -36,7 +31,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ChangePlanActivity"></activity>
+        <activity android:name=".activity.MakeDutyActivity"></activity>
+        <activity android:name=".activity.ChangePlanActivity" />
         <activity android:name=".overhaul.OverhaulWeekPlanActivity" />
         <activity android:name=".activity.SpecialPlanDetailActivity" />
         <activity android:name=".overhaul.OverhaulMonitorPublishActivity" />
@@ -54,9 +50,9 @@
         <activity android:name=".activity.CreatePlanActivity" />
         <activity android:name=".activity.AddMonthPlanActivity" />
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.NewTaskActivity"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".activity.NewTaskActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.NewMainActivity"
             android:screenOrientation="portrait" />
@@ -158,9 +154,11 @@
         <activity
             android:name=".activity.SignActivity"
             android:screenOrientation="landscape" />
-        <activity
+        <!--
+ <activity
             android:name=".activity.MapActivity"
             android:screenOrientation="portrait" />
+        -->
         <activity
             android:name=".activity.DayPlanDetailActivity"
             android:screenOrientation="portrait" />
@@ -284,18 +282,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.RfidActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".overhaul.OverhaulZzWeekTaskDetailActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="f997b2a5b39654038602347a7203462f" />
-       <!-- 69ef137e2112474f49cece1036dfc50b-->
+            android:value="f997b2a5b39654038602347a7203462f" /> <!-- 69ef137e2112474f49cece1036dfc50b -->
         <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService">
-        </service>
+        <service android:name="com.amap.api.location.APSService"></service>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -306,7 +302,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
-
 
         <activity android:name=".training.NewTrainPlanActivity" />
     </application>

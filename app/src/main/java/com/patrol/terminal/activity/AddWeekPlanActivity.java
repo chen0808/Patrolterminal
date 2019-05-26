@@ -27,11 +27,13 @@ import com.patrol.terminal.bean.WeekOfMonthBean;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,12 +56,6 @@ public class AddWeekPlanActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
-    @BindView(R.id.month_plan_name)
-    EditText monthPlanName;
-    @BindView(R.id.month_plan_date)
-    TextView monthPlanDate;
-    @BindView(R.id.month_plan_class)
-    TextView monthPlanClass;
     @BindView(R.id.month_plan_type)
     TextView monthPlanType;
     @BindView(R.id.month_plan_month)
@@ -79,9 +75,9 @@ public class AddWeekPlanActivity extends BaseActivity {
     private List<String> lineName = new ArrayList<>();
     private List<WeekOfMonthBean> eqTowers = new ArrayList<>();
     private String curMonth;
-    private String year;
-    private String month;
-    private String week;
+    private int year;
+    private int month;
+    private int week;
     private int type = 0;
     private String lineId;
     private List<Tower> selectType = new ArrayList<>();
@@ -107,11 +103,22 @@ public class AddWeekPlanActivity extends BaseActivity {
 
     private void initview() {
         curMonth = DateUatil.getCurMonth();
-        year = curMonth.substring(0, 4);
-        month = curMonth.substring(5, 7);
-        week = DateUatil.getWeekNum() + "";
-        monthPlanDate.setText(curMonth + "第" + week + "周");
-        titleName.setText(curMonth + "第" + week + "周计划制定");
+        year = Integer.parseInt(curMonth.substring(0, 4));
+        month = Integer.parseInt(curMonth.substring(5, 7));
+        int weekNumOfMonth = DateUatil.getWeekNumOfMonth(year+"", month+"");
+        week = DateUatil.getWeekNum()+1;
+        if (week>weekNumOfMonth){
+            week=1;
+            month=month+1;
+            if (month>12){
+                month=1;
+                year=year+1;
+            }
+        }
+        Map<String, Object> scopeForWeeks = TimeUtil.getScopeForWeeks(year,month,week);
+        String beginDate =TimeUtil.dateToDate((String) scopeForWeeks.get("beginDate"));
+        String endDate =TimeUtil.dateToDate((String) scopeForWeeks.get("endDate"));
+        titleName.setText(beginDate+"-"+endDate+"（第"+week+")周计划制定");
         adapter = new AddTowerAdapter(this,eqTowers);
         monthPlanTypeLv.setAdapter(adapter);
 
@@ -141,7 +148,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.title_back, R.id.month_plan_line, R.id.month_plan_type, R.id.month_yes, R.id.trouble_more, R.id.month_plan_date})
+    @OnClick({R.id.title_back, R.id.month_plan_line, R.id.month_plan_type, R.id.month_yes, R.id.trouble_more})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -156,9 +163,6 @@ public class AddWeekPlanActivity extends BaseActivity {
                 break;
             case R.id.month_plan_type:
                 showType();
-                break;
-            case R.id.month_plan_date:
-//                showWeek();
                 break;
             case R.id.month_yes:
                 saveWeek();
@@ -235,7 +239,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         lineName.clear();
         //获取月计划列表
         BaseRequest.getInstance().getService()
-                .getWeekList(Integer.parseInt(year), Integer.parseInt(month), SPUtil.getDepId(this), type_id)
+                .getWeekList(year, month, SPUtil.getDepId(this), type_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekOfMonthBean>>(this) {
@@ -306,9 +310,9 @@ public class AddWeekPlanActivity extends BaseActivity {
             return;
         }
         PlanWeekReqBean bean = new PlanWeekReqBean();
-        bean.setYear(year);
-        bean.setMonth(Integer.parseInt(month) + "");
-        bean.setWeek(week);
+        bean.setYear(year+"");
+        bean.setMonth(month + "");
+        bean.setWeek(week+"");
         PlanWeekLineBean planWeekLineBean = new PlanWeekLineBean();
         planWeekLineBean.setType_id(type_id);
         planWeekLineBean.setLine_id(lineId);

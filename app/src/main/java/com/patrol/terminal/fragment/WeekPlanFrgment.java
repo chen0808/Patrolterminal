@@ -32,6 +32,7 @@ import com.patrol.terminal.bean.WeekPlanBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
@@ -42,6 +43,7 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
@@ -79,6 +81,7 @@ public class WeekPlanFrgment extends BaseFragment {
     private String mJobType;
     private String depId;
     private List<WeekListBean> results=new ArrayList<>();
+    private String currWeek;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,6 +108,7 @@ public class WeekPlanFrgment extends BaseFragment {
         month = Integer.parseInt(months[0]) + "";
         year = years[0];
         week = DateUatil.getWeekNum() + "";
+        currWeek = DateUatil.getWeekNum() + "";
         taskTitle.setText("周计划列表");
         taskDate.setText(time + "第" + week + "周");
 
@@ -321,7 +325,11 @@ public class WeekPlanFrgment extends BaseFragment {
 
                 int weekNumOfMonth = DateUatil.getWeekNumOfMonth(i + "", j + "");
                 for (int y = 1; y < weekNumOfMonth + 1; y++) {
-                    weekList.add("第" + y + "周");
+
+                    Map<String, Object> scopeForWeeks = TimeUtil.getScopeForWeeks(i,j,y);
+                    String beginDate =TimeUtil.dateToDay((String) scopeForWeeks.get("beginDate"));
+                    String endDate =TimeUtil.dateToDay((String) scopeForWeeks.get("endDate"));
+                    weekList.add(beginDate+"-" + endDate+ "("+y+")");
                 }
                 list.add(weekList);
                 months.add(monthList);
@@ -352,7 +360,7 @@ public class WeekPlanFrgment extends BaseFragment {
             }
         }).build();
         pvOptions.setPicker(years, months, weeks);
-        pvOptions.setSelectOptions(years.indexOf(year + "年"), Integer.parseInt(month) - 1, Integer.parseInt(week) - 1);
+        pvOptions.setSelectOptions(years.indexOf(year + "年"), Integer.parseInt(month) - 1, Integer.parseInt(currWeek) - 1);
         pvOptions.show();
     }
 
