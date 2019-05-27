@@ -59,7 +59,7 @@ public class GroupTaskFrgment extends BaseFragment {
     private String year;
     private String month;
     private String day;
-    private String userId;
+    private String userId,duty_user_id;
     private String depId;
 
     @Override
@@ -75,17 +75,18 @@ public class GroupTaskFrgment extends BaseFragment {
         inteDate();
         taskDate.setText(time);
         taskTitle.setText("组任务列表");
-        userId = SPUtil.getUserId(getContext());
         taskAdd.setVisibility(View.GONE);
         String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             taskAdd.setVisibility(View.VISIBLE);
             depId = SPUtil.getDepId(getContext());
-            userId=null;
-        }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+            getGroupList();
+        }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+            duty_user_id = SPUtil.getUserId(getContext());
+            getGroupList();
+        }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
             userId = SPUtil.getUserId(getContext());
-        }else {
-            userId=null;
+            getGroupListZy();
         }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
@@ -103,14 +104,14 @@ public class GroupTaskFrgment extends BaseFragment {
                 startActivityForResult(intent,11);
             }
         });
-        getGroupList();
+
     }
 
-    //获取月计划列表
+    //获取小组任务列表
     public void getGroupList() {
 
         BaseRequest.getInstance().getService()
-                .getGroupList(year, month, day, SPUtil.getDepId(getContext()),userId)
+                .getGroupList(year, month, day,depId,duty_user_id,userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {
@@ -127,7 +128,26 @@ public class GroupTaskFrgment extends BaseFragment {
 
     }
 
+    //获取小组任务列表
+    public void getGroupListZy() {
 
+        BaseRequest.getInstance().getService()
+                .getGroupList(year, month, day,userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
+                        result = t.getResults();
+                        groupTaskAdapter.setNewData(result);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+
+    }
 
     public void inteDate() {
         String[] years = time.split("年");
@@ -188,4 +208,5 @@ public class GroupTaskFrgment extends BaseFragment {
             getGroupList();
         }
     }
+
 }

@@ -53,8 +53,35 @@ public class WeekListBean implements Parcelable {
         private String audit_status;
         private String done_status;
         private String done_time;
+    private int done_num;
+    private int all_num;
+    private String done_rate;
 
-        public String getId() {
+    public int getDone_num() {
+        return done_num;
+    }
+
+    public void setDone_num(int done_num) {
+        this.done_num = done_num;
+    }
+
+    public int getAll_num() {
+        return all_num;
+    }
+
+    public void setAll_num(int all_num) {
+        this.all_num = all_num;
+    }
+
+    public String getDone_rate() {
+        return done_rate;
+    }
+
+    public void setDone_rate(String done_rate) {
+        this.done_rate = done_rate;
+    }
+
+    public String getId() {
             return id;
         }
 
@@ -230,6 +257,7 @@ public class WeekListBean implements Parcelable {
             this.done_time = done_time;
         }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -259,6 +287,9 @@ public class WeekListBean implements Parcelable {
         dest.writeString(this.audit_status);
         dest.writeString(this.done_status);
         dest.writeString(this.done_time);
+        dest.writeInt(this.done_num);
+        dest.writeInt(this.all_num);
+        dest.writeString(this.done_rate);
     }
 
     public WeekListBean() {
@@ -287,6 +318,9 @@ public class WeekListBean implements Parcelable {
         this.audit_status = in.readString();
         this.done_status = in.readString();
         this.done_time = in.readString();
+        this.done_num = in.readInt();
+        this.all_num = in.readInt();
+        this.done_rate = in.readString();
     }
 
     public static final Parcelable.Creator<WeekListBean> CREATOR = new Parcelable.Creator<WeekListBean>() {

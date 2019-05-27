@@ -14,9 +14,11 @@ import com.patrol.terminal.adapter.PersonalTaskDetailAdapter;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PlanTypeBean;
 import com.patrol.terminal.bean.TypeBean;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -61,11 +63,11 @@ public class PersonalTaskDetailActivity extends Activity {
     TextView tvLineTower;
 
 
-    private String year, month, id;
+    private int year, month, day;
     private List<PlanTypeBean> typeList = new ArrayList<>();
     private PersonalTaskDetailAdapter monthPlanDetailAdapter;
-    private String sign="1";
-    private PersonalTaskListBean bean;
+    private GroupTaskBean bean;
+    private List<PersonalTaskListBean> results=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,25 +76,22 @@ public class PersonalTaskDetailActivity extends Activity {
         ButterKnife.bind(this);
         initView();
         initdata();
-        getSign();
+        getPersonalList();
     }
 
     private void initdata() {
         bean = getIntent().getParcelableExtra("bean");
-        id= bean.getType_id();
         SPUtil.put(this, "ids", "task_id", bean.getId());
+             tvLineType.setVisibility(View.VISIBLE);
+             tvLineType.setText("执行人 : "+bean.getWork_user_name());
             tvTableName.setText(bean.getName());
             tvLineName.setText("线路名称 : " + bean.getLine_name());
             tvLineNo.setText("班  组 : " + SPUtil.getDepName(PersonalTaskDetailActivity.this));
-            tvLineDate.setText("杆塔名称 : "+ bean.getTower_name());
+            tvLineDate.setText("杆塔名称 : "+ bean.getName());
+            year=bean.getYear();
+        month=bean.getMonth();
+        day=bean.getDay();
 
-
-        PlanTypeBean planTypeBean = new PlanTypeBean();
-        planTypeBean.setName(bean.getLine_name()+ bean.getTower_name() + bean.getType_name());
-        planTypeBean.setType(0);
-        typeList.add(planTypeBean);
-
-      monthPlanDetailAdapter.setNewData(typeList);
     }
 
 
@@ -103,28 +102,27 @@ public class PersonalTaskDetailActivity extends Activity {
 
     private void initView() {
         tvLineTower.setVisibility(View.GONE);
-        year = getIntent().getStringExtra("year");
-        month = getIntent().getStringExtra("month");
-
 
         titleName.setText("个人任务详情");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         monthPlanDetailRc.setLayoutManager(manager);
-        monthPlanDetailAdapter = new PersonalTaskDetailAdapter(R.layout.item_plan_detail, typeList);
+        monthPlanDetailAdapter = new PersonalTaskDetailAdapter(R.layout.item_plan_detail, results);
         monthPlanDetailRc.setAdapter(monthPlanDetailAdapter);
         monthPlanDetailAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                PersonalTaskListBean bean = results.get(position);
                 Intent intent = new Intent();
                 intent.putExtra("line_id",bean.getLine_id());
                 intent.putExtra("line_name",bean.getLine_name());
                 intent.putExtra("tower_id",bean.getTower_id());
                 intent.putExtra("tower_name",bean.getTower_name());
                 intent.putExtra("task_id",bean.getId());
-                intent.putExtra("sign",sign);
+                intent.putExtra("sign",bean.getType_sign());
+                intent.putExtra("audit_status",bean.getAudit_status());
                 intent.putExtra("typename",bean.getType_name());
-                switch (sign) {
+                switch (bean.getType_sign()) {
                     case "1":
                         intent.setClass(PersonalTaskDetailActivity.this, PatrolRecordActivity.class);
                         SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_id", bean.getTower_id());
@@ -151,29 +149,25 @@ public class PersonalTaskDetailActivity extends Activity {
 
                 }
 
-                startActivity(intent);
+                startActivityForResult(intent,25);
             }
         });
     }
 
+    //获取个人任务列表
+    public void getPersonalList() {
 
-    //获取任务类型
-    public void getSign() {
         ProgressDialog.show(this,false,"正在加载。。。");
-
         BaseRequest.getInstance().getService()
-                .getSign(id)
+                .getPersonalListOfGroup(year+"",month+"", day+"",bean.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<TypeBean>(this) {
+                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
+                        results = t.getResults();
+                        monthPlanDetailAdapter.setNewData(results);
                         ProgressDialog.cancle();
-                        if (t.getCode() == 1) {
-                            TypeBean results = t.getResults();
-                            sign=results.getSign();
-                        }
-
                     }
 
                     @Override
@@ -181,5 +175,15 @@ public class PersonalTaskDetailActivity extends Activity {
                         ProgressDialog.cancle();
                     }
                 });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==25&&resultCode==RESULT_OK){
+            getPersonalList();
+            RxRefreshEvent.publish("refreshPersonal");
+        }
     }
 }

@@ -132,7 +132,7 @@ public interface ApiServise {
 
     //月计划列表
     @GET("eq/line/partGET")
-    Observable<BaseResult<List<LineCheckBean>>> getLineList();
+    Observable<BaseResult<List<LineCheckBean>>> getLineList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id);
 
     //周计划添加获取月计划列表
     @GET("plan/month/line/monthGET")
@@ -321,12 +321,24 @@ public interface ApiServise {
 
     //组任务列表
     @GET("/task/group/list/listGET")
-    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id);
+    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id,@Query("work_user_id") String work_user_id);
+
+    @GET("/task/group/user/groupGET")
+    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id);
+
+    //个人任务列表
+    @GET("task/personal/listGET")
+    Observable<BaseResult<List<PersonalTaskListBean>>> getPersonalListOfGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("group_list_id") String group_list_id);
 
     //个人任务列表
     @GET("task/personal/listGET")
     Observable<BaseResult<List<PersonalTaskListBean>>> getPersonalList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id);
+    //个人任务列表
+    @GET("task/personal/listGET")
+    Observable<BaseResult<List<PersonalTaskListBean>>> getYXtodoList(@Query("year") String year, @Query("month") String month, @Query("day") String day,@Query("dep_id") String dep_id,  @Query("user_id") String user_id,@Query("audit_status") String audit_status);
 
+    @GET("task/personal/listGET")
+    Observable<BaseResult<List<PersonalTaskListBean>>> getCheckList(@Query("year") String year, @Query("month") String month, @Query("day") String day,  @Query("user_id") String user_id,@Query("audit_status") String audit_status);
     //个人任务列表
     @GET("task/personal/listGET")
     Observable<BaseResult<List<PersonalTaskListBean>>> getDepPersonalList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
@@ -805,8 +817,8 @@ public interface ApiServise {
     @GET("task/temperature/byIdGE")
     Observable<BaseResult<HwcwBean>> getHWCWbyId(@Query("id") String id);
 
-    //个人任务详情
-    @POST("task/agents/audit/updatePOST")
+    //更新个人任务代办信息
+    @POST("/task/personal/updatePOST ")
     Observable<BaseResult<TypeBean>> saveTodoAudit(@Body SaveTodoReqbean reqbean);
 
     //上传个人位置信息

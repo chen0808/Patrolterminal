@@ -27,6 +27,7 @@ import com.patrol.terminal.bean.LineCheckBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.SavaEleLineBean;
 import com.patrol.terminal.bean.SavaLineBean;
+import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -60,6 +61,7 @@ public class LineCheckActivity extends BaseActivity {
     ListView rvLineCheck;
     private int year;
     private int month;
+    private String dep_id;
     private String id;
     private int selectPosin=-1;
     private List<LineCheckBean> results = new ArrayList<>();
@@ -74,7 +76,7 @@ public class LineCheckActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         from = getIntent().getStringExtra("from");
-
+        String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         if ("Temporary".equals(from)){
             titleName.setText("选择线路");
         }else {
@@ -83,7 +85,10 @@ public class LineCheckActivity extends BaseActivity {
         year = getIntent().getIntExtra("year", 2019);
         month = getIntent().getIntExtra("month", 5);
         id = getIntent().getStringExtra("id");
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) ) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
+            dep_id=SPUtil.getDepId(this);
 
+        }
         adapter = new LineCheckAdapter(this, results);
         rvLineCheck.setAdapter(adapter);
 
@@ -105,7 +110,7 @@ public class LineCheckActivity extends BaseActivity {
     private void initData() {
         ProgressDialog.show(this, false, "正在加载。。。");
         BaseRequest.getInstance().getService()
-                .getLineList()
+                .getLineList(year,month,dep_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineCheckBean>>(this) {

@@ -74,8 +74,8 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
     private String line_id;
     private String line_name;
     private String tower_id;
-    private String tower_name;
-    private String task_id,sign,typename;
+    private String tower_name, audit_status;
+    private String task_id, sign, typename;
     private String jobType;
     private String id;
 
@@ -98,96 +98,92 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
         tower_name = getIntent().getStringExtra("tower_name");
         task_id = getIntent().getStringExtra("task_id");
         sign = getIntent().getStringExtra("sign");
+        audit_status = getIntent().getStringExtra("audit_status");
         typename = getIntent().getStringExtra("typename");
         etLineId.setText(line_name);
         etTowerId.setText(tower_name);
         getYXtodo();
         getGTQXCL();
     }
+
     public void getYXtodo() {
-        BaseRequest.getInstance().getService()
-                .getYXOnetodo(task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TodoListBean>>(this) {
 
-                    @Override
-                    protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
-                        if (t.getCode()==1){
-                            List<TodoListBean> results = t.getResults();
-                            if (results.size()>0){
-                                TodoListBean todoListBean = results.get(0);
-                                String audit_status = todoListBean.getAudit_status();
-                                if ("0".equals(audit_status)){
-                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                                        titleSetting.setVisibility(View.VISIBLE);
-                                        titleSettingTv.setText("审批");
-                                    }
-                                    mengban.setVisibility(View.VISIBLE);
-                                    btnCommit.setVisibility(View.GONE);
-                                }else if ("2".equals(audit_status)){
-                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
-                                        titleSetting.setVisibility(View.GONE);
-                                        mengban.setVisibility(View.VISIBLE);
-                                        btnCommit.setVisibility(View.GONE);
-                                    }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
-                                        mengban.setVisibility(View.GONE);
-                                        btnCommit.setVisibility(View.VISIBLE);
-                                    }else {
-                                        titleSetting.setVisibility(View.GONE);
-                                        mengban.setVisibility(View.VISIBLE);
-                                        btnCommit.setVisibility(View.GONE);
-                                    }
+        if ("0".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                mengban.setVisibility(View.VISIBLE);
+                btnCommit.setVisibility(View.GONE);
+                titleSetting.setVisibility(View.GONE);
+            } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                mengban.setVisibility(View.GONE);
+                btnCommit.setVisibility(View.VISIBLE);
+            } else {
+                mengban.setVisibility(View.VISIBLE);
+                btnCommit.setVisibility(View.GONE);
+                titleSetting.setVisibility(View.GONE);
+            }
+        } else if ("1".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
+            }
+            mengban.setVisibility(View.VISIBLE);
+            btnCommit.setVisibility(View.GONE);
+        }
+        else if ("2".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
+            }
+            mengban.setVisibility(View.VISIBLE);
+            btnCommit.setVisibility(View.GONE);
+        }else if ("4".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                titleSetting.setVisibility(View.GONE);
+                mengban.setVisibility(View.VISIBLE);
+                btnCommit.setVisibility(View.GONE);
+            } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                mengban.setVisibility(View.GONE);
+                btnCommit.setVisibility(View.VISIBLE);
+            } else {
+                titleSetting.setVisibility(View.GONE);
+                mengban.setVisibility(View.VISIBLE);
+                btnCommit.setVisibility(View.GONE);
+            }
 
-                                }else {
-                                    titleSetting.setVisibility(View.GONE);
-                                    mengban.setVisibility(View.VISIBLE);
-                                    btnCommit.setVisibility(View.GONE);
-                                }
-                            }else {
-                                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
-                                    mengban.setVisibility(View.VISIBLE);
-                                    btnCommit.setVisibility(View.GONE);
-                                    titleSetting.setVisibility(View.GONE);
-                                }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
-                                    mengban.setVisibility(View.GONE);
-                                    btnCommit.setVisibility(View.VISIBLE);
-                                }else {
-                                    mengban.setVisibility(View.VISIBLE);
-                                    btnCommit.setVisibility(View.GONE);
-                                    titleSetting.setVisibility(View.GONE);
-                                }
+        } else {
+            titleSetting.setVisibility(View.GONE);
+            mengban.setVisibility(View.VISIBLE);
+            btnCommit.setVisibility(View.GONE);
+        }
 
-                            }
-                        }
 
-                    }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
     }
-    @OnClick({R.id.title_back, R.id.btn_commit,R.id.title_setting})
+
+    @OnClick({R.id.title_back, R.id.btn_commit, R.id.title_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
-                case R.id.title_setting:
+            case R.id.title_setting:
                 CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
                     @Override
                     public void ok() {
                         super.ok();
-                        saveTodoAudit("1");   //同意
+                        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                            saveTodoAudit("3");   //同意
+                        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                            saveTodoAudit("2");   //同意
+                        }
+
                         dismiss();
                     }
 
                     @Override
                     public void cancel() {
                         super.cancel();
-                        saveTodoAudit("2");  //不同意
+                        saveTodoAudit("4");  //不同意
                         dismiss();
                     }
                 };
@@ -208,7 +204,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
 //                    return;
 //                }
                 Map<String, String> params = new HashMap<>();
-                if (id!=null){
+                if (id != null) {
                     params.put("id", id);
                 }
                 params.put("line_id", line_id);
@@ -219,10 +215,10 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                 params.put("Flank_tilt", sideTilt.equals("") ? "0" : sideTilt);
                 params.put("rate", rante.equals("") ? "0" : rante);
                 params.put("high_difference", heightDif.equals("") ? "0" : heightDif);
-                params.put("results",  conclusion);
+                params.put("results", conclusion);
                 params.put("work_time", DateUatil.getCurrTime());
                 params.put("remark", remark);
-                params.put("user_id",SPUtil.getUserId(this));
+                params.put("user_id", SPUtil.getUserId(this));
 
                 params.put("audit_id", SPUtil.getDepId(this));
                 params.put("content", "关于" + line_name + tower_name + "的" + typename);
@@ -233,10 +229,12 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                         .subscribe(new BaseObserver(this) {
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
-                                if (t.getCode()==1){
+                                if (t.getCode() == 1) {
                                     Toast.makeText(XieGanTaQingXieCeWenActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                                    setResult(RESULT_OK);
+
                                     finish();
-                                }else {
+                                } else {
                                     Toast.makeText(XieGanTaQingXieCeWenActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                                 }
 
@@ -257,7 +255,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
         SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
 
         saveTodoReqbean.setAudit_status(state);
-        saveTodoReqbean.setTask_id(task_id);
+        saveTodoReqbean.setId(task_id);
 
         BaseRequest.getInstance().getService()
                 .saveTodoAudit(saveTodoReqbean)
@@ -270,6 +268,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(XieGanTaQingXieCeWenActivity.this, "审批成功", Toast.LENGTH_SHORT).show();
                             RxRefreshEvent.publish("todo");
+                            setResult(RESULT_OK);
                             finish();
                         }
 
@@ -281,6 +280,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                     }
                 });
     }
+
     //查询杆塔倾斜测量
     public void getGTQXCL() {
 
@@ -295,16 +295,16 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             GTQXCLbean results = t.getResults();
-                            if (results!=null){
+                            if (results != null) {
                                 id = results.getId();
                                 line_name = results.getLine_name();
                                 tower_name = results.getTower_name();
                                 tower_id = results.getTower_id();
                                 etTowerType.setText(results.getTower_type());
-                                etFrontTilt.setText(results.getPositive_tilt()+"");
-                                etSideTilt.setText(results.getFlank_tilt()+"");
-                                etShopeRate.setText(results.getRate()+"");
-                                etHeightDif.setText(results.getHigh_difference()+"");
+                                etFrontTilt.setText(results.getPositive_tilt() + "");
+                                etSideTilt.setText(results.getFlank_tilt() + "");
+                                etShopeRate.setText(results.getRate() + "");
+                                etHeightDif.setText(results.getHigh_difference() + "");
                                 etConclusion.setText(results.getResults());
                                 etRemark.setText(results.getRemark());
                                 etLineId.setText(line_name);

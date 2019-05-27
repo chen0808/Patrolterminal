@@ -282,6 +282,8 @@ public class MonthPlanFrgment extends BaseFragment {
                 break;
             case R.id.task_add:
                Intent intent=new Intent(getContext(), TemporaryActivity.class);
+               intent.putExtra("year",year);
+                intent.putExtra("month",month);
                getActivity().startActivityForResult(intent,10);
                 break;
             case R.id.plan_submit:

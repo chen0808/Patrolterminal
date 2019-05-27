@@ -80,16 +80,22 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
     private String userId;
+    private String jobType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new);
         ButterKnife.bind(this);
-
+        jobType = SPUtil.getString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         FileDownloader.init(this);
         checkPremission();
-        initView();
+        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+            getGroupName();
+        }else {
+            initView();
+        }
+
 
         //RFIDManager.getRFIDInstance().init(this, "001583EA5423", "", this);
         //初始化定位
@@ -115,11 +121,9 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         mFragments = new ArrayList<>(4);
         userId = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
         // init fragment
-        String jobType = SPUtil.getString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
 
-        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-            getGroupName();
-        }
+
+
         if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {     //培训专责
             mFragments.add(new TrainingHomeFragment());
         }else  if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
@@ -135,15 +139,12 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                 || jobType.contains(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
             mainExameRb.setVisibility(View.GONE);
 
-
-
             mFragments.add(new TodosManageFragment());  //只是不显示，以免RideoButton点击错乱
 
         }else {                                                    //有待办的角色
             mainExameRb.setVisibility(View.VISIBLE);
 
-
-            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){   //运行待办
+            if (jobType.contains("yx")){   //运行待办
                 mFragments.add(new YXTodosManageFragment());
             } else {   //其他角色待办
                 mFragments.add(new TodosManageFragment());
@@ -225,6 +226,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                             if (results!=null){
                                 if ("1".contains(results.getIs_boss())){
                                     SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
+                                    initView();
                                 }
                             }
                         }

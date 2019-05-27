@@ -26,6 +26,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupOfDayBean;
+import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -62,7 +63,7 @@ public class PersonalTaskFrgment extends BaseFragment {
     TextView planCreate;
     private PersonalTaskAdapter personalTaskAdapter;
     private TimePickerView pvTime;
-    private List<PersonalTaskListBean> result = new ArrayList<>();
+    private List<GroupTaskBean> result = new ArrayList<>();
     private String time;
     private String id;
 
@@ -70,6 +71,7 @@ public class PersonalTaskFrgment extends BaseFragment {
     private String week;
     private String year,month,day;
     private Disposable refreshPersonal;
+    private String depid,userid;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,8 +82,16 @@ public class PersonalTaskFrgment extends BaseFragment {
     @Override
     protected void initData() {
         String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_MEMBER)|| jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) ) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
+            depid=SPUtil.getDepId(getContext());
           taskAdd.setVisibility(View.GONE);
+        }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+            userid=SPUtil.getUserId(getContext());
+            taskAdd.setVisibility(View.GONE);
+        }else if (jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+            taskAdd.setVisibility(View.GONE);
+        }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+            userid=SPUtil.getUserId(getContext());
         }
         planCreate.setVisibility(View.GONE);
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
@@ -96,58 +106,58 @@ public class PersonalTaskFrgment extends BaseFragment {
         personalTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                PersonalTaskListBean bean = result.get(position);
-//                Intent intent=new Intent();
-//                intent.setClass(getContext(), PersonalTaskDetailActivity.class);
-//                Bundle bundle=new Bundle();
-//                bundle.putParcelable("bean",result.get(position));
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-                Intent intent = new Intent();
-                intent.putExtra("line_id",bean.getLine_id());
-                intent.putExtra("line_name",bean.getLine_name());
-                intent.putExtra("tower_id",bean.getTower_id());
-                intent.putExtra("tower_name",bean.getTower_name());
-                intent.putExtra("task_id",bean.getId());
-                intent.putExtra("sign",bean.getType_sign());
-                intent.putExtra("typename",bean.getType_name());
-                switch (bean.getType_sign()) {
-                    case "1":
-                        intent.setClass(getContext(), PatrolRecordActivity.class);
-                        SPUtil.put(getContext(), "ids", "tower_id", bean.getTower_id());
-                        SPUtil.put(getContext(), "ids", "line_id", bean.getLine_id());
-                        SPUtil.put(getContext(), "ids", "line_name", bean.getLine_name());
-                        SPUtil.put(getContext(), "ids", "tower_name", bean.getTower_name());
-                        break;
-                    case "2":
-                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
-                        break;
-                    case "3":
-                        intent.setClass(getContext(), JiediDianZuCeLiangActicivity.class);
-                        break;
-                    case "10":
-                        intent.setClass(getContext(), JueYuanZiLingZhiJianCeActivity.class);
-                        break;
-                    case "5":
-                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
-                        break;
-                    case "6":
-                        intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
-                        break;
-
-                }
-
+                GroupTaskBean bean = result.get(position);
+                Intent intent=new Intent();
+                intent.setClass(getContext(), PersonalTaskDetailActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putParcelable("bean",bean);
+                intent.putExtras(bundle);
                 startActivity(intent);
+//                Intent intent = new Intent();
+//                intent.putExtra("line_id",bean.getLine_id());
+//                intent.putExtra("line_name",bean.getLine_name());
+//                intent.putExtra("tower_id",bean.getTower_id());
+//                intent.putExtra("tower_name",bean.GroupTaskBean());
+//                intent.putExtra("task_id",bean.getId());
+//                intent.putExtra("sign",bean.getType_sign());
+//                intent.putExtra("typename",bean.getType_name());
+//                switch (bean.getType_sign()) {
+//                    case "1":
+//                        intent.setClass(getContext(), PatrolRecordActivity.class);
+//                        SPUtil.put(getContext(), "ids", "tower_id", bean.getTower_id());
+//                        SPUtil.put(getContext(), "ids", "line_id", bean.getLine_id());
+//                        SPUtil.put(getContext(), "ids", "line_name", bean.getLine_name());
+//                        SPUtil.put(getContext(), "ids", "tower_name", bean.getTower_name());
+//                        break;
+//                    case "2":
+//                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
+//                        break;
+//                    case "3":
+//                        intent.setClass(getContext(), JiediDianZuCeLiangActicivity.class);
+//                        break;
+//                    case "10":
+//                        intent.setClass(getContext(), JueYuanZiLingZhiJianCeActivity.class);
+//                        break;
+//                    case "5":
+//                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
+//                        break;
+//                    case "6":
+//                        intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
+//                        break;
+//
+//                }
+
+//                startActivity(intent);
             }
         });
-        getPersonalList();
+        getGroupList();
 
         refreshPersonal = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
             public void accept(String type) throws Exception {
                 if (type.equals("refreshPersonal")) {
-                    getPersonalList();
+                    getGroupList();
                 }
             }
         });
@@ -160,30 +170,49 @@ public class PersonalTaskFrgment extends BaseFragment {
         year = years[0];
         day = Integer.parseInt(days[0]) + "";
     }
-    //获取个人任务列表
-    public void getPersonalList() {
+//    //获取个人任务列表
+//    public void getPersonalList() {
+//
+//        ProgressDialog.show(getContext(),false,"正在加载。。。");
+//        BaseRequest.getInstance().getService()
+//                .getPersonalList(year,month, day, SPUtil.getUserId(getContext()))
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
+//                    @Override
+//                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
+//                        result = t.getResults();
+//                        personalTaskAdapter.setNewData(result);
+//                        ProgressDialog.cancle();
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//                        ProgressDialog.cancle();
+//                    }
+//                });
+//
+//    }
 
-        ProgressDialog.show(getContext(),false,"正在加载。。。");
+    //获取小组任务列表
+    public void getGroupList() {
         BaseRequest.getInstance().getService()
-                .getPersonalList(year,month, day, SPUtil.getUserId(getContext()))
+                .getGroupList(year, month, day,depid,null,userid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
+                .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {
                     @Override
-                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         personalTaskAdapter.setNewData(result);
-                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
                     }
                 });
 
     }
-
 
 
     public void showDay() {
@@ -201,7 +230,7 @@ public class PersonalTaskFrgment extends BaseFragment {
                 time = DateUatil.getDay(date);
                 taskDate.setText(time);
                 inteDate();
-                getPersonalList();
+                getGroupList();
             }
         })
                 .setDate(selectedDate)
@@ -232,7 +261,7 @@ public class PersonalTaskFrgment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==12&&resultCode==-1){
-            getPersonalList();
+            getGroupList();
         }
     }
 

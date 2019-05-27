@@ -1,6 +1,7 @@
 package com.patrol.terminal.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -148,15 +149,23 @@ public class NewTaskActivity extends AppCompatActivity {
 
     @OnClick({R.id.title_back, R.id.task_def, R.id.task_dan, R.id.task_cheak})
     public void onViewClicked(View view) {
+        Intent intent=new Intent();
         switch (view.getId()) {
+
             case R.id.title_back:
                 finish();
                 break;
             case R.id.task_def:
+                intent.setClass(this,DefectActivity.class);
+                startActivity(intent);
                 break;
             case R.id.task_dan:
+                intent.setClass(this,TroubleActivity.class);
+                startActivity(intent);
                 break;
             case R.id.task_cheak:
+                intent.setClass(this,YXCheckActivity.class);
+                startActivity(intent);
                 break;
         }
     }

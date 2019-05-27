@@ -121,7 +121,7 @@ public class PatrolRecordActivity extends BaseActivity {
     private Map<String, RequestBody> params = new HashMap<>();
     private String line_name, jobType;
     private String tower_id;
-    private String tower_name, task_id, sign, typename, id;
+    private String tower_name, task_id, sign, typename, audit_status;
     private List<File> fileList = new ArrayList<>();
 
     @Override
@@ -136,6 +136,8 @@ public class PatrolRecordActivity extends BaseActivity {
         tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
         tower_name = getIntent().getStringExtra("tower_name");
+        audit_status = getIntent().getStringExtra("audit_status");
+
         sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
         initview();
@@ -221,12 +223,13 @@ public class PatrolRecordActivity extends BaseActivity {
 
     /**
      * 图片保存路径  这里是在SD卡目录下创建了MyPhoto文件夹
+     *
      * @param fileName
      * @return
      */
     private Uri patrUri(String fileName, int pos) {  //指定了图片的名字，可以使用时间来命名
         // TODO Auto-generated method stub
-        String strPhotoName = fileName+".jpg";
+        String strPhotoName = fileName + ".jpg";
         String savePath = Environment.getExternalStorageDirectory().getPath()
                 + "/MyPhoto/";
         File dir = new File(savePath);
@@ -286,50 +289,55 @@ public class PatrolRecordActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)|| jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
 
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
                         @Override
                         public void ok() {
                             super.ok();
-                            saveTodoAudit("1");   //同意
+                            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                                saveTodoAudit("3");   //同意
+                            } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                                saveTodoAudit("2");   //同意
+                            }
+
                             dismiss();
                         }
 
                         @Override
                         public void cancel() {
                             super.cancel();
-                            saveTodoAudit("2");  //不同意
+                            saveTodoAudit("4");  //不同意
                             dismiss();
                         }
                     };
                     dialog.show();
-                } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) ) {
                     commitPatrolRecord();
                 }
                 break;
             case R.id.iv_photo1:
 
                 //打卡相机前先检测SD卡是否可以用
-                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                     photoUri1 = patrUri("record_1", 1);
-                    startCamera(100 ,photoUri1);
-                }else{
+                    startCamera(100, photoUri1);
+                } else {
                     Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
                 }
 
 
-               // selectPic();
+                // selectPic();
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 1);
                 break;
             case R.id.iv_photo2:
                 //selectPic();
 
                 //打卡相机前先检测SD卡是否可以用
-                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                     photoUri2 = patrUri("record_2", 2);
-                    startCamera(200 ,photoUri2);
-                }else{
+                    startCamera(200, photoUri2);
+                } else {
                     Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
                 }
 
@@ -338,10 +346,10 @@ public class PatrolRecordActivity extends BaseActivity {
             case R.id.iv_photo3:
                 //selectPic();
                 //打卡相机前先检测SD卡是否可以用
-                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-                    photoUri3 = patrUri("record_3",  3);
-                    startCamera(300 ,photoUri3);
-                }else{
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                    photoUri3 = patrUri("record_3", 3);
+                    startCamera(300, photoUri3);
+                } else {
                     Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
                 }
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 3);
@@ -349,30 +357,30 @@ public class PatrolRecordActivity extends BaseActivity {
             case R.id.iv_photo4:
                 //selectPic();
                 //打卡相机前先检测SD卡是否可以用
-                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                     photoUri4 = patrUri("record_4", 4);
-                    startCamera(400 ,photoUri4);
-                }else{
+                    startCamera(400, photoUri4);
+                } else {
                     Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
                 }
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 4);
                 break;
             case R.id.iv_photo5:
                 //selectPic();
-                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                     photoUri5 = patrUri("record_5", 5);
-                    startCamera(500 ,photoUri5);
-                }else{
+                    startCamera(500, photoUri5);
+                } else {
                     Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
                 }
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 5);
                 break;
             case R.id.iv_photo6:
                 //selectPic();
-                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                     photoUri6 = patrUri("record_6", 6);
-                    startCamera(600 ,photoUri6);
-                }else{
+                    startCamera(600, photoUri6);
+                } else {
                     Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
                 }
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 6);
@@ -394,7 +402,7 @@ public class PatrolRecordActivity extends BaseActivity {
     private void startCamera(int requestCode, Uri photoUri) {
         // TODO Auto-generated method stub
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         startActivityForResult(intent, requestCode);
     }
 
@@ -442,12 +450,12 @@ public class PatrolRecordActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode== Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case 100:
                     try {
-                        Bitmap bitmap = FileUtil.compressBySize(filePath1,300,200);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap,filePath1);
+                        Bitmap bitmap = FileUtil.compressBySize(filePath1, 300, 200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap, filePath1);
                         ivPhoto1.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
@@ -465,8 +473,8 @@ public class PatrolRecordActivity extends BaseActivity {
                     break;
                 case 200:
                     try {
-                        Bitmap bitmap = FileUtil.compressBySize(filePath2,300,200);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap,filePath2);
+                        Bitmap bitmap = FileUtil.compressBySize(filePath2, 300, 200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap, filePath2);
                         ivPhoto2.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
@@ -483,8 +491,8 @@ public class PatrolRecordActivity extends BaseActivity {
                     break;
                 case 300:
                     try {
-                        Bitmap bitmap = FileUtil.compressBySize(filePath3,300,200);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap,filePath3);
+                        Bitmap bitmap = FileUtil.compressBySize(filePath3, 300, 200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap, filePath3);
                         ivPhoto3.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
@@ -501,8 +509,8 @@ public class PatrolRecordActivity extends BaseActivity {
                     break;
                 case 400:
                     try {
-                        Bitmap bitmap = FileUtil.compressBySize(filePath4,300,200);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap,filePath4);
+                        Bitmap bitmap = FileUtil.compressBySize(filePath4, 300, 200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap, filePath4);
                         ivPhoto4.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
@@ -519,8 +527,8 @@ public class PatrolRecordActivity extends BaseActivity {
                     break;
                 case 500:
                     try {
-                        Bitmap bitmap = FileUtil.compressBySize(filePath5,300,200);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap,filePath5);
+                        Bitmap bitmap = FileUtil.compressBySize(filePath5, 300, 200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap, filePath5);
                         ivPhoto5.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
@@ -537,8 +545,8 @@ public class PatrolRecordActivity extends BaseActivity {
                     break;
                 case 600:
                     try {
-                        Bitmap bitmap = FileUtil.compressBySize(filePath6,300,200);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap,filePath6);
+                        Bitmap bitmap = FileUtil.compressBySize(filePath6, 300, 200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap, filePath6);
                         ivPhoto6.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
@@ -641,6 +649,7 @@ public class PatrolRecordActivity extends BaseActivity {
         }
     }
 
+    //t提交巡视记录
     private void commitPatrolRecord() {
         if (fileList.size() < 6) {
             Toast.makeText(PatrolRecordActivity.this, "请上传6张对应图片！", Toast.LENGTH_SHORT).show();
@@ -664,9 +673,10 @@ public class PatrolRecordActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
-                        Toast.makeText(PatrolRecordActivity.this, "保存成功！", Toast.LENGTH_SHORT).show();
+
                         if (t.getCode() == 1) {
                             Toast.makeText(PatrolRecordActivity.this, "保存成功！", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
                             finish();
                         }
                     }
@@ -691,59 +701,51 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     public void getYXtodo() {
-        BaseRequest.getInstance().getService()
-                .getYXOnetodo(task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TodoListBean>>(this) {
 
-                    @Override
-                    protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
-                        if (t.getCode() == 1) {
-                            List<TodoListBean> results = t.getResults();
-                            if (results.size() > 0) {
-                                TodoListBean todoListBean = results.get(0);
-                                String audit_status = todoListBean.getAudit_status();
-                                if ("0".equals(audit_status)) {
-                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                                        titleSetting.setVisibility(View.VISIBLE);
-                                        titleSettingTv.setText("审批");
-                                    }
-                                } else if ("2".equals(audit_status)) {
-                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                                        titleSetting.setVisibility(View.GONE);
-                                    }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-                                        titleSetting.setVisibility(View.VISIBLE);
-                                        titleSettingTv.setText("上传图片");
-                                    } else {
-                                        titleSetting.setVisibility(View.GONE);
-
-                                    }
-
-                                } else {
-                                    titleSetting.setVisibility(View.GONE);
-
-                                }
-                            } else {
-                                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                                    titleSetting.setVisibility(View.GONE);
-                                }else   if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-                                    titleSetting.setVisibility(View.VISIBLE);
-                                    titleSettingTv.setText("上传图片");
-                                } else {
-                                    titleSetting.setVisibility(View.GONE);
-                                }
-
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
+        if ("0".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("上传图片");
+            } else {
+                titleSetting.setVisibility(View.GONE);
+            }
+        } else if ("1".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
+            }else {
+                titleSetting.setVisibility(View.GONE);
+            }
+        }  else if ("2".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
+            }else {
+                titleSetting.setVisibility(View.GONE);
+            }
+        }else if ("4".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                titleSetting.setVisibility(View.GONE);
+            } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("上传图片");
+            } else {
+                titleSetting.setVisibility(View.GONE);
+            }
+        } else {
+            titleSetting.setVisibility(View.GONE);
+        }
+//    } else   {
+//        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+//            titleSetting.setVisibility(View.GONE);
+//        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+//            titleSetting.setVisibility(View.VISIBLE);
+//            titleSettingTv.setText("上传图片");
+//        } else {
+//            titleSetting.setVisibility(View.GONE);
+//        }
+//
+//    }
     }
 
     //保存待办信息
@@ -752,7 +754,7 @@ public class PatrolRecordActivity extends BaseActivity {
         SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
 
         saveTodoReqbean.setAudit_status(state);
-        saveTodoReqbean.setTask_id(task_id);
+        saveTodoReqbean.setId(task_id);
 
         BaseRequest.getInstance().getService()
                 .saveTodoAudit(saveTodoReqbean)
@@ -764,6 +766,7 @@ public class PatrolRecordActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             Toast.makeText(PatrolRecordActivity.this, "审批成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
                             RxRefreshEvent.publish("todo");
                             finish();
                         }

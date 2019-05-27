@@ -73,7 +73,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
     RelativeLayout titleSetting;
     @BindView(R.id.mengban)
     RelativeLayout mengban;
-    private String line_name, jobType;
+    private String line_name, jobType, audit_status;
     private String tower_id;
     private String tower_name, task_id, sign, typename, id;
 
@@ -93,6 +93,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
         tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
         tower_name = getIntent().getStringExtra("tower_name");
+        audit_status = getIntent().getStringExtra("audit_status");
         sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
         etLineId.setText(line_name);
@@ -101,7 +102,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
         getYXtodo();
     }
 
-    @OnClick({R.id.title_back, R.id.btn_commit,R.id.title_setting})
+    @OnClick({R.id.title_back, R.id.btn_commit, R.id.title_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -112,21 +113,26 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                     @Override
                     public void ok() {
                         super.ok();
-                        saveTodoAudit("1");   //同意
+                        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                            saveTodoAudit("3");   //同意
+                        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                            saveTodoAudit("2");   //同意
+                        }
+
                         dismiss();
                     }
 
                     @Override
                     public void cancel() {
                         super.cancel();
-                        saveTodoAudit("2");  //不同意
+                        saveTodoAudit("4");  //不同意
                         dismiss();
                     }
                 };
                 dialog.show();
                 break;
             case R.id.btn_commit:
-                ProgressDialog.show(this,false,"正在上传。。。。");
+                ProgressDialog.show(this, false, "正在上传。。。。");
                 String towerType = etTowerId.getText().toString();
                 String aResistor = etAResistor.getText().toString();
                 String bResistor = etBResistor.getText().toString();
@@ -165,10 +171,11 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
                                 ProgressDialog.cancle();
-                                if (t.getCode()==1) {
+                                if (t.getCode() == 1) {
                                     Toast.makeText(JiediDianZuCeLiangActicivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
+                                    setResult(RESULT_OK);
                                     finish();
-                                }else {
+                                } else {
                                     Toast.makeText(JiediDianZuCeLiangActicivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -184,70 +191,56 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
     }
 
     public void getYXtodo() {
-        BaseRequest.getInstance().getService()
-                .getYXOnetodo(task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TodoListBean>>(this) {
 
-                    @Override
-                    protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
-                        if (t.getCode() == 1) {
-                            List<TodoListBean> results = t.getResults();
-                            if (results.size() > 0) {
-                                TodoListBean todoListBean = results.get(0);
-                                String audit_status = todoListBean.getAudit_status();
-                                if ("0".equals(audit_status)) {
-                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                                        titleSetting.setVisibility(View.VISIBLE);
-                                        titleSettingTv.setText("审批");
-                                    }
-                                    mengban.setVisibility(View.VISIBLE);
-                                    btnCommit.setVisibility(View.GONE);
-                                } else if ("2".equals(audit_status)) {
-                                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
-                                        titleSetting.setVisibility(View.GONE);
-                                        mengban.setVisibility(View.VISIBLE);
-                                        btnCommit.setVisibility(View.GONE);
-                                    }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-                                        mengban.setVisibility(View.GONE);
-                                        btnCommit.setVisibility(View.VISIBLE);
-                                    } else {
-                                        titleSetting.setVisibility(View.GONE);
-                                        mengban.setVisibility(View.VISIBLE);
-                                        btnCommit.setVisibility(View.GONE);
-                                    }
+        if ("0".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                mengban.setVisibility(View.VISIBLE);
+                btnCommit.setVisibility(View.GONE);
+                titleSetting.setVisibility(View.GONE);
+            } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                mengban.setVisibility(View.GONE);
+                btnCommit.setVisibility(View.VISIBLE);
+            } else {
+                mengban.setVisibility(View.VISIBLE);
+                btnCommit.setVisibility(View.GONE);
+                titleSetting.setVisibility(View.GONE);
+            }
+        } else if ("1".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
+            }
+            mengban.setVisibility(View.VISIBLE);
+            btnCommit.setVisibility(View.GONE);
+        } else if ("2".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
+            }
+            mengban.setVisibility(View.VISIBLE);
+            btnCommit.setVisibility(View.GONE);
+        } else if ("4".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                titleSetting.setVisibility(View.GONE);
+                mengban.setVisibility(View.VISIBLE);
+                btnCommit.setVisibility(View.GONE);
+            } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                mengban.setVisibility(View.GONE);
+                btnCommit.setVisibility(View.VISIBLE);
+            } else {
+                titleSetting.setVisibility(View.GONE);
+                mengban.setVisibility(View.VISIBLE);
+                btnCommit.setVisibility(View.GONE);
+            }
 
-                                } else {
-                                    titleSetting.setVisibility(View.GONE);
-                                    mengban.setVisibility(View.VISIBLE);
-                                    btnCommit.setVisibility(View.GONE);
-                                }
-                            } else {
-                                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
-                                    mengban.setVisibility(View.VISIBLE);
-                                    btnCommit.setVisibility(View.GONE);
-                                    titleSetting.setVisibility(View.GONE);
-                                }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-                                    mengban.setVisibility(View.GONE);
-                                    btnCommit.setVisibility(View.VISIBLE);
-                                } else {
-                                    mengban.setVisibility(View.VISIBLE);
-                                    btnCommit.setVisibility(View.GONE);
-                                    titleSetting.setVisibility(View.GONE);
-                                }
+        } else {
+            titleSetting.setVisibility(View.GONE);
+            mengban.setVisibility(View.VISIBLE);
+            btnCommit.setVisibility(View.GONE);
+        }
 
-                            }
-                        }
 
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
+}
 
     //保存待办信息
     public void saveTodoAudit(String state) {
@@ -255,7 +248,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
         SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
 
         saveTodoReqbean.setAudit_status(state);
-        saveTodoReqbean.setTask_id(task_id);
+        saveTodoReqbean.setId(task_id);
 
         BaseRequest.getInstance().getService()
                 .saveTodoAudit(saveTodoReqbean)
@@ -268,6 +261,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(JiediDianZuCeLiangActicivity.this, "审批成功", Toast.LENGTH_SHORT).show();
                             RxRefreshEvent.publish("todo");
+                            setResult(RESULT_OK);
                             finish();
                         }
 
@@ -294,16 +288,16 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             JDDZbean results = t.getResults();
-                            if (results!=null){
+                            if (results != null) {
                                 id = results.getId();
                                 line_name = results.getLine_name();
                                 tower_name = results.getTower_name();
                                 tower_id = results.getTower_id();
                                 etTowerId.setText(results.getTower_type());
-                                etAResistor.setText(results.getMeasure_a()+"");
-                                etBResistor.setText(results.getMeasure_b()+"");
-                                etCResistor.setText(results.getMeasure_c()+"");
-                                etDResistor.setText(results.getMeasure_d()+"");
+                                etAResistor.setText(results.getMeasure_a() + "");
+                                etBResistor.setText(results.getMeasure_b() + "");
+                                etCResistor.setText(results.getMeasure_c() + "");
+                                etDResistor.setText(results.getMeasure_d() + "");
                                 etWeather.setText(results.getWeather());
                                 etVerdict.setText(results.getResults());
                                 etNote.setText(results.getRemark());

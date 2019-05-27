@@ -2,6 +2,7 @@ package com.patrol.terminal.adapter;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -33,11 +34,20 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
             } else {
                 viewHolder.setText(R.id.item_plan_date_tv, "检");
             }
-            viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
-
+        if("1".equals(item.getAllot_status())){
+            viewHolder.setGone(R.id.plan_progressbar_ll, true);
+            viewHolder.setGone(R.id.plan_progressbar_ll,true);
+            viewHolder.setText(R.id.plan_progressbar_tv,"计划进度("+item.getDone_num()+"/"+item.getAll_num()+") :")
+                    .setText(R.id.plan_progressbar_num,item.getDone_rate()+"%");
+            ProgressBar progressBar = viewHolder.getView(R.id.plan_progressbar_probar);
+            progressBar.setMax(item.getAll_num());
+            progressBar.setProgress(item.getDone_num());
+        }else {
+            viewHolder.setGone(R.id.plan_progressbar_ll, false);
+        }
             viewHolder.setVisible(R.id.item_line_state, false);
-            viewHolder.setVisible(R.id.month_plan_go, false);
-            viewHolder.setVisible(R.id.plan_progressbar_ll, true);
+            viewHolder.setVisible(R.id.plan_to_change, false);
+
             HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
 
             viewHolder.setText(R.id.item_line_status, "杆段 : " +item.getName());
