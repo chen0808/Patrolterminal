@@ -25,7 +25,7 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder viewHolder, DayListBean item) {
-        if (item.getDay_id() != null) {
+
             if (item.getType_name().contains("巡")) {
                 viewHolder.setText(R.id.item_plan_date_tv, "巡");
             } else if (item.getType_name().contains("特")) {
@@ -38,17 +38,8 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
             viewHolder.setVisible(R.id.item_line_state, false);
             viewHolder.setVisible(R.id.month_plan_go, true);
             HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
-            List<DayListBean.TowersBean> towers = item.getTowers();
-            String tower = "";
-            for (int j = 0; j < towers.size(); j++) {
-                if (j  == 0) {
-                    tower = towers.get(j).getName();
-                } else {
-                    tower = tower + "," +towers.get(j).getName();
-                }
-            }
 
-            viewHolder.setText(R.id.item_line_status, "杆段 : " +tower);
+            viewHolder.setText(R.id.item_line_status, "杆段 : " +item.getName());
 
             view.setVisibility(View.GONE);
             viewHolder.setText(R.id.item_plan_device_name, item.getLine_name() + item.getYear() + "年" + item.getMonth() + "月" + item.getWeek() + "日计划")
@@ -60,7 +51,7 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
                     intent.putExtra("from", Constant.FROM_DAYPLAN_TO_ADDMONTH);
-                    intent.putExtra("week_id", item.getWeek_id());
+                    intent.putExtra("week_id", item.getWeek_line_id());
                     intent.putExtra("day_id", item.getDay_id());
                     intent.putExtra("line_id", item.getLine_id());
                     intent.putExtra("line_name", item.getLine_name());
@@ -73,33 +64,6 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
                     mContext.startActivity(intent);
                 }
             });
-        } else {
-//            viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
-//            String plan_type = item.getPlan_type();
-//            switch (plan_type){
-//                case "1":
-//                    viewHolder.setText(R.id.item_plan_date_tv, "保").setVisible(R.id.plan_to_change,true);
-//                    viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent(mContext, ChangePlanActivity.class);
-//                            intent.putExtra("from", Constant.FROM_DAYPLAN_TO_ADDMONTH);
-//                            intent.putExtra("week_id",item.getW_id());
-//                            intent.putExtra("day_id",item.getD_id());
-//                            mContext.startActivity(intent);
-//                        }
-//                    });
-//                    break;
-//                case "2":
-//                case "3":
-//                    viewHolder.setText(R.id.item_plan_date_tv, "安").setVisible(R.id.plan_to_change,false);
-//                    break;
-//            }
-//            viewHolder.setText(R.id.item_plan_device_name, item.getPlan_name())
-//                     .setVisible(R.id.item_plan_status,false)
-//                    .setText(R.id.item_plan_content, "开始时间 : " + item.getBegin_time())
-//                    .setText(R.id.item_line_status, "结束时间 : " + item.getEnd_time());;
 
-        }
     }
 }

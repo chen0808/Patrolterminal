@@ -27,7 +27,7 @@ public class AddGroupTaskReqBean {
     private String year;
     private String month;
     private String day;
-    private List< GroupOfDayBean.PatrolBean> lists;
+    private List< GroupOfDayBean> lists;
     private List<UsersBean> users;
     private List<DefectBean> defects;
     private List<DefectBean> dangers;
@@ -112,11 +112,11 @@ public class AddGroupTaskReqBean {
         this.day = day;
     }
 
-    public List< GroupOfDayBean.PatrolBean> getLists() {
+    public List< GroupOfDayBean> getLists() {
         return lists;
     }
 
-    public void setLists(List< GroupOfDayBean.PatrolBean> lists) {
+    public void setLists(List< GroupOfDayBean> lists) {
         this.lists = lists;
     }
 

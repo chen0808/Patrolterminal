@@ -16,9 +16,9 @@ import java.util.List;
 
 public class AddGroupTaskAdapter extends BaseAdapter {
     private Context context;
-    private List<GroupOfDayBean.PatrolBean> lineTypeBeans;
+    private List<GroupOfDayBean> lineTypeBeans;
     private int type=0;
-    public AddGroupTaskAdapter(Context context, List<GroupOfDayBean.PatrolBean> traceList) {
+    public AddGroupTaskAdapter(Context context, List<GroupOfDayBean> traceList) {
         this.context = context;
         this.lineTypeBeans = traceList;
     }
@@ -26,14 +26,7 @@ public class AddGroupTaskAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        if (type==0){
-            if (lineTypeBeans.size()<4){
-                return lineTypeBeans.size();
-            }
-            return 4;
-        }else {
             return lineTypeBeans.size();
-        }
 
     }
 
@@ -60,40 +53,22 @@ public class AddGroupTaskAdapter extends BaseAdapter {
             holder.itemTroubleCheck = (CheckBox) convertView.findViewById(R.id.add_group_task_check);
             convertView.setTag(holder);
         }
-        GroupOfDayBean.PatrolBean listBean = lineTypeBeans.get(position);
-        String type_val = listBean.getType_val();
-        if ("1".equals(type_val)||"2".equals(type_val)){
+        GroupOfDayBean listBean = lineTypeBeans.get(position);
+
             holder.itemTroubleName.setText(listBean.getLine_name()+listBean.getName());
-        }else {
-            holder.itemTroubleName.setText(listBean.getName());
-        }
+
 
         holder.taskType.setText(listBean.getType_name());
         holder.itemTroubleCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (holder.itemTroubleCheck.isChecked()){
-                    if ("1".equals(type_val)||"2".equals(type_val)){
-                        RxRefreshEvent.publish("addgroup@"+listBean.getType_val()+"@"+listBean.getId()+"@"+listBean.getLine_name()+listBean.getName()+listBean.getType_name()+"@"+"无");
-                    }else {
-                        RxRefreshEvent.publish("addgroup@"+listBean.getType_val()+"@"+listBean.getId()+"@"+listBean.getName()+listBean.getType_name()+"@"+listBean.getDone_time());
-                    }
-
-                }else {
-
-                    if ("1".equals(type_val)||"2".equals(type_val)){
-                        RxRefreshEvent.publish("deletegroup@"+listBean.getType_val()+"@"+listBean.getId());
-                    }else {
-                        RxRefreshEvent.publish("deletegroup@"+listBean.getType_val()+"@"+listBean.getId());
-                    }
-                }
-
+                        RxRefreshEvent.publishGrooup(listBean);
             }
         });
         return convertView;
     }
 
-    public void setData(List<GroupOfDayBean.PatrolBean> typeBeanList) {
+    public void setData(List<GroupOfDayBean> typeBeanList) {
         lineTypeBeans = typeBeanList;
         notifyDataSetChanged();
 

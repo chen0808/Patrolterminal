@@ -8,8 +8,17 @@ public class SubmitPlanReqBean {
     private String week;
     private String audit_status;
     private List<Tower> lines;
+    private List<Tower> towers;
     private List<Tower> lineIds;
     private List<Tower> weekIds;
+
+    public List<Tower> getTowers() {
+        return towers;
+    }
+
+    public void setTowers(List<Tower> towers) {
+        this.towers = towers;
+    }
 
     public String getWeek() {
         return week;

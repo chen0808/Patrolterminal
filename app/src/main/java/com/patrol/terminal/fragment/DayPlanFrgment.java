@@ -91,28 +91,10 @@ public class DayPlanFrgment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent=new Intent();
-                if (results.get(position).getDay_id()!=null) {
                     intent.setClass(getContext(), DayPlanDetailActivity.class);
                     Bundle bundle=new Bundle();
                     bundle.putParcelable("bean",results.get(position));
                     intent.putExtras(bundle);
-                }else {
-                    DayListBean dayListBean = results.get(position);
-                    String plan_type = dayListBean.getPlan_type();
-                    if ("3".equals(plan_type)){
-                        intent.setClass(getContext(), MonitoringRecordActivity.class);
-                        intent.putExtra("bean", dayListBean);
-
-                    }else {
-                        intent.setClass(getContext(), SpecialPlanDetailActivity.class);
-                        intent.putExtra("from","day");
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("bean", results.get(position));
-                        intent.putExtras(bundle);
-                    }
-
-
-                }
                 startActivity(intent);
             }
         });

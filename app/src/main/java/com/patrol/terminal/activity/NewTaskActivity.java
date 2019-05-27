@@ -87,9 +87,7 @@ public class NewTaskActivity extends AppCompatActivity {
         SPUtil.putString(this, "date", "time", time);
         String job = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         List<Fragment> fragmentList = new ArrayList<>();
-        if (!job.equals(Utils.getJobName(Constant.RUNNING_SQUAD_MEMBER))) {
-            fragmentList.add(new GroupTaskFrgment());
-        }
+        fragmentList.add(new GroupTaskFrgment());
         fragmentList.add(new PersonalTaskFrgment());
         taskPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(taskPagerAdapter);
@@ -100,9 +98,7 @@ public class NewTaskActivity extends AppCompatActivity {
     }
 
     private void initMagicIndicator(String job) {
-        if (!job.equals(Utils.getJobName(Constant.RUNNING_SQUAD_MEMBER))) {
-            mDataList.add("小组任务");
-        }
+        mDataList.add("小组任务");
         mDataList.add("个人任务");
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {

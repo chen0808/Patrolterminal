@@ -23,6 +23,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AddGroupTaskReqBean;
 import com.patrol.terminal.bean.DangerBean;
+import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DefectBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupOfDayBean;
@@ -84,10 +85,10 @@ public class AddGroupTaskActivity extends BaseActivity {
     LinearLayout monPlanTypeLl;
     @BindView(R.id.month_yes)
     TextView monthYes;
-    private List<TaskLineBean> selectType = new ArrayList<>();
+    private List<GroupOfDayBean> selectType = new ArrayList<>();
     private AddGroupTaskAdapter adapter;
     private GroupTaskSelectAdapter selectAdapter;
-    private GroupOfDayBean results;
+    private List<GroupOfDayBean> results=new ArrayList<>();
     private Disposable subscribe;
     private List<DefectBean> list1 = new ArrayList<>();
     private List<String> lineName = new ArrayList<>();
@@ -97,7 +98,6 @@ public class AddGroupTaskActivity extends BaseActivity {
     private String week;
     private int type = 0;
     private String lineId;
-    private List<GroupOfDayBean.PatrolBean> taskList = new ArrayList<>();
 
     private List<String> typeName = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
@@ -110,12 +110,8 @@ public class AddGroupTaskActivity extends BaseActivity {
     private List<AddGroupTaskReqBean.UsersBean> addPeoList = new ArrayList<>();
     private String duty_user_name;
     private String duty_user_id;
-    private List<GroupOfDayBean.PatrolBean> patrol;
-    private List<DefectBean> danger;
-    private List<DefectBean> defect;
-    private List<GroupOfDayBean.PatrolBean> patSelectList=new ArrayList<>();
-    private List<DefectBean> danSelectList=new ArrayList<>();
-    private List<DefectBean> defSelectList=new ArrayList<>();
+    private List<GroupOfDayBean> patSelectList=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,94 +127,38 @@ public class AddGroupTaskActivity extends BaseActivity {
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         inteDate();
         titleName.setText("制定班组任务");
-        adapter = new AddGroupTaskAdapter(this, taskList);
+        adapter = new AddGroupTaskAdapter(this, results);
         selectAdapter = new GroupTaskSelectAdapter(this, selectType);
         groupTaskTypeLv.setAdapter(adapter);
         manthPlanDetailLv.setAdapter(selectAdapter);
-         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+         subscribe = RxRefreshEvent.getGroopuObservable().subscribe(new Consumer<GroupOfDayBean>() {
 
             @Override
-            public void accept(String type) throws Exception {
-                if (type.startsWith("addgroup")) {
-                    String[] split = type.split("@");
-                    String type_val = split[1];
-                    String id = split[2];
-                    TaskLineBean bean = new TaskLineBean();
-                    bean.setL_id(split[2]);
-                    bean.setName(split[3]);
-                    bean.setTime(split[4]);
-                    selectType.add(bean);
-                    selectAdapter.setData(selectType);
-                    if ("1".equals(type_val)||"2".equals(type_val)){
-                        for (int i = 0; i < patrol.size(); i++) {
-                            GroupOfDayBean.PatrolBean patrolBean = patrol.get(i);
-                            String patrolBeanId = patrolBean.getId();
-                            if (id.equals(patrolBeanId)){
-                                patSelectList.add(patrolBean);
-                            }
-                        }
-                    }else if ("3".equals(type_val)){
-                        for (int i = 0; i < defect.size(); i++) {
-                            DefectBean defectBean = defect.get(i);
-                            if (id.equals(defectBean.getId())){
-                                defSelectList.add(defectBean);
-                            }
-                        }
-                    }else if ("4".equals(type_val)){
-                        for (int i = 0; i < danger.size(); i++) {
-                            DefectBean defectBean = danger.get(i);
-                            if (id.equals(defectBean.getId())){
-                                danSelectList.add(defectBean);
-                            }
-                        }
-                    }
-
-                } else if (type.startsWith("deletegroup")) {
-                    String[] split = type.split("@");
-                    String type_val = split[1];
-                    String id = split[2];
+            public void accept(GroupOfDayBean type) throws Exception {
+                if (selectType.size()==0){
+                    type.setDay_tower_id(type.getId());
+                    selectType.add(type);
+                }else {
+                    int isExit=0;
                     for (int i = 0; i < selectType.size(); i++) {
-                        if (id.equals(selectType.get(i).getL_id())) {
+                        GroupOfDayBean dayOfWeekBean = selectType.get(i);
+                        if (dayOfWeekBean.getId().equals(type.getId())){
+                            isExit=1;
                             selectType.remove(i);
-                            break;
+                            return;
                         }
                     }
-                    selectAdapter.setData(selectType);
-                    if ("1".equals(type_val)||"2".equals(type_val)){
-                        for (int i = 0; i < patSelectList.size(); i++) {
-                            GroupOfDayBean.PatrolBean patrolBean = patSelectList.get(i);
-                            String patrolBeanId = patrolBean.getId();
-                            if (id.equals(patrolBeanId)){
-                                patSelectList.remove(i);
-                                break;
-                            }
-                        }
-                    }else if ("3".equals(type_val)){
-                        for (int i = 0; i < defSelectList.size(); i++) {
-                            DefectBean defectBean = defSelectList.get(i);
-                            if (id.equals(defectBean.getId())){
-                                defSelectList.remove(i);
-                                break;
-                            }
-                        }
-                    }else if ("4".equals(type_val)){
-
-                        for (int i = 0; i < danSelectList.size(); i++) {
-                            DefectBean defectBean = danSelectList.get(i);
-                            if (id.equals(defectBean.getId())){
-                                danSelectList.remove(i);
-                                break;
-                            }
-                        }
+                    if (isExit==0){
+                        type.setDay_tower_id(type.getId());
+                        selectType.add(type);
                     }
                 }
-
-
+                selectAdapter.setData(selectType);
             }
         });
     }
 
-    public void setVisibility(List<GroupOfDayBean.PatrolBean> list) {
+    public void setVisibility(List<GroupOfDayBean> list) {
         if (list.size() == 0) {
             groupTaskNoData.setVisibility(View.VISIBLE);
         } else {
@@ -235,55 +175,24 @@ public class AddGroupTaskActivity extends BaseActivity {
     //获取日计划列表
     public void getDayList() {
         ProgressDialog.show(this,false,"正在加载中");
-        taskList.clear();
+
         BaseRequest.getInstance().getService()
-                .getDayList( SPUtil.getDepId(this), type_id)
+                .getDayofGroup( year,month,day,SPUtil.getDepId(this), type_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<GroupOfDayBean>(this) {
+                .subscribe(new BaseObserver<List<GroupOfDayBean>>(this) {
 
-                    @Override
-                    protected void onSuccees(BaseResult<GroupOfDayBean> t) throws Exception {
-                        ProgressDialog.cancle();
-                        results = t.getResults();
-                        patrol = results.getPatrol();
-                        danger = results.getDanger();
-                        defect = results.getDefect();
-                        if (patrol.size()>0){
-                            day_id=patrol.get(0).getId();
-                        }
-                        for (int i = 0; i < defect.size(); i++) {
-                            DefectBean defectBean = defect.get(i);
-                            GroupOfDayBean.PatrolBean bean=new GroupOfDayBean.PatrolBean();
-                            bean.setId(defectBean.getId());
-                            bean.setType_val("3");
-                            bean.setType_name("缺陷处理");
-                            bean.setLine_name(defectBean.getLine_name());
-                            bean.setDone_time(defectBean.getFind_time());
-                            bean.setName(defectBean.getLine_name()+defectBean.getStart_name()+"(杆塔)"+defectBean.getContent());
-                            taskList.add(bean);
-                        }
-                        for (int i = 0; i < danger.size(); i++) {
-                            DefectBean defectBean = defect.get(i);
-                            GroupOfDayBean.PatrolBean bean=new GroupOfDayBean.PatrolBean();
-                            bean.setId(defectBean.getId());
-                            bean.setType_val("4");
-                            bean.setType_name("隐患消除");
-                            bean.setLine_name(defectBean.getLine_name());
-                            bean.setDone_time(defectBean.getFind_time());
-                            bean.setName(defectBean.getLine_name()+defectBean.getStart_name()+"(杆塔)"+defectBean.getContent());
-                            taskList.add(bean);
-                        }
-                        taskList.addAll(patrol);
-                        setVisibility(taskList);
-                    }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                        Log.e("fff", e.toString());
-                    }
-                });
+                               @Override
+                               protected void onSuccees(BaseResult<List<GroupOfDayBean>> t) throws Exception {
+                                  results = t.getResults();
+                                   adapter.setData(results);
+                               }
+
+                               @Override
+                               protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                               }});
     }
 
 
@@ -494,7 +403,6 @@ public class AddGroupTaskActivity extends BaseActivity {
     public void savaGroupTask() {
 
         AddGroupTaskReqBean bean = new AddGroupTaskReqBean();
-        bean.setDay_id(day_id);
         bean.setDep_id(SPUtil.getDepId(this));
         bean.setDay(day);
         bean.setMonth(month);
@@ -503,9 +411,7 @@ public class AddGroupTaskActivity extends BaseActivity {
         bean.setDuty_user_id(duty_user_id);
         bean.setDuty_user_name(duty_user_name);
         bean.setUsers(addPeoList);
-        bean.setDangers(danSelectList);
-        bean.setDefects(defSelectList);
-        bean.setLists(patSelectList);
+        bean.setLists(selectType);
         BaseRequest.getInstance().getService()
                 .savaGroupTask(bean)
                 .subscribeOn(Schedulers.io())

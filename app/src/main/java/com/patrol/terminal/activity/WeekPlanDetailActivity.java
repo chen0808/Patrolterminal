@@ -72,7 +72,7 @@ public class WeekPlanDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_month_plan_detail);
         ButterKnife.bind(this);
         initView();
-        getHaveDefect();
+//        getHaveDefect();
     }
 
 
@@ -101,68 +101,55 @@ public class WeekPlanDetailActivity extends BaseActivity {
         tvLineName.setText("线路名称 : " + monthPlanDetailBean.getLine_name());
         tvLineNo.setText("班  组 : " + monthPlanDetailBean.getDep_name());
         tvLineDate.setText("月  份 : " + monthPlanDetailBean.getYear() + "年" + monthPlanDetailBean.getMonth() + "月");
-        List<WeekListBean.TowersBean> towers = monthPlanDetailBean.getTowers();
-        String tower = "";
-        for (int i = 0; i < towers.size(); i++) {
+            tvLineTower.setText("杆  段 : " + monthPlanDetailBean.getName());
 
-            if (i == 0) {
-                tower = towers.get(i).getName();
-            } else {
-                tower = tower + "," + towers.get(i).getName();
-            }
-        }
-        if (towers == null) {
-            tvLineTower.setText("杆  段 : 无");
-        } else {
-            tvLineTower.setText("杆  段 : " + tower);
-        }
         DefectBean bean = new DefectBean();
-        bean.setContent(monthPlanDetailBean.getLine_name() + monthPlanDetailBean.getType_name() + "任务");
+        bean.setContent(monthPlanDetailBean.getLine_name() +monthPlanDetailBean.getName()+ monthPlanDetailBean.getType_name() + "计划");
         bean.setFind_time("");
         bean.setType(0);
         selectType.add(bean);
     }
 
-
-    //获取已经添加的缺陷列表
-    public void getHaveDefect() {
-        ApiServise service = BaseRequest.getInstance().getService();
-        Observable<BaseResult<List<DefectBean>>> haveDefect = service.getHaveDefect(line_id, null, w_id, null, "2,3", "1");
-        Observable<BaseResult<List<DefectBean>>> haveDanger = service.getHaveDanger(line_id, null, w_id, null, "2,3", "1");
-        Observable.zip(haveDefect, haveDanger, new BiFunction<BaseResult<List<DefectBean>>, BaseResult<List<DefectBean>>, String>() {
-            @Override
-            public String apply(BaseResult<List<DefectBean>> listBaseResult, BaseResult<List<DefectBean>> listBaseResult2) throws Exception {
-                List<DefectBean> results = listBaseResult.getResults();
-                List<DefectBean> results2 = listBaseResult2.getResults();
-                for (int i = 0; i < results.size(); i++) {
-                    DefectBean defectBean = results.get(i);
-                    defectBean.setType(2);
-                    defectBean.setContent(defectBean.getContent() + "缺陷消除");
-                    selectType.add(defectBean);
-                }
-                for (int i = 0; i < results2.size(); i++) {
-                    DefectBean defectBean = results2.get(i);
-                    defectBean.setType(1);
-                    defectBean.setContent(defectBean.getContent() + "隐患处理");
-                    selectType.add(defectBean);
-                }
-                return listBaseResult.getCode() + "";
-            }
-        }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(@NonNull String jsonObject) throws Exception {
-                        if ("1".equals(jsonObject)) {
-                            monthPlanDetailAdapter.setNewData(selectType);
-                        }
-                    }
-                }, new Consumer<Throwable>() {//请求失败处理
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                    }
-                });
-    }
+//
+//    //获取已经添加的缺陷列表
+//    public void getHaveDefect() {
+//        ApiServise service = BaseRequest.getInstance().getService();
+//        Observable<BaseResult<List<DefectBean>>> haveDefect = service.getHaveDefect(line_id, null, w_id, null, "2,3", "1");
+//        Observable<BaseResult<List<DefectBean>>> haveDanger = service.getHaveDanger(line_id, null, w_id, null, "2,3", "1");
+//        Observable.zip(haveDefect, haveDanger, new BiFunction<BaseResult<List<DefectBean>>, BaseResult<List<DefectBean>>, String>() {
+//            @Override
+//            public String apply(BaseResult<List<DefectBean>> listBaseResult, BaseResult<List<DefectBean>> listBaseResult2) throws Exception {
+//                List<DefectBean> results = listBaseResult.getResults();
+//                List<DefectBean> results2 = listBaseResult2.getResults();
+//                for (int i = 0; i < results.size(); i++) {
+//                    DefectBean defectBean = results.get(i);
+//                    defectBean.setType(2);
+//                    defectBean.setContent(defectBean.getContent() + "缺陷消除");
+//                    selectType.add(defectBean);
+//                }
+//                for (int i = 0; i < results2.size(); i++) {
+//                    DefectBean defectBean = results2.get(i);
+//                    defectBean.setType(1);
+//                    defectBean.setContent(defectBean.getContent() + "隐患处理");
+//                    selectType.add(defectBean);
+//                }
+//                return listBaseResult.getCode() + "";
+//            }
+//        }).subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<String>() {
+//                    @Override
+//                    public void accept(@NonNull String jsonObject) throws Exception {
+//                        if ("1".equals(jsonObject)) {
+//                            monthPlanDetailAdapter.setNewData(selectType);
+//                        }
+//                    }
+//                }, new Consumer<Throwable>() {//请求失败处理
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//                    }
+//                });
+//    }
 
 
 }

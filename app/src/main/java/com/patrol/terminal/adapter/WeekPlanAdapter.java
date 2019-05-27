@@ -43,31 +43,31 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
         viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_week_bg);
         viewHolder.setVisible(R.id.item_line_state, false);
         viewHolder.setVisible(R.id.month_plan_go, true);
+            viewHolder.setVisible(R.id.plan_to_change, false);
         HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
             view.setVisibility(View.VISIBLE);
         viewHolder.setText(R.id.item_line_status, StringUtil.getYxbWeekState(item.getAudit_status()));
         view.setStatus(item.getAudit_status());
-        viewHolder.setText(R.id.item_plan_device_name,item.getLine_name()+item.getYear()+"年"+item.getMonth()+"月第"+item.getWeek()+"周计划")
-                .setVisible(R.id.plan_to_change,true)
+        viewHolder.setText(R.id.item_plan_device_name,item.getLine_name()+item.getName())
                 .setText(R.id.item_plan_content,"类型 : "+item.getType_name());
-        viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
-                intent.putExtra("from", Constant.FROM_WEEKPLAN_TO_ADDMONTH);
-                intent.putExtra("month_id", item.getMonth_id());
-                intent.putExtra("week_id",item.getWeek_id());
-                intent.putExtra("line_id",item.getLine_id());
-                intent.putExtra("line_name",item.getLine_name());
-                intent.putExtra("year",item.getYear()+"");
-                intent.putExtra("month",item.getMonth()+"");
-                intent.putExtra("week",item.getWeek()+"");
-                intent.putExtra("id",item.getId()+"");
-                intent.putExtra("type",item.getType_name());
-                //intent.putExtra("from","week");
-                mContext.startActivity(intent);
-            }
-        });
+//        viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
+//                intent.putExtra("from", Constant.FROM_WEEKPLAN_TO_ADDMONTH);
+//                intent.putExtra("month_id", item.getMonth_line_id());
+//                intent.putExtra("week_id",item.getWeek_id());
+//                intent.putExtra("line_id",item.getLine_id());
+//                intent.putExtra("line_name",item.getLine_name());
+//                intent.putExtra("year",item.getYear()+"");
+//                intent.putExtra("month",item.getMonth()+"");
+//                intent.putExtra("week",item.getWeek()+"");
+//                intent.putExtra("id",item.getId()+"");
+//                intent.putExtra("type",item.getType_name());
+//                //intent.putExtra("from","week");
+//                mContext.startActivity(intent);
+//            }
+//        });
     }else {
 //            viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_week_bg);
 //            String plan_type = item.getPlan_type();

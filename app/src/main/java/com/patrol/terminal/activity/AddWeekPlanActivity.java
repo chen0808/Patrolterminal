@@ -72,8 +72,9 @@ public class AddWeekPlanActivity extends BaseActivity {
     TextView monthYes;
     @BindView(R.id.add_tower_more)
     ImageView addTowerMore;
+
     private List<String> lineName = new ArrayList<>();
-    private List<WeekOfMonthBean> eqTowers = new ArrayList<>();
+
     private String curMonth;
     private int year;
     private int month;
@@ -82,13 +83,16 @@ public class AddWeekPlanActivity extends BaseActivity {
     private String lineId;
     private List<Tower> selectType = new ArrayList<>();
     private AddTowerAdapter adapter;
-    private List<WeekOfMonthBean> results;
+    private List<WeekOfMonthBean> results=new ArrayList<>();
     private Disposable subscribe;
     private List<String> typeName = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
     private String type_id;
     private String lName;
     private String type_name;
+    private List<WeekOfMonthBean> linelist;
+    private String beginDate;
+    private String endDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +102,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         initview();
         getWeekInfoList();
         getLineType();
-
+        getLine();
     }
 
     private void initview() {
@@ -116,10 +120,11 @@ public class AddWeekPlanActivity extends BaseActivity {
             }
         }
         Map<String, Object> scopeForWeeks = TimeUtil.getScopeForWeeks(year,month,week);
-        String beginDate =TimeUtil.dateToDate((String) scopeForWeeks.get("beginDate"));
-        String endDate =TimeUtil.dateToDate((String) scopeForWeeks.get("endDate"));
-        titleName.setText(beginDate+"-"+endDate+"（第"+week+")周计划制定");
-        adapter = new AddTowerAdapter(this,eqTowers);
+        beginDate = TimeUtil.dateToDate((String) scopeForWeeks.get("beginDate"));
+        endDate = TimeUtil.dateToDate((String) scopeForWeeks.get("endDate"));
+
+        titleName.setText(beginDate +"-"+ endDate +"（第"+week+")周计划制定");
+        adapter = new AddTowerAdapter(this,results);
         monthPlanTypeLv.setAdapter(adapter);
 
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
@@ -129,13 +134,19 @@ public class AddWeekPlanActivity extends BaseActivity {
                 if (type.startsWith("add")) {
                     String[] split = type.split("@");
                     Tower bean = new Tower();
-                    bean.setTower_id(split[1]);
-                    bean.setName(split[2]);
-                    bean.setId(split[3]);
+                    bean.setTowers_id(split[1]);
+                    bean.setLine_id(split[2]);
+                    bean.setLine_name(split[3]);
+                    bean.setName(split[4]);
+                    bean.setType_id(split[5]);
+                    bean.setType_name(split[6]);
+                    bean.setType_sign(split[7]);
+                    bean.setMonth_line_id(split[8]);
+                    bean.setDep_id(SPUtil.getDepId(AddWeekPlanActivity.this));
+                    bean.setDep_name(SPUtil.getDepName(AddWeekPlanActivity.this));
                     selectType.add(bean);
                 } else if (type.startsWith("delete")) {
                     String[] split = type.split("@");
-
                     for (int i = 0; i < selectType.size(); i++) {
                         Tower tower = selectType.get(i);
                         if (split[1].equals(tower.getTower_id())) {
@@ -149,9 +160,10 @@ public class AddWeekPlanActivity extends BaseActivity {
     }
 
     private void getWeekInfoList() {
+        ProgressDialog.show(this,false,"正在加载。。。");
         //获取周计划杆段列表
         BaseRequest.getInstance().getService()
-                .getWeekListWeek(year, month, SPUtil.getDepId(this), type_id)
+                .getWeekListWeek(year, month, SPUtil.getDepId(this), type_id,lineId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekOfMonthBean>>(this) {
@@ -159,14 +171,6 @@ public class AddWeekPlanActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<WeekOfMonthBean>> t) throws Exception {
                         ProgressDialog.cancle();
                         results = t.getResults();
-//                        for (int i = 0; i <results.size(); i++) {
-//                            WeekOfMonthBean bean = results.get(i);
-//                            String line_name = bean.getLine_name();
-//                            if (lineName.indexOf(line_name)==-1){
-//                                lineName.add(line_name);
-//                            }
-//                        }
-
                         adapter.setData(results);
                     }
 
@@ -185,9 +189,9 @@ public class AddWeekPlanActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.month_plan_line:
-                if (type_id == null) {
-                    Toast.makeText(this, "请先选择工作类型", Toast.LENGTH_SHORT).show();
-                    break;
+                if (lineName == null) {
+                    Toast.makeText(this, "暂未获取到线路，请稍后再试", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 showLine();
                 break;
@@ -223,17 +227,9 @@ public class AddWeekPlanActivity extends BaseActivity {
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 lName = lineName.get(options1);
                 monthPlanLine.setText(lName);
+                lineId=linelist.get(options1).getLine_id();
                 selectType.clear();
-                eqTowers.clear();
-                for (int i = 0; i < results.size(); i++) {
-                    String line_name = results.get(i).getLine_name();
-                    if (lName.equals(line_name)){
-                        lineId = results.get(i).getLine_id();
-                        Log.i("123321",lineId);
-                        eqTowers.add(results.get(i));
-                    }
-                }
-                adapter.setData(eqTowers);
+                getWeekInfoList();
             }
         }).build();
         pvOptions.setPicker(lineName);
@@ -254,9 +250,7 @@ public class AddWeekPlanActivity extends BaseActivity {
                 type_id = typeList.get(options1).getId();
                 monthPlanLine.setText("点击选择线路");
                 selectType.clear();
-                eqTowers.clear();
-                adapter.setData(eqTowers);
-                getLine();
+               getWeekInfoList();
             }
         }).build();
         pvOptions.setPicker(typeName);
@@ -265,20 +259,18 @@ public class AddWeekPlanActivity extends BaseActivity {
 
     //获取每个班组负责的线路
     public void getLine() {
-        ProgressDialog.show(this, false, "正在加载中");
         lineName.clear();
         //获取月计划列表
         BaseRequest.getInstance().getService()
-                .getWeekList(year, month, SPUtil.getDepId(this), type_id)
+                .getWeekList(year, month, SPUtil.getDepId(this), null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekOfMonthBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<WeekOfMonthBean>> t) throws Exception {
-                        ProgressDialog.cancle();
-                        results = t.getResults();
-                        for (int i = 0; i <results.size(); i++) {
-                            WeekOfMonthBean bean = results.get(i);
+                        linelist = t.getResults();
+                        for (int i = 0; i < linelist.size(); i++) {
+                            WeekOfMonthBean bean = linelist.get(i);
                             String line_name = bean.getLine_name();
                             if (lineName.indexOf(line_name)==-1){
                                 lineName.add(line_name);
@@ -288,7 +280,6 @@ public class AddWeekPlanActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
                     }
                 });
     }
@@ -343,24 +334,10 @@ public class AddWeekPlanActivity extends BaseActivity {
         bean.setYear(year+"");
         bean.setMonth(month + "");
         bean.setWeek(week+"");
-        PlanWeekLineBean planWeekLineBean = new PlanWeekLineBean();
-        planWeekLineBean.setType_id(type_id);
-        planWeekLineBean.setLine_id(lineId);
-        planWeekLineBean.setLine_name(lName);
-        planWeekLineBean.setDep_id(SPUtil.getDepId(this));
-        planWeekLineBean.setDep_name(SPUtil.getDepName(this));
-        planWeekLineBean.setType_name(type_name);
-        List<PlanWeekLineBean.TowersBean> list = new ArrayList();
-        for (int i = 0; i < selectType.size(); i++) {
-            PlanWeekLineBean.TowersBean towersBean = new PlanWeekLineBean.TowersBean();
-            Tower tower = selectType.get(i);
-            towersBean.setTowers_id(tower.getTower_id());
-            towersBean.setName(tower.getName());
-            towersBean.setMonth_line_id(tower.getId());
-            list.add(towersBean);
-        }
-        planWeekLineBean.setTowers(list);
-        bean.setPlanWeekLine(planWeekLineBean);
+        bean.setBegin_time(beginDate);
+        bean.setEnd_time(endDate);
+        bean.setTowers(selectType);
+
         BaseRequest.getInstance().getService()
                 .saveWeek(bean)
                 .subscribeOn(Schedulers.io())

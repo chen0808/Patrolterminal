@@ -9,23 +9,24 @@ import android.widget.TextView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.EqTower;
+import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.TaskLineBean;
 
 import java.util.List;
 
 public class GroupTaskSelectAdapter extends BaseAdapter {
     private Context context;
-    private  List<TaskLineBean> lineTypeBeans;
+    private  List<GroupOfDayBean> lineTypeBeans;
     private  List<EqTower> eqTowers;
     private  List<String> towerList;
     private int start,end;
 
-    public GroupTaskSelectAdapter(Context context, List<TaskLineBean> traceList) {
+    public GroupTaskSelectAdapter(Context context, List<GroupOfDayBean> traceList) {
         this.context = context;
         this.lineTypeBeans = traceList;
     }
 
-    public GroupTaskSelectAdapter(Context context, List<TaskLineBean> selectType, List<EqTower> eqTowers, List<String>  names) {
+    public GroupTaskSelectAdapter(Context context, List<GroupOfDayBean> selectType, List<EqTower> eqTowers, List<String>  names) {
         this.context = context;
         this.lineTypeBeans = selectType;
         this.eqTowers=eqTowers;
@@ -62,14 +63,14 @@ public class GroupTaskSelectAdapter extends BaseAdapter {
             holder.time = (TextView) convertView.findViewById(R.id.item_plan_time);
             convertView.setTag(holder);
         }
-        TaskLineBean dangerBean = lineTypeBeans.get(position);
+        GroupOfDayBean dangerBean = lineTypeBeans.get(position);
 
-      holder.name.setText(dangerBean.getName());
-        holder.time.setText(dangerBean.getTime());
+      holder.name.setText(dangerBean.getLine_name()+dangerBean.getName()+dangerBean.getType_name()+"任务");
+        holder.time.setText("");
         return convertView;
     }
 
-    public void setData(List<TaskLineBean> typeBeanList) {
+    public void setData(List<GroupOfDayBean> typeBeanList) {
         lineTypeBeans = typeBeanList;
         notifyDataSetChanged();
 
