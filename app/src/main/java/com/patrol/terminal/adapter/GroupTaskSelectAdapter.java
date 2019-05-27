@@ -65,7 +65,7 @@ public class GroupTaskSelectAdapter extends BaseAdapter {
         }
         GroupOfDayBean dangerBean = lineTypeBeans.get(position);
 
-      holder.name.setText(dangerBean.getName());
+      holder.name.setText(dangerBean.getLine_name()+dangerBean.getName()+dangerBean.getType_name()+"任务");
         holder.time.setText("");
         return convertView;
     }

@@ -1,131 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activity.MonthPlanDetailActivity">
-
-    <include layout="@layout/include_title"></include>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_table_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:visibility="gone"
-                android:text="2019红外线月度表"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_line_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/dp_20"
-                android:text="线路名称：固安线" />
-
-            <TextView
-                android:id="@+id/tv_line_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="4dp"
-                android:text="执行班组：西固运维班" />
-
-            <TextView
-                android:id="@+id/tv_line_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="4dp"
-                android:text="计划月份：2019-04" />
-
-            <TextView
-                android:id="@+id/tv_line_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:visibility="gone"
-                android:layout_marginTop="4dp"
-                android:text="工作类型：定期巡视" />
-            <TextView
-                android:id="@+id/tv_line_tower"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="4dp"
-                android:text="杆段：0-50" />
-        </LinearLayout>
-        `
-    </RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:textColor="@color/color_10"
-        android:textSize="@dimen/sp_18"
-        android:text="计划明细"
-        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:background="@color/image_overlay_false"
-        android:orientation="horizontal"
-        >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_title"></include>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_table_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:visibility="gone"
+                    android:text="2019红外线月度表"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                   />
+
+                <TextView
+                    android:id="@+id/tv_line_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:text="线路名称：固安线" />
+
+                <TextView
+                    android:id="@+id/tv_line_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:text="执行班组：西固运维班" />
+
+                <TextView
+                    android:id="@+id/tv_line_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:text="计划月份：2019-04" />
+
+                <TextView
+                    android:id="@+id/tv_line_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:text="工作类型：定期巡视"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_line_tower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:text="杆段：0-50" />
+            </LinearLayout>
+            `
+        </RelativeLayout>
+
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="7"
-            android:gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:textSize="@dimen/sp_16"
-            android:text="计划名称"
-            android:textColor="@color/color_33"
-            />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:text="计划明细"
+            android:textColor="@color/color_10"
+            android:textSize="@dimen/sp_18" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
             android:background="@color/image_overlay_false"
-            />
-        <TextView
-            android:layout_width="0dp"
+            android:orientation="horizontal"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="计划名称"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_16" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/image_overlay_false" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:text="发现时间"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_16" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/month_plan_detail_rc"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:textSize="@dimen/sp_16"
-            android:text="发现时间"
-            android:textColor="@color/color_33"
-            />
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:overScrollMode="never">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/month_plan_detail_rc"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
-        android:overScrollMode="never"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/task_submit"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="2"
+            android:background="@color/gray_plan"
+            android:visibility="gone"
+            android:gravity="center"
+            android:text="生成抢单任务"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
 
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

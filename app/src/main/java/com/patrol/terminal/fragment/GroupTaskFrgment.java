@@ -95,7 +95,7 @@ public class GroupTaskFrgment extends BaseFragment {
                 Bundle bundle=new Bundle();
                 bundle.putParcelable("GroupTaskBean",bean);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,11);
             }
         });
         getGroupList();

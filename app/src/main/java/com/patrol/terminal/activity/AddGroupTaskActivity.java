@@ -23,6 +23,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AddGroupTaskReqBean;
 import com.patrol.terminal.bean.DangerBean;
+import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DefectBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupOfDayBean;
@@ -87,7 +88,7 @@ public class AddGroupTaskActivity extends BaseActivity {
     private List<GroupOfDayBean> selectType = new ArrayList<>();
     private AddGroupTaskAdapter adapter;
     private GroupTaskSelectAdapter selectAdapter;
-    private List<GroupOfDayBean> results;
+    private List<GroupOfDayBean> results=new ArrayList<>();
     private Disposable subscribe;
     private List<DefectBean> list1 = new ArrayList<>();
     private List<String> lineName = new ArrayList<>();
@@ -130,24 +131,29 @@ public class AddGroupTaskActivity extends BaseActivity {
         selectAdapter = new GroupTaskSelectAdapter(this, selectType);
         groupTaskTypeLv.setAdapter(adapter);
         manthPlanDetailLv.setAdapter(selectAdapter);
-         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+         subscribe = RxRefreshEvent.getGroopuObservable().subscribe(new Consumer<GroupOfDayBean>() {
 
             @Override
-            public void accept(String type) throws Exception {
-                if (type.startsWith("addgroup")) {
-//                    String[] split = type.split("@");
-//                    String type_val = split[1];
-//                    String id = split[2];
-//                    TaskLineBean bean = new TaskLineBean();
-//                    bean.setL_id(split[2]);
-//                    bean.setName(split[3]);
-//                    bean.setTime(split[4]);
-//                    selectType.add(bean);
-//                    selectAdapter.setData(selectType);
-
+            public void accept(GroupOfDayBean type) throws Exception {
+                if (selectType.size()==0){
+                    type.setDay_tower_id(type.getId());
+                    selectType.add(type);
+                }else {
+                    int isExit=0;
+                    for (int i = 0; i < selectType.size(); i++) {
+                        GroupOfDayBean dayOfWeekBean = selectType.get(i);
+                        if (dayOfWeekBean.getId().equals(type.getId())){
+                            isExit=1;
+                            selectType.remove(i);
+                            return;
+                        }
+                    }
+                    if (isExit==0){
+                        type.setDay_tower_id(type.getId());
+                        selectType.add(type);
+                    }
                 }
-
-
+                selectAdapter.setData(selectType);
             }
         });
     }
@@ -397,7 +403,6 @@ public class AddGroupTaskActivity extends BaseActivity {
     public void savaGroupTask() {
 
         AddGroupTaskReqBean bean = new AddGroupTaskReqBean();
-        bean.setDay_id(day_id);
         bean.setDep_id(SPUtil.getDepId(this));
         bean.setDay(day);
         bean.setMonth(month);
@@ -406,7 +411,7 @@ public class AddGroupTaskActivity extends BaseActivity {
         bean.setDuty_user_id(duty_user_id);
         bean.setDuty_user_name(duty_user_name);
         bean.setUsers(addPeoList);
-        bean.setLists(patSelectList);
+        bean.setLists(selectType);
         BaseRequest.getInstance().getService()
                 .savaGroupTask(bean)
                 .subscribeOn(Schedulers.io())

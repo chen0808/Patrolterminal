@@ -120,32 +120,28 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
             getGroupName();
         }
+        if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {     //培训专责
+            mFragments.add(new TrainingHomeFragment());
+        }else  if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+            mFragments.add(new HomeFragment());
+        }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+            mFragments.add(new ZyHomeFragment());
+        }else {
+            mFragments.add(new JXHomeFragment());
+        }
 
         if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.REFURBISHMENT_MEMBER)
                 || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
                 || jobType.contains(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
             mainExameRb.setVisibility(View.GONE);
 
-            if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {     //培训专责
-                mFragments.add(new TrainingHomeFragment());
-            }else  if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
-                mFragments.add(new HomeFragment());
-            }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
-                mFragments.add(new ZyHomeFragment());
-            }else {
-                mFragments.add(new JXHomeFragment());
-            }
+
 
             mFragments.add(new TodosManageFragment());  //只是不显示，以免RideoButton点击错乱
 
         }else {                                                    //有待办的角色
             mainExameRb.setVisibility(View.VISIBLE);
 
-            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
-                mFragments.add(new HomeFragment());
-            }else {
-                mFragments.add(new JXHomeFragment());
-            }
 
             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){   //运行待办
                 mFragments.add(new YXTodosManageFragment());

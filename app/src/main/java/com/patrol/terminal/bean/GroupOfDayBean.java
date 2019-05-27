@@ -31,10 +31,10 @@ public class GroupOfDayBean {
          */
 
         private String id;
-        private Object week_line_id;
+        private String week_line_id;
         private String week_tower_id;
-        private Object day_id;
-        private Object day_line_id;
+        private String day_id;
+        private String day_line_id;
         private String type_id;
         private String type_sign;
         private String type_name;
@@ -43,8 +43,8 @@ public class GroupOfDayBean {
         private String dep_id;
         private String dep_name;
         private String name;
-        private Object tower_id;
-        private Object towers_id;
+        private String tower_id;
+        private String towers_id;
         private String tower_type;
         private int year;
         private int month;
@@ -53,7 +53,16 @@ public class GroupOfDayBean {
         private String allot_status;
         private String audit_status;
         private String done_status;
-        private Object done_time;
+        private String done_time;
+    private String  day_tower_id;
+
+    public String getDay_tower_id() {
+        return day_tower_id;
+    }
+
+    public void setDay_tower_id(String day_tower_id) {
+        this.day_tower_id = day_tower_id;
+    }
 
         public String getId() {
             return id;
@@ -63,11 +72,11 @@ public class GroupOfDayBean {
             this.id = id;
         }
 
-        public Object getWeek_line_id() {
+        public String getWeek_line_id() {
             return week_line_id;
         }
 
-        public void setWeek_line_id(Object week_line_id) {
+        public void setWeek_line_id(String week_line_id) {
             this.week_line_id = week_line_id;
         }
 
@@ -79,19 +88,19 @@ public class GroupOfDayBean {
             this.week_tower_id = week_tower_id;
         }
 
-        public Object getDay_id() {
+        public String getDay_id() {
             return day_id;
         }
 
-        public void setDay_id(Object day_id) {
+        public void setDay_id(String day_id) {
             this.day_id = day_id;
         }
 
-        public Object getDay_line_id() {
+        public String getDay_line_id() {
             return day_line_id;
         }
 
-        public void setDay_line_id(Object day_line_id) {
+        public void setDay_line_id(String day_line_id) {
             this.day_line_id = day_line_id;
         }
 
@@ -159,19 +168,19 @@ public class GroupOfDayBean {
             this.name = name;
         }
 
-        public Object getTower_id() {
+        public String getTower_id() {
             return tower_id;
         }
 
-        public void setTower_id(Object tower_id) {
+        public void setTower_id(String tower_id) {
             this.tower_id = tower_id;
         }
 
-        public Object getTowers_id() {
+        public String getTowers_id() {
             return towers_id;
         }
 
-        public void setTowers_id(Object towers_id) {
+        public void setTowers_id(String towers_id) {
             this.towers_id = towers_id;
         }
 
@@ -239,11 +248,11 @@ public class GroupOfDayBean {
             this.done_status = done_status;
         }
 
-        public Object getDone_time() {
+        public String getDone_time() {
             return done_time;
         }
 
-        public void setDone_time(Object done_time) {
+        public void setDone_time(String done_time) {
             this.done_time = done_time;
         }
 }

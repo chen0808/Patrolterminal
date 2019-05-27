@@ -26,14 +26,7 @@ public class AddGroupTaskAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        if (type==0){
-            if (lineTypeBeans.size()<4){
-                return lineTypeBeans.size();
-            }
-            return 4;
-        }else {
             return lineTypeBeans.size();
-        }
 
     }
 
@@ -69,22 +62,7 @@ public class AddGroupTaskAdapter extends BaseAdapter {
         holder.itemTroubleCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (holder.itemTroubleCheck.isChecked()){
-//                    if ("1".equals(type_val)||"2".equals(type_val)){
-//                        RxRefreshEvent.publish("addgroup@"+listBean.getType_val()+"@"+listBean.getId()+"@"+listBean.getLine_name()+listBean.getName()+listBean.getType_name()+"@"+"无");
-//                    }else {
-//                        RxRefreshEvent.publish("addgroup@"+listBean.getType_val()+"@"+listBean.getId()+"@"+listBean.getName()+listBean.getType_name()+"@"+listBean.getDone_time());
-//                    }
-//
-//                }else {
-//
-//                    if ("1".equals(type_val)||"2".equals(type_val)){
-//                        RxRefreshEvent.publish("deletegroup@"+listBean.getType_val()+"@"+listBean.getId());
-//                    }else {
-//                        RxRefreshEvent.publish("deletegroup@"+listBean.getType_val()+"@"+listBean.getId());
-//                    }
-                }
-
+                        RxRefreshEvent.publishGrooup(listBean);
             }
         });
         return convertView;

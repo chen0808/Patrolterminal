@@ -15,14 +15,14 @@ import java.util.List;
 
 public class PersonalTaskSelectAdapter extends BaseAdapter {
     private Context context;
-    private  GroupTaskBean bean;
+    private  List<GroupTaskBean> list;
     private  List<EqTower> eqTowers;
     private  List<String> towerList;
     private int start,end;
 
-    public PersonalTaskSelectAdapter(Context context, GroupTaskBean traceList) {
+    public PersonalTaskSelectAdapter(Context context, List<GroupTaskBean> traceList) {
         this.context = context;
-        this.bean = traceList;
+        this.list = traceList;
     }
 
 
@@ -30,10 +30,8 @@ public class PersonalTaskSelectAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        if (bean==null){
-         return 0;
-        }
-        return 1;
+
+        return list.size();
     }
 
     @Override
@@ -61,14 +59,14 @@ public class PersonalTaskSelectAdapter extends BaseAdapter {
             holder.time = (TextView) convertView.findViewById(R.id.item_plan_time);
             convertView.setTag(holder);
         }
-
-      holder.name.setText(bean.getLine_name()+bean.getName()+bean.getType_name()+"任务");
+        GroupTaskBean bean = list.get(position);
+        holder.name.setText(bean.getLine_name()+bean.getName()+bean.getType_name()+"任务");
         holder.time.setText("无");
         return convertView;
     }
 
-    public void setData(GroupTaskBean typeBeanList) {
-        bean = typeBeanList;
+    public void setData(List<GroupTaskBean> typeBeanList) {
+        list = typeBeanList;
         notifyDataSetChanged();
 
     }

@@ -12,6 +12,7 @@ import com.patrol.terminal.bean.ControlDepWorkBean2;
 import com.patrol.terminal.bean.ControlQualityBean;
 import com.patrol.terminal.bean.ControlToolBean;
 import com.patrol.terminal.bean.ControlToolBeanList;
+import com.patrol.terminal.bean.CreateRobTaskBean;
 import com.patrol.terminal.bean.DangerBean;
 import com.patrol.terminal.bean.DayListBean;
 import com.patrol.terminal.bean.DayOfWeekBean;
@@ -156,6 +157,13 @@ public interface ApiServise {
     Observable<BaseResult<List<DayOfWeekBean>>> getDayPlan(@Query("year") String year, @Query("month") String month, @Query("dep_id") String dep_id);
 
 
+    //生成抢单任务
+    @POST("/task/group/list/updatePOST")
+    Observable<BaseResult<List<DayOfWeekBean>>> createRobTask(@Body CreateRobTaskBean bean);
+
+    //生成抢单任务
+    @POST("/task/personal/savePOST")
+    Observable<BaseResult<List<DayOfWeekBean>>> addPersonTask(@Body List<GroupTaskBean> bean);
 
 
     //根据当前日期查询所属周下所有计划接口

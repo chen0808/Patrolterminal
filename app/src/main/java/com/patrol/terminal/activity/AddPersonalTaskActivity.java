@@ -27,7 +27,9 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AddPersonalTaskReqBean;
 import com.patrol.terminal.bean.DangerBean;
+import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DepUserBean;
+import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.utils.DateUatil;
@@ -78,7 +80,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
     TextView monthYes;
 
 
-    private List<GroupTaskBean> selectType = new ArrayList<>();
+
     private AddPersonalTaskAdapter adapter;
     private PersonalTaskSelectAdapter selectAdapter;
     private List<GroupTaskBean> results;
@@ -100,8 +102,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
     private String d_id;
     private List<DepUserBean> personalList;
     private List<DepUserBean> addPeoList = new ArrayList<>();
-    private int selectPosin=-1;
-    private GroupTaskBean selectBean;
+    private  List<GroupTaskBean> selectBean=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +126,8 @@ public class AddPersonalTaskActivity extends BaseActivity {
         groupTaskTypeLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectPosin=position;
-                adapter.notifyDataSetChanged();
-                selectBean=results.get(position);
+                selectBean.add(results.get(position));
+
                 selectAdapter.setData(selectBean);
             }
         });
@@ -319,7 +319,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
     //保存
     public void savaGroupTask() {
 
-        if (selectBean==null){
+        if (selectBean.size()==0){
             Toast.makeText(this,"请添加任务",Toast.LENGTH_SHORT).show();
             return;
         }
@@ -327,38 +327,16 @@ public class AddPersonalTaskActivity extends BaseActivity {
             Toast.makeText(this,"请添加组员",Toast.LENGTH_SHORT).show();
             return;
         }
-
-        AddPersonalTaskReqBean bean = new AddPersonalTaskReqBean();
-        bean.setDay_id(selectBean.getId());
-        bean.setYear(year);
-        bean.setMonth(month);
-        bean.setDay(day);
-        bean.setDep_name(selectBean.getDep_name());
-        bean.setDep_id(selectBean.getDep_id());
-        bean.setLine_id(selectBean.getLine_id());
-        bean.setLine_name(selectBean.getLine_name());
-        bean.setDep_id(selectBean.getDep_id());
-        bean.setTowers_id(selectBean.getTowers_id());
-        bean.setType_name(selectBean.getType_name());
-        bean.setPlan_type(selectBean.getPlan_type());
-        bean.setGroup_id(selectBean.getGroup_id());
-        bean.setType_id(selectBean.getType_id());
-        bean.setType_val(selectBean.getType_val());
-        for (int i = 0; i < addPeoList.size(); i++) {
-            DepUserBean depUserBean = addPeoList.get(i);
-            bean.setUser_id(depUserBean.getUser_id());
-            bean.setUser_name(depUserBean.getUser_name());
-        }
         BaseRequest.getInstance().getService()
-                .savaPersonalTask(bean)
+                .addPersonTask(selectBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DangerBean>>(this) {
+                .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<DangerBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
                         if (t.getCode() == 1) {
                             setResult(RESULT_OK);
-                            Toast.makeText(AddPersonalTaskActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddPersonalTaskActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
                             Toast.makeText(AddPersonalTaskActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
@@ -472,18 +450,44 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 holder.taskType = (TextView) convertView.findViewById(R.id.add_group_task_type);
                 holder.itemTroubleCheck = (CheckBox) convertView.findViewById(R.id.add_group_task_check);
                 holder.itemTaskCheck = (RadioButton) convertView.findViewById(R.id.add_group_task_rb);
+                holder.item = (RelativeLayout) convertView.findViewById(R.id.personal_task_item);
+
                 convertView.setTag(holder);
             }
             GroupTaskBean listBean = lineTypeBeans.get(position);
-            holder.itemTroubleCheck.setVisibility(View.GONE);
-            holder.itemTaskCheck.setVisibility(View.VISIBLE);
+
             holder.itemTroubleName.setText(listBean.getLine_name()+listBean.getName());
             holder.taskType.setText(listBean.getType_name());
-           if (selectPosin==position){
-               holder.itemTaskCheck.setChecked(true);
-           }else {
-               holder.itemTaskCheck.setChecked(false);
-           }
+            holder.item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (selectBean.size()==0){
+                        listBean.setGroup_list_id(listBean.getId());
+                        listBean.setUser_id(SPUtil.getUserId(AddPersonalTaskActivity.this));
+                        listBean.setUser_name(SPUtil.getUserName(AddPersonalTaskActivity.this));
+                        selectBean.add(listBean);
+                        holder.itemTroubleCheck.setChecked(true);
+                    }else {
+                        int isExit=0;
+                        for (int i = 0; i < selectBean.size(); i++) {
+                            GroupTaskBean dayOfWeekBean = selectBean.get(i);
+                            if (dayOfWeekBean.getId().equals(listBean.getId())){
+                                isExit=1;
+                                selectBean.remove(i);
+                                holder.itemTroubleCheck.setChecked(false);
+                                return;
+                            }
+                        }
+                        if (isExit==0){
+                            listBean.setGroup_list_id(listBean.getId());
+                            selectBean.add(listBean);
+                            holder.itemTroubleCheck.setChecked(true);
+                        }
+                    }
+                    selectAdapter.setData(selectBean);
+
+                }
+            });
             return convertView;
         }
 
@@ -497,6 +501,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
          class ViewHolder {
             private   TextView itemTroubleName;
             private   TextView taskType;
+             private   RelativeLayout item;
             private CheckBox itemTroubleCheck;
              private RadioButton itemTaskCheck;
         }

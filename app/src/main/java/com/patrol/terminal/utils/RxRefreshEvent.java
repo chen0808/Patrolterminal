@@ -1,6 +1,7 @@
 package com.patrol.terminal.utils;
 
 import com.patrol.terminal.bean.DayOfWeekBean;
+import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.PlanTypeBean;
 
 import io.reactivex.Observable;
@@ -22,6 +23,15 @@ public class RxRefreshEvent {
     public static void publishDay(DayOfWeekBean bean) {
         dayobservable.onNext(bean);
     }
+
+    private static PublishSubject<GroupOfDayBean> groupobservable=PublishSubject.create();
+    public static PublishSubject<GroupOfDayBean> getGroopuObservable() {
+        return groupobservable;
+    }
+    public static void publishGrooup(GroupOfDayBean bean) {
+        groupobservable.onNext(bean);
+    }
+
     public static PublishSubject<PlanTypeBean> getTypeObservable() {
         return typeObservable;
     }
