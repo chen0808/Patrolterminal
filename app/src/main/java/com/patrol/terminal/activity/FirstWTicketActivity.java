@@ -54,6 +54,7 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SignDialog;
 
 import java.io.File;
@@ -791,6 +792,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                 finish();
                 break;
             case R.id.title_setting:
+                ProgressDialog.show(this, true, "正在上传...");
                 FirstTicketBean bean = getData();
                 Map<String, RequestBody> params = setParams(bean);
                 BaseRequest.getInstance().getService().upLoadFirstTicket(params).subscribeOn(Schedulers.io())
@@ -798,12 +800,14 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                         .subscribe(new BaseObserver(this) {
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
+                                ProgressDialog.cancle();
                                 Toast.makeText(FirstWTicketActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
 
                             @Override
                             protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                                ProgressDialog.cancle();
                                 Toast.makeText(FirstWTicketActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                             }
                         });

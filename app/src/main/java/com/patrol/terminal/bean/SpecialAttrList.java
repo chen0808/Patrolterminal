@@ -5,28 +5,28 @@ import java.io.Serializable;
 public class SpecialAttrList implements Serializable {
 
     /**
-     * id : 9F2DF17853FC468884A3F37260FDFED6
-     * name : 交叉跨越
+     * id : 98F764466504450DBC4C490F6DB512C2
+     * name : 八防
      * p_id : 0
-     * sort : 0
+     * sort : 1
      * remarks : null
-     * level_no : null
-     * p_name : 无
-     * full_name : \交叉跨越
-     * leaf : 0
-     * leaf_total : 30
+     * level_no : 1
+     * p_name : null
+     * full_name : null
+     * leaf : null
+     * leaf_total : null
      */
 
     private String id;
     private String name;
     private String p_id;
     private int sort;
-    private String remarks;
-    private String level_no;
-    private String p_name;
-    private String full_name;
-    private String leaf;
-    private String leaf_total;
+    private Object remarks;
+    private int level_no;
+    private Object p_name;
+    private Object full_name;
+    private Object leaf;
+    private Object leaf_total;
 
     public String getId() {
         return id;
@@ -60,51 +60,51 @@ public class SpecialAttrList implements Serializable {
         this.sort = sort;
     }
 
-    public String getRemarks() {
+    public Object getRemarks() {
         return remarks;
     }
 
-    public void setRemarks(String remarks) {
+    public void setRemarks(Object remarks) {
         this.remarks = remarks;
     }
 
-    public String getLevel_no() {
+    public int getLevel_no() {
         return level_no;
     }
 
-    public void setLevel_no(String level_no) {
+    public void setLevel_no(int level_no) {
         this.level_no = level_no;
     }
 
-    public String getP_name() {
+    public Object getP_name() {
         return p_name;
     }
 
-    public void setP_name(String p_name) {
+    public void setP_name(Object p_name) {
         this.p_name = p_name;
     }
 
-    public String getFull_name() {
+    public Object getFull_name() {
         return full_name;
     }
 
-    public void setFull_name(String full_name) {
+    public void setFull_name(Object full_name) {
         this.full_name = full_name;
     }
 
-    public String getLeaf() {
+    public Object getLeaf() {
         return leaf;
     }
 
-    public void setLeaf(String leaf) {
+    public void setLeaf(Object leaf) {
         this.leaf = leaf;
     }
 
-    public String getLeaf_total() {
+    public Object getLeaf_total() {
         return leaf_total;
     }
 
-    public void setLeaf_total(String leaf_total) {
+    public void setLeaf_total(Object leaf_total) {
         this.leaf_total = leaf_total;
     }
 }

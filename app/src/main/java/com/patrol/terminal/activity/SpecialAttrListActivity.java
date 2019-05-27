@@ -108,14 +108,14 @@ public class SpecialAttrListActivity extends BaseActivity {
         List<SpecialAttrList> listLevel3 = new ArrayList<>();
         List<SpecialAttrList> listLevel4 = new ArrayList<>();
         for (int i = 0; i < results.size(); i++) {
-            int count = getSlashCount(results.get(i).getFull_name());
-            if (count == 2) {
+            int count = results.get(i).getLevel_no();
+            if (count == 1) {
                 listLevel1.add(results.get(i));
-            } else if (count == 3) {
+            } else if (count == 2) {
                 listLevel2.add(results.get(i));
-            } else if (count == 4) {
+            } else if (count == 3) {
                 listLevel3.add(results.get(i));
-            } else if (count == 5) {
+            } else if (count == 4) {
                 listLevel4.add(results.get(i));
             }
         }

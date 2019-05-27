@@ -827,10 +827,14 @@ public interface ApiServise {
     Observable<BaseResult<List<LineName>>> getDoubleLine(@Query("id") String id);
 
     //特殊属性列表
-    @GET("task/danger/wares/allGET")
+    @GET("task/danger/wares/waresAllGET")
     Observable<BaseResult<List<SpecialAttrList>>> specialAttrList();
 
     //起始终点杆塔
     @GET("eq/tower/allGET")
     Observable<BaseResult<List<TowerListBean>>> towerList(@Query("line_id") String line_id, @Query("order") String order);
+
+    //添加特殊属性
+    @POST("eq/tower/wares/savePOST")
+    Observable<BaseResult> addSpecial();
 }
