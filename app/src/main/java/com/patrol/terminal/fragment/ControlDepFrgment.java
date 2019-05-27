@@ -273,6 +273,7 @@ public class ControlDepFrgment extends BaseFragment {
             if (workControlCardBean != null) {
                 leaderName = workControlCardBean.getDuty_user_name();
                 leaderId = workControlCardBean.getDuty_user_id();
+                controlCardPersonal.setText(leaderName);
             }
         }
     }
@@ -295,7 +296,13 @@ public class ControlDepFrgment extends BaseFragment {
             mControlDepShowList1.add(info);
         }
 
-        ControlDepdapter1 depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick, workerSelectList.getUserInfos());
+        ControlDepdapter1 depdapter1;
+        if (workerSelectList != null) {
+             depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick, workerSelectList.getUserInfos());   //更新模式
+        }else {
+             depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick, null);   //查看模式
+        }
+
         controlCardDiv.setAdapter(depdapter1);
     }
 
