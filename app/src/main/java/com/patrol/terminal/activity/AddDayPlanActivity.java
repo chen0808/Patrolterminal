@@ -25,10 +25,12 @@ import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.PlanWeekLineBean;
 import com.patrol.terminal.bean.PlanWeekReqBean;
+import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.NoScrollListView;
+import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,6 +93,7 @@ public class AddDayPlanActivity extends BaseActivity {
     private String day;
     private String lineName;
     private String typeName;
+    private List<DayOfWeekBean> lineList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +103,10 @@ public class AddDayPlanActivity extends BaseActivity {
         initview();
 
         getLineType();
-
+        getLine();
+        getWeekPlan();
     }
+
 
     private void initview() {
         week = DateUatil.getWeekNum() + "";
@@ -111,26 +116,31 @@ public class AddDayPlanActivity extends BaseActivity {
         adapter = new AddDayAdapter(this, linList);
         monthPlanTypeLv.setAdapter(adapter);
 
-        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+        subscribe = RxRefreshEvent.getDayObservable().subscribe(new Consumer<DayOfWeekBean>() {
 
             @Override
-            public void accept(String type) throws Exception {
-                if (type.startsWith("add")) {
-                    String[] split = type.split("@");
-                    DayOfWeekBean tower=new DayOfWeekBean();
-                    tower.setTowers_id(split[1]);
-                    tower.setName(split[2]);
-                    tower.setWeek_line_id(split[3]);
-                    selectType.add(tower);
-                } else if (type.startsWith("delete")) {
+            public void accept(DayOfWeekBean type) throws Exception {
+                if (selectType.size()==0){
+                    type.setWeek_tower_id(type.getId());
+                    type.setDay(day);
+                    selectType.add(type);
+                }else {
+                    int isExit=0;
                     for (int i = 0; i < selectType.size(); i++) {
-                        String[] split = type.split("@");
-                        if (split[1].equals(selectType.get(i).getId())) {
+                        DayOfWeekBean dayOfWeekBean = selectType.get(i);
+                        if (dayOfWeekBean.getId().equals(type.getId())){
+                            isExit=1;
                             selectType.remove(i);
-                            break;
+                            return;
                         }
                     }
+                    if (isExit==0){
+                        type.setWeek_tower_id(type.getId());
+                        type.setDay(day);
+                        selectType.add(type);
+                    }
                 }
+
             }
         });
     }
@@ -142,10 +152,6 @@ public class AddDayPlanActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.month_plan_line:
-                if (type_id==null||"".equals(type_id)){
-                   Toast.makeText(this,"请先选择工作类型",Toast.LENGTH_SHORT).show();
-                   return;
-                }
                 showLine();
                 break;
             case R.id.month_plan_type:
@@ -178,7 +184,6 @@ public class AddDayPlanActivity extends BaseActivity {
         OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                linList.clear();
                 selectType.clear();
                 lineName = lineNameList.get(options1);
                 monthPlanLine.setText(lineName);
@@ -186,10 +191,9 @@ public class AddDayPlanActivity extends BaseActivity {
                     String line_name = results.get(i).getLine_name();
                     if (lineName.equals(line_name)){
                         lineId = results.get(options1).getLine_id();
-                        linList.add(results.get(i));
                     }
                 }
-             adapter.setData(linList);
+              getWeekPlan();
             }
         }).build();
         pvOptions.setPicker(lineNameList);
@@ -208,10 +212,7 @@ public class AddDayPlanActivity extends BaseActivity {
                 typeName = typeList.get(options1).getName();
                 monthPlanType.setText(typeName);
                 type_id = typeList.get(options1).getId();
-                monthPlanLine.setText("点击选择线路");
-                linList.clear();
-                adapter.setData(linList);
-                getLine();
+                getWeekPlan();
             }
         }).build();
         pvOptions.setPicker(typeNameList);
@@ -220,19 +221,17 @@ public class AddDayPlanActivity extends BaseActivity {
 
     //获取每个班组负责的线路
     public void getLine() {
-        selectType.clear();
-        lineNameList.clear();
         //获取月计划列表
         BaseRequest.getInstance().getService()
-                .getDayPlan(year,month, SPUtil.getDepId(this),type_id)
+                .getDayPlan(year,month, SPUtil.getDepId(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
-                        results = t.getResults();
-                        for (int i = 0; i < results.size(); i++) {
-                            DayOfWeekBean bean = results.get(i);
+                        lineList = t.getResults();
+                        for (int i = 0; i < lineList.size(); i++) {
+                            DayOfWeekBean bean = lineList.get(i);
                                 String line_name = bean.getLine_name();
                                 if (lineNameList.indexOf(line_name)==-1){
                                     lineNameList.add(line_name);
@@ -245,7 +244,28 @@ public class AddDayPlanActivity extends BaseActivity {
                     }
                 });
     }
+    //获取每个班组负责的线路
+    public void getWeekPlan() {
+        ProgressDialog.show(this,false,"正在加载。。。。");
+        //获取月计划列表
+        BaseRequest.getInstance().getService()
+                .getDayPlan(year,month, SPUtil.getDepId(this),type_id,lineId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
+                        results = t.getResults();
+                        adapter.setData(results);
+                        ProgressDialog.cancle();
+                    }
 
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
 
     //获取工作类型
     public void getLineType() {
@@ -274,43 +294,16 @@ public class AddDayPlanActivity extends BaseActivity {
 
     //保存
     public void saveWeek() {
-        if (type_id==null){
-            Toast.makeText(this,"请选择工作类型",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (lineId==null){
-            Toast.makeText(this,"请选择线路",Toast.LENGTH_SHORT).show();
-            return;
-        }
+
         if (selectType.size()==0){
-            Toast.makeText(this,"请添加杆段",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"请添加计划",Toast.LENGTH_SHORT).show();
             return;
         }
-        PlanWeekReqBean bean = new PlanWeekReqBean();
-        bean.setYear(year);
-        bean.setMonth(Integer.parseInt(month) + "");
-        bean.setWeek(week);
-        PlanWeekLineBean planWeekLineBean = new PlanWeekLineBean();
-        planWeekLineBean.setType_id(type_id);
-        planWeekLineBean.setLine_id(lineId);
-        planWeekLineBean.setLine_name(lineName);
-        planWeekLineBean.setDep_id(SPUtil.getDepId(this));
-        planWeekLineBean.setDep_name(SPUtil.getDepName(this));
-        planWeekLineBean.setType_name(typeName);
-        List<PlanWeekLineBean.TowersBean> list = new ArrayList();
-        for (int i = 0; i < selectType.size(); i++) {
-            PlanWeekLineBean.TowersBean towersBean = new PlanWeekLineBean.TowersBean();
-            DayOfWeekBean bean1 = selectType.get(i);
-            towersBean.setTowers_id(bean1.getTowers_id());
-            towersBean.setName(bean1.getName());
-            towersBean.setWeek_line_id(bean1.getWeek_line_id());
-            list.add(towersBean);
-        }
-        planWeekLineBean.setTowers(list);
-        bean.setPlanDaykLine(planWeekLineBean);
+
+
 
         BaseRequest.getInstance().getService()
-                .addDayPlan(bean)
+                .addDayPlan(selectType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineTypeBean>>(this) {

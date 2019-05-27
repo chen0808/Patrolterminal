@@ -72,6 +72,7 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
                 intent.putExtra("line_name", item.getLine_name());
                 intent.putExtra("year", item.getYear()+"");
                 intent.putExtra("month", item.getMonth()+"");
+                intent.putExtra("line_id", item.getLine_id()+"");
                 intent.putExtra("type", item.getFull_plan());
                 mContext.startActivity(intent);
             }

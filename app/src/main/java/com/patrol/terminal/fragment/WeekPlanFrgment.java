@@ -2,6 +2,7 @@ package com.patrol.terminal.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,7 +111,12 @@ public class WeekPlanFrgment extends BaseFragment {
         week = DateUatil.getWeekNum() + "";
         currWeek = DateUatil.getWeekNum() + "";
         taskTitle.setText("周计划列表");
-        taskDate.setText(time + "第" + week + "周");
+        Map<String, Object> scopeForWeeks = TimeUtil.getScopeForWeeks(Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(currWeek));
+       String beginDate = TimeUtil.dateToDate((String) scopeForWeeks.get("beginDate"));
+        String  endDate = TimeUtil.dateToDate((String) scopeForWeeks.get("endDate"));
+        String startDay=beginDate.split("月")[1];
+        String endDay=endDate.split("月")[1];
+        taskDate.setText(time +startDay+"-"+endDay+ "(" + currWeek + ")");
 
         // 设置监听器。
         planRv.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -282,11 +288,8 @@ public class WeekPlanFrgment extends BaseFragment {
     //提交周计划审核
     public void submitWeekPlan(String status) {
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
-        bean.setYear(year);
-        bean.setMonth(month);
         bean.setAudit_status(status);
-        bean.setWeek(week);
-        bean.setLines(lineList);
+        bean.setTowers(lineList);
         BaseRequest.getInstance().getService()
                 .submitWeekPlan(bean)
                 .subscribeOn(Schedulers.io())
@@ -314,31 +317,28 @@ public class WeekPlanFrgment extends BaseFragment {
 
     //初始化月份数据
     public void initdata() {
-        List<List<String>> list = new ArrayList<>();
-        for (int i = 2017; i < 2100; i++) {
+        for (int i = 2018; i < 2100; i++) {
             years.add(i + "年");
-            List<String> monthList = new ArrayList<>();
-
+            ArrayList<String> options2Items_01 = new ArrayList<>();
+            List<List<String>> toptions2Items1 = new ArrayList<>();
             for (int j = 1; j < 13; j++) {
-                monthList.add(j + "月");
-                List<String> weekList = new ArrayList<>();
+                options2Items_01.add(j + "月");
 
+                List<String> options3Items_01 = new ArrayList<>();
                 int weekNumOfMonth = DateUatil.getWeekNumOfMonth(i + "", j + "");
                 for (int y = 1; y < weekNumOfMonth + 1; y++) {
 
                     Map<String, Object> scopeForWeeks = TimeUtil.getScopeForWeeks(i,j,y);
                     String beginDate =TimeUtil.dateToDay((String) scopeForWeeks.get("beginDate"));
                     String endDate =TimeUtil.dateToDay((String) scopeForWeeks.get("endDate"));
-                    weekList.add(beginDate+"-" + endDate+ "("+y+")");
+                    options3Items_01.add(beginDate+"-" + endDate+ "("+y+")");
                 }
-                list.add(weekList);
-                months.add(monthList);
+                toptions2Items1.add(options3Items_01);
 
             }
-
-            weeks.add(list);
+            weeks.add(toptions2Items1);
+            months.add(options2Items_01);
         }
-
 
     }
 
@@ -354,7 +354,8 @@ public class WeekPlanFrgment extends BaseFragment {
                 String time = years.get(options1) + months.get(options1).get(option2) + weeks.get(options1).get(option2).get(options3);
                 year = years.get(options1).split("年")[0];
                 month = months.get(options1).get(option2).split("月")[0];
-                week = weeks.get(options1).get(option2).get(options3).substring(1, 2);
+                String date = weeks.get(options1).get(option2).get(options3);
+                week =date.substring(date.length()-2,date.length()-1);
                 taskDate.setText(time);
                 getWeekList();
             }

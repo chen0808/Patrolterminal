@@ -22,6 +22,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddMonthPlanActivity;
 import com.patrol.terminal.activity.MonthPlanDetailActivity;
+import com.patrol.terminal.activity.SpecialPlanDetailActivity;
 import com.patrol.terminal.activity.TemporaryActivity;
 import com.patrol.terminal.adapter.MonthPlanAdapter;
 import com.patrol.terminal.adapter.MonthPlanListAdapter;
@@ -147,18 +148,18 @@ public class MonthPlanFrgment extends BaseFragment {
                 MonthPlanBean bean = (MonthPlanBean) data.get(position);
                 Intent intent = new Intent();
 
-                if (bean.getMonth_id() != null) {
+                if (bean.getRepair_content() == null) {
                     intent.setClass(getContext(), MonthPlanDetailActivity.class);
                     intent.putExtra("year", bean.getYear());
                     intent.putExtra("month", bean.getMonth());
                     intent.putExtra("month_id", bean.getMonth_id());
                     intent.putExtra("id", bean.getLine_id());
                 } else {
-//                    intent.setClass(getContext(), SpecialPlanDetailActivity.class);
-//                    intent.putExtra("from","month");
-//                    Bundle bundle = new Bundle();
-//                    bundle.putParcelable("bean", bean.getPlanCheck());
-//                    intent.putExtras(bundle);
+                    intent.setClass(getContext(), SpecialPlanDetailActivity.class);
+                    intent.putExtra("from","month");
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("bean", bean);
+                    intent.putExtras(bundle);
                 }
                 startActivity(intent);
             }

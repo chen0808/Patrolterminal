@@ -12,7 +12,7 @@ public class WeekOfMonthBean {
      * line_id : 56C007929745424BB9D40598483D16A6
      * towers_id :
      */
-
+    private String month_line_id;
     private String towers_name;
     private String type_name;
     private String type_id;
@@ -20,6 +20,14 @@ public class WeekOfMonthBean {
     private String line_name;
     private String line_id;
     private String towers_id;
+
+    public String getMonth_line_id() {
+        return month_line_id;
+    }
+
+    public void setMonth_line_id(String month_line_id) {
+        this.month_line_id = month_line_id;
+    }
 
     public String getTowers_name() {
         return towers_name;

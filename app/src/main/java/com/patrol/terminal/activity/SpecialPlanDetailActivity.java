@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.InnerPlanbean;
+import com.patrol.terminal.bean.MonthPlanBean;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,11 +54,11 @@ public class SpecialPlanDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         String from = getIntent().getStringExtra("from");
         if ("month".equals(from)){
-        InnerPlanbean bean = getIntent().getParcelableExtra("bean");
+            MonthPlanBean bean = getIntent().getParcelableExtra("bean");
         titleName.setText("计划详情");
-        specialPlanName.setText(bean.getPlan_name());
+        specialPlanName.setText(bean.getRepair_content());
         tvLineName.setText("线路名称 : "+bean.getLine_name());
-        specialPlanBeginTime.setText("开始时间 : "+bean.getBegin_time());
+        specialPlanBeginTime.setText("开始时间 : "+bean.getStart_time());
         specialPlanEndTime.setText("结束时间 : "+bean.getEnd_time());
         specialPlanLevel.setText("电压等级 : "+bean.getVoltage_level());
         specialPlanDep.setText("申请单位 :" +bean.getDep_name());

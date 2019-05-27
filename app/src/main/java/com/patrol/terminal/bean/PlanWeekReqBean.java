@@ -6,15 +6,55 @@ public class PlanWeekReqBean {
     private  String year;
     private  String month;
     private  String week;
+    // 开始时间
+    private String begin_time;
+    // 结束时间
+    private String end_time;
     private  String day;
     private  String line_id;
+
     private  String type_id;
     private  String type_val;
     private List<Tower> planWeekTowerList;
+    private List<Tower> towers;
     private PlanWeekLineBean planWeekLine;
     private PlanWeekLineBean planDayLine;
     private String  planTime;
     private List<DayPlanReqBean>  weekPlanIds;
+
+
+
+    public String getBegin_time() {
+        return begin_time;
+    }
+
+    public void setBegin_time(String begin_time) {
+        this.begin_time = begin_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(String end_time) {
+        this.end_time = end_time;
+    }
+
+    public List<Tower> getTowers() {
+        return towers;
+    }
+
+    public void setTowers(List<Tower> towers) {
+        this.towers = towers;
+    }
+
+    public PlanWeekLineBean getPlanDayLine() {
+        return planDayLine;
+    }
+
+    public void setPlanDayLine(PlanWeekLineBean planDayLine) {
+        this.planDayLine = planDayLine;
+    }
 
     public PlanWeekLineBean getPlanDaykLine() {
         return planDayLine;

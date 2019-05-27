@@ -26,15 +26,7 @@ public class AddTowerAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        if (type==0){
-            if (lineTypeBeans.size()<6){
-                return lineTypeBeans.size();
-            }else {
-                return 6;
-            }
-        }else {
             return lineTypeBeans.size();
-        }
 
     }
 
@@ -71,9 +63,9 @@ public class AddTowerAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (holder.towerCheck.isChecked()){
-                    //RxRefreshEvent.publish("add@"+listBean.getPatrol().get(position).getId()+"@"+listBean.getTowers()+"@"+listBean.getMonth_line_id());
+                    RxRefreshEvent.publish("add@"+listBean.getTowers_id()+"@"+listBean.getLine_id()+"@"+listBean.getLine_name()+"@"+listBean.getTowers_name()+"@"+listBean.getType_id()+"@"+listBean.getType_name()+"@"+listBean.getType_sign()+"@"+listBean.getMonth_line_id());
                 }else {
-                   // RxRefreshEvent.publish("delete@"+listBean.getId());
+                    RxRefreshEvent.publish("delete@"+listBean.getTowers_id());
                 }
 
             }

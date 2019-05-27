@@ -1,10 +1,13 @@
 package com.patrol.terminal.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.adapter.MonthPlanListAdapter;
 
-public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implements MultiItemEntity {
+public class MonthPlanBean implements Parcelable {
 
 
 
@@ -85,8 +88,8 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
     private int blackout_days;
     private String last_repair_time;
     private String risk_level;
-    private Object type_id;
-    private Object type_val;
+    private String type_id;
+    private String type_val;
     private String substation_id;
     private String remark;
     private int week;
@@ -94,7 +97,7 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
     private String month_audit_status;
     private String week_audit_status;
     private String done_status;
-    private Object done_time;
+    private String done_time;
     private String is_ele;
     private String ele_user_id;
     private String ele_user_name;
@@ -102,30 +105,21 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
     private String safe_user_name;
     private String check_user_id;
     private String check_user_name;
-    private Object taskList;
-    private Object userId1;
-    private Object userName1;
-    private Object userId2;
-    private Object userName2;
-    private Object allot_status;
+    private String taskList;
+    private String userId1;
+    private String userName1;
+    private String userId2;
+    private String userName2;
+    private String allot_status;
 
-    public Object getAllot_status() {
+    public String getAllot_status() {
         return allot_status;
     }
 
-    public void setAllot_status(Object allot_status) {
+    public void setAllot_status(String allot_status) {
         this.allot_status = allot_status;
     }
-
-    @Override
-    public int getLevel() {
-        return 2;
-    }
-
-    @Override
-    public int getItemType() {
-        return MonthPlanListAdapter.TYPE_2;
-    }
+    
 
     public String getFull_plan() {
         return type_name;
@@ -311,19 +305,19 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
         this.risk_level = risk_level;
     }
 
-    public Object getType_id() {
+    public String getType_id() {
         return type_id;
     }
 
-    public void setType_id(Object type_id) {
+    public void setType_id(String type_id) {
         this.type_id = type_id;
     }
 
-    public Object getType_val() {
+    public String getType_val() {
         return type_val;
     }
 
-    public void setType_val(Object type_val) {
+    public void setType_val(String type_val) {
         this.type_val = type_val;
     }
 
@@ -383,11 +377,11 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
         this.done_status = done_status;
     }
 
-    public Object getDone_time() {
+    public String getDone_time() {
         return done_time;
     }
 
-    public void setDone_time(Object done_time) {
+    public void setDone_time(String done_time) {
         this.done_time = done_time;
     }
 
@@ -447,43 +441,162 @@ public class MonthPlanBean extends AbstractExpandableItem<PatrolLevel3> implemen
         this.check_user_name = check_user_name;
     }
 
-    public Object getTaskList() {
+    public String getTaskList() {
         return taskList;
     }
 
-    public void setTaskList(Object taskList) {
+    public void setTaskList(String taskList) {
         this.taskList = taskList;
     }
 
-    public Object getUserId1() {
+    public String getUserId1() {
         return userId1;
     }
 
-    public void setUserId1(Object userId1) {
+    public void setUserId1(String userId1) {
         this.userId1 = userId1;
     }
 
-    public Object getUserName1() {
+    public String getUserName1() {
         return userName1;
     }
 
-    public void setUserName1(Object userName1) {
+    public void setUserName1(String userName1) {
         this.userName1 = userName1;
     }
 
-    public Object getUserId2() {
+    public String getUserId2() {
         return userId2;
     }
 
-    public void setUserId2(Object userId2) {
+    public void setUserId2(String userId2) {
         this.userId2 = userId2;
     }
 
-    public Object getUserName2() {
+    public String getUserName2() {
         return userName2;
     }
 
-    public void setUserName2(Object userName2) {
+    public void setUserName2(String userName2) {
         this.userName2 = userName2;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.type_name);
+        dest.writeString(this.plan_type);
+        dest.writeString(this.dep_id);
+        dest.writeInt(this.month);
+        dest.writeInt(this.year);
+        dest.writeString(this.month_id);
+        dest.writeString(this.line_name);
+        dest.writeString(this.audit_status);
+        dest.writeString(this.dep_name);
+        dest.writeString(this.id);
+        dest.writeString(this.apply_dep_id);
+        dest.writeString(this.apply_dep_name);
+        dest.writeString(this.voltage_level);
+        dest.writeString(this.line_id);
+        dest.writeString(this.repair_content);
+        dest.writeString(this.is_blackout);
+        dest.writeString(this.blackout_range);
+        dest.writeString(this.task_source);
+        dest.writeString(this.start_time);
+        dest.writeString(this.end_time);
+        dest.writeInt(this.blackout_days);
+        dest.writeString(this.last_repair_time);
+        dest.writeString(this.risk_level);
+        dest.writeString(this.type_id);
+        dest.writeString(this.type_val);
+        dest.writeString(this.substation_id);
+        dest.writeString(this.remark);
+        dest.writeInt(this.week);
+        dest.writeInt(this.day);
+        dest.writeString(this.month_audit_status);
+        dest.writeString(this.week_audit_status);
+        dest.writeString(this.done_status);
+        dest.writeString(this.done_time);
+        dest.writeString(this.is_ele);
+        dest.writeString(this.ele_user_id);
+        dest.writeString(this.ele_user_name);
+        dest.writeString(this.safe_user_id);
+        dest.writeString(this.safe_user_name);
+        dest.writeString(this.check_user_id);
+        dest.writeString(this.check_user_name);
+        dest.writeString(this.taskList);
+        dest.writeString(this.userId1);
+        dest.writeString(this.userName1);
+        dest.writeString(this.userId2);
+        dest.writeString(this.userName2);
+        dest.writeString(this.allot_status);
+    }
+
+    public MonthPlanBean() {
+    }
+
+    protected MonthPlanBean(Parcel in) {
+        this.type_name = in.readString();
+        this.plan_type = in.readString();
+        this.dep_id = in.readString();
+        this.month = in.readInt();
+        this.year = in.readInt();
+        this.month_id = in.readString();
+        this.line_name = in.readString();
+        this.audit_status = in.readString();
+        this.dep_name = in.readString();
+        this.id = in.readString();
+        this.apply_dep_id = in.readString();
+        this.apply_dep_name = in.readString();
+        this.voltage_level = in.readString();
+        this.line_id = in.readString();
+        this.repair_content = in.readString();
+        this.is_blackout = in.readString();
+        this.blackout_range = in.readString();
+        this.task_source = in.readString();
+        this.start_time = in.readString();
+        this.end_time = in.readString();
+        this.blackout_days = in.readInt();
+        this.last_repair_time = in.readString();
+        this.risk_level = in.readString();
+        this.type_id = in.readString();
+        this.type_val = in.readString();
+        this.substation_id = in.readString();
+        this.remark = in.readString();
+        this.week = in.readInt();
+        this.day = in.readInt();
+        this.month_audit_status = in.readString();
+        this.week_audit_status = in.readString();
+        this.done_status = in.readString();
+        this.done_time = in.readString();
+        this.is_ele = in.readString();
+        this.ele_user_id = in.readString();
+        this.ele_user_name = in.readString();
+        this.safe_user_id = in.readString();
+        this.safe_user_name = in.readString();
+        this.check_user_id = in.readString();
+        this.check_user_name = in.readString();
+        this.taskList = in.readString();
+        this.userId1 = in.readString();
+        this.userName1 = in.readString();
+        this.userId2 = in.readString();
+        this.userName2 = in.readString();
+        this.allot_status = in.readString();
+    }
+
+    public static final Parcelable.Creator<MonthPlanBean> CREATOR = new Parcelable.Creator<MonthPlanBean>() {
+        @Override
+        public MonthPlanBean createFromParcel(Parcel source) {
+            return new MonthPlanBean(source);
+        }
+
+        @Override
+        public MonthPlanBean[] newArray(int size) {
+            return new MonthPlanBean[size];
+        }
+    };
 }

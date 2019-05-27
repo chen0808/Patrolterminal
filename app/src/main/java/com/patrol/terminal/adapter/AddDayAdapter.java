@@ -25,16 +25,7 @@ public class AddDayAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-
-        if (type==0){
-            if (lineTypeBeans.size()<6){
-                return lineTypeBeans.size();
-            }else {
-                return 6;
-            }
-        }else {
             return lineTypeBeans.size();
-        }
 
     }
 
@@ -58,19 +49,21 @@ public class AddDayAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_add_tower, parent, false);
             holder.towerNmae = (TextView) convertView.findViewById(R.id.item_add_tower_name);
             holder.towerCheck = (CheckBox) convertView.findViewById(R.id.item_add_tower_check);
+            holder.towerType = (TextView) convertView.findViewById(R.id.item_add_tower_type);
             convertView.setTag(holder);
         }
         DayOfWeekBean listBean = lineTypeBeans.get(position);
         String planName=listBean.getLine_name()+listBean.getName();
         holder.towerNmae.setText(planName);
+        holder.towerType.setText(listBean.getType_name());
         holder.towerCheck.setChecked(false);
         holder.towerCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (holder.towerCheck.isChecked()){
-                    RxRefreshEvent.publish("add@"+listBean.getTowers_id()+"@"+listBean.getName()+"@"+listBean.getWeek_line_id());
+                    RxRefreshEvent.publishDay(listBean);
                 }else {
-                    RxRefreshEvent.publish("delete@"+listBean.getTowers_id());
+                    RxRefreshEvent.publishDay(listBean);
                 }
 
             }
@@ -86,7 +79,7 @@ public class AddDayAdapter extends BaseAdapter {
 
 
     static class ViewHolder {
-      private   TextView towerNmae;
+      private   TextView towerNmae,towerType;
         private   CheckBox towerCheck;
 
     }

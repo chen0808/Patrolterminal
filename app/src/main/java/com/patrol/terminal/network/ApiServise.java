@@ -136,7 +136,7 @@ public interface ApiServise {
 
     //获取周计划杆段列表
     @GET("plan/month/line/monthGET")
-    Observable<BaseResult<List<WeekOfMonthBean>>> getWeekListWeek(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_id") String type_id);
+    Observable<BaseResult<List<WeekOfMonthBean>>> getWeekListWeek(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_id") String type_id,@Query("line_id") String line_id);
 
     //月计划列表
     @GET("/plan/month/dataGET")
@@ -152,12 +152,19 @@ public interface ApiServise {
 
 
     //根据当前日期查询所属周下所有计划接口
-    @GET("/plan/week/line/weekGET")
-    Observable<BaseResult<List<DayOfWeekBean>>> getDayPlan(@Query("year") String year, @Query("month") String month, @Query("dep_id") String dep_id, @Query("type_id") String type_id);
+    @GET("/plan/week/tower/weekGET")
+    Observable<BaseResult<List<DayOfWeekBean>>> getDayPlan(@Query("year") String year, @Query("month") String month, @Query("dep_id") String dep_id);
+
+
+
+
+    //根据当前日期查询所属周下所有计划接口
+    @GET("/plan/week/tower/weekGET")
+    Observable<BaseResult<List<DayOfWeekBean>>> getDayPlan(@Query("year") String year, @Query("month") String month, @Query("dep_id") String dep_id, @Query("type_id") String type_id, @Query("line_id") String line_id);
 
     //添加日计划
     @POST("/plan/day/savePOST")
-    Observable<BaseResult<List<LineTypeBean>>> addDayPlan(@Body PlanWeekReqBean bean);
+    Observable<BaseResult<List<LineTypeBean>>> addDayPlan(@Body  List<DayOfWeekBean> bean);
 
 
     //添加日计划
@@ -285,16 +292,19 @@ public interface ApiServise {
 
 
     //周计划列表
-    @GET("/plan/week/line/listGET")
+    @GET("/plan/week/tower/listGET ")
     Observable<BaseResult<List<WeekListBean>>> getWeekList(@Query("year") String year, @Query("month") String month, @Query("week") String week, @Query("dep_id") String dep_id, @Query("audit_status") String audit_status);
 
     //日计划列表
-    @GET("/plan/day/line/listGET")
+    @GET("/plan/day/tower/listGET")
     Observable<BaseResult<List<DayListBean>>> getDayList(@Query("year") String year, @Query("month") String month, @Query("day") String week, @Query("dep_id") String dep_id);
 
     //日计划列表
     @GET("/plan/day/line/dayGET")
     Observable<BaseResult<GroupOfDayBean>> getDayList(@Query("dep_id") String dep_id, @Query("type_id") String type_id);
+    //根据当前日期查询所属周下所有计划接口
+    @GET("plan/day/tower/dayGET")
+    Observable<BaseResult<List<GroupOfDayBean>>> getDayofGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day,@Query("dep_id") String dep_id, @Query("type_id") String type_id);
 
     //组任务列表
     @GET("/task/group/list/listGET")
