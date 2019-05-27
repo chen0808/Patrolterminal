@@ -18,6 +18,7 @@ import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DefectBean;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -91,7 +92,7 @@ public class GroupTaskDetailActivity extends Activity {
     //获取月计划列表
     public void getGroupList( ) {
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER) && "0".equals(bean.getIs_rob())) {
+        if (jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER) && "0".equals(bean.getIs_rob())&&"0".equals(bean.getAllot_status())) {
              type=1;
               taskSubmit.setVisibility(View.VISIBLE);
         }else if ("1".equals(bean.getIs_rob())){
@@ -99,11 +100,17 @@ public class GroupTaskDetailActivity extends Activity {
             taskSubmit.setVisibility(View.VISIBLE);
             taskSubmit.setText("抢单");
             taskSubmit.setBackgroundColor(getResources().getColor(R.color.write_red));
+            tvTableName.setVisibility(View.VISIBLE);
+            tvTableName.setText("关于"+bean.getLine_name()+bean.getName()+"的抢单任务");
+        }
+        if ("1".equals(bean.getAllot_status())){
+             tvLineType.setVisibility(View.VISIBLE);
+             tvLineType.setText("执行人 : " +bean.getWork_user_name());
         }
         tvTableName.setText(bean.getYear() + "年" + bean.getMonth() + "月" + bean.getDay() + "日班组任务");
         tvLineName.setText("线路名称 : " + bean.getLine_name());
         tvLineNo.setText("班  组 : " + bean.getDep_name());
-        tvLineDate.setText("小组负责人 " + bean.getDuty_user_name());
+        tvLineDate.setText("小组负责人 :" + bean.getDuty_user_name());
         tvLineTower.setText("杆  段 : " + bean.getName());
 
         DefectBean planTypeBean = new DefectBean();
@@ -147,6 +154,8 @@ public class GroupTaskDetailActivity extends Activity {
                                  taskSubmit.setText("抢单");
                                  taskSubmit.setBackgroundColor(getResources().getColor(R.color.write_red));
                                  Toast.makeText(GroupTaskDetailActivity.this,"成功生成抢单任务",Toast.LENGTH_SHORT).show();
+                                 tvTableName.setVisibility(View.VISIBLE);
+                                 tvTableName.setText("关于"+bean.getLine_name()+bean.getName()+"的抢单任务");
                                  setResult(RESULT_OK);
                              }
                              ProgressDialog.cancle();
@@ -177,7 +186,9 @@ public class GroupTaskDetailActivity extends Activity {
                         if (t.getCode()==1){
                             type=0;
                             taskSubmit.setVisibility(View.GONE);
+                            tvTableName.setVisibility(View.GONE);
                             Toast.makeText(GroupTaskDetailActivity.this,"抢单成功，请到您的个人任务列表中查看",Toast.LENGTH_SHORT).show();
+                            RxRefreshEvent.publish("refreshPersonal");
                             setResult(RESULT_OK);
                         }else {
                             Toast.makeText(GroupTaskDetailActivity.this,"抢单失败",Toast.LENGTH_SHORT).show();

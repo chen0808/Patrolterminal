@@ -36,7 +36,8 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
             viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
 
             viewHolder.setVisible(R.id.item_line_state, false);
-            viewHolder.setVisible(R.id.month_plan_go, true);
+            viewHolder.setVisible(R.id.month_plan_go, false);
+            viewHolder.setVisible(R.id.plan_progressbar_ll, true);
             HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
 
             viewHolder.setText(R.id.item_line_status, "杆段 : " +item.getName());
@@ -46,24 +47,24 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
                     .setVisible(R.id.plan_to_change, true)
                     .setText(R.id.item_plan_content, "类型 : " + item.getType_name());
 
-            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
-                    intent.putExtra("from", Constant.FROM_DAYPLAN_TO_ADDMONTH);
-                    intent.putExtra("week_id", item.getWeek_line_id());
-                    intent.putExtra("day_id", item.getDay_id());
-                    intent.putExtra("line_id", item.getLine_id());
-                    intent.putExtra("line_name", item.getLine_name());
-                    intent.putExtra("year", item.getYear() + "");
-                    intent.putExtra("month", item.getMonth() + "");
-                    intent.putExtra("day", item.getDay() + "");
-                    intent.putExtra("id", item.getId());
-                    intent.putExtra("type", item.getType_name());
-                    //intent.putExtra("from","week");
-                    mContext.startActivity(intent);
-                }
-            });
+//            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
+//                    intent.putExtra("from", Constant.FROM_DAYPLAN_TO_ADDMONTH);
+//                    intent.putExtra("week_id", item.getWeek_line_id());
+//                    intent.putExtra("day_id", item.getDay_id());
+//                    intent.putExtra("line_id", item.getLine_id());
+//                    intent.putExtra("line_name", item.getLine_name());
+//                    intent.putExtra("year", item.getYear() + "");
+//                    intent.putExtra("month", item.getMonth() + "");
+//                    intent.putExtra("day", item.getDay() + "");
+//                    intent.putExtra("id", item.getId());
+//                    intent.putExtra("type", item.getType_name());
+//                    //intent.putExtra("from","week");
+//                    mContext.startActivity(intent);
+//                }
+//            });
 
     }
 }

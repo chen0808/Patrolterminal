@@ -25,9 +25,11 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -41,6 +43,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class PersonalTaskFrgment extends BaseFragment {
@@ -65,6 +69,7 @@ public class PersonalTaskFrgment extends BaseFragment {
     private String gId;
     private String week;
     private String year,month,day;
+    private Disposable refreshPersonal;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -136,6 +141,16 @@ public class PersonalTaskFrgment extends BaseFragment {
             }
         });
         getPersonalList();
+
+        refreshPersonal = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.equals("refreshPersonal")) {
+                    getPersonalList();
+                }
+            }
+        });
     }
     public void inteDate() {
         String[] years = time.split("年");
@@ -218,6 +233,14 @@ public class PersonalTaskFrgment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==12&&resultCode==-1){
             getPersonalList();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (refreshPersonal!=null){
+            refreshPersonal.dispose();
         }
     }
 }
