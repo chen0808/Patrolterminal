@@ -70,11 +70,13 @@ import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.SecondTicketBean;
 import com.patrol.terminal.bean.SituationBean;
 import com.patrol.terminal.bean.SpecialAttrBean;
+import com.patrol.terminal.bean.SpecialAttrList;
 import com.patrol.terminal.bean.SubmitPlanReqBean;
 import com.patrol.terminal.bean.SubmitPlanReqStateBean;
 import com.patrol.terminal.bean.ThirdTicketBean;
 import com.patrol.terminal.bean.TicketSafeBean;
 import com.patrol.terminal.bean.TodoListBean;
+import com.patrol.terminal.bean.TowerListBean;
 import com.patrol.terminal.bean.TrainAuditorBean;
 import com.patrol.terminal.bean.TrainLevelBean;
 import com.patrol.terminal.bean.TrainingAddTaskBean;
@@ -138,7 +140,7 @@ public interface ApiServise {
 
     //获取周计划杆段列表
     @GET("plan/month/line/monthGET")
-    Observable<BaseResult<List<WeekOfMonthBean>>> getWeekListWeek(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_id") String type_id,@Query("line_id") String line_id);
+    Observable<BaseResult<List<WeekOfMonthBean>>> getWeekListWeek(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_id") String type_id, @Query("line_id") String line_id);
 
     //月计划列表
     @GET("/plan/month/dataGET")
@@ -173,7 +175,7 @@ public interface ApiServise {
 
     //添加日计划
     @POST("/plan/day/savePOST")
-    Observable<BaseResult<List<LineTypeBean>>> addDayPlan(@Body  List<DayOfWeekBean> bean);
+    Observable<BaseResult<List<LineTypeBean>>> addDayPlan(@Body List<DayOfWeekBean> bean);
 
 
     //添加日计划
@@ -183,6 +185,7 @@ public interface ApiServise {
     //添加日计划
     @POST("/plan/month/line/tempPOST")
     Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body SavaLineBean bean);
+
     //获取月缺陷库
     @GET("/task/defect/listGET")
     Observable<BaseResult<List<DefectBean>>> getDefect(@Query("line_id") String line_id, @Query("status") String status, @Query("audit_status") String audit_status);
@@ -311,9 +314,10 @@ public interface ApiServise {
     //日计划列表
     @GET("/plan/day/line/dayGET")
     Observable<BaseResult<GroupOfDayBean>> getDayList(@Query("dep_id") String dep_id, @Query("type_id") String type_id);
+
     //根据当前日期查询所属周下所有计划接口
     @GET("plan/day/tower/dayGET")
-    Observable<BaseResult<List<GroupOfDayBean>>> getDayofGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day,@Query("dep_id") String dep_id, @Query("type_id") String type_id);
+    Observable<BaseResult<List<GroupOfDayBean>>> getDayofGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("type_id") String type_id);
 
     //组任务列表
     @GET("/task/group/list/listGET")
@@ -326,6 +330,7 @@ public interface ApiServise {
     //个人任务列表
     @GET("task/personal/listGET")
     Observable<BaseResult<List<PersonalTaskListBean>>> getDepPersonalList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
+
     //日计划详情
     @GET("/plan/day/line/allGET")
     Observable<BaseResult<List<WeekPlanDetailBean>>> getDayDetail(@Query("id") String d_id);
@@ -526,6 +531,7 @@ public interface ApiServise {
     //http://172.16.15.60:9096/plan/repair/listGET?year=2019&month=5&week=2
     @GET("plan/repair/listGET")
     Observable<BaseResult<List<OverhaulYearBean>>> getOverhaulPlanList(@Query("year") String year, @Query("month") String month, @Query("week") String week, @Query("month_audit_status") String month_audit_status, @Query("id") String id, @Query("ele_user_id") String ele_user_id, @Query("check_user_id") String check_user_id, @Query("safe_user_id") String safe_user_id);
+
     @GET("plan/repair/listGET")
     Observable<BaseResult<List<OverhaulYearBean>>> getOverhaulPlanList(@Query("year") String year, @Query("month") String month, @Query("week") String week, @Query("month_audit_status") String month_audit_status, @Query("id") String id);
 
@@ -644,16 +650,15 @@ public interface ApiServise {
 
     //运行班获取待办列表
     @GET("task/agents/listGET")
-    Observable<BaseResult<List<TodoListBean>>> getYXtodo(@Query("audit_id") String audit_id,@Query("audit_status") String audit_status,@Query("order") String order);
+    Observable<BaseResult<List<TodoListBean>>> getYXtodo(@Query("audit_id") String audit_id, @Query("audit_status") String audit_status, @Query("order") String order);
 
     //运行班获取已办列表
     @GET("task/agents/listGET")
-    Observable<BaseResult<List<TodoListBean>>> getYXtodoHave(@Query("audit_id") String audit_id,@Query("audit_status not in") String audit_status,@Query("order") String order);
+    Observable<BaseResult<List<TodoListBean>>> getYXtodoHave(@Query("audit_id") String audit_id, @Query("audit_status not in") String audit_status, @Query("order") String order);
 
     //运行班获取待办列表
     @GET("task/agents/listGET")
     Observable<BaseResult<List<TodoListBean>>> getYXOnetodo(@Query("data_id") String deal_man);
-
 
 
     //检修计划详情
@@ -764,6 +769,7 @@ public interface ApiServise {
     //获取主任列表
     @GET("sys/user/relate/findGET")
     Observable<BaseResult<List<TrainAuditorBean>>> getAuditorList();
+
     //运行班待办列表
     @POST("/task/need/deal/savePOST")
     Observable<BaseResult<TypeBean>> saveTodo(@Body SaveTodoReqbean reqbean);
@@ -771,6 +777,7 @@ public interface ApiServise {
     //获取pda扫描的杆塔信息
     @GET("eq/tower/oneGET")
     Observable<BaseResult<RfInfo>> getRfInfo(@Query("rf_id") String rfId);
+
     //查询红外测温
     @GET("task/temperature/oneGET")
     Observable<BaseResult<HwcwBean>> getHWCW(@Query("task_id") String rf_id);
@@ -818,4 +825,12 @@ public interface ApiServise {
     //线路或双重设备名称
     @GET("eq/line/allGET")
     Observable<BaseResult<List<LineName>>> getDoubleLine(@Query("id") String id);
+
+    //特殊属性列表
+    @GET("task/danger/wares/allGET")
+    Observable<BaseResult<List<SpecialAttrList>>> specialAttrList();
+
+    //起始终点杆塔
+    @GET("eq/tower/allGET")
+    Observable<BaseResult<List<TowerListBean>>> towerList(@Query("line_id") String line_id, @Query("order") String order);
 }

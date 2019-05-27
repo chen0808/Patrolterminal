@@ -1,13 +1,12 @@
 package com.patrol.terminal.adapter;
 
-import android.content.Intent;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.CommitDefectActivity;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.bean.PatrolLevel3;
@@ -15,7 +14,7 @@ import com.patrol.terminal.bean.PatrolLevel4;
 
 import java.util.List;
 
-public class SpecialContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
+public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
     public static final int TYPE_1 = 1;
     public static final int TYPE_2 = 2;
     public static final int TYPE_3 = 3;
@@ -28,12 +27,12 @@ public class SpecialContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
      * @param data A new list is created out of this one to avoid mutable list
      */
 
-    public SpecialContentAdapter(List<MultiItemEntity> data) {
+    public SpecialListAdapter(List<MultiItemEntity> data) {
         super(data);
-        addItemType(TYPE_1, R.layout.item_patrol_content_1);
-        addItemType(TYPE_2, R.layout.item_patrol_content_1_2);
-        addItemType(TYPE_3, R.layout.item_patrol_content_1_3);
-        addItemType(TYPE_4, R.layout.item_patrol_content_2);
+        addItemType(TYPE_1, R.layout.item_sepcial_attr_1);
+        addItemType(TYPE_2, R.layout.item_sepcial_attr_2);
+        addItemType(TYPE_3, R.layout.item_sepcial_attr_3);
+        addItemType(TYPE_4, R.layout.item_sepcial_attr_4);
     }
 
     @Override
@@ -54,6 +53,12 @@ public class SpecialContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         }
                     }
                 });
+                helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    }
+                });
                 break;
             case TYPE_2:
                 PatrolLevel2 item2 = (PatrolLevel2) item;
@@ -68,6 +73,12 @@ public class SpecialContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                             expand(pos);
 //      }
                         }
+                    }
+                });
+                helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                     }
                 });
                 break;
@@ -86,23 +97,35 @@ public class SpecialContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         }
                     }
                 });
+                helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    }
+                });
                 break;
             case TYPE_4:
                 PatrolLevel4 item4 = (PatrolLevel4) item;
                 helper.setText(R.id.tv_content, item4.getName());
-                helper.itemView.setOnClickListener(new View.OnClickListener() {
+                helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(mContext, CommitDefectActivity.class);
-                        intent.putExtra("isPatrol", false);
-                        intent.putExtra("name", item4.getName());
-                        intent.putExtra("category", item4.getCategory());
-//                        intent.putExtra("listLevel3", (Serializable) listLevel3);
-//                        intent.putExtra("listLevel4", (Serializable) listLevel4);
-                        intent.putExtra("id", item4.getId());
-                        mContext.startActivity(intent);
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                     }
                 });
+//                helper.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(mContext, CommitDefectActivity.class);
+//                        intent.putExtra("isPatrol", false);
+//                        intent.putExtra("name", item4.getName());
+//                        intent.putExtra("category", item4.getCategory());
+////                        intent.putExtra("listLevel3", (Serializable) listLevel3);
+////                        intent.putExtra("listLevel4", (Serializable) listLevel4);
+//                        intent.putExtra("id", item4.getId());
+//                        mContext.startActivity(intent);
+//                    }
+//                });
                 break;
         }
     }

@@ -1,9 +1,11 @@
 package com.patrol.terminal.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.SpecialAttrListActivity;
 import com.patrol.terminal.adapter.SpecialContentAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -36,8 +40,8 @@ import io.reactivex.schedulers.Schedulers;
 public class SpecialAttrFrgment extends BaseFragment {
     @BindView(R.id.rv_special_content)
     RecyclerView rvSpecialContent;
-    private List<SpecialAttrBean> listLevel3;
-    private List<SpecialAttrBean> listLevel4;
+    @BindView(R.id.iv_add)
+    ImageView ivAdd;
     private String tower_id;
     private Disposable subscribe;
 
@@ -61,7 +65,8 @@ public class SpecialAttrFrgment extends BaseFragment {
         });
         getdata();
     }
-    public void getdata(){
+
+    public void getdata() {
         BaseRequest.getInstance().getService().getSpecialAttr(tower_id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<SpecialAttrBean>>(getActivity()) {
@@ -69,7 +74,7 @@ public class SpecialAttrFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<SpecialAttrBean>> t) throws Exception {
                         List<SpecialAttrBean> results = t.getResults();
                         rvSpecialContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        SpecialContentAdapter adapter = new SpecialContentAdapter(getData(results), listLevel3, listLevel4);
+                        SpecialContentAdapter adapter = new SpecialContentAdapter(getData(results));
                         rvSpecialContent.setAdapter(adapter);
                     }
 
@@ -84,8 +89,8 @@ public class SpecialAttrFrgment extends BaseFragment {
         List<MultiItemEntity> list = new ArrayList<>();
         List<SpecialAttrBean> listLevel1 = new ArrayList<>();
         List<SpecialAttrBean> listLevel2 = new ArrayList<>();
-        listLevel3 = new ArrayList<>();
-        listLevel4 = new ArrayList<>();
+        List<SpecialAttrBean> listLevel3 = new ArrayList<>();
+        List<SpecialAttrBean> listLevel4 = new ArrayList<>();
         for (int i = 0; i < results.size(); i++) {
             if (results.get(i).getLevel_no() == 1) {
                 listLevel1.add(results.get(i));
@@ -121,11 +126,19 @@ public class SpecialAttrFrgment extends BaseFragment {
         }
         return list;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (subscribe!=null){
+        if (subscribe != null) {
             subscribe.dispose();
         }
+    }
+
+    @OnClick(R.id.iv_add)
+    public void onViewClicked() {
+        Intent intent = new Intent(getActivity(), SpecialAttrListActivity.class);
+//        intent.putExtra("line_id",);
+        startActivity(intent);
     }
 }

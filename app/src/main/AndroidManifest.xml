@@ -52,6 +52,7 @@
         <activity android:name=".activity.AddMonthPlanActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.TicketSafeActivity"></activity>
+        <activity android:name=".activity.SpecialAttrListActivity"></activity>
         <activity
             android:name=".activity.NewTaskActivity"
             android:screenOrientation="portrait" />
