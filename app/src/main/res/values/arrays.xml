@@ -19,6 +19,9 @@
         <item>35kV</item>
         <item>110kV</item>
         <item>220kV</item>
+        <item>330kV</item>
+        <item>500kV</item>
+        <item>1000kV</item>
     </string-array>
 
     <string-array name="jx_task_source_names">

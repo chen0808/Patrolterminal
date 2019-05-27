@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -130,6 +131,42 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
     TextView dianRiskLevel;
     @BindView(R.id.dian_risk_level_tv)
     TextView dianRiskLevelTv;
+
+    TextView safeSeekbarNum;
+    @BindView(R.id.seekbar_ll)
+    LinearLayout seekbarLl;
+    @BindView(R.id.plan_progressbar_tv)
+    TextView planProgressbarTv;
+    @BindView(R.id.plan_progressbar_probar)
+    ProgressBar planProgressbarProbar;
+    @BindView(R.id.plan_progressbar_num)
+    TextView planProgressbarNum;
+    @BindView(R.id.plan_progressbar_ll)
+    LinearLayout planProgressbarLl;
+    @BindView(R.id.baodian_progressbar_tv)
+    TextView baodianProgressbarTv;
+    @BindView(R.id.baodian_progressbar_probar)
+    ProgressBar baodianProgressbarProbar;
+    @BindView(R.id.baodian_progressbar_num)
+    TextView baodianProgressbarNum;
+    @BindView(R.id.baodian_progressbar_ll)
+    LinearLayout baodianProgressbarLl;
+    @BindView(R.id.yanshou_progressbar_tv)
+    TextView yanshouProgressbarTv;
+    @BindView(R.id.yanshou_progressbar_probar)
+    ProgressBar yanshouProgressbarProbar;
+    @BindView(R.id.yanshou_progressbar_num)
+    TextView yanshouProgressbarNum;
+    @BindView(R.id.yanshou_progressbar_ll)
+    LinearLayout yanshouProgressbarLl;
+    @BindView(R.id.safe_progressbar_tv)
+    TextView safeProgressbarTv;
+    @BindView(R.id.safe_progressbar_probar)
+    ProgressBar safeProgressbarProbar;
+    @BindView(R.id.safe_progressbar_num)
+    TextView safeProgressbarNum;
+    @BindView(R.id.safe_progressbar_ll)
+    LinearLayout safeProgressbarLl;
 
     private String jobType;
     private String userId;
@@ -271,6 +308,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
         String is_ele = results.getIs_ele();
         titleSettingTv.setText("派发");
         if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {   //检修专责
+            seekbarLl.setVisibility(View.VISIBLE);
             if ("1".equals(status)) {   //待专责分发
                 titleSetting.setVisibility(View.VISIBLE);
                 taskLl.setVisibility(View.VISIBLE);
