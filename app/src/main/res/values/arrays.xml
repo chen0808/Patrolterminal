@@ -14,4 +14,35 @@
         <item>TID</item>
         <item>USER</item>
     </string-array>
+
+    <string-array name="jx_dianya_level">
+        <item>35kV</item>
+        <item>110kV</item>
+        <item>220kV</item>
+    </string-array>
+
+    <string-array name="jx_task_source_names">
+        <item>消缺</item>
+        <item>停电配合</item>
+        <item>大修项目</item>
+        <item>例行检修</item>
+        <item>技改项目</item>
+    </string-array>
+
+    <string-array name="jx_risk_names">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <string-array name="tingdian_range_names">
+        <item>安宁区</item>
+        <item>城关区</item>
+        <item>西固区</item>
+        <item>红古区</item>
+        <item>七里河区</item>
+    </string-array>
 </resources>

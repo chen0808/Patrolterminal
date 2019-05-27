@@ -607,9 +607,12 @@ public interface ApiServise {
     @POST("/task/repair/auditPOST")
     Observable<BaseResult<List<OverhaulSendUserBean>>> sendOverhaulFzrPlan(@Body OverhaulFzrSendBean bean);
 
-    //专责更新检修计划
     @POST("plan/repair/updatePOST")
     Observable<BaseResult<List<OverhaulSendUserBean>>> updataOverhaulMonitorPlan(@Body OverhaulZZSendBean bean);
+
+    //专责更新检修计划
+    @POST("plan/repair/updatePOST")
+    Observable<BaseResult<List<OverhaulYearBean>>> updateJxMonthPlan(@Body OverhaulYearBean bean);
 
 
     //获取带电作业班人员

@@ -1,5 +1,9 @@
 package com.patrol.terminal.overhaul;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
@@ -45,6 +49,21 @@ public class OverhaulMonthAdapter extends BaseQuickAdapter<OverhaulYearBean, Bas
             viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))
                     .setText(R.id.item_line_status, "状态 : 待提交审核");
             viewHolder.setVisible(R.id.plan_to_change, true);   //提交审核后不可修改
+
+            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, OverhaulAddMonthPlanActivity.class);
+                    Bundle bundle = new Bundle();
+                    if (item != null) {
+                        bundle.putParcelable("bean", item);
+                    }
+                    intent.putExtras(bundle);
+                    mContext.startActivity(intent);
+                }
+            });
+
         } else if ("1".equals(item.getMonth_audit_status())) {
             viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))
                     .setText(R.id.item_line_status, "状态 : 待主管审核");

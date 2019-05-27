@@ -43,6 +43,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class OverhaulMonthPlanFrgment extends BaseFragment {
@@ -73,6 +75,8 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
     private String week;
     private String jobType;
 
+    private Disposable updateMonthPlan;
+
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
@@ -82,7 +86,7 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
     @Override
     protected void initData() {
         planSubmit.setVisibility(View.VISIBLE);
-        taskAdd.setVisibility(View.INVISIBLE);
+        taskAdd.setVisibility(View.VISIBLE);
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)){
             planSubmit.setText("提交");
@@ -122,6 +126,16 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
         });
         //getWeekList();
         getMonthList();
+
+        updateMonthPlan = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+
+            @Override
+            public void accept(String s) throws Exception {
+                if (s.startsWith("updateMonthPlan")) {
+                    getMonthList();
+                }
+            }
+        });
 
 
     }
@@ -202,7 +216,9 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                 showMonth();
                 break;
             case R.id.task_add:
-                startActivityForResult(new Intent(getContext(), OverhaulAddMonthPlanActivity.class), 10);
+                Intent intent = new Intent(getContext(), OverhaulAddMonthPlanActivity.class);
+                intent.putExtra("add_month_from_type", 1);
+                startActivityForResult(intent, 10);
                 break;
             case R.id.plan_submit:
                 if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {
