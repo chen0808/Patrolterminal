@@ -1,7 +1,10 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -9,12 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.google.gson.Gson;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.SpecialListAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.AddSpecial;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.bean.PatrolLevel3;
@@ -32,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.RequestBody;
 
 public class SpecialAttrListActivity extends BaseActivity {
     @BindView(R.id.title_back)
@@ -50,6 +56,12 @@ public class SpecialAttrListActivity extends BaseActivity {
     NiceSpinner nsStart;
     @BindView(R.id.ns_end)
     NiceSpinner nsEnd;
+    @BindView(R.id.ll_start)
+    LinearLayout llStart;
+    @BindView(R.id.ll_end)
+    LinearLayout llEnd;
+    @BindView(R.id.btn_add)
+    Button btnAdd;
     private List<String> list = new ArrayList<>();
     private String line_id = "B511327CB4BB4D4A9E544F6972510B4E";
 
@@ -149,8 +161,28 @@ public class SpecialAttrListActivity extends BaseActivity {
         return split.length;
     }
 
-    @OnClick(R.id.title_back)
-    public void onViewClicked() {
-        finish();
+    @OnClick({R.id.title_back, R.id.btn_add})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.title_back:
+                finish();
+                break;
+            case R.id.btn_add:
+                String json = new Gson().toJson(AddSpecial.getInstance());
+                RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
+                BaseRequest.getInstance().getService().addSpecial(body).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new BaseObserver(this) {
+                            @Override
+                            protected void onSuccees(BaseResult t) throws Exception {
+
+                            }
+
+                            @Override
+                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                            }
+                        });
+                break;
+        }
     }
 }

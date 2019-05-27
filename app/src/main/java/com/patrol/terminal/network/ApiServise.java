@@ -836,5 +836,5 @@ public interface ApiServise {
 
     //添加特殊属性
     @POST("eq/tower/wares/savePOST")
-    Observable<BaseResult> addSpecial();
+    Observable<BaseResult> addSpecial(@Body RequestBody info);
 }

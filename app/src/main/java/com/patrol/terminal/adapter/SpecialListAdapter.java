@@ -56,7 +56,9 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
 
+                        }
                     }
                 });
                 break;
