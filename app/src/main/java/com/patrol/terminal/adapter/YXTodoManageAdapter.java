@@ -32,7 +32,9 @@ public class YXTodoManageAdapter extends BaseQuickAdapter<PersonalTaskListBean, 
             case "6":
                 viewHolder.setText(R.id.item_todo_type_tv, "检");
                 break;
-
+            case "20":
+                viewHolder.setText(R.id.item_todo_type_tv, "修");
+                break;
         }
         switch (audit_status){
             case "3":
@@ -44,6 +46,9 @@ public class YXTodoManageAdapter extends BaseQuickAdapter<PersonalTaskListBean, 
                 viewHolder.setText(R.id.item_yxtodo_state, "审核不通过");
                 viewHolder.setTextColor(R.id.item_yxtodo_state,mContext.getResources().getColor(R.color.green));
                 viewHolder.setBackgroundRes(R.id.item_yxtodo_state, R.drawable.state_green_bg);
+                break;
+            case "-1":
+                viewHolder.setGone(R.id.item_yxtodo_state,false);
                 break;
                 default:
                     viewHolder.setText(R.id.item_yxtodo_state, "审核中");

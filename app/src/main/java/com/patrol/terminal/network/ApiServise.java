@@ -76,6 +76,7 @@ import com.patrol.terminal.bean.SubmitPlanReqStateBean;
 import com.patrol.terminal.bean.ThirdTicketBean;
 import com.patrol.terminal.bean.TicketSafeBean;
 import com.patrol.terminal.bean.TodoListBean;
+import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.TowerListBean;
 import com.patrol.terminal.bean.TrainAuditorBean;
 import com.patrol.terminal.bean.TrainLevelBean;
@@ -131,7 +132,7 @@ public interface ApiServise {
     Observable<BaseResult<MonthListBean>> getMonthPlan(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("audit_status") String audit_status);
 
     //月计划列表
-    @GET("eq/line/partGET")
+    @GET("/plan/month/lineGET")
     Observable<BaseResult<List<LineCheckBean>>> getLineList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id);
 
     //周计划添加获取月计划列表
@@ -384,8 +385,13 @@ public interface ApiServise {
     //计划类型
     @GET("plan/type/listGET")
     Observable<BaseResult<List<LineTypeBean>>> getLineType();
+    //计划类型
+    @GET("plan/type/listGET")
+    Observable<BaseResult<List<LineTypeBean>>> getLineType(@Query("temp") String temp);
 
-
+    //获取临时任务线路的杆塔
+    @GET("/eq/tower/partGET")
+    Observable<BaseResult<List<Tower>>> getTempTower(@Query("line_id") String line_id);
     //巡视记录条件查询
     @GET("patrol/list")
     Observable<BaseResult<List<PatrolListBean>>> getPatrolList(@Query("Inspector") String Inspector, @Query("Liable") String Liable, @Query("Liable") String team);

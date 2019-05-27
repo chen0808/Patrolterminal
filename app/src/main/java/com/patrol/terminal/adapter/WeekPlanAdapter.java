@@ -26,13 +26,23 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
 
     @Override
     protected void convert(BaseViewHolder viewHolder, WeekListBean item) {
+
         if (item.getWeek_id()!=null){
-            if (item.getType_name().contains("巡")){
-                viewHolder.setText(R.id.item_plan_date_tv, "巡");
-            }else if (item.getType_name().contains("特")){
+            if (item.getType_name().contains("特")) {
                 viewHolder.setText(R.id.item_plan_date_tv, "特");
-            }else {
+                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_week_bg);
+            }else if (item.getType_name().contains("保")) {
+                viewHolder.setText(R.id.item_plan_date_tv, "保");
+                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_qing_bg);
+            } else if (item.getType_name().contains("事")) {
+                viewHolder.setText(R.id.item_plan_date_tv, "事");
+                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_yellow_bg);
+            } else if (item.getType_name().contains("巡")) {
+                viewHolder.setText(R.id.item_plan_date_tv, "巡");
+                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_mon_bg);
+            } else {
                 viewHolder.setText(R.id.item_plan_date_tv, "检");
+                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
             }
 
                 if("0".equals(item.getAudit_status())){

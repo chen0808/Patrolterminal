@@ -1,8 +1,40 @@
 package com.patrol.terminal.bean;
 
+import java.util.List;
+
 public class SavaLineBean {
    private String type_id,type_sign,type_name,line_id
 ,line_name,year,month;
+    private String start_time;
+
+    // 结束时间
+    private String end_time;
+
+    private List<Tower> towers;
+
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(String start_time) {
+        this.start_time = start_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(String end_time) {
+        this.end_time = end_time;
+    }
+
+    public List<Tower> getTowers() {
+        return towers;
+    }
+
+    public void setTowers(List<Tower> towers) {
+        this.towers = towers;
+    }
 
     public String getType_id() {
         return type_id;

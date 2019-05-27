@@ -17,50 +17,117 @@
         <include layout="@layout/include_title" />
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical">
+
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/plan_ll_styl">
+
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:layout_width="@dimen/dp_100"
+                    android:text="选择工作类型" />
+
+                <TextView
+                    android:id="@+id/month_plan_type"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:drawableRight="@mipmap/icon_go"
+                    android:text="点击选择工作类型" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/plan_ll_styl">
+
+                <TextView
+                    android:id="@+id/month_plan_month"
+                    style="@style/plan_tv_styl"
+                    android:layout_width="@dimen/dp_100"
+                    android:text="选择工作线路" />
+
+                <TextView
+                    android:id="@+id/month_plan_line"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:drawableRight="@mipmap/icon_go"
+                    android:text="点击选择线路" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/plan_ll_styl">
+
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:layout_width="@dimen/dp_100"
+                    android:text="选择开始时间" />
+
+                <TextView
+                    android:id="@+id/month_plan_start"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:drawableRight="@mipmap/icon_go"
+                    android:text="点击选择开始时间" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/plan_ll_styl">
+
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:layout_width="@dimen/dp_100"
+                    android:text="选择结束时间" />
+
+                <TextView
+                    android:id="@+id/month_plan_end"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:drawableRight="@mipmap/icon_go"
+                    android:text="点击选择结束时间" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
 
             <LinearLayout
+                android:id="@+id/mon_plan_tower_ll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@color/white"
+                android:visibility="gone"
                 android:orientation="vertical">
 
-
-                <View style="@style/line_styl" />
-
                 <LinearLayout style="@style/plan_ll_styl">
 
                     <TextView
                         style="@style/plan_tv_styl"
-                        android:text="工作类型" />
+                        android:text="选择杆段" />
 
-                    <TextView
-                        android:id="@+id/month_plan_type"
-                        style="@style/plan_et_styl"
-                        android:layout_marginRight="@dimen/dp_20"
-                        android:drawableRight="@mipmap/icon_go"
-                        android:text="点击选择工作类型" />
                 </LinearLayout>
 
                 <View style="@style/line_styl" />
 
-                <LinearLayout style="@style/plan_ll_styl">
 
-                    <TextView
-                        android:id="@+id/month_plan_month"
-                        style="@style/plan_tv_styl"
-                        android:text="选择线路" />
+                <ListView
+                    android:id="@+id/month_plan_tower"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_40"></ListView>
 
-                    <TextView
-                        android:id="@+id/month_plan_line"
-                        style="@style/plan_et_styl"
-                        android:layout_marginRight="@dimen/dp_20"
-                        android:drawableRight="@mipmap/icon_go"
-                        android:text="点击选择线路" />
-                </LinearLayout>
-                <View style="@style/line_styl" />
 
-                </LinearLayout>
             </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

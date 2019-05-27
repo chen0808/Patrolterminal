@@ -2,6 +2,7 @@ package com.patrol.terminal.bean;
 
 public class Tower {
     private String tower_id;
+    private String tower_type;
     private String line_id;
     private String id;
     private String name;
@@ -14,6 +15,14 @@ public class Tower {
     private  String dep_name;
     private String towers_id;
     private String month_line_id;
+
+    public String getTower_type() {
+        return tower_type;
+    }
+
+    public void setTower_type(String tower_type) {
+        this.tower_type = tower_type;
+    }
 
     public String getMonth_line_id() {
         return month_line_id;

@@ -4,6 +4,7 @@ package com.patrol.terminal.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +26,17 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupBean;
+import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.TodoListBean;
+import com.patrol.terminal.overhaul.OverhaulWeekDetailActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,7 +76,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     private static final int IS_DONE_PAGE = 1;
     private int isTodoPage = IS_TODO_PAGE;
     private String status;
-    private List<PersonalTaskListBean> results;
+    private List<PersonalTaskListBean> results=new ArrayList<>();
     private List<PersonalTaskListBean> resultsHave;
 
     private String jobType;
@@ -82,6 +86,10 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     private String user_id;
     private String year,month,day,time;
     private String haveState;
+
+    private String ele_user_id;
+    private String check_user_id;
+    private String safe_user_id;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,9 +112,14 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
             haveState="3";
             getYXtodo();
             getYXtodoHave();
+
+
+
         }else if (jobType.contains("yxb")){
             getGroupName();
-
+        }
+        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+            getWeekList();
         }
         LinearLayoutManager manager = new LinearLayoutManager(mActivity);
         fragTodoRv.setLayoutManager(manager);
@@ -117,8 +130,12 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
             @Override
             public void onRefresh() {
                 if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+                    results.clear();
                     getYXtodo();
                     getYXtodoHave();
+                    if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+                        getWeekList();
+                    }
                 }
             }
         });
@@ -130,9 +147,13 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
             @Override
             public void accept(String type) throws Exception {
                 if (type.startsWith("todo")) {
+                    results.clear();
                     if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
                         getYXtodo();
                         getYXtodoHave();
+                    }
+                    if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+                        getWeekList();
                     }
                 }
             }
@@ -205,10 +226,67 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
             case "6":
                 intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
                 break;
+            case "20":
+                intent.setClass(getContext(), OverhaulWeekDetailActivity.class);
+                intent.putExtra("id",todoListBean.getId());
+                break;
 
         }
         startActivity(intent);
     }
+
+    //获取周计划列表
+    public void getWeekList() {
+
+        String userId = SPUtil.getString(getContext(), Constant.USER, Constant.USERID, "");
+
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {
+            userId = null;
+        }else if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)){
+            ele_user_id =userId;
+            userId = null;
+        }else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)){
+            check_user_id =userId;
+        }else if (jobType.contains(Constant.SAFETY_SPECIALIZED)){
+            safe_user_id =userId;
+        }
+
+        String week = DateUatil.getWeekNum()+"";
+
+        //安全,验收,保电需要传userId
+        BaseRequest.getInstance().getService()
+                .getOverhaulPlanList(year, month, week, "2", userId, ele_user_id, check_user_id,safe_user_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<OverhaulYearBean>>(getContext()) {
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
+                        List<OverhaulYearBean> overhaulYearBeans = t.getResults();
+                        for (int i = 0; i < overhaulYearBeans.size(); i++) {
+                            OverhaulYearBean overhaulYearBean = overhaulYearBeans.get(i);
+                            PersonalTaskListBean bean=new PersonalTaskListBean();
+                            bean.setLine_name(overhaulYearBean.getLine_name());
+                            bean.setLine_id(overhaulYearBean.getLine_id());
+                            bean.setDone_time(overhaulYearBean.getStart_time());
+                            bean.setId(overhaulYearBean.getId());
+                            bean.setTower_name("");
+                            bean.setUser_name("检修专责");
+                            bean.setType_name("检修");
+                            bean.setType_sign("20");
+                            bean.setAudit_status("-1");
+                            results.add(bean);
+                        }
+                        toDoManageAdapter.setNewData(results);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Log.e("fff", e.toString());
+                    }
+                });
+    }
+
     public void getYXtodo() {
         ProgressDialog.show(getContext(),false,"正在加载中");
         BaseRequest.getInstance().getService()
@@ -223,7 +301,8 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                         fragTodoRef.setRefreshing(false);
                         results = t.getResults();
                         if (isTodoPage ==IS_TODO_PAGE){
-                        toDoManageAdapter.setNewData(results);}
+                        toDoManageAdapter.setNewData(results);
+                        }
                     }
 
                     @Override
