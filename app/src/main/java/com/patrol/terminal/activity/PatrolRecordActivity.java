@@ -1,10 +1,16 @@
 package com.patrol.terminal.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,6 +43,7 @@ import com.patrol.terminal.fragment.SpecialAttrFrgment;
 import com.patrol.terminal.fragment.TroubleFrgment;
 import com.patrol.terminal.overhaul.OverhaulFileBean;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PictureSelectorConfig;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
@@ -59,11 +66,15 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.badge.
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -208,6 +219,66 @@ public class PatrolRecordActivity extends BaseActivity {
         ViewPagerHelper.bind(magicIndicator, viewPager);
     }
 
+    /**
+     * 图片保存路径  这里是在SD卡目录下创建了MyPhoto文件夹
+     * @param fileName
+     * @return
+     */
+    private Uri patrUri(String fileName, int pos) {  //指定了图片的名字，可以使用时间来命名
+        // TODO Auto-generated method stub
+        String strPhotoName = fileName+".jpg";
+        String savePath = Environment.getExternalStorageDirectory().getPath()
+                + "/MyPhoto/";
+        File dir = new File(savePath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        switch (pos) {
+            case 1:
+                filePath1 = savePath + strPhotoName;
+                break;
+
+            case 2:
+                filePath2 = savePath + strPhotoName;
+                break;
+
+            case 3:
+                filePath3 = savePath + strPhotoName;
+                break;
+
+            case 4:
+                filePath4 = savePath + strPhotoName;
+                break;
+
+            case 5:
+                filePath5 = savePath + strPhotoName;
+                break;
+
+            case 6:
+                filePath6 = savePath + strPhotoName;
+                break;
+        }
+
+        return FileProvider.getUriForFile(getApplicationContext(),
+                "com.patrol.terminal.fileprovider",
+                new File(dir, strPhotoName));
+    }
+
+    //private String recordPath1;
+    Uri photoUri1;
+    String filePath1;
+    Uri photoUri2;
+    String filePath2;
+    Uri photoUri3;
+    String filePath3;
+    Uri photoUri4;
+    String filePath4;
+    Uri photoUri5;
+    String filePath5;
+    Uri photoUri6;
+    String filePath6;
+
     @OnClick({R.id.title_back, R.id.title_setting, R.id.iv_photo1, R.id.iv_photo2, R.id.iv_photo3, R.id.iv_photo4, R.id.iv_photo5, R.id.iv_photo6, R.id.fab})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -238,27 +309,72 @@ public class PatrolRecordActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_photo1:
-                selectPic();
+
+                //打卡相机前先检测SD卡是否可以用
+                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                    photoUri1 = patrUri("record_1", 1);
+                    startCamera(100 ,photoUri1);
+                }else{
+                    Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
+                }
+
+
+               // selectPic();
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 1);
                 break;
             case R.id.iv_photo2:
-                selectPic();
+                //selectPic();
+
+                //打卡相机前先检测SD卡是否可以用
+                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                    photoUri2 = patrUri("record_2", 2);
+                    startCamera(200 ,photoUri2);
+                }else{
+                    Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
+                }
+
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 2);
                 break;
             case R.id.iv_photo3:
-                selectPic();
+                //selectPic();
+                //打卡相机前先检测SD卡是否可以用
+                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                    photoUri3 = patrUri("record_3",  3);
+                    startCamera(300 ,photoUri3);
+                }else{
+                    Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
+                }
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 3);
                 break;
             case R.id.iv_photo4:
-                selectPic();
+                //selectPic();
+                //打卡相机前先检测SD卡是否可以用
+                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                    photoUri4 = patrUri("record_4", 4);
+                    startCamera(400 ,photoUri4);
+                }else{
+                    Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
+                }
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 4);
                 break;
             case R.id.iv_photo5:
-                selectPic();
+                //selectPic();
+                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                    photoUri5 = patrUri("record_5", 5);
+                    startCamera(500 ,photoUri5);
+                }else{
+                    Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
+                }
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 5);
                 break;
             case R.id.iv_photo6:
-                selectPic();
+                //selectPic();
+                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                    photoUri6 = patrUri("record_6", 6);
+                    startCamera(600 ,photoUri6);
+                }else{
+                    Toast.makeText(PatrolRecordActivity.this, "SD卡不可用", Toast.LENGTH_SHORT).show();
+                }
                 SPUtil.put(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 6);
                 break;
             case R.id.fab:
@@ -273,6 +389,15 @@ public class PatrolRecordActivity extends BaseActivity {
     private void selectPic() {
         PictureSelectorConfig.initSingleConfig(this);
     }
+
+    //打开相机
+    private void startCamera(int requestCode, Uri photoUri) {
+        // TODO Auto-generated method stub
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
+        startActivityForResult(intent, requestCode);
+    }
+
 
     // 处理选择的照片的地址
     private void refreshAdapter(List<LocalMedia> picList) {
@@ -317,8 +442,117 @@ public class PatrolRecordActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        if (resultCode== Activity.RESULT_OK) {
             switch (requestCode) {
+                case 100:
+                    try {
+                        Bitmap bitmap = FileUtil.compressBySize(filePath1,300,200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap,filePath1);
+                        ivPhoto1.setImageBitmap(bitmap);
+
+                        for (int i = 0; i < fileList.size(); i++) {
+                            if (filePath1.contains(fileList.get(i).getName())) {
+                                fileList.remove(i);
+                            }
+                        }
+
+                        fileList.add(new File(filePath1));
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                    break;
+                case 200:
+                    try {
+                        Bitmap bitmap = FileUtil.compressBySize(filePath2,300,200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap,filePath2);
+                        ivPhoto2.setImageBitmap(bitmap);
+
+                        for (int i = 0; i < fileList.size(); i++) {
+                            if (filePath2.contains(fileList.get(i).getName())) {
+                                fileList.remove(i);
+                            }
+                        }
+
+                        fileList.add(new File(filePath2));
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    break;
+                case 300:
+                    try {
+                        Bitmap bitmap = FileUtil.compressBySize(filePath3,300,200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap,filePath3);
+                        ivPhoto3.setImageBitmap(bitmap);
+
+                        for (int i = 0; i < fileList.size(); i++) {
+                            if (filePath3.contains(fileList.get(i).getName())) {
+                                fileList.remove(i);
+                            }
+                        }
+
+                        fileList.add(new File(filePath3));
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    break;
+                case 400:
+                    try {
+                        Bitmap bitmap = FileUtil.compressBySize(filePath4,300,200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap,filePath4);
+                        ivPhoto4.setImageBitmap(bitmap);
+
+                        for (int i = 0; i < fileList.size(); i++) {
+                            if (filePath4.contains(fileList.get(i).getName())) {
+                                fileList.remove(i);
+                            }
+                        }
+
+                        fileList.add(new File(filePath4));
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    break;
+                case 500:
+                    try {
+                        Bitmap bitmap = FileUtil.compressBySize(filePath5,300,200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap,filePath5);
+                        ivPhoto5.setImageBitmap(bitmap);
+
+                        for (int i = 0; i < fileList.size(); i++) {
+                            if (filePath5.contains(fileList.get(i).getName())) {
+                                fileList.remove(i);
+                            }
+                        }
+
+                        fileList.add(new File(filePath5));
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    break;
+                case 600:
+                    try {
+                        Bitmap bitmap = FileUtil.compressBySize(filePath6,300,200);  //设置压缩后图片的高度和宽度
+                        FileUtil.saveFile(bitmap,filePath6);
+                        ivPhoto6.setImageBitmap(bitmap);
+
+                        for (int i = 0; i < fileList.size(); i++) {
+                            if (filePath6.contains(fileList.get(i).getName())) {
+                                fileList.remove(i);
+                            }
+                        }
+
+                        fileList.add(new File(filePath6));
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    break;
                 case Constant.CHOOSE_REQUEST:
                     // 图片选择结果回调
                     refreshAdapter(PictureSelector.obtainMultipleResult(data));
@@ -332,8 +566,11 @@ public class PatrolRecordActivity extends BaseActivity {
                     List<LocalMedia> localMedia = PictureSelector.obtainMultipleResult(data);
                     EventBus.getDefault().post(new PicEvent(localMedia));
                     break;
+
             }
         }
+
+
         if (requestCode == Constant.REQUEST_CODE_MAIN && resultCode == Constant.RESULT_CODE_VIEW_IMG) {
             //查看大图页面删除了图片
             ArrayList<String> toDeletePicList = data.getStringArrayListExtra(Constant.IMG_LIST); //要删除的图片的集合

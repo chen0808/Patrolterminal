@@ -85,7 +85,6 @@ public class OverhaulPublishActivity extends BaseActivity {
         month = Integer.parseInt(months[0]) + "";
         year = years[0];
         week = weeks[0].substring(1, weeks[0].length());
-        Log.w("linmeng", "year:" + year + ",month:" +month + ",week:" + week);
 
         overhaulYearBean = getIntent().getParcelableExtra("bean");
         weekTaskContents = getIntent().getStringArrayExtra("weekTaskContents");    //分发的任务内容
@@ -104,6 +103,7 @@ public class OverhaulPublishActivity extends BaseActivity {
     private String userName2;     //验收专责Name
 
     private void getAllSendToPerson() {
+        Log.w("linmeng", "getAllSendToPerson!");
         weekTaskToPersonBeans.clear();
         BaseRequest.getInstance().getService()
                 .getSendOverhaulUsers()
