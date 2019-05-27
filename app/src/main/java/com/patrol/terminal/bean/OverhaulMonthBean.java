@@ -71,6 +71,17 @@ public class OverhaulMonthBean implements Parcelable {
     private String userName3;
     private String userId4;
     private String userName4;
+    public static final Creator<OverhaulMonthBean> CREATOR = new Creator<OverhaulMonthBean>() {
+        @Override
+        public OverhaulMonthBean createFromParcel(Parcel source) {
+            return new OverhaulMonthBean(source);
+        }
+
+        @Override
+        public OverhaulMonthBean[] newArray(int size) {
+            return new OverhaulMonthBean[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -397,15 +408,13 @@ public class OverhaulMonthBean implements Parcelable {
         this.userName4 = in.readString();
     }
 
-    public static final Parcelable.Creator<OverhaulMonthBean> CREATOR = new Parcelable.Creator<OverhaulMonthBean>() {
-        @Override
-        public OverhaulMonthBean createFromParcel(Parcel source) {
-            return new OverhaulMonthBean(source);
-        }
+    private String ticket_type;
 
-        @Override
-        public OverhaulMonthBean[] newArray(int size) {
-            return new OverhaulMonthBean[size];
-        }
-    };
+    public String getTicket_type() {
+        return ticket_type;
+    }
+
+    public void setTicket_type(String ticket_type) {
+        this.ticket_type = ticket_type;
+    }
 }

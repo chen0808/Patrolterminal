@@ -162,6 +162,6 @@
             android:layout_marginTop="@dimen/dp_10"
             android:layout_alignParentRight="true"
             android:layout_marginRight="8dp"
-            android:src="@mipmap/tower" />
+            android:src="@mipmap/tower1" />
     </RelativeLayout>
 </LinearLayout>

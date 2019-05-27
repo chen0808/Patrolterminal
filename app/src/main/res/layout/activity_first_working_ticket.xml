@@ -189,16 +189,16 @@
                     android:text="3.工作的线路或设备双重名称(多回路应证明双重称号）："
                     android:textColor="@color/black"></TextView>
 
-                <EditText
-                    android:id="@+id/et_double_name"
+                <TextView
+                    android:id="@+id/tv_double_name"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_toLeftOf="@+id/persons_tv"
                     android:layout_toRightOf="@+id/staff_in_the_workshop_tv"
                     android:background="@drawable/stoke_gray"
                     android:gravity="top"
-                    android:padding="5dp"></EditText>
+                    android:padding="5dp"></TextView>
             </LinearLayout>
 
             <View
@@ -324,11 +324,24 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="6.安全措施"
-                    android:textColor="@color/black"></TextView>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="6.安全措施"
+                        android:textColor="@color/black"></TextView>
+
+                    <ImageView
+                        android:id="@+id/iv_safe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/add_black" />
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -414,10 +427,10 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
                         android:layout_weight="2"
                         android:gravity="center_horizontal"
-                        android:text="挂设位置（线路名称及杆号）"></TextView>
+                        android:text="挂设位置（线路名称及杆号）"
+                        android:textSize="12sp"></TextView>
 
                     <ImageView
                         android:layout_width="1dp"
@@ -1353,9 +1366,9 @@
                     android:background="@color/bg_gray"></View>
 
                 <TextView
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="13.备注"
                     android:textColor="@color/black" />
 
@@ -1388,15 +1401,15 @@
                     android:padding="4dp" />
 
                 <TextView
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="(2)其他事项" />
 
                 <EditText
-                    android:layout_height="100dp"
                     android:id="@+id/et_other"
                     android:layout_width="match_parent"
+                    android:layout_height="100dp"
                     android:layout_marginTop="4dp"
                     android:background="@drawable/stoke_gray"
                     android:gravity="top"

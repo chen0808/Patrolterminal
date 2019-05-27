@@ -34,6 +34,7 @@ import com.patrol.terminal.bean.JDDZbean;
 import com.patrol.terminal.bean.JYZbean;
 import com.patrol.terminal.bean.LineBean;
 import com.patrol.terminal.bean.LineCheckBean;
+import com.patrol.terminal.bean.LineName;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.LoginReqBean;
 import com.patrol.terminal.bean.MonthListBean;
@@ -796,4 +797,7 @@ public interface ApiServise {
     @POST("task/repair/pda/updatePOST")
     Observable<BaseResult<List<OverhaulMonthBean>>> updateBzAgents(@Query("task_status") String task_status, @Query("id") String id);
 
+    //线路或双重设备名称
+    @GET("eq/line/allGET")
+    Observable<BaseResult<List<LineName>>> getDoubleLine(@Query("id") String id);
 }

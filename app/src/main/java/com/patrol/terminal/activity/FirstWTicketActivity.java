@@ -17,6 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -32,6 +38,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.ClassMemberBean;
 import com.patrol.terminal.bean.FirstTicketBean;
+import com.patrol.terminal.bean.LineName;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.bean.SignBean;
@@ -55,11 +62,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -99,8 +101,8 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     TextView tvCrewId;
     @BindView(R.id.tv_person)
     TextView tvPerson;
-    @BindView(R.id.et_double_name)
-    EditText etDoubleName;
+    @BindView(R.id.tv_double_name)
+    TextView tvDoubleName;
     @BindView(R.id.planned_working_hours)
     TextView plannedWorkingHours;
     @BindView(R.id.tv_s_time)
@@ -206,6 +208,8 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     EditText etRemoveGroundNum;
     @BindView(R.id.tv_leader)
     TextView tvLeader;
+    @BindView(R.id.iv_safe)
+    ImageView ivSafe;
     private List<TicketFirstWork> workList = new ArrayList<>();
     private List<TicketFirstGround> groundList = new ArrayList<>();
     private List<TicketFirstPermit> permitList = new ArrayList<>();
@@ -223,6 +227,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     private String ticketType;
     private String ticketTaskType;
     private FirstTicketBean results;
+    private String lineId;
     //    private String status;
 
     @Override
@@ -267,6 +272,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
 
             if (bean != null) {
                 taskId = bean.getId();
+                lineId = bean.getLine_id();
 //                status = bean.getRepair_status();
 //                OverhaulMonthBean.PlanRepairBean planRepairBean = bean.getPlanRepair();
 //                tvUnitId.setText(planRepairBean.getRepair_content());
@@ -357,6 +363,23 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         Log.d("TAG", e.getMessage());
+                    }
+                });
+
+        //线路或双重设备名称
+        BaseRequest.getInstance().getService().getDoubleLine(lineId).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<LineName>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<LineName>> t) throws Exception {
+                        List<LineName> results = t.getResults();
+                        if (results != null && results.size() > 0) {
+                            tvDoubleName.setText(results.get(0).getVoltage_level() + results.get(0).getName() + ",线路编号：" + results.get(0).getLine_no() + "，色标：" + results.get(0).getLine_color() + ",位置称号：左线");
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                     }
                 });
     }
@@ -550,6 +573,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                 params.put("permitList[" + i + "].permit_way", toRequestBody(bean.getPermitList().get(i).getPermit_way()));
                 params.put("permitList[" + i + "].permit_user_name", toRequestBody(bean.getPermitList().get(i).getPermit_user_name()));
                 params.put("permitList[" + i + "].sign_file_id", toRequestBody(bean.getPermitList().get(i).getSign_file_id()));
+                params.put("permitList[" + i + "].file", toRequestBody(bean.getPermitList().get(i).getFile()));
                 params.put("permitList[" + i + "].permit_time", toRequestBody(bean.getPermitList().get(i).getPermit_time()));
             }
         }
@@ -751,9 +775,12 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             R.id.iv_signature_pad_8, R.id.tv_crew_id, R.id.tv_change_time, R.id.tv_delay_a_time,
             R.id.tv_delay_b_time, R.id.tv_delay_c_time, R.id.title_setting, R.id.iv_task_add, R.id.iv_ground_lines_add,
             R.id.iv_licensing_started_add, R.id.iv_licensing_end_add, R.id.tv_postpone,
-            R.id.tv_s_time, R.id.tv_e_time, R.id.et_old_leader, R.id.tv_leader})
+            R.id.tv_s_time, R.id.tv_e_time, R.id.et_old_leader, R.id.tv_leader, R.id.iv_safe})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.iv_safe:
+                startActivity(new Intent(this, TicketSafeActivity.class));
+                break;
             case R.id.et_old_leader:
                 getAllSendToPerson("2");
                 break;

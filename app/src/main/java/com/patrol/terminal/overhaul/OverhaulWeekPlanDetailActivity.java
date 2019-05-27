@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -24,7 +25,6 @@ import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.ControlCardActivity;
 import com.patrol.terminal.activity.FirstWTicketActivity;
-import com.patrol.terminal.adapter.ControlDepdapter1;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -55,7 +55,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -323,7 +322,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
     private void initTicket1() {
         //专责进来没有选择的时候显示,其他时候隐藏
-//        if (planRepairBean.getTicket_type().equals("0") && jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getStatus())) {
+        if (overhaulMonthBean.getTicket_type().equals("0") && jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getTask_status())) {
         nsWorkTicket.setVisibility(View.VISIBLE);
         nsWorkTicket2.setVisibility(View.VISIBLE);
         workTicketTv.setText("填写工作票");
@@ -352,11 +351,10 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
             }
         });
-//        }
+        }
     }
 
     private void initTicket2(int position) {
-//        if (planRepairBean.getTicket_task_type().equals("0")) {
         data4.clear();
         if (position == 0) {
             data4.add("各类检修工作");
@@ -391,7 +389,6 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
             }
         });
-//        }
     }
 
     public void initFileList() {
@@ -722,6 +719,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
     private boolean[] mulchoice;
     private SelectWorkerBean selectWorkerBean = new SelectWorkerBean();
+
     private void getAllWorkers() {
 
         BaseRequest.getInstance().getService()
@@ -731,7 +729,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<ClassMemberBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<ClassMemberBean>> t) throws Exception {
-                        if(t.getCode() == 1) {
+                        if (t.getCode() == 1) {
                             if (t.getResults() != null && t.getResults().size() > 0) {
                                 List<ClassMemberBean.UserListBean> userListBeans = t.getResults().get(0).getUserList();
                                 String[] workers = new String[userListBeans.size()];
@@ -758,7 +756,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
     }
 
 
-    private void showSelectDialog(String[] workers,  List<ClassMemberBean.UserListBean> userListBeans) {
+    private void showSelectDialog(String[] workers, List<ClassMemberBean.UserListBean> userListBeans) {
         //selectWorkerBean = new SelectWorkerBean();
         List<SelectWorkerBean.SelectUserInfo> selectUserInfos = new ArrayList<>();
         AlertDialog.Builder builder = new AlertDialog.Builder(OverhaulWeekPlanDetailActivity.this);
@@ -776,8 +774,8 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String s = "";
-                for(int i=0;i<workers.length;i++){
-                    if(mulchoice[i]){
+                for (int i = 0; i < workers.length; i++) {
+                    if (mulchoice[i]) {
                         s = s + workers[i] + ",";
 
                         SelectWorkerBean.SelectUserInfo userInfo = new SelectWorkerBean.SelectUserInfo();
@@ -857,8 +855,8 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //                        case 1:
                 Intent intent11 = new Intent(OverhaulWeekPlanDetailActivity.this, FirstWTicketActivity.class);
                 intent11.putExtra("bean", overhaulMonthBean);
-//                            intent11.putExtra("type", String.valueOf(nicePosition));
-//                            intent11.putExtra("task_type", String.valueOf(nicePosition2));
+//                intent11.putExtra("type", String.valueOf(nicePosition));
+//                intent11.putExtra("task_type", String.valueOf(nicePosition2));
                 intent11.putExtra("leaderName", "叶");
                 startActivity(intent11);
 //                            break;
@@ -951,7 +949,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     Intent intent1 = new Intent(OverhaulWeekPlanDetailActivity.this, ControlCardActivity.class);
                     intent1.putExtra(Constant.CONTROL_CARD_ENTER_TYPE, entenType);
                     intent1.putExtra("allControlBean", allControlCarBean);    //上次填写的内容存储
-                    intent1.putExtra("selectedUserListBeans",  selectWorkerBean);
+                    intent1.putExtra("selectedUserListBeans", selectWorkerBean);
                     intent1.putExtra("bean", overhaulMonthBean);        //周计划列表
                     intent1.putExtra("id", controlCardId);   //模板
                     //intent1.putExtra("leaderName", leaderName);
