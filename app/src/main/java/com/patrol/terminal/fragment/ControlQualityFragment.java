@@ -125,8 +125,8 @@ public class ControlQualityFragment extends BaseFragment {
             if (bean != null) {
                 taskId = bean.getId();
                 controlCardName.setText(bean.getTask_content());
-                controlCardType.setText("暂无");
-                controlCardDep.setText("带电作业班");
+                controlCardType.setText("带电作业班");
+                controlCardDep.setText(leaderName);
 
                 //getFzrInfo(bean.getRepair_id(), "2");
                 controlCardPersonal.setText(leaderName);
@@ -140,8 +140,8 @@ public class ControlQualityFragment extends BaseFragment {
             if (bean != null) {
                 taskId = bean.getId();
                 controlCardName.setText(bean.getTask_content());
-                controlCardType.setText("暂无");
-                controlCardDep.setText("暂无");
+                controlCardType.setText("带电作业班");
+                controlCardDep.setText(leaderName);
 
                 //getFzrInfo(bean.getRepair_id(), "2");
                 controlCardPersonal.setText(leaderName);
@@ -240,6 +240,8 @@ public class ControlQualityFragment extends BaseFragment {
             if (workQualityCardBean != null) {
                 leaderId = workQualityCardBean.getDuty_user_id();
                 leaderName = workQualityCardBean.getDuty_user_name();
+                controlCardPersonal.setText(leaderName);
+                controlCardDep.setText(leaderName);
             }
         }
     }
