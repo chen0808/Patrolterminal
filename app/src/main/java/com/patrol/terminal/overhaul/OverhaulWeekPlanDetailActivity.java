@@ -322,7 +322,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
     private void initTicket1() {
         //专责进来没有选择的时候显示,其他时候隐藏
-        if (overhaulMonthBean.getTicket_type().equals("0") && jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getTask_status())) {
+        if ("0".equals(overhaulMonthBean.getTicket_type()) && jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getTask_status())) {
         nsWorkTicket.setVisibility(View.VISIBLE);
         nsWorkTicket2.setVisibility(View.VISIBLE);
         workTicketTv.setText("填写工作票");
