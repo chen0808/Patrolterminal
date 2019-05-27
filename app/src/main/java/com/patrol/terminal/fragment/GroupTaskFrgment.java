@@ -60,6 +60,7 @@ public class GroupTaskFrgment extends BaseFragment {
     private String month;
     private String day;
     private String userId;
+    private String depId;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,13 +75,17 @@ public class GroupTaskFrgment extends BaseFragment {
         inteDate();
         taskDate.setText(time);
         taskTitle.setText("组任务列表");
-
+        userId = SPUtil.getUserId(getContext());
+        taskAdd.setVisibility(View.GONE);
         String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        if (!jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
-            taskAdd.setVisibility(View.GONE);
-        }
-        if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            taskAdd.setVisibility(View.VISIBLE);
+            depId = SPUtil.getDepId(getContext());
+            userId=null;
+        }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
             userId = SPUtil.getUserId(getContext());
+        }else {
+            userId=null;
         }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);

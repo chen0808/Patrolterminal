@@ -39,7 +39,11 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
                 }else {
                     viewHolder.setVisible(R.id.plan_to_change, false);
                 }
-
+            if("2".equals(item.getAudit_status())){
+                viewHolder.setVisible(R.id.plan_progressbar_ll, true);
+            }else {
+                viewHolder.setVisible(R.id.plan_progressbar_ll, false);
+            }
         viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_week_bg);
         viewHolder.setVisible(R.id.item_line_state, false);
         viewHolder.setVisible(R.id.month_plan_go, true);
