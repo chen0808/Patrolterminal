@@ -73,9 +73,10 @@ public class SpecialAttrFrgment extends BaseFragment {
                     @Override
                     protected void onSuccees(BaseResult<List<SpecialAttrBean>> t) throws Exception {
                         List<SpecialAttrBean> results = t.getResults();
+                        if (results!=null){
                         rvSpecialContent.setLayoutManager(new LinearLayoutManager(getActivity()));
                         SpecialContentAdapter adapter = new SpecialContentAdapter(getData(results));
-                        rvSpecialContent.setAdapter(adapter);
+                        rvSpecialContent.setAdapter(adapter);}
                     }
 
                     @Override

@@ -308,7 +308,7 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_backlog"
+                    android:id="@+id/rv_todo"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:layout_marginLeft="16dp"
@@ -427,7 +427,12 @@
                 android:background="@drawable/stoke_home_list"
                 android:orientation="vertical">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
                 <TextView
+                    android:id="@+id/home_done_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -436,7 +441,18 @@
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
+                    <ImageView
+                        android:id="@+id/data_change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingRight="16dp"
+                        android:visibility="gone"
+                        android:paddingTop="16dp"
+                        android:src="@mipmap/data_change"
+                        android:layout_alignParentRight="true"
+                        />
+                </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

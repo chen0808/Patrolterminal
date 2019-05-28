@@ -251,6 +251,7 @@ public class HongWaiCeWenActivity extends BaseActivity {
                                 if (t.getCode() == 1) {
                                     Toast.makeText(HongWaiCeWenActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
                                     setResult(RESULT_OK);
+                                    RxRefreshEvent.publish("refreshGroup");
                                     finish();
                                 }
 
@@ -285,6 +286,7 @@ public class HongWaiCeWenActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(HongWaiCeWenActivity.this, "审批成功", Toast.LENGTH_SHORT).show();
                             RxRefreshEvent.publish("todo");
+                            RxRefreshEvent.publish("refreshGroup");
                             setResult(RESULT_OK);
                             finish();
                         }

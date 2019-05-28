@@ -7,28 +7,29 @@ public class PersonalTaskListBean implements Parcelable {
 
 
         /**
-         * id : D6986342094D4800816E3ACEE4C73C77
-         * group_list_id : E4BC8BBE76FD42C1AD93E879558C3BC7
-         * name : 刘海生2019-05-27关于1111桃郑线#021杆塔的个人任务
-         * type_id : C7A9A60BDB1B4FE986014CA7DA24A467
-         * type_sign : 1
-         * type_name : 定期巡视
+         * id : 0F3DE59A4DB84237A95E0A04896DDE4A
+         * group_list_id : 7B9A3192338245108EAD4C115A6E1A77
+         * name : 刘海生2019-05-28关于1116桃南线#028杆塔的个人任务
+         * type_id : C5A6C19CCA4E4C009AED7B8393150593
+         * type_sign : 3
+         * type_name : 接地电阻检测
          * plan_type : 1
-         * line_id : 06CD39FC7726400F92C00D4C89C80F1C
-         * line_name : 1111桃郑线
+         * line_id : F3BA53A0C28E4EEC9D6DB821CDAAA6EC
+         * line_name : 1116桃南线
          * dep_id : BBE359C6F29042A1A5AF96F9C1B68ED8
          * dep_name : 西固运维班
          * user_id : 4B01F91D1E10479BA898DE45023CF25B
          * user_name : 刘海生
-         * tower_id : 00FF28535F314DEC938FBA61F2598367
-         * tower_name : #021
+         * tower_id : DC3AA99CC1D740D8A9759A0BB3194AB9
+         * tower_name : #028
          * year : 2019
          * month : 5
          * week : 5
-         * day : 27
+         * day : 28
          * audit_status : 0
          * done_status : 0
          * done_time : null
+         * sub_time : null
          * towers_id : null
          */
 
@@ -54,6 +55,7 @@ public class PersonalTaskListBean implements Parcelable {
         private String audit_status;
         private String done_status;
         private String done_time;
+        private String sub_time;
         private String towers_id;
 
         public String getId() {
@@ -232,6 +234,14 @@ public class PersonalTaskListBean implements Parcelable {
             this.done_time = done_time;
         }
 
+        public String getSub_time() {
+            return sub_time;
+        }
+
+        public void setSub_time(String sub_time) {
+            this.sub_time = sub_time;
+        }
+
         public String getTowers_id() {
             return towers_id;
         }
@@ -269,6 +279,7 @@ public class PersonalTaskListBean implements Parcelable {
         dest.writeString(this.audit_status);
         dest.writeString(this.done_status);
         dest.writeString(this.done_time);
+        dest.writeString(this.sub_time);
         dest.writeString(this.towers_id);
     }
 
@@ -298,6 +309,7 @@ public class PersonalTaskListBean implements Parcelable {
         this.audit_status = in.readString();
         this.done_status = in.readString();
         this.done_time = in.readString();
+        this.sub_time = in.readString();
         this.towers_id = in.readString();
     }
 

@@ -110,7 +110,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         year = Integer.parseInt(curMonth.substring(0, 4));
         month = Integer.parseInt(curMonth.substring(5, 7));
         int weekNumOfMonth = DateUatil.getWeekNumOfMonth(year+"", month+"");
-        week = DateUatil.getWeekNum();
+        week = DateUatil.getWeekNum()+1;
         if (week>weekNumOfMonth){
             week=1;
             month=month+1;

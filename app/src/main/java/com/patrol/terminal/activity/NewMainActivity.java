@@ -38,6 +38,7 @@ import com.patrol.terminal.rfid.RFIDManager;
 import com.patrol.terminal.training.TrainingHomeFragment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -55,6 +56,8 @@ import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -81,6 +84,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     private AMapLocationClientOption locationOption = null;
     private String userId;
     private String jobType;
+    private Disposable refreshTodo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,12 +99,19 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         }else {
             initView();
         }
-
-
         //RFIDManager.getRFIDInstance().init(this, "001583EA5423", "", this);
         //初始化定位
         initLocation();
        // timer.schedule(timerTask,1000,1000 * 1000);
+        refreshTodo = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.startsWith("refreshTodo")) {
+
+                }
+            }
+        });
     }
 
     private void checkPremission() {
@@ -123,17 +134,18 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         // init fragment
 
 
-
+      //分配每个职位进来的首页
         if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {     //培训专责
             mFragments.add(new TrainingHomeFragment());
-        }else  if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+        }else  if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
             mFragments.add(new HomeFragment());
-        }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+        }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
             mFragments.add(new ZyHomeFragment());
         }else {
             mFragments.add(new JXHomeFragment());
         }
 
+        //分配每个职位进来的待办
         if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.REFURBISHMENT_MEMBER)
                 || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
                 || jobType.contains(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
@@ -160,11 +172,15 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         // register listener
         fragmentVp.addOnPageChangeListener(mPageChangeListener);
         llBottomTab.setOnCheckedChangeListener(mOnCheckedChangeListener);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (refreshTodo!=null){
+            refreshTodo.dispose();
+        }
         fragmentVp.removeOnPageChangeListener(mPageChangeListener);
     }
 
@@ -226,9 +242,10 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                             if (results!=null){
                                 if ("1".contains(results.getIs_boss())){
                                     SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
-                                    initView();
+                                    jobType = Constant.RUNNING_SQUAD_TEMA_LEADER;
                                 }
                             }
+                            initView();
                         }
 
                     }
@@ -447,5 +464,6 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //            handler.sendMessage(message);
 //        }
 //    };
+
 
 }

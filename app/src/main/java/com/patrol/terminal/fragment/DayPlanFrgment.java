@@ -139,7 +139,7 @@ public class DayPlanFrgment extends BaseFragment {
     public void getDayList() {
 
         BaseRequest.getInstance().getService()
-                .getDayList(year,month,day, SPUtil.getDepId(getContext()))
+                .getDayList(year,month,day, SPUtil.getDepId(getContext()),"type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayListBean>>(getContext()) {

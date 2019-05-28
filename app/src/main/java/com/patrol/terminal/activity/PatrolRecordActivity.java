@@ -33,6 +33,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.JDDZbean;
 import com.patrol.terminal.bean.OverhaulZzTaskBean;
+import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.bean.PicEvent;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TodoListBean;
@@ -73,6 +74,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -122,7 +124,8 @@ public class PatrolRecordActivity extends BaseActivity {
     private String line_name, jobType;
     private String tower_id;
     private String tower_name, task_id, sign, typename, audit_status;
-    private List<File> fileList = new ArrayList<>();
+    private List<Map<String,File>> fileList=new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -414,30 +417,37 @@ public class PatrolRecordActivity extends BaseActivity {
             if (localMedia.isCompressed()) {
                 String compressPath = localMedia.getCompressPath(); //压缩后的图片路径
                 int index = (int) SPUtil.get(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 0);
+                Map<String,File> fileMap = new HashMap<>();
                 switch (index) {
                     case 1:
                         Glide.with(this).load(compressPath).into(ivPhoto1);
-                        fileList.add(new File(compressPath));
+                        fileMap.put("1",new File(compressPath));
+                        fileList.add(fileMap);
                         break;
                     case 2:
                         Glide.with(this).load(compressPath).into(ivPhoto2);
-                        fileList.add(new File(compressPath));
+                        fileMap.put("2",new File(compressPath));
+                        fileList.add(fileMap);
                         break;
                     case 3:
                         Glide.with(this).load(compressPath).into(ivPhoto3);
-                        fileList.add(new File(compressPath));
+                        fileMap.put("3",new File(compressPath));
+                        fileList.add(fileMap);
                         break;
                     case 4:
                         Glide.with(this).load(compressPath).into(ivPhoto4);
-                        fileList.add(new File(compressPath));
+                        fileMap.put("4",new File(compressPath));
+                        fileList.add(fileMap);
                         break;
                     case 5:
                         Glide.with(this).load(compressPath).into(ivPhoto5);
-                        fileList.add(new File(compressPath));
+                        fileMap.put("5",new File(compressPath));
+                        fileList.add(fileMap);
                         break;
                     case 6:
                         Glide.with(this).load(compressPath).into(ivPhoto6);
-                        fileList.add(new File(compressPath));
+                        fileMap.put("6",new File(compressPath));
+                        fileList.add(fileMap);
                         break;
                 }
 
@@ -451,6 +461,7 @@ public class PatrolRecordActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            Map<String,File> fileMap = new HashMap<>();
             switch (requestCode) {
                 case 100:
                     try {
@@ -459,14 +470,16 @@ public class PatrolRecordActivity extends BaseActivity {
                         ivPhoto1.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
-                            if (filePath1.contains(fileList.get(i).getName())) {
+                            Map<String, File> stringFileMap = fileList.get(i);
+                            File file = stringFileMap.get("1");
+                            if (file!=null) {
                                 fileList.remove(i);
                             }
                         }
 
-                        fileList.add(new File(filePath1));
+                        fileMap.put("1",new File(filePath1));
+                        fileList.add(fileMap);
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
@@ -478,12 +491,15 @@ public class PatrolRecordActivity extends BaseActivity {
                         ivPhoto2.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
-                            if (filePath2.contains(fileList.get(i).getName())) {
+                            Map<String, File> stringFileMap = fileList.get(i);
+                            File file = stringFileMap.get("2");
+                            if (file!=null) {
                                 fileList.remove(i);
                             }
                         }
 
-                        fileList.add(new File(filePath2));
+                        fileMap.put("2",new File(filePath2));
+                        fileList.add(fileMap);
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -496,14 +512,17 @@ public class PatrolRecordActivity extends BaseActivity {
                         ivPhoto3.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
-                            if (filePath3.contains(fileList.get(i).getName())) {
+                            Map<String, File> stringFileMap = fileList.get(i);
+                            File file = stringFileMap.get("3");
+                            if (file!=null) {
                                 fileList.remove(i);
                             }
                         }
 
-                        fileList.add(new File(filePath3));
+                        fileMap.put("3",new File(filePath3));
+                        fileList.add(fileMap);
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
+
                         e.printStackTrace();
                     }
                     break;
@@ -514,12 +533,15 @@ public class PatrolRecordActivity extends BaseActivity {
                         ivPhoto4.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
-                            if (filePath4.contains(fileList.get(i).getName())) {
+                            Map<String, File> stringFileMap = fileList.get(i);
+                            File file = stringFileMap.get("4");
+                            if (file!=null) {
                                 fileList.remove(i);
                             }
                         }
 
-                        fileList.add(new File(filePath4));
+                        fileMap.put("4",new File(filePath4));
+                        fileList.add(fileMap);
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -532,14 +554,16 @@ public class PatrolRecordActivity extends BaseActivity {
                         ivPhoto5.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
-                            if (filePath5.contains(fileList.get(i).getName())) {
+                            Map<String, File> stringFileMap = fileList.get(i);
+                            File file = stringFileMap.get("5");
+                            if (file!=null) {
                                 fileList.remove(i);
                             }
                         }
 
-                        fileList.add(new File(filePath5));
+                        fileMap.put("5",new File(filePath5));
+                        fileList.add(fileMap);
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     break;
@@ -550,12 +574,15 @@ public class PatrolRecordActivity extends BaseActivity {
                         ivPhoto6.setImageBitmap(bitmap);
 
                         for (int i = 0; i < fileList.size(); i++) {
-                            if (filePath6.contains(fileList.get(i).getName())) {
+                            Map<String, File> stringFileMap = fileList.get(i);
+                            File file = stringFileMap.get("6");
+                            if (file!=null) {
                                 fileList.remove(i);
                             }
                         }
 
-                        fileList.add(new File(filePath6));
+                        fileMap.put("6",new File(filePath6));
+                        fileList.add(fileMap);
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -596,34 +623,34 @@ public class PatrolRecordActivity extends BaseActivity {
                 .getPartrolRecord(task_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<OverhaulFileBean>>(this) {
+                .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
 
 
                     @Override
-                    protected void onSuccees(BaseResult<List<OverhaulFileBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
                         if (t.getCode() == 1) {
-                            List<OverhaulFileBean> results = t.getResults();
+                            List<PatrolRecordPicBean> results = t.getResults();
                             for (int i = 0; i < results.size(); i++) {
-                                OverhaulFileBean overhaulFileBean = results.get(i);
+                                PatrolRecordPicBean overhaulFileBean = results.get(i);
                                 String file_path = overhaulFileBean.getFile_path();
                                 String compressPath = BaseUrl.BASE_URL + file_path.substring(1, file_path.length()) + overhaulFileBean.getFilename();
-                                switch (i + 1) {
-                                    case 1:
+                                switch (overhaulFileBean.getSign()) {
+                                    case "1":
                                         Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto1);
                                         break;
-                                    case 2:
+                                    case "2":
                                         Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto2);
                                         break;
-                                    case 3:
+                                    case "3":
                                         Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto3);
                                         break;
-                                    case 4:
+                                    case "4":
                                         Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto4);
                                         break;
-                                    case 5:
+                                    case "5":
                                         Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto5);
                                         break;
-                                    case 6:
+                                    case "6":
                                         Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto6);
                                         break;
                                 }
@@ -657,9 +684,15 @@ public class PatrolRecordActivity extends BaseActivity {
         }
         ProgressDialog.show(this, false, "正在上传。。。");
         for (int i = 0; i < fileList.size(); i++) {
-            File file = fileList.get(i);
-            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            params.put("file" + (i + 1) + "\"; filename=\"" + file.getName(), requestFile);
+            Map<String, File> stringFileMap = fileList.get(i);
+            Set<String> strings = stringFileMap.keySet();
+            for ( String type:strings ) {
+                File file = stringFileMap.get(type);
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                params.put("file" + type
+                        + "\"; filename=\"" + file.getName(), requestFile);
+            }
+
         }
 
         params.put("user_id", toRequestBody(SPUtil.getUserId(this)));
@@ -677,6 +710,7 @@ public class PatrolRecordActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(PatrolRecordActivity.this, "保存成功！", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
+                            RxRefreshEvent.publish("refreshGroup");
                             finish();
                         }
                     }
@@ -767,6 +801,7 @@ public class PatrolRecordActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(PatrolRecordActivity.this, "审批成功", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
+                            RxRefreshEvent.publish("refreshGroup");
                             RxRefreshEvent.publish("todo");
                             finish();
                         }

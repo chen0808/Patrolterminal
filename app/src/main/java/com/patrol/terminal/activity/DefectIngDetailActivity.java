@@ -15,6 +15,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.DefectFragmentBean;
+import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.overhaul.OverhaulFileBean;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -118,16 +119,16 @@ public class DefectIngDetailActivity extends BaseActivity {
                 .getPartrolRecord(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<OverhaulFileBean>>(this) {
+                .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
 
 
                     @Override
-                    protected void onSuccees(BaseResult<List<OverhaulFileBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
                         if (t.getCode()==1){
-                            List<OverhaulFileBean> results = t.getResults();
+                            List<PatrolRecordPicBean> results = t.getResults();
                             for (int i = 0; i < results.size(); i++) {
                                 if (i==0){
-                                OverhaulFileBean overhaulFileBean = results.get(i);
+                                    PatrolRecordPicBean overhaulFileBean = results.get(i);
                                 String file_path = overhaulFileBean.getFile_path();
                                 String compressPath= BaseUrl.BASE_URL+file_path.substring(1,file_path.length())+overhaulFileBean.getFilename();
                                 Glide.with(DefectIngDetailActivity.this).load(compressPath).into(defectTaskTv);

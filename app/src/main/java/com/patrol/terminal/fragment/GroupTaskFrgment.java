@@ -23,6 +23,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
@@ -35,6 +36,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class GroupTaskFrgment extends BaseFragment {
@@ -61,6 +64,8 @@ public class GroupTaskFrgment extends BaseFragment {
     private String day;
     private String userId,duty_user_id;
     private String depId;
+    private String jobType;
+    private Disposable refreshGroup;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,7 +81,7 @@ public class GroupTaskFrgment extends BaseFragment {
         taskDate.setText(time);
         taskTitle.setText("组任务列表");
         taskAdd.setVisibility(View.GONE);
-        String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
+        jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             taskAdd.setVisibility(View.VISIBLE);
             depId = SPUtil.getDepId(getContext());
@@ -104,14 +109,32 @@ public class GroupTaskFrgment extends BaseFragment {
                 startActivityForResult(intent,11);
             }
         });
+        refreshGroup = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.equals("refreshGroup")) {
+                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                        taskAdd.setVisibility(View.VISIBLE);
+                        depId = SPUtil.getDepId(getContext());
+                        getGroupList();
+                    } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                        duty_user_id = SPUtil.getUserId(getContext());
+                        getGroupList();
+                    } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+                        userId = SPUtil.getUserId(getContext());
+                        getGroupListZy();
+                    }
+                }
+            }
+        });
     }
 
     //获取小组任务列表
     public void getGroupList() {
 
         BaseRequest.getInstance().getService()
-                .getGroupList(year, month, day,depId,duty_user_id,userId)
+                .getGroupList(year, month, day,depId,duty_user_id,userId,"type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {
@@ -205,8 +228,25 @@ public class GroupTaskFrgment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==11&&resultCode==-1){
-            getGroupList();
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                taskAdd.setVisibility(View.VISIBLE);
+                depId = SPUtil.getDepId(getContext());
+                getGroupList();
+            }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+                duty_user_id = SPUtil.getUserId(getContext());
+                getGroupList();
+            }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+                userId = SPUtil.getUserId(getContext());
+                getGroupListZy();
+            }
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (refreshGroup!=null){
+            refreshGroup.dispose();
+        }
+    }
 }

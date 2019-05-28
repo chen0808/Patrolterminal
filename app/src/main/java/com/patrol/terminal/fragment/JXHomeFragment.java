@@ -72,7 +72,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     RelativeLayout rlDefact;
     @BindView(R.id.rl_trouble)
     RelativeLayout rlTrouble;
-    @BindView(R.id.rv_backlog)
+    @BindView(R.id.rv_todo)
     RecyclerView rvBacklog;
     @BindView(R.id.home_todo_no_data)
     TextView homeTodoNoData;

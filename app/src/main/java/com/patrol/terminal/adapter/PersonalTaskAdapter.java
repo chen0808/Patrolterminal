@@ -22,8 +22,28 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
 
     @Override
     protected void convert(BaseViewHolder viewHolder, GroupTaskBean item) {
-        viewHolder.setText(R.id.item_task_date_tv, "人");
-        viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_day_bg);
+        switch (item.getType_sign()) {
+            case "4":
+                viewHolder.setText(R.id.item_task_date_tv, "特殊");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_week_bg);
+                break;
+            case "7":
+                viewHolder.setText(R.id.item_task_date_tv, "保电");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_qing_bg);
+                break;
+            case "2":
+                viewHolder.setText(R.id.item_task_date_tv, "故障");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_yellow_bg);
+                break;
+            case "1":
+                viewHolder.setText(R.id.item_task_date_tv, "定巡");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_mon_bg);
+                break;
+            default:
+                viewHolder.setText(R.id.item_task_date_tv, "定检");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_day_bg);
+                break;
+        }
 
         String finish_status = item.getDone_status();
 
@@ -34,8 +54,6 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
                 viewHolder.setText(R.id.item_line_state, "已完成");
                 viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_green_bg);
             }
-        viewHolder.setText(R.id.item_line_state, "已分配");
-        viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_red_bg);
         viewHolder.setGone(R.id.plan_progressbar_ll,true);
         viewHolder.setText(R.id.plan_progressbar_tv,"任务进度("+item.getDone_num()+"/"+item.getAll_num()+") :")
                 .setText(R.id.plan_progressbar_num,item.getDone_rate()+"%");

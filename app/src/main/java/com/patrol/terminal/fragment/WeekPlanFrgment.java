@@ -184,7 +184,7 @@ public class WeekPlanFrgment extends BaseFragment {
 
     public void getWeekList() {
         BaseRequest.getInstance().getService()
-                .getWeekList(year, month, week, depId,state)
+                .getWeekList(year, month, week, depId,state,"type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekListBean>>(getContext()) {

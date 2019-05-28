@@ -115,7 +115,7 @@ public class MonthPlanFrgment extends BaseFragment {
         mContext = getActivity();
         taskScreen.setVisibility(View.VISIBLE);
         taskAdd.setVisibility(View.VISIBLE);
-        planSubmit.setVisibility(View.VISIBLE);
+
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         //判断
@@ -176,7 +176,7 @@ public class MonthPlanFrgment extends BaseFragment {
         data1.clear();
         data2.clear();
         BaseRequest.getInstance().getService()
-                .getMonthPlan(Integer.parseInt(year), Integer.parseInt(month), depId, state)
+                .getMonthPlan(Integer.parseInt(year), Integer.parseInt(month), depId, state,"type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<MonthListBean>(getContext()) {
@@ -284,7 +284,7 @@ public class MonthPlanFrgment extends BaseFragment {
                Intent intent=new Intent(getContext(), TemporaryActivity.class);
                intent.putExtra("year",year);
                 intent.putExtra("month",month);
-               getActivity().startActivityForResult(intent,10);
+                startActivityForResult(intent,10);
                 break;
             case R.id.plan_submit:
                 if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
@@ -457,6 +457,10 @@ public class MonthPlanFrgment extends BaseFragment {
             data.addAll(ele);
             data2.addAll(ele);
         }
+        if (lineList.size()!=0){
+                planSubmit.setVisibility(View.VISIBLE);
+        }
+
     }
 
     public static int dip2px(Context context, float dipValue) {

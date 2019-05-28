@@ -31,10 +31,28 @@ public class MonthPlanBean implements Parcelable {
     private String dep_id;
     private int month;
     private int year;
+    private String  type_sign;
     private String month_id;
     private String line_name;
     private String audit_status;
     private String dep_name;
+
+    public String getType_name() {
+        return type_name;
+    }
+
+    public void setType_name(String type_name) {
+        this.type_name = type_name;
+    }
+
+    public String getType_sign() {
+        return type_sign;
+    }
+
+    public void setType_sign(String type_sign) {
+        this.type_sign = type_sign;
+    }
+
     /**
      * id : 161E390898624F04A88E53F832712FEF
      * apply_dep_id : 34B9F165BF9B4527B01ABF328055FBD3
@@ -493,6 +511,7 @@ public class MonthPlanBean implements Parcelable {
         dest.writeString(this.dep_id);
         dest.writeInt(this.month);
         dest.writeInt(this.year);
+        dest.writeString(this.type_sign);
         dest.writeString(this.month_id);
         dest.writeString(this.line_name);
         dest.writeString(this.audit_status);
@@ -545,6 +564,7 @@ public class MonthPlanBean implements Parcelable {
         this.dep_id = in.readString();
         this.month = in.readInt();
         this.year = in.readInt();
+        this.type_sign = in.readString();
         this.month_id = in.readString();
         this.line_name = in.readString();
         this.audit_status = in.readString();
