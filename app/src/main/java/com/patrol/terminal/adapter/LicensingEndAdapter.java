@@ -25,12 +25,13 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 
 import org.angmarch.views.NiceSpinner;
-import org.angmarch.views.OnSpinnerItemSelectedListener;
 
 import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+
+//import org.angmarch.views.OnSpinnerItemSelectedListener;
 
 public class LicensingEndAdapter extends BaseQuickAdapter<TicketFirstEnd, BaseViewHolder> {
     public LicensingEndAdapter(int layoutResId, @Nullable List<TicketFirstEnd> data) {
@@ -44,12 +45,12 @@ public class LicensingEndAdapter extends BaseQuickAdapter<TicketFirstEnd, BaseVi
         if (null != item.getEnd_way() && !item.getEnd_way().equals("")) {
             licensingMethodSpinner.setSelectedIndex(Integer.parseInt(item.getEnd_way()));
         }
-        licensingMethodSpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
-            @Override
-            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
-                item.setEnd_way(String.valueOf(position));
-            }
-        });
+//        licensingMethodSpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
+//                item.setEnd_way(String.valueOf(position));
+//            }
+//        });
 
         EditText etLicensor = helper.getView(R.id.licensor_et);
         etLicensor.setText(item.getPermit_user_name());
