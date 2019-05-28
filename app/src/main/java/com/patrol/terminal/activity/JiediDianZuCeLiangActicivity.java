@@ -174,6 +174,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                                 if (t.getCode() == 1) {
                                     Toast.makeText(JiediDianZuCeLiangActicivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
                                     setResult(RESULT_OK);
+                                    RxRefreshEvent.publish("refreshGroup");
                                     finish();
                                 } else {
                                     Toast.makeText(JiediDianZuCeLiangActicivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
@@ -261,6 +262,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(JiediDianZuCeLiangActicivity.this, "审批成功", Toast.LENGTH_SHORT).show();
                             RxRefreshEvent.publish("todo");
+                            RxRefreshEvent.publish("refreshGroup");
                             setResult(RESULT_OK);
                             finish();
                         }

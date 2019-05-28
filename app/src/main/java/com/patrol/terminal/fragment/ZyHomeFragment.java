@@ -14,10 +14,15 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DefectActivity;
+import com.patrol.terminal.activity.HongWaiCeWenActivity;
+import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
+import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
+import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.PersonalTaskDetailActivity;
 import com.patrol.terminal.activity.TroubleActivity;
+import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
 import com.patrol.terminal.adapter.BackLogAdapter;
 import com.patrol.terminal.adapter.BackLogTaskAdapter;
 import com.patrol.terminal.adapter.BackTaskYXAdapter;
@@ -139,12 +144,32 @@ public class ZyHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                PersonalTaskListBean ovaTodoBean = backLogData.get(position);
-                Intent intent=new Intent();
-                intent.setClass(getContext(), PersonalTaskDetailActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putParcelable("bean",ovaTodoBean);
-                intent.putExtras(bundle);
+                PersonalTaskListBean todoListBean = backLogData.get(position);
+                String deal_type = todoListBean.getType_sign();
+                String data_id = todoListBean.getId();
+                Intent intent = new Intent();
+                intent.putExtra("task_id", data_id);
+                switch (deal_type) {
+                    case "1":
+                        intent.setClass(getContext(), PatrolRecordActivity.class);
+                        break;
+                    case "2":
+                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
+                        break;
+                    case "3":
+                        intent.setClass(getContext(), JiediDianZuCeLiangActicivity.class);
+                        break;
+                    case "10":
+                        intent.setClass(getContext(), JueYuanZiLingZhiJianCeActivity.class);
+                        break;
+                    case "5":
+                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
+                        break;
+                    case "6":
+                        intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
+                        break;
+
+                }
                 startActivity(intent);
             }
         });
@@ -158,12 +183,32 @@ public class ZyHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         backLogTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                PersonalTaskListBean ovaTodoBean = backLogData.get(position);
-                Intent intent=new Intent();
-                intent.setClass(getContext(), PersonalTaskDetailActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putParcelable("bean",ovaTodoBean);
-                intent.putExtras(bundle);
+                PersonalTaskListBean todoListBean = taskData.get(position);
+                String deal_type = todoListBean.getType_sign();
+                String data_id = todoListBean.getId();
+                Intent intent = new Intent();
+                intent.putExtra("task_id", data_id);
+                switch (deal_type) {
+                    case "1":
+                        intent.setClass(getContext(), PatrolRecordActivity.class);
+                        break;
+                    case "2":
+                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
+                        break;
+                    case "3":
+                        intent.setClass(getContext(), JiediDianZuCeLiangActicivity.class);
+                        break;
+                    case "10":
+                        intent.setClass(getContext(), JueYuanZiLingZhiJianCeActivity.class);
+                        break;
+                    case "5":
+                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
+                        break;
+                    case "6":
+                        intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
+                        break;
+
+                }
                 startActivity(intent);
             }
         });

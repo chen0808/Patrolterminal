@@ -10,13 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.external.rfid.IRfid;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DefectActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
@@ -25,10 +20,8 @@ import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
-import com.patrol.terminal.activity.RfidActivity;
 import com.patrol.terminal.activity.TroubleActivity;
 import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
-import com.patrol.terminal.adapter.BackLogAdapter;
 import com.patrol.terminal.adapter.BackLogTaskAdapter;
 import com.patrol.terminal.adapter.BackTodoYXAdapter;
 import com.patrol.terminal.adapter.PlanFinishRateAdapter;
@@ -37,15 +30,10 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.LineTypeBean;
-import com.patrol.terminal.bean.OvaTodoBean;
-import com.patrol.terminal.bean.PatrolListBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PlanFinishRateBean;
 import com.patrol.terminal.bean.TodoListBean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
-import com.patrol.terminal.overhaul.OverhaulWeekPlanActivity;
-import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
-import com.patrol.terminal.rfid.RFIDManager;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
@@ -53,7 +41,10 @@ import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -80,8 +71,8 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     RelativeLayout rlDefact;
     @BindView(R.id.rl_trouble)
     RelativeLayout rlTrouble;
-    @BindView(R.id.rv_backlog)
-    RecyclerView rvBacklog;
+    @BindView(R.id.rv_todo)
+    RecyclerView rvTodo;
     @BindView(R.id.home_todo_no_data)
     TextView homeTodoNoData;
     @BindView(R.id.ll_backlog)
@@ -98,19 +89,34 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     LinearLayout llPlanFinishRate;
     @BindView(R.id.scanner_iv)
     ImageView scannerIv;
+    @BindView(R.id.one_line)
+    TextView oneLine;
+    @BindView(R.id.two_line)
+    TextView twoLine;
+    @BindView(R.id.rv_last_task)
+    RecyclerView rvLastTask;
+    @BindView(R.id.home_last_task_no_data)
+    TextView homeLastTaskNoData;
+    @BindView(R.id.ll_last_task)
+    RelativeLayout llLastTask;
+    @BindView(R.id.home_done_data)
+    TextView homeDoneData;
+    @BindView(R.id.data_change)
+    ImageView dataChange;
 
-    private String[] typeList = new String[]{};
-    private List<String> types = new ArrayList<>();
-    private List<LineTypeBean> result;
-    private List<TodoListBean> backLogData = new ArrayList<>();
+
+    private List<PersonalTaskListBean> backLogData = new ArrayList<>();
     private List<PersonalTaskListBean> taskData = new ArrayList<>();
     private List<PlanFinishRateBean> data = new ArrayList<>();
+    private List<PlanFinishRateBean> data1 = new ArrayList<>();
     private String status;
     private String jobType;
     private BackTodoYXAdapter adapter;
     private ProgressDialog progressDialog;
     private BackLogTaskAdapter backLogTaskAdapter;
     private String year, month, day, time;
+    private int type=1;
+    private PlanFinishRateAdapter planFinishRateAdapter;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -140,6 +146,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         //运行班组长和组员进来隐藏计划
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             rlPlan.setVisibility(View.VISIBLE);
+            dataChange.setVisibility(View.VISIBLE);
         } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             rlPlan.setVisibility(View.GONE);
         }
@@ -148,27 +155,26 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         } else if (jobType.endsWith("_zz") && !jobType.contains("b_")) {
             status = "4,5";
         }
-
         initBackLog();
         initTask();
         initPlanFinishRate();
-        getYXtodo();
         getPersonalList();
+        getYXtodo();
     }
 
     private void initBackLog() {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        rvBacklog.setLayoutManager(manager);
+        rvTodo.setLayoutManager(manager);
 
         adapter = new BackTodoYXAdapter(R.layout.item_back_log, backLogData);
-        rvBacklog.setAdapter(adapter);
+        rvTodo.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                TodoListBean todoListBean = backLogData.get(position);
-                String deal_type = todoListBean.getPlan_type_sign();
-                String data_id = todoListBean.getData_id();
+                PersonalTaskListBean todoListBean = backLogData.get(position);
+                String deal_type = todoListBean.getType_sign();
+                String data_id = todoListBean.getId();
                 Intent intent = new Intent();
                 intent.putExtra("task_id", data_id);
                 switch (deal_type) {
@@ -216,7 +222,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     public void getPersonalList() {
 
         BaseRequest.getInstance().getService()
-                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()))
+                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()),"5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
@@ -241,14 +247,20 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     }
 
     private void initPlanFinishRate() {
+        Random random=new Random();
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         rvPlanFinishRate.setLayoutManager(manager);
-        data.add(new PlanFinishRateBean("刘海生", 50, 60));
-        data.add(new PlanFinishRateBean("蒋秀珍", 15, 54));
-        data.add(new PlanFinishRateBean("胡作铸", 87, 76));
-        PlanFinishRateAdapter adapter = new PlanFinishRateAdapter(R.layout.item_plan_finish_rate, data);
-        rvPlanFinishRate.setAdapter(adapter);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        data.add(new PlanFinishRateBean("刘海生", random.nextInt(100), random.nextInt(100)));
+        data.add(new PlanFinishRateBean("蒋秀珍", random.nextInt(100), random.nextInt(100)));
+        data.add(new PlanFinishRateBean("胡作铸", random.nextInt(100), random.nextInt(100)));
+
+        data1.add(new PlanFinishRateBean("刘海生", random.nextInt(100), random.nextInt(100)));
+        data1.add(new PlanFinishRateBean("蒋秀珍", random.nextInt(100), random.nextInt(100)));
+        data1.add(new PlanFinishRateBean("胡作铸", random.nextInt(100), random.nextInt(100)));
+
+        planFinishRateAdapter = new PlanFinishRateAdapter(R.layout.item_plan_finish_rate, data);
+        rvPlanFinishRate.setAdapter(planFinishRateAdapter);
+        planFinishRateAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent();
@@ -335,15 +347,16 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 
     public void getYXtodo() {
         BaseRequest.getInstance().getService()
-                .getYXtodo(SPUtil.getDepId(getContext()), "0", "CREATE_TIME desc")
+                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()),"2","5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TodoListBean>>(getContext()) {
-
+                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
                     @Override
-                    protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         backLogData = t.getResults();
+
                         adapter.setNewData(backLogData);
+
                         if (backLogData.size() == 0) {
                             homeTodoNoData.setVisibility(View.VISIBLE);
                         } else {
@@ -353,7 +366,6 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
                     }
                 });
     }
@@ -394,5 +406,19 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         month = Integer.parseInt(months[0]) + "";
         year = years[0];
         day = Integer.parseInt(days[0]) + "";
+    }
+
+    @OnClick(R.id.data_change)
+    public void onViewClicked() {
+
+        if (type ==1){
+            type =2;
+            planFinishRateAdapter.setNewData(data1);
+            homeDoneData.setText("周计划完成率");
+        }else if (type ==2){
+            type =1;
+            planFinishRateAdapter.setNewData(data);
+            homeDoneData.setText("日计划完成率");
+        }
     }
 }

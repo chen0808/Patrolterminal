@@ -113,10 +113,12 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
             getYXtodo();
             getYXtodoHave();
 
-
-
-        }else if (jobType.contains("yxb")){
-            getGroupName();
+        }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+            user_id=SPUtil.getUserId(getContext());
+            state="1";
+            haveState="2";
+            getYXtodo();
+            getYXtodoHave();
         }
         if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
             getWeekList();
@@ -146,7 +148,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
 
             @Override
             public void accept(String type) throws Exception {
-                if (type.startsWith("todo")) {
+                if (type.startsWith("refreshTodo")) {
                     results.clear();
                     if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
                         getYXtodo();
@@ -362,11 +364,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                             if (results!=null){
                                 if ("1".contains(results.getIs_boss())){
                                     SPUtil.putString(getContext(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
-                                    user_id=SPUtil.getUserId(getContext());
-                                    state="1";
-                                    haveState="2";
-                                    getYXtodo();
-                                    getYXtodoHave();
+
                                 }
                             }
                         }

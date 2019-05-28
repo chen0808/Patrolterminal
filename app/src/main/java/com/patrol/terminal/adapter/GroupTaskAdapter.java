@@ -22,9 +22,29 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder viewHolder, GroupTaskBean item) {
-        viewHolder.setText(R.id.item_task_date_tv, "组");
-        viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_day_bg);
-        viewHolder.setGone(R.id.plan_progressbar_ll,false);
+        switch (item.getType_sign()) {
+            case "4":
+                viewHolder.setText(R.id.item_task_date_tv, "特殊");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_week_bg);
+                break;
+            case "7":
+                viewHolder.setText(R.id.item_task_date_tv, "保电");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_qing_bg);
+                break;
+            case "2":
+                viewHolder.setText(R.id.item_task_date_tv, "故障");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_yellow_bg);
+                break;
+            case "1":
+                viewHolder.setText(R.id.item_task_date_tv, "定巡");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_mon_bg);
+                break;
+            default:
+                viewHolder.setText(R.id.item_task_date_tv, "定检");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_day_bg);
+                break;
+        }
+
         if ("1".equals(item.getIs_rob())){
             viewHolder.setText(R.id.item_task_date_tv, "抢");
             viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.group_red_bg);
@@ -33,6 +53,7 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
         if ("0".equals(allot_status)){
             viewHolder.setText(R.id.item_line_state, "未分配");
             viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_red_bg);
+            viewHolder.setGone(R.id.plan_progressbar_ll,false);
         }else {
                 viewHolder.setText(R.id.item_line_state, "已分配");
                 viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_red_bg);
@@ -43,7 +64,6 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
             progressBar.setMax(item.getAll_num());
             progressBar.setProgress(item.getDone_num());
         }
-
         viewHolder.setText(R.id.item_task_personal, "小组负责人 :"+item.getDuty_user_name())
                 .setText(R.id.item_task_name, item.getLine_name()+item.getName()+item.getType_name()+"任务")
                 .setText(R.id.item_task_type,"班组 :"+ item.getDep_name());

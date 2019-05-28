@@ -68,6 +68,7 @@ public class LineCheckActivity extends BaseActivity {
     private LineCheckAdapter adapter;
     private LineCheckBean selectBean;
     private String from;
+    private String type_sign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class LineCheckActivity extends BaseActivity {
         id = getIntent().getStringExtra("id");
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) ) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
             dep_id=SPUtil.getDepId(this);
-
+            type_sign = "2,4,7,8,9,10";
         }
         adapter = new LineCheckAdapter(this, results);
         rvLineCheck.setAdapter(adapter);
@@ -110,7 +111,7 @@ public class LineCheckActivity extends BaseActivity {
     private void initData() {
         ProgressDialog.show(this, false, "正在加载。。。");
         BaseRequest.getInstance().getService()
-                .getLineList(year,month,dep_id)
+                .getLineList(year,month,dep_id,type_sign)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineCheckBean>>(this) {

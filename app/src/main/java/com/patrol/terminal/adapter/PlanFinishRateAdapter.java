@@ -24,5 +24,6 @@ public class PlanFinishRateAdapter extends BaseQuickAdapter<PlanFinishRateBean, 
         ProgressBar pb1 = helper.getView(R.id.pb1);
         ProgressBar pb2 = helper.getView(R.id.pb2);
         pb1.setProgress((int) item.getPercent1());
+        pb2.setProgress((int) item.getPercent2());
     }
 }

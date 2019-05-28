@@ -10,18 +10,18 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class BackTodoYXAdapter extends BaseQuickAdapter<TodoListBean, BaseViewHolder> {
+public class BackTodoYXAdapter extends BaseQuickAdapter<PersonalTaskListBean, BaseViewHolder> {
 
 
-    public BackTodoYXAdapter(int layoutResId, @Nullable List<TodoListBean> data) {
+    public BackTodoYXAdapter(int layoutResId, @Nullable List<PersonalTaskListBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, TodoListBean item) {
+    protected void convert(BaseViewHolder helper, PersonalTaskListBean item) {
         int position = helper.getPosition();
         if (item!= null) {
-            helper.setText(R.id.tv_title, position+1+". "+item.getContent());
+            helper.setText(R.id.tv_title, position+1+". "+"关于"+item.getLine_name()+item.getTower_name()+"的"+item.getType_name()+"待办");
         }
     }
 }

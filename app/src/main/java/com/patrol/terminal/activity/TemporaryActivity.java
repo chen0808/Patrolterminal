@@ -222,6 +222,7 @@ public class TemporaryActivity extends BaseActivity {
         bean.setEnd_time(endTime);
         bean.setYear(year);
         bean.setMonth(month);
+        bean.setTowers(selectBean);
         //获取月计划列表
         BaseRequest.getInstance().getService()
                 .saveMonthPlan(bean)
@@ -245,9 +246,9 @@ public class TemporaryActivity extends BaseActivity {
     public void showDay(int type) {
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2018, 1, 23);
+        startDate.set(Integer.parseInt(year), Integer.parseInt(month)-1,1);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2028, 2, 28);
+        endDate.set(Integer.parseInt(year), Integer.parseInt(month)-1,31);
         //时间选择器 ，自定义布局
         //选中事件回调
 //是否只显示中间选中项的label文字，false则每项item全部都带有label。
@@ -283,13 +284,14 @@ public class TemporaryActivity extends BaseActivity {
     public void getTempTower() {
         ProgressDialog.show(this,false,"正在加载。。。");
         BaseRequest.getInstance().getService()
-                .getTempTower(line_id)
+                .getTempTower(line_id,"name")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<Tower>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<Tower>> t) throws Exception {
                         ProgressDialog.cancle();
+                        monPlanTowerLl.setVisibility(View.VISIBLE);
                         TempTowerAdapter adapter=new TempTowerAdapter(TemporaryActivity.this,t.getResults());
                         monthPlanTower.setAdapter(adapter);
                     }
@@ -345,7 +347,7 @@ public class TemporaryActivity extends BaseActivity {
             }
             Tower listBean = lineTypeBeans.get(position);
             holder.itemTroubleName.setText(listBean.getName());
-
+            holder.itemTroubleCheck.setChecked(false);
             holder.taskType.setVisibility(View.GONE);
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -353,6 +355,7 @@ public class TemporaryActivity extends BaseActivity {
                     if (selectBean.size()==0){
                         Tower tower=new Tower();
                         tower.setTower_type("2");
+                        tower.setName(listBean.getName());
                         tower.setTower_id(listBean.getId());
                         selectBean.add(tower);
                         holder.itemTroubleCheck.setChecked(true);
@@ -360,7 +363,7 @@ public class TemporaryActivity extends BaseActivity {
                         int isExit=0;
                         for (int i = 0; i < selectBean.size(); i++) {
                             Tower dayOfWeekBean = selectBean.get(i);
-                            if (dayOfWeekBean.getId().equals(listBean.getId())){
+                            if (dayOfWeekBean.getTower_id().equals(listBean.getId())){
                                 isExit=1;
                                 selectBean.remove(i);
                                 holder.itemTroubleCheck.setChecked(false);
@@ -371,6 +374,7 @@ public class TemporaryActivity extends BaseActivity {
                             Tower tower=new Tower();
                             tower.setTower_type("2");
                             tower.setTower_id(listBean.getId());
+                            tower.setName(listBean.getName());
                             selectBean.add(tower);
                             holder.itemTroubleCheck.setChecked(true);
                         }

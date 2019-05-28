@@ -37,22 +37,29 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
     @Override
     protected void convert(BaseViewHolder viewHolder, MonthPlanBean item) {
         if (item.getRepair_content() == null) {
-            if (item.getFull_plan().contains("特")) {
-                viewHolder.setText(R.id.item_plan_date_tv, "特");
-                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_week_bg);
-            }else if (item.getFull_plan().contains("保")) {
-                viewHolder.setText(R.id.item_plan_date_tv, "保");
-                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_qing_bg);
-            } else if (item.getFull_plan().contains("事")) {
-                viewHolder.setText(R.id.item_plan_date_tv, "事");
-                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_yellow_bg);
-            } else if (item.getFull_plan().contains("巡")) {
-                viewHolder.setText(R.id.item_plan_date_tv, "巡");
-                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_mon_bg);
-            } else {
-                viewHolder.setText(R.id.item_plan_date_tv, "检");
-                viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
-            }
+switch (item.getType_sign()){
+    case "4":
+        viewHolder.setText(R.id.item_plan_date_tv, "特殊");
+        viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_week_bg);
+        break;
+    case "7":
+        viewHolder.setText(R.id.item_plan_date_tv, "保电");
+        viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_qing_bg);
+        break;
+    case "2":
+        viewHolder.setText(R.id.item_plan_date_tv, "故障");
+        viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_yellow_bg);
+        break;
+    case "1":
+        viewHolder.setText(R.id.item_plan_date_tv, "定巡");
+        viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_mon_bg);
+        break;
+        default:
+            viewHolder.setText(R.id.item_plan_date_tv, "定检");
+            viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
+            break;
+}
+
             if (state != null) {
                 viewHolder.setVisible(R.id.plan_to_change, false);
             } else {

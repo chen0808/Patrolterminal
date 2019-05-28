@@ -33,6 +33,7 @@ import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.NoScrollListView;
 
@@ -150,7 +151,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
     //获取小组任务
     public void getAddGroupList() {
         BaseRequest.getInstance().getService()
-                .getAddGroupList(year, month, day, SPUtil.getUserId(this),type_id,"0")
+                .getAddGroupList(year, month, day, SPUtil.getUserId(this),type_id,"0","0")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(this) {
@@ -336,6 +337,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
                         if (t.getCode() == 1) {
                             setResult(RESULT_OK);
+                            RxRefreshEvent.publish("refreshGroup");
                             Toast.makeText(AddPersonalTaskActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
