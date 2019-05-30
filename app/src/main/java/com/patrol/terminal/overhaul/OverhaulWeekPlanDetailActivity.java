@@ -851,7 +851,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //                    nicePosition2 = Integer.valueOf(planRepairBean.getTicket_task_type());
 //                    Log.d("task__type", "type:" + nicePosition + "------task_type:" + nicePosition2);
 //                }
-                if (jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getTask_status())) {  //负责人进来, 填写过的将数据带过去
+                if ((jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) && "2".equals(overhaulMonthBean.getTask_status())) {  //负责人进来, 填写过的将数据带过去
                     switch (nicePosition) {
                         case 1:
                             Intent intent11 = new Intent(OverhaulWeekPlanDetailActivity.this, FirstWTicketActivity.class);
