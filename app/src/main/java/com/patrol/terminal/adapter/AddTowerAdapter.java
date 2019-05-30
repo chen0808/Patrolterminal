@@ -63,19 +63,11 @@ public class AddTowerAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (holder.towerCheck.isChecked()){
-                    if ("1".equals(listBean.getType_sign())){
-                        RxRefreshEvent.publish("add@"+listBean.getTowers_id()+"@"+listBean.getLine_id()+"@"+listBean.getLine_name()+"@"+listBean.getTowers_name()+"@"+listBean.getType_id()+"@"+listBean.getType_name()+"@"+listBean.getType_sign()+"@"+listBean.getMonth_line_id());
 
-                    }else {
-                        RxRefreshEvent.publish("add@"+listBean.getTowers_id()+"@"+listBean.getLine_id()+"@"+listBean.getLine_name()+"@"+listBean.getTowers_name()+"@"+listBean.getType_id()+"@"+listBean.getType_name()+"@"+listBean.getType_sign()+"@"+listBean.getMonth_line_id());
+                        RxRefreshEvent.publish("add@"+listBean.getTowers_id()+"@"+listBean.getLine_id()+"@"+listBean.getLine_name()+"@"+listBean.getTowers_name()+"@"+listBean.getType_id()+"@"+listBean.getType_name()+"@"+listBean.getType_sign()+"@"+listBean.getMonth_line_id()+"@"+listBean.getDefect_id());
 
-                    }
                 }else {
-                    if ("1".equals(listBean.getType_sign())){
                         RxRefreshEvent.publish("delete@"+listBean.getTowers_id());
-                    }else {
-                        RxRefreshEvent.publish("delete@"+listBean.getTowers_id());
-                    }
 
                 }
 

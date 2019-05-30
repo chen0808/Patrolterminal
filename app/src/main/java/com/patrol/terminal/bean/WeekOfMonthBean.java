@@ -20,6 +20,15 @@ public class WeekOfMonthBean {
     private String line_name;
     private String line_id;
     private String towers_id;
+    private String defect_id;
+
+    public String getDefect_id() {
+        return defect_id;
+    }
+
+    public void setDefect_id(String defect_id) {
+        this.defect_id = defect_id;
+    }
 
     public String getMonth_line_id() {
         return month_line_id;

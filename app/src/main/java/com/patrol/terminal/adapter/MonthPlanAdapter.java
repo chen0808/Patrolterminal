@@ -63,7 +63,7 @@ switch (item.getType_sign()){
             if (state != null) {
                 viewHolder.setVisible(R.id.plan_to_change, false);
             } else {
-                if ("0".equals(item.getAudit_status())) {
+                if ("0".equals(item.getAudit_status())||"4".equals(item.getAudit_status())) {
                     viewHolder.setVisible(R.id.plan_to_change, true);
                 } else {
                     viewHolder.setVisible(R.id.plan_to_change, false);

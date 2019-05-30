@@ -3,7 +3,6 @@ package com.patrol.terminal.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +27,8 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.bean.SubmitPlanReqBean;
-import com.patrol.terminal.bean.SubmitPlanReqStateBean;
 import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.WeekListBean;
-import com.patrol.terminal.bean.WeekPlanBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
@@ -194,6 +191,7 @@ public class WeekPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
+                        lineList.clear();
                         results = t.getResults();
                         weekPlanAdapter.setNewData(results);
                         for (int i = 0; i < results.size(); i++) {
@@ -206,7 +204,7 @@ public class WeekPlanFrgment extends BaseFragment {
                                     lineBean.setId(bean.getId());
                                     lineList.add(lineBean);
                                     //当身份是运行班专责时，获取到需要发布的列表
-                                }  else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(results.get(i).getAudit_status())) {
+                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(results.get(i).getAudit_status())||"3".equals(results.get(i).getAudit_status()))){
                                     WeekListBean bean = results.get(i);
                                     Tower lineBean = new Tower();
                                     lineBean.setId(bean.getId());
@@ -427,40 +425,5 @@ public class WeekPlanFrgment extends BaseFragment {
         if (requestCode == 10 && resultCode == -1) {
             getWeekList();
         }
-    }
-
-    //审核月计划, 同意或者拒绝
-    public void checkWeekPlan(String state) {
-        ProgressDialog.show(getContext(), false, "正在加载中");
-        //SubmitPlanReqBean bean=new SubmitPlanReqBean();
-
-        SubmitPlanReqStateBean bean = new SubmitPlanReqStateBean();
-        bean.setWeekIds(lineList);
-        bean.setState(state);
-        BaseRequest.getInstance().getService()
-                .submitWeekPlanState(bean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<WeekPlanBean>>(getContext()) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<WeekPlanBean>> t) throws Exception {
-                        ProgressDialog.cancle();
-                        if (t.getCode() == 1) {
-                            if ("2".equals(state)){
-                                Toast.makeText(getContext(), "一键发布成功", Toast.LENGTH_SHORT).show();
-                            }else {
-                                Toast.makeText(getContext(), "一键审核成功", Toast.LENGTH_SHORT).show();
-                            }
-
-                            getWeekList();
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                    }
-                });
-
     }
 }

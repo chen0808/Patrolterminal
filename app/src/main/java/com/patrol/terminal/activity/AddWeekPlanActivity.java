@@ -107,7 +107,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         year = Integer.parseInt(curMonth.substring(0, 4));
         month = Integer.parseInt(curMonth.substring(5, 7));
         int weekNumOfMonth = DateUatil.getWeekNumOfMonth(year+"", month+"");
-        week = DateUatil.getWeekNum()+1;
+        week = DateUatil.getWeekNum();
         if (week>weekNumOfMonth){
             week=1;
             month=month+1;
@@ -139,6 +139,7 @@ public class AddWeekPlanActivity extends BaseActivity {
                     bean.setType_name(split[6]);
                     bean.setType_sign(split[7]);
                     bean.setMonth_line_id(split[8]);
+                    bean.setDefect_id(split[9]);
                     bean.setDep_id(SPUtil.getDepId(AddWeekPlanActivity.this));
                     bean.setDep_name(SPUtil.getDepName(AddWeekPlanActivity.this));
                     selectType.add(bean);
@@ -331,8 +332,8 @@ public class AddWeekPlanActivity extends BaseActivity {
         bean.setYear(year+"");
         bean.setMonth(month + "");
         bean.setWeek(week+"");
-        bean.setBegin_time(DateUatil.dateToDate(beginDate));
-        bean.setEnd_time(DateUatil.dateToDate(endDate));
+        bean.setBegin_time(DateUatil.dateToDate(year+"年"+beginDate));
+        bean.setEnd_time(DateUatil.dateToDate(year+"年"+endDate));
         bean.setTowers(selectType);
 
         BaseRequest.getInstance().getService()

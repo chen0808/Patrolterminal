@@ -108,8 +108,8 @@ public class MonthPlanDetailActivity extends BaseActivity {
     //获取已经添加的缺陷列表
     public void getHaveDefect() {
         ApiServise service = BaseRequest.getInstance().getService();
-        Observable<BaseResult<List<DefectBean>>> haveDefect = service.getHaveDefect(month_line_id, "1", "1");
-        Observable<BaseResult<List<DefectBean>>> haveDanger = service.getHaveDanger(month_line_id,  "1", "1");
+        Observable<BaseResult<List<DefectBean>>> haveDefect = service.getHaveDefect(month_line_id, "1,2,3", "1");
+        Observable<BaseResult<List<DefectBean>>> haveDanger = service.getHaveDanger(month_line_id,  "1,2,3", "1");
         Observable.zip(haveDefect,haveDanger, new BiFunction<BaseResult<List<DefectBean>>,BaseResult<List<DefectBean>>, String>() {
             @Override
             public String apply(BaseResult<List<DefectBean>> listBaseResult, BaseResult<List<DefectBean>> listBaseResult2) throws Exception {

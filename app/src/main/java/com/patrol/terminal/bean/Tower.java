@@ -6,7 +6,7 @@ public class Tower {
     private String line_id;
     private String id;
     private String name;
-
+    private String defect_id;
     private String type_name;
     private String type_id;
     private String type_sign;
@@ -15,6 +15,14 @@ public class Tower {
     private  String dep_name;
     private String towers_id;
     private String month_line_id;
+
+    public String getDefect_id() {
+        return defect_id;
+    }
+
+    public void setDefect_id(String defect_id) {
+        this.defect_id = defect_id;
+    }
 
     public String getTower_type() {
         return tower_type;

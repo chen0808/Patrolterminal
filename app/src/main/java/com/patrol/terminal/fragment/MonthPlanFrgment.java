@@ -397,7 +397,7 @@ public class MonthPlanFrgment extends BaseFragment {
                     lineBean.setMonth_line_id(monthPlanBean.getId());
                     lineList.add(lineBean);
                     //当身份是班长时，获取需要审核的列表
-                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())){
+                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(monthPlanBean.getAudit_status())||"4".equals(monthPlanBean.getAudit_status()))){
                     Tower lineBean = new Tower();
                     lineBean.setLine_id(monthPlanBean.getLine_id());
                     lineBean.setMonth_line_id(monthPlanBean.getId());
