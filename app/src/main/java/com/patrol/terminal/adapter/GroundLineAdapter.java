@@ -11,7 +11,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.TicketFirstGround;
-import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 
 import java.util.List;
@@ -70,7 +69,7 @@ public class GroundLineAdapter extends BaseQuickAdapter<TicketFirstGround, BaseV
         });
 
         tvHungTime.setText(item.getInstall_time());
-        if (!item.getInstall_time().equals(Constant.WORK_TICKET_TIME)) {
+        if (!item.getInstall_time().equals(mContext.getResources().getString(R.string.work_ticket_time))) {
             cbHungTime.setVisibility(View.GONE);
         }
         cbHungTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -79,13 +78,13 @@ public class GroundLineAdapter extends BaseQuickAdapter<TicketFirstGround, BaseV
                 if (isChecked) {
                     tvHungTime.setText(DateUatil.getCurrTime());
                 } else {
-                    tvHungTime.setText(Constant.WORK_TICKET_TIME);
+                    tvHungTime.setText(mContext.getResources().getString(R.string.work_ticket_time));
                 }
                 item.setInstall_time(tvHungTime.getText().toString());
             }
         });
 
-        if (!item.getRemove_time().equals(Constant.WORK_TICKET_TIME)) {
+        if (!item.getRemove_time().equals(mContext.getResources().getString(R.string.work_ticket_time))) {
             cbDemolitionTime.setVisibility(View.GONE);
         }
         tvDemolitionTime.setText(item.getRemove_time());
@@ -95,7 +94,7 @@ public class GroundLineAdapter extends BaseQuickAdapter<TicketFirstGround, BaseV
                 if (isChecked) {
                     tvDemolitionTime.setText(DateUatil.getCurrTime());
                 } else {
-                    tvDemolitionTime.setText(Constant.WORK_TICKET_TIME);
+                    tvDemolitionTime.setText(mContext.getResources().getString(R.string.work_ticket_time));
                 }
                 item.setRemove_time(tvDemolitionTime.getText().toString());
             }

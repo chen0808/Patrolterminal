@@ -33,6 +33,7 @@ public class Constant {
     public static final int REQUEST_CODE_ADDRESS_BOOK3 = 14;//通讯录3
     public static final int REQUEST_CODE_ADDRESS_BOOK4 = 15;//通讯录4
     public static final int REQUEST_CODE_SIGN = 20;//签名跳转
+    public static final int SAFE_LIST = 30;//跳转到所有的注意事项
     public static final String PARTOL_RECORD_PIC_INDEX = "partolRecordPicIndex";
     public static String USERDEPNAME = "userdepname";
 
@@ -62,8 +63,6 @@ public class Constant {
     public static final String[] JOBS_NAME = {"运行班班长", "运行班组长", "运行班班员", "检修班班长", "检修班组长",
             "检修班班员", "运行专责", "检修专责", "工区主管", "运行主管", "检修主管", "绩效专责", "培训专责",
             "汽车班班长", "汽车班班员", "保电专责", "安全专责", "验收专责"};
-
-    public static final String WORK_TICKET_TIME = "        年    月    日    时    分";
 
     public static final int CONTROL_WORK = 0;
     public static final int CONTROL_QUALITY = 1;

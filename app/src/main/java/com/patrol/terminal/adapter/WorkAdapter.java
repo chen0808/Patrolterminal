@@ -2,23 +2,23 @@ package com.patrol.terminal.adapter;
 
 import android.view.View;
 
-import androidx.annotation.Nullable;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.bean.TicketFirstWork;
+import com.patrol.terminal.bean.TicketWork;
 
 import java.util.List;
 
-public class WorkAdapter extends BaseQuickAdapter<TicketFirstWork, BaseViewHolder> {
+import androidx.annotation.Nullable;
 
-    public WorkAdapter(int layoutResId, @Nullable List<TicketFirstWork> data) {
+public class WorkAdapter extends BaseQuickAdapter<TicketWork, BaseViewHolder> {
+
+    public WorkAdapter(int layoutResId, @Nullable List<TicketWork> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, TicketFirstWork item) {
+    protected void convert(BaseViewHolder helper, TicketWork item) {
         helper.setText(R.id.tv_place, item.getWork_range())
                 .setText(R.id.tv_content, item.getWork_content());
         helper.getView(R.id.tv_name).setVisibility(View.GONE);

@@ -2,7 +2,7 @@ package com.patrol.terminal.bean;
 
 import java.io.Serializable;
 
-public class TicketFirstUser implements Serializable {
+public class TicketUser implements Serializable {
     // 主键id
     private String id;
 
@@ -24,7 +24,11 @@ public class TicketFirstUser implements Serializable {
     // 人员变更时间
     private String alter_time;
 
-    public TicketFirstUser(String user_name, String user_status, String sign) {
+    public TicketUser(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public TicketUser(String user_name, String user_status, String sign) {
         this.user_name = user_name;
         this.user_status = user_status;
         this.sign = sign;

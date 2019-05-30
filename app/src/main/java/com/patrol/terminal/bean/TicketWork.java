@@ -2,22 +2,37 @@ package com.patrol.terminal.bean;
 
 import java.io.Serializable;
 
-public class TicketFirstWork implements Serializable {
+public class TicketWork implements Serializable {
     // 主键id
     private String id;
 
     // 第一种工作票id
     private String ticket_id;
 
+    // 线路或设备名称
+    private String line_name;
     // 工作范围
     private String work_range;
-
     // 工作内容
     private String work_content;
 
-    public TicketFirstWork(String work_range, String work_content) {
+    public TicketWork(String work_range, String work_content) {
         this.work_range = work_range;
         this.work_content = work_content;
+    }
+
+    public TicketWork(String line_name, String work_range, String work_content) {
+        this.line_name = line_name;
+        this.work_range = work_range;
+        this.work_content = work_content;
+    }
+
+    public String getLine_name() {
+        return line_name;
+    }
+
+    public void setLine_name(String line_name) {
+        this.line_name = line_name;
     }
 
     public String getId() {

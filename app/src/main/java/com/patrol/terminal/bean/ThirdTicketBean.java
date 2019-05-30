@@ -4,207 +4,276 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ThirdTicketBean implements Serializable {
-    private String crew_id;
-    private String s_time;
-    private String e_time;
-    private String stop_reclose;//停用重合线路
-    private String work_conditions;//工作条件
-    private String sign_time;//签发人签名时间
-    private String regulation_time;//许可人签名时间
-    private String custody_man;//专责监护人
-    private String supply_safety_measures;//补充安全措施
-    private String final_regulation_time;//最终汇报调控许可人签名时间
-    private String remark;//备注
-    private List<TaskContentBean> workList;
-    private List<FileListBean> fileList;
+    // PDA安全事项 sz
+    List<TicketSafeContent> safeList;
+    // 主键id
+    private String id;
+    // 单位id
+    private String unit_id;
+    // 单位名称
+    private String unit_name;
+    // 编号
+    private String ticket_number;
+    // 工作负责人id
+    private String duty_user_id;
+    // 工作负责人名称
+    private String duty_user_name;
+    // 工作班组id
+    private String work_dep_id;
+    // 工作班组名称
+    private String work_dep_name;
+    // 停用重合闸线路id
+    private String reload_line_id;
+    // 停用重合闸线路名称
+    private String reload_line_name;
+    // 检修任务id
+    private String task_id;
+    // 计划开始时间
+    private String begin_time;
+    // 计划结束时间
+    private String end_time;
+    // 工作条件（等电位、中间电位或地电位作业，或邻近带电设备名称）
+    private String work_condition;
+    // 注意事项（安全措施）
+    private String care_content;
+    // 调控许可人id
+    private String permit_user_id;
+    // 调控许可人名称
+    private String permit_user_name;
+    // 专责监护人id
+    private String monitor_user_id;
+    // 专责监护人名称
+    private String monitor_user_name;
+    // 补充安全措施
+    private String other_care_content;
+    // 工作终结汇报调控许可人id
+    private String done_user_id;
+    // 工作终结汇报调控许可人名称
+    private String done_user_name;
+    // 备注
+    private String remakes;
+    /*** 自定义字段 ***/
 
-    public String getCrew_id() {
-        return crew_id;
+    // PDA人员签名 sz
+    private List<TicketSign> signList;
+    // PDA工作人员 sz
+    private List<TicketUser> userList;
+    // PDA工作任务 sz
+    private List<TicketWork> workList;
+
+    public List<TicketSafeContent> getSafeList() {
+        return safeList;
     }
 
-    public void setCrew_id(String crew_id) {
-        this.crew_id = crew_id;
+    public void setSafeList(List<TicketSafeContent> safeList) {
+        this.safeList = safeList;
     }
 
-    public String getS_time() {
-        return s_time;
+    public String getId() {
+        return id;
     }
 
-    public void setS_time(String s_time) {
-        this.s_time = s_time;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getE_time() {
-        return e_time;
+    public String getUnit_id() {
+        return unit_id;
     }
 
-    public void setE_time(String e_time) {
-        this.e_time = e_time;
+    public void setUnit_id(String unit_id) {
+        this.unit_id = unit_id;
     }
 
-    public String getStop_reclose() {
-        return stop_reclose;
+    public String getUnit_name() {
+        return unit_name;
     }
 
-    public void setStop_reclose(String stop_reclose) {
-        this.stop_reclose = stop_reclose;
+    public void setUnit_name(String unit_name) {
+        this.unit_name = unit_name;
     }
 
-    public String getWork_conditions() {
-        return work_conditions;
+    public String getTicket_number() {
+        return ticket_number;
     }
 
-    public void setWork_conditions(String work_conditions) {
-        this.work_conditions = work_conditions;
+    public void setTicket_number(String ticket_number) {
+        this.ticket_number = ticket_number;
     }
 
-    public String getSign_time() {
-        return sign_time;
+    public String getDuty_user_id() {
+        return duty_user_id;
     }
 
-    public void setSign_time(String sign_time) {
-        this.sign_time = sign_time;
+    public void setDuty_user_id(String duty_user_id) {
+        this.duty_user_id = duty_user_id;
     }
 
-    public String getRegulation_time() {
-        return regulation_time;
+    public String getDuty_user_name() {
+        return duty_user_name;
     }
 
-    public void setRegulation_time(String regulation_time) {
-        this.regulation_time = regulation_time;
+    public void setDuty_user_name(String duty_user_name) {
+        this.duty_user_name = duty_user_name;
     }
 
-    public String getCustody_man() {
-        return custody_man;
+    public String getWork_dep_id() {
+        return work_dep_id;
     }
 
-    public void setCustody_man(String custody_man) {
-        this.custody_man = custody_man;
+    public void setWork_dep_id(String work_dep_id) {
+        this.work_dep_id = work_dep_id;
     }
 
-    public String getSupply_safety_measures() {
-        return supply_safety_measures;
+    public String getWork_dep_name() {
+        return work_dep_name;
     }
 
-    public void setSupply_safety_measures(String supply_safety_measures) {
-        this.supply_safety_measures = supply_safety_measures;
+    public void setWork_dep_name(String work_dep_name) {
+        this.work_dep_name = work_dep_name;
     }
 
-    public String getFinal_regulation_time() {
-        return final_regulation_time;
+    public String getReload_line_id() {
+        return reload_line_id;
     }
 
-    public void setFinal_regulation_time(String final_regulation_time) {
-        this.final_regulation_time = final_regulation_time;
+    public void setReload_line_id(String reload_line_id) {
+        this.reload_line_id = reload_line_id;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getReload_line_name() {
+        return reload_line_name;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setReload_line_name(String reload_line_name) {
+        this.reload_line_name = reload_line_name;
     }
 
-    public List<TaskContentBean> getWorkList() {
+    public String getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(String task_id) {
+        this.task_id = task_id;
+    }
+
+    public String getBegin_time() {
+        return begin_time;
+    }
+
+    public void setBegin_time(String begin_time) {
+        this.begin_time = begin_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(String end_time) {
+        this.end_time = end_time;
+    }
+
+    public String getWork_condition() {
+        return work_condition;
+    }
+
+    public void setWork_condition(String work_condition) {
+        this.work_condition = work_condition;
+    }
+
+    public String getCare_content() {
+        return care_content;
+    }
+
+    public void setCare_content(String care_content) {
+        this.care_content = care_content;
+    }
+
+    public String getPermit_user_id() {
+        return permit_user_id;
+    }
+
+    public void setPermit_user_id(String permit_user_id) {
+        this.permit_user_id = permit_user_id;
+    }
+
+    public String getPermit_user_name() {
+        return permit_user_name;
+    }
+
+    public void setPermit_user_name(String permit_user_name) {
+        this.permit_user_name = permit_user_name;
+    }
+
+    public String getMonitor_user_id() {
+        return monitor_user_id;
+    }
+
+    public void setMonitor_user_id(String monitor_user_id) {
+        this.monitor_user_id = monitor_user_id;
+    }
+
+    public String getMonitor_user_name() {
+        return monitor_user_name;
+    }
+
+    public void setMonitor_user_name(String monitor_user_name) {
+        this.monitor_user_name = monitor_user_name;
+    }
+
+    public String getOther_care_content() {
+        return other_care_content;
+    }
+
+    public void setOther_care_content(String other_care_content) {
+        this.other_care_content = other_care_content;
+    }
+
+    public String getDone_user_id() {
+        return done_user_id;
+    }
+
+    public void setDone_user_id(String done_user_id) {
+        this.done_user_id = done_user_id;
+    }
+
+    public String getDone_user_name() {
+        return done_user_name;
+    }
+
+    public void setDone_user_name(String done_user_name) {
+        this.done_user_name = done_user_name;
+    }
+
+    public String getRemakes() {
+        return remakes;
+    }
+
+    public void setRemakes(String remakes) {
+        this.remakes = remakes;
+    }
+
+    public List<TicketSign> getSignList() {
+        return signList;
+    }
+
+    public void setSignList(List<TicketSign> signList) {
+        this.signList = signList;
+    }
+
+    public List<TicketUser> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<TicketUser> userList) {
+        this.userList = userList;
+    }
+
+    public List<TicketWork> getWorkList() {
         return workList;
     }
 
-    public void setWorkList(List<TaskContentBean> workList) {
+    public void setWorkList(List<TicketWork> workList) {
         this.workList = workList;
-    }
-
-    public List<FileListBean> getFileList() {
-        return fileList;
-    }
-
-    public void setFileList(List<FileListBean> fileList) {
-        this.fileList = fileList;
-    }
-
-    public static class FileListBean implements Serializable {
-        /**
-         * id : D9ADB8CE4C7343D4ADA43F426771F9AF
-         * data_id : BE5BF9C56D714E18B33A4BCB5C514F92
-         * filename : 5defc3a8-4c04-44e8-9c37-0a9113b9b97a.jpg
-         * old_name : aaa.jpg
-         * file_type : 1
-         * file_path : /upload.folder/
-         * file_size : 17628
-         * repair_type : 0
-         * content : aaa.jpg
-         */
-        private String data_id;
-        private String filename;
-        private String old_name;
-        private String file_type;
-        private String file_path;
-        private String file_size;
-        private String repair_type;
-        private String content;
-
-        public String getData_id() {
-            return data_id;
-        }
-
-        public void setData_id(String data_id) {
-            this.data_id = data_id;
-        }
-
-        public String getFilename() {
-            return filename;
-        }
-
-        public void setFilename(String filename) {
-            this.filename = filename;
-        }
-
-        public String getOld_name() {
-            return old_name;
-        }
-
-        public void setOld_name(String old_name) {
-            this.old_name = old_name;
-        }
-
-        public String getFile_type() {
-            return file_type;
-        }
-
-        public void setFile_type(String file_type) {
-            this.file_type = file_type;
-        }
-
-        public String getFile_path() {
-            return file_path;
-        }
-
-        public void setFile_path(String file_path) {
-            this.file_path = file_path;
-        }
-
-        public String getFile_size() {
-            return file_size;
-        }
-
-        public void setFile_size(String file_size) {
-            this.file_size = file_size;
-        }
-
-        public String getRepair_type() {
-            return repair_type;
-        }
-
-        public void setRepair_type(String repair_type) {
-            this.repair_type = repair_type;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
     }
 }

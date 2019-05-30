@@ -8,14 +8,23 @@ public class PatrolLevel1 extends AbstractExpandableItem<PatrolLevel2> implement
 
     private String title;
     private boolean tag;
-    private String wares_id;
-    private String line_id;
-    private String towers;
-    private String start_id;
-    private String start_sort;
+    private String id;
+
+    public PatrolLevel1(String title, String id) {
+        this.title = title;
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public PatrolLevel1(String title) {
         this.title = title;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {

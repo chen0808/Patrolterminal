@@ -22,7 +22,6 @@ import com.patrol.terminal.activity.SignActivity;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.SignBean;
 import com.patrol.terminal.bean.TicketFirstPermit;
-import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 
 import org.angmarch.views.NiceSpinner;
@@ -98,7 +97,7 @@ public class LicensingStartedAdapter extends BaseQuickAdapter<TicketFirstPermit,
         CheckBox cbTime = helper.getView(R.id.time_checkbox);
         TextView tvTime = helper.getView(R.id.time_tv);
         tvTime.setText(item.getPermit_time());
-        if (!item.getPermit_time().equals(Constant.WORK_TICKET_TIME)) {
+        if (!item.getPermit_time().equals(mContext.getResources().getString(R.string.work_ticket_time))) {
             cbTime.setVisibility(View.GONE);
         }
         cbTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -107,7 +106,7 @@ public class LicensingStartedAdapter extends BaseQuickAdapter<TicketFirstPermit,
                 if (isChecked) {
                     tvTime.setText(DateUatil.getCurrTime());
                 } else {
-                    tvTime.setText(Constant.WORK_TICKET_TIME);
+                    tvTime.setText(mContext.getResources().getString(R.string.work_ticket_time));
                 }
                 item.setPermit_time(tvTime.getText().toString());
             }

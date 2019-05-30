@@ -75,7 +75,7 @@ import com.patrol.terminal.bean.SpecialAttrList;
 import com.patrol.terminal.bean.SubmitPlanReqBean;
 import com.patrol.terminal.bean.SubmitPlanReqStateBean;
 import com.patrol.terminal.bean.ThirdTicketBean;
-import com.patrol.terminal.bean.TicketSafeBean;
+import com.patrol.terminal.bean.TicketSafeContent;
 import com.patrol.terminal.bean.TodoListBean;
 import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.TowerListBean;
@@ -656,8 +656,12 @@ public interface ApiServise {
 
 
     //工作票注意事项
-    @GET("task/tic/safe/listGET")
-    Observable<BaseResult<List<TicketSafeBean>>> getTicketSafe(@Query("type") String type, @Query("task_type") String task_type);
+    @GET("ticket/safe/type/listGET")
+    Observable<BaseResult<List<TicketSafeContent>>> getTicketSafe(@Query("ticket_type") String type, @Query("type_id") String task_type, @Query("order") String order);
+
+    //所有注意事项列表
+    @GET("ticket/safe/listGET")
+    Observable<BaseResult<List<TicketSafeContent>>> safeList();
 
     //上传文档
     @Multipart
@@ -704,15 +708,6 @@ public interface ApiServise {
 //    @POST("task/need/deal/savePOST")
 //    Observable<BaseResult> releaseDeal(@Body OverhaulZZSendBean bean);
 
-    //上传第一种工作票
-    @Multipart
-    @POST("ticket/first/savePOST")
-    Observable<BaseResult> upLoadFirstTicket(@PartMap Map<String, RequestBody> params);
-
-    //查询第一种工作票内容
-    @GET("ticket/first/allGET")
-    Observable<BaseResult<FirstTicketBean>> searchFirstTicket(@Query("task_id") String id);
-
     //上传现场质量监督记录现场情况
     @Multipart
     @POST("task/supervise/pda/updatePOST")
@@ -734,31 +729,40 @@ public interface ApiServise {
     @GET("task/illegal/listGET")
     Observable<BaseResult<List<FieldAntiInspectionBean>>> getFieldAntiInspection();
 
+    //上传第一种工作票
+    @Multipart
+    @POST("ticket/first/savePOST")
+    Observable<BaseResult> upLoadFirstTicket(@PartMap Map<String, RequestBody> params);
+
+    //查询第一种工作票内容
+    @GET("ticket/first/allGET")
+    Observable<BaseResult<FirstTicketBean>> searchFirstTicket(@Query("task_id") String id);
+
     //上传第二种工作票
     @Multipart
-    @POST("task/tic/sec/savePOST")
+    @POST("ticket/second/savePOST")
     Observable<BaseResult> upLoadSecondTicket(@PartMap Map<String, RequestBody> params);
 
     //查看第二种工作票
-    @GET("task/tic/sec/allGET")
-    Observable<BaseResult<SecondTicketBean>> searchSecondTicket(@Query("id") String id);
+    @GET("ticket/second/allGET")
+    Observable<BaseResult<SecondTicketBean>> searchSecondTicket(@Query("task_id") String id);
 
     //上传第三种工作票
     @Multipart
-    @POST("task/eleTicket/savePOST")
+    @POST("ticket/electric/savePOST")
     Observable<BaseResult> upLoadThirdTicket(@PartMap Map<String, RequestBody> params);
 
     //查询第三种工作票内容
-    @GET("task/eleTicket/oneGET")
-    Observable<BaseResult<ThirdTicketBean>> searchThirdTicket(@Query("id") String id);
+    @GET("ticket/electric/allGET")
+    Observable<BaseResult<ThirdTicketBean>> searchThirdTicket(@Query("task_id") String id);
 
     //上传第四种工作票
     @Multipart
-    @POST("task/repair/savePOST")
+    @POST("ticket/fault/repair/savePOST")
     Observable<BaseResult> upLoadFourTicket(@PartMap Map<String, RequestBody> params);
 
     //查询第四种工作票内容
-    @GET("task/repair/oneGET")
+    @GET("ticket/fault/repair/allGET")
     Observable<BaseResult<FourTicketBean>> searchFourTicket(@Query("task_id") String id);
 
 
@@ -862,7 +866,7 @@ public interface ApiServise {
     Observable<BaseResult<List<TowerListBean>>> towerList(@Query("line_id") String line_id, @Query("order") String order);
 
     //添加特殊属性
-    @POST("eq/tower/wares/savePOST")
+    @POST("eq/tower/wares/pda/savePOST")
     Observable<BaseResult> addSpecial(@Body RequestBody info);
 
     //获取待办列表

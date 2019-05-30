@@ -16,16 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.SafeAdapter;
 import com.patrol.terminal.adapter.TaskContentAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -37,21 +32,31 @@ import com.patrol.terminal.bean.ClassMemberBean;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.bean.SignBean;
-import com.patrol.terminal.bean.TaskContentBean;
 import com.patrol.terminal.bean.ThirdTicketBean;
-import com.patrol.terminal.bean.TicketSafeBean;
+import com.patrol.terminal.bean.TicketSafeContent;
+import com.patrol.terminal.bean.TicketSign;
+import com.patrol.terminal.bean.TicketUser;
+import com.patrol.terminal.bean.TicketWork;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SignDialog;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -107,8 +112,8 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
     EditText etStopReclose;
     @BindView(R.id.et_work_conditions)
     EditText etWorkConditions;
-    @BindView(R.id.et_remark_safe)
-    TextView etRemarkSafe;
+    @BindView(R.id.rv_remark_safe)
+    RecyclerView rvRemarkSafe;
     @BindView(R.id.iv_signature_pad)
     ImageView ivSignaturePad;
     @BindView(R.id.time_checkbox)
@@ -117,8 +122,6 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
     TextView timeTv;
     @BindView(R.id.iv_signature_pad_2)
     ImageView ivSignaturePad2;
-    @BindView(R.id.et_licensor)
-    EditText etLicensor;
     @BindView(R.id.time_checkbox_3)
     CheckBox timeCheckbox3;
     @BindView(R.id.time_tv_3)
@@ -137,9 +140,17 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
     TextView timeTv5;
     @BindView(R.id.et_remark)
     EditText etRemark;
+    @BindView(R.id.et_permit_user_name)
+    EditText etPermitUserName;
+    @BindView(R.id.et_monitor_user_name)
+    EditText etMonitorUserName;
+    @BindView(R.id.et_done_user_name)
+    EditText etDoneUserName;
+    @BindView(R.id.iv_safe_change)
+    ImageView ivSafeChange;
     private List<AddressBookLevel2> nameList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
-    private List<TaskContentBean> taskContentBeans = new ArrayList<>();
+    private List<TicketWork> workList = new ArrayList<>();
     private TaskContentAdapter contentAdapter;
     private Map<String, RequestBody> params = new HashMap<>();
     private String taskId;
@@ -147,7 +158,12 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
     private String leaderId;
     private String ticketType;
     private String ticketTaskType;
-    private String status;
+    //    private String status;
+    private List<TicketSign> signList = new ArrayList<>();
+    private List<TicketUser> userList = new ArrayList<>();
+    private List<TicketSafeContent> safeList = new ArrayList();
+    private ThirdTicketBean results;
+    private SafeAdapter safeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +176,10 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
     }
 
     private void initview() {
+        workList.clear();
+        signList.clear();
+        userList.clear();
+        safeList.clear();
         titleName.setText("电力线路带电作业工作票");
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("提交");
@@ -187,8 +207,8 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
         } else {
             OverhaulMonthBean bean = getIntent().getParcelableExtra("bean");
 //
-//            if (bean != null) {
-//                taskId = bean.getRepair_id();
+            if (bean != null) {
+                taskId = bean.getRepair_id();
 //                status = bean.getRepair_status();
 //                OverhaulMonthBean.PlanRepairBean planRepairBean = bean.getPlanRepair();
 //                tvUnitId.setText(planRepairBean.getRepair_content());
@@ -197,53 +217,54 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
 //                tvLeaderId.setText(leaderName);
 //                tvSTime.setText(planRepairBean.getStart_time());
 //                tvETime.setText(planRepairBean.getEnd_time());
-//            }
+            }
         }
 
-        if (status.equals(Constant.STATUS_PRINCPIAL)) {
-            etSupplySafetyMeasures.setEnabled(false);
-            etWorkConditions.setEnabled(false);
-            etStopReclose.setEnabled(false);
-            etLicensor.setEnabled(false);
-            etRemark.setEnabled(false);
-            etTicketNumber.setEnabled(false);
-            etRemarkSafe.setEnabled(false);
-        } else {
-            timeCheckbox.setOnCheckedChangeListener(this);
-            timeCheckbox3.setOnCheckedChangeListener(this);
-            timeCheckbox5.setOnCheckedChangeListener(this);
-        }
+//        if (status.equals(Constant.STATUS_PRINCPIAL)) {
+//            etSupplySafetyMeasures.setEnabled(false);
+//            etWorkConditions.setEnabled(false);
+//            etStopReclose.setEnabled(false);
+//            etLicensor.setEnabled(false);
+//            etRemark.setEnabled(false);
+//            etTicketNumber.setEnabled(false);
+//            etRemarkSafe.setEnabled(false);
+//        } else {
+        timeCheckbox.setOnCheckedChangeListener(this);
+        timeCheckbox3.setOnCheckedChangeListener(this);
+        timeCheckbox5.setOnCheckedChangeListener(this);
+//        }
 
         //注意事项
-        BaseRequest.getInstance().getService().getTicketSafe(ticketType, ticketTaskType).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TicketSafeBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<TicketSafeBean>> t) throws Exception {
-                        List<TicketSafeBean> results = t.getResults();
-                        if (results != null && results.size() > 0) {
-                            String safeWay = results.get(0).getSafe_way();
-                            String remarkSafe = safeWay.replace("<p>", "").replace("</p>", "");
-                            String remarkSafe2 = remarkSafe.replace("。（", "。\n  （");
-                            etRemarkSafe.setText(remarkSafe2);
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                    }
-                });
+//        BaseRequest.getInstance().getService().getTicketSafe(ticketType, ticketTaskType).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<List<TicketSafeBean>>(this) {
+//                    @Override
+//                    protected void onSuccees(BaseResult<List<TicketSafeBean>> t) throws Exception {
+//                        List<TicketSafeBean> results = t.getResults();
+//                        if (results != null && results.size() > 0) {
+//                            String safeWay = results.get(0).getSafe_way();
+//                            String remarkSafe = safeWay.replace("<p>", "").replace("</p>", "");
+//                            String remarkSafe2 = remarkSafe.replace("。（", "。\n  （");
+//                            etRemarkSafe.setText(remarkSafe2);
+//                        }
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//                    }
+//                });
         //已填写数据
         BaseRequest.getInstance().getService().searchThirdTicket(taskId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<ThirdTicketBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<ThirdTicketBean> t) throws Exception {
-                        ThirdTicketBean results = t.getResults();
+                        results = t.getResults();
                         if (results == null) {
                             rvTaskContent.setLayoutManager(new LinearLayoutManager(ThirdWTicketActivity.this));
-                            contentAdapter = new TaskContentAdapter(R.layout.item_task_content, taskContentBeans);
+                            contentAdapter = new TaskContentAdapter(R.layout.item_task_content, workList);
                             rvTaskContent.setAdapter(contentAdapter);
+                            getDefaultSafe();
                         } else {
                             setData(results);
                         }
@@ -256,76 +277,180 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
                 });
     }
 
+    private void getDefaultSafe() {
+        //默认注意事项
+        BaseRequest.getInstance().getService().getTicketSafe("3", "1", "sort").subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<TicketSafeContent>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<TicketSafeContent>> t) throws Exception {
+                        List<TicketSafeContent> results = t.getResults();
+                        if (results != null && results.size() > 0) {
+                            rvRemarkSafe.setLayoutManager(new LinearLayoutManager(ThirdWTicketActivity.this));
+                            safeAdapter = new SafeAdapter(R.layout.item_safe, results);
+                            rvRemarkSafe.setAdapter(safeAdapter);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }
+
     private ThirdTicketBean getData() {
         ThirdTicketBean bean = new ThirdTicketBean();
-        bean.setCrew_id(tvCrewId.getText().toString());
-        bean.setS_time(tvSTime.getText().toString());
-        bean.setE_time(tvETime.getText().toString());
-        bean.setStop_reclose(etStopReclose.getText().toString());
-        bean.setWork_conditions(etWorkConditions.getText().toString());
-        bean.setSign_time(timeTv.getText().toString());
-        bean.setRegulation_time(timeTv3.getText().toString());
-        bean.setSupply_safety_measures(etSupplySafetyMeasures.getText().toString());
-        bean.setFinal_regulation_time(timeTv5.getText().toString());
-
-        bean.setRemark(etRemark.getText().toString());
-        bean.setWorkList(taskContentBeans);
+        bean.setBegin_time(tvSTime.getText().toString());
+        bean.setEnd_time(tvETime.getText().toString());
+        bean.setReload_line_name(etStopReclose.getText().toString());
+        bean.setWork_condition(etWorkConditions.getText().toString());
+        bean.setOther_care_content(etSupplySafetyMeasures.getText().toString());
+        bean.setPermit_user_name(etPermitUserName.getText().toString());
+        bean.setMonitor_user_name(etMonitorUserName.getText().toString());
+        bean.setDone_user_name(etDoneUserName.getText().toString());
+        bean.setRemakes(etRemark.getText().toString());
+        bean.setWorkList(workList);
+        bean.setUserList(userList);
+        bean.setSignList(signList);
+        List<TicketSafeContent> data = safeAdapter.getData();
+        safeList.addAll(data);
+        bean.setSafeList(safeList);
         return bean;
     }
 
     private void setData(ThirdTicketBean results) {
+        String crew = getCrew(results.getUserList());
+        tvCrewId.setText(crew);
+        tvPerson.setText("共" + (crew.length() - crew.replace(" ", "").length()) + "人");
+        tvSTime.setText(results.getBegin_time());
+        tvETime.setText(results.getEnd_time());
+        rvRemarkSafe.setLayoutManager(new LinearLayoutManager(this));
+        safeAdapter = new SafeAdapter(R.layout.item_safe, results.getSafeList());
+        rvRemarkSafe.setAdapter(safeAdapter);
+        etStopReclose.setText(results.getReload_line_name());
+        etWorkConditions.setText(results.getWork_condition());
+        etSupplySafetyMeasures.setText(results.getOther_care_content());
+        etPermitUserName.setText(results.getPermit_user_name());
+        etMonitorUserName.setText(results.getMonitor_user_name());
+        etDoneUserName.setText(results.getDone_user_name());
+        etRemark.setText(results.getRemakes());
+
+        for (int i = 0; i < results.getSignList().size(); i++) {
+            String sign = results.getSignList().get(i).getSign();
+            switch (sign) {
+                case "1":
+                    showPic(results.getSignList().get(i), ivSignaturePad, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        timeTv.setText(results.getSignList().get(i).getSign_time());
+                        timeCheckbox.setVisibility(View.GONE);
+                    }
+                    break;
+                case "2":
+                    showPic(results.getSignList().get(i), ivSignaturePad2, sign + ".jpg");
+//                    tvGroupTimeB.setText(results.getSignList().get(i).getSign_time());
+//                    cbGroupTimeB.setVisibility(View.GONE);
+                    break;
+                case "3":
+                    showPic(results.getSignList().get(i), ivSignaturePad3, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        timeTv3.setText(results.getSignList().get(i).getSign_time());
+                        timeCheckbox3.setVisibility(View.GONE);
+                    }
+                    break;
+                case "4":
+                    showPic(results.getSignList().get(i), ivSignaturePad4, sign + ".jpg");
+//                    tvWorkATime.setText(results.getSignList().get(i).getSign_time());
+//                    cbWorkATime.setVisibility(View.GONE);
+                    break;
+                case "5":
+                    showPic(results.getSignList().get(i), ivSignaturePad5, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        timeTv5.setText(results.getSignList().get(i).getSign_time());
+                        timeCheckbox5.setVisibility(View.GONE);
+                    }
+                    break;
+            }
+        }
+
         //工作任务
-        taskContentBeans.clear();
+        workList.clear();
         if (results.getWorkList() != null && results.getWorkList().size() > 0) {
-            taskContentBeans.addAll(results.getWorkList());
+            workList.addAll(results.getWorkList());
         }
         rvTaskContent.setLayoutManager(new LinearLayoutManager(this));
-        contentAdapter = new TaskContentAdapter(R.layout.item_task_content, taskContentBeans);
+        contentAdapter = new TaskContentAdapter(R.layout.item_task_content, workList);
         rvTaskContent.setAdapter(contentAdapter);
+    }
 
-        tvCrewId.setText(results.getCrew_id());
-        String crewId = results.getCrew_id() == null ? "" : results.getCrew_id();
-        tvPerson.setText("共" + (crewId.length() - crewId.replace(" ", "").length()) + "人");
-        tvSTime.setText(results.getS_time());
-        tvETime.setText(results.getE_time());
-        etStopReclose.setText(results.getStop_reclose());
-        etWorkConditions.setText(results.getWork_conditions());
-        timeTv.setText(results.getSign_time());
-        timeTv3.setText(results.getRegulation_time());
-        etSupplySafetyMeasures.setText(results.getSupply_safety_measures());
-        timeTv5.setText(results.getFinal_regulation_time());
+    private String getCrew(List<TicketUser> userList) {
+        String userName = "";
+        if (userList.size() > 0) {
+            for (int i = 0; i < userList.size(); i++) {
+                userName += userList.get(i).getUser_name() + " ";
+                this.userList.add(userList.get(i));
+            }
+        }
+        return userName;
+    }
 
-        showPic(results.getFileList(), ivSignaturePad, "sign1.jpg");
-        showPic(results.getFileList(), ivSignaturePad2, "princpial1.jpg");
-        showPic(results.getFileList(), ivSignaturePad3, "leader1.jpg");
-        showPic(results.getFileList(), ivSignaturePad4, "accept1.jpg");
-        showPic(results.getFileList(), ivSignaturePad5, "princpial2.jpg");
+    //图片展示
+    private void showPic(TicketSign sign, ImageView iv, String fileName) {
+        Glide.with(this).asBitmap().load(BaseUrl.BASE_URL + sign.getFile_path() + sign.getFilename()).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                iv.setImageBitmap(resource);
+                Log.d("TAG", BaseUrl.BASE_URL + sign.getFile_path() + sign.getFilename());
+                if (iv.getDrawable() != null) {
+                    File file = SignDialog.saveBitmapFile(resource, fileName.replace(".jpg", ""));
+                    String base64 = FileUtil.fileToBase64(file);
+//                    signList.add(new TicketSign(sign.getSign(), "", base64));
+                }
+            }
+        });
     }
 
     private Map<String, RequestBody> setParams(ThirdTicketBean bean) {
+        params.put("id", toRequestBody(results == null ? "" : results.getId()));
         params.put("task_id", toRequestBody(taskId));
         params.put("type", toRequestBody(ticketType));
         params.put("task_type", toRequestBody(ticketTaskType));
-        params.put("crew_id", toRequestBody(bean.getCrew_id()));
-        params.put("s_time", toRequestBody(bean.getS_time()));
-        params.put("e_time", toRequestBody(bean.getE_time()));
-        params.put("stop_reclose", toRequestBody(bean.getStop_reclose()));
-        params.put("work_conditions", toRequestBody(bean.getWork_conditions()));
-        params.put("sign_time", toRequestBody(bean.getSign_time()));
-        params.put("regulation_time", toRequestBody(bean.getRegulation_time()));
-        params.put("supply_safety_measures", toRequestBody(bean.getSupply_safety_measures()));
-        params.put("final_regulation_time", toRequestBody(bean.getFinal_regulation_time()));
-        params.put("remark", toRequestBody(bean.getRemark()));
+        params.put("begin_time", toRequestBody(bean.getBegin_time()));
+        params.put("end_time", toRequestBody(bean.getEnd_time()));
+        params.put("reload_line_name", toRequestBody(bean.getReload_line_name()));
+        params.put("work_condition", toRequestBody(bean.getWork_condition()));
+        params.put("other_care_content", toRequestBody(bean.getOther_care_content()));
+        params.put("permit_user_name", toRequestBody(bean.getPermit_user_name()));
+        params.put("monitor_user_name", toRequestBody(bean.getMonitor_user_name()));
+        params.put("done_user_name", toRequestBody(bean.getDone_user_name()));
+        params.put("remakes", toRequestBody(bean.getRemakes()));
 
         for (int i = 0; i < bean.getWorkList().size(); i++) {
-            params.put("workList[" + i + "].eq_name", toRequestBody(bean.getWorkList().get(i).getWork_name()));
+            params.put("workList[" + i + "].line_name", toRequestBody(bean.getWorkList().get(i).getLine_name()));
             params.put("workList[" + i + "].work_range", toRequestBody(bean.getWorkList().get(i).getWork_range()));
             params.put("workList[" + i + "].work_content", toRequestBody(bean.getWorkList().get(i).getWork_content()));
         }
 
-        for (int i = 0; i < mPicList.size(); i++) {
-            RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpg"), mPicList.get(i));
-            params.put("file\"; filename=\"" + mPicList.get(i).getName(), requestFile);
+        //PDA工作人员集合
+        if (bean.getUserList() != null) {
+            for (int i = 0; i < bean.getUserList().size(); i++) {
+                params.put("userList[" + i + "].user_name", toRequestBody(bean.getUserList().get(i).getUser_name()));
+            }
+        }
+
+        addPicList();
+        // PDA人员签名集合
+        if (bean.getSignList() != null) {
+            for (int i = 0; i < bean.getSignList().size(); i++) {
+                params.put("signList[" + i + "].sign", toRequestBody(bean.getSignList().get(i).getSign()));
+                params.put("signList[" + i + "].sign_time", toRequestBody(bean.getSignList().get(i).getSign_time()));
+                params.put("signList[" + i + "].file", toRequestBody(bean.getSignList().get(i).getFile()));
+            }
+        }
+
+        if (bean.getSafeList() != null) {
+            for (int i = 0; i < bean.getSafeList().size(); i++) {
+                params.put("safeList[" + i + "].ticket_safe_content", toRequestBody(bean.getSafeList().get(i).getTicket_safe_content()));
+            }
         }
         return params;
     }
@@ -337,24 +462,6 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
         } else {
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
             return requestBody;
-        }
-    }
-
-    private void showPic(List<ThirdTicketBean.FileListBean> list, ImageView iv, String fileName) {
-        for (ThirdTicketBean.FileListBean fileListBean : list) {
-            if (fileListBean.getContent().equals(fileName)) {
-                Glide.with(this).asBitmap().load(BaseUrl.BASE_URL + fileListBean.getFile_path() + fileListBean.getFilename()).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        iv.setImageBitmap(resource);
-                        Log.d("TAG", BaseUrl.BASE_URL + fileListBean.getFile_path() + fileListBean.getFilename());
-                        if (iv.getDrawable() != null) {
-                            File file = SignDialog.saveBitmapFile(resource, fileName.replace(".jpg", ""));
-                            mPicList.add(file);
-                        }
-                    }
-                });
-            }
         }
     }
 
@@ -409,10 +516,11 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
                     if (checkedItems[i]) {
                         nameArray += workers[i] + " ";
                         j++;
+                        userList.add(new TicketUser(workers[i]));
+                        tvCrewId.setText(nameArray);
+                        tvPerson.setText("(共" + j + "人)");
                     }
                 }
-                tvCrewId.setText(nameArray);
-                tvPerson.setText("(共" + j + "人)");
                 dialog.dismiss();
 
             }
@@ -420,26 +528,27 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
         builder.show();
     }
 
+    //获取所有人签名
     private void addPicList() {
         if (ivSignaturePad.getDrawable() != null) {
-            File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "sign1");
-            mPicList.add(file1);
+            File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "1");
+            signList.add(new TicketSign("1", timeTv.getText().toString(), FileUtil.fileToBase64(file1)));
         }
         if (ivSignaturePad2.getDrawable() != null) {
-            File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "princpial1");
-            mPicList.add(file2);
+            File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "2");
+            signList.add(new TicketSign("2", getResources().getString(R.string.work_ticket_time), FileUtil.fileToBase64(file2)));
         }
         if (ivSignaturePad3.getDrawable() != null) {
-            File file3 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad3).getDrawable()).getBitmap(), "leader1");
-            mPicList.add(file3);
+            File file3 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad3).getDrawable()).getBitmap(), "3");
+            signList.add(new TicketSign("3", timeTv3.getText().toString(), FileUtil.fileToBase64(file3)));
         }
         if (ivSignaturePad4.getDrawable() != null) {
-            File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "accept1");
-            mPicList.add(file4);
+            File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "4");
+            signList.add(new TicketSign("4", getResources().getString(R.string.work_ticket_time), FileUtil.fileToBase64(file4)));
         }
         if (ivSignaturePad5.getDrawable() != null) {
-            File file5 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad5).getDrawable()).getBitmap(), "princpial2");
-            mPicList.add(file5);
+            File file5 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad5).getDrawable()).getBitmap(), "5");
+            signList.add(new TicketSign("5", timeTv5.getText().toString(), FileUtil.fileToBase64(file5)));
         }
     }
 
@@ -478,7 +587,7 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
                 if (isChecked) {
                     timeTv.setText(DateUatil.getCurrTime());
                 } else {
-                    timeTv.setText(Constant.WORK_TICKET_TIME);
+                    timeTv.setText(getResources().getString(R.string.work_ticket_time));
                 }
 
                 break;
@@ -487,7 +596,7 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
                 if (isChecked) {
                     timeTv3.setText(DateUatil.getCurrTime());
                 } else {
-                    timeTv3.setText(Constant.WORK_TICKET_TIME);
+                    timeTv3.setText(getResources().getString(R.string.work_ticket_time));
                 }
 
                 break;
@@ -496,7 +605,7 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
                 if (isChecked) {
                     timeTv5.setText(DateUatil.getCurrTime());
                 } else {
-                    timeTv5.setText(Constant.WORK_TICKET_TIME);
+                    timeTv5.setText(getResources().getString(R.string.work_ticket_time));
                 }
                 break;
         }
@@ -505,9 +614,14 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
 
     @OnClick({R.id.title_back, R.id.tv_crew_id, R.id.iv_signature_pad, R.id.iv_signature_pad_2,
             R.id.iv_signature_pad_3, R.id.iv_signature_pad_4, R.id.iv_signature_pad_5,
-            R.id.title_setting, R.id.iv_task_add, R.id.tv_s_time, R.id.tv_e_time})
+            R.id.title_setting, R.id.iv_task_add, R.id.tv_s_time, R.id.tv_e_time, R.id.iv_safe_change})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.iv_safe_change:
+                Intent intent = new Intent(this, SafeListActivity.class);
+                intent.putExtra("chooseList", (Serializable) safeAdapter.getData());
+                startActivityForResult(intent, Constant.SAFE_LIST);
+                break;
             case R.id.title_back:
                 finish();
                 break;
@@ -524,59 +638,62 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
                 PickerUtils.showDate(ThirdWTicketActivity.this, tvETime);
                 break;
             case R.id.iv_signature_pad:
-                if (ticketType != null && status.equals(Constant.STATUS_SIGN)) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, SignActivity.class);
-                    startActivity(intent);
-                    SignBean.setIndex(1);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_SIGN)) {
+                Intent intent1 = new Intent();
+                intent1.setClass(this, SignActivity.class);
+                startActivity(intent1);
+                SignBean.setIndex(1);
+//                }
                 break;
             case R.id.iv_signature_pad_2:
-                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, SignActivity.class);
-                    startActivity(intent);
-                    SignBean.setIndex(2);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
+                Intent intent2 = new Intent();
+                intent2.setClass(this, SignActivity.class);
+                startActivity(intent2);
+                SignBean.setIndex(2);
+//                }
                 break;
             case R.id.iv_signature_pad_3:
-                if (ticketType != null && status.equals(Constant.STATUS_LEADER)) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, SignActivity.class);
-                    startActivity(intent);
-                    SignBean.setIndex(3);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_LEADER)) {
+                Intent intent3 = new Intent();
+                intent3.setClass(this, SignActivity.class);
+                startActivity(intent3);
+                SignBean.setIndex(3);
+//                }
                 break;
             case R.id.iv_signature_pad_4:
-                if (ticketType != null && status.equals(Constant.STATUS_ACCEPT)) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, SignActivity.class);
-                    startActivity(intent);
-                    SignBean.setIndex(4);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_ACCEPT)) {
+                Intent intent4 = new Intent();
+                intent4.setClass(this, SignActivity.class);
+                startActivity(intent4);
+                SignBean.setIndex(4);
+//                }
                 break;
             case R.id.iv_signature_pad_5:
-                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, SignActivity.class);
-                    startActivity(intent);
-                    SignBean.setIndex(5);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
+                Intent intent5 = new Intent();
+                intent5.setClass(this, SignActivity.class);
+                startActivity(intent5);
+                SignBean.setIndex(5);
+//                }
                 break;
             case R.id.title_setting:
+                ProgressDialog.show(this, true, "正在上传...");
                 ThirdTicketBean bean = getData();
-                addPicList();
                 Map<String, RequestBody> params = setParams(bean);
                 BaseRequest.getInstance().getService().upLoadThirdTicket(params).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new BaseObserver(this) {
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
+                                ProgressDialog.cancle();
                                 Toast.makeText(ThirdWTicketActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
 
                             @Override
                             protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                                ProgressDialog.cancle();
                                 Toast.makeText(ThirdWTicketActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -593,8 +710,8 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
                         Toast.makeText(ThirdWTicketActivity.this, "请补全任务信息", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    taskContentBeans.add(new TaskContentBean(et1.getText().toString(), et2.getText().toString(), et3.getText().toString()));
-                    contentAdapter.setNewData(taskContentBeans);
+                    workList.add(new TicketWork(et1.getText().toString(), et2.getText().toString(), et3.getText().toString()));
+                    contentAdapter.setNewData(workList);
                 });
                 break;
         }
@@ -604,18 +721,9 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == Constant.REQUEST_CODE_ADDRESS_BOOK) {
-                nameList = (List<AddressBookLevel2>) data.getSerializableExtra("nameList");
-                String nameArray = "";
-                int j = 0;
-                for (int i = 0; i < nameList.size(); i++) {
-                    if (nameList.get(i).isTag()) {
-                        nameArray += nameList.get(i).getContent() + " ";
-                        j++;
-                    }
-                }
-                tvCrewId.setText(nameArray);
-                tvPerson.setText("共" + j + "人");
+            if (requestCode == Constant.SAFE_LIST) {
+                List<TicketSafeContent> sureList = (List<TicketSafeContent>) data.getSerializableExtra("sureList");
+                safeAdapter.setNewData(sureList);
             }
         }
     }

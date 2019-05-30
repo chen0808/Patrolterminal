@@ -2,7 +2,7 @@ package com.patrol.terminal.bean;
 
 import java.io.Serializable;
 
-public class TicketFirstSign implements Serializable {
+public class TicketSign implements Serializable {
     // 主键id
     private String id;
 
@@ -29,7 +29,7 @@ public class TicketFirstSign implements Serializable {
 
     private String filename;
 
-    public TicketFirstSign(String sign, String sign_time, String file) {
+    public TicketSign(String sign, String sign_time, String file) {
         this.sign = sign;
         this.sign_time = sign_time;
         this.file = file;

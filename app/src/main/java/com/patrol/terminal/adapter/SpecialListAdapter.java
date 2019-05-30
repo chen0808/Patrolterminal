@@ -7,11 +7,13 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
+import com.patrol.terminal.bean.AddSpecial;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.bean.PatrolLevel3;
 import com.patrol.terminal.bean.PatrolLevel4;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
@@ -19,6 +21,8 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
     public static final int TYPE_2 = 2;
     public static final int TYPE_3 = 3;
     public static final int TYPE_4 = 4;
+    private final AddSpecial addSpecial;
+    private List<String> waresId = new ArrayList<>();
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -27,12 +31,13 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
      * @param data A new list is created out of this one to avoid mutable list
      */
 
-    public SpecialListAdapter(List<MultiItemEntity> data) {
+    public SpecialListAdapter(List<MultiItemEntity> data, AddSpecial addSpecial) {
         super(data);
         addItemType(TYPE_1, R.layout.item_sepcial_attr_1);
         addItemType(TYPE_2, R.layout.item_sepcial_attr_2);
         addItemType(TYPE_3, R.layout.item_sepcial_attr_3);
         addItemType(TYPE_4, R.layout.item_sepcial_attr_4);
+        this.addSpecial = addSpecial;
     }
 
     @Override
@@ -57,8 +62,11 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
-
+                            waresId.add(item1.getId());
+                        } else {
+                            waresId.remove(item1.getId());
                         }
+                        addSpecial.setWaresIdList(waresId);
                     }
                 });
                 break;
@@ -80,7 +88,12 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                        if (isChecked) {
+                            waresId.add(item2.getId());
+                        } else {
+                            waresId.remove(item2.getId());
+                        }
+                        addSpecial.setWaresIdList(waresId);
                     }
                 });
                 break;
@@ -102,7 +115,12 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                        if (isChecked) {
+                            waresId.add(item3.getId());
+                        } else {
+                            waresId.remove(item3.getId());
+                        }
+                        addSpecial.setWaresIdList(waresId);
                     }
                 });
                 break;
@@ -112,7 +130,12 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                        if (isChecked) {
+                            waresId.add(item4.getId());
+                        } else {
+                            waresId.remove(item4.getId());
+                        }
+                        addSpecial.setWaresIdList(waresId);
                     }
                 });
 //                helper.itemView.setOnClickListener(new View.OnClickListener() {

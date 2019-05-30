@@ -1,15 +1,13 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.Gson;
@@ -32,6 +30,8 @@ import org.angmarch.views.NiceSpinner;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -63,7 +63,10 @@ public class SpecialAttrListActivity extends BaseActivity {
     @BindView(R.id.btn_add)
     Button btnAdd;
     private List<String> list = new ArrayList<>();
+    private AddSpecial addSpecial = new AddSpecial();
+    private List<AddSpecial.WaresBean> waresBeans = new ArrayList<>();
     private String line_id = "B511327CB4BB4D4A9E544F6972510B4E";
+    private List<TowerListBean> towerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +83,7 @@ public class SpecialAttrListActivity extends BaseActivity {
                         if (results != null && results.size() > 0) {
                             rvSpecial.setLayoutManager(new LinearLayoutManager(SpecialAttrListActivity.this));
                             List<MultiItemEntity> data = getData(results);
-                            SpecialListAdapter adapter = new SpecialListAdapter(data);
+                            SpecialListAdapter adapter = new SpecialListAdapter(data, addSpecial);
                             rvSpecial.setAdapter(adapter);
                         }
                     }
@@ -95,11 +98,11 @@ public class SpecialAttrListActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<TowerListBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<TowerListBean>> t) throws Exception {
-                        List<TowerListBean> results = t.getResults();
-                        if (results != null && results.size() > 0) {
+                        towerList = t.getResults();
+                        if (towerList != null && towerList.size() > 0) {
                             list.clear();
-                            for (int i = 0; i < results.size(); i++) {
-                                list.add(results.get(i).getName());
+                            for (int i = 0; i < towerList.size(); i++) {
+                                list.add(towerList.get(i).getName());
                             }
                             nsStart.attachDataSource(list);
                             nsEnd.attachDataSource(list);
@@ -168,7 +171,16 @@ public class SpecialAttrListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_add:
-                String json = new Gson().toJson(AddSpecial.getInstance());
+                int startIndex = nsStart.getSelectedIndex();
+                int endIndex = nsEnd.getSelectedIndex();
+                addSpecial.setLine_id(line_id);
+                waresBeans.add(new AddSpecial.WaresBean(towerList.get(endIndex).getId(),
+                        String.valueOf(towerList.get(endIndex).getSort()), line_id, towerList.get(startIndex).getId(),
+                        String.valueOf(towerList.get(startIndex).getSort()), towerList.get(startIndex).getName() + "-" + towerList.get(endIndex).getName()
+                ));
+                addSpecial.setWares(waresBeans);
+                String json = new Gson().toJson(addSpecial);
+                Log.d("tag", json);
                 RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
                 BaseRequest.getInstance().getService().addSpecial(body).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

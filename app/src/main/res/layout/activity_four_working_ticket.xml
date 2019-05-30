@@ -188,60 +188,16 @@
                     android:text="3.工作任务"
                     android:textColor="@color/black" />
 
-                <ImageView
-                    android:id="@+id/iv_task_add"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentRight="true"
-                    android:scaleType="center"
-                    android:src="@mipmap/add_black" />
             </RelativeLayout>
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/et_repair_content"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/bg_gray"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:text="线路或设备名称"></TextView>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/write_order_grat"></View>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:text="工作地点或地段"></TextView>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/write_order_grat"></View>
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:text="工作内容"></TextView>
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_task_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="100dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/stoke_gray"
+                android:gravity="top"
+                android:padding="4dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -256,12 +212,13 @@
                 android:text="4.安全措施"
                 android:textColor="@color/black" />
 
-            <TextView
-                android:id="@+id/et_remark_safe"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_remark_safe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/stoke_gray"
-                android:padding="4dp" />
+                android:padding="4dp"></androidx.recyclerview.widget.RecyclerView>
 
             <View
                 android:layout_width="match_parent"
@@ -277,7 +234,7 @@
                 android:textColor="@color/black"></TextView>
 
             <EditText
-                android:id="@+id/et_repair_site"
+                android:id="@+id/et_care_content"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="4dp"
@@ -306,7 +263,7 @@
                     android:textColor="@color/black"></TextView>
 
                 <EditText
-                    android:id="@+id/et_repair_header"
+                    android:id="@+id/et_duty_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/stoke_gray"
@@ -326,7 +283,7 @@
                     android:text="根据抢修任务布置人"></TextView>
 
                 <EditText
-                    android:id="@+id/et_repair_decorate"
+                    android:id="@+id/et_task_user_name"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/stoke_gray"
@@ -359,7 +316,7 @@
                     android:textColor="@color/black"></TextView>
 
                 <EditText
-                    android:id="@+id/et_supplement_step"
+                    android:id="@+id/et_extra_content"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_marginTop="4dp"
@@ -499,7 +456,7 @@
                 android:text="现场设备状况及保留的安全措施："></TextView>
 
             <EditText
-                android:id="@+id/et_remark"
+                android:id="@+id/et_done_content"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="4dp"

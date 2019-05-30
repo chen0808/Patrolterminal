@@ -22,7 +22,7 @@
     <string name="patrol_standar4">（1）瓷质裂纹、破碎，钢化玻璃绝缘子爆裂， 钢脚弯曲，合成绝缘子伞裙破裂 （2）绝缘子串偏斜，金具、均压环变形、扭曲，开口销及弹簧销缺损或脱出</string>
     <string name="patrol_standar5">（1）避雷器、避雷针等防雷装置和其他设备的连接、固定情况 （2）地线、接地引下线、接地装置、连续接地线间的连接、固定以及锈蚀情况</string>
     <string name="patrol_standar6">（1）)防振锤移位、脱落、偏斜、钢丝断股，阻尼线变形、烧伤，绑线松动 （2）相位、警告、指示及防护等标志缺损、丢失，线路名称、杆塔编号字迹不清</string>
-    <string name="work_ticket_time">&#160;&#160;&#160;&#160;年&#160;&#160;月&#160;&#160;日&#160;&#160;时&#160;&#160;分</string>
+    <string name="work_ticket_time">  年  月  日  时  分</string>
 
     <string-array name="backlog_list">
         <item>"组立直线塔（基）"</item>

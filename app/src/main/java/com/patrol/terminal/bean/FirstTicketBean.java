@@ -5,20 +5,6 @@ import java.util.List;
 
 public class FirstTicketBean implements Serializable {
 
-    // PDA工作任务集合
-    List<TicketFirstWork> workList;
-    private String unit_id;
-    // PDA接地线集合
-    List<TicketFirstGround> groundList;
-    private String ticket_number;
-    // PDA许可集合
-    List<TicketFirstPermit> permitList;
-    // PDA终结报告集合
-    List<TicketFirstEnd> endList;
-    // PDA人员签名集合
-    List<TicketFirstSign> signList;
-    // PDA作业人员集合
-    List<TicketFirstUser> userList;
     private String id;
     private String task_id;
     private String unit_name;
@@ -41,6 +27,30 @@ public class FirstTicketBean implements Serializable {
     private String guarder_content;
     private String other_content;
     private String ticket_type;
+    // PDA工作任务集合
+    List<TicketWork> workList;
+    // PDA接地线集合
+    List<TicketFirstGround> groundList;
+    // PDA许可集合
+    List<TicketFirstPermit> permitList;
+    // PDA终结报告集合
+    List<TicketFirstEnd> endList;
+    // PDA人员签名集合
+    List<TicketSign> signList;
+    // PDA作业人员集合
+    List<TicketUser> userList;
+    // PDA安全事项 sz
+    List<TicketSafeContent> safeList;
+    private String unit_id;
+    private String ticket_number;
+
+    public List<TicketSafeContent> getSafeList() {
+        return safeList;
+    }
+
+    public void setSafeList(List<TicketSafeContent> safeList) {
+        this.safeList = safeList;
+    }
 
     public String getBegin_time() {
         return begin_time;
@@ -234,11 +244,11 @@ public class FirstTicketBean implements Serializable {
         this.ticket_type = ticket_type;
     }
 
-    public List<TicketFirstWork> getWorkList() {
+    public List<TicketWork> getWorkList() {
         return workList;
     }
 
-    public void setWorkList(List<TicketFirstWork> workList) {
+    public void setWorkList(List<TicketWork> workList) {
         this.workList = workList;
     }
 
@@ -266,19 +276,19 @@ public class FirstTicketBean implements Serializable {
         this.endList = endList;
     }
 
-    public List<TicketFirstSign> getSignList() {
+    public List<TicketSign> getSignList() {
         return signList;
     }
 
-    public void setSignList(List<TicketFirstSign> signList) {
+    public void setSignList(List<TicketSign> signList) {
         this.signList = signList;
     }
 
-    public List<TicketFirstUser> getUserList() {
+    public List<TicketUser> getUserList() {
         return userList;
     }
 
-    public void setUserList(List<TicketFirstUser> userList) {
+    public void setUserList(List<TicketUser> userList) {
         this.userList = userList;
     }
 }

@@ -351,23 +351,33 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/bg_gray"></View>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="7.注意事项(安全措施)："
-                android:textColor="@color/black"></TextView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/et_remark_safe"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="7.注意事项(安全措施)："
+                    android:textColor="@color/black"></TextView>
+
+                <ImageView
+                    android:id="@+id/iv_safe_change"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/add_black" />
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_remark_safe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:layout_toLeftOf="@+id/persons_tv"
-                android:layout_toRightOf="@+id/staff_in_the_workshop_tv"
                 android:background="@drawable/stoke_gray"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"></TextView>
+                android:padding="4dp"></androidx.recyclerview.widget.RecyclerView>
 
             <!--工作票签发人 1-->
             <LinearLayout
@@ -484,7 +494,7 @@
                     android:text="调控许可人（联系人）："></TextView>
 
                 <EditText
-                    android:id="@+id/et_licensor"
+                    android:id="@+id/et_permit_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/stoke_gray"
@@ -546,6 +556,7 @@
                     android:textColor="@color/black"></TextView>
 
                 <EditText
+                    android:id="@+id/et_monitor_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/stoke_gray"
@@ -660,6 +671,7 @@
                     android:textColor="@color/black"></TextView>
 
                 <EditText
+                    android:id="@+id/et_done_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/stoke_gray"

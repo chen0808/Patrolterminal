@@ -21,7 +21,6 @@ import com.patrol.terminal.activity.SignActivity;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.SignBean;
 import com.patrol.terminal.bean.TicketFirstEnd;
-import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 
 import org.angmarch.views.NiceSpinner;
@@ -97,7 +96,7 @@ public class LicensingEndAdapter extends BaseQuickAdapter<TicketFirstEnd, BaseVi
         CheckBox cbTime = helper.getView(R.id.time_checkbox);
         TextView tvTime = helper.getView(R.id.time_tv);
         tvTime.setText(item.getEnd_time());
-        if (!item.getEnd_time().equals(Constant.WORK_TICKET_TIME)) {
+        if (!item.getEnd_time().equals(mContext.getResources().getString(R.string.work_ticket_time))) {
             cbTime.setVisibility(View.GONE);
         }
         cbTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -106,7 +105,7 @@ public class LicensingEndAdapter extends BaseQuickAdapter<TicketFirstEnd, BaseVi
                 if (isChecked) {
                     tvTime.setText(DateUatil.getCurrTime());
                 } else {
-                    tvTime.setText(Constant.WORK_TICKET_TIME);
+                    tvTime.setText(mContext.getResources().getString(R.string.work_ticket_time));
                 }
                 item.setEnd_time(tvTime.getText().toString());
             }

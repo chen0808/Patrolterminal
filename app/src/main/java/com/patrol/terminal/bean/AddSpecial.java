@@ -11,40 +11,32 @@ public class AddSpecial implements Serializable {
      * wares_id : 4A2959A104244125A33946F1E2A91338
      */
 
-    private static String line_id;
-    private static String wares_id;
-    private static List<WaresBean> wares;
-    private static AddSpecial addSpecial;
+    private String line_id;
+    private List<WaresBean> wares;
+    private List<String> waresIdList;
 
-    public static synchronized AddSpecial getInstance() {
-        if (addSpecial == null) {
-            addSpecial = new AddSpecial();
-        }
-        return addSpecial;
-    }
-
-    public static String getLine_id() {
+    public String getLine_id() {
         return line_id;
     }
 
-    public static void setLine_id(String line_id) {
-        AddSpecial.line_id = line_id;
+    public void setLine_id(String line_id) {
+        this.line_id = line_id;
     }
 
-    public static String getWares_id() {
-        return wares_id;
-    }
-
-    public static void setWares_id(String wares_id) {
-        AddSpecial.wares_id = wares_id;
-    }
-
-    public static List<WaresBean> getWares() {
+    public List<WaresBean> getWares() {
         return wares;
     }
 
-    public static void setWares(List<WaresBean> wares) {
-        AddSpecial.wares = wares;
+    public void setWares(List<WaresBean> wares) {
+        this.wares = wares;
+    }
+
+    public List<String> getWaresIdList() {
+        return waresIdList;
+    }
+
+    public void setWaresIdList(List<String> waresIdList) {
+        this.waresIdList = waresIdList;
     }
 
     public static class WaresBean {
@@ -57,23 +49,20 @@ public class AddSpecial implements Serializable {
          * towers : #001-#002
          * wares_id : 4A2959A104244125A33946F1E2A91338
          */
-
-        private String end_id;
-        private String end_sort;
         private String line_id;
-        private String start_id;
-        private String start_sort;
         private String towers;
-        private String wares_id;
+        private String start_id;
+        private String end_id;
+        private String start_sort;
+        private String end_sort;
 
-        public WaresBean(String end_id, String end_sort, String line_id, String start_id, String start_sort, String towers, String wares_id) {
+        public WaresBean(String end_id, String end_sort, String line_id, String start_id, String start_sort, String towers) {
             this.end_id = end_id;
             this.end_sort = end_sort;
             this.line_id = line_id;
             this.start_id = start_id;
             this.start_sort = start_sort;
             this.towers = towers;
-            this.wares_id = wares_id;
         }
 
         public String getEnd_id() {
@@ -122,14 +111,6 @@ public class AddSpecial implements Serializable {
 
         public void setTowers(String towers) {
             this.towers = towers;
-        }
-
-        public String getWares_id() {
-            return wares_id;
-        }
-
-        public void setWares_id(String wares_id) {
-            this.wares_id = wares_id;
         }
     }
 }

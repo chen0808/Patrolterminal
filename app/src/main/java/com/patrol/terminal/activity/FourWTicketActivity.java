@@ -16,16 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.SafeAdapter;
 import com.patrol.terminal.adapter.TaskContentAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -38,12 +33,16 @@ import com.patrol.terminal.bean.FourTicketBean;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.bean.SignBean;
-import com.patrol.terminal.bean.TaskContentBean;
-import com.patrol.terminal.bean.TicketSafeBean;
+import com.patrol.terminal.bean.TicketSafeContent;
+import com.patrol.terminal.bean.TicketSign;
+import com.patrol.terminal.bean.TicketUser;
+import com.patrol.terminal.bean.TicketWork;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SignDialog;
 
 import java.io.File;
@@ -52,6 +51,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -92,18 +96,8 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     TextView tvCrewId;
     @BindView(R.id.tv_person)
     TextView tvPerson;
-    @BindView(R.id.iv_task_add)
-    ImageView ivTaskAdd;
-    @BindView(R.id.rv_task_content)
-    RecyclerView rvTaskContent;
-    @BindView(R.id.et_remark_safe)
-    TextView etRemarkSafe;
-    @BindView(R.id.et_repair_header)
-    EditText etRepairHeader;
-    @BindView(R.id.et_repair_decorate)
-    EditText etRepairDecorate;
-    @BindView(R.id.et_supplement_step)
-    EditText etSupplementStep;
+    @BindView(R.id.rv_remark_safe)
+    RecyclerView rvRemarkSafe;
     @BindView(R.id.iv_signature_pad)
     ImageView ivSignaturePad;
     @BindView(R.id.time_checkbox)
@@ -112,8 +106,6 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     TextView timeTv;
     @BindView(R.id.iv_signature_pad_2)
     ImageView ivSignaturePad2;
-    @BindView(R.id.et_remark)
-    EditText etRemark;
     @BindView(R.id.iv_signature_pad_3)
     ImageView ivSignaturePad3;
     @BindView(R.id.iv_signature_pad_4)
@@ -122,17 +114,27 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     CheckBox timeCheckbox1;
     @BindView(R.id.time_tv_1)
     TextView timeTv1;
-    @BindView(R.id.et_repair_site)
-    EditText etRepairSite;
     @BindView(R.id.unit_tv)
     TextView unitTv;
     @BindView(R.id.tv_start_time)
     TextView tvStartTime;
     @BindView(R.id.tv_end_time)
     TextView tvEndTime;
+    @BindView(R.id.et_repair_content)
+    EditText etRepairContent;
+    @BindView(R.id.et_care_content)
+    EditText etCareContent;
+    @BindView(R.id.et_extra_content)
+    EditText etExtraContent;
+    @BindView(R.id.et_done_content)
+    EditText etDoneContent;
+    @BindView(R.id.et_duty_user_name)
+    EditText etDutyUserName;
+    @BindView(R.id.et_task_user_name)
+    EditText etTaskUserName;
     private List<AddressBookLevel2> nameList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
-    private List<TaskContentBean> taskContentBeans = new ArrayList<>();
+    private List<TicketWork> workList = new ArrayList<>();
     private TaskContentAdapter contentAdapter;
     private Map<String, RequestBody> params = new HashMap<>();
     private String taskId;
@@ -140,7 +142,12 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     private String leaderId;
     private String ticketType;
     private String ticketTaskType;
-    private String status;
+    //    private String status;
+    private List<TicketSign> signList = new ArrayList<>();
+    private List<TicketUser> userList = new ArrayList<>();
+    private List<TicketSafeContent> safeList = new ArrayList<>();
+    private FourTicketBean results;
+    private SafeAdapter safeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +159,9 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     }
 
     private void initview() {
-
+        signList.clear();
+        userList.clear();
+        safeList.clear();
         titleName.setText("国网兰州供电公司电力线路事故应急抢修单");
         titleName.setTextSize(16.0f);
         titleSetting.setVisibility(View.VISIBLE);
@@ -176,62 +185,58 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
                 tvLeaderId.setText(leaderName);//班组负责人
             }
         } else {
-//            OverhaulMonthBean bean = getIntent().getParcelableExtra("bean");
-//            if (bean != null) {
-//                taskId = bean.getRepair_id();
+            OverhaulMonthBean bean = getIntent().getParcelableExtra("bean");
+            if (bean != null) {
+                taskId = bean.getRepair_id();
 //                status = bean.getRepair_status();
 //                OverhaulMonthBean.PlanRepairBean planRepairBean = bean.getPlanRepair();
 //                tvUnitId.setText(planRepairBean.getRepair_content());
 //                etTicketNumber.setText("暂无");
 //                tvDepId.setText("带电作业班");
 //                tvLeaderId.setText(leaderName);
-//            }
+            }
         }
 
-        if (status.equals(Constant.STATUS_PRINCPIAL)) {
-            etRemark.setEnabled(false);
-            etRepairSite.setEnabled(false);
-            etSupplementStep.setEnabled(false);
-            etRepairDecorate.setEnabled(false);
-            etRepairHeader.setEnabled(false);
-            etRemarkSafe.setEnabled(false);
-            etTicketNumber.setEnabled(false);
-        } else {
-            timeCheckbox.setOnCheckedChangeListener(this);
-            timeCheckbox1.setOnCheckedChangeListener(this);
-        }
+//        if (status.equals(Constant.STATUS_PRINCPIAL)) {
+//            etRemark.setEnabled(false);
+//            etRepairSite.setEnabled(false);
+//            etSupplementStep.setEnabled(false);
+//            etRepairDecorate.setEnabled(false);
+//            etRepairHeader.setEnabled(false);
+//            etRemarkSafe.setEnabled(false);
+//            etTicketNumber.setEnabled(false);
+//        } else {
+        timeCheckbox.setOnCheckedChangeListener(this);
+        timeCheckbox1.setOnCheckedChangeListener(this);
+//        }
 
-        //注意事项
-        BaseRequest.getInstance().getService().getTicketSafe(ticketType, ticketTaskType).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TicketSafeBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<TicketSafeBean>> t) throws Exception {
-                        List<TicketSafeBean> results = t.getResults();
-                        if (results != null && results.size() > 0) {
-                            String safeWay = results.get(0).getSafe_way();
-                            String remarkSafe = safeWay.replace("<p>", "").replace("</p>", "");
-                            String remarkSafe2 = remarkSafe.replace("。（", "。\n  （");
-                            etRemarkSafe.setText(remarkSafe2);
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                    }
-                });
+//        //注意事项
+//        BaseRequest.getInstance().getService().getTicketSafe(ticketType, ticketTaskType).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<List<TicketSafeBean>>(this) {
+//                    @Override
+//                    protected void onSuccees(BaseResult<List<TicketSafeBean>> t) throws Exception {
+//                        List<TicketSafeBean> results = t.getResults();
+//                        if (results != null && results.size() > 0) {
+//                            String safeWay = results.get(0).getSafe_way();
+//                            String remarkSafe = safeWay.replace("<p>", "").replace("</p>", "");
+//                            String remarkSafe2 = remarkSafe.replace("。（", "。\n  （");
+//                            etRemarkSafe.setText(remarkSafe2);
+//                        }
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//                    }
+//                });
         //已填写数据
         BaseRequest.getInstance().getService().searchFourTicket(taskId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<FourTicketBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<FourTicketBean> t) throws Exception {
-                        FourTicketBean results = t.getResults();
-                        if (results == null) {
-                            rvTaskContent.setLayoutManager(new LinearLayoutManager(FourWTicketActivity.this));
-                            contentAdapter = new TaskContentAdapter(R.layout.item_task_content, taskContentBeans);
-                            rvTaskContent.setAdapter(contentAdapter);
-                        } else {
+                        results = t.getResults();
+                        if (results != null) {
                             setData(results);
                         }
                     }
@@ -245,67 +250,125 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
 
     private FourTicketBean getData() {
         FourTicketBean bean = new FourTicketBean();
-        bean.setCrew_id(tvCrewId.getText().toString());
-        bean.setRepair_site(etRepairSite.getText().toString());
-        bean.setRepair_head(etRepairHeader.getText().toString());
-        bean.setRepair_decorate(etRepairDecorate.getText().toString());
-        bean.setSupplement_step(etSupplementStep.getText().toString());
-        bean.setLicensor_repair_time(timeTv.getText().toString());
-        bean.setRepair_end_time(timeTv1.getText().toString());
-        bean.setRemark(etRemark.getText().toString());
-        bean.setWorkList(taskContentBeans);
+        bean.setBegin_time(tvStartTime.getText().toString());
+        bean.setEnd_time(tvEndTime.getText().toString());
+
+        bean.setDuty_user_name(etDutyUserName.getText().toString());
+        bean.setTask_user_name(etTaskUserName.getText().toString());
+        bean.setRepair_content(etRepairContent.getText().toString());
+        bean.setCare_content(etCareContent.getText().toString());
+        bean.setExtra_content(etExtraContent.getText().toString());
+        bean.setDone_content(etDoneContent.getText().toString());
+        bean.setSignList(signList);
+        bean.setUserList(userList);
+        List<TicketSafeContent> data = safeAdapter.getData();
+        safeList.addAll(data);
+        bean.setSafeList(safeList);
         return bean;
     }
 
     private void setData(FourTicketBean results) {
-        tvCrewId.setText(results.getCrew_id());
-        String crewId = results.getCrew_id() == null ? "" : results.getCrew_id();
-        tvPerson.setText("共" + (crewId.length() - crewId.replace(" ", "").length()) + "人");
-        etRepairSite.setText(results.getRepair_site());
-        etRepairHeader.setText(results.getRepair_head());
-        etRepairDecorate.setText(results.getRepair_decorate());
-        etSupplementStep.setText(results.getSupplement_step());
-        timeTv.setText(results.getLicensor_repair_time());
-        etRemark.setText(results.getRemark());
-        timeTv1.setText(results.getRepair_end_time());
+        String crew = getCrew(results.getUserList());
+        tvCrewId.setText(crew);
+        tvPerson.setText("共" + (crew.length() - crew.replace(" ", "").length()) + "人");
+        tvStartTime.setText(results.getBegin_time());
+        tvEndTime.setText(results.getDone_time());
+        rvRemarkSafe.setLayoutManager(new LinearLayoutManager(FourWTicketActivity.this));
+        safeAdapter = new SafeAdapter(R.layout.item_safe, results.getSafeList());
+        rvRemarkSafe.setAdapter(safeAdapter);
+        etDutyUserName.setText(results.getDuty_user_name());
+        etTaskUserName.setText(results.getTask_user_name());
+        etRepairContent.setText(results.getRepair_content());
+        etCareContent.setText(results.getCare_content());
+        etDoneContent.setText(results.getDone_content());
+        etExtraContent.setText(results.getExtra_content());
 
-        showPic(results.getFileList(), ivSignaturePad, "licence1.jpg");
-        showPic(results.getFileList(), ivSignaturePad2, "licence2.jpg");
-        showPic(results.getFileList(), ivSignaturePad3, "princpial1.jpg");
-        showPic(results.getFileList(), ivSignaturePad4, "licence3.jpg");
+        for (int i = 0; i < results.getSignList().size(); i++) {
+            String sign = results.getSignList().get(i).getSign();
+            switch (sign) {
+                case "1":
+                    showPic(results.getSignList().get(i), ivSignaturePad, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        timeTv.setText(results.getSignList().get(i).getSign_time());
+                        timeCheckbox.setVisibility(View.GONE);
+                    }
+                    break;
+                case "2":
+                    showPic(results.getSignList().get(i), ivSignaturePad2, sign + ".jpg");
+//                    tvGroupTimeB.setText(results.getSignList().get(i).getSign_time());
+//                    cbGroupTimeB.setVisibility(View.GONE);
+                    break;
+                case "3":
+                    showPic(results.getSignList().get(i), ivSignaturePad3, sign + ".jpg");
+//                    tvGroupTimeC.setText(results.getSignList().get(i).getSign_time());
+//                    cbGroupTimeC.setVisibility(View.GONE);
+                    break;
+                case "4":
+                    showPic(results.getSignList().get(i), ivSignaturePad4, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        timeTv1.setText(results.getSignList().get(i).getSign_time());
+                        timeCheckbox1.setVisibility(View.GONE);
+                    }
+                    break;
+            }
+        }
 
 //        //工作任务
-        taskContentBeans.clear();
-        if (results.getWorkList() != null && results.getWorkList().size() > 0) {
-            taskContentBeans.addAll(results.getWorkList());
+//        workList.clear();
+//        if (results.getWorkList() != null && results.getWorkList().size() > 0) {
+//            workList.addAll(results.getWorkList());
+//        }
+//        rvTaskContent.setLayoutManager(new LinearLayoutManager(this));
+//        contentAdapter = new TaskContentAdapter(R.layout.item_task_content, workList);
+//        rvTaskContent.setAdapter(contentAdapter);
+    }
+
+    private String getCrew(List<TicketUser> userList) {
+        String userName = "";
+        if (userList.size() > 0) {
+            for (int i = 0; i < userList.size(); i++) {
+                userName += userList.get(i).getUser_name() + " ";
+                this.userList.add(userList.get(i));
+            }
         }
-        rvTaskContent.setLayoutManager(new LinearLayoutManager(this));
-        contentAdapter = new TaskContentAdapter(R.layout.item_task_content, taskContentBeans);
-        rvTaskContent.setAdapter(contentAdapter);
+        return userName;
     }
 
     private Map<String, RequestBody> setParams(FourTicketBean bean) {
+        params.put("id", toRequestBody(results == null ? "" : results.getId()));
         params.put("task_id", toRequestBody(taskId));
         params.put("type", toRequestBody(ticketType));
         params.put("task_type", toRequestBody(ticketTaskType));
-        params.put("crew_id", toRequestBody(bean.getCrew_id()));
-        params.put("repair_site", toRequestBody(bean.getRepair_site()));
-        params.put("repair_head", toRequestBody(bean.getRepair_head()));
-        params.put("repair_decorate", toRequestBody(bean.getRepair_decorate()));
-        params.put("supplement_step", toRequestBody(bean.getSupplement_step()));
-        params.put("licensor_repair_time", toRequestBody(bean.getLicensor_repair_time()));
-        params.put("repair_end_time", toRequestBody(bean.getRepair_end_time()));
-        params.put("remark", toRequestBody(bean.getRemark()));
+        params.put("begin_time", toRequestBody(bean.getBegin_time()));
+        params.put("done_time", toRequestBody(bean.getDone_time()));
+        params.put("duty_user_name", toRequestBody(bean.getDuty_user_name()));
+        params.put("task_user_name", toRequestBody(bean.getTask_user_name()));
+        params.put("care_content", toRequestBody(bean.getCare_content()));
+        params.put("done_content", toRequestBody(bean.getDone_content()));
+        params.put("extra_content", toRequestBody(bean.getExtra_content()));
+        params.put("repair_content", toRequestBody(bean.getRepair_content()));
 
-        for (int i = 0; i < bean.getWorkList().size(); i++) {
-            params.put("workList[" + i + "].eq_name", toRequestBody(bean.getWorkList().get(i).getWork_name()));
-            params.put("workList[" + i + "].work_range", toRequestBody(bean.getWorkList().get(i).getWork_range()));
-            params.put("workList[" + i + "].work_content", toRequestBody(bean.getWorkList().get(i).getWork_content()));
+        //PDA工作人员集合
+        if (bean.getUserList() != null) {
+            for (int i = 0; i < bean.getUserList().size(); i++) {
+                params.put("userList[" + i + "].user_name", toRequestBody(bean.getUserList().get(i).getUser_name()));
+            }
         }
 
-        for (int i = 0; i < mPicList.size(); i++) {
-            RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpg"), mPicList.get(i));
-            params.put("file\"; filename=\"" + mPicList.get(i).getName(), requestFile);
+        addPicList();
+        // PDA人员签名集合
+        if (bean.getSignList() != null) {
+            for (int i = 0; i < bean.getSignList().size(); i++) {
+                params.put("signList[" + i + "].sign", toRequestBody(bean.getSignList().get(i).getSign()));
+                params.put("signList[" + i + "].sign_time", toRequestBody(bean.getSignList().get(i).getSign_time()));
+                params.put("signList[" + i + "].file", toRequestBody(bean.getSignList().get(i).getFile()));
+            }
+        }
+
+        if (bean.getSafeList() != null) {
+            for (int i = 0; i < bean.getSafeList().size(); i++) {
+                params.put("safeList[" + i + "].ticket_safe_content", toRequestBody(bean.getSafeList().get(i).getTicket_safe_content()));
+            }
         }
         return params;
     }
@@ -320,22 +383,20 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
         }
     }
 
-    private void showPic(List<FourTicketBean.FileListBean> list, ImageView iv, String fileName) {
-        for (FourTicketBean.FileListBean fileListBean : list) {
-            if (fileListBean.getContent().equals(fileName)) {
-                Glide.with(this).asBitmap().load(BaseUrl.BASE_URL + fileListBean.getFile_path() + fileListBean.getFilename()).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        iv.setImageBitmap(resource);
-                        Log.d("TAG", BaseUrl.BASE_URL + fileListBean.getFile_path() + fileListBean.getFilename());
-                        if (iv.getDrawable() != null) {
-                            File file = SignDialog.saveBitmapFile(resource, fileName.replace(".jpg", ""));
-                            mPicList.add(file);
-                        }
-                    }
-                });
+    //图片展示
+    private void showPic(TicketSign sign, ImageView iv, String fileName) {
+        Glide.with(this).asBitmap().load(BaseUrl.BASE_URL + sign.getFile_path() + sign.getFilename()).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                iv.setImageBitmap(resource);
+                Log.d("TAG", BaseUrl.BASE_URL + sign.getFile_path() + sign.getFilename());
+                if (iv.getDrawable() != null) {
+                    File file = SignDialog.saveBitmapFile(resource, fileName.replace(".jpg", ""));
+                    String base64 = FileUtil.fileToBase64(file);
+//                    signList.add(new TicketSign(sign.getSign(), "", base64));
+                }
             }
-        }
+        });
     }
 
     private void getAllSendToPerson() {
@@ -389,10 +450,11 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
                     if (checkedItems[i]) {
                         nameArray += workers[i] + " ";
                         j++;
+                        userList.add(new TicketUser(workers[i]));
+                        tvCrewId.setText(nameArray);
+                        tvPerson.setText("(共" + j + "人)");
                     }
                 }
-                tvCrewId.setText(nameArray);
-                tvPerson.setText("(共" + j + "人)");
                 dialog.dismiss();
 
             }
@@ -401,22 +463,23 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     }
 
 
+    //获取所有人签名
     private void addPicList() {
         if (ivSignaturePad.getDrawable() != null) {
-            File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "licence1");
-            mPicList.add(file1);
+            File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "1");
+            signList.add(new TicketSign("1", timeTv.getText().toString(), FileUtil.fileToBase64(file1)));
         }
         if (ivSignaturePad2.getDrawable() != null) {
-            File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "licence2");
-            mPicList.add(file2);
+            File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "2");
+            signList.add(new TicketSign("2", getResources().getString(R.string.work_ticket_time), FileUtil.fileToBase64(file2)));
         }
         if (ivSignaturePad3.getDrawable() != null) {
-            File file3 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad3).getDrawable()).getBitmap(), "princpial1");
-            mPicList.add(file3);
+            File file3 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad3).getDrawable()).getBitmap(), "3");
+            signList.add(new TicketSign("3", getResources().getString(R.string.work_ticket_time), FileUtil.fileToBase64(file3)));
         }
         if (ivSignaturePad4.getDrawable() != null) {
-            File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "licence3");
-            mPicList.add(file4);
+            File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "4");
+            signList.add(new TicketSign("4", timeTv1.getText().toString(), FileUtil.fileToBase64(file4)));
         }
     }
 
@@ -452,7 +515,7 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
                 if (isChecked) {
                     timeTv.setText(DateUatil.getCurrTime());
                 } else {
-                    timeTv.setText(Constant.WORK_TICKET_TIME);
+                    timeTv.setText(getResources().getString(R.string.work_ticket_time));
                 }
 
                 break;
@@ -461,7 +524,7 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
                 if (isChecked) {
                     timeTv1.setText(DateUatil.getCurrTime());
                 } else {
-                    timeTv1.setText(Constant.WORK_TICKET_TIME);
+                    timeTv1.setText(getResources().getString(R.string.work_ticket_time));
                 }
                 break;
 
@@ -490,51 +553,54 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
                 PickerUtils.showDate(this, tvEndTime);
                 break;
             case R.id.iv_signature_pad:
-                if (ticketType != null && status.equals(Constant.STATUS_LICENCE)) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, SignActivity.class);
-                    startActivity(intent);
-                    SignBean.setIndex(1);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_LICENCE)) {
+                Intent intent = new Intent();
+                intent.setClass(this, SignActivity.class);
+                startActivity(intent);
+                SignBean.setIndex(1);
+//                }
                 break;
             case R.id.iv_signature_pad_2:
-                if (ticketType != null && status.equals(Constant.STATUS_LICENCE)) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, SignActivity.class);
-                    startActivity(intent);
-                    SignBean.setIndex(2);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_LICENCE)) {
+                Intent intent2 = new Intent();
+                intent2.setClass(this, SignActivity.class);
+                startActivity(intent2);
+                SignBean.setIndex(2);
+//                }
                 break;
             case R.id.iv_signature_pad_3:
-                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, SignActivity.class);
-                    startActivity(intent);
-                    SignBean.setIndex(3);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
+                Intent intent3 = new Intent();
+                intent3.setClass(this, SignActivity.class);
+                startActivity(intent3);
+                SignBean.setIndex(3);
+//                }
                 break;
             case R.id.iv_signature_pad_4:
-                if (ticketType != null && status.equals(Constant.STATUS_LICENCE)) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, SignActivity.class);
-                    startActivity(intent);
-                    SignBean.setIndex(4);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_LICENCE)) {
+                Intent intent4 = new Intent();
+                intent4.setClass(this, SignActivity.class);
+                startActivity(intent4);
+                SignBean.setIndex(4);
+//                }
                 break;
             case R.id.title_setting:
+                ProgressDialog.show(this, true, "正在上传...");
                 FourTicketBean bean = getData();
-                addPicList();
                 Map<String, RequestBody> params = setParams(bean);
                 BaseRequest.getInstance().getService().upLoadFourTicket(params).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new BaseObserver(this) {
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
+                                ProgressDialog.cancle();
                                 Toast.makeText(FourWTicketActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
 
                             @Override
                             protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                                ProgressDialog.cancle();
                                 Toast.makeText(FourWTicketActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -553,8 +619,8 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
                             Toast.makeText(FourWTicketActivity.this, "请补全任务信息", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        taskContentBeans.add(new TaskContentBean(et1.getText().toString(), et2.getText().toString(), et3.getText().toString()));
-                        contentAdapter.setNewData(taskContentBeans);
+                        workList.add(new TicketWork(et1.getText().toString(), et2.getText().toString(), et3.getText().toString()));
+                        contentAdapter.setNewData(workList);
                     }
                 });
                 break;

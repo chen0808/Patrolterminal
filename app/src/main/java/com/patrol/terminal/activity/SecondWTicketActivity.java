@@ -16,18 +16,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.SafeAdapter;
 import com.patrol.terminal.adapter.TaskContentAdapter;
+import com.patrol.terminal.adapter.WorkAdapter;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
@@ -38,27 +33,37 @@ import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.bean.SecondTicketBean;
 import com.patrol.terminal.bean.SignBean;
-import com.patrol.terminal.bean.TaskContentBean;
-import com.patrol.terminal.bean.TicketSafeBean;
+import com.patrol.terminal.bean.TicketSafeContent;
+import com.patrol.terminal.bean.TicketSign;
+import com.patrol.terminal.bean.TicketUser;
+import com.patrol.terminal.bean.TicketWork;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SignDialog;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class SecondWTicketActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
@@ -98,8 +103,8 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
     TextView tvSTime;
     @BindView(R.id.tv_e_time)
     TextView tvETime;
-    @BindView(R.id.et_remark_safe)
-    TextView etRemarkSafe;
+    @BindView(R.id.rv_remark_safe)
+    RecyclerView rvRemarkSafe;
     @BindView(R.id.iv_signature_pad)
     ImageView ivSignaturePad;
     @BindView(R.id.cb_group_time_a)
@@ -134,8 +139,6 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
     TextView tvDelayTime;
     @BindView(R.id.et_remark)
     EditText etRemark;
-    List<MultipartBody.Part> files = new ArrayList<>();
-    Map<String, RequestBody> params = new HashMap<>();
     @BindView(R.id.iv_task_add)
     ImageView ivTaskAdd;
     @BindView(R.id.rv_task_content)
@@ -144,16 +147,26 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
     TextView unitTv;
     @BindView(R.id.iv_signature_pad_person)
     ImageView ivSignaturePadPerson;
+    @BindView(R.id.iv_safe_change)
+    ImageView ivSafeChange;
     private List<AddressBookLevel2> nameList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
-    private List<TaskContentBean> taskContentBeans = new ArrayList<>();
     private TaskContentAdapter contentAdapter;
     private String taskId;
     private String leaderName;
     private String leaderId;
     private String ticketType;
     private String ticketTaskType;
-    private String status;
+    //    private String status;
+    Map<String, RequestBody> params = new HashMap<>();
+    private List<TicketWork> workList = new ArrayList<>();
+    private List<TicketSign> signList = new ArrayList<>();
+    private List<TicketUser> userList = new ArrayList<>();
+    private List<TicketSafeContent> safeList = new ArrayList<>();
+    private WorkAdapter workAdapter;
+    private SecondTicketBean results;
+    private SafeAdapter safeAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +178,10 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
     }
 
     private void initview() {
+        workList.clear();
+        signList.clear();
+        userList.clear();
+        safeList.clear();
         titleName.setText("电力线路第二种工作票");
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("提交");
@@ -193,8 +210,8 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
         } else {
             OverhaulMonthBean bean = getIntent().getParcelableExtra("bean");
 
-//            if (bean != null) {
-//                taskId = bean.getRepair_id();
+            if (bean != null) {
+                taskId = bean.getRepair_id();
 //                status = bean.getRepair_status();
 //                OverhaulMonthBean.PlanRepairBean planRepairBean = bean.getPlanRepair();
 //                tvUnitId.setText(planRepairBean.getRepair_content());
@@ -203,50 +220,33 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
 //                tvLeaderId.setText(leaderName);
 //                tvSTime.setText(planRepairBean.getStart_time());
 //                tvETime.setText(planRepairBean.getEnd_time());
-//            }
+            }
         }
 
-        if (status.equals(Constant.STATUS_PRINCPIAL)) {
-            etRemark.setEnabled(false);
-            etRemarkSafe.setEnabled(false);
-            etTicketNumber.setEnabled(false);
-        } else {
-            cbGroupTimeA.setOnCheckedChangeListener(this);
-            cbGroupTimeB.setOnCheckedChangeListener(this);
-            cbGroupTimeC.setOnCheckedChangeListener(this);
-            cbWorkATime.setOnCheckedChangeListener(this);
-            cbWorkBTime.setOnCheckedChangeListener(this);
-        }
-        //注意事项
-        BaseRequest.getInstance().getService().getTicketSafe(ticketType, ticketTaskType).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TicketSafeBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<TicketSafeBean>> t) throws Exception {
-                        List<TicketSafeBean> results = t.getResults();
-                        if (results != null && results.size() > 0) {
-                            String safeWay = results.get(0).getSafe_way();
-                            String remarkSafe = safeWay.replace("<p>", "").replace("</p>", "");
-                            String remarkSafe2 = remarkSafe.replace("。（", "。\n  （");
-                            etRemarkSafe.setText(remarkSafe2);
-                        }
-                    }
+//        if (status.equals(Constant.STATUS_PRINCPIAL)) {
+//            etRemark.setEnabled(false);
+//            etRemarkSafe.setEnabled(false);
+//            etTicketNumber.setEnabled(false);
+//        } else {
+        cbGroupTimeA.setOnCheckedChangeListener(this);
+        cbGroupTimeB.setOnCheckedChangeListener(this);
+        cbGroupTimeC.setOnCheckedChangeListener(this);
+        cbWorkATime.setOnCheckedChangeListener(this);
+        cbWorkBTime.setOnCheckedChangeListener(this);
+//        }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                    }
-                });
         //已填写数据
         BaseRequest.getInstance().getService().searchSecondTicket(taskId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<SecondTicketBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<SecondTicketBean> t) throws Exception {
-                        SecondTicketBean results = t.getResults();
+                        results = t.getResults();
                         if (results == null) {
                             rvTaskContent.setLayoutManager(new LinearLayoutManager(SecondWTicketActivity.this));
-                            contentAdapter = new TaskContentAdapter(R.layout.item_task_content, taskContentBeans);
+                            contentAdapter = new TaskContentAdapter(R.layout.item_task_content, workList);
                             rvTaskContent.setAdapter(contentAdapter);
+                            getDefaultSafe();
                         } else {
                             setData(results);
                         }
@@ -259,23 +259,25 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                 });
     }
 
-    //
-    private void showPic(List<SecondTicketBean.FileListBean> list, ImageView iv, String fileName) {
-        for (SecondTicketBean.FileListBean fileListBean : list) {
-            if (fileListBean.getContent().equals(fileName)) {
-                Glide.with(this).asBitmap().load(BaseUrl.BASE_URL + fileListBean.getFile_path() + fileListBean.getFilename()).into(new SimpleTarget<Bitmap>() {
+    private void getDefaultSafe() {
+        //默认注意事项
+        BaseRequest.getInstance().getService().getTicketSafe("2", "1", "sort").subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<TicketSafeContent>>(this) {
                     @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        iv.setImageBitmap(resource);
-                        Log.d("TAG", BaseUrl.BASE_URL + fileListBean.getFile_path() + fileListBean.getFilename());
-                        if (iv.getDrawable() != null) {
-                            File file = SignDialog.saveBitmapFile(resource, fileName.replace(".jpg", ""));
-                            mPicList.add(file);
+                    protected void onSuccees(BaseResult<List<TicketSafeContent>> t) throws Exception {
+                        List<TicketSafeContent> results = t.getResults();
+                        if (results != null && results.size() > 0) {
+                            rvRemarkSafe.setLayoutManager(new LinearLayoutManager(SecondWTicketActivity.this));
+                            safeAdapter = new SafeAdapter(R.layout.item_safe, results);
+                            rvRemarkSafe.setAdapter(safeAdapter);
                         }
                     }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
                 });
-            }
-        }
     }
 
     private void getAllSendToPerson() {
@@ -329,38 +331,16 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                     if (checkedItems[i]) {
                         nameArray += workers[i] + " ";
                         j++;
+                        userList.add(new TicketUser(workers[i]));
+                        tvCrewId.setText(nameArray);
+                        tvPerson.setText("(共" + j + "人)");
                     }
                 }
-                tvCrewId.setText(nameArray);
-                tvPerson.setText("共" + j + "人");
                 dialog.dismiss();
 
             }
         });
         builder.show();
-    }
-
-    private void addPicList() {
-        if (ivSignaturePad.getDrawable() != null) {
-            File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "sign1");
-            mPicList.add(file1);
-        }
-        if (ivSignaturePad2.getDrawable() != null) {
-            File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "sign2");
-            mPicList.add(file2);
-        }
-        if (ivSignaturePad3.getDrawable() != null) {
-            File file3 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad3).getDrawable()).getBitmap(), "princpial1");
-            mPicList.add(file3);
-        }
-        if (ivSignaturePad4.getDrawable() != null) {
-            File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "princpial2");
-            mPicList.add(file4);
-        }
-        if (ivSignaturePad5.getDrawable() != null) {
-            File file5 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad5).getDrawable()).getBitmap(), "princpial3");
-            mPicList.add(file5);
-        }
     }
 
     @Override
@@ -385,17 +365,25 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                 case 5:
                     ivSignaturePad5.setImageBitmap(bitmap);
                     break;
-
+                case 6:
+                    ivSignaturePadPerson.setImageBitmap(bitmap);
+                    break;
             }
         }
         SignBean.setBitmap(null);
+        SignBean.setIndex(0);
     }
 
     @OnClick({R.id.title_back, R.id.tv_crew_id, R.id.iv_signature_pad, R.id.iv_signature_pad_2,
-            R.id.iv_signature_pad_3, R.id.iv_signature_pad_4, R.id.iv_signature_pad_5,
-            R.id.title_setting, R.id.iv_task_add, R.id.tv_delay_time, R.id.tv_s_time, R.id.tv_e_time})
+            R.id.iv_signature_pad_3, R.id.iv_signature_pad_4, R.id.iv_signature_pad_5, R.id.iv_signature_pad_person,
+            R.id.title_setting, R.id.iv_task_add, R.id.tv_delay_time, R.id.tv_s_time, R.id.tv_e_time, R.id.iv_safe_change})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.iv_safe_change:
+                Intent intent = new Intent(this, SafeListActivity.class);
+                intent.putExtra("chooseList", (Serializable) safeAdapter.getData());
+                startActivityForResult(intent, Constant.SAFE_LIST);
+                break;
             case R.id.title_back:
                 finish();
                 break;
@@ -412,50 +400,55 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                 PickerUtils.showDate(SecondWTicketActivity.this, tvETime);
                 break;
             case R.id.iv_signature_pad:
-                if (ticketType != null && status.equals(Constant.STATUS_SIGN)) {
-                    Intent intent1 = new Intent();
-                    intent1.setClass(this, SignActivity.class);
-                    startActivity(intent1);
-                    SignBean.setIndex(1);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_SIGN)) {
+                Intent intent1 = new Intent();
+                intent1.setClass(this, SignActivity.class);
+                startActivity(intent1);
+                SignBean.setIndex(1);
+//                }
                 break;
             case R.id.iv_signature_pad_2:
-                if (ticketType != null && status.equals(Constant.STATUS_SIGN)) {
-                    Intent intent1 = new Intent();
-                    intent1.setClass(this, SignActivity.class);
-                    startActivity(intent1);
-                    SignBean.setIndex(2);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_SIGN)) {
+                Intent intent2 = new Intent();
+                intent2.setClass(this, SignActivity.class);
+                startActivity(intent2);
+                SignBean.setIndex(2);
+//                }
                 break;
             case R.id.iv_signature_pad_3:
-                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
-                    Intent intent1 = new Intent();
-                    intent1.setClass(this, SignActivity.class);
-                    startActivity(intent1);
-                    SignBean.setIndex(3);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
+                Intent intent3 = new Intent();
+                intent3.setClass(this, SignActivity.class);
+                startActivity(intent3);
+                SignBean.setIndex(3);
+//                }
                 break;
             case R.id.iv_signature_pad_4:
-                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
-                    Intent intent1 = new Intent();
-                    intent1.setClass(this, SignActivity.class);
-                    startActivity(intent1);
-                    SignBean.setIndex(4);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
+                Intent intent4 = new Intent();
+                intent4.setClass(this, SignActivity.class);
+                startActivity(intent4);
+                SignBean.setIndex(4);
+//                }
                 break;
             case R.id.iv_signature_pad_5:
-                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
-                    Intent intent1 = new Intent();
-                    intent1.setClass(this, SignActivity.class);
-                    startActivity(intent1);
-                    SignBean.setIndex(5);
-                }
+//                if (ticketType != null && status.equals(Constant.STATUS_PRINCPIAL)) {
+                Intent intent5 = new Intent();
+                intent5.setClass(this, SignActivity.class);
+                startActivity(intent5);
+                SignBean.setIndex(5);
+//                }
+                break;
+            case R.id.iv_signature_pad_person:
+                Intent intent6 = new Intent();
+                intent6.setClass(this, SignActivity.class);
+                startActivity(intent6);
+                SignBean.setIndex(6);
                 break;
             case R.id.title_setting:
+                ProgressDialog.show(this, true, "正在上传...");
                 SecondTicketBean bean = getData();
-                addPicList();
                 Map<String, RequestBody> params = setParams(bean);
-                files.clear();
                 for (int i = 0; i < mPicList.size(); i++) {
                     RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpg"), mPicList.get(i));
                     params.put("file\"; filename=\"" + mPicList.get(i).getName(), requestFile);
@@ -465,12 +458,14 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                         .subscribe(new BaseObserver(this) {
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
+                                ProgressDialog.cancle();
                                 Toast.makeText(SecondWTicketActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
 
                             @Override
                             protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                                ProgressDialog.cancle();
                                 Toast.makeText(SecondWTicketActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -487,8 +482,8 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                         Toast.makeText(SecondWTicketActivity.this, "请补全任务信息", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    taskContentBeans.add(new TaskContentBean(et1.getText().toString(), et2.getText().toString(), et3.getText().toString()));
-                    contentAdapter.setNewData(taskContentBeans);
+                    workList.add(new TicketWork(et1.getText().toString(), et2.getText().toString(), et3.getText().toString()));
+                    contentAdapter.setNewData(workList);
                 });
                 break;
             case R.id.tv_delay_time:
@@ -501,88 +496,189 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == Constant.REQUEST_CODE_ADDRESS_BOOK) {
-                nameList = (List<AddressBookLevel2>) data.getSerializableExtra("nameList");
-                String nameArray = "";
-                int j = 0;
-                for (int i = 0; i < nameList.size(); i++) {
-                    if (nameList.get(i).isTag()) {
-                        nameArray += nameList.get(i).getContent() + " ";
-                        j++;
-                    }
-                }
-                tvCrewId.setText(nameArray);
-                tvPerson.setText("(共" + j + "人)");
+            if (requestCode == Constant.SAFE_LIST) {
+                List<TicketSafeContent> sureList = (List<TicketSafeContent>) data.getSerializableExtra("sureList");
+                safeAdapter.setNewData(sureList);
             }
         }
     }
 
     private SecondTicketBean getData() {
         SecondTicketBean bean = new SecondTicketBean();
-        bean.setCrew_id(tvCrewId.getText().toString());
-        bean.setPlan_s_time(tvSTime.getText().toString());
-        bean.setPlan_e_time(tvETime.getText().toString());
-        bean.setRemark_time_a(tvGroupTimeA.getText().toString());
-        bean.setRemark_time_b(tvGroupTimeB.getText().toString());
-        bean.setRemark_time_c(tvGroupTimeC.getText().toString());
-        bean.setWork_a_time(tvWorkATime.getText().toString());
-        bean.setWork_b_time(tvWorkBTime.getText().toString());
+        bean.setBegin_time(tvSTime.getText().toString());
+        bean.setEnd_time(tvETime.getText().toString());
         bean.setDelay_time(tvDelayTime.getText().toString());
-        bean.setRemark(etRemark.getText().toString());
-        bean.setSecWorkList(taskContentBeans);
+        bean.setRemarks(etRemark.getText().toString());
+        bean.setWorkList(workList);
+        bean.setSignList(signList);
+        bean.setUserList(userList);
+        List<TicketSafeContent> data = safeAdapter.getData();
+        safeList.addAll(data);
+        bean.setSafeList(safeList);
         return bean;
     }
 
     private void setData(SecondTicketBean results) {
-        tvCrewId.setText(results.getCrew_id());
-        String crewId = results.getCrew_id() == null ? "" : results.getCrew_id();
-        tvPerson.setText("共" + (crewId.length() - crewId.replace(" ", "").length()) + "人");
-        tvSTime.setText(results.getPlan_s_time());
-        tvETime.setText(results.getPlan_e_time());
-        tvGroupTimeA.setText(results.getRemark_time_a());
-        tvGroupTimeB.setText(results.getRemark_time_b());
-        tvGroupTimeC.setText(results.getRemark_time_c());
-        tvWorkATime.setText(results.getWork_a_time());
-        tvWorkBTime.setText(results.getWork_b_time());
+        String crew = getCrew(results.getUserList());
+        tvCrewId.setText(crew);
+        tvPerson.setText("共" + (crew.length() - crew.replace(" ", "").length()) + "人");
+        tvSTime.setText(results.getBegin_time());
+        tvETime.setText(results.getEnd_time());
+        rvRemarkSafe.setLayoutManager(new LinearLayoutManager(SecondWTicketActivity.this));
+        safeAdapter = new SafeAdapter(R.layout.item_safe, results.getSafeList());
+        rvRemarkSafe.setAdapter(safeAdapter);
         tvDelayTime.setText(results.getDelay_time());
+        etRemark.setText(results.getRemarks());
 
-        showPic(results.getFileList(), ivSignaturePad, "sign1.jpg");
-        showPic(results.getFileList(), ivSignaturePad2, "sign2.jpg");
-        showPic(results.getFileList(), ivSignaturePad3, "princpial1.jpg");
-        showPic(results.getFileList(), ivSignaturePad4, "princpial2.jpg");
-        showPic(results.getFileList(), ivSignaturePad5, "princpial3.jpg");
+        for (int i = 0; i < results.getSignList().size(); i++) {
+            String sign = results.getSignList().get(i).getSign();
+            switch (sign) {
+                case "1":
+                    showPic(results.getSignList().get(i), ivSignaturePad, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        tvGroupTimeA.setText(results.getSignList().get(i).getSign_time());
+                        cbGroupTimeA.setVisibility(View.GONE);
+                    }
+                    break;
+                case "2":
+                    showPic(results.getSignList().get(i), ivSignaturePad2, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        tvGroupTimeB.setText(results.getSignList().get(i).getSign_time());
+                        cbGroupTimeB.setVisibility(View.GONE);
+                    }
+                    break;
+                case "3":
+                    showPic(results.getSignList().get(i), ivSignaturePad3, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        tvGroupTimeC.setText(results.getSignList().get(i).getSign_time());
+                        cbGroupTimeC.setVisibility(View.GONE);
+                    }
+                    break;
+                case "4":
+                    showPic(results.getSignList().get(i), ivSignaturePad4, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        tvWorkATime.setText(results.getSignList().get(i).getSign_time());
+                        cbWorkATime.setVisibility(View.GONE);
+                    }
+                    break;
+                case "5":
+                    showPic(results.getSignList().get(i), ivSignaturePad5, sign + ".jpg");
+                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
+                        tvWorkBTime.setText(results.getSignList().get(i).getSign_time());
+                        cbWorkBTime.setVisibility(View.GONE);
+                    }
+                    break;
+                case "6":
+                    showPic(results.getSignList().get(i), ivSignaturePadPerson, sign + ".jpg");
+                    break;
+            }
+        }
 
         //工作任务
-        taskContentBeans.clear();
-        if (results.getSecWorkList() != null && results.getSecWorkList().size() > 0) {
-            taskContentBeans.addAll(results.getSecWorkList());
+        workList.clear();
+        if (results.getWorkList() != null && results.getWorkList().size() > 0) {
+            workList.addAll(results.getWorkList());
         }
         rvTaskContent.setLayoutManager(new LinearLayoutManager(this));
-        contentAdapter = new TaskContentAdapter(R.layout.item_task_content, taskContentBeans);
+        contentAdapter = new TaskContentAdapter(R.layout.item_task_content, workList);
         rvTaskContent.setAdapter(contentAdapter);
     }
 
+    private String getCrew(List<TicketUser> userList) {
+        String userName = "";
+        if (userList.size() > 0) {
+            for (int i = 0; i < userList.size(); i++) {
+                userName += userList.get(i).getUser_name() + " ";
+                this.userList.add(userList.get(i));
+            }
+        }
+        return userName;
+    }
+
+    //图片展示
+    private void showPic(TicketSign sign, ImageView iv, String fileName) {
+        Glide.with(this).asBitmap().load(BaseUrl.BASE_URL + sign.getFile_path() + sign.getFilename()).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                iv.setImageBitmap(resource);
+                Log.d("TAG", BaseUrl.BASE_URL + sign.getFile_path() + sign.getFilename());
+                if (iv.getDrawable() != null) {
+                    File file = SignDialog.saveBitmapFile(resource, fileName.replace(".jpg", ""));
+                    String base64 = FileUtil.fileToBase64(file);
+//                    signList.add(new TicketSign(sign.getSign(), "", base64));
+                }
+            }
+        });
+    }
+
     private Map<String, RequestBody> setParams(SecondTicketBean bean) {
+        params.put("id", toRequestBody(results == null ? "" : results.getId()));
         params.put("task_id", toRequestBody(taskId));
         params.put("type", toRequestBody(ticketType));
         params.put("task_type", toRequestBody(ticketTaskType));
-        params.put("crew_id", toRequestBody(bean.getCrew_id()));
-        params.put("plan_s_time", toRequestBody(bean.getPlan_s_time()));
-        params.put("plan_e_time", toRequestBody(bean.getPlan_e_time()));
-        params.put("remark_time_a", toRequestBody(bean.getRemark_time_b()));
-        params.put("remark_time_b", toRequestBody(bean.getRemark_time_b()));
-        params.put("remark_time_c", toRequestBody(bean.getRemark_time_c()));
-        params.put("work_a_time", toRequestBody(bean.getWork_a_time()));
-        params.put("work_b_time", toRequestBody(bean.getWork_b_time()));
+        params.put("begin_time", toRequestBody(bean.getBegin_time()));
+        params.put("end_time", toRequestBody(bean.getEnd_time()));
         params.put("delay_time", toRequestBody(bean.getDelay_time()));
-        params.put("remark", toRequestBody(bean.getRemark()));
+        params.put("remarks", toRequestBody(bean.getRemarks()));
 
-        for (int i = 0; i < bean.getSecWorkList().size(); i++) {
-            params.put("secWorkList[" + i + "].work_name", toRequestBody(bean.getSecWorkList().get(i).getWork_name()));
-            params.put("secWorkList[" + i + "].work_range", toRequestBody(bean.getSecWorkList().get(i).getWork_range()));
-            params.put("secWorkList[" + i + "].work_content", toRequestBody(bean.getSecWorkList().get(i).getWork_content()));
+        for (int i = 0; i < bean.getWorkList().size(); i++) {
+            params.put("workList[" + i + "].line_name", toRequestBody(bean.getWorkList().get(i).getLine_name()));
+            params.put("workList[" + i + "].work_range", toRequestBody(bean.getWorkList().get(i).getWork_range()));
+            params.put("workList[" + i + "].work_content", toRequestBody(bean.getWorkList().get(i).getWork_content()));
+        }
+
+        //PDA工作人员集合
+        if (bean.getUserList() != null) {
+            for (int i = 0; i < bean.getUserList().size(); i++) {
+                params.put("userList[" + i + "].user_name", toRequestBody(bean.getUserList().get(i).getUser_name()));
+            }
+        }
+
+        addPicList();
+        // PDA人员签名集合
+        if (bean.getSignList() != null) {
+            for (int i = 0; i < bean.getSignList().size(); i++) {
+                params.put("signList[" + i + "].sign", toRequestBody(bean.getSignList().get(i).getSign()));
+                params.put("signList[" + i + "].sign_time", toRequestBody(bean.getSignList().get(i).getSign_time()));
+                params.put("signList[" + i + "].file", toRequestBody(bean.getSignList().get(i).getFile()));
+            }
+        }
+
+        if (bean.getSafeList() != null) {
+            for (int i = 0; i < bean.getSafeList().size(); i++) {
+                params.put("safeList[" + i + "].ticket_safe_content", toRequestBody(bean.getSafeList().get(i).getTicket_safe_content()));
+                params.put("safeList[" + i + "].ticket_safe_id", toRequestBody(bean.getSafeList().get(i).getTicket_safe_id()));
+            }
         }
         return params;
+    }
+
+    //获取所有人签名
+    private void addPicList() {
+        if (ivSignaturePad.getDrawable() != null) {
+            File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "1");
+            signList.add(new TicketSign("1", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file1)));
+        }
+        if (ivSignaturePad2.getDrawable() != null) {
+            File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "2");
+            signList.add(new TicketSign("2", tvGroupTimeB.getText().toString(), FileUtil.fileToBase64(file2)));
+        }
+        if (ivSignaturePad3.getDrawable() != null) {
+            File file3 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad3).getDrawable()).getBitmap(), "3");
+            signList.add(new TicketSign("3", tvGroupTimeC.getText().toString(), FileUtil.fileToBase64(file3)));
+        }
+        if (ivSignaturePad4.getDrawable() != null) {
+            File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "4");
+            signList.add(new TicketSign("4", tvWorkATime.getText().toString(), FileUtil.fileToBase64(file4)));
+        }
+        if (ivSignaturePad5.getDrawable() != null) {
+            File file5 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad5).getDrawable()).getBitmap(), "5");
+            signList.add(new TicketSign("5", tvWorkBTime.getText().toString(), FileUtil.fileToBase64(file5)));
+        }
+        if (ivSignaturePadPerson.getDrawable() != null) {
+            File file6 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePadPerson).getDrawable()).getBitmap(), "6");
+            signList.add(new TicketSign("6", getResources().getString(R.string.work_ticket_time), FileUtil.fileToBase64(file6)));
+        }
     }
 
     public RequestBody toRequestBody(String value) {
@@ -602,7 +698,7 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                 if (isChecked) {
                     tvGroupTimeA.setText(DateUatil.getCurrTime());
                 } else {
-                    tvGroupTimeA.setText(Constant.WORK_TICKET_TIME);
+                    tvGroupTimeA.setText(getResources().getString(R.string.work_ticket_time));
                 }
 
                 break;
@@ -611,7 +707,7 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                 if (isChecked) {
                     tvGroupTimeB.setText(DateUatil.getCurrTime());
                 } else {
-                    tvGroupTimeB.setText(Constant.WORK_TICKET_TIME);
+                    tvGroupTimeB.setText(getResources().getString(R.string.work_ticket_time));
                 }
                 break;
 
@@ -619,7 +715,7 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                 if (isChecked) {
                     tvGroupTimeC.setText(DateUatil.getCurrTime());
                 } else {
-                    tvGroupTimeC.setText(Constant.WORK_TICKET_TIME);
+                    tvGroupTimeC.setText(getResources().getString(R.string.work_ticket_time));
                 }
                 break;
 
@@ -627,7 +723,7 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                 if (isChecked) {
                     tvWorkATime.setText(DateUatil.getCurrTime());
                 } else {
-                    tvWorkATime.setText(Constant.WORK_TICKET_TIME);
+                    tvWorkATime.setText(getResources().getString(R.string.work_ticket_time));
                 }
                 break;
 
@@ -635,7 +731,7 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                 if (isChecked) {
                     tvWorkBTime.setText(DateUatil.getCurrTime());
                 } else {
-                    tvWorkBTime.setText(Constant.WORK_TICKET_TIME);
+                    tvWorkBTime.setText(getResources().getString(R.string.work_ticket_time));
                 }
                 break;
         }
