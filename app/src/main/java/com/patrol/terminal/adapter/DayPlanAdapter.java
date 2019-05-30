@@ -57,19 +57,24 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
             ProgressBar progressBar = viewHolder.getView(R.id.plan_progressbar_probar);
             progressBar.setMax(item.getAll_num());
             progressBar.setProgress(item.getDone_num());
+            if (Double.parseDouble(item.getDone_rate())==100){
+                viewHolder.setText(R.id.item_line_status, "状态 : 已完成" );
+            }else {
+                viewHolder.setText(R.id.item_line_status, "状态 : 执行中" );
+            }
         }else {
             viewHolder.setGone(R.id.plan_progressbar_ll, false);
+            viewHolder.setText(R.id.item_line_status, "状态 : 未分配" );
         }
             viewHolder.setVisible(R.id.item_line_state, false);
             viewHolder.setVisible(R.id.plan_to_change, false);
 
             HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
 
-            viewHolder.setText(R.id.item_line_status, "杆段 : " +item.getName());
+
 
             view.setVisibility(View.GONE);
-            viewHolder.setText(R.id.item_plan_device_name, item.getLine_name() + item.getYear() + "年" + item.getMonth() + "月" + item.getWeek() + "日计划")
-                    .setVisible(R.id.plan_to_change, true)
+            viewHolder.setText(R.id.item_plan_device_name, item.getLine_name()+item.getName())
                     .setText(R.id.item_plan_content, "类型 : " + item.getType_name());
 
 //            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {

@@ -188,6 +188,14 @@ public interface ApiServise {
     @POST("/plan/month/line/tempPOST")
     Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body SavaLineBean bean);
 
+    //添加日计划
+    @POST("/plan/week/tower/tempPOST")
+    Observable<BaseResult<List<LineTypeBean>>> saveWeekPlan(@Body SavaLineBean bean);
+
+
+    //添加日计划
+    @POST("/plan/day/tower/tempPOST")
+    Observable<BaseResult<List<LineTypeBean>>> saveDayPlan(@Body SavaLineBean bean);
     //获取月缺陷库
     @GET("/task/defect/listGET")
     Observable<BaseResult<List<DefectBean>>> getDefect(@Query("line_id") String line_id, @Query("status") String status, @Query("audit_status") String audit_status);
@@ -678,17 +686,6 @@ public interface ApiServise {
     @GET("plan/repair/user/listGET")
     Observable<BaseResult<List<OvaTodoBean>>> getOverhaulTodo(@Query("user_id") String user_id, @Query("status") String status);
 
-    //运行班获取待办列表
-    @GET("task/agents/listGET")
-    Observable<BaseResult<List<TodoListBean>>> getYXtodo(@Query("audit_id") String audit_id, @Query("audit_status") String audit_status, @Query("order") String order);
-
-    //运行班获取已办列表
-    @GET("task/agents/listGET")
-    Observable<BaseResult<List<TodoListBean>>> getYXtodoHave(@Query("audit_id") String audit_id, @Query("audit_status not in") String audit_status, @Query("order") String order);
-
-    //运行班获取待办列表
-    @GET("task/agents/listGET")
-    Observable<BaseResult<List<TodoListBean>>> getYXOnetodo(@Query("data_id") String deal_man);
 
 
     //检修计划详情
@@ -818,7 +815,7 @@ public interface ApiServise {
 
     //查询巡视记录
     @GET("/task/patrol/img/listGET")
-    Observable<BaseResult<List<PatrolRecordPicBean>>> getPartrolRecord(@Query("task_id") String task_id);
+    Observable<BaseResult<List<PatrolRecordPicBean>>> getPartrolRecord(@Query("task_id") String task_id,@Query("order") String order);
 
     //查询绝缘子
     @GET("task/insulator/oneGET")
@@ -867,4 +864,8 @@ public interface ApiServise {
     //添加特殊属性
     @POST("eq/tower/wares/savePOST")
     Observable<BaseResult> addSpecial(@Body RequestBody info);
+
+    //获取待办列表
+    @GET("/task/remind/listGET")
+    Observable<BaseResult<List<TodoListBean>>> getYXtodo( @Query("to_user_id") String user_id,@Query("done_status") String done_status,@Query("order") String order);
 }

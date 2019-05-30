@@ -14,12 +14,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.HongWaiCeWenActivity;
-import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
-import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
-import com.patrol.terminal.activity.NewMainActivity;
-import com.patrol.terminal.activity.PatrolRecordActivity;
-import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
 import com.patrol.terminal.adapter.YXTodoManageAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
@@ -27,21 +21,25 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
-import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.TodoListBean;
-import com.patrol.terminal.overhaul.OverhaulWeekDetailActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
+import com.yanzhenjie.recyclerview.SwipeMenu;
+import com.yanzhenjie.recyclerview.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -67,7 +65,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     @BindView(R.id.done_tv)
     TextView doneTv;
     @BindView(R.id.frag_todo_rv)
-    RecyclerView fragTodoRv;
+    SwipeRecyclerView fragTodoRv;
     @BindView(R.id.frag_todo_ref)
     SwipeRefreshLayout fragTodoRef;
     private Activity mActivity;
@@ -76,8 +74,8 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     private static final int IS_DONE_PAGE = 1;
     private int isTodoPage = IS_TODO_PAGE;
     private String status;
-    private List<PersonalTaskListBean> results=new ArrayList<>();
-    private List<PersonalTaskListBean> resultsHave;
+    private List<TodoListBean> results=new ArrayList<>();
+    private List<TodoListBean> resultsHave=new ArrayList<>();
 
     private String jobType;
     private Disposable subscribe;
@@ -101,6 +99,8 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     protected void initData() {
         mActivity = getActivity();
         titleBack.setVisibility(View.GONE);
+        titleSetting.setVisibility(View.VISIBLE);
+        titleSettingTv.setText("已读");
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         inteDate();
         titleName.setText("待办管理");
@@ -110,35 +110,42 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
             dep_id=SPUtil.getDepId(getContext());
             state="2";
             haveState="3";
-            getYXtodo();
-            getYXtodoHave();
-
         }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
             user_id=SPUtil.getUserId(getContext());
             state="1";
             haveState="2";
-            getYXtodo();
-            getYXtodoHave();
         }
-        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
-            getWeekList();
-        }
+        getYXtodo();
+        getYXtodoHave();
+//        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+//            getWeekList();
+//        }
         LinearLayoutManager manager = new LinearLayoutManager(mActivity);
         fragTodoRv.setLayoutManager(manager);
         toDoManageAdapter = new YXTodoManageAdapter(R.layout.fragment_yxtodo_item, results);
-        fragTodoRv.setAdapter(toDoManageAdapter);
 
+        //  设置侧滑
+        // 设置监听器。
+        fragTodoRv.setSwipeMenuCreator(mSwipeMenuCreator);
+        fragTodoRv.setOnItemMenuClickListener(new OnItemMenuClickListener() {
+            @Override
+            public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
+                // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
+                menuBridge.closeMenu();
+            }
+        });
+        fragTodoRv.setAdapter(toDoManageAdapter);
         fragTodoRef.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+
                     results.clear();
                     getYXtodo();
                     getYXtodoHave();
-                    if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
-                        getWeekList();
-                    }
-                }
+//                    if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+//                        getWeekList();
+//                    }
+
             }
         });
 
@@ -169,7 +176,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
         year =years[0];
         day=Integer.parseInt(days[0])+"";
     }
-    @OnClick({R.id.to_do_tv, R.id.done_tv})
+    @OnClick({R.id.to_do_tv, R.id.done_tv,R.id.title_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.to_do_tv:
@@ -180,7 +187,6 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
 
                 isTodoPage = IS_TODO_PAGE;
                 toDoManageAdapter.setNewData(results);
-                toDoManageAdapter.setNewData(results);
                 break;
 
             case R.id.done_tv:
@@ -190,54 +196,53 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                 doneTv.setTextColor(getResources().getColor(R.color.date_color));
 
                 isTodoPage = IS_DONE_PAGE;
-                toDoManageAdapter.setNewData(results);
                 toDoManageAdapter.setNewData(resultsHave);
+                break;
+            case R.id.title_setting:
+
                 break;
         }
     }
+    // 创建菜单：
+    SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
+            int width = getResources().getDimensionPixelSize(R.dimen.dp_50);
+//
+            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
+            // 2. 指定具体的高，比如80;
+            // 3. WRAP_CONTENT，自身高度，不推荐;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
+            SwipeMenuItem deleteItem1 = new SwipeMenuItem(getContext());
+            deleteItem1.setWidth(width);
+            deleteItem1.setHeight(height);
+            deleteItem1.setBackground(R.color.home_red);
+            deleteItem1.setTextSize(15);
+            deleteItem1.setTextColorResource(R.color.white);
+            deleteItem1.setText("删除");
+            rightMenu.addMenuItem(deleteItem1); // 在Item右侧添加一个菜单。
+            // 注意：哪边不想要菜单，那么不要添加即可。
+        }
+    };
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        PersonalTaskListBean todoListBean;
+        TodoListBean todoListBean;
         if (isTodoPage ==IS_TODO_PAGE){
              todoListBean = results.get(position);
         }else {
             todoListBean = resultsHave.get(position);
         }
-        String deal_type = todoListBean.getType_sign();
+        String deal_type = todoListBean.getSign();
         String data_id = todoListBean.getId();
-        Intent intent = new Intent();
-        intent.putExtra("audit_status",todoListBean.getAudit_status());
+        Intent intent = Utils.goTodo(getContext(), deal_type);
+        intent.putExtra("audit_status",todoListBean.getDone_status());
         intent.putExtra("task_id", data_id);
-        switch (deal_type) {
-            case "1":
-                intent.setClass(getContext(), PatrolRecordActivity.class);
-                break;
-            case "2":
-                intent.setClass(getContext(), HongWaiCeWenActivity.class);
-                break;
-            case "3":
-                intent.setClass(getContext(), JiediDianZuCeLiangActicivity.class);
-                break;
-            case "10":
-                intent.setClass(getContext(), JueYuanZiLingZhiJianCeActivity.class);
-                break;
-            case "5":
-                intent.setClass(getContext(), HongWaiCeWenActivity.class);
-                break;
-            case "6":
-                intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
-                break;
-            case "20":
-                intent.setClass(getContext(), OverhaulWeekDetailActivity.class);
-                intent.putExtra("id",todoListBean.getId());
-                break;
-
-        }
+        intent.putExtra("sign", deal_type);
         startActivity(intent);
     }
 
-    //获取周计划列表
+    //获取周检修计划列表
     public void getWeekList() {
 
         String userId = SPUtil.getString(getContext(), Constant.USER, Constant.USERID, "");
@@ -265,21 +270,8 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                     @Override
                     protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
                         List<OverhaulYearBean> overhaulYearBeans = t.getResults();
-                        for (int i = 0; i < overhaulYearBeans.size(); i++) {
-                            OverhaulYearBean overhaulYearBean = overhaulYearBeans.get(i);
-                            PersonalTaskListBean bean=new PersonalTaskListBean();
-                            bean.setLine_name(overhaulYearBean.getLine_name());
-                            bean.setLine_id(overhaulYearBean.getLine_id());
-                            bean.setDone_time(overhaulYearBean.getStart_time());
-                            bean.setId(overhaulYearBean.getId());
-                            bean.setTower_name("");
-                            bean.setUser_name("检修专责");
-                            bean.setType_name("检修");
-                            bean.setType_sign("20");
-                            bean.setAudit_status("-1");
-                            results.add(bean);
-                        }
-                        toDoManageAdapter.setNewData(results);
+
+//                        toDoManageAdapter.setNewData(results);
                     }
 
                     @Override
@@ -288,23 +280,27 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                     }
                 });
     }
-
-    public void getYXtodo() {
+    private void getYXtodo() {
         ProgressDialog.show(getContext(),false,"正在加载中");
         BaseRequest.getInstance().getService()
-                .getYXtodoList(year,month,day,dep_id,user_id,state)
+                .getYXtodo(SPUtil.getUserId(getContext()),"0","create_time")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
-
+                .subscribe(new BaseObserver<List<TodoListBean>>(getContext()) {
                     @Override
-                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
                         ProgressDialog.cancle();
-                        fragTodoRef.setRefreshing(false);
-                        results = t.getResults();
-                        if (isTodoPage ==IS_TODO_PAGE){
-                        toDoManageAdapter.setNewData(results);
+                        if (t.getCode() == 1) {
+                            fragTodoRef.setRefreshing(false);
+                            results = t.getResults();
+                            if (isTodoPage ==IS_TODO_PAGE){
+                                toDoManageAdapter.setNewData(results);
+                            }
+                            if (results!=null){
+                                RxRefreshEvent.publish("todoRefreshNum@"+results.size());
+                            };
                         }
+
                     }
 
                     @Override
@@ -316,13 +312,12 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     }
     public void getYXtodoHave() {
         BaseRequest.getInstance().getService()
-                .getYXtodoList(year,month,day,dep_id,user_id,haveState)
+                .getYXtodo(SPUtil.getUserId(getContext()),"1","create_time")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
-
+                .subscribe(new BaseObserver<List<TodoListBean>>(getContext()) {
                     @Override
-                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
                         fragTodoRef.setRefreshing(false);
                         resultsHave = t.getResults();
                         if (isTodoPage ==IS_DONE_PAGE){

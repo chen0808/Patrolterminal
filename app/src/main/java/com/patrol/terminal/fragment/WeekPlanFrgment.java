@@ -1,5 +1,6 @@
 package com.patrol.terminal.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddWeekPlanActivity;
 import com.patrol.terminal.activity.SpecialPlanDetailActivity;
+import com.patrol.terminal.activity.TemporaryWeekActivity;
 import com.patrol.terminal.activity.WeekPlanDetailActivity;
 import com.patrol.terminal.adapter.WeekPlanAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -35,6 +37,7 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.CancelOrOkDialog;
+import com.patrol.terminal.widget.PopMenmuDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -83,6 +86,7 @@ public class WeekPlanFrgment extends BaseFragment {
     private String depId;
     private List<WeekListBean> results=new ArrayList<>();
     private String currWeek;
+    private PopMenmuDialog popWinShare;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -93,7 +97,6 @@ public class WeekPlanFrgment extends BaseFragment {
     @Override
     protected void initData() {
         initdata();
-        planSubmit.setVisibility(View.VISIBLE);
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(getActivity(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
@@ -211,6 +214,12 @@ public class WeekPlanFrgment extends BaseFragment {
                                 }
                             }
                         }
+                        if (lineList.size()!=0){
+                            planSubmit.setVisibility(View.VISIBLE);
+                        }else {
+                            planSubmit.setVisibility(View.GONE);
+                        }
+
                     }
 
                     @Override
@@ -278,13 +287,60 @@ public class WeekPlanFrgment extends BaseFragment {
                 }
                 break;
             case R.id.task_add:
-                startActivityForResult(new Intent(getContext(), AddWeekPlanActivity.class), 10);
+                if (popWinShare == null) {
+                    //自定义的单击事件
+                    OnClickLintener paramOnClickListener = new OnClickLintener();
+                    popWinShare = new PopMenmuDialog(getActivity(), paramOnClickListener, dip2px(getContext(), 140), dip2px(getContext(), 80));
+                    //监听窗口的焦点事件，点击窗口外面则取消显示
+                    popWinShare.getContentView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (!hasFocus) {
+                                popWinShare.dismiss();
+                            }
+                        }
+                    });
+                    popWinShare.setTitle("制定下周计划","制定临时计划");
+                }
+
+                //设置默认获取焦点
+                popWinShare.setFocusable(true);
+                //以某个控件的x和y的偏移量位置开始显示窗口
+                popWinShare.showAsDropDown(taskAdd, 0, 0);
+                //如果窗口存在，则更新
+                popWinShare.update();
                 break;
+
             case R.id.plan_create:
                 break;
         }
     }
+    class OnClickLintener implements View.OnClickListener {
 
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.all:
+                    startActivityForResult(new Intent(getContext(), AddWeekPlanActivity.class), 10);
+                    break;
+                case R.id.popmenmu1:
+                    startActivityForResult(new Intent(getContext(), TemporaryWeekActivity.class), 10);
+                    break;
+                case R.id.popmenmu2:
+
+                    break;
+                default:
+                    break;
+            }
+            popWinShare.dismiss();
+        }
+
+    }
+    public static int dip2px(Context context, float dipValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * scale + 0.5f);
+    }
     //提交周计划审核
     public void submitWeekPlan(String status) {
         SubmitPlanReqBean bean = new SubmitPlanReqBean();

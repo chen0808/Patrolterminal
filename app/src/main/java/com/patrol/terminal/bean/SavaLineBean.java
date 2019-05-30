@@ -4,8 +4,24 @@ import java.util.List;
 
 public class SavaLineBean {
    private String type_id,type_sign,type_name,line_id
-,line_name,year,month;
+,line_name,year,month,week,day;
     private String start_time;
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getWeek() {
+        return week;
+    }
+
+    public void setWeek(String week) {
+        this.week = week;
+    }
 
     // 结束时间
     private String end_time;

@@ -232,6 +232,8 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                                 if (t.getCode() == 1) {
                                     Toast.makeText(XieGanTaQingXieCeWenActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                                     setResult(RESULT_OK);
+
+                                    RxRefreshEvent.publish("refreshTodo");
                                     RxRefreshEvent.publish("refreshGroup");
                                     finish();
                                 } else {
@@ -267,7 +269,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             Toast.makeText(XieGanTaQingXieCeWenActivity.this, "审批成功", Toast.LENGTH_SHORT).show();
-                            RxRefreshEvent.publish("todo");
+                            RxRefreshEvent.publish("refreshTodo");
                             RxRefreshEvent.publish("refreshGroup");
                             setResult(RESULT_OK);
                             finish();

@@ -11,6 +11,15 @@ public class SubmitPlanReqBean {
     private List<Tower> towers;
     private List<Tower> lineIds;
     private List<Tower> weekIds;
+    private String from_user_id;
+
+    public String getFrom_user_id() {
+        return from_user_id;
+    }
+
+    public void setFrom_user_id(String from_user_id) {
+        this.from_user_id = from_user_id;
+    }
 
     public List<Tower> getTowers() {
         return towers;

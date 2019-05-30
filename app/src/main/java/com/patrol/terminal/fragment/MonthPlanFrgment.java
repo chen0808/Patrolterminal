@@ -12,34 +12,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.AddMonthPlanActivity;
 import com.patrol.terminal.activity.MonthPlanDetailActivity;
 import com.patrol.terminal.activity.SpecialPlanDetailActivity;
 import com.patrol.terminal.activity.TemporaryActivity;
 import com.patrol.terminal.adapter.MonthPlanAdapter;
-import com.patrol.terminal.adapter.MonthPlanListAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.DefectBean;
-import com.patrol.terminal.bean.EleBean;
-import com.patrol.terminal.bean.MonthLevel1;
 import com.patrol.terminal.bean.MonthListBean;
 import com.patrol.terminal.bean.MonthPlanBean;
-import com.patrol.terminal.bean.PatrolContentBean;
-import com.patrol.terminal.bean.PatrolLevel1;
-import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.bean.SubmitPlanReqBean;
-import com.patrol.terminal.bean.SubmitPlanReqStateBean;
 import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -55,6 +43,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -91,7 +80,6 @@ public class MonthPlanFrgment extends BaseFragment {
     private MonthPlanAdapter monthPlanAdapter;
     private TimePickerView pvTime;
     private List<Tower> lineList = new ArrayList<>();
-    private List<Tower> relList = new ArrayList<>();
     private List<MonthPlanBean> data = new ArrayList<>();
     private List<MonthPlanBean> data1 = new ArrayList<>();
     private List<MonthPlanBean> data2 = new ArrayList<>();
@@ -209,6 +197,7 @@ public class MonthPlanFrgment extends BaseFragment {
         bean.setYear(year);
         bean.setMonth(month);
         bean.setAudit_status(status);
+        bean.setFrom_user_id(SPUtil.getUserId(getContext()));
         bean.setLines(lineList);
         BaseRequest.getInstance().getService()
                 .submitMonthPlan(bean)
@@ -224,7 +213,7 @@ public class MonthPlanFrgment extends BaseFragment {
                             } else {
                                 Toast.makeText(getContext(), "一键审核成功", Toast.LENGTH_SHORT).show();
                             }
-
+                            RxRefreshEvent.publish("refreshTodo");
                             getMonthPlanList();
                         } else {
                             Toast.makeText(getContext(), t.getMsg(), Toast.LENGTH_SHORT).show();
@@ -360,6 +349,7 @@ public class MonthPlanFrgment extends BaseFragment {
             switch (v.getId()) {
                 case R.id.all:
                     monthPlanAdapter.setNewData(data);
+                    break;
                 case R.id.popmenmu1:
                     monthPlanAdapter.setNewData(data1);
                     break;
@@ -380,45 +370,6 @@ public class MonthPlanFrgment extends BaseFragment {
         if (requestCode == 10 && resultCode == -1) {
             getMonthPlanList();
         }
-    }
-
-
-    //审核月计划, 同意或者拒绝
-    public void checkMonthPlan(String state) {
-        ProgressDialog.show(getContext(), false, "正在加载中");
-        //SubmitPlanReqBean bean=new SubmitPlanReqBean();
-
-        SubmitPlanReqStateBean bean = new SubmitPlanReqStateBean();
-        if ("4".equals(state)) {
-            bean.setLineIds(relList);
-        } else {
-            bean.setLineIds(lineList);
-        }
-        bean.setState(state);
-        BaseRequest.getInstance().getService()
-                .submitMonthPlanState(bean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<MonthPlanBean>>(getContext()) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<MonthPlanBean>> t) throws Exception {
-                        ProgressDialog.cancle();
-                        if (t.getCode() == 1) {
-                            if ("4".equals(state)) {
-                                Toast.makeText(getContext(), "一键发布成功", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), "一键审核成功", Toast.LENGTH_SHORT).show();
-                            }
-                            getMonthPlanList();
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                    }
-                });
-
     }
 
     private void getData(MonthListBean results) {
@@ -459,6 +410,8 @@ public class MonthPlanFrgment extends BaseFragment {
         }
         if (lineList.size()!=0){
                 planSubmit.setVisibility(View.VISIBLE);
+        }else {
+            planSubmit.setVisibility(View.GONE);
         }
 
     }

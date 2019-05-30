@@ -49,7 +49,13 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
                 viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
                 break;
         }
+        viewHolder.setText(R.id.item_line_status, StringUtil.getYxbWeekState(item.getAudit_status()));
 
+        viewHolder.setText(R.id.item_plan_device_name, item.getLine_name() + item.getName())
+                .setText(R.id.item_plan_content, "类型 : " + item.getType_name());
+        HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
+        view.setVisibility(View.VISIBLE);
+        view.setWeekState(item.getAudit_status());
         if ("0".equals(item.getAudit_status())) {
             viewHolder.setVisible(R.id.plan_to_change, true);
         } else {
@@ -57,23 +63,26 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
         }
         if ("1".equals(item.getAllot_status())) {
             viewHolder.setGone(R.id.plan_progressbar_ll, true);
-            viewHolder.setGone(R.id.plan_progressbar_ll, true);
             viewHolder.setText(R.id.plan_progressbar_tv, "计划进度(" + item.getDone_num() + "/" + item.getAll_num() + ") :")
                     .setText(R.id.plan_progressbar_num, item.getDone_rate() + "%");
             ProgressBar progressBar = viewHolder.getView(R.id.plan_progressbar_probar);
             progressBar.setMax(item.getAll_num());
             progressBar.setProgress(item.getDone_num());
+            if (Double.parseDouble(item.getDone_rate())==100){
+                view.setWeekState("5");
+                viewHolder.setText(R.id.item_line_status, "状态 : 已完成" );
+            }else {
+                view.setWeekState("4");
+                viewHolder.setText(R.id.item_line_status, "状态 : 执行中" );
+            }
+
         } else {
             viewHolder.setGone(R.id.plan_progressbar_ll, false);
         }
         viewHolder.setVisible(R.id.item_line_state, false);
         viewHolder.setVisible(R.id.month_plan_go, true);
         viewHolder.setVisible(R.id.plan_to_change, false);
-        HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
-        view.setVisibility(View.VISIBLE);
-        viewHolder.setText(R.id.item_line_status, StringUtil.getYxbWeekState(item.getAudit_status()));
-        view.setStatus(item.getAudit_status());
-        viewHolder.setText(R.id.item_plan_device_name, item.getLine_name() + item.getName())
-                .setText(R.id.item_plan_content, "类型 : " + item.getType_name());
+
+
     }
 }

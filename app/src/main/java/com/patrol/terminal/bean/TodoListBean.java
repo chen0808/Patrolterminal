@@ -2,36 +2,39 @@ package com.patrol.terminal.bean;
 
 public class TodoListBean {
 
-
         /**
-         * id : A1A7039BE15E40888F87AC4BC380AF8A
-         * audit_id : BBE359C6F29042A1A5AF96F9C1B68ED8
-         * content : 关于桃南线#021的红外测温
-         * plan_type_sign : 5
-         * data_id : DDEE375B2E0F4F4F991F9E918ED32BB0
-         * audit_status : 0
-         * create_time : 2019年05月22日05时31分
-         * user_id : 9CF4DCD383474DAC89F0D0C9DCC8071B
-         * audit_name : null
-         * user_name : 邓贵宝
-         * plan_type_name : 红外测温
+         * id : 6F1F11F511F34121814FA8AF4D45055B
+         * menu_id : null
+         * module : 0
+         * data_id : null
+         * title : 运行月计划待审核
+         * url : null
+         * sign : 1
+         * flow : 1
+         * to_user_id : 94AE9C0BD55A43E49E47D12BD1F48391
+         * from_user_id : 9CF4DCD383474DAC89F0D0C9DCC8071B
+         * from_user_name : 邓贵宝
+         * remind_type : 1
+         * done_status : 0
+         * create_time : 2019-05-29T20:38:48.335
          */
 
         private String id;
-        private String audit_id;
-        private String content;
-        private String plan_type_sign;
-        private String data_id;
-        private String audit_status;
+        private Object menu_id;
+        private String module;
+        private Object data_id;
+        private String title;
+        private Object url;
+        private String sign;
+        private String flow;
+        private String to_user_id;
+        private String from_user_id;
+        private String from_user_name;
+        private String remind_type;
+        private String done_status;
         private String create_time;
-        private String user_id;
-        private Object audit_name;
-        private String user_name;
-        private String plan_type_name;
 
-
-
-    public String getId() {
+        public String getId() {
             return id;
         }
 
@@ -39,44 +42,100 @@ public class TodoListBean {
             this.id = id;
         }
 
-        public String getAudit_id() {
-            return audit_id;
+        public Object getMenu_id() {
+            return menu_id;
         }
 
-        public void setAudit_id(String audit_id) {
-            this.audit_id = audit_id;
+        public void setMenu_id(Object menu_id) {
+            this.menu_id = menu_id;
         }
 
-        public String getContent() {
-            return content;
+        public String getModule() {
+            return module;
         }
 
-        public void setContent(String content) {
-            this.content = content;
+        public void setModule(String module) {
+            this.module = module;
         }
 
-        public String getPlan_type_sign() {
-            return plan_type_sign;
-        }
-
-        public void setPlan_type_sign(String plan_type_sign) {
-            this.plan_type_sign = plan_type_sign;
-        }
-
-        public String getData_id() {
+        public Object getData_id() {
             return data_id;
         }
 
-        public void setData_id(String data_id) {
+        public void setData_id(Object data_id) {
             this.data_id = data_id;
         }
 
-        public String getAudit_status() {
-            return audit_status;
+        public String getTitle() {
+            return title;
         }
 
-        public void setAudit_status(String audit_status) {
-            this.audit_status = audit_status;
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public Object getUrl() {
+            return url;
+        }
+
+        public void setUrl(Object url) {
+            this.url = url;
+        }
+
+        public String getSign() {
+            return sign;
+        }
+
+        public void setSign(String sign) {
+            this.sign = sign;
+        }
+
+        public String getFlow() {
+            return flow;
+        }
+
+        public void setFlow(String flow) {
+            this.flow = flow;
+        }
+
+        public String getTo_user_id() {
+            return to_user_id;
+        }
+
+        public void setTo_user_id(String to_user_id) {
+            this.to_user_id = to_user_id;
+        }
+
+        public String getFrom_user_id() {
+            return from_user_id;
+        }
+
+        public void setFrom_user_id(String from_user_id) {
+            this.from_user_id = from_user_id;
+        }
+
+        public String getFrom_user_name() {
+            return from_user_name;
+        }
+
+        public void setFrom_user_name(String from_user_name) {
+            this.from_user_name = from_user_name;
+        }
+
+        public String getRemind_type() {
+            return remind_type;
+        }
+
+        public void setRemind_type(String remind_type) {
+            this.remind_type = remind_type;
+        }
+
+        public String getDone_status() {
+            return done_status;
+        }
+
+        public void setDone_status(String done_status) {
+            this.done_status = done_status;
         }
 
         public String getCreate_time() {
@@ -85,37 +144,5 @@ public class TodoListBean {
 
         public void setCreate_time(String create_time) {
             this.create_time = create_time;
-        }
-
-        public String getUser_id() {
-            return user_id;
-        }
-
-        public void setUser_id(String user_id) {
-            this.user_id = user_id;
-        }
-
-        public Object getAudit_name() {
-            return audit_name;
-        }
-
-        public void setAudit_name(Object audit_name) {
-            this.audit_name = audit_name;
-        }
-
-        public String getUser_name() {
-            return user_name;
-        }
-
-        public void setUser_name(String user_name) {
-            this.user_name = user_name;
-        }
-
-        public String getPlan_type_name() {
-            return plan_type_name;
-        }
-
-        public void setPlan_type_name(String plan_type_name) {
-            this.plan_type_name = plan_type_name;
         }
 }

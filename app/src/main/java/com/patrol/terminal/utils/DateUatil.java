@@ -300,6 +300,24 @@ public class DateUatil {
         }
         return week;
     }
+    /**
+     * 获取日期属于周几
+     * @param time
+     * @return
+     */
+    public static String dateToDate(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        String times = "";
+        try {
+            Date date = sdf.parse(time);
+            times = sdf1.format(date);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return times;
+    }
 
     /**
      * 获取数字

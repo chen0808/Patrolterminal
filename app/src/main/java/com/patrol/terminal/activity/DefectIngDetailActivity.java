@@ -16,7 +16,6 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.DefectFragmentBean;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
-import com.patrol.terminal.overhaul.OverhaulFileBean;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.List;
@@ -116,7 +115,7 @@ public class DefectIngDetailActivity extends BaseActivity {
 
         ProgressDialog.show(this, false, "正在加载。。。。");
         BaseRequest.getInstance().getService()
-                .getPartrolRecord(id)
+                .getPartrolRecord(id,"sign")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {

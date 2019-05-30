@@ -29,13 +29,12 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PlanFinishRateBean;
-import com.patrol.terminal.bean.TodoListBean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -48,6 +47,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
@@ -103,10 +104,12 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     TextView homeDoneData;
     @BindView(R.id.data_change)
     ImageView dataChange;
-
+    @BindView(R.id.wanchenglv_name)
+    TextView wanchenglvNmae;
 
     private List<PersonalTaskListBean> backLogData = new ArrayList<>();
     private List<PersonalTaskListBean> taskData = new ArrayList<>();
+    private List<PersonalTaskListBean> lastData = new ArrayList<>();
     private List<PlanFinishRateBean> data = new ArrayList<>();
     private List<PlanFinishRateBean> data1 = new ArrayList<>();
     private String status;
@@ -117,6 +120,8 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     private String year, month, day, time;
     private int type=1;
     private PlanFinishRateAdapter planFinishRateAdapter;
+    private BackLogTaskAdapter lastTaskAdapter;
+    private Disposable refreshTodo;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -147,21 +152,85 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             rlPlan.setVisibility(View.VISIBLE);
             dataChange.setVisibility(View.VISIBLE);
+            Random random=new Random();
+            data.add(new PlanFinishRateBean("刘海生", random.nextInt(100), random.nextInt(100)));
+            data.add(new PlanFinishRateBean("蒋秀珍", random.nextInt(100), random.nextInt(100)));
+            data.add(new PlanFinishRateBean("胡作铸", random.nextInt(100), random.nextInt(100)));
+
+            data1.add(new PlanFinishRateBean("刘海生", random.nextInt(100), random.nextInt(100)));
+            data1.add(new PlanFinishRateBean("蒋秀珍", random.nextInt(100), random.nextInt(100)));
+            data1.add(new PlanFinishRateBean("胡作铸", random.nextInt(100), random.nextInt(100)));
         } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             rlPlan.setVisibility(View.GONE);
+            wanchenglvNmae.setText("类别");
+            homeDoneData.setText("完成率");
+            Random random=new Random();
+            data.add(new PlanFinishRateBean("日计划", random.nextInt(100), random.nextInt(100)));
+            data.add(new PlanFinishRateBean("周计划", random.nextInt(100), random.nextInt(100)));
+
+
         }
         if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED)) {
             status = "1,2,3,4,5";
         } else if (jobType.endsWith("_zz") && !jobType.contains("b_")) {
+
             status = "4,5";
         }
+        refreshTodo = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.startsWith("refreshTodo")) {
+                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                        getYXtodo("2");
+                    } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                        getYXtodo("1");
+                    }
+
+                }
+            }
+        });
         initBackLog();
         initTask();
+        initLastTask();
         initPlanFinishRate();
         getPersonalList();
-        getYXtodo();
+        getLastTask();
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            getYXtodo("2");
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+            getYXtodo("1");
+        }
     }
 
+    //获取已完成任务
+    private void getLastTask() {
+        BaseRequest.getInstance().getService()
+                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()),"3","5")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
+                        lastData = t.getResults();
+
+                        lastTaskAdapter.setNewData(lastData);
+
+                        if (taskData.size() == 0) {
+                            homeLastTaskNoData.setVisibility(View.VISIBLE);
+                        } else {
+                            homeLastTaskNoData.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+
+    }
+
+    //获取待办
     private void initBackLog() {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         rvTodo.setLayoutManager(manager);
@@ -173,36 +242,41 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PersonalTaskListBean todoListBean = backLogData.get(position);
-                String deal_type = todoListBean.getType_sign();
-                String data_id = todoListBean.getId();
-                Intent intent = new Intent();
-                intent.putExtra("task_id", data_id);
-                switch (deal_type) {
-                    case "1":
-                        intent.setClass(getContext(), PatrolRecordActivity.class);
-                        break;
-                    case "2":
-                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
-                        break;
-                    case "3":
-                        intent.setClass(getContext(), JiediDianZuCeLiangActicivity.class);
-                        break;
-                    case "10":
-                        intent.setClass(getContext(), JueYuanZiLingZhiJianCeActivity.class);
-                        break;
-                    case "5":
-                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
-                        break;
-                    case "6":
-                        intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
-                        break;
-
-                }
-                startActivity(intent);
+                gotoPersonal(todoListBean);
             }
         });
     }
 
+    //首页跳转
+    public void gotoPersonal(PersonalTaskListBean todoListBean){
+        String deal_type = todoListBean.getType_sign();
+        String data_id = todoListBean.getId();
+        Intent intent = new Intent();
+        intent.putExtra("task_id", data_id);
+        switch (deal_type) {
+            case "1":
+                intent.setClass(getContext(), PatrolRecordActivity.class);
+                break;
+            case "2":
+                intent.setClass(getContext(), HongWaiCeWenActivity.class);
+                break;
+            case "3":
+                intent.setClass(getContext(), JiediDianZuCeLiangActicivity.class);
+                break;
+            case "10":
+                intent.setClass(getContext(), JueYuanZiLingZhiJianCeActivity.class);
+                break;
+            case "5":
+                intent.setClass(getContext(), HongWaiCeWenActivity.class);
+                break;
+            case "6":
+                intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
+                break;
+
+        }
+        startActivity(intent);
+    }
+    //当前任务
     private void initTask() {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         rvTask.setLayoutManager(manager);
@@ -211,13 +285,25 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         backLogTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), NewTaskActivity.class);
-                startActivity(intent);
+                PersonalTaskListBean bean = taskData.get(position);
+                gotoPersonal(bean);
             }
         });
     }
-
+    //历史任务
+    private void initLastTask() {
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        rvLastTask.setLayoutManager(manager);
+        lastTaskAdapter = new BackLogTaskAdapter(R.layout.item_back_log, lastData);
+        rvLastTask.setAdapter(this.lastTaskAdapter);
+        lastTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                PersonalTaskListBean bean = lastData.get(position);
+                gotoPersonal(bean);
+            }
+        });
+    }
     //获取个人任务列表
     public void getPersonalList() {
 
@@ -229,9 +315,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                     @Override
                     protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         taskData = t.getResults();
-
                         backLogTaskAdapter.setNewData(taskData);
-
                         if (taskData.size() == 0) {
                             homeTaskNoData.setVisibility(View.VISIBLE);
                         } else {
@@ -247,25 +331,17 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     }
 
     private void initPlanFinishRate() {
-        Random random=new Random();
+
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         rvPlanFinishRate.setLayoutManager(manager);
-        data.add(new PlanFinishRateBean("刘海生", random.nextInt(100), random.nextInt(100)));
-        data.add(new PlanFinishRateBean("蒋秀珍", random.nextInt(100), random.nextInt(100)));
-        data.add(new PlanFinishRateBean("胡作铸", random.nextInt(100), random.nextInt(100)));
 
-        data1.add(new PlanFinishRateBean("刘海生", random.nextInt(100), random.nextInt(100)));
-        data1.add(new PlanFinishRateBean("蒋秀珍", random.nextInt(100), random.nextInt(100)));
-        data1.add(new PlanFinishRateBean("胡作铸", random.nextInt(100), random.nextInt(100)));
 
         planFinishRateAdapter = new PlanFinishRateAdapter(R.layout.item_plan_finish_rate, data);
         rvPlanFinishRate.setAdapter(planFinishRateAdapter);
         planFinishRateAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), NewPlanActivity.class);
-                startActivity(intent);
+
             }
         });
     }
@@ -345,9 +421,9 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 //    }
 
 
-    public void getYXtodo() {
+    public void getYXtodo(String status) {
         BaseRequest.getInstance().getService()
-                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()),"2","5")
+                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()),status,"5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
@@ -419,6 +495,14 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             type =1;
             planFinishRateAdapter.setNewData(data);
             homeDoneData.setText("日计划完成率");
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (refreshTodo!=null){
+            refreshTodo.dispose();
         }
     }
 }

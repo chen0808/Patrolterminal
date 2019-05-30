@@ -1,5 +1,6 @@
 package com.patrol.terminal.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,8 +18,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddDayPlanActivity;
 import com.patrol.terminal.activity.CreatePlanActivity;
 import com.patrol.terminal.activity.DayPlanDetailActivity;
-import com.patrol.terminal.activity.MonitoringRecordActivity;
-import com.patrol.terminal.activity.SpecialPlanDetailActivity;
+import com.patrol.terminal.activity.TemporaryDayActivity;
 import com.patrol.terminal.adapter.DayPlanAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
@@ -28,6 +28,7 @@ import com.patrol.terminal.bean.DayListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.PopMenmuDialog;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -62,6 +63,7 @@ public class DayPlanFrgment extends BaseFragment {
 
     private TimePickerView pvTime;
     private String year,month,day;
+    private PopMenmuDialog popWinShare;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -179,17 +181,64 @@ public class DayPlanFrgment extends BaseFragment {
                 showDay();
                 break;
             case R.id.task_add:
-                Intent intent = new Intent(getContext(), AddDayPlanActivity.class);
-                startActivityForResult(intent,10);
+                if (popWinShare == null) {
+                    //自定义的单击事件
+                    OnClickLintener paramOnClickListener = new OnClickLintener();
+                    popWinShare = new PopMenmuDialog(getActivity(), paramOnClickListener, dip2px(getContext(), 140), dip2px(getContext(), 80));
+                    //监听窗口的焦点事件，点击窗口外面则取消显示
+                    popWinShare.getContentView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (!hasFocus) {
+                                popWinShare.dismiss();
+                            }
+                        }
+                    });
+                    popWinShare.setTitle("制定日计划","制定临时计划");
+                }
+
+                //设置默认获取焦点
+                popWinShare.setFocusable(true);
+                //以某个控件的x和y的偏移量位置开始显示窗口
+                popWinShare.showAsDropDown(taskAdd, 0, 0);
+                //如果窗口存在，则更新
+                popWinShare.update();
                 break;
+
             case R.id.plan_create:
                 Intent intent1 = new Intent(getContext(), CreatePlanActivity.class);
                 intent1.putExtra("from",0);
                 startActivityForResult(intent1,10);
                 break;
         }
+
+    }
+class OnClickLintener implements View.OnClickListener {
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.all:
+                startActivityForResult(new Intent(getContext(), AddDayPlanActivity.class), 10);
+                break;
+            case R.id.popmenmu1:
+                startActivityForResult(new Intent(getContext(), TemporaryDayActivity.class), 10);
+                break;
+            case R.id.popmenmu2:
+
+                break;
+            default:
+                break;
+        }
+        popWinShare.dismiss();
     }
 
+}
+    public static int dip2px(Context context, float dipValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * scale + 0.5f);
+    }
     public void showDay() {
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();

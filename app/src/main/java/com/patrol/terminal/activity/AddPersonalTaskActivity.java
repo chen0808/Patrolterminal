@@ -25,11 +25,8 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.AddPersonalTaskReqBean;
-import com.patrol.terminal.bean.DangerBean;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DepUserBean;
-import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.utils.DateUatil;
@@ -465,6 +462,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (selectBean.size()==0){
                         listBean.setGroup_list_id(listBean.getId());
+
                         listBean.setUser_id(SPUtil.getUserId(AddPersonalTaskActivity.this));
                         listBean.setUser_name(SPUtil.getUserName(AddPersonalTaskActivity.this));
                         selectBean.add(listBean);

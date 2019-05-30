@@ -31,7 +31,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.YXCheckActivity"></activity>
+        <activity android:name=".activity.ShowImageActivity"></activity>
+        <activity android:name=".activity.YXCheckActivity" />
         <activity android:name=".activity.TemporaryActivity" />
         <activity android:name=".activity.MakeDutyActivity" />
         <activity android:name=".activity.ChangePlanActivity" />
@@ -307,6 +308,8 @@
 
         <activity android:name=".training.NewTrainPlanActivity" />
         <activity android:name=".activity.LineCheckActivity" />
+        <activity android:name=".activity.TemporaryWeekActivity" />
+        <activity android:name=".activity.TemporaryDayActivity" />
     </application>
 
 </manifest>

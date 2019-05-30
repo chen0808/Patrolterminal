@@ -5,6 +5,16 @@ import java.util.List;
 public class SubmitPlanReqStateBean {
     private List<Tower> lineIds;
     private List<Tower> weekIds;
+    private String state;
+    private String from_user_id;
+
+    public String getFrom_user_id() {
+        return from_user_id;
+    }
+
+    public void setFrom_user_id(String from_user_id) {
+        this.from_user_id = from_user_id;
+    }
 
     public List<Tower> getWeekIds() {
         return weekIds;
@@ -14,7 +24,7 @@ public class SubmitPlanReqStateBean {
         this.weekIds = weekIds;
     }
 
-    private String state;
+
 
     public List<Tower> getLineIds() {
         return lineIds;

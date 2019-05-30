@@ -89,6 +89,12 @@ public class NewPlanActivity extends BaseActivity {
 
         viewPager.setNoScroll(true);
         viewPager.setOffscreenPageLimit(5);
+        String from = getIntent().getStringExtra("from");
+        if ("todoMonth".equals(from)){
+            viewPager.setCurrentItem(0);
+        }else if ("todoWeek".equals(from)){
+            viewPager.setCurrentItem(1);
+        }
     }
 
     private void initMagicIndicator() {

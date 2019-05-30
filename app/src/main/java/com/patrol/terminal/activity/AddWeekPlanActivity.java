@@ -334,8 +334,8 @@ public class AddWeekPlanActivity extends BaseActivity {
         bean.setYear(year+"");
         bean.setMonth(month + "");
         bean.setWeek(week+"");
-        bean.setBegin_time(beginDate);
-        bean.setEnd_time(endDate);
+        bean.setBegin_time(DateUatil.dateToDate(beginDate));
+        bean.setEnd_time(DateUatil.dateToDate(endDate));
         bean.setTowers(selectType);
 
         BaseRequest.getInstance().getService()

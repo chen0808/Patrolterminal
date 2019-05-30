@@ -15,8 +15,8 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.GroupBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
+import com.patrol.terminal.bean.TodoListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
@@ -64,8 +64,8 @@ public class YXCheckActivity extends BaseActivity implements BaseQuickAdapter.On
     private static final int IS_DONE_PAGE = 1;
     private int isTodoPage = IS_TODO_PAGE;
     private String status;
-    private List<PersonalTaskListBean> results;
-    private List<PersonalTaskListBean> resultsHave;
+    private List<TodoListBean> results;
+    private List<TodoListBean> resultsHave;
 
     private String jobType;
     private Disposable subscribe;
@@ -162,16 +162,16 @@ public class YXCheckActivity extends BaseActivity implements BaseQuickAdapter.On
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        PersonalTaskListBean todoListBean;
+        TodoListBean todoListBean;
         if (isTodoPage == IS_TODO_PAGE) {
             todoListBean = results.get(position);
         } else {
             todoListBean = resultsHave.get(position);
         }
-        String deal_type = todoListBean.getType_sign();
+        String deal_type = todoListBean.getSign();
         String data_id = todoListBean.getId();
         Intent intent = new Intent();
-        intent.putExtra("audit_status", todoListBean.getAudit_status());
+        intent.putExtra("audit_status", todoListBean.getDone_status());
         intent.putExtra("task_id", data_id);
         switch (deal_type) {
             case "1":
@@ -207,7 +207,7 @@ public class YXCheckActivity extends BaseActivity implements BaseQuickAdapter.On
                     protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         ProgressDialog.cancle();
                         fragTodoRef.setRefreshing(false);
-                        results = t.getResults();
+
                         if (isTodoPage == IS_TODO_PAGE) {
                             toDoManageAdapter.setNewData(results);
                         }

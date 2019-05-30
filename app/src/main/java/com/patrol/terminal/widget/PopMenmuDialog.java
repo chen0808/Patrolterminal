@@ -40,4 +40,9 @@ public class PopMenmuDialog extends PopupWindow {
         //设置背景透明
         setBackgroundDrawable(new ColorDrawable(0));
     }
+    public void setTitle(String str1,String str2){
+        all.setText(str1);
+        layoutShare.setText(str2);
+        layoutCopy.setVisibility(View.GONE);
+    }
 }

@@ -103,11 +103,11 @@
         android:id="@+id/frag_todo_ref"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
+        <com.yanzhenjie.recyclerview.SwipeRecyclerView
             android:id="@+id/frag_todo_rv"
             android:layout_width="match_parent"
             android:overScrollMode="never"
-            android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="match_parent"></com.yanzhenjie.recyclerview.SwipeRecyclerView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 

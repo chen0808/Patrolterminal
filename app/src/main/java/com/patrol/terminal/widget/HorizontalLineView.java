@@ -76,6 +76,42 @@ public class HorizontalLineView extends LinearLayout {
 
         }
     }
+    public void setWeekState(String type) {
+        switch (type) {
+            case "0":
+                break;
+            case "1":
+                view2.setBackgroundResource(R.drawable.green_oval);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
+                break;
+            case "2":
+            case "3":
+                view2.setBackgroundResource(R.drawable.green_oval);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view3.setBackgroundResource(R.drawable.green_oval);
+                line2.setBackgroundColor(getResources().getColor(R.color.line_green));
+                break;
+            case "4":
+                view2.setBackgroundResource(R.drawable.green_oval);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view3.setBackgroundResource(R.drawable.green_oval);
+                line2.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view4.setBackgroundResource(R.drawable.green_oval);
+                line3.setBackgroundColor(getResources().getColor(R.color.line_green));
+                break;
+            case "5":
+                view2.setBackgroundResource(R.drawable.green_oval);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view3.setBackgroundResource(R.drawable.green_oval);
+                line2.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view4.setBackgroundResource(R.drawable.green_oval);
+                line3.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view5.setBackgroundResource(R.drawable.green_oval);
+                line4.setBackgroundColor(getResources().getColor(R.color.line_green));
+                break;
+
+        }
+    }
     public void setOverStatus(String type){
 
         switch (type){

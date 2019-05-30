@@ -3,19 +3,18 @@ package com.patrol.terminal.activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.external.rfid.IRfid;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
@@ -24,7 +23,6 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupBean;
-import com.patrol.terminal.bean.PatrolRecordBean;
 import com.patrol.terminal.bean.PositionInfo;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.AnylyzeFrgment;
@@ -34,19 +32,16 @@ import com.patrol.terminal.fragment.MeFragement;
 import com.patrol.terminal.fragment.TodosManageFragment;
 import com.patrol.terminal.fragment.YXTodosManageFragment;
 import com.patrol.terminal.fragment.ZyHomeFragment;
-import com.patrol.terminal.rfid.RFIDManager;
 import com.patrol.terminal.training.TrainingHomeFragment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.ProgressDialog;
+import com.patrol.terminal.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -65,7 +60,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 
     private static final int REQUEST_TAKE_PHOTO_PERMISSION = 1;
     @BindView(R.id.fragment_vp)
-    ViewPager fragmentVp;
+    NoScrollViewPager fragmentVp;
     @BindView(R.id.main_home_rb)
     RadioButton mainHomeRb;
     @BindView(R.id.main_exame_rb)
@@ -76,6 +71,10 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     RadioButton mainMyRb;
     @BindView(R.id.ll_bottom_tab)
     RadioGroup llBottomTab;
+    @BindView(R.id.todo_num)
+    TextView todoNum;
+    @BindView(R.id.home_bottom)
+    RelativeLayout homeBottom;
 
     private List<Fragment> mFragments;
     private FragmentPagerAdapter mAdapter;
@@ -96,19 +95,26 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         checkPremission();
         if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
             getGroupName();
-        }else {
+        } else {
             initView();
         }
         //RFIDManager.getRFIDInstance().init(this, "001583EA5423", "", this);
         //初始化定位
         initLocation();
-       // timer.schedule(timerTask,1000,1000 * 1000);
+        // timer.schedule(timerTask,1000,1000 * 1000);
         refreshTodo = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
             public void accept(String type) throws Exception {
-                if (type.startsWith("refreshTodo")) {
-
+                if (type.startsWith("todoRefreshNum")) {
+                    String[] split = type.split("@");
+                    String num=split[1];
+                    if (!"0".equals(num)) {
+                        todoNum.setVisibility(View.VISIBLE);
+                        todoNum.setText(num);
+                    }else {
+                        todoNum.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -134,14 +140,14 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         // init fragment
 
 
-      //分配每个职位进来的首页
+        //分配每个职位进来的首页
         if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {     //培训专责
             mFragments.add(new TrainingHomeFragment());
-        }else  if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             mFragments.add(new HomeFragment());
-        }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
             mFragments.add(new ZyHomeFragment());
-        }else {
+        } else {
             mFragments.add(new JXHomeFragment());
         }
 
@@ -153,10 +159,10 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 
             mFragments.add(new TodosManageFragment());  //只是不显示，以免RideoButton点击错乱
 
-        }else {                                                    //有待办的角色
+        } else {                                                    //有待办的角色
             mainExameRb.setVisibility(View.VISIBLE);
 
-            if (jobType.contains("yx")){   //运行待办
+            if (jobType.contains("yx")) {   //运行待办
                 mFragments.add(new YXTodosManageFragment());
             } else {   //其他角色待办
                 mFragments.add(new TodosManageFragment());
@@ -172,13 +178,13 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         // register listener
         fragmentVp.addOnPageChangeListener(mPageChangeListener);
         llBottomTab.setOnCheckedChangeListener(mOnCheckedChangeListener);
-
+        fragmentVp.setNoScroll(false);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (refreshTodo!=null){
+        if (refreshTodo != null) {
             refreshTodo.dispose();
         }
         fragmentVp.removeOnPageChangeListener(mPageChangeListener);
@@ -227,11 +233,11 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         String[] years = time.split("年");
         String[] months = years[1].split("月");
         String[] days = months[1].split("日");
-       String month = Integer.parseInt(months[0])+"";
-        String year =years[0];
-        String day=Integer.parseInt(days[0])+"";
+        String month = Integer.parseInt(months[0]) + "";
+        String year = years[0];
+        String day = Integer.parseInt(days[0]) + "";
         BaseRequest.getInstance().getService()
-                .getGroupName(year,month,day,SPUtil.getDepId(this),SPUtil.getUserId(this))
+                .getGroupName(year, month, day, SPUtil.getDepId(this), SPUtil.getUserId(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<GroupBean>(this) {
@@ -239,8 +245,8 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                     protected void onSuccees(BaseResult<GroupBean> t) throws Exception {
                         if (t.getCode() == 1) {
                             GroupBean results = t.getResults();
-                            if (results!=null){
-                                if ("1".contains(results.getIs_boss())){
+                            if (results != null) {
+                                if ("1".contains(results.getIs_boss())) {
                                     SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
                                     jobType = Constant.RUNNING_SQUAD_TEMA_LEADER;
                                 }
@@ -257,15 +263,13 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     }
 
 
-
     /**
      * 初始化定位
      *
-     * @since 2.8.0
      * @author hongming.wang
-     *
+     * @since 2.8.0
      */
-    private void initLocation(){
+    private void initLocation() {
         //初始化client
         locationClient = new AMapLocationClient(this.getApplicationContext());
         locationOption = getDefaultOption();
@@ -279,11 +283,11 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 
     /**
      * 默认的定位参数
-     * @since 2.8.0
-     * @author hongming.wang
      *
+     * @author hongming.wang
+     * @since 2.8.0
      */
-    private AMapLocationClientOption getDefaultOption(){
+    private AMapLocationClientOption getDefaultOption() {
         AMapLocationClientOption mOption = new AMapLocationClientOption();
         mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
         mOption.setGpsFirst(true);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
@@ -303,11 +307,10 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     /**
      * 开始定位
      *
-     * @since 2.8.0
      * @author hongming.wang
-     *
+     * @since 2.8.0
      */
-    private void startLocation(){
+    private void startLocation() {
         if (null == locationOption) {
             locationOption = new AMapLocationClientOption();
         }
@@ -335,10 +338,10 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         locationOption.setLocationCacheEnable(false);
         // 设置是否单次定位
         locationOption.setOnceLocation(false);
-        try{
+        try {
             // 设置网络请求超时时间
             locationOption.setHttpTimeOut(30000);
-        }catch(Throwable e){
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }
@@ -350,7 +353,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         @Override
         public void onLocationChanged(AMapLocation location) {
             if (null != location) {
-                if(location.getErrorCode() == 0) {
+                if (location.getErrorCode() == 0) {
                     double longitude = location.getLongitude();
                     double latitude = location.getLatitude();
                     String locationTime = DateUatil.getTime(location.getTime());
@@ -433,25 +436,24 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //        }
 //    };
 
-    private void setPositon(PositionInfo poitionInfo)
-    {
-        Log.w("linmeng","setPosition poitionInfo:" + poitionInfo.getLat());
-            BaseRequest.getInstance().getService().setPosition(poitionInfo).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new BaseObserver<TypeBean>(this) {
-                        @Override
-                        protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
-                            if (t.getCode() == 1) {
-                                t.getResults();
-                            }
-
+    private void setPositon(PositionInfo poitionInfo) {
+        Log.w("linmeng", "setPosition poitionInfo:" + poitionInfo.getLat());
+        BaseRequest.getInstance().getService().setPosition(poitionInfo).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<TypeBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            t.getResults();
                         }
 
-                        @Override
-                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                            Log.e("", e.getMessage());
-                        }
-                    });
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Log.e("", e.getMessage());
+                    }
+                });
 
     }
 

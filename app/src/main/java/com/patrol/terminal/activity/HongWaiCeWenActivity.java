@@ -16,7 +16,6 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.HwcwBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
-import com.patrol.terminal.bean.TodoListBean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -26,7 +25,6 @@ import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -251,6 +249,8 @@ public class HongWaiCeWenActivity extends BaseActivity {
                                 if (t.getCode() == 1) {
                                     Toast.makeText(HongWaiCeWenActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
                                     setResult(RESULT_OK);
+
+                                    RxRefreshEvent.publish("refreshTodo");
                                     RxRefreshEvent.publish("refreshGroup");
                                     finish();
                                 }
@@ -285,7 +285,7 @@ public class HongWaiCeWenActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             Toast.makeText(HongWaiCeWenActivity.this, "审批成功", Toast.LENGTH_SHORT).show();
-                            RxRefreshEvent.publish("todo");
+                            RxRefreshEvent.publish("refreshTodo");
                             RxRefreshEvent.publish("refreshGroup");
                             setResult(RESULT_OK);
                             finish();
