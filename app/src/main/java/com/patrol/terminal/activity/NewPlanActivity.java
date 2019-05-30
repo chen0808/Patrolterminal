@@ -75,7 +75,7 @@ public class NewPlanActivity extends BaseActivity {
     }
 
     private void initview() {
-        titleName.setText("计划管理");
+        titleName.setText("运行计划管理");
          String  time = DateUatil.getTime(new Date(System.currentTimeMillis()));
         SPUtil.putString(this,"date","time",time);
         List<Fragment> fragmentList = new ArrayList<>();

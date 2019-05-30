@@ -83,7 +83,7 @@ public class OverhaulPlanActivity extends AppCompatActivity {
     }
 
     private void initview() {
-        titleName.setText("计划管理");
+        titleName.setText("检修计划管理");
         List<Fragment> fragmentList = new ArrayList<>();
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
 
@@ -94,7 +94,7 @@ public class OverhaulPlanActivity extends AppCompatActivity {
             fragmentList.add(new OverhaulWeekPlanFrgment());
             fragmentList.add(new OverhaulZzWeekTaskFrgment());
         }else if (jobType.contains(Constant.REFURBISHMENT_LEADER)  || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)    //班长,负责人能看周任务
-                || jobType.contains(Constant.REFURBISHMENT_MEMBER)){
+                || jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
             mDataList = Arrays.asList(CHANNELS_01);
             fragmentList.add(new OverhaulWeekTaskFrgment());
         }else if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)

@@ -1,9 +1,7 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,7 +18,6 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.LineTypeBean;
-import com.patrol.terminal.bean.PlanWeekLineBean;
 import com.patrol.terminal.bean.PlanWeekReqBean;
 import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.WeekOfMonthBean;

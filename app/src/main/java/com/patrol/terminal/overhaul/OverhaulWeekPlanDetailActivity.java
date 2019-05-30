@@ -253,7 +253,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //            }
             controlCard.setText("查看控制卡");
             nsControlCard.setVisibility(View.GONE);
-        } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {  //这里是负责人，负责人是不可以派发的，其他班员无PDA
+        } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //这里是负责人，负责人是不可以派发的，其他班员无PDA
             titleSetting.setVisibility(View.GONE);
             if (task_status.equals("2")) {   //待负责人提交
                 titleSetting.setVisibility(View.VISIBLE);
@@ -321,7 +321,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
     private void initTicket1() {
         //专责进来没有选择的时候显示,其他时候隐藏
-        if ("0".equals(overhaulMonthBean.getTicket_type()) && jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getTask_status())) {
+        if ("0".equals(overhaulMonthBean.getTicket_type()) && (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) && "2".equals(overhaulMonthBean.getTask_status())) {
         nsWorkTicket.setVisibility(View.VISIBLE);
         nsWorkTicket2.setVisibility(View.VISIBLE);
         workTicketTv.setText("填写工作票");
@@ -467,7 +467,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
                         if (t.getCode() == 1) {
                             allControlCarBean = t.getResults();
-                            if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {  //负责人进来, 填写过的将数据带过去
+                            if (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人进来, 填写过的将数据带过去
                                 if (allControlCarBean == null) {   //负责人第一次进来
                                     nsControlCard.setVisibility(View.VISIBLE);
                                 } else {
@@ -839,7 +839,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     bundle.putParcelable("bean", overhaulMonthBean);
                     intent.putExtras(bundle);
                     startActivity(intent);
-                } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {  //负责人提交
+                } else if (jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人提交
                     sendToMember();
                 }
                 break;
@@ -934,7 +934,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
             case R.id.control_card:
                 int entenType;
                 String task_status = overhaulMonthBean.getTask_status();
-                if (jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(task_status)) {  //负责人填写状态,提交后不可填写
+                if ((jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) )&& "2".equals(task_status)) {  //负责人填写状态,提交后不可填写
                     if (allControlCarBean == null) {
                         entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
                     } else {

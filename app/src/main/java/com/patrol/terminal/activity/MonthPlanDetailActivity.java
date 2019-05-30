@@ -71,7 +71,7 @@ public class MonthPlanDetailActivity extends BaseActivity {
     private String id1;
     private List<DefectBean> selectType = new ArrayList<>();
     private String month_id;
-    private String line_id;
+    private String line_id,month_line_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +94,8 @@ public class MonthPlanDetailActivity extends BaseActivity {
         year = getIntent().getIntExtra("year",2019);
         month = getIntent().getIntExtra("month",4);
         line_id = getIntent().getStringExtra("id");
+        month_line_id = getIntent().getStringExtra("month_line_id");
+
         month_id = getIntent().getStringExtra("month_id");
 
         titleName.setText("月计划详情");
@@ -106,8 +108,8 @@ public class MonthPlanDetailActivity extends BaseActivity {
     //获取已经添加的缺陷列表
     public void getHaveDefect() {
         ApiServise service = BaseRequest.getInstance().getService();
-        Observable<BaseResult<List<DefectBean>>> haveDefect = service.getHaveDefect(line_id, month_id, null, null, "1", "1");
-        Observable<BaseResult<List<DefectBean>>> haveDanger = service.getHaveDanger(line_id, month_id, null, null, "1", "1");
+        Observable<BaseResult<List<DefectBean>>> haveDefect = service.getHaveDefect(month_line_id, "1", "1");
+        Observable<BaseResult<List<DefectBean>>> haveDanger = service.getHaveDanger(month_line_id,  "1", "1");
         Observable.zip(haveDefect,haveDanger, new BiFunction<BaseResult<List<DefectBean>>,BaseResult<List<DefectBean>>, String>() {
             @Override
             public String apply(BaseResult<List<DefectBean>> listBaseResult, BaseResult<List<DefectBean>> listBaseResult2) throws Exception {

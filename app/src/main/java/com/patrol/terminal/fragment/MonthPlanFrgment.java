@@ -102,8 +102,6 @@ public class MonthPlanFrgment extends BaseFragment {
     protected void initData() {
         mContext = getActivity();
         taskScreen.setVisibility(View.VISIBLE);
-        taskAdd.setVisibility(View.VISIBLE);
-
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         //判断
@@ -118,6 +116,8 @@ public class MonthPlanFrgment extends BaseFragment {
             depId = null;
             planSubmit.setVisibility(View.VISIBLE);
             planCreate.setVisibility(View.INVISIBLE);
+        }else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+            taskAdd.setVisibility(View.VISIBLE);
         }
         time = DateUatil.getCurMonth();
         String[] years = time.split("年");
@@ -141,6 +141,7 @@ public class MonthPlanFrgment extends BaseFragment {
                     intent.putExtra("year", bean.getYear());
                     intent.putExtra("month", bean.getMonth());
                     intent.putExtra("month_id", bean.getMonth_id());
+                    intent.putExtra("month_line_id", bean.getId());
                     intent.putExtra("id", bean.getLine_id());
                 } else {
                     intent.setClass(getContext(), SpecialPlanDetailActivity.class);
@@ -177,9 +178,9 @@ public class MonthPlanFrgment extends BaseFragment {
                             lineList.clear();
                             getData(results);
                             monthPlanAdapter.setNewData(data);
-                            ProgressDialog.cancle();
 
                         }
+                        ProgressDialog.cancle();
                     }
 
                     @Override
@@ -192,7 +193,7 @@ public class MonthPlanFrgment extends BaseFragment {
 
     //提交月计划审核
     public void submitMonthPlan(String status) {
-        ProgressDialog.show(getContext(), false, "正在加载中");
+        ProgressDialog.show(getContext(), false, "正在加载中...");
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
         bean.setYear(year);
         bean.setMonth(month);
@@ -381,21 +382,25 @@ public class MonthPlanFrgment extends BaseFragment {
             data1 = patrol;
             data.addAll(patrol);
             for (int j = 0; j < patrol.size(); j++) {
+
                 MonthPlanBean monthPlanBean = patrol.get(j);
                 //当身份是专责时，获取需要审批的列表
                 if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
                     Tower lineBean = new Tower();
                     lineBean.setLine_id(monthPlanBean.getLine_id());
+                    lineBean.setMonth_line_id(monthPlanBean.getId());
                     lineList.add(lineBean);
                     //当身份是主管时，获取需要审批的列表
                 } else if (mJobType.contains(Constant.RUN_SUPERVISOR) && "2".equals(monthPlanBean.getAudit_status())) {
                     Tower lineBean = new Tower();
                     lineBean.setLine_id(monthPlanBean.getLine_id());
+                    lineBean.setMonth_line_id(monthPlanBean.getId());
                     lineList.add(lineBean);
                     //当身份是班长时，获取需要审核的列表
                 } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())){
                     Tower lineBean = new Tower();
                     lineBean.setLine_id(monthPlanBean.getLine_id());
+                    lineBean.setMonth_line_id(monthPlanBean.getId());
                     lineList.add(lineBean);
                 }
             }

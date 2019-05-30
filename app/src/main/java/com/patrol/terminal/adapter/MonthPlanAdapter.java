@@ -87,6 +87,7 @@ switch (item.getType_sign()){
                     intent.putExtra("year", item.getYear() + "");
                     intent.putExtra("month", item.getMonth() + "");
                     intent.putExtra("line_id", item.getLine_id() + "");
+                    intent.putExtra("id", item.getId());
                     intent.putExtra("type", item.getFull_plan());
                     mContext.startActivity(intent);
                 }

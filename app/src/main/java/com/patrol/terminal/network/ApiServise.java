@@ -93,6 +93,7 @@ import com.patrol.terminal.bean.WeekListBean;
 import com.patrol.terminal.bean.WeekOfMonthBean;
 import com.patrol.terminal.bean.WeekPlanBean;
 import com.patrol.terminal.bean.WeekPlanDetailBean;
+import com.patrol.terminal.bean.YXtoJXbean;
 import com.patrol.terminal.overhaul.OverhaulFileBean;
 
 import java.util.List;
@@ -222,11 +223,11 @@ public interface ApiServise {
 
     //获取已经存在的缺陷列表
     @GET("/task/defect/listGET")
-    Observable<BaseResult<List<DefectBean>>> getHaveDefect(@Query("line_id") String line_id, @Query("month_id") String month_id, @Query("week_line_id") String week_id, @Query("day_line_id") String day_id, @Query("status") String status, @Query("audit_status") String audit_status);
+    Observable<BaseResult<List<DefectBean>>> getHaveDefect(@Query("month_line_id") String month_line_id, @Query("status") String status, @Query("audit_status") String audit_status);
 
     //获取已经存在的隐患列表
     @GET("/task/danger/listGET")
-    Observable<BaseResult<List<DefectBean>>> getHaveDanger(@Query("line_id") String line_id, @Query("month_id") String month_id, @Query("week_line_id") String week_id, @Query("day_line_id") String day_id, @Query("status") String status, @Query("audit_status") String audit_status);
+    Observable<BaseResult<List<DefectBean>>> getHaveDanger(@Query("month_line_id") String month_line_id, @Query("status") String status, @Query("audit_status") String audit_status);
 
 
     //获取组成员列表
@@ -335,6 +336,9 @@ public interface ApiServise {
 
     @GET("/task/group/user/groupGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id);
+
+    @GET("/task/repair/user/taskGET")
+    Observable<BaseResult<List<YXtoJXbean>>> getRepairList(@Query("year") String year, @Query("month") String month, @Query("day") String day,@Query("user_id") String user_id,@Query("sign") String sign);
 
     //个人任务列表
     @GET("task/personal/listGET")

@@ -100,7 +100,7 @@ public class AddMonthPlanActivity extends BaseActivity {
     private String line_id;
     private String line_name;
     private String Id;
-    private String month_id;
+    private String month_line_id;
     private String week_id;
     private String day_id;
     private String week;
@@ -122,30 +122,12 @@ public class AddMonthPlanActivity extends BaseActivity {
         initview();
 
         line_id = getIntent().getStringExtra("line_id");
-        Log.w("linmeng", "onCreate from:" + from);
-        if (from == Constant.FROM_MONTHPLAN_TO_ADDMONTH) {
-            month_id = getIntent().getStringExtra("month_id");
+        month_line_id = getIntent().getStringExtra("id");
             getHaveDefect();
             getHaveDanger();
+        
             getDefect();
             getDanger();
-        }else if (from == Constant.FROM_WEEKPLAN_TO_ADDMONTH) {
-            week_id = getIntent().getStringExtra("week_id");
-            Id = getIntent().getStringExtra("id");
-            getHaveWeekDefect();
-            getHaveWeekDanger();
-            month_id = getIntent().getStringExtra("month_id");
-            getWeekDefect();
-            getWeekDanger();
-        }else if (from == Constant.FROM_DAYPLAN_TO_ADDMONTH) {
-            day_id = getIntent().getStringExtra("day_id");
-            Id = getIntent().getStringExtra("id");
-            getHaveDayDefect();
-            getHaveDayDanger();
-            week_id = getIntent().getStringExtra("week_id");
-            getDayDefect();
-            getDayDanger();
-        }
 
     }
 
@@ -267,13 +249,7 @@ public class AddMonthPlanActivity extends BaseActivity {
                     finish();
                     return;
                 }
-                if (from == Constant.FROM_MONTHPLAN_TO_ADDMONTH) {
                     savaDefMonth();
-                }else if (from == Constant.FROM_WEEKPLAN_TO_ADDMONTH) {
-                    savaDefWeek();
-                }else if (from == Constant.FROM_DAYPLAN_TO_ADDMONTH) {
-                    savaDefDay();
-                }
 
                 break;
             case R.id.trouble_more:
@@ -331,96 +307,11 @@ public class AddMonthPlanActivity extends BaseActivity {
                     }
                 });
     }
-    //获取周缺陷库
-    public void getWeekDefect() {
-        list1.clear();
-        BaseRequest.getInstance().getService()
-                .getWeekDefect(line_id, month_id,null,"1","1")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-                        List<DefectBean> results = t.getResults();
-                        list1.addAll(results);
-                        setVisibility(list1);
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
-
-    //获取周缺陷库
-    public void getWeekDanger() {
-        list1.clear();
-        BaseRequest.getInstance().getService()
-                .getWeekDanger(line_id, month_id,null,"1","1")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-                        List<DefectBean> results = t.getResults();
-                        list2.addAll(results);
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
-
-    //获取日隐患库
-    public void getDayDanger() {
-        list1.clear();
-        BaseRequest.getInstance().getService()
-                .getDayDanger(line_id, week_id, "","2","1")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-                        List<DefectBean> results = t.getResults();
-                        list2.addAll(results);
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
-    //获取日缺陷库
-    public void getDayDefect() {
-        list1.clear();
-        BaseRequest.getInstance().getService()
-                .getDayDefect(line_id, week_id, "","2","1")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-                        List<DefectBean> results = t.getResults();
-                        list1.addAll(results);
-                        setVisibility(list1);
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
-
 
     //获取已经添加的缺陷列表
     public void getHaveDefect() {
         BaseRequest.getInstance().getService()
-                .getHaveDefect(line_id,month_id, Id,day_id,"1","1")
+                .getHaveDefect(month_line_id,"1","1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectBean>>(this) {
@@ -443,60 +334,12 @@ public class AddMonthPlanActivity extends BaseActivity {
                 });
     }
 
-    //获取已经添加的缺陷列表
-    public void getHaveWeekDefect() {
-        BaseRequest.getInstance().getService()
-                .getHaveDefect(line_id,month_id,Id,day_id,"2,3","1")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-                        List<DefectBean> results = t.getResults();
-                        for (int i = 0; i < results.size(); i++) {
-                            DefectBean defectBean = results.get(i);
-                            defectBean.setType(2);
-                            selectType.add(defectBean);
-                        }
 
-                        selectAdapter.setData(selectType);
-                    }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
-    //获取已经添加的缺陷列表
-    public void getHaveDayDefect() {
-        BaseRequest.getInstance().getService()
-                .getHaveDefect(line_id,month_id,week_id,Id,"3","1")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-                        List<DefectBean> results = t.getResults();
-                        for (int i = 0; i < results.size(); i++) {
-                            DefectBean defectBean = results.get(i);
-                            defectBean.setType(2);
-                            selectType.add(defectBean);
-                        }
-
-                        selectAdapter.setData(selectType);
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
     //获取已经添加的隐患列表
     public void getHaveDanger() {
         BaseRequest.getInstance().getService()
-                .getHaveDanger(line_id,month_id,week_id,day_id,"1","1")
+                .getHaveDanger(month_line_id,"1","1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectBean>>(this) {
@@ -518,56 +361,8 @@ public class AddMonthPlanActivity extends BaseActivity {
                     }
                 });
     }
-    //获取已经添加的隐患列表
-    public void getHaveWeekDanger() {
-        BaseRequest.getInstance().getService()
-                .getHaveDanger(line_id,month_id,week_id,day_id,"2,3","1")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-                        List<DefectBean> results = t.getResults();
-                        for (int i = 0; i < results.size(); i++) {
-                            DefectBean defectBean = results.get(i);
-                            defectBean.setType(1);
-                            selectType.add(defectBean);
-                        }
 
-                        selectAdapter.setData(selectType);
-                    }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
-    //获取已经添加的隐患列表
-    public void getHaveDayDanger() {
-        BaseRequest.getInstance().getService()
-                .getHaveDanger(line_id,month_id,week_id,day_id,"3","1")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-                        List<DefectBean> results = t.getResults();
-                        for (int i = 0; i < results.size(); i++) {
-                            DefectBean defectBean = results.get(i);
-                            defectBean.setType(1);
-                            selectType.add(defectBean);
-                        }
-
-                        selectAdapter.setData(selectType);
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
     //保存月缺陷
     public void savaDefMonth() {
         SavaMonthDefDanBean bean = getReqBean(1);
@@ -594,58 +389,7 @@ public class AddMonthPlanActivity extends BaseActivity {
                     }
                 });
     }
-    //保存周缺陷
-    public void savaDefWeek() {
-        SavaMonthDefDanBean bean = getReqBean(2);
-        ProgressDialog.show(this,false,"正在加载");
-        BaseRequest.getInstance().getService()
-                .savaDefDanWeek(bean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DangerBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DangerBean>> t) throws Exception {
-                        ProgressDialog.cancle();
-                        if (t.getCode()==1){
-                            Toast.makeText(AddMonthPlanActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
-                            finish();
-                        }else {
-                            Toast.makeText(AddMonthPlanActivity.this,t.getMsg(),Toast.LENGTH_SHORT).show();
-                        }
-                    }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                    }
-                });
-    }
-    //保存日缺陷
-    public void savaDefDay() {
-        SavaMonthDefDanBean bean = getReqBean(3);
-        ProgressDialog.show(this,false,"正在加载");
-        BaseRequest.getInstance().getService()
-                .savaDefDanDay(bean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DangerBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DangerBean>> t) throws Exception {
-                        ProgressDialog.cancle();
-                        if (t.getCode()==1){
-                            Toast.makeText(AddMonthPlanActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
-                            finish();
-                        }else {
-                            Toast.makeText(AddMonthPlanActivity.this,t.getMsg(),Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                    }
-                });
-    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -661,6 +405,7 @@ public class AddMonthPlanActivity extends BaseActivity {
         if (state==1){
             bean.setYear(year);
             bean.setMonth(month);
+            bean.setId(month_line_id);
         }else if (state==2){
             bean.setId(Id);
             bean.setWeek_id(week_id );

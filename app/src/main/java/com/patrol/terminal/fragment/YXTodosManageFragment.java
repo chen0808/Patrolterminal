@@ -27,7 +27,6 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
-import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -156,14 +155,11 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
             @Override
             public void accept(String type) throws Exception {
                 if (type.startsWith("refreshTodo")) {
-                    results.clear();
-                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
                         getYXtodo();
                         getYXtodoHave();
-                    }
-                    if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
-                        getWeekList();
-                    }
+//                    if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
+//                        getWeekList();
+//                    }
                 }
             }
         });
@@ -281,7 +277,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                 });
     }
     private void getYXtodo() {
-        ProgressDialog.show(getContext(),false,"正在加载中");
+
         BaseRequest.getInstance().getService()
                 .getYXtodo(SPUtil.getUserId(getContext()),"0","create_time")
                 .subscribeOn(Schedulers.io())
@@ -289,7 +285,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                 .subscribe(new BaseObserver<List<TodoListBean>>(getContext()) {
                     @Override
                     protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
-                        ProgressDialog.cancle();
+                        Log.i("555555555","refreshTodo");
                         if (t.getCode() == 1) {
                             fragTodoRef.setRefreshing(false);
                             results = t.getResults();
@@ -305,7 +301,6 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
                         fragTodoRef.setRefreshing(false);
                     }
                 });

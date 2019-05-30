@@ -14,25 +14,17 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddPersonalTaskActivity;
-import com.patrol.terminal.activity.HongWaiCeWenActivity;
-import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
-import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
-import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.PersonalTaskDetailActivity;
-import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
 import com.patrol.terminal.adapter.PersonalTaskAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.GroupTaskBean;
-import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
@@ -113,41 +105,6 @@ public class PersonalTaskFrgment extends BaseFragment {
                 bundle.putParcelable("bean",bean);
                 intent.putExtras(bundle);
                 startActivity(intent);
-//                Intent intent = new Intent();
-//                intent.putExtra("line_id",bean.getLine_id());
-//                intent.putExtra("line_name",bean.getLine_name());
-//                intent.putExtra("tower_id",bean.getTower_id());
-//                intent.putExtra("tower_name",bean.GroupTaskBean());
-//                intent.putExtra("task_id",bean.getId());
-//                intent.putExtra("sign",bean.getType_sign());
-//                intent.putExtra("typename",bean.getType_name());
-//                switch (bean.getType_sign()) {
-//                    case "1":
-//                        intent.setClass(getContext(), PatrolRecordActivity.class);
-//                        SPUtil.put(getContext(), "ids", "tower_id", bean.getTower_id());
-//                        SPUtil.put(getContext(), "ids", "line_id", bean.getLine_id());
-//                        SPUtil.put(getContext(), "ids", "line_name", bean.getLine_name());
-//                        SPUtil.put(getContext(), "ids", "tower_name", bean.getTower_name());
-//                        break;
-//                    case "2":
-//                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
-//                        break;
-//                    case "3":
-//                        intent.setClass(getContext(), JiediDianZuCeLiangActicivity.class);
-//                        break;
-//                    case "10":
-//                        intent.setClass(getContext(), JueYuanZiLingZhiJianCeActivity.class);
-//                        break;
-//                    case "5":
-//                        intent.setClass(getContext(), HongWaiCeWenActivity.class);
-//                        break;
-//                    case "6":
-//                        intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
-//                        break;
-//
-//                }
-
-//                startActivity(intent);
             }
         });
         getGroupList();

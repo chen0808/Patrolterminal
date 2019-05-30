@@ -21,6 +21,8 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupTaskBean;
+import com.patrol.terminal.bean.YXtoJXbean;
+import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
@@ -92,7 +94,10 @@ public class GroupTaskFrgment extends BaseFragment {
         }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
             userId = SPUtil.getUserId(getContext());
             getGroupListZy();
+        }else {
+            getGroupList();
         }
+        getRepairList();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
         groupTaskAdapter = new GroupTaskAdapter(R.layout.fragment_task_item, result);
@@ -125,6 +130,7 @@ public class GroupTaskFrgment extends BaseFragment {
                         userId = SPUtil.getUserId(getContext());
                         getGroupListZy();
                     }
+                    getRepairList();
                 }
             }
         });
@@ -142,6 +148,32 @@ public class GroupTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         groupTaskAdapter.setNewData(result);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+
+    }
+
+    //获取小组负责人的检修任务
+    public void getRepairList() {
+
+        BaseRequest.getInstance().getService()
+                .getRepairList(year, month, day,SPUtil.getUserId(getContext()),"4")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<YXtoJXbean>>(getContext()) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<YXtoJXbean>> t) throws Exception {
+                        List<YXtoJXbean> jxlist = t.getResults();
+                        if (jxlist!=null&&jxlist.size()>0){
+                            planSubmit.setText("检修");
+                            planSubmit.setVisibility(View.VISIBLE);
+                        }else {
+                            planSubmit.setVisibility(View.GONE);
+                        }
                     }
 
                     @Override
@@ -212,11 +244,15 @@ public class GroupTaskFrgment extends BaseFragment {
         pvTime.show();
     }
 
-    @OnClick({R.id.task_date, R.id.task_add})
+    @OnClick({R.id.task_date, R.id.task_add,R.id.plan_submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:
                 showDay();
+                break;
+            case R.id.plan_submit:
+                Intent intent1 = new Intent(getContext(), OverhaulPlanActivity.class);
+                startActivityForResult(intent1,11);
                 break;
             case R.id.task_add:
                 Intent intent = new Intent(getContext(), AddGroupTaskActivity.class);
@@ -239,6 +275,7 @@ public class GroupTaskFrgment extends BaseFragment {
                 userId = SPUtil.getUserId(getContext());
                 getGroupListZy();
             }
+            getRepairList();
         }
     }
 
