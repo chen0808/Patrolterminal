@@ -47,6 +47,7 @@ public class SafeListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safe_list);
         ButterKnife.bind(this);
+        titleName.setText("注意事项列表");
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("确认");
         List<TicketSafeContent> chooseList = (List<TicketSafeContent>) getIntent().getSerializableExtra("chooseList");
@@ -58,7 +59,14 @@ public class SafeListActivity extends BaseActivity {
                         List<TicketSafeContent> results = t.getResults();
                         if (results != null && results.size() > 0) {
                             rvSafeList.setLayoutManager(new LinearLayoutManager(SafeListActivity.this));
-                            adapter = new SafeListAdapter(R.layout.item_safe_list, results, chooseList);
+                            for (int i = 0; i < chooseList.size(); i++) {
+                                for (int j = 0; j < results.size(); j++) {
+                                    if (results.get(j).getTicket_safe_id().equals(chooseList.get(i).getTicket_safe_id())) {
+                                        results.get(j).setTag(true);
+                                    }
+                                }
+                            }
+                            adapter = new SafeListAdapter(R.layout.item_safe_list, results);
                             rvSafeList.setAdapter(adapter);
                         }
                     }

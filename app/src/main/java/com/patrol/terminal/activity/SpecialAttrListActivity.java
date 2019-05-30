@@ -65,8 +65,9 @@ public class SpecialAttrListActivity extends BaseActivity {
     private List<String> list = new ArrayList<>();
     private AddSpecial addSpecial = new AddSpecial();
     private List<AddSpecial.WaresBean> waresBeans = new ArrayList<>();
-    private String line_id = "B511327CB4BB4D4A9E544F6972510B4E";
+    //    private String line_id = "B511327CB4BB4D4A9E544F6972510B4E";
     private List<TowerListBean> towerList;
+    private String line_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class SpecialAttrListActivity extends BaseActivity {
         setContentView(R.layout.activity_special_attr_list);
         ButterKnife.bind(this);
         titleName.setText("添加特殊属性");
+        line_id = getIntent().getStringExtra("line_id");
         BaseRequest.getInstance().getService().specialAttrList().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<SpecialAttrList>>(this) {
@@ -135,7 +137,7 @@ public class SpecialAttrListActivity extends BaseActivity {
             }
         }
         for (int i = 0; i < listLevel1.size(); i++) {
-            PatrolLevel1 level1 = new PatrolLevel1(listLevel1.get(i).getName());
+            PatrolLevel1 level1 = new PatrolLevel1(listLevel1.get(i).getName(), listLevel1.get(i).getId());
             for (int j = 0; j < listLevel2.size(); j++) {
                 if (listLevel1.get(i).getId().equals(listLevel2.get(j).getP_id())) {
                     PatrolLevel2 level2 = new PatrolLevel2("", false, "", listLevel2.get(j).getName(), listLevel2.get(j).getId());

@@ -616,6 +616,8 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
         params.put("task_id", toRequestBody(taskId));
         params.put("type", toRequestBody(ticketType));
         params.put("task_type", toRequestBody(ticketTaskType));
+        params.put("unit_name", toRequestBody(tvUnitId.getText().toString()));
+        params.put("work_dep_name", toRequestBody(tvDepId.getText().toString()));
         params.put("begin_time", toRequestBody(bean.getBegin_time()));
         params.put("end_time", toRequestBody(bean.getEnd_time()));
         params.put("delay_time", toRequestBody(bean.getDelay_time()));

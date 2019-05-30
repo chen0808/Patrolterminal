@@ -58,6 +58,8 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         }
                     }
                 });
+                helper.setOnCheckedChangeListener(R.id.cb_tag, null);
+                helper.setChecked(R.id.cb_tag, item1.isTag());
                 helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -66,6 +68,7 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         } else {
                             waresId.remove(item1.getId());
                         }
+                        item1.setTag(isChecked);
                         addSpecial.setWaresIdList(waresId);
                     }
                 });
@@ -85,6 +88,8 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         }
                     }
                 });
+                helper.setOnCheckedChangeListener(R.id.cb_tag, null);
+                helper.setChecked(R.id.cb_tag, item2.isTag());
                 helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -93,6 +98,7 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         } else {
                             waresId.remove(item2.getId());
                         }
+                        item2.setTag(isChecked);
                         addSpecial.setWaresIdList(waresId);
                     }
                 });
@@ -112,6 +118,8 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         }
                     }
                 });
+                helper.setOnCheckedChangeListener(R.id.cb_tag, null);
+                helper.setChecked(R.id.cb_tag, item3.isTag());
                 helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -120,6 +128,7 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         } else {
                             waresId.remove(item3.getId());
                         }
+                        item3.setTag(isChecked);
                         addSpecial.setWaresIdList(waresId);
                     }
                 });
@@ -127,6 +136,8 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
             case TYPE_4:
                 PatrolLevel4 item4 = (PatrolLevel4) item;
                 helper.setText(R.id.tv_content, item4.getName());
+                helper.setOnCheckedChangeListener(R.id.cb_tag, null);
+                helper.setChecked(R.id.cb_tag, item4.isTag());
                 helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -135,6 +146,7 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         } else {
                             waresId.remove(item4.getId());
                         }
+                        item4.setTag(isChecked);
                         addSpecial.setWaresIdList(waresId);
                     }
                 });

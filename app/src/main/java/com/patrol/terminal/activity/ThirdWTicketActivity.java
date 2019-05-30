@@ -414,6 +414,8 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
         params.put("task_id", toRequestBody(taskId));
         params.put("type", toRequestBody(ticketType));
         params.put("task_type", toRequestBody(ticketTaskType));
+        params.put("unit_name", toRequestBody(tvUnitId.getText().toString()));
+        params.put("work_dep_name", toRequestBody(tvDepId.getText().toString()));
         params.put("begin_time", toRequestBody(bean.getBegin_time()));
         params.put("end_time", toRequestBody(bean.getEnd_time()));
         params.put("reload_line_name", toRequestBody(bean.getReload_line_name()));
@@ -450,6 +452,7 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
         if (bean.getSafeList() != null) {
             for (int i = 0; i < bean.getSafeList().size(); i++) {
                 params.put("safeList[" + i + "].ticket_safe_content", toRequestBody(bean.getSafeList().get(i).getTicket_safe_content()));
+                params.put("safeList[" + i + "].ticket_safe_id", toRequestBody(bean.getSafeList().get(i).getTicket_safe_id()));
             }
         }
         return params;

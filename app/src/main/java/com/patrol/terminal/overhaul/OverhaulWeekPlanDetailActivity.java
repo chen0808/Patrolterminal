@@ -23,6 +23,9 @@ import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.ControlCardActivity;
 import com.patrol.terminal.activity.FirstWTicketActivity;
+import com.patrol.terminal.activity.FourWTicketActivity;
+import com.patrol.terminal.activity.SecondWTicketActivity;
+import com.patrol.terminal.activity.ThirdWTicketActivity;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -203,7 +206,6 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
         planId = getIntent().getStringExtra("id");
         titleName.setText("周检修详情");
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
-
         initId();
     }
 
@@ -253,7 +255,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //            }
             controlCard.setText("查看控制卡");
             nsControlCard.setVisibility(View.GONE);
-        } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //这里是负责人，负责人是不可以派发的，其他班员无PDA
+        } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //这里是负责人，负责人是不可以派发的，其他班员无PDA
             titleSetting.setVisibility(View.GONE);
             if (task_status.equals("2")) {   //待负责人提交
                 titleSetting.setVisibility(View.VISIBLE);
@@ -321,35 +323,36 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
     private void initTicket1() {
         //专责进来没有选择的时候显示,其他时候隐藏
-        if ("0".equals(overhaulMonthBean.getTicket_type()) && (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) && "2".equals(overhaulMonthBean.getTask_status())) {
-        nsWorkTicket.setVisibility(View.VISIBLE);
-        nsWorkTicket2.setVisibility(View.VISIBLE);
-        workTicketTv.setText("填写工作票");
-        nicePosition = 1;
-        nicePosition2 = 1;
-        data3.clear();
-        data3.add("第一种工作票");
-        data3.add("第二种工作票");
-        data3.add("电力线路带电作业工作票");
-        data3.add("事故应急抢修单");
-        nsWorkTicket.attachDataSource(data3);
-        data4.clear();
-        data4.add("各类检修工作");
-        data4.add("修建树木");
-        data4.add("竣工验收");
-        nsWorkTicket2.attachDataSource(data4);
-        nsWorkTicket.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                nicePosition = position + 1;
-                initTicket2(position);
-            }
+//        null == overhaulMonthBean.getTicket_type() &&
+        if ((jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) && "2".equals(overhaulMonthBean.getTask_status())) {
+            nsWorkTicket.setVisibility(View.VISIBLE);
+            nsWorkTicket2.setVisibility(View.VISIBLE);
+            workTicketTv.setText("填写工作票");
+            nicePosition = 1;
+            nicePosition2 = 1;
+            data3.clear();
+            data3.add("第一种工作票");
+            data3.add("第二种工作票");
+            data3.add("电力线路带电作业工作票");
+            data3.add("事故应急抢修单");
+            nsWorkTicket.attachDataSource(data3);
+            data4.clear();
+            data4.add("各类检修工作");
+            data4.add("修建树木");
+            data4.add("竣工验收");
+            nsWorkTicket2.attachDataSource(data4);
+            nsWorkTicket.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    nicePosition = position + 1;
+                    initTicket2(position);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
         }
     }
 
@@ -467,7 +470,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 
                         if (t.getCode() == 1) {
                             allControlCarBean = t.getResults();
-                            if (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人进来, 填写过的将数据带过去
+                            if (jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人进来, 填写过的将数据带过去
                                 if (allControlCarBean == null) {   //负责人第一次进来
                                     nsControlCard.setVisibility(View.VISIBLE);
                                 } else {
@@ -611,19 +614,19 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
         OverhaulFzrSendBean.UserInfo userInfo1 = new OverhaulFzrSendBean.UserInfo();
         userInfo1.setUser_id(userData.get(signPosition).getUser_id());
         userInfo1.setUser_name(userData.get(signPosition).getUser_name());
-        userInfo1.setSign("6");
+        userInfo1.setSign(Constant.STATUS_SIGN);
         userList.add(userInfo1);
 
         OverhaulFzrSendBean.UserInfo userInfo2 = new OverhaulFzrSendBean.UserInfo();
         userInfo2.setUser_id(userData.get(signPosition2).getUser_id());
         userInfo2.setUser_name(userData.get(signPosition2).getUser_name());
-        userInfo2.setSign("6");
+        userInfo2.setSign(Constant.STATUS_SIGN);
         userList.add(userInfo2);
 
         OverhaulFzrSendBean.UserInfo userInfo3 = new OverhaulFzrSendBean.UserInfo();
         userInfo3.setUser_id(userData.get(licencePosition).getUser_id());
         userInfo3.setUser_name(userData.get(licencePosition).getUser_name());
-        userInfo3.setSign("7");
+        userInfo3.setSign(Constant.STATUS_LICENCE);
         userList.add(userInfo3);
         overhaulFzrSendBean.setUserList(userList);
 
@@ -799,7 +802,6 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                 //弹框选择
                 getAllWorkers();
                 break;
-
             case R.id.title_back:
                 finish();
                 break;
@@ -839,7 +841,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     bundle.putParcelable("bean", overhaulMonthBean);
                     intent.putExtras(bundle);
                     startActivity(intent);
-                } else if (jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人提交
+                } else if (jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人提交
                     sendToMember();
                 }
                 break;
@@ -849,41 +851,41 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //                    nicePosition2 = Integer.valueOf(planRepairBean.getTicket_task_type());
 //                    Log.d("task__type", "type:" + nicePosition + "------task_type:" + nicePosition2);
 //                }
-//                if (jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getStatus())) {  //负责人进来, 填写过的将数据带过去
-//                    switch (nicePosition) {
-//                        case 1:
-                Intent intent11 = new Intent(OverhaulWeekPlanDetailActivity.this, FirstWTicketActivity.class);
-                intent11.putExtra("bean", overhaulMonthBean);
-//                intent11.putExtra("type", String.valueOf(nicePosition));
-//                intent11.putExtra("task_type", String.valueOf(nicePosition2));
-                intent11.putExtra("leaderName", "叶");
-                startActivity(intent11);
-//                            break;
-//                        case 2:
-//                            Intent intent12 = new Intent(OverhaulWeekPlanDetailActivity.this, SecondWTicketActivity.class);
-//                            intent12.putExtra("bean", overhaulMonthBean);
-//                            intent12.putExtra("type", String.valueOf(nicePosition));
-//                            intent12.putExtra("task_type", String.valueOf(nicePosition2));
-//                            intent12.putExtra("leaderName", leaderName);
-//                            startActivity(intent12);
-//                            break;
-//                        case 3:
-//                            Intent intent13 = new Intent(OverhaulWeekPlanDetailActivity.this, ThirdWTicketActivity.class);
-//                            intent13.putExtra("bean", overhaulMonthBean);
-//                            intent13.putExtra("type", String.valueOf(nicePosition));
-//                            intent13.putExtra("task_type", String.valueOf(nicePosition2));
-//                            intent13.putExtra("leaderName", leaderName);
-//                            startActivity(intent13);
-//                            break;
-//                        case 4:
-//                            Intent intent14 = new Intent(OverhaulWeekPlanDetailActivity.this, FourWTicketActivity.class);
-//                            intent14.putExtra("bean", overhaulMonthBean);
-//                            intent14.putExtra("type", String.valueOf(nicePosition));
-//                            intent14.putExtra("task_type", String.valueOf(nicePosition2));
-//                            intent14.putExtra("leaderName", leaderName);
-//                            startActivity(intent14);
-//                            break;
-//                    }
+                if (jobType.contains(Constant.REFURBISHMENT_MEMBER) && "2".equals(overhaulMonthBean.getTask_status())) {  //负责人进来, 填写过的将数据带过去
+                    switch (nicePosition) {
+                        case 1:
+                            Intent intent11 = new Intent(OverhaulWeekPlanDetailActivity.this, FirstWTicketActivity.class);
+                            intent11.putExtra("bean", overhaulMonthBean);
+                            intent11.putExtra("type", String.valueOf(nicePosition));
+                            intent11.putExtra("task_type", String.valueOf(nicePosition2));
+//                        intent11.putExtra("leaderName", "叶");
+                            startActivity(intent11);
+                            break;
+                        case 2:
+                            Intent intent12 = new Intent(OverhaulWeekPlanDetailActivity.this, SecondWTicketActivity.class);
+                            intent12.putExtra("bean", overhaulMonthBean);
+                            intent12.putExtra("type", String.valueOf(nicePosition));
+                            intent12.putExtra("task_type", String.valueOf(nicePosition2));
+//                        intent12.putExtra("leaderName", leaderName);
+                            startActivity(intent12);
+                            break;
+                        case 3:
+                            Intent intent13 = new Intent(OverhaulWeekPlanDetailActivity.this, ThirdWTicketActivity.class);
+                            intent13.putExtra("bean", overhaulMonthBean);
+                            intent13.putExtra("type", String.valueOf(nicePosition));
+                            intent13.putExtra("task_type", String.valueOf(nicePosition2));
+//                        intent13.putExtra("leaderName", leaderName);
+                            startActivity(intent13);
+                            break;
+                        case 4:
+                            Intent intent14 = new Intent(OverhaulWeekPlanDetailActivity.this, FourWTicketActivity.class);
+                            intent14.putExtra("bean", overhaulMonthBean);
+                            intent14.putExtra("type", String.valueOf(nicePosition));
+                            intent14.putExtra("task_type", String.valueOf(nicePosition2));
+//                        intent14.putExtra("leaderName", leaderName);
+                            startActivity(intent14);
+                            break;
+                    }
 //                } else {      //其他人员进来
 //                    if (planRepairBean.getTicket_type().equals("0")) {
 //                        Toast.makeText(OverhaulWeekPlanDetailActivity.this, "当前无工作票！", Toast.LENGTH_SHORT).show();
@@ -929,12 +931,12 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //                                break;
 //                        }
 //                    }
-//                }
+                }
                 break;
             case R.id.control_card:
                 int entenType;
                 String task_status = overhaulMonthBean.getTask_status();
-                if ((jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) )&& "2".equals(task_status)) {  //负责人填写状态,提交后不可填写
+                if ((jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) && "2".equals(task_status)) {  //负责人填写状态,提交后不可填写
                     if (allControlCarBean == null) {
                         entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
                     } else {

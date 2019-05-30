@@ -108,11 +108,11 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
             public void accept(String type) throws Exception {
                 if (type.startsWith("todoRefreshNum")) {
                     String[] split = type.split("@");
-                    String num=split[1];
+                    String num = split[1];
                     if (!"0".equals(num)) {
                         todoNum.setVisibility(View.VISIBLE);
                         todoNum.setText(num);
-                    }else {
+                    } else {
                         todoNum.setVisibility(View.GONE);
                     }
                 }

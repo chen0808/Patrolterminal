@@ -339,9 +339,10 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
         params.put("task_id", toRequestBody(taskId));
         params.put("type", toRequestBody(ticketType));
         params.put("task_type", toRequestBody(ticketTaskType));
+        params.put("unit_name", toRequestBody(tvUnitId.getText().toString()));
+        params.put("work_dep_name", toRequestBody(tvDepId.getText().toString()));
         params.put("begin_time", toRequestBody(bean.getBegin_time()));
         params.put("done_time", toRequestBody(bean.getDone_time()));
-        params.put("duty_user_name", toRequestBody(bean.getDuty_user_name()));
         params.put("task_user_name", toRequestBody(bean.getTask_user_name()));
         params.put("care_content", toRequestBody(bean.getCare_content()));
         params.put("done_content", toRequestBody(bean.getDone_content()));

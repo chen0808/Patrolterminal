@@ -27,6 +27,16 @@ public class FirstTicketBean implements Serializable {
     private String guarder_content;
     private String other_content;
     private String ticket_type;
+    private String delay_time;
+
+    public String getDelay_time() {
+        return delay_time;
+    }
+
+    public void setDelay_time(String delay_time) {
+        this.delay_time = delay_time;
+    }
+
     // PDA工作任务集合
     List<TicketWork> workList;
     // PDA接地线集合

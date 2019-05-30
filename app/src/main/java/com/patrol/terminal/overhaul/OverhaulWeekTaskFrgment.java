@@ -18,6 +18,7 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.JxbSignInfo;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -62,7 +63,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
     private List<List<List<String>>> weeks = new ArrayList<>();
 
     //private TimePickerView pvTime;
-    private String year,month/*,day*/;
+    private String year, month/*,day*/;
     private String week;
     private String userId;
     private String sign;
@@ -86,15 +87,13 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         userId = SPUtil.getUserId(getContext());
 
-        if (jobType.contains(Constant.REFURBISHMENT_LEADER)) {
-            sign = "3";
-        }else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)){
+
+        if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
             sign = "1";
-        }else if (jobType.contains(Constant.SAFETY_SPECIALIZED)) {
+        } else if (jobType.contains(Constant.SAFETY_SPECIALIZED)) {
             sign = "2";
-        }else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {
-            sign = "4";
         }
+
 
 //        if (jobType.contains(Constant.REFURBISHMENT_LEADER)|| jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)
 //                || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)|| jobType.contains(Constant.SAFETY_SPECIALIZED)) { //班长发布周检修工作
@@ -112,14 +111,14 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         String[] months = years[1].split("月");
         month = Integer.parseInt(months[0]) + "";
         year = years[0];
-        week = DateUatil.getWeekNum()+"";
+        week = DateUatil.getWeekNum() + "";
         taskTitle.setText("周计划列表");
-       // taskDate.setText(time + "第" + week + "周");
+        // taskDate.setText(time + "第" + week + "周");
 
-        Map<String ,Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), DateUatil.getWeekNum());
-        String beginDate = (String)taskDateStr.get("beginDate");
-        String endDate = (String)taskDateStr.get("endDate");
-        taskDate.setText(beginDate + "至" + endDate + "（" +  "第" + week + "周"+ "）");
+        Map<String, Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), DateUatil.getWeekNum());
+        String beginDate = (String) taskDateStr.get("beginDate");
+        String endDate = (String) taskDateStr.get("endDate");
+        taskDate.setText(beginDate + "至" + endDate + "（" + "第" + week + "周" + "）");
 
         // 设置监听器。
         planRv.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -132,7 +131,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         weekTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent=new Intent();
+                Intent intent = new Intent();
                 intent.setClass(getContext(), OverhaulWeekPlanDetailActivity.class);
                 Bundle bundle = new Bundle();
                 if (results.get(position) != null) {
@@ -148,9 +147,9 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
 
             @Override
             public void accept(String s) throws Exception {
-                     if (s.startsWith("publishRepair")){
-                         getWeekList();
-                     }
+                if (s.startsWith("publishRepair")) {
+                    getWeekList();
+                }
             }
         });
     }
@@ -165,27 +164,47 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
     };
 
 
-   //其他人员获取周任务列表
+    //其他人员获取周任务列表
     public void getWeekList() {
         Log.w("linmeng", "sign:" + sign);
 
-            BaseRequest.getInstance().getService()
-                    .getOverhaulTaskList(year,month,week, userId, sign)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new BaseObserver<List<OverhaulMonthBean>>(getContext()) {
+        BaseRequest.getInstance().getService()
+                .getSign(year, month, week, userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<JxbSignInfo>>(getActivity()) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<JxbSignInfo>> t) throws Exception {
+                        List<JxbSignInfo> result = t.getResults();
+                        if (result != null && result.size() > 0) {
+                            SPUtil.put(getActivity(), "jxb", "sign", result.get(0).getSign());
+                            BaseRequest.getInstance().getService()
+                                    .getOverhaulTaskList(year, month, week, userId, result.get(0).getSign())
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new BaseObserver<List<OverhaulMonthBean>>(getContext()) {
 
-                        @Override
-                        protected void onSuccees(BaseResult<List<OverhaulMonthBean>> t) throws Exception {
-                            results = t.getResults();
-                            weekTaskAdapter.setNewData(results);
+                                        @Override
+                                        protected void onSuccees(BaseResult<List<OverhaulMonthBean>> t) throws Exception {
+                                            results = t.getResults();
+                                            weekTaskAdapter.setNewData(results);
+                                        }
+
+                                        @Override
+                                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                                            Log.e("fff", e.toString());
+                                        }
+                                    });
                         }
 
-                        @Override
-                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                            Log.e("fff", e.toString());
-                        }
-                    });
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+
+
     }
 
 
@@ -211,7 +230,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
                 break;
             case R.id.task_add:
                 Intent intent = new Intent(getContext(), OverhaulAddWeekPlanActivity.class);
-                startActivityForResult(intent,10);
+                startActivityForResult(intent, 10);
                 break;
 //            case R.id.plan_create:
 //                Intent intent1 = new Intent(getContext(), CreatePlanActivity.class);
@@ -231,40 +250,40 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
 
                 //返回的分别是三个级别的选中位置
-                String time =  years.get(options1)  + months.get(options1).get(option2)  + weeks.get(options1).get(option2).get(options3) ;
-                year=years.get(options1).split("年")[0];
-                month= months.get(options1).get(option2).split("月")[0];
-                week=  weeks.get(options1).get(option2).get(options3).substring(1,2);
+                String time = years.get(options1) + months.get(options1).get(option2) + weeks.get(options1).get(option2).get(options3);
+                year = years.get(options1).split("年")[0];
+                month = months.get(options1).get(option2).split("月")[0];
+                week = weeks.get(options1).get(option2).get(options3).substring(1, 2);
                 //taskDate.setText(time);
 
-                Map<String ,Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month),  Integer.parseInt(week));
-                String beginDate = (String)taskDateStr.get("beginDate");
-                String endDate = (String)taskDateStr.get("endDate");
-                taskDate.setText(beginDate + "至" + endDate + "（" +  "第" + week + "周"+ "）");
+                Map<String, Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(week));
+                String beginDate = (String) taskDateStr.get("beginDate");
+                String endDate = (String) taskDateStr.get("endDate");
+                taskDate.setText(beginDate + "至" + endDate + "（" + "第" + week + "周" + "）");
 
                 getWeekList();
             }
         }).build();
         pvOptions.setPicker(years, months, weeks);
-        pvOptions.setSelectOptions(years.indexOf(year + "年"),Integer.parseInt(month)-1,Integer.parseInt(week)-1);
+        pvOptions.setSelectOptions(years.indexOf(year + "年"), Integer.parseInt(month) - 1, Integer.parseInt(week) - 1);
         pvOptions.show();
     }
 
 
     //初始化月份数据
     public void initDate() {
-        List<List<String>> list =new ArrayList<>();
+        List<List<String>> list = new ArrayList<>();
         for (int i = 2017; i < 2100; i++) {
             years.add(i + "年");
-            List<String> monthList=new ArrayList<>();
+            List<String> monthList = new ArrayList<>();
 
-            for (int j= 1; j< 13; j++) {
+            for (int j = 1; j < 13; j++) {
                 monthList.add(j + "月");
-                List<String> weekList=new ArrayList<>();
+                List<String> weekList = new ArrayList<>();
 
                 int weekNumOfMonth = DateUatil.getWeekNumOfMonth(i + "", j + "");
-                for (int y = 1; y < weekNumOfMonth+1; y++) {
-                    weekList.add("第" +y + "周");
+                for (int y = 1; y < weekNumOfMonth + 1; y++) {
+                    weekList.add("第" + y + "周");
                 }
                 list.add(weekList);
                 months.add(monthList);
@@ -278,7 +297,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1001){
+        if (requestCode == 1001) {
             getWeekList();
         }
     }
@@ -286,7 +305,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (subscribe!=null){
+        if (subscribe != null) {
             subscribe.dispose();
         }
     }

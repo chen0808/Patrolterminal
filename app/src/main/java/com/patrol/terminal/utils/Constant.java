@@ -76,11 +76,11 @@ public class Constant {
     public static final int OVERHAUL_MONTH = 1;
     public static final int OVERHAUL_WEEK = 2;
 
-    public static final String STATUS_LEADER = "1";//班长,专责
-    public static final String STATUS_PRINCPIAL = "2";//负责人
-    public static final String STATUS_ACCEPT = "3";//组员(接收人)
-    public static final String STATUS_SIGN = "4";//签发人
-    public static final String STATUS_LICENCE = "5";//许可人
+    public static final String STATUS_LEADER = "3";//班长,专责
+    public static final String STATUS_PRINCPIAL = "4";//负责人
+    public static final String STATUS_ACCEPT = "5";//组员(接收人)
+    public static final String STATUS_SIGN = "6";//签发人
+    public static final String STATUS_LICENCE = "7";//许可人
 
     public static final int IS_OTHER_LOOK = 0;  //其他人员查看控制卡模式
     public static final int IS_FZR_WRITE = 1;   //负责人填写控制卡模式

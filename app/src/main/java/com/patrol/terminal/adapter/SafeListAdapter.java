@@ -1,6 +1,7 @@
 package com.patrol.terminal.adapter;
 
-import android.widget.CompoundButton;
+import android.view.View;
+import android.widget.CheckBox;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -13,34 +14,31 @@ import androidx.annotation.Nullable;
 
 public class SafeListAdapter extends BaseQuickAdapter<TicketSafeContent, BaseViewHolder> {
 
-
-    private final List<TicketSafeContent> chooseList;
-
-    public SafeListAdapter(int layoutResId, @Nullable List<TicketSafeContent> data, List<TicketSafeContent> chooseList) {
+    public SafeListAdapter(int layoutResId, @Nullable List<TicketSafeContent> data) {
         super(layoutResId, data);
-        this.chooseList = chooseList;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, TicketSafeContent item) {
         helper.setText(R.id.tv, item.getContent());
-        for (int i = 0; i < chooseList.size(); i++) {
-            if (item.getTicket_safe_id().equals(chooseList.get(i).getTicket_safe_id())) {
-                item.setTag(true);
-            }
+        CheckBox cb = helper.getView(R.id.cb);
+        if (item.isTag()) {
+            cb.setChecked(true);
+        } else {
+            cb.setChecked(false);
         }
-        helper.setChecked(R.id.cb, item.isTag());
-        helper.setOnCheckedChangeListener(R.id.cb, new CompoundButton.OnCheckedChangeListener() {
+        // 设置复选框的点击事件
+        helper.getView(R.id.cb).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                for (int i = 0; i < chooseList.size(); i++) {
-                    if (isChecked && !item.isTag()) {
-                        item.setTag(true);
-                    } else if (!isChecked && item.isTag()) {
-                        item.setTag(false);
-                    }
+            public void onClick(View v) {
+                item.setTag(!item.isTag());
+                if (item.isTag()) {
+                    cb.setChecked(true);
+                } else {
+                    cb.setChecked(false);
                 }
             }
         });
+
     }
 }

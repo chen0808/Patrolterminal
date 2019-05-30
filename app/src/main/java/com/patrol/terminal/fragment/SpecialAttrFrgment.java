@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.SpecialAttrListActivity;
@@ -30,6 +27,8 @@ import com.patrol.terminal.utils.SPUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -43,6 +42,7 @@ public class SpecialAttrFrgment extends BaseFragment {
     @BindView(R.id.iv_add)
     ImageView ivAdd;
     private String tower_id;
+    private String line_id;
     private Disposable subscribe;
 
     @Override
@@ -55,6 +55,7 @@ public class SpecialAttrFrgment extends BaseFragment {
     protected void initData() {
 
         tower_id = (String) SPUtil.get(getActivity(), "ids", "tower_id", "");
+        line_id = (String) SPUtil.get(getActivity(), "ids", "line_id", "");
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {
@@ -139,7 +140,7 @@ public class SpecialAttrFrgment extends BaseFragment {
     @OnClick(R.id.iv_add)
     public void onViewClicked() {
         Intent intent = new Intent(getActivity(), SpecialAttrListActivity.class);
-//        intent.putExtra("line_id",);
+        intent.putExtra("line_id", line_id);
         startActivity(intent);
     }
 }

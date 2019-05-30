@@ -93,8 +93,6 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     TextView etTicketNumber;
     @BindView(R.id.tv_leader_id)
     TextView tvLeaderId;
-    @BindView(R.id.teams_and_groups_tv)
-    TextView teamsAndGroupsTv;
     @BindView(R.id.tv_dep_id)
     TextView tvDepId;
     @BindView(R.id.staff_in_the_workshop_tv)
@@ -202,8 +200,6 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     @BindView(R.id.tv_postpone)
     TextView tvPostpone;
     Map<String, RequestBody> params = new HashMap<>();
-    @BindView(R.id.unit_tv)
-    TextView unitTv;
     @BindView(R.id.et_remove_ground_no)
     EditText etRemoveGroundNo;
     @BindView(R.id.et_remove_ground_num)
@@ -349,7 +345,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                             workAdapter = new WorkAdapter(R.layout.item_task_content, workList);
                             rvTaskContent.setAdapter(workAdapter);
 
-                            licensingStartedListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+                            groundLinesToHangListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
                             groundLineAdapter = new GroundLineAdapter(R.layout.item_ground_line, groundList);
                             groundLinesToHangListView.setAdapter(groundLineAdapter);
 
@@ -421,6 +417,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         bean.setEnd_time(tvETime.getText().toString());
         bean.setRelate_device_operate(etSwitchSafe.getText().toString());
         bean.setRetain_device(etDeviceSafe.getText().toString());
+        bean.setDelay_time(tvPostpone.getText().toString());
         bean.setRemove_ground_no(etRemoveGroundNo.getText().toString());
         bean.setRemove_ground_num(etRemoveGroundNum.getText().toString());
         bean.setGuarder_name(etCustodyMan.getText().toString());
@@ -456,6 +453,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         rvRemarkSafe.setAdapter(safeAdapter);
         etSwitchSafe.setText(results.getRelate_device_operate());
         etDeviceSafe.setText(results.getRetain_device());
+        tvPostpone.setText(results.getDelay_time());
         etRemoveGroundNo.setText(results.getRemove_ground_no());
         etRemoveGroundNum.setText(results.getRemove_ground_num());
         etCustodyMan.setText(results.getGuarder_name());
@@ -574,11 +572,13 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         params.put("id", toRequestBody(results == null ? "" : results.getId()));
         params.put("task_id", toRequestBody(taskId));
         params.put("ticket_type", toRequestBody("1"));
-//        params.put("crew_id", toRequestBody(bean.getCrew_id()));
+        params.put("unit_name", toRequestBody(tvUnitId.getText().toString()));
+        params.put("work_dep_name", toRequestBody(tvDepId.getText().toString()));
         params.put("begin_time", toRequestBody(bean.getBegin_time()));
         params.put("end_time", toRequestBody(bean.getEnd_time()));
         params.put("relate_device_operate", toRequestBody(bean.getRelate_device_operate()));
         params.put("retain_device", toRequestBody(bean.getRetain_device()));
+        params.put("delay_time", toRequestBody(bean.getDelay_time()));
         params.put("remove_ground_no", toRequestBody(bean.getRemove_ground_no()));
         params.put("remove_ground_num", toRequestBody(bean.getRemove_ground_num()));
         params.put("guarder_name", toRequestBody(bean.getGuarder_name()));
@@ -648,6 +648,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         if (bean.getSafeList() != null) {
             for (int i = 0; i < bean.getSafeList().size(); i++) {
                 params.put("safeList[" + i + "].ticket_safe_content", toRequestBody(bean.getSafeList().get(i).getTicket_safe_content()));
+                params.put("safeList[" + i + "].ticket_safe_id", toRequestBody(bean.getSafeList().get(i).getTicket_safe_id()));
             }
         }
         return params;
