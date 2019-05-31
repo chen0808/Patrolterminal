@@ -13,7 +13,7 @@ public class AddSpecial implements Serializable {
 
     private String line_id;
     private List<WaresBean> wares;
-    private List<String> waresIdList;
+    private List<SpecialAttrList> taskDangerList;
 
     public String getLine_id() {
         return line_id;
@@ -31,12 +31,12 @@ public class AddSpecial implements Serializable {
         this.wares = wares;
     }
 
-    public List<String> getWaresIdList() {
-        return waresIdList;
+    public List<SpecialAttrList> getWaresIdList() {
+        return taskDangerList;
     }
 
-    public void setWaresIdList(List<String> waresIdList) {
-        this.waresIdList = waresIdList;
+    public void setWaresIdList(List<SpecialAttrList> waresIdList) {
+        this.taskDangerList = waresIdList;
     }
 
     public static class WaresBean {

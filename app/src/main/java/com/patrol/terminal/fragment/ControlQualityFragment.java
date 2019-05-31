@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.LoginActivity;
 import com.patrol.terminal.adapter.ControlOperationAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
@@ -30,7 +29,6 @@ import com.patrol.terminal.bean.ControlOperationBean;
 import com.patrol.terminal.bean.ControlQualityBean;
 import com.patrol.terminal.bean.ControlQualityInfo;
 import com.patrol.terminal.bean.OverhaulMonthBean;
-import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.bean.OverhaulZzTaskBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;

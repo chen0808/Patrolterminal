@@ -65,9 +65,9 @@ public class SpecialAttrListActivity extends BaseActivity {
     private List<String> list = new ArrayList<>();
     private AddSpecial addSpecial = new AddSpecial();
     private List<AddSpecial.WaresBean> waresBeans = new ArrayList<>();
-    //    private String line_id = "B511327CB4BB4D4A9E544F6972510B4E";
+    private String line_id = "B511327CB4BB4D4A9E544F6972510B4E";
     private List<TowerListBean> towerList;
-    private String line_id;
+//    private String line_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class SpecialAttrListActivity extends BaseActivity {
         setContentView(R.layout.activity_special_attr_list);
         ButterKnife.bind(this);
         titleName.setText("添加特殊属性");
-        line_id = getIntent().getStringExtra("line_id");
+//        line_id = getIntent().getStringExtra("line_id");
         BaseRequest.getInstance().getService().specialAttrList().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<SpecialAttrList>>(this) {

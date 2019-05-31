@@ -79,6 +79,38 @@ public class OverhaulYearBean implements Parcelable {
     private String userName1;
     private String userId2;
     private String userName2;
+    // PDA个人任务完成数量 sz
+    private Integer done_num;
+
+    // PDA个人任务总数量 sz
+    private Integer all_num;
+
+    // PDA个人任务完成率 sz
+    private String done_rate;
+
+    public Integer getDone_num() {
+        return done_num;
+    }
+
+    public void setDone_num(Integer done_num) {
+        this.done_num = done_num;
+    }
+
+    public Integer getAll_num() {
+        return all_num;
+    }
+
+    public void setAll_num(Integer all_num) {
+        this.all_num = all_num;
+    }
+
+    public String getDone_rate() {
+        return done_rate;
+    }
+
+    public void setDone_rate(String done_rate) {
+        this.done_rate = done_rate;
+    }
 
     public String getId() {
         return id;

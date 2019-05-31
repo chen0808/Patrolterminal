@@ -21,12 +21,17 @@ public class SpecialAttrList implements Serializable {
     private String name;
     private String p_id;
     private int sort;
-    private Object remarks;
+    private String remarks;
     private int level_no;
-    private Object p_name;
-    private Object full_name;
-    private Object leaf;
-    private Object leaf_total;
+    private String p_name;
+    private String full_name;
+    private String leaf;
+    private String leaf_total;
+
+    public SpecialAttrList(String id, String remarks) {
+        this.id = id;
+        this.remarks = remarks;
+    }
 
     public String getId() {
         return id;
@@ -60,11 +65,11 @@ public class SpecialAttrList implements Serializable {
         this.sort = sort;
     }
 
-    public Object getRemarks() {
+    public String getRemarks() {
         return remarks;
     }
 
-    public void setRemarks(Object remarks) {
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
@@ -76,35 +81,35 @@ public class SpecialAttrList implements Serializable {
         this.level_no = level_no;
     }
 
-    public Object getP_name() {
+    public String getP_name() {
         return p_name;
     }
 
-    public void setP_name(Object p_name) {
+    public void setP_name(String p_name) {
         this.p_name = p_name;
     }
 
-    public Object getFull_name() {
+    public String getFull_name() {
         return full_name;
     }
 
-    public void setFull_name(Object full_name) {
+    public void setFull_name(String full_name) {
         this.full_name = full_name;
     }
 
-    public Object getLeaf() {
+    public String getLeaf() {
         return leaf;
     }
 
-    public void setLeaf(Object leaf) {
+    public void setLeaf(String leaf) {
         this.leaf = leaf;
     }
 
-    public Object getLeaf_total() {
+    public String getLeaf_total() {
         return leaf_total;
     }
 
-    public void setLeaf_total(Object leaf_total) {
+    public void setLeaf_total(String leaf_total) {
         this.leaf_total = leaf_total;
     }
 }

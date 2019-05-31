@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.SafeAdapter;
 import com.patrol.terminal.adapter.TaskContentAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -33,7 +32,6 @@ import com.patrol.terminal.bean.FourTicketBean;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.bean.SignBean;
-import com.patrol.terminal.bean.TicketSafeContent;
 import com.patrol.terminal.bean.TicketSign;
 import com.patrol.terminal.bean.TicketUser;
 import com.patrol.terminal.bean.TicketWork;
@@ -54,7 +52,6 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,9 +142,9 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     //    private String status;
     private List<TicketSign> signList = new ArrayList<>();
     private List<TicketUser> userList = new ArrayList<>();
-    private List<TicketSafeContent> safeList = new ArrayList<>();
+    //    private List<TicketSafeContent> safeList = new ArrayList<>();
     private FourTicketBean results;
-    private SafeAdapter safeAdapter;
+//    private SafeAdapter safeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +158,7 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     private void initview() {
         signList.clear();
         userList.clear();
-        safeList.clear();
+//        safeList.clear();
         titleName.setText("国网兰州供电公司电力线路事故应急抢修单");
         titleName.setTextSize(16.0f);
         titleSetting.setVisibility(View.VISIBLE);
@@ -251,8 +248,7 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     private FourTicketBean getData() {
         FourTicketBean bean = new FourTicketBean();
         bean.setBegin_time(tvStartTime.getText().toString());
-        bean.setEnd_time(tvEndTime.getText().toString());
-
+        bean.setDone_time(tvEndTime.getText().toString());
         bean.setDuty_user_name(etDutyUserName.getText().toString());
         bean.setTask_user_name(etTaskUserName.getText().toString());
         bean.setRepair_content(etRepairContent.getText().toString());
@@ -261,9 +257,9 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
         bean.setDone_content(etDoneContent.getText().toString());
         bean.setSignList(signList);
         bean.setUserList(userList);
-        List<TicketSafeContent> data = safeAdapter.getData();
-        safeList.addAll(data);
-        bean.setSafeList(safeList);
+//        List<TicketSafeContent> data = safeAdapter.getData();
+//        safeList.addAll(data);
+//        bean.setSafeList(safeList);
         return bean;
     }
 
@@ -273,9 +269,9 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
         tvPerson.setText("共" + (crew.length() - crew.replace(" ", "").length()) + "人");
         tvStartTime.setText(results.getBegin_time());
         tvEndTime.setText(results.getDone_time());
-        rvRemarkSafe.setLayoutManager(new LinearLayoutManager(FourWTicketActivity.this));
-        safeAdapter = new SafeAdapter(R.layout.item_safe, results.getSafeList());
-        rvRemarkSafe.setAdapter(safeAdapter);
+//        rvRemarkSafe.setLayoutManager(new LinearLayoutManager(FourWTicketActivity.this));
+//        safeAdapter = new SafeAdapter(R.layout.item_safe, results.getSafeList());
+//        rvRemarkSafe.setAdapter(safeAdapter);
         etDutyUserName.setText(results.getDuty_user_name());
         etTaskUserName.setText(results.getTask_user_name());
         etRepairContent.setText(results.getRepair_content());
@@ -343,6 +339,7 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
         params.put("work_dep_name", toRequestBody(tvDepId.getText().toString()));
         params.put("begin_time", toRequestBody(bean.getBegin_time()));
         params.put("done_time", toRequestBody(bean.getDone_time()));
+        params.put("duty_user_name", toRequestBody(bean.getDuty_user_name()));
         params.put("task_user_name", toRequestBody(bean.getTask_user_name()));
         params.put("care_content", toRequestBody(bean.getCare_content()));
         params.put("done_content", toRequestBody(bean.getDone_content()));

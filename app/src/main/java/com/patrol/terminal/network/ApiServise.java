@@ -600,8 +600,8 @@ public interface ApiServise {
 
 
     //检修专责获取周计划列表
-    @GET("plan/repair/listGET")
-    Observable<BaseResult<List<OverhaulYearBean>>> getOverhaulZzWeekPlan(@Query("id") String id);
+    @GET("plan/repair/oneGET")
+    Observable<BaseResult<OverhaulYearBean>> getOverhaulZzWeekPlan(@Query("id") String id);
 
     //其他人员获取检修周任务列表
     //http://172.16.15.60:9096/task/repair/user/taskGET?user_id=3E88F1592A414E7D92D3F743FB821BE1&sign=1

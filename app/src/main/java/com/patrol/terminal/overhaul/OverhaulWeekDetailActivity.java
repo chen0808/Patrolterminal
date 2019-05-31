@@ -235,12 +235,12 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
         ProgressDialog.show(this, false, "正在加载");
         BaseRequest.getInstance().getService().getOverhaulZzWeekPlan(planId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<OverhaulYearBean>>(this) {
+                .subscribe(new BaseObserver<OverhaulYearBean>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
-                        List<OverhaulYearBean> overhaulMonthBeanList = t.getResults();
-                        if (overhaulMonthBeanList.size() > 0) {
-                            results = overhaulMonthBeanList.get(0);
+                    protected void onSuccees(BaseResult<OverhaulYearBean> t) throws Exception {
+                        OverhaulYearBean overhaulMonthBeanList = t.getResults();
+                        if (overhaulMonthBeanList != null) {
+                            results = overhaulMonthBeanList;
                         }
 
                         initView();
@@ -350,7 +350,9 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
         dianRiskLevelTv.setText("2");       //回去在做，电网风险等级   TODO
         weekPlanContent.setText(results.getRepair_content());
         weekPlanRemark.setText(results.getRemark());
-
+        planProgressbarTv.setText("周计划进度(" + results.getDone_num() + "/" + results.getAll_num() + "):");
+        planProgressbarProbar.setProgress(Integer.valueOf(results.getDone_rate()));
+        planProgressbarNum.setText(results.getDone_rate() + "%");
         String repairContentStr = results.getRepair_content();
         if (repairContentStr.contains("；")) {
             String taskStrs[] = repairContentStr.split("；");

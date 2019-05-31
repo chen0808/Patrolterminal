@@ -62,4 +62,5 @@
         android:background="@drawable/selector_commit_bg"
         android:text="添加"
         android:textColor="@color/white" />
+
 </RelativeLayout>
