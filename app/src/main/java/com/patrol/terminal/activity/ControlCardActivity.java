@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.fragment.ControlDepFrgment;
-import com.patrol.terminal.fragment.ControlQualityFragment;
 import com.patrol.terminal.fragment.ControlToolFragment;
+import com.patrol.terminal.fragment.NewControlQualityFragment;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class ControlCardActivity extends AppCompatActivity {
         titleName.setText("控制卡");
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new ControlDepFrgment());
-        fragmentList.add(new ControlQualityFragment());
+        fragmentList.add(new NewControlQualityFragment());
         fragmentList.add(new ControlToolFragment());
         MyFragmentPagerAdapter CardPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         controlCardVg.setAdapter(CardPagerAdapter);

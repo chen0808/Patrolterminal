@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
@@ -56,6 +56,7 @@ public class ControlOperationAdapter extends BaseAdapter {
             holder.mContent = convertView.findViewById(R.id.divison_demand);
             holder.mSafeDivison = convertView.findViewById(R.id.divison_risk);
             holder.mCheckInfo = convertView.findViewById(R.id.divison_inspections);
+            holder.mItem = convertView.findViewById(R.id.control_card_division_rl);
 
             if (list != null && list.get(position) != null) {
                 holder.mDivisonNo.setText("" + list.get(position).getDivisonNo());
@@ -124,6 +125,7 @@ public class ControlOperationAdapter extends BaseAdapter {
         private TextView mContent;
         private TextView mSafeDivison;
         private TextView mCheckInfo;
+        private LinearLayout mItem;
     }
 
     public void showSingleChooseDialog(Context context, String title, String[] workers, ViewHolder holder, int position) {

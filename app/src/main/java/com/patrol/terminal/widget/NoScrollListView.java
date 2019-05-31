@@ -20,6 +20,7 @@ public class NoScrollListView extends ListView {
 
     /**
      * 设置listView不可滑动
+     *
      * @param widthMeasureSpec
      * @param heightMeasureSpec
      */

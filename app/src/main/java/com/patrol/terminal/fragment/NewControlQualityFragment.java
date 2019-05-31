@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.ControlOperationAdapter;
+import com.patrol.terminal.adapter.ControlQualityAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -34,7 +35,6 @@ import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulZzTaskBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.SignDialog;
 
 import java.io.File;
@@ -43,41 +43,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class ControlQualityFragment extends BaseFragment {
+public class NewControlQualityFragment extends BaseFragment {
 
-    @BindView(R.id.control_card_name)
-    TextView controlCardName;
-    @BindView(R.id.control_card_type)
-    TextView controlCardType;
-    @BindView(R.id.control_card_dep)
-    TextView controlCardDep;
-    @BindView(R.id.control_card_personal)
-    TextView controlCardPersonal;
-    @BindView(R.id.control_card_no)
-    TextView controlCardNo;
-    @BindView(R.id.control_card_start_time)
-    TextView controlCardStartTime;
-    @BindView(R.id.control_card_end_time)
-    TextView controlCardEndTime;
-    @BindView(R.id.control_card_div)
-    NoScrollListView controlCardDiv;
-    @BindView(R.id.iv_signature_pad)
-    ImageView ivSignaturePad;
-    @BindView(R.id.control_card_submit)
-    TextView controlCardSubmit;
-    @BindView(R.id.et_remark)
-    EditText etRemark;
-    @BindView(R.id.et_remark_tv)
-    TextView etRemarkTv;
 
-    private List<String> list = new ArrayList<>();
+    @BindView(R.id.new_control_quality_rv)
+    RecyclerView newControlQualityRv;
     Map<String, RequestBody> params = new HashMap<>();
 
     private Context mContext;
@@ -95,11 +73,64 @@ public class ControlQualityFragment extends BaseFragment {
     private String taskId = "";     //任务ID
     private String leaderName;
     private String leaderId;
+    private View header;
+    private View bottom;
+    private TextView controlCardName;
+    private TextView controlCardType;
+    private TextView controlCardDep;
+    private TextView controlCardPersonal;
+    private TextView controlCardNo;
+    private TextView controlCardStartTime;
+    private TextView controlCardEndTime;
+    private ImageView ivSignaturePad;
+    private EditText etRemark;
+    private TextView etRemarkTv;
+    private TextView controlCardSubmit;
 
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_control_quality_card, null);
+        View view = inflater.inflate(R.layout.fragment_new_control_quality, null);
+        header = inflater.inflate(R.layout.fragment_new_control_quality_header, null);
+        bottom = inflater.inflate(R.layout.fragment_new_control_quality_bottom, null);
+        controlCardName = header.findViewById(R.id.control_card_name);
+        controlCardType = header.findViewById(R.id.control_card_type);
+        controlCardDep = header.findViewById(R.id.control_card_dep);
+        controlCardPersonal = header.findViewById(R.id.control_card_personal);
+        controlCardNo = header.findViewById(R.id.control_card_no);
+        controlCardStartTime = header.findViewById(R.id.control_card_start_time);
+        controlCardEndTime = header.findViewById(R.id.control_card_end_time);
+
+        newControlQualityRv = bottom.findViewById(R.id.new_control_quality_rv);
+        ivSignaturePad = bottom.findViewById(R.id.iv_signature_pad);
+        ivSignaturePad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isCanClick) {
+                    Dialog dialog1 = SignDialog.show(getActivity(), ivSignaturePad);
+                    dialog1.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            if (ivSignaturePad.getDrawable() != null) {
+                                File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "controlQuality");
+                                mPicList.add(file1);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        etRemark = bottom.findViewById(R.id.et_remark);
+        etRemarkTv = bottom.findViewById(R.id.et_remark_tv);
+        controlCardSubmit = bottom.findViewById(R.id.control_card_submit);
+        controlCardSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ControlOperationBean bean = setValue();
+                putValue(bean);
+                uploadControlQuality();
+            }
+        });
         return view;
     }
 
@@ -107,11 +138,12 @@ public class ControlQualityFragment extends BaseFragment {
     protected void initData() {
         mContext = getActivity();
         mActivity = getActivity();
+
         String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         String userId = SPUtil.getString(getContext(), Constant.USER, Constant.USERID, "");
         String userName = SPUtil.getString(getContext(), Constant.USER, Constant.USERNAME, "");
 
-        if (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {
+        if (jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {
             leaderName = userName;
             leaderId = userId;
         }
@@ -135,7 +167,7 @@ public class ControlQualityFragment extends BaseFragment {
                 controlCardEndTime.setText(bean.getEnd_time());
             }
 
-        }else {
+        } else {
             OverhaulMonthBean bean = mActivity.getIntent().getParcelableExtra("bean");
             if (bean != null) {
                 taskId = bean.getId();
@@ -175,7 +207,7 @@ public class ControlQualityFragment extends BaseFragment {
                             showSign(url);
                         }
                     }
-                }else {  //如果进来质量卡为空,则显示模板,表示上次没填写,但是查看模式,也不可再填写
+                } else {  //如果进来质量卡为空,则显示模板,表示上次没填写,但是查看模式,也不可再填写
                     if (controlBean != null) {
                         getQualityList(controlBean.getId());
                     }
@@ -215,7 +247,7 @@ public class ControlQualityFragment extends BaseFragment {
                         }
                     }
 
-                }else {
+                } else {
                     isFzrUpdate = false;
                     if (controlBean != null) {
                         getQualityList(controlBean.getId());
@@ -228,7 +260,7 @@ public class ControlQualityFragment extends BaseFragment {
 
     private void showSign(String url) {
         //显示签名
-        if (url!=null){
+        if (url != null) {
             Glide.with(this).load(BaseUrl.BASE_URL + url).into(ivSignaturePad);
         }
     }
@@ -260,8 +292,12 @@ public class ControlQualityFragment extends BaseFragment {
             mControlQualityList.add(info);
         }
 
-        depdapter1 = new ControlOperationAdapter(getContext(), mControlQualityList, isCanClick);
-        controlCardDiv.setAdapter(depdapter1);
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        newControlQualityRv.setLayoutManager(manager);
+        ControlQualityAdapter qualityAdapter = new ControlQualityAdapter(R.layout.item_control_quality_division, mControlQualityList, isCanClick);
+        newControlQualityRv.setAdapter(qualityAdapter);
+        qualityAdapter.addHeaderView(header);
+        qualityAdapter.addFooterView(bottom);
     }
 
 
@@ -305,40 +341,31 @@ public class ControlQualityFragment extends BaseFragment {
             mControlQualityList.add(info);
         }
 
-        depdapter1 = new ControlOperationAdapter(getContext(), mControlQualityList, isCanClick);
-        controlCardDiv.setAdapter(depdapter1);
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        newControlQualityRv.setLayoutManager(manager);
+        ControlQualityAdapter qualityAdapter = new ControlQualityAdapter(R.layout.item_control_quality_division, mControlQualityList, isCanClick);
+        newControlQualityRv.setAdapter(qualityAdapter);
+        qualityAdapter.addHeaderView(header);
+        qualityAdapter.addFooterView(bottom);
     }
 
-    @OnClick({R.id.control_card_start_time, R.id.control_card_end_time, R.id.control_card_submit, R.id.iv_signature_pad})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.control_card_start_time:
-                //PickerUtils.showDate(mContext, controlCardStartTime);
-                break;
-            case R.id.control_card_end_time:
-                //PickerUtils.showDate(mContext, controlCardEndTime);
-                break;
-            case R.id.control_card_submit:
-                ControlOperationBean bean = setValue();
-                putValue(bean);
-                uploadControlQuality();
-                break;
-            case R.id.iv_signature_pad:
-                if (isCanClick) {
-                    Dialog dialog1 = SignDialog.show(getActivity(), ivSignaturePad);
-                    dialog1.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            if (ivSignaturePad.getDrawable() != null) {
-                                File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "controlQuality");
-                                mPicList.add(file1);
-                            }
-                        }
-                    });
-                }
-                break;
-        }
-    }
+//    @OnClick({R.id.control_card_start_time, R.id.control_card_end_time, R.id.control_card_submit, R.id.iv_signature_pad})
+//    public void onViewClicked(View view) {
+//        switch (view.getId()) {
+//            case R.id.control_card_start_time:
+//                //PickerUtils.showDate(mContext, controlCardStartTime);
+//                break;
+//            case R.id.control_card_end_time:
+//                //PickerUtils.showDate(mContext, controlCardEndTime);
+//                break;
+//            case R.id.control_card_submit:
+//
+//                break;
+//            case R.id.iv_signature_pad:
+//
+//                break;
+//        }
+//    }
 
     private ControlOperationBean setValue() {
         ControlOperationBean bean = new ControlOperationBean();
@@ -401,11 +428,13 @@ public class ControlQualityFragment extends BaseFragment {
             return requestBody;
         }
     }
+
     public int Dp2Px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
-//    定义函数动态控制listView的高度
+
+    //    定义函数动态控制listView的高度
     public void setListViewHeightBasedOnChildren(ListView listView) {
 //获取listview的适配器
         ListAdapter listAdapter = listView.getAdapter();
@@ -416,7 +445,7 @@ public class ControlQualityFragment extends BaseFragment {
         }
         int totalHeight = 0;
         for (int i = 0; i < listAdapter.getCount(); i++) {
-            totalHeight += Dp2Px(getContext(),itemHeight)+listView.getDividerHeight();
+            totalHeight += Dp2Px(getContext(), itemHeight) + listView.getDividerHeight();
         }
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight;
