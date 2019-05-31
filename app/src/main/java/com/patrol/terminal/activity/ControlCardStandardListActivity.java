@@ -13,7 +13,7 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.ControlCardStandard;
+import com.patrol.terminal.bean.ControlQualityBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -53,13 +53,13 @@ public class ControlCardStandardListActivity extends BaseActivity {
         titleName.setText("工序质量列表");
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("确认");
-        List<ControlCardStandard> chooseList = (List<ControlCardStandard>) getIntent().getSerializableExtra("chooseList");
+        List<ControlQualityBean> chooseList = (List<ControlQualityBean>) getIntent().getSerializableExtra("chooseList");
         BaseRequest.getInstance().getService().controlCardStandradList().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<ControlCardStandard>>(this) {
+                .subscribe(new BaseObserver<List<ControlQualityBean>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<ControlCardStandard>> t) throws Exception {
-                        List<ControlCardStandard> results = t.getResults();
+                    protected void onSuccees(BaseResult<List<ControlQualityBean>> t) throws Exception {
+                        List<ControlQualityBean> results = t.getResults();
                         if (results != null && results.size() > 0) {
                             rvProjectList.setLayoutManager(new LinearLayoutManager(ControlCardStandardListActivity.this));
                             for (int i = 0; i < chooseList.size(); i++) {
@@ -88,7 +88,7 @@ public class ControlCardStandardListActivity extends BaseActivity {
                 break;
             case R.id.title_setting:
                 Intent intent = new Intent();
-                List<ControlCardStandard> data = new ArrayList<>();
+                List<ControlQualityBean> data = new ArrayList<>();
                 data.clear();
                 for (int i = 0; i < adapter.getData().size(); i++) {
                     if (adapter.getData().get(i).isTag()) {

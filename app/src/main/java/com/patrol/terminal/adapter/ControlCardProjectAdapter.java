@@ -6,20 +6,20 @@ import android.widget.CheckBox;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.bean.ControlCardProject;
+import com.patrol.terminal.bean.ControlDepWorkBean;
 
 import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class ControlCardProjectAdapter extends BaseQuickAdapter<ControlCardProject, BaseViewHolder> {
+public class ControlCardProjectAdapter extends BaseQuickAdapter<ControlDepWorkBean, BaseViewHolder> {
 
-    public ControlCardProjectAdapter(int layoutResId, @Nullable List<ControlCardProject> data) {
+    public ControlCardProjectAdapter(int layoutResId, @Nullable List<ControlDepWorkBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, ControlCardProject item) {
+    protected void convert(BaseViewHolder helper, ControlDepWorkBean item) {
         helper.setText(R.id.tv, item.getContent());
         CheckBox cb = helper.getView(R.id.cb);
         if (item.isTag()) {

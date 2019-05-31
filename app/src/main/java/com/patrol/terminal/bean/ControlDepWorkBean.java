@@ -16,6 +16,33 @@ public class ControlDepWorkBean {
     private String type_id;
     private String sort;
     private String work_project_id;
+    private String card_project_content;
+    private boolean tag;
+    private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getCard_project_content() {
+        return card_project_content;
+    }
+
+    public void setCard_project_content(String card_project_content) {
+        this.card_project_content = card_project_content;
+    }
+
+    public boolean isTag() {
+        return tag;
+    }
+
+    public void setTag(boolean tag) {
+        this.tag = tag;
+    }
 
     public String getId() {
         return id;

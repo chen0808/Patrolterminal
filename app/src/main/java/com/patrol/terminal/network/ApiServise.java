@@ -7,9 +7,6 @@ import com.patrol.terminal.bean.AddressBookBean;
 import com.patrol.terminal.bean.AllControlCarBean;
 import com.patrol.terminal.bean.ClassMemberBean;
 import com.patrol.terminal.bean.ControlCardBean;
-import com.patrol.terminal.bean.ControlCardProject;
-import com.patrol.terminal.bean.ControlCardSafe;
-import com.patrol.terminal.bean.ControlCardStandard;
 import com.patrol.terminal.bean.ControlDepWorkBean;
 import com.patrol.terminal.bean.ControlDepWorkBean2;
 import com.patrol.terminal.bean.ControlQualityBean;
@@ -683,15 +680,15 @@ public interface ApiServise {
 
     //所有控制卡作业项目列表
     @GET("card/project/listGET")
-    Observable<BaseResult<List<ControlCardProject>>> controlCardProjectList();
+    Observable<BaseResult<List<ControlDepWorkBean>>> controlCardProjectList();
 
     //所有控制卡作业危险点分析及安全措施列表
     @GET("card/safe/listGET")
-    Observable<BaseResult<List<ControlCardSafe>>> controlCardSafeList();
+    Observable<BaseResult<List<ControlDepWorkBean2>>> controlCardSafeList();
 
     //所有控制卡工序质量列表
     @GET("card/standrad/listGET")
-    Observable<BaseResult<List<ControlCardStandard>>> controlCardStandradList();
+    Observable<BaseResult<List<ControlQualityBean>>> controlCardStandradList();
 
     //上传文档
     @Multipart

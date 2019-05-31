@@ -13,7 +13,7 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.ControlCardSafe;
+import com.patrol.terminal.bean.ControlDepWorkBean2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -53,13 +53,13 @@ public class ControlCardSafeListActivity extends BaseActivity {
         titleName.setText("危险点分析及安全措施列表");
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("确认");
-        List<ControlCardSafe> chooseList = (List<ControlCardSafe>) getIntent().getSerializableExtra("chooseList");
+        List<ControlDepWorkBean2> chooseList = (List<ControlDepWorkBean2>) getIntent().getSerializableExtra("chooseList");
         BaseRequest.getInstance().getService().controlCardSafeList().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<ControlCardSafe>>(this) {
+                .subscribe(new BaseObserver<List<ControlDepWorkBean2>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<ControlCardSafe>> t) throws Exception {
-                        List<ControlCardSafe> results = t.getResults();
+                    protected void onSuccees(BaseResult<List<ControlDepWorkBean2>> t) throws Exception {
+                        List<ControlDepWorkBean2> results = t.getResults();
                         if (results != null && results.size() > 0) {
                             rvProjectList.setLayoutManager(new LinearLayoutManager(ControlCardSafeListActivity.this));
                             for (int i = 0; i < chooseList.size(); i++) {
@@ -88,7 +88,7 @@ public class ControlCardSafeListActivity extends BaseActivity {
                 break;
             case R.id.title_setting:
                 Intent intent = new Intent();
-                List<ControlCardSafe> data = new ArrayList<>();
+                List<ControlDepWorkBean2> data = new ArrayList<>();
                 data.clear();
                 for (int i = 0; i < adapter.getData().size(); i++) {
                     if (adapter.getData().get(i).isTag()) {

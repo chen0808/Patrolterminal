@@ -18,6 +18,15 @@ public class ControlDepWorkBean2 {
     private String type_id;
     private String sort;
     private String work_safe_id;
+    private boolean tag;
+
+    public boolean isTag() {
+        return tag;
+    }
+
+    public void setTag(boolean tag) {
+        this.tag = tag;
+    }
 
     public String getId() {
         return id;
