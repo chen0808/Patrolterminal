@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -67,7 +68,8 @@ public class WeekPlanFrgment extends BaseFragment {
     TextView planSubmit;
     @BindView(R.id.plan_create)
     TextView planCreate;
-
+    @BindView(R.id.plan_refresh)
+    SwipeRefreshLayout mRefrsh;
     private TimePickerView pvTime;
     private String time;
     private WeekPlanAdapter weekPlanAdapter;
@@ -146,6 +148,12 @@ public class WeekPlanFrgment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getWeekList();
+            }
+        });
         getWeekList();
     }
 
@@ -217,12 +225,13 @@ public class WeekPlanFrgment extends BaseFragment {
                         }else {
                             planSubmit.setVisibility(View.GONE);
                         }
-
+                        mRefrsh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
+                        mRefrsh.setRefreshing(false);
                     }
                 });
     }

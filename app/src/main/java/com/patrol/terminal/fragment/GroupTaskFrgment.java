@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -57,6 +58,9 @@ public class GroupTaskFrgment extends BaseFragment {
     ImageView taskAdd;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
+    @BindView(R.id.plan_refresh)
+    SwipeRefreshLayout mRefrsh;
+
     private GroupTaskAdapter groupTaskAdapter;
     private TimePickerView pvTime;
     private List<GroupTaskBean> result = new ArrayList<>();
@@ -84,20 +88,7 @@ public class GroupTaskFrgment extends BaseFragment {
         taskTitle.setText("组任务列表");
         taskAdd.setVisibility(View.GONE);
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-            taskAdd.setVisibility(View.VISIBLE);
-            depId = SPUtil.getDepId(getContext());
-            getGroupList();
-        }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
-            duty_user_id = SPUtil.getUserId(getContext());
-            getGroupList();
-        }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
-            userId = SPUtil.getUserId(getContext());
-            getGroupListZy();
-        }else {
-            getGroupList();
-        }
-        getRepairList();
+        getData();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
         groupTaskAdapter = new GroupTaskAdapter(R.layout.fragment_task_item, result);
@@ -119,23 +110,33 @@ public class GroupTaskFrgment extends BaseFragment {
             @Override
             public void accept(String type) throws Exception {
                 if (type.equals("refreshGroup")) {
-                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                        taskAdd.setVisibility(View.VISIBLE);
-                        depId = SPUtil.getDepId(getContext());
-                        getGroupList();
-                    } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-                        duty_user_id = SPUtil.getUserId(getContext());
-                        getGroupList();
-                    } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-                        userId = SPUtil.getUserId(getContext());
-                        getGroupListZy();
-                    }
-                    getRepairList();
+                    getData();
                 }
+            }
+        });
+        mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getData();
             }
         });
     }
 
+    //根据职位获取页面数据
+    public void getData(){
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            taskAdd.setVisibility(View.VISIBLE);
+            depId = SPUtil.getDepId(getContext());
+            getGroupList();
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+            duty_user_id = SPUtil.getUserId(getContext());
+            getGroupList();
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+            userId = SPUtil.getUserId(getContext());
+            getGroupListZy();
+        }
+        getRepairList();
+    }
     //获取小组任务列表
     public void getGroupList() {
 
@@ -148,10 +149,12 @@ public class GroupTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         groupTaskAdapter.setNewData(result);
+                        mRefrsh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        mRefrsh.setRefreshing(false);
                     }
                 });
 
@@ -174,10 +177,12 @@ public class GroupTaskFrgment extends BaseFragment {
                         }else {
                             planSubmit.setVisibility(View.GONE);
                         }
+                        mRefrsh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        mRefrsh.setRefreshing(false);
                     }
                 });
 
@@ -195,10 +200,12 @@ public class GroupTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         groupTaskAdapter.setNewData(result);
+                        mRefrsh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        mRefrsh.setRefreshing(false);
                     }
                 });
 
