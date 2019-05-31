@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -56,6 +57,8 @@ public class DayPlanFrgment extends BaseFragment {
     ImageView taskAdd;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
+    @BindView(R.id.plan_refresh)
+    SwipeRefreshLayout mRefrsh;
 
     private DayPlanAdapter dayPlanAdapter;
     private String time;
@@ -98,6 +101,12 @@ public class DayPlanFrgment extends BaseFragment {
                     bundle.putParcelable("bean",results.get(position));
                     intent.putExtras(bundle);
                 startActivity(intent);
+            }
+        });
+        mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDayList();
             }
         });
         getDayList();
@@ -150,11 +159,13 @@ public class DayPlanFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<DayListBean>> t) throws Exception {
                         results = t.getResults();
                         dayPlanAdapter.setNewData(results);
+                        mRefrsh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         Log.e("fff", e.toString());
+                        mRefrsh.setRefreshing(false);
                     }
                 });
     }

@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -76,6 +77,8 @@ public class MonthPlanFrgment extends BaseFragment {
     RadioButton mAqjh;
     @BindView(R.id.task_screen)
     ImageView taskScreen;
+    @BindView(R.id.plan_refresh)
+    SwipeRefreshLayout mRefrsh;
 
     private MonthPlanAdapter monthPlanAdapter;
     private TimePickerView pvTime;
@@ -154,7 +157,12 @@ public class MonthPlanFrgment extends BaseFragment {
             }
 
         });
-
+        mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMonthPlanList();
+            }
+        });
         getMonthPlanList();
     }
 
@@ -181,11 +189,13 @@ public class MonthPlanFrgment extends BaseFragment {
 
                         }
                         ProgressDialog.cancle();
+                        mRefrsh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
+                        mRefrsh.setRefreshing(false);
                     }
                 });
 

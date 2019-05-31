@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -53,6 +54,8 @@ public class PersonalTaskFrgment extends BaseFragment {
     SwipeRecyclerView planRv;
     @BindView(R.id.plan_create)
     TextView planCreate;
+    @BindView(R.id.plan_refresh)
+    SwipeRefreshLayout mRefrsh;
     private PersonalTaskAdapter personalTaskAdapter;
     private TimePickerView pvTime;
     private List<GroupTaskBean> result = new ArrayList<>();
@@ -108,7 +111,12 @@ public class PersonalTaskFrgment extends BaseFragment {
             }
         });
         getGroupList();
-
+        mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getGroupList();
+            }
+        });
         refreshPersonal = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
@@ -162,10 +170,12 @@ public class PersonalTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         personalTaskAdapter.setNewData(result);
+                        mRefrsh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        mRefrsh.setRefreshing(false);
                     }
                 });
 
