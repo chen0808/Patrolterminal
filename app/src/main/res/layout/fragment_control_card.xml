@@ -198,9 +198,8 @@
                 android:background="@color/color_33" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="序号"
                 android:textColor="@color/color_33"
@@ -212,9 +211,8 @@
                 android:background="@color/color_33" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
                 android:gravity="center"
                 android:text="危险点分析"
                 android:textColor="@color/color_33"
@@ -228,7 +226,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="6"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="安全控制措施"
                 android:textColor="@color/color_33"
@@ -240,9 +238,8 @@
                 android:background="@color/color_33" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
                 android:gravity="center"
                 android:text="负责人"
                 android:textColor="@color/color_33"
