@@ -46,10 +46,10 @@
             android:id="@+id/divison_demand"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1"
             android:gravity="center"
-            android:paddingTop="14dp"
-            android:paddingBottom="13dp"
             android:text="1.1持票核对线路“三号”"
             android:textColor="@color/color_33"
             android:textSize="@dimen/sp_12" />
