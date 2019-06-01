@@ -92,22 +92,33 @@
         android:text="状态：审核中"
         android:textSize="@dimen/sp_13" />
 
-    <TextView
+    <ImageView
         android:id="@+id/plan_to_change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/dp_60"
-        android:layout_marginBottom="@dimen/dp_5"
-        android:background="@drawable/plan_date_bg"
+        android:layout_marginRight="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_5"
         android:paddingLeft="@dimen/dp_10"
+        android:visibility="gone"
         android:paddingTop="@dimen/dp_5"
-        android:layout_centerVertical="true"
         android:paddingRight="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_5"
-        android:text="修订"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_13" />
+        android:src="@mipmap/edit_icon" />
+
+    <ImageView
+        android:id="@+id/plan_deal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_5"
+        android:paddingLeft="@dimen/dp_10"
+        android:visibility="gone"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_5"
+        android:src="@mipmap/deal_icon" />
 
     <LinearLayout
         android:layout_width="match_parent"

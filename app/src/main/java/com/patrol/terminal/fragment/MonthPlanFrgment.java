@@ -17,6 +17,8 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.AddMonthPlanActivity;
+import com.patrol.terminal.activity.LineCheckActivity;
 import com.patrol.terminal.activity.MonthPlanDetailActivity;
 import com.patrol.terminal.activity.SpecialPlanDetailActivity;
 import com.patrol.terminal.activity.TemporaryActivity;
@@ -132,31 +134,7 @@ public class MonthPlanFrgment extends BaseFragment {
         planRv.setLayoutManager(manager);
         monthPlanAdapter = new MonthPlanAdapter(R.layout.fragment_plan_item, data, state, mJobType);
         planRv.setAdapter(monthPlanAdapter);
-        monthPlanAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
-                MonthPlanBean bean = (MonthPlanBean) data.get(position);
-                Intent intent = new Intent();
-
-                if (bean.getRepair_content() == null) {
-                    intent.setClass(getContext(), MonthPlanDetailActivity.class);
-                    intent.putExtra("year", bean.getYear());
-                    intent.putExtra("month", bean.getMonth());
-                    intent.putExtra("month_id", bean.getMonth_id());
-                    intent.putExtra("month_line_id", bean.getId());
-                    intent.putExtra("id", bean.getLine_id());
-                } else {
-                    intent.setClass(getContext(), SpecialPlanDetailActivity.class);
-                    intent.putExtra("from","month");
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("bean", bean);
-                    intent.putExtras(bundle);
-                }
-                startActivity(intent);
-            }
-
-        });
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -164,6 +142,69 @@ public class MonthPlanFrgment extends BaseFragment {
             }
         });
         getMonthPlanList();
+    }
+    public void adapterClick(){
+        monthPlanAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                MonthPlanBean item = (MonthPlanBean) adapter.getItem(position);
+                //判断是否是保电计划
+                if (item.getRepair_content() != null) {
+                    switch (view.getId()){
+                        case R.id.plan_to_change:
+                            Intent intent = new Intent(mContext, LineCheckActivity.class);
+                            intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
+                            intent.putExtra("id", item.getId());
+                            intent.putExtra("year", item.getYear());
+                            intent.putExtra("month", item.getMonth());
+                            startActivityForResult(intent, 10);
+                            break;
+                    }
+                }else {
+                switch (view.getId()){
+                    case R.id.plan_to_change:
+                        Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
+                        intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
+                        intent.putExtra("line_name", item.getLine_name());
+                        intent.putExtra("year", item.getYear() + "");
+                        intent.putExtra("month", item.getMonth() + "");
+                        intent.putExtra("line_id", item.getLine_id() + "");
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("type", item.getFull_plan());
+                        mContext.startActivity(intent);
+                        break;
+                    case R.id.plan_deal:
+
+                        break;
+                }
+                }
+            }
+        });
+        monthPlanAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                MonthPlanBean bean = (MonthPlanBean) adapter.getItem(position);
+                Intent intent = new Intent();
+
+                if (bean.getRepair_content() != null) {
+                    intent.setClass(getContext(), SpecialPlanDetailActivity.class);
+                    intent.putExtra("from","month");
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("bean", bean);
+                    intent.putExtras(bundle);
+                } else {
+                    intent.setClass(getContext(), MonthPlanDetailActivity.class);
+                    intent.putExtra("year", bean.getYear());
+                    intent.putExtra("month", bean.getMonth());
+                    intent.putExtra("month_id", bean.getMonth_id());
+                    intent.putExtra("month_line_id", bean.getId());
+                    intent.putExtra("id", bean.getLine_id());
+                }
+                startActivity(intent);
+            }
+
+        });
     }
 
     //获取月计划列表
@@ -353,6 +394,7 @@ public class MonthPlanFrgment extends BaseFragment {
         }
     }
 
+    //筛选框点击事件
     class OnClickLintener implements View.OnClickListener {
 
         @Override

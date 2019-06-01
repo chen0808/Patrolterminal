@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.Gson;
@@ -23,7 +24,7 @@ import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.bean.PatrolLevel3;
 import com.patrol.terminal.bean.PatrolLevel4;
 import com.patrol.terminal.bean.SpecialAttrList;
-import com.patrol.terminal.bean.TowerListBean;
+import com.patrol.terminal.bean.Tower;
 
 import org.angmarch.views.NiceSpinner;
 
@@ -66,7 +67,7 @@ public class SpecialAttrListActivity extends BaseActivity {
     private AddSpecial addSpecial = new AddSpecial();
     private List<AddSpecial.WaresBean> waresBeans = new ArrayList<>();
     //    private String line_id = "B511327CB4BB4D4A9E544F6972510B4E";
-    private List<TowerListBean> towerList;
+    private List<Tower> towerList;
     private String line_id;
 
     @Override
@@ -76,6 +77,12 @@ public class SpecialAttrListActivity extends BaseActivity {
         ButterKnife.bind(this);
         titleName.setText("添加特殊属性");
         line_id = getIntent().getStringExtra("line_id");
+
+        getSpecial();
+        getTower();
+    }
+
+    public void getSpecial() {
         BaseRequest.getInstance().getService().specialAttrList().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<SpecialAttrList>>(this) {
@@ -95,27 +102,33 @@ public class SpecialAttrListActivity extends BaseActivity {
                     }
                 });
 
-        BaseRequest.getInstance().getService().towerList(line_id, "line_id asc").subscribeOn(Schedulers.io())
+    }
+
+    public void getTower() {
+        BaseRequest.getInstance().getService()
+                .getTempTower(line_id,"name")
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TowerListBean>>(this) {
+                .subscribe(new BaseObserver<List<Tower>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<TowerListBean>> t) throws Exception {
-                        towerList = t.getResults();
-                        if (towerList != null && towerList.size() > 0) {
-                            list.clear();
-                            for (int i = 0; i < towerList.size(); i++) {
-                                list.add(towerList.get(i).getName());
-                            }
-                            nsStart.attachDataSource(list);
-                            nsEnd.attachDataSource(list);
-                        }
+                    protected void onSuccees(BaseResult<List<Tower>> t) throws Exception {
+                        if (t.getCode()==1){
+                            towerList = t.getResults();
+                            if (towerList != null && towerList.size() > 0) {
+                                list.clear();
+                                for (int i = 0; i < towerList.size(); i++) {
+                                    list.add(towerList.get(i).getName());
+                                }
+                                nsStart.attachDataSource(list);
+                                nsEnd.attachDataSource(list);
+                            }}
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
                     }
                 });
+
     }
 
     private List<MultiItemEntity> getData(List<SpecialAttrList> results) {
@@ -189,7 +202,11 @@ public class SpecialAttrListActivity extends BaseActivity {
                         .subscribe(new BaseObserver(this) {
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
-
+                                 if (t.getCode()==1){
+                                     Toast.makeText(SpecialAttrListActivity.this,"添加成功",Toast.LENGTH_SHORT).show();
+                                     setResult(RESULT_OK);
+                                     finish();
+                                 }
                             }
 
                             @Override

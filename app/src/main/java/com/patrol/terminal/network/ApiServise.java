@@ -570,7 +570,7 @@ public interface ApiServise {
     //获取所有缺陷库
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
     @GET("task/defect/listGET")
-    Observable<BaseResult<List<DefectFragmentBean>>> getAllDefact();
+    Observable<BaseResult<List<DefectFragmentBean>>> getAllDefact(@Query("dep_id") String type_id, @Query("order") String order);
 
     //获取所有隐患库task/defect/saveDefect
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
@@ -843,9 +843,13 @@ public interface ApiServise {
     @GET("task/resistance/oneGET")
     Observable<BaseResult<JDDZbean>> getJDDZ(@Query("task_id") String rf_id);
 
-    //查询巡视记录
+    //查询巡视记录图片
     @GET("/task/patrol/img/listGET")
     Observable<BaseResult<List<PatrolRecordPicBean>>> getPartrolRecord(@Query("task_id") String task_id, @Query("order") String order);
+
+    //查询缺陷记录图片
+    @GET("/sys/file/listGET")
+    Observable<BaseResult<List<PatrolRecordPicBean>>> getDefectPic(@Query("data_id") String data_id);
 
     //查询绝缘子
     @GET("task/insulator/oneGET")

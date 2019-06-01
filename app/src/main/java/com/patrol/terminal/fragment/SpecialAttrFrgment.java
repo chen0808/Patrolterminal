@@ -141,6 +141,14 @@ public class SpecialAttrFrgment extends BaseFragment {
     public void onViewClicked() {
         Intent intent = new Intent(getActivity(), SpecialAttrListActivity.class);
         intent.putExtra("line_id", line_id);
-        startActivity(intent);
+        startActivityForResult(intent,31);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==31&&resultCode==-1){
+            getdata();
+        }
     }
 }

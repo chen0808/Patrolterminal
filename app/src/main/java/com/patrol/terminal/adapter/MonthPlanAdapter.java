@@ -1,16 +1,11 @@
 package com.patrol.terminal.adapter;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.AddMonthPlanActivity;
-import com.patrol.terminal.activity.LineCheckActivity;
 import com.patrol.terminal.bean.MonthPlanBean;
-import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.HorizontalLineView;
 
@@ -36,67 +31,62 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder viewHolder, MonthPlanBean item) {
+        //判断是检修计划还是运行计划
         if (item.getRepair_content() == null) {
-switch (item.getType_sign()){
-    case "4":
-        viewHolder.setText(R.id.item_plan_date_tv, "特殊");
-        viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_week_bg);
-        break;
-    case "7":
-        viewHolder.setText(R.id.item_plan_date_tv, "保电");
-        viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_qing_bg);
-        break;
-    case "2":
-        viewHolder.setText(R.id.item_plan_date_tv, "故障");
-        viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_yellow_bg);
-        break;
-    case "1":
-        viewHolder.setText(R.id.item_plan_date_tv, "定巡");
-        viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_mon_bg);
-        break;
-        default:
-            viewHolder.setText(R.id.item_plan_date_tv, "定检");
-            viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
-            break;
-}
-
-            if (state != null) {
-                viewHolder.setVisible(R.id.plan_to_change, false);
-            } else {
-                if ("0".equals(item.getAudit_status())||"4".equals(item.getAudit_status())) {
-                    viewHolder.setVisible(R.id.plan_to_change, true);
-                } else {
-                    viewHolder.setVisible(R.id.plan_to_change, false);
-                }
-
+            switch (item.getType_sign()) {
+                case "4":
+                    viewHolder.setText(R.id.item_plan_date_tv, "特殊");
+                    viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_week_bg);
+                    break;
+                case "7":
+                    viewHolder.setText(R.id.item_plan_date_tv, "保电");
+                    viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_qing_bg);
+                    break;
+                case "2":
+                    viewHolder.setText(R.id.item_plan_date_tv, "故障");
+                    viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_yellow_bg);
+                    break;
+                case "1":
+                    viewHolder.setText(R.id.item_plan_date_tv, "定巡");
+                    viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_mon_bg);
+                    break;
+                default:
+                    viewHolder.setText(R.id.item_plan_date_tv, "定检");
+                    viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
+                    break;
             }
 
-            viewHolder.setVisible(R.id.item_line_state, false);
+            //根据审核类型隐藏图标按钮
+            switch (item.getAudit_status()){
+                case "0":
+                    viewHolder.setVisible(R.id.plan_to_change, true);
+                    viewHolder.setVisible(R.id.plan_to_change, true);
+                    break;
+                case "1":
+                case "2":
+                    viewHolder.setVisible(R.id.plan_to_change, true);
+                    viewHolder.setVisible(R.id.plan_to_change, false);
+                    break;
+                case "4":
+                    viewHolder.setVisible(R.id.plan_to_change, true);
+                break;
+                default:
+                    viewHolder.setVisible(R.id.plan_to_change, false);
+                    viewHolder.setVisible(R.id.plan_to_change, false);
+                    break;
+            }
+
+            viewHolder.setGone(R.id.item_line_state, false);
             HorizontalLineView horizontalLineView = viewHolder.getView(R.id.item_plan_status);
-            viewHolder.setText(R.id.item_line_status, StringUtil.getYXBstate(item.getAudit_status()));
             horizontalLineView.setStatus(item.getAudit_status());
             horizontalLineView.setVisibility(View.VISIBLE);
             viewHolder.setText(R.id.item_plan_device_name, item.getLine_name())
+                    .setText(R.id.item_line_status, StringUtil.getYXBstate(item.getAudit_status()))
                     .setText(R.id.item_plan_content, "类型 : " + item.getFull_plan());
-            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
-                    intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
-                    intent.putExtra("line_name", item.getLine_name());
-                    intent.putExtra("year", item.getYear() + "");
-                    intent.putExtra("month", item.getMonth() + "");
-                    intent.putExtra("line_id", item.getLine_id() + "");
-                    intent.putExtra("id", item.getId());
-                    intent.putExtra("type", item.getFull_plan());
-                    mContext.startActivity(intent);
-                }
-            });
         } else {
 
             viewHolder.setText(R.id.item_plan_date_tv, "保")
-                    .setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_green_bg)
-                    .setVisible(R.id.plan_to_change, true);
+                    .setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_green_bg);
             if ("0".equals(item.getAllot_status())) {
                 viewHolder.setVisible(R.id.plan_to_change, true);
                 viewHolder.setText(R.id.item_plan_content, "分配状态 : 未分配");
@@ -104,17 +94,6 @@ switch (item.getType_sign()){
                 viewHolder.setVisible(R.id.plan_to_change, false);
                 viewHolder.setText(R.id.item_plan_content, "分配状态 : 已分配");
             }
-            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, LineCheckActivity.class);
-                    intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
-                    intent.putExtra("id", item.getId());
-                    intent.putExtra("year", item.getYear());
-                    intent.putExtra("month", item.getMonth());
-                    ((Activity) mContext).startActivityForResult(intent, 10);
-                }
-            });
             viewHolder.setText(R.id.item_plan_device_name, "基于" + item.getLine_name() + "的保电计划")
                     .setText(R.id.item_line_status, "停电时间 : " + item.getStart_time() + " - " + item.getEnd_time());
 

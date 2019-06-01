@@ -6,66 +6,6 @@
 
     <include layout="@layout/include_title"></include>
 
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <RadioButton
-            android:id="@+id/btn_1"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:background="@drawable/selector_choose_bg"
-            android:button="@null"
-            android:gravity="center"
-            android:text="定巡"
-            android:textColor="@color/colorPrimaryDark" />
-
-        <RadioButton
-            android:id="@+id/btn_2"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:background="@drawable/selector_choose_bg"
-            android:button="@null"
-            android:gravity="center"
-            android:text="定检"
-            android:textColor="@color/colorPrimaryDark" />
-
-        <RadioButton
-            android:id="@+id/btn_3"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:background="@drawable/selector_choose_bg"
-            android:button="@null"
-            android:gravity="center"
-            android:text="缺陷"
-            android:textColor="@color/colorPrimaryDark" />
-
-        <RadioButton
-            android:id="@+id/btn_4"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:background="@drawable/selector_choose_bg"
-            android:button="@null"
-            android:gravity="center"
-            android:text="隐患"
-            android:textColor="@color/colorPrimaryDark" />
-    </RadioGroup>
-
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -75,7 +15,7 @@
         android:padding="8dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -100,11 +40,11 @@
                 android:text="杆塔名称：01号杆塔" />
 
             <TextView
-                android:id="@+id/defect_task_id"
+                android:id="@+id/defect_find_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="任务id：1432453146" />
+                android:text="发现人：刘海生" />
 
             <TextView
                 android:id="@+id/defect_allote_status"
@@ -114,11 +54,11 @@
                 android:text="状态：待审核" />
 
             <TextView
-                android:id="@+id/defect_type"
+                android:id="@+id/defect_deal_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="巡视类型：杆塔大修" />
+                android:text="处理人：刘海生" />
 
             <!--<TextView-->
                 <!--android:id="@+id/defect_pat_name"-->
@@ -153,15 +93,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="40sp" />
+
+            <!--展示上传的图片-->
+            <GridView
+                android:id="@+id/defect_gridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:columnWidth="60dp"
+                android:horizontalSpacing="10dp"
+                android:numColumns="auto_fit"
+                android:verticalSpacing="10dp" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/defect_task_tv"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
-            android:src="@mipmap/tower1" />
     </RelativeLayout>
 </LinearLayout>

@@ -16,6 +16,7 @@ import com.patrol.terminal.bean.DefectFragmentBean;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +32,9 @@ public class DefectFrgment extends BaseFragment {
     RecyclerView rvDefect;
     private String task_id;
     private Disposable subscribe;
+    private List<DefectFragmentBean> results=new ArrayList<>();
+    private DefectFragmentAdapter adapter;
+
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +44,9 @@ public class DefectFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
+        rvDefect.setLayoutManager(new LinearLayoutManager(getActivity()));
+         adapter = new DefectFragmentAdapter(R.layout.fragment_defect_item, results);
+        rvDefect.setAdapter(adapter);
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
@@ -58,10 +65,8 @@ public class DefectFrgment extends BaseFragment {
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(getActivity()) {
                     @Override
                     protected void onSuccees(BaseResult<List<DefectFragmentBean>> t) throws Exception {
-                        List<DefectFragmentBean> results = t.getResults();
-                        rvDefect.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        DefectFragmentAdapter adapter = new DefectFragmentAdapter(R.layout.fragment_defect_item, results);
-                        rvDefect.setAdapter(adapter);
+                        results = t.getResults();
+                        adapter.setNewData(results);
                     }
 
                     @Override

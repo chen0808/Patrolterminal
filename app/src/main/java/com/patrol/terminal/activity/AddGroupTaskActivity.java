@@ -2,7 +2,6 @@ package com.patrol.terminal.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -23,12 +22,10 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AddGroupTaskReqBean;
 import com.patrol.terminal.bean.DangerBean;
-import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DefectBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.LineTypeBean;
-import com.patrol.terminal.bean.TaskLineBean;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
@@ -137,12 +134,13 @@ public class AddGroupTaskActivity extends BaseActivity {
             public void accept(GroupOfDayBean type) throws Exception {
                 if (selectType.size()==0){
                     type.setDay_tower_id(type.getId());
+                    type.setId(null);
                     selectType.add(type);
                 }else {
                     int isExit=0;
                     for (int i = 0; i < selectType.size(); i++) {
                         GroupOfDayBean dayOfWeekBean = selectType.get(i);
-                        if (dayOfWeekBean.getId().equals(type.getId())){
+                        if (dayOfWeekBean.getDay_tower_id().equals(type.getId())){
                             isExit=1;
                             selectType.remove(i);
                             return;
@@ -150,6 +148,7 @@ public class AddGroupTaskActivity extends BaseActivity {
                     }
                     if (isExit==0){
                         type.setDay_tower_id(type.getId());
+                        type.setId(null);
                         selectType.add(type);
                     }
                 }

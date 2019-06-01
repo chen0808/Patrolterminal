@@ -15,6 +15,15 @@ public class Tower {
     private  String dep_name;
     private String towers_id;
     private String month_line_id;
+    private String sort;
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 
     public String getDefect_id() {
         return defect_id;

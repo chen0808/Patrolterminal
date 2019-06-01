@@ -14,6 +14,8 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DefectFragmentBean;
+import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
@@ -43,6 +45,7 @@ public class DefectActivity extends BaseActivity {
     SwipeRecyclerView planRv;
     private MyFragmentPagerAdapter taskPagerAdapter;
     private DefectIngAdapter groupTaskAdapter;
+    private String jobType;
     //private List<DefectDetailBean> mDefectDetailList = new ArrayList<>();
 
     @Override
@@ -50,15 +53,19 @@ public class DefectActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defect);
         ButterKnife.bind(this);
-
+        jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         initview();
         getAllDef();
     }
 
     private void getAllDef() {
+        String dep_id=SPUtil.getDepId(this);
+        if ((jobType.contains("_zz")||jobType.contains("_zg"))&&!jobType.contains("b_zz")){
+            dep_id=null;
+        }
         ProgressDialog.show(DefectActivity.this,false,"正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getAllDefact()
+                .getAllDefact(dep_id,"find_time")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(this) {
