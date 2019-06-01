@@ -41,51 +41,69 @@ public class SpecialContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
         switch (helper.getItemViewType()) {
             case TYPE_1:
                 PatrolLevel1 item1 = (PatrolLevel1) item;
-                helper.setText(R.id.tv_title, item1.getTitle()).setImageResource(R.id.iv_expand, item1.isExpanded() ? R.mipmap.next : R.mipmap.btn_down);
-                helper.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = helper.getAdapterPosition();
-                        if (item1.isExpanded()) {
-                            collapse(pos);
-                        } else {
-                            expand(pos);
+                helper.setText(R.id.tv_title, item1.getTitle());
+                if (item1.getSubItems() == null || item1.getSubItems().size() == 0) {
+                    helper.getView(R.id.iv_expand).setVisibility(View.GONE);
+                } else {
+                    helper.getView(R.id.iv_expand).setVisibility(View.VISIBLE);
+                    helper.setImageResource(R.id.iv_expand, item1.isExpanded() ? R.mipmap.next : R.mipmap.btn_down);
+                    helper.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int pos = helper.getAdapterPosition();
+                            if (item1.isExpanded()) {
+                                collapse(pos);
+                            } else {
+                                expand(pos);
 //      }
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 break;
             case TYPE_2:
                 PatrolLevel2 item2 = (PatrolLevel2) item;
-                helper.setText(R.id.tv_title, item2.getName()).setImageResource(R.id.iv_expand, item2.isExpanded() ? R.mipmap.next : R.mipmap.btn_down);
-                helper.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = helper.getAdapterPosition();
-                        if (item2.isExpanded()) {
-                            collapse(pos);
-                        } else {
-                            expand(pos);
+                helper.setText(R.id.tv_title, item2.getName());
+                if (item2.getSubItems() == null || item2.getSubItems().size() == 0) {
+                    helper.getView(R.id.iv_expand).setVisibility(View.GONE);
+                } else {
+                    helper.getView(R.id.iv_expand).setVisibility(View.VISIBLE);
+                    helper.setImageResource(R.id.iv_expand, item2.isExpanded() ? R.mipmap.next : R.mipmap.btn_down);
+                    helper.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int pos = helper.getAdapterPosition();
+                            if (item2.isExpanded()) {
+                                collapse(pos);
+                            } else {
+                                expand(pos);
 //      }
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 break;
             case TYPE_3:
                 PatrolLevel3 item3 = (PatrolLevel3) item;
-                helper.setText(R.id.tv_title, item3.getName()).setImageResource(R.id.iv_expand, item3.isExpanded() ? R.mipmap.next : R.mipmap.btn_down);
-                helper.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = helper.getAdapterPosition();
-                        if (item3.isExpanded()) {
-                            collapse(pos);
-                        } else {
-                            expand(pos);
+                helper.setText(R.id.tv_title, item3.getName());
+                if (item3.getSubItems() == null || item3.getSubItems().size() == 0) {
+                    helper.getView(R.id.iv_expand).setVisibility(View.GONE);
+                } else {
+                    helper.getView(R.id.iv_expand).setVisibility(View.VISIBLE);
+                    helper.setImageResource(R.id.iv_expand, item3.isExpanded() ? R.mipmap.next : R.mipmap.btn_down);
+                    helper.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int pos = helper.getAdapterPosition();
+                            if (item3.isExpanded()) {
+                                collapse(pos);
+                            } else {
+                                expand(pos);
 //      }
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 break;
             case TYPE_4:
                 PatrolLevel4 item4 = (PatrolLevel4) item;
