@@ -4,16 +4,17 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
+import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.bean.TicketSafeContent;
 
 import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class SafeAdapter extends BaseQuickAdapter<TicketSafeContent, BaseViewHolder> {
+public class SafeAdapter extends BaseItemDraggableAdapter<TicketSafeContent, BaseViewHolder> {
 
     public SafeAdapter(int layoutResId, @Nullable List<TicketSafeContent> data) {
         super(layoutResId, data);
@@ -39,5 +40,9 @@ public class SafeAdapter extends BaseQuickAdapter<TicketSafeContent, BaseViewHol
                 item.setTicket_safe_content(etContent.getText().toString());
             }
         });
+    }
+
+    public void setOnItemSwipeListener(BaseObserver<List<TicketSafeContent>> listBaseObserver) {
+
     }
 }

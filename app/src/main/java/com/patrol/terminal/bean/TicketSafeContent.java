@@ -26,9 +26,19 @@ public class TicketSafeContent implements Serializable {
 
     private boolean tag;
 
-    public TicketSafeContent(String ticket_safe_content, String ticket_safe_id) {
+    private String status;
+
+    public TicketSafeContent(String ticket_safe_content, String status) {
         this.ticket_safe_content = ticket_safe_content;
-        this.ticket_safe_id = ticket_safe_id;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getContent() {

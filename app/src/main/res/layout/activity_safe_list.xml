@@ -6,8 +6,8 @@
 
     <include layout="@layout/include_title"></include>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
         android:id="@+id/rv_safe_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="wrap_content"></com.yanzhenjie.recyclerview.SwipeRecyclerView>
 </LinearLayout>

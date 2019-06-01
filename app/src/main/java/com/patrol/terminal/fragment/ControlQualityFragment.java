@@ -277,7 +277,6 @@ public class ControlQualityFragment extends BaseFragment {
                         if (t.getCode() == 1) {
                             controlQualityBeans = t.getResults();
                             updateInfo1(controlQualityBeans);
-
                         } else {
                             Toast.makeText(mContext, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
