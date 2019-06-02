@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -60,6 +61,8 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
     SwipeRecyclerView planRv;
     @BindView(R.id.plan_submit)
     TextView planSubmit;
+    @BindView(R.id.plan_refresh)
+    SwipeRefreshLayout planRefresh;
 //    @BindView(R.id.plan_create)
 //    TextView planCreate;
 
@@ -85,13 +88,12 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-        planSubmit.setVisibility(View.VISIBLE);
         taskAdd.setVisibility(View.VISIBLE);
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)){
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {
             planSubmit.setText("提交");
             //planCreate.setVisibility(View.VISIBLE);
-        }else if (jobType.contains(Constant.MAINTENANCE_SUPERVISOR)){
+        } else if (jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) {
             planSubmit.setText("审核");
         }
         time = SPUtil.getString(getContext(), "date", "overhaulTime", DateUatil.getTime(new Date(System.currentTimeMillis())));
@@ -137,7 +139,12 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
             }
         });
 
-
+        planRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMonthList();
+            }
+        });
     }
 
 
@@ -159,15 +166,17 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                     @Override
                     protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
                         if (t.getCode() == 1) {
+                            planRefresh.setRefreshing(false);
                             result = t.getResults();
                             monthAdapter.setNewData(result);
                             for (int i = 0; i < result.size(); i++) {
                                 OverhaulYearBean overhaulYearBean = result.get(i);
-                                if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)&&"0".equals(overhaulYearBean.getMonth_audit_status())){   //专责   审核状态   //0:编制   1:待主管审核   2:审核通过    3:审核不通过
-                                    OverPlanReqBean bean=new OverPlanReqBean();
+                                if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) && "0".equals(overhaulYearBean.getMonth_audit_status())) {   //专责   审核状态   //0:编制   1:待主管审核   2:审核通过    3:审核不通过
+                                    OverPlanReqBean bean = new OverPlanReqBean();
                                     bean.setId(overhaulYearBean.getId());
                                     bean.setMonth_audit_status("1");
                                     list1.add(bean);
+                                    planSubmit.setVisibility(View.VISIBLE);
                                 }
 //                                else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)&&"2".equals(overhaulYearBean.getMonth_audit_status())){   //专责   审核状态
 //                                    OverPlanReqBean bean=new OverPlanReqBean();
@@ -175,12 +184,13 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
 //                                    bean.setAudit_status("2");
 //                                    list2.add(bean);
 //                                }
-                                else if (jobType.contains(Constant.MAINTENANCE_SUPERVISOR)&&"1".equals(overhaulYearBean.getMonth_audit_status())){   //主管   审核状态  目前只做了审核通过  TODO
-                                    OverPlanReqBean bean=new OverPlanReqBean();
+                                else if (jobType.contains(Constant.MAINTENANCE_SUPERVISOR) && "1".equals(overhaulYearBean.getMonth_audit_status())) {   //主管   审核状态  目前只做了审核通过  TODO
+                                    OverPlanReqBean bean = new OverPlanReqBean();
                                     bean.setId(overhaulYearBean.getId());
                                     bean.setMonth_audit_status("2");
                                     bean.setWeek_audit_status("1");
                                     list3.add(bean);
+                                    planSubmit.setVisibility(View.VISIBLE);
                                 }
                             }
                         }

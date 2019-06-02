@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -64,16 +63,18 @@
             android:text="是否需要停电" />
 
         <RadioGroup
+            android:id="@+id/rg_need_blackout"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_30"
-            android:layout_marginLeft="@dimen/dp_20"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_20"
             android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/month_plan_yes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="是" />
 
             <RadioButton
@@ -81,7 +82,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_20"
-                android:checked="true"
                 android:text="否" />
         </RadioGroup>
 
@@ -92,9 +92,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <View style="@style/line_styl" />
 
-        <LinearLayout style="@style/overhaul_ll_styl">
+        <LinearLayout
+            android:id="@+id/ll_blackout_day"
+            style="@style/overhaul_ll_styl">
 
             <TextView
                 style="@style/overhaul_tv_styl"
@@ -104,11 +107,15 @@
                 android:id="@+id/month_plan_day_num"
                 style="@style/plan_et_styl"
                 android:background="@null"
-                android:hint="请输入停电天数" />
+                android:hint="请输入停电天数"
+                android:inputType="number" />
         </LinearLayout>
+
         <View style="@style/line_styl" />
 
-        <LinearLayout style="@style/overhaul_ll_styl">
+        <LinearLayout
+            android:id="@+id/ll_blackout_range"
+            style="@style/overhaul_ll_styl">
 
             <TextView
                 style="@style/overhaul_tv_styl"
@@ -169,7 +176,9 @@
                 android:drawableRight="@mipmap/icon_go"
                 android:hint="点击选择结束时间" />
         </LinearLayout>
+
         <View style="@style/line_styl" />
+
         <LinearLayout style="@style/overhaul_ll_styl">
 
             <TextView
@@ -183,7 +192,9 @@
                 android:drawableRight="@mipmap/icon_go"
                 android:hint="点击选择风险等级" />
         </LinearLayout>
+
         <View style="@style/line_styl" />
+
         <LinearLayout style="@style/overhaul_ll_styl">
 
             <TextView
@@ -198,12 +209,13 @@
                 android:hint="点击选择风险等级" />
         </LinearLayout>
     </LinearLayout>
+
     <View style="@style/line_styl" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             style="@style/overhaul_tv_styl"
@@ -214,19 +226,20 @@
             android:id="@+id/month_plan_content"
             style="@style/plan_et_styl"
             android:layout_height="@dimen/dp_100"
-            android:gravity="left"
             android:layout_marginRight="@dimen/dp_20"
-            android:padding="@dimen/dp_10"
             android:layout_marginBottom="@dimen/dp_10"
             android:background="@drawable/btn_white"
-            android:hint="请输入这次的检修内容" />
+            android:gravity="left"
+            android:hint="请输入这次的检修内容"
+            android:padding="@dimen/dp_10" />
     </LinearLayout>
+
     <View style="@style/line_styl" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             style="@style/overhaul_tv_styl"
@@ -237,12 +250,13 @@
             android:id="@+id/month_plan_remark"
             style="@style/plan_et_styl"
             android:layout_height="@dimen/dp_50"
-            android:gravity="left"
             android:layout_marginRight="@dimen/dp_20"
-            android:padding="@dimen/dp_10"
             android:background="@drawable/btn_white"
-            android:hint="请输入备注信息" />
+            android:gravity="left"
+            android:hint="请输入备注信息"
+            android:padding="@dimen/dp_10" />
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -251,8 +265,8 @@
             android:id="@+id/month_plan_submit"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_40"
-            android:background="@color/gray_plan"
             android:layout_alignParentBottom="true"
+            android:background="@color/gray_plan"
             android:gravity="center"
             android:text="提交"
             android:textColor="@color/white"

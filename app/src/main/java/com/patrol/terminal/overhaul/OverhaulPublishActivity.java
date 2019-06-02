@@ -64,7 +64,7 @@ public class OverhaulPublishActivity extends BaseActivity {
 
     private String year, month, week;
 
-    private List<WeekTaskToPersonBean> weekTaskToPersonBeans =  new ArrayList<>();
+    private List<WeekTaskToPersonBean> weekTaskToPersonBeans = new ArrayList<>();
     private WeekTaskZzPublishAdapter mWeekTaskPublishAdapter;
     private String[] weekTaskContents;
 
@@ -81,10 +81,11 @@ public class OverhaulPublishActivity extends BaseActivity {
         String time = SPUtil.getString(this, "date", "overhaulTime", DateUatil.getTime(new Date(System.currentTimeMillis())));
         String[] years = time.split("年");  //2019年8月第3周
         String[] months = years[1].split("月");
-        String [] weeks = months[1].split("周");
-        month = Integer.parseInt(months[0]) + "";
+//        String[] weeks = months[1].split("周");
+        month = months[0] + "";
         year = years[0];
-        week = weeks[0].substring(1, weeks[0].length());
+//        week = weeks[0].substring(1, weeks[0].length());
+        week = DateUatil.getWeekNum() + "";
 
         overhaulYearBean = getIntent().getParcelableExtra("bean");
         weekTaskContents = getIntent().getStringArrayExtra("weekTaskContents");    //分发的任务内容
@@ -176,7 +177,7 @@ public class OverhaulPublishActivity extends BaseActivity {
 
         List<OverhaulZZSendBean.TaskInfo> taskInfos = new ArrayList<>();
         for (int i = 0; i < weekTaskToPersonBeans.size(); i++) {
-            OverhaulZZSendBean.TaskInfo taskInfo =  new OverhaulZZSendBean.TaskInfo();
+            OverhaulZZSendBean.TaskInfo taskInfo = new OverhaulZZSendBean.TaskInfo();
             taskInfo.setTask_content(weekTaskToPersonBeans.get(i).getContent());
             taskInfo.setTask_status("1");
             taskInfo.setUserId3(weekTaskToPersonBeans.get(i).getUserId());
