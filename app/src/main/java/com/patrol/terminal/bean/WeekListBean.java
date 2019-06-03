@@ -56,6 +56,15 @@ public class WeekListBean implements Parcelable {
     private int done_num;
     private int all_num;
     private String done_rate;
+    private double towers_range;
+
+    public double getTowers_range() {
+        return towers_range;
+    }
+
+    public void setTowers_range(double towers_range) {
+        this.towers_range = towers_range;
+    }
 
     public int getDone_num() {
         return done_num;
@@ -290,6 +299,7 @@ public class WeekListBean implements Parcelable {
         dest.writeInt(this.done_num);
         dest.writeInt(this.all_num);
         dest.writeString(this.done_rate);
+        dest.writeDouble(this.towers_range);
     }
 
     public WeekListBean() {
@@ -321,6 +331,7 @@ public class WeekListBean implements Parcelable {
         this.done_num = in.readInt();
         this.all_num = in.readInt();
         this.done_rate = in.readString();
+        this.towers_range = in.readDouble();
     }
 
     public static final Parcelable.Creator<WeekListBean> CREATOR = new Parcelable.Creator<WeekListBean>() {

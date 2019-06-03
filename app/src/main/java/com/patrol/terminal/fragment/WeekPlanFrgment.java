@@ -18,7 +18,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddWeekPlanActivity;
-import com.patrol.terminal.activity.NextMonthPlanActivity;
+import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.activity.SpecialPlanDetailActivity;
 import com.patrol.terminal.activity.TemporaryWeekActivity;
 import com.patrol.terminal.activity.WeekPlanDetailActivity;
@@ -45,6 +45,8 @@ import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,6 +77,20 @@ public class WeekPlanFrgment extends BaseFragment {
     RelativeLayout addPlanLl;
     @BindView(R.id.add_plan_iv)
     ImageView addPlanIv;
+    @BindView(R.id.plan_total_title)
+    TextView planTotalTitle;
+    @BindView(R.id.month_line_total)
+    TextView monthLineTotal;
+    @BindView(R.id.month_line_kilo_total)
+    TextView monthLineKiloTotal;
+    @BindView(R.id.month_line_110kv_num)
+    TextView monthLine110kvNum;
+    @BindView(R.id.month_line_110kv_kilo)
+    TextView monthLine110kvKilo;
+    @BindView(R.id.month_line_35kv_num)
+    TextView monthLine35kvNum;
+    @BindView(R.id.month_line_35kv_kilo)
+    TextView monthLine35kvKilo;
     @BindView(R.id.task_title)
     TextView taskTitle;
     @BindView(R.id.task_date)
@@ -85,8 +101,6 @@ public class WeekPlanFrgment extends BaseFragment {
     SwipeRecyclerView planRv;
     @BindView(R.id.plan_refresh)
     SwipeRefreshLayout planRefresh;
-    @BindView(R.id.plan_total_title)
-    TextView planTotalTitle;
     private TimePickerView pvTime;
     private String time;
     private WeekPlanAdapter weekPlanAdapter;
@@ -96,7 +110,6 @@ public class WeekPlanFrgment extends BaseFragment {
     private String month;
     private int week;
     private String state;
-    private List<Tower> lineList = new ArrayList<>();
     private List<Tower> nextlineList = new ArrayList<>();
     private String mJobType;
     private String depId;
@@ -105,6 +118,21 @@ public class WeekPlanFrgment extends BaseFragment {
     private int nextYear;
     private int nextWeek;
     private List<WeekListBean> nextWeekList;
+    private String nextBeginTime;
+
+    private int num_total = 0;
+    private int num_110kv = 0;
+    private int num_35kv = 0;
+    private double kilo_total = 0;
+    private double kilo_110kv = 0;
+    private double kilo_35kv = 0;
+
+    private int next_num_total = 0;
+    private int next_num_110kv = 0;
+    private int next_num_35kv = 0;
+    private double next_kilo_total = 0;
+    private double next_kilo_110kv = 0;
+    private double next_kilo_35kv = 0;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,22 +142,33 @@ public class WeekPlanFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-        addNextPlan.setText("下周工作计划制定");
-        planTotalTitle.setText("本周计划工作汇总");
+
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(getActivity(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             state = "1,2,3,4,5";
             depId = null;
         }
-        initdata();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //初始化日期控件的数据
+                initdata();
+            }
+        }).start();
+
+        //初始化年月周数据
         initdate();
         taskTitle.setText("周计划列表");
 
+
         String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
         String endDate = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
-        taskDate.setText(year+"年第"+week+"周("+beginDate+"-"+endDate+")");
-
+        String nextBeginTime = TimeUtil.getFirstDayOfWeek(nextYear, nextWeek);
+        String nextEndTime = TimeUtil.getLastDayOfWeek(nextYear, nextWeek);
+        taskDate.setText(year + "年第" + week + "周(" + beginDate + "-" + endDate + ")");
+        addNextPlan.setText("下周工作计划制定(" + nextBeginTime + "-" + nextEndTime + ")");
+        planTotalTitle.setText("本周计划工作汇总");
         // 设置监听器。
         planRv.setSwipeMenuCreator(mSwipeMenuCreator);
         // 菜单点击监听。
@@ -178,13 +217,14 @@ public class WeekPlanFrgment extends BaseFragment {
         year = years[0];
         week = TimeUtil.getCurrWeek();
         int maxWeekNumOfYear = TimeUtil.getMaxWeekNumOfYear(Integer.parseInt(year));
-        if (week>maxWeekNumOfYear){
-            nextWeek=1;
-            nextYear=Integer.parseInt(year)+1;
-        }else {
-            nextWeek=week+1;
-            nextYear=Integer.parseInt(year);
+        if (week > maxWeekNumOfYear) {
+            nextWeek = 1;
+            nextYear = Integer.parseInt(year) + 1;
+        } else {
+            nextWeek = week + 1;
+            nextYear = Integer.parseInt(year);
         }
+
     }
 
     // 创建菜单：
@@ -222,39 +262,25 @@ public class WeekPlanFrgment extends BaseFragment {
     //获取本周计划
     public void getWeekList() {
         BaseRequest.getInstance().getService()
-                .getWeekList(year, week+"", depId, state, "type_sign,line_id")
+                .getWeekList(year, week + "", depId, state, "type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekListBean>>(getContext()) {
 
                     @Override
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
-                        lineList.clear();
+                        num_total = 0;
+                        kilo_total = 0;
                         results = t.getResults();
                         weekPlanAdapter.setNewData(results);
                         for (int i = 0; i < results.size(); i++) {
                             WeekListBean weekListBean = results.get(i);
-                            //当身份是运行班专责时，获取到需要审核的列表
-                            if (weekListBean.getWeek_id() != null) {
-                                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(results.get(i).getAudit_status())) {
-                                    WeekListBean bean = results.get(i);
-                                    Tower lineBean = new Tower();
-                                    lineBean.setId(bean.getId());
-                                    lineList.add(lineBean);
-                                    //当身份是运行班专责时，获取到需要发布的列表
-                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(results.get(i).getAudit_status()) || "3".equals(results.get(i).getAudit_status()))) {
-                                    WeekListBean bean = results.get(i);
-                                    Tower lineBean = new Tower();
-                                    lineBean.setId(bean.getId());
-                                    lineList.add(lineBean);
-                                }
-                            }
+                            num_total++;
+                            kilo_total += weekListBean.getTowers_range();
                         }
-                        if (lineList.size() != 0) {
-                            planSubmit.setVisibility(View.VISIBLE);
-                        } else {
-                            planSubmit.setVisibility(View.GONE);
-                        }
+                        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                        monthLineTotal.setText("杆段总数 : " + num_total + "条");
+                        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
                         planRefresh.setRefreshing(false);
                     }
 
@@ -276,17 +302,17 @@ public class WeekPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
-                        lineList.clear();
+                        next_num_total = 0;
+                        next_kilo_total = 0;
+                        nextlineList.clear();
                         nextWeekList = t.getResults();
                         if (nextWeekList != null && nextWeekList.size() > 0) {
                             addPlanIv.setVisibility(View.GONE);
                             addPlanLl.setVisibility(View.VISIBLE);
-                            String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
-                            String endDate = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
-                            addPlanName.setText(nextYear + "年第" + nextWeek + "周工作计划("+beginDate+"-"+endDate+")");
+                            addPlanName.setText(nextYear + "年第" + nextWeek + "周工作计划");
 
                             WeekListBean weekListBean = nextWeekList.get(0);
-                           String audit_status=weekListBean.getAudit_status();
+                            String audit_status = weekListBean.getAudit_status();
                             addPlanStatus.setText(StringUtil.getYxbWeekState(weekListBean.getAudit_status()));
                             if ("2".equals(weekListBean.getAudit_status())) {
                                 addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
@@ -308,21 +334,26 @@ public class WeekPlanFrgment extends BaseFragment {
                         }
                         for (int i = 0; i < nextWeekList.size(); i++) {
                             WeekListBean weekListBean = nextWeekList.get(i);
+                            next_num_total++;
+                            next_kilo_total += weekListBean.getTowers_range();
                             //当身份是运行班专责时，获取到需要审核的列表
                             if (weekListBean.getWeek_id() != null) {
-                                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(nextWeekList.get(i).getAudit_status())) {
-                                    WeekListBean bean = nextWeekList.get(i);
+                                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(weekListBean.getAudit_status())) {
                                     Tower lineBean = new Tower();
-                                    lineBean.setId(bean.getId());
+                                    lineBean.setId(weekListBean.getId());
                                     nextlineList.add(lineBean);
                                     //当身份是运行班专责时，获取到需要发布的列表
-                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(results.get(i).getAudit_status()) || "3".equals(results.get(i).getAudit_status()))) {
-                                    WeekListBean bean = nextWeekList.get(i);
+                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(weekListBean.getAudit_status()) || "3".equals(weekListBean.getAudit_status()))) {
                                     Tower lineBean = new Tower();
-                                    lineBean.setId(bean.getId());
+                                    lineBean.setId(weekListBean.getId());
                                     nextlineList.add(lineBean);
                                 }
                             }
+                        }
+                        if (nextlineList.size() != 0) {
+                            planSubmit.setVisibility(View.VISIBLE);
+                        } else {
+                            planSubmit.setVisibility(View.GONE);
                         }
                     }
 
@@ -354,9 +385,16 @@ public class WeekPlanFrgment extends BaseFragment {
                 showWeek();
                 break;
             case R.id.add_plan_ll:
-                Intent intent1 = new Intent(getContext(), NextMonthPlanActivity.class);
-//                intent1.putExtra("list", (Serializable) nextPatrolList);
-//                intent1.putExtra("linelist", (Serializable) nextLineList);
+                Intent intent1 = new Intent(getContext(), NextWeekPlanActivity.class);
+                intent1.putExtra("list", (Serializable) nextWeekList);
+                intent1.putExtra("linelist", (Serializable) nextlineList);
+                intent1.putExtra("num_total", next_num_total);
+                intent1.putExtra("kilo_total", next_kilo_total);
+                intent1.putExtra("110kv_num", next_num_110kv);
+                intent1.putExtra("110kv_kolo", next_kilo_110kv);
+                intent1.putExtra("35kv_num", next_num_35kv);
+                intent1.putExtra("35kv_kolo", next_kilo_35kv);
+                intent1.putExtra("year", nextYear);
                 intent1.putExtra("year", nextYear);
                 intent1.putExtra("week", nextWeek);
                 startActivityForResult(intent1, 10);
@@ -438,7 +476,7 @@ public class WeekPlanFrgment extends BaseFragment {
     public void submitWeekPlan(String status) {
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
         bean.setAudit_status(status);
-        bean.setTowers(lineList);
+        bean.setTowers(nextlineList);
         BaseRequest.getInstance().getService()
                 .submitWeekPlan(bean)
                 .subscribeOn(Schedulers.io())
@@ -452,7 +490,7 @@ public class WeekPlanFrgment extends BaseFragment {
                             } else {
                                 Toast.makeText(getContext(), "一键审核成功", Toast.LENGTH_SHORT).show();
                             }
-                            getWeekList();
+                            getNextWeekList();
                         }
                     }
 
@@ -470,10 +508,10 @@ public class WeekPlanFrgment extends BaseFragment {
             years.add(i + "年");
             int maxWeekNumOfYear = TimeUtil.getMaxWeekNumOfYear(i);
             List<String> options3Items_01 = new ArrayList<>();
-            for (int j =0 ; j < maxWeekNumOfYear; j++) {
+            for (int j = 1; j < maxWeekNumOfYear + 1; j++) {
                 String firstDayOfWeek = TimeUtil.getFirstDayOfWeek(i, j);
                 String lastDayOfWeek = TimeUtil.getLastDayOfWeek(i, j);
-                    options3Items_01.add("第"+(j+1)+"周("+firstDayOfWeek+"-"+lastDayOfWeek+")");
+                options3Items_01.add("第" + (j) + "周(" + firstDayOfWeek + "-" + lastDayOfWeek + ")");
 
             }
             weeks.add(options3Items_01);
@@ -493,13 +531,13 @@ public class WeekPlanFrgment extends BaseFragment {
                 String time = years.get(options1) + weeks.get(options1).get(option2);
                 year = years.get(options1).split("年")[0];
                 String date = weeks.get(options1).get(option2);
-                week = Integer.parseInt(date.split("第")[0].split("周")[0]);
+                week = Integer.parseInt(date.split("周")[0].split("第")[1]);
                 taskDate.setText(time);
                 getWeekList();
             }
         }).build();
         pvOptions.setPicker(years, weeks);
-        pvOptions.setSelectOptions(years.indexOf(year + "年"),week-1);
+        pvOptions.setSelectOptions(years.indexOf(year + "年"), week - 1);
         pvOptions.show();
     }
 
@@ -508,6 +546,7 @@ public class WeekPlanFrgment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10 && resultCode == -1) {
             getWeekList();
+            getNextWeekList();
         }
     }
 }

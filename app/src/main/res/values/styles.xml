@@ -100,8 +100,8 @@
 
     <style name="line_styl">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/dp_half</item>
-        <item name="android:background">@color/price_text</item>
+        <item name="android:layout_height">@dimen/dp_1</item>
+        <item name="android:background">@color/image_overlay_false</item>
         <item name="android:layout_marginLeft">@dimen/dp_20</item>
         <item name="android:layout_marginRight">@dimen/dp_20</item>
     </style>

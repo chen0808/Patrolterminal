@@ -122,7 +122,6 @@ public class PersonalTaskDetailActivity extends Activity {
                 intent.putExtra("audit_status",bean.getAudit_status());
                 intent.putExtra("typename",bean.getType_name());
                 switch (bean.getType_sign()) {
-
                     case "1":
                     case "2":
                     case "7":

@@ -200,7 +200,6 @@ public class TemporaryActivity extends BaseActivity {
     }
 
     public void initType(List<LineTypeBean> list){
-
         List<String> list1=new ArrayList<>();
         List<String> list2=new ArrayList<>();
         List<String> list3=new ArrayList<>();
@@ -223,7 +222,6 @@ public class TemporaryActivity extends BaseActivity {
         typeSign.add(list2);
         typeSign.add(list3);
         typeSign.add(list4);
-
     }
 
     //展示工作类型

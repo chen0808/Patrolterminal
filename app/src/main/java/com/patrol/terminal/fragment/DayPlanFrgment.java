@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -16,25 +17,25 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddDayPlanActivity;
-import com.patrol.terminal.activity.CreatePlanActivity;
 import com.patrol.terminal.activity.DayPlanDetailActivity;
-import com.patrol.terminal.activity.TemporaryDayActivity;
+import com.patrol.terminal.activity.NextDayPlanActivity;
 import com.patrol.terminal.adapter.DayPlanAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DayListBean;
-import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.PopMenmuDialog;
+import com.patrol.terminal.utils.TimeUtil;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,38 +50,83 @@ import io.reactivex.schedulers.Schedulers;
 public class DayPlanFrgment extends BaseFragment {
 
 
+    @BindView(R.id.add_next_plan)
+    TextView addNextPlan;
+    @BindView(R.id.plan_submit)
+    ImageView planSubmit;
+    @BindView(R.id.add_plan_right)
+    ImageView addPlanRight;
+    @BindView(R.id.plan_point)
+    View planPoint;
+    @BindView(R.id.add_plan_name)
+    TextView addPlanName;
+    @BindView(R.id.add_plan_status)
+    TextView addPlanStatus;
+    @BindView(R.id.add_plan_ll)
+    RelativeLayout addPlanLl;
+    @BindView(R.id.add_plan_iv)
+    ImageView addPlanIv;
+    @BindView(R.id.plan_total_title)
+    TextView planTotalTitle;
+    @BindView(R.id.month_line_total)
+    TextView monthLineTotal;
+    @BindView(R.id.month_line_kilo_total)
+    TextView monthLineKiloTotal;
+    @BindView(R.id.month_line_110kv_num)
+    TextView monthLine110kvNum;
+    @BindView(R.id.month_line_110kv_kilo)
+    TextView monthLine110kvKilo;
+    @BindView(R.id.month_line_35kv_num)
+    TextView monthLine35kvNum;
+    @BindView(R.id.month_line_35kv_kilo)
+    TextView monthLine35kvKilo;
     @BindView(R.id.task_title)
     TextView taskTitle;
     @BindView(R.id.task_date)
     TextView taskDate;
-    @BindView(R.id.task_add)
-    ImageView taskAdd;
+    @BindView(R.id.task_screen)
+    ImageView taskScreen;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
     @BindView(R.id.plan_refresh)
-    SwipeRefreshLayout mRefrsh;
-
+    SwipeRefreshLayout planRefresh;
     private DayPlanAdapter dayPlanAdapter;
     private String time;
     private List<DayListBean> results;
 
     private TimePickerView pvTime;
-    private String year,month,day;
-    private PopMenmuDialog popWinShare;
+    private String year, month, day;
+    private int num_total = 0;
+    private int num_110kv = 0;
+    private int num_35kv = 0;
+    private double kilo_total = 0;
+    private double kilo_110kv = 0;
+    private double kilo_35kv = 0;
+
+    private int next_num_total = 0;
+    private int next_num_110kv = 0;
+    private int next_num_35kv = 0;
+    private double next_kilo_total = 0;
+    private double next_kilo_110kv = 0;
+    private double next_kilo_35kv = 0;
+    private int nextDay;
+    private int nextmonth;
+    private int nextyear;
+    private List<DayListBean> nextDayList;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_plan_list, container, false);
         return view;
     }
 
     @Override
     protected void initData() {
-        String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        if (!jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
-            taskAdd.setVisibility(View.INVISIBLE);
-        }
-         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+        addPlanStatus.setVisibility(View.GONE);
+        addNextPlan.setText("明日工作计划制定");
+        planTotalTitle.setText("今日工作计划汇总");
+
+        time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         inteDate();
         taskTitle.setText("日计划列表");
         taskDate.setText(time);
@@ -95,22 +141,23 @@ public class DayPlanFrgment extends BaseFragment {
         dayPlanAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent=new Intent();
-                    intent.setClass(getContext(), DayPlanDetailActivity.class);
-                    Bundle bundle=new Bundle();
-                    bundle.putParcelable("bean",results.get(position));
-                    intent.putExtras(bundle);
+                Intent intent = new Intent();
+                intent.setClass(getContext(), DayPlanDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("bean", results.get(position));
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
-        mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        planRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getDayList();
+                getNextDayList();
             }
         });
         getDayList();
-
+        getNextDayList();
     }
 
 
@@ -145,12 +192,10 @@ public class DayPlanFrgment extends BaseFragment {
         }
     };
 
-
-   //获取日计划列表
+    //获取日计划列表
     public void getDayList() {
-
         BaseRequest.getInstance().getService()
-                .getDayList(year,month,day, SPUtil.getDepId(getContext()),"type_sign,line_id")
+                .getDayList(year, month, day, SPUtil.getDepId(getContext()), "type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayListBean>>(getContext()) {
@@ -159,13 +204,53 @@ public class DayPlanFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<DayListBean>> t) throws Exception {
                         results = t.getResults();
                         dayPlanAdapter.setNewData(results);
-                        mRefrsh.setRefreshing(false);
+                        for (int i = 0; i < results.size(); i++) {
+                            DayListBean dayListBean = results.get(i);
+                            num_total++;
+                            kilo_total=kilo_total+dayListBean.getTowers_range();
+                        }
+                        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                        monthLineTotal.setText("杆段总数 : " + num_total + "条");
+                        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                        planRefresh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         Log.e("fff", e.toString());
-                        mRefrsh.setRefreshing(false);
+                        planRefresh.setRefreshing(false);
+                    }
+                });
+    }
+    //获取明日计划列表
+    public void getNextDayList() {
+
+        BaseRequest.getInstance().getService()
+                .getDayList(nextyear+"", nextmonth+"", nextDay+"", SPUtil.getDepId(getContext()), "type_sign,line_id")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DayListBean>>(getContext()) {
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<DayListBean>> t) throws Exception {
+                        nextDayList = t.getResults();
+                        if (nextDayList != null && nextDayList.size() > 0) {
+                            addPlanIv.setVisibility(View.GONE);
+                            addPlanRight.setVisibility(View.VISIBLE);
+                            addPlanLl.setVisibility(View.VISIBLE);
+                            addPlanName.setText(nextyear + "年第" + nextmonth + "月"+nextDay+"日工作计划");
+
+                        }
+                        for (int i = 0; i < nextDayList.size(); i++) {
+                            DayListBean dayListBean = nextDayList.get(i);
+                            next_num_total++;
+                            next_kilo_total=kilo_total+dayListBean.getTowers_range();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
                     }
                 });
     }
@@ -185,71 +270,45 @@ public class DayPlanFrgment extends BaseFragment {
     };
 
 
-    @OnClick({R.id.task_date, R.id.task_add,R.id.plan_create})
+    @OnClick({R.id.task_date, R.id.add_plan_iv, R.id.add_plan_right, R.id.add_plan_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:
                 showDay();
                 break;
-            case R.id.task_add:
-                if (popWinShare == null) {
-                    //自定义的单击事件
-                    OnClickLintener paramOnClickListener = new OnClickLintener();
-                    popWinShare = new PopMenmuDialog(getActivity(), paramOnClickListener, dip2px(getContext(), 140), dip2px(getContext(), 80));
-                    //监听窗口的焦点事件，点击窗口外面则取消显示
-                    popWinShare.getContentView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            case R.id.add_plan_right:
+            case R.id.add_plan_iv:
 
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                            if (!hasFocus) {
-                                popWinShare.dismiss();
-                            }
-                        }
-                    });
-                    popWinShare.setTitle("制定日计划","制定临时计划");
-                }
-
-                //设置默认获取焦点
-                popWinShare.setFocusable(true);
-                //以某个控件的x和y的偏移量位置开始显示窗口
-                popWinShare.showAsDropDown(taskAdd, 0, 0);
-                //如果窗口存在，则更新
-                popWinShare.update();
+                Intent intent = new Intent(getContext(), AddDayPlanActivity.class);
+                intent.putExtra("year", nextyear);
+                intent.putExtra("month", nextmonth);
+                intent.putExtra("day", nextDay);
+                startActivityForResult(intent, 10);
                 break;
-
-            case R.id.plan_create:
-                Intent intent1 = new Intent(getContext(), CreatePlanActivity.class);
-                intent1.putExtra("from",0);
-                startActivityForResult(intent1,10);
+            case R.id.add_plan_ll:
+                Intent intent1 = new Intent(getContext(), NextDayPlanActivity.class);
+                intent1.putExtra("list", (Serializable) nextDayList);
+                intent1.putExtra("num_total",next_num_total);
+                intent1.putExtra("kilo_total",next_kilo_total);
+                intent1.putExtra("110kv_num",next_num_110kv);
+                intent1.putExtra("110kv_kolo",next_kilo_110kv);
+                intent1.putExtra("35kv_num",next_num_35kv);
+                intent1.putExtra("35kv_kolo",next_kilo_35kv);
+                intent1.putExtra("year", nextyear);
+                intent1.putExtra("month", nextmonth);
+                intent1.putExtra("day", nextDay);
+                startActivityForResult(intent1, 10);
                 break;
         }
 
     }
-class OnClickLintener implements View.OnClickListener {
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.all:
-                startActivityForResult(new Intent(getContext(), AddDayPlanActivity.class), 10);
-                break;
-            case R.id.popmenmu1:
-                startActivityForResult(new Intent(getContext(), TemporaryDayActivity.class), 10);
-                break;
-            case R.id.popmenmu2:
 
-                break;
-            default:
-                break;
-        }
-        popWinShare.dismiss();
-    }
-
-}
     public static int dip2px(Context context, float dipValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
+
     public void showDay() {
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();
@@ -260,41 +319,55 @@ class OnClickLintener implements View.OnClickListener {
         //选中事件回调
 //是否只显示中间选中项的label文字，false则每项item全部都带有label。
         pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
-               @Override
-               public void onTimeSelect(Date date, View v) {//选中事件回调
-                   time = DateUatil.getDay(date);
-                   taskDate.setText(time);
-                    inteDate();
-                    getDayList();
-               }
-           })
-                   .setDate(selectedDate)
-                   .setRangDate(startDate, endDate)
-                   .setContentTextSize(18)
-                   .setLineSpacingMultiplier(1.2f)
-                   .setTextXOffset(0, 0, 0, 40, 0, -40)
-                   .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                   .setDividerColor(0xFF24AD9D)
-                   .setType(new boolean[]{true, true, true, false, false, false})
-                   .setLabel("年", "月", "日", "时", "分", "秒")
-                   .build();
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                time = DateUatil.getDay(date);
+                taskDate.setText(time);
+                inteDate();
+                getDayList();
+            }
+        })
+                .setDate(selectedDate)
+                .setRangDate(startDate, endDate)
+                .setContentTextSize(18)
+                .setLineSpacingMultiplier(1.2f)
+                .setTextXOffset(0, 0, 0, 40, 0, -40)
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setDividerColor(0xFF24AD9D)
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .setLabel("年", "月", "日", "时", "分", "秒")
+                .build();
         pvTime.show();
     }
 
-    public void inteDate(){
+    public void inteDate() {
         String[] years = time.split("年");
         String[] months = years[1].split("月");
         String[] days = months[1].split("日");
-        month = Integer.parseInt(months[0])+"";
-        year =years[0];
-        day=Integer.parseInt(days[0])+"";
+        month = Integer.parseInt(months[0]) + "";
+        year = years[0];
+        day = Integer.parseInt(days[0]) + "";
+        nextDay = Integer.parseInt(days[0])+1;
+        nextmonth=Integer.parseInt(months[0]);
+        nextyear=Integer.parseInt(years[0]);
+        int monthOfDay = TimeUtil.getMonthOfDay(Integer.parseInt(year), Integer.parseInt(month));
+        if (nextDay>monthOfDay){
+            nextDay=1;
+            nextmonth = Integer.parseInt(months[0])+1;
+            if (nextmonth >12){
+                nextmonth =1;
+                nextyear = Integer.parseInt(year)+1;
+            }
+        }
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==10&&resultCode==-1){
+        if (requestCode == 10 && resultCode == -1) {
             getDayList();
+            getNextDayList();
         }
     }
 }

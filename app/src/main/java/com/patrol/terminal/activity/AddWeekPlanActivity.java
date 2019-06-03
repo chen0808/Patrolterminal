@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,8 +25,8 @@ import com.patrol.terminal.bean.WeekOfMonthBean;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.utils.TimeUtil;
-import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class AddWeekPlanActivity extends BaseActivity {
     @BindView(R.id.month_plan_line)
     TextView monthPlanLine;
     @BindView(R.id.month_plan_type_lv)
-    NoScrollListView monthPlanTypeLv;
+    ListView monthPlanTypeLv;
     @BindView(R.id.trouble_more)
     LinearLayout troubleMore;
     @BindView(R.id.mon_plan_type_ll)
@@ -70,8 +71,8 @@ public class AddWeekPlanActivity extends BaseActivity {
     ImageView addTowerMore;
 
     private List<String> lineName = new ArrayList<>();
-
-    private String curMonth;
+    private List<String> typeVal = new ArrayList<>();
+    private List<List<String>> typeSign = new ArrayList<>();
     private int year;
     private int month;
     private int week;
@@ -81,7 +82,6 @@ public class AddWeekPlanActivity extends BaseActivity {
     private AddTowerAdapter adapter;
     private List<WeekOfMonthBean> results=new ArrayList<>();
     private Disposable subscribe;
-    private List<String> typeName = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
 
     private String type_id;
@@ -90,6 +90,7 @@ public class AddWeekPlanActivity extends BaseActivity {
     private List<WeekOfMonthBean> linelist;
     private String beginDate;
     private String endDate;
+    private String sign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +185,7 @@ public class AddWeekPlanActivity extends BaseActivity {
                 showLine();
                 break;
             case R.id.month_plan_type:
-                showType();
+                showTypeSign();
                 break;
             case R.id.month_yes:
                 saveWeek();
@@ -224,24 +225,27 @@ public class AddWeekPlanActivity extends BaseActivity {
         pvOptions.show();
     }
 
-    //类型添加选项框
-    private void showType() {// 不联动的多级选项
-        if (typeList.size() == 0) {
-            Toast.makeText(this, "没有获取到工作类型信息，请稍后再试", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    //展示工作类型
+    public void showTypeSign() {
+
+        //条件选择器
         OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                type_name = typeList.get(options1).getName();
-                monthPlanType.setText(type_name);
-                type_id = typeList.get(options1).getId();
-                monthPlanLine.setText("点击选择线路");
-                selectType.clear();
-               getWeekInfoList();
+                String typeName = typeSign.get(options1).get(option2);
+                monthPlanType.setText(typeName);
+                for (int i = 0; i < typeList.size(); i++) {
+                    LineTypeBean lineTypeBean = typeList.get(i);
+                    if (typeName.equals(lineTypeBean.getName())){
+                        type_id = lineTypeBean.getId();
+                        sign = lineTypeBean.getSign();
+                    }
+                }
+
             }
         }).build();
-        pvOptions.setPicker(typeName);
+        pvOptions.setPicker(typeVal, typeSign);
+        pvOptions.setSelectOptions(0, 0);
         pvOptions.show();
     }
 
@@ -275,7 +279,6 @@ public class AddWeekPlanActivity extends BaseActivity {
 
     //获取工作类型
     public void getLineType() {
-        typeName.clear();
         BaseRequest.getInstance().getService()
                 .getWorkType("sort")
                 .subscribeOn(Schedulers.io())
@@ -284,10 +287,7 @@ public class AddWeekPlanActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
                         typeList = t.getResults();
-                        for (int i = 0; i < typeList.size(); i++) {
-                            LineTypeBean lineTypeBean = typeList.get(i);
-                            typeName.add(lineTypeBean.getName());
-                        }
+                        initType(typeList);
 
                     }
 
@@ -358,52 +358,30 @@ public class AddWeekPlanActivity extends BaseActivity {
             subscribe.dispose();
         }
     }
-//
-//    //初始化月份数据
-//    public void initdata() {
-//        List<List<String>> list = new ArrayList<>();
-//        for (int i = 2017; i < 2100; i++) {
-//            years.add(i + "年");
-//            List<String> monthList = new ArrayList<>();
-//
-//            for (int j = 1; j < 13; j++) {
-//                monthList.add(j + "月");
-//                List<String> weekList = new ArrayList<>();
-//
-//                int weekNumOfMonth = DateUatil.getWeekNumOfMonth(i + "", j + "");
-//                for (int y = 1; y < weekNumOfMonth + 1; y++) {
-//                    weekList.add("第" + y + "周");
-//                }
-//                list.add(weekList);
-//                months.add(monthList);
-//
-//            }
-//
-//            weeks.add(list);
-//        }
-//
-//
-//    }
 
-//    //展示月份
-//    public void showWeek() {
-//
-//        //条件选择器
-//        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-//            @Override
-//            public void onOptionsSelect(int options1, int option2, int options3, View v) {
-//
-//                //返回的分别是三个级别的选中位置
-//                String time = years.get(options1) + months.get(options1).get(option2) + weeks.get(options1).get(option2).get(options3);
-//                year = years.get(options1).split("年")[0];
-//                month = months.get(options1).get(option2).split("月")[0];
-//                week = weeks.get(options1).get(option2).get(options3).substring(1, 2);
-//                monthPlanDate.setText(time);
-//
-//            }
-//        }).build();
-//        pvOptions.setPicker(years, months, weeks);
-//        pvOptions.setSelectOptions(years.indexOf(year + "年"), Integer.parseInt(month) - 1, Integer.parseInt(week) - 1);
-//        pvOptions.show();
-//    }
+
+    public void initType(List<LineTypeBean> list){
+        List<String> list1=new ArrayList<>();
+        List<String> list2=new ArrayList<>();
+        List<String> list3=new ArrayList<>();
+        List<String> list4=new ArrayList<>();
+        typeVal.add("定巡");
+        typeVal.add("定检");
+        typeVal.add("缺陷");
+        typeVal.add("隐患");
+        for (int i = 0; i < list.size(); i++) {
+            LineTypeBean lineTypeBean = list.get(i);
+            if ("1".equals(lineTypeBean.getVal())){
+                list1.add(StringUtil.getTypeSign(lineTypeBean.getSign()));
+            }else if ("2".equals(lineTypeBean.getVal())){
+                list2.add(StringUtil.getTypeSign(lineTypeBean.getSign()));
+            }
+        }
+        list3.add("缺陷处理");
+        list4.add("隐患消除");
+        typeSign.add(list1);
+        typeSign.add(list2);
+        typeSign.add(list3);
+        typeSign.add(list4);
+    }
 }

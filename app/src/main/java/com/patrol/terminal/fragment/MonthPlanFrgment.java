@@ -100,7 +100,7 @@ public class MonthPlanFrgment extends BaseFragment {
     TextView monthLine35kvKilo;
     private MonthPlanAdapter monthPlanAdapter;
     private TimePickerView pvTime;
-    private List<Tower> lineList = new ArrayList<>();
+    private List<Tower> nextLineList = new ArrayList<>();
     private List<MonthPlanBean> data = new ArrayList<>();
     private List<MonthPlanBean> data1 = new ArrayList<>();
     private List<MonthPlanBean> data2 = new ArrayList<>();
@@ -115,15 +115,19 @@ public class MonthPlanFrgment extends BaseFragment {
     private int nextMonth;
     private int nextYear;
     private List<MonthPlanBean> nextPatrolList;
-    private List<Tower> nextLineList;
     private int num_total = 0;
     private int num_110kv = 0;
     private int num_35kv = 0;
-
     private double kilo_total = 0;
     private double kilo_110kv = 0;
     private double kilo_35kv = 0;
 
+    private int next_num_total = 0;
+    private int next_num_110kv = 0;
+    private int next_num_35kv = 0;
+    private double next_kilo_total = 0;
+    private double next_kilo_110kv = 0;
+    private double next_kilo_35kv = 0;
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plan_list, container, false);
@@ -251,6 +255,7 @@ public class MonthPlanFrgment extends BaseFragment {
                         if (t.getCode() == 1) {
                             MonthListBean results = t.getResults();
                             nextLineList = getData(results, 2);
+
                             nextPatrolList = results.getPatrol();
                             if (nextPatrolList != null && nextPatrolList.size() > 0) {
                                 addPlanIv.setVisibility(View.GONE);
@@ -278,6 +283,11 @@ public class MonthPlanFrgment extends BaseFragment {
                             } else {
                                 addPlanIv.setVisibility(View.VISIBLE);
                                 addPlanLl.setVisibility(View.GONE);
+                            }
+                            if (nextLineList.size() != 0) {
+                                planSubmit.setVisibility(View.VISIBLE);
+                            } else {
+                                planSubmit.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -307,16 +317,15 @@ public class MonthPlanFrgment extends BaseFragment {
 
                         if (t.getCode() == 1) {
                             MonthListBean results = t.getResults();
-                            lineList.clear();
-                            lineList = getData(results, 1);
+                            getData(results, 1);
                             monthPlanAdapter.setNewData(data);
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                            monthLineTotal.setText("工作线路总数 : "+num_total+"条");
-                            monthLineKiloTotal.setText("总公里数 : "+decimalFormat.format(kilo_total)+"公里");
-                            monthLine110kvNum.setText("110kv线路总数 : "+num_110kv+"条");
-                            monthLine110kvKilo.setText("公里数 : "+decimalFormat.format(kilo_110kv)+"公里");
-                            monthLine35kvNum.setText("35kv线路总数 : "+num_35kv+"条");
-                            monthLine35kvKilo.setText("公里数 : "+decimalFormat.format(kilo_35kv)+"公里");
+                            monthLineTotal.setText("工作线路总数 : " + num_total + "条");
+                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                            monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
+                            monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
+                            monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
+                            monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
                         }
                         ProgressDialog.cancle();
                         planRefresh.setRefreshing(false);
@@ -332,14 +341,14 @@ public class MonthPlanFrgment extends BaseFragment {
     }
 
     //提交月计划审核
-    public void submitMonthPlan(List<Tower> list, String status) {
+    public void submitMonthPlan(String status) {
         ProgressDialog.show(getContext(), false, "正在加载中...");
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
         bean.setYear(year);
         bean.setMonth(month);
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(getContext()));
-        bean.setLines(list);
+        bean.setLines(nextLineList);
         BaseRequest.getInstance().getService()
                 .submitMonthPlan(bean)
                 .subscribeOn(Schedulers.io())
@@ -355,7 +364,7 @@ public class MonthPlanFrgment extends BaseFragment {
                                 Toast.makeText(getContext(), "审核成功", Toast.LENGTH_SHORT).show();
                             }
                             RxRefreshEvent.publish("refreshTodo");
-                            getMonthPlanList();
+                            getNextMonthPlanList();
                         } else {
                             Toast.makeText(getContext(), t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
@@ -414,6 +423,12 @@ public class MonthPlanFrgment extends BaseFragment {
                 Intent intent1 = new Intent(getContext(), NextMonthPlanActivity.class);
                 intent1.putExtra("list", (Serializable) nextPatrolList);
                 intent1.putExtra("linelist", (Serializable) nextLineList);
+                intent1.putExtra("num_total",next_num_total);
+                intent1.putExtra("kilo_total",next_kilo_total);
+                intent1.putExtra("110kv_num",next_num_110kv);
+                intent1.putExtra("110kv_kolo",next_kilo_110kv);
+                intent1.putExtra("35kv_num",next_num_35kv);
+                intent1.putExtra("35kv_kolo",next_kilo_35kv);
                 intent1.putExtra("year", nextYear);
                 intent1.putExtra("month", nextMonth);
                 startActivityForResult(intent1, 10);
@@ -426,7 +441,7 @@ public class MonthPlanFrgment extends BaseFragment {
                 startActivityForResult(intent, 10);
                 break;
             case R.id.plan_submit:
-                submit(lineList);
+                submit();
                 break;
             case R.id.task_screen:
                 if (popWinShare == null) {
@@ -456,40 +471,40 @@ public class MonthPlanFrgment extends BaseFragment {
     }
 
     //提交月计划审核
-    public void submit(List<Tower> lineList) {
+    public void submit() {
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "审核", "不同意", "同意") {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitMonthPlan(lineList, "2");   //同意
+                    submitMonthPlan( "2");   //同意
                     dismiss();
                 }
 
                 @Override
                 public void cancel() {
                     super.cancel();
-                    submitMonthPlan(lineList, "4");  //不同意
+                    submitMonthPlan( "4");  //不同意
                     dismiss();
                 }
             };
             dialog.show();
 
         } else if (mJobType.contains((Constant.RUNNING_SQUAD_LEADER))) {
-            submitMonthPlan(lineList, "1");
+            submitMonthPlan( "1");
         } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
             CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "审核", "不同意", "同意") {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitMonthPlan(lineList, "3");   //同意
+                    submitMonthPlan( "3");   //同意
                     dismiss();
                 }
 
                 @Override
                 public void cancel() {
                     super.cancel();
-                    submitMonthPlan(lineList, "4");  //不同意
+                    submitMonthPlan("4");  //不同意
                     dismiss();
                 }
             };
@@ -537,36 +552,45 @@ public class MonthPlanFrgment extends BaseFragment {
         if (patrol != null) {
             for (int j = 0; j < patrol.size(); j++) {
                 MonthPlanBean monthPlanBean = patrol.get(j);
-                if (type==1){
+                if (type == 1) {
                     num_total++;
                     kilo_total += monthPlanBean.getLine_length();
                     if (monthPlanBean.getVoltage_level().contains("110")) {
-                        kilo_110kv =kilo_110kv+ monthPlanBean.getLine_length();
+                        kilo_110kv = kilo_110kv + monthPlanBean.getLine_length();
                         num_110kv++;
                     } else if (monthPlanBean.getVoltage_level().contains("35")) {
-                        kilo_35kv = kilo_35kv+monthPlanBean.getLine_length();
+                        kilo_35kv = kilo_35kv + monthPlanBean.getLine_length();
                         num_35kv++;
                     }
-                }
-
-                //当身份是专责时，获取需要审批的列表
-                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
-                    Tower lineBean = new Tower();
-                    lineBean.setLine_id(monthPlanBean.getLine_id());
-                    lineBean.setMonth_line_id(monthPlanBean.getId());
-                    lineList.add(lineBean);
-                    //当身份是主管时，获取需要审批的列表
-                } else if (mJobType.contains(Constant.RUN_SUPERVISOR) && "2".equals(monthPlanBean.getAudit_status())) {
-                    Tower lineBean = new Tower();
-                    lineBean.setLine_id(monthPlanBean.getLine_id());
-                    lineBean.setMonth_line_id(monthPlanBean.getId());
-                    lineList.add(lineBean);
-                    //当身份是班长时，获取需要审核的列表
-                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(monthPlanBean.getAudit_status()) || "4".equals(monthPlanBean.getAudit_status()))) {
-                    Tower lineBean = new Tower();
-                    lineBean.setLine_id(monthPlanBean.getLine_id());
-                    lineBean.setMonth_line_id(monthPlanBean.getId());
-                    lineList.add(lineBean);
+                } else {
+                    next_num_total++;
+                    next_kilo_total += monthPlanBean.getLine_length();
+                    if (monthPlanBean.getVoltage_level().contains("110")) {
+                        next_kilo_110kv = kilo_110kv + monthPlanBean.getLine_length();
+                        next_num_110kv++;
+                    } else if (monthPlanBean.getVoltage_level().contains("35")) {
+                        next_kilo_35kv = kilo_35kv + monthPlanBean.getLine_length();
+                        next_num_35kv++;
+                    }
+                    //当身份是专责时，获取需要审批的列表
+                    if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
+                        Tower lineBean = new Tower();
+                        lineBean.setLine_id(monthPlanBean.getLine_id());
+                        lineBean.setMonth_line_id(monthPlanBean.getId());
+                        lineList.add(lineBean);
+                        //当身份是主管时，获取需要审批的列表
+                    } else if (mJobType.contains(Constant.RUN_SUPERVISOR) && "2".equals(monthPlanBean.getAudit_status())) {
+                        Tower lineBean = new Tower();
+                        lineBean.setLine_id(monthPlanBean.getLine_id());
+                        lineBean.setMonth_line_id(monthPlanBean.getId());
+                        lineList.add(lineBean);
+                        //当身份是班长时，获取需要审核的列表
+                    } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(monthPlanBean.getAudit_status()) || "4".equals(monthPlanBean.getAudit_status()))) {
+                        Tower lineBean = new Tower();
+                        lineBean.setLine_id(monthPlanBean.getLine_id());
+                        lineBean.setMonth_line_id(monthPlanBean.getId());
+                        lineList.add(lineBean);
+                    }
                 }
             }
         }
@@ -583,11 +607,7 @@ public class MonthPlanFrgment extends BaseFragment {
                 data.addAll(ele);
                 data2.addAll(ele);
             }
-            if (lineList.size() != 0) {
-                planSubmit.setVisibility(View.VISIBLE);
-            } else {
-                planSubmit.setVisibility(View.GONE);
-            }
+
         }
 
         return lineList;

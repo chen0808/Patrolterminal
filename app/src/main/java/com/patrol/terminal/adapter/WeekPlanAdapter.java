@@ -1,6 +1,5 @@
 package com.patrol.terminal.adapter;
 
-import android.view.View;
 import android.widget.ProgressBar;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -8,7 +7,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.WeekListBean;
 import com.patrol.terminal.utils.StringUtil;
-import com.patrol.terminal.widget.HorizontalLineView;
 
 import java.util.List;
 
@@ -55,9 +53,9 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
 
         viewHolder.setText(R.id.item_plan_device_name, item.getLine_name() + item.getName())
                 .setText(R.id.item_plan_content, "工作内容 : " + StringUtil.getTypeSign(item.getType_sign()));
-        HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
-        view.setVisibility(View.VISIBLE);
-        view.setWeekState(item.getAudit_status());
+//        HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
+//        view.setVisibility(View.VISIBLE);
+//        view.setWeekState(item.getAudit_status());
         if ("0".equals(item.getAudit_status())) {
             viewHolder.setVisible(R.id.plan_to_change, true);
         } else {

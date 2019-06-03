@@ -2,19 +2,16 @@ package com.patrol.terminal.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
-import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
-import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.AddDayAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -23,18 +20,11 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.LineTypeBean;
-import com.patrol.terminal.bean.PlanWeekLineBean;
-import com.patrol.terminal.bean.PlanWeekReqBean;
-import com.patrol.terminal.bean.Tower;
-import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,7 +56,7 @@ public class AddDayPlanActivity extends BaseActivity {
     @BindView(R.id.month_plan_line)
     TextView monthPlanLine;
     @BindView(R.id.month_plan_type_lv)
-    NoScrollListView monthPlanTypeLv;
+    ListView monthPlanTypeLv;
     @BindView(R.id.trouble_more)
     LinearLayout troubleMore;
     @BindView(R.id.mon_plan_type_ll)
@@ -78,7 +68,6 @@ public class AddDayPlanActivity extends BaseActivity {
     private List<String> lineNameList = new ArrayList<>();
     private String year;
     private String month;
-    private String week;
     private int type = 0;
     private String lineId;
     private List<DayOfWeekBean> selectType = new ArrayList<>();
@@ -89,7 +78,6 @@ public class AddDayPlanActivity extends BaseActivity {
     private List<String> typeNameList = new ArrayList<>();
     private List<LineTypeBean> typeList=new ArrayList<>();
     private String type_id;
-    private String time;
     private String day;
     private String lineName;
     private String typeName;
@@ -109,10 +97,9 @@ public class AddDayPlanActivity extends BaseActivity {
 
 
     private void initview() {
-        week = DateUatil.getWeekNum() + "";
-        time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+
         inteDate();
-        titleName.setText(time + "计划制定");
+        titleName.setText(year+"年"+month+"月" +day+ "日计划制定");
         adapter = new AddDayAdapter(this, linList);
         monthPlanTypeLv.setAdapter(adapter);
 
@@ -335,42 +322,10 @@ public class AddDayPlanActivity extends BaseActivity {
         }
     }
 
-    public void showDay() {
-        Calendar selectedDate = Calendar.getInstance();//系统当前时间
-        Calendar startDate = Calendar.getInstance();
-        startDate.set(2018, 1, 23);
-        Calendar endDate = Calendar.getInstance();
-        endDate.set(2028, 2, 28);
-        //时间选择器 ，自定义布局
-        //选中事件回调
-//是否只显示中间选中项的label文字，false则每项item全部都带有label。
-        TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {//选中事件回调
-                time = DateUatil.getDay(date);
-                inteDate();
 
-
-            }
-        })
-                .setDate(selectedDate)
-                .setRangDate(startDate, endDate)
-                .setContentTextSize(18)
-                .setLineSpacingMultiplier(1.2f)
-                .setTextXOffset(0, 0, 0, 40, 0, -40)
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setDividerColor(0xFF24AD9D)
-                .setType(new boolean[]{true, true, true, false, false, false})
-                .setLabel("年", "月", "日", "时", "分", "秒")
-                .build();
-        pvTime.show();
-    }
     public void inteDate() {
-        String[] years = time.split("年");
-        String[] months = years[1].split("月");
-        String[] days = months[1].split("日");
-        month = Integer.parseInt(months[0]) + "";
-        year = years[0];
-        day = Integer.parseInt(days[0]) + "";
+        month = getIntent().getIntExtra("month",6)+"";
+        year = getIntent().getIntExtra("year",2019)+"";
+        day = getIntent().getIntExtra("day",1)+"";
     }
 }
