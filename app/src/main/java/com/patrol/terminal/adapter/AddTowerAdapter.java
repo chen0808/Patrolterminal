@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.WeekOfMonthBean;
 import com.patrol.terminal.utils.RxRefreshEvent;
+import com.patrol.terminal.utils.StringUtil;
 
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class AddTowerAdapter extends BaseAdapter {
 
 
         holder.towerNmae.setText(lineTypeBeans.get(position).getLine_name() + lineTypeBeans.get(position).getTowers_name()/*lineTypeBeans.get(position).getTowers()*/);
-        holder.towerType.setText(lineTypeBeans.get(position).getType_name());  //TODO
+        holder.towerType.setText(StringUtil.getTypeSign(lineTypeBeans.get(position).getType_sign()));  //TODO
         WeekOfMonthBean listBean = lineTypeBeans.get(position);
      holder.towerCheck.setChecked(false);
         holder.towerCheck.setOnClickListener(new View.OnClickListener() {

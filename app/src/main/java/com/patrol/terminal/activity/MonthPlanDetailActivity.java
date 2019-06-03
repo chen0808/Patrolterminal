@@ -16,6 +16,7 @@ import com.patrol.terminal.bean.DefectBean;
 import com.patrol.terminal.bean.MonthPlanDetailBean;
 import com.patrol.terminal.bean.Trace;
 import com.patrol.terminal.network.ApiServise;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
@@ -95,7 +96,6 @@ public class MonthPlanDetailActivity extends BaseActivity {
         month = getIntent().getIntExtra("month",4);
         line_id = getIntent().getStringExtra("id");
         month_line_id = getIntent().getStringExtra("month_line_id");
-
         month_id = getIntent().getStringExtra("month_id");
 
         titleName.setText("月计划详情");
@@ -162,18 +162,26 @@ public class MonthPlanDetailActivity extends BaseActivity {
                             List<MonthPlanDetailBean> results = t.getResults();
                             for (int i = 0; i < results.size(); i++) {
                                 MonthPlanDetailBean monthPlanDetailBean = results.get(i);
-                                String type_val = monthPlanDetailBean.getType_val();
+                                String type_sign = monthPlanDetailBean.getType_sign();
                                 if (i == 0) {
                                     tvTableName.setText(monthPlanDetailBean.getPlan_name());
                                     tvLineName.setText("线路名称 : " + monthPlanDetailBean.getLine_name());
                                     tvLineNo.setText("班  组 : " + monthPlanDetailBean.getDep_name());
                                     tvLineDate.setText("月  份 : " + monthPlanDetailBean.getYear() + "年" + monthPlanDetailBean.getMonth() + "月");
+
                                 }
-                                DefectBean defectBean =new DefectBean();
-                                defectBean.setType(0);
-                                defectBean.setContent(monthPlanDetailBean.getLine_name()+monthPlanDetailBean.getType_name()+"计划");
-                                defectBean.setFind_time("");
-                                selectType.add(defectBean);
+                                String[] split = type_sign.split(",");
+                                for (int j = 0; j < split.length; j++) {
+                                    String sign = split[j];
+                                    DefectBean defectBean =new DefectBean();
+                                    defectBean.setType(0);
+                                    defectBean.setContent(StringUtil.getTypeSign(sign)+"计划");
+                                    defectBean.setFind_time("");
+                                    selectType.add(defectBean);
+                                }
+                                tvLineTower.setVisibility(View.VISIBLE);
+                                tvLineTower.setText("电压等级 : "+monthPlanDetailBean.getVoltage_level());
+
                             }
 
                         monthPlanDetailAdapter.setNewData(selectType);

@@ -42,8 +42,26 @@ public class MonthPlanDetailBean {
         private String dep_name;
         private String line_name;
         private String type_name;
+        private String type_sign;
+    private String voltage_level;
 
-        public String getId() {
+    public String getVoltage_level() {
+        return voltage_level;
+    }
+
+    public void setVoltage_level(String voltage_level) {
+        this.voltage_level = voltage_level;
+    }
+
+    public String getType_sign() {
+        return type_sign;
+    }
+
+    public void setType_sign(String type_sign) {
+        this.type_sign = type_sign;
+    }
+
+    public String getId() {
             return id;
         }
 

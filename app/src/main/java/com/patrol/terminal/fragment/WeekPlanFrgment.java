@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddWeekPlanActivity;
+import com.patrol.terminal.activity.NextMonthPlanActivity;
 import com.patrol.terminal.activity.SpecialPlanDetailActivity;
 import com.patrol.terminal.activity.TemporaryWeekActivity;
 import com.patrol.terminal.activity.WeekPlanDetailActivity;
@@ -32,6 +34,7 @@ import com.patrol.terminal.bean.WeekListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.PopMenmuDialog;
@@ -43,8 +46,8 @@ import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -56,69 +59,76 @@ import io.reactivex.schedulers.Schedulers;
 public class WeekPlanFrgment extends BaseFragment {
 
 
+    @BindView(R.id.add_next_plan)
+    TextView addNextPlan;
+    @BindView(R.id.plan_submit)
+    ImageView planSubmit;
+    @BindView(R.id.add_plan_right)
+    ImageView addPlanRight;
+    @BindView(R.id.plan_point)
+    View planPoint;
+    @BindView(R.id.add_plan_name)
+    TextView addPlanName;
+    @BindView(R.id.add_plan_status)
+    TextView addPlanStatus;
+    @BindView(R.id.add_plan_ll)
+    RelativeLayout addPlanLl;
+    @BindView(R.id.add_plan_iv)
+    ImageView addPlanIv;
     @BindView(R.id.task_title)
     TextView taskTitle;
     @BindView(R.id.task_date)
     TextView taskDate;
-    @BindView(R.id.task_add)
-    ImageView taskAdd;
+    @BindView(R.id.task_screen)
+    ImageView taskScreen;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
-    @BindView(R.id.plan_submit)
-    TextView planSubmit;
-    @BindView(R.id.plan_create)
-    TextView planCreate;
     @BindView(R.id.plan_refresh)
-    SwipeRefreshLayout mRefrsh;
+    SwipeRefreshLayout planRefresh;
+    @BindView(R.id.plan_total_title)
+    TextView planTotalTitle;
     private TimePickerView pvTime;
     private String time;
     private WeekPlanAdapter weekPlanAdapter;
     private List<String> years = new ArrayList<>();
-    private List<List<String>> months = new ArrayList<>();
-    private List<List<List<String>>> weeks = new ArrayList<>();
+    private List<List<String>> weeks = new ArrayList<>();
     private String year;
     private String month;
-    private String week;
+    private int week;
     private String state;
     private List<Tower> lineList = new ArrayList<>();
+    private List<Tower> nextlineList = new ArrayList<>();
     private String mJobType;
     private String depId;
-    private List<WeekListBean> results=new ArrayList<>();
-    private String currWeek;
+    private List<WeekListBean> results = new ArrayList<>();
     private PopMenmuDialog popWinShare;
+    private int nextYear;
+    private int nextWeek;
+    private List<WeekListBean> nextWeekList;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_plan_list, container, false);
         return view;
     }
 
     @Override
     protected void initData() {
-        initdata();
+        addNextPlan.setText("下周工作计划制定");
+        planTotalTitle.setText("本周计划工作汇总");
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(getActivity(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
-            state="1,2,3,4,5";
-            depId=null;
-            planSubmit.setText("审核");
-            taskAdd.setVisibility(View.INVISIBLE);
-            planCreate.setVisibility(View.INVISIBLE);
+            state = "1,2,3,4,5";
+            depId = null;
         }
-        time = DateUatil.getCurMonth();
-        String[] years = time.split("年");
-        String[] months = years[1].split("月");
-        month = Integer.parseInt(months[0]) + "";
-        year = years[0];
-        week = DateUatil.getWeekNum() + "";
-        currWeek = DateUatil.getWeekNum() + "";
+        initdata();
+        initdate();
         taskTitle.setText("周计划列表");
-        Map<String, Object> scopeForWeeks = TimeUtil.getScopeForWeeks(Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(currWeek));
-       String beginDate = TimeUtil.dateToDate((String) scopeForWeeks.get("beginDate"));
-        String  endDate = TimeUtil.dateToDate((String) scopeForWeeks.get("endDate"));
-        String startDay=beginDate.split("月")[1];
-        String endDay=endDate.split("月")[1];
-        taskDate.setText(time +startDay+"-"+endDay+ "(" + currWeek + ")");
+
+        String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
+        String endDate = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
+        taskDate.setText(year+"年第"+week+"周("+beginDate+"-"+endDate+")");
 
         // 设置监听器。
         planRv.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -133,30 +143,49 @@ public class WeekPlanFrgment extends BaseFragment {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent();
                 intent.setClass(getContext(), WeekPlanDetailActivity.class);
-                if (results.get(position).getWeek_id()!=null) {
-                    Bundle bundle=new Bundle();
+                if (results.get(position).getWeek_id() != null) {
+                    Bundle bundle = new Bundle();
                     bundle.putParcelable("bean", results.get(position));
                     intent.putExtras(bundle);
 
-                }else {
-                        intent.setClass(getContext(), SpecialPlanDetailActivity.class);
-                        intent.putExtra("from","week");
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("bean", results.get(position));
-                        intent.putExtras(bundle);
-                    }
+                } else {
+                    intent.setClass(getContext(), SpecialPlanDetailActivity.class);
+                    intent.putExtra("from", "week");
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("bean", results.get(position));
+                    intent.putExtras(bundle);
+                }
                 startActivity(intent);
             }
         });
-        mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        planRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getWeekList();
+                getNextWeekList();
             }
         });
         getWeekList();
+        getNextWeekList();
     }
 
+    //初始化日期
+    public void initdate() {
+        time = DateUatil.getCurMonth();
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        month = Integer.parseInt(months[0]) + "";
+        year = years[0];
+        week = TimeUtil.getCurrWeek();
+        int maxWeekNumOfYear = TimeUtil.getMaxWeekNumOfYear(Integer.parseInt(year));
+        if (week>maxWeekNumOfYear){
+            nextWeek=1;
+            nextYear=Integer.parseInt(year)+1;
+        }else {
+            nextWeek=week+1;
+            nextYear=Integer.parseInt(year);
+        }
+    }
 
     // 创建菜单：
     SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
@@ -190,9 +219,10 @@ public class WeekPlanFrgment extends BaseFragment {
     };
 
 
+    //获取本周计划
     public void getWeekList() {
         BaseRequest.getInstance().getService()
-                .getWeekList(year, month, week, depId,state,"type_sign,line_id")
+                .getWeekList(year, week+"", depId, state, "type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekListBean>>(getContext()) {
@@ -204,15 +234,15 @@ public class WeekPlanFrgment extends BaseFragment {
                         weekPlanAdapter.setNewData(results);
                         for (int i = 0; i < results.size(); i++) {
                             WeekListBean weekListBean = results.get(i);
-                                //当身份是运行班专责时，获取到需要审核的列表
-                            if (weekListBean.getWeek_id()!=null){
+                            //当身份是运行班专责时，获取到需要审核的列表
+                            if (weekListBean.getWeek_id() != null) {
                                 if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(results.get(i).getAudit_status())) {
                                     WeekListBean bean = results.get(i);
                                     Tower lineBean = new Tower();
                                     lineBean.setId(bean.getId());
                                     lineList.add(lineBean);
                                     //当身份是运行班专责时，获取到需要发布的列表
-                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(results.get(i).getAudit_status())||"3".equals(results.get(i).getAudit_status()))){
+                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(results.get(i).getAudit_status()) || "3".equals(results.get(i).getAudit_status()))) {
                                     WeekListBean bean = results.get(i);
                                     Tower lineBean = new Tower();
                                     lineBean.setId(bean.getId());
@@ -220,22 +250,88 @@ public class WeekPlanFrgment extends BaseFragment {
                                 }
                             }
                         }
-                        if (lineList.size()!=0){
+                        if (lineList.size() != 0) {
                             planSubmit.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             planSubmit.setVisibility(View.GONE);
                         }
-                        mRefrsh.setRefreshing(false);
+                        planRefresh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
-                        mRefrsh.setRefreshing(false);
+                        planRefresh.setRefreshing(false);
                     }
                 });
     }
 
+    //获取下周计划
+    public void getNextWeekList() {
+        BaseRequest.getInstance().getService()
+                .getWeekList(nextYear + "", nextWeek + "", depId, state, "type_sign,line_id")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<WeekListBean>>(getContext()) {
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
+                        lineList.clear();
+                        nextWeekList = t.getResults();
+                        if (nextWeekList != null && nextWeekList.size() > 0) {
+                            addPlanIv.setVisibility(View.GONE);
+                            addPlanLl.setVisibility(View.VISIBLE);
+                            String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
+                            String endDate = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
+                            addPlanName.setText(nextYear + "年第" + nextWeek + "周工作计划("+beginDate+"-"+endDate+")");
+
+                            WeekListBean weekListBean = nextWeekList.get(0);
+                           String audit_status=weekListBean.getAudit_status();
+                            addPlanStatus.setText(StringUtil.getYxbWeekState(weekListBean.getAudit_status()));
+                            if ("2".equals(weekListBean.getAudit_status())) {
+                                addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
+                                addPlanStatus.setTextColor(getResources().getColor(R.color.green));
+                            }
+                            if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(audit_status)) {
+                                addPlanRight.setVisibility(View.VISIBLE);
+                                planSubmit.setVisibility(View.VISIBLE);
+                            } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(audit_status)) {
+                                planSubmit.setVisibility(View.VISIBLE);
+                                addPlanRight.setVisibility(View.GONE);
+                            } else {
+                                addPlanRight.setVisibility(View.GONE);
+                                planSubmit.setVisibility(View.GONE);
+                            }
+                        } else {
+                            addPlanIv.setVisibility(View.VISIBLE);
+                            addPlanLl.setVisibility(View.GONE);
+                        }
+                        for (int i = 0; i < nextWeekList.size(); i++) {
+                            WeekListBean weekListBean = nextWeekList.get(i);
+                            //当身份是运行班专责时，获取到需要审核的列表
+                            if (weekListBean.getWeek_id() != null) {
+                                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(nextWeekList.get(i).getAudit_status())) {
+                                    WeekListBean bean = nextWeekList.get(i);
+                                    Tower lineBean = new Tower();
+                                    lineBean.setId(bean.getId());
+                                    nextlineList.add(lineBean);
+                                    //当身份是运行班专责时，获取到需要发布的列表
+                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(results.get(i).getAudit_status()) || "3".equals(results.get(i).getAudit_status()))) {
+                                    WeekListBean bean = nextWeekList.get(i);
+                                    Tower lineBean = new Tower();
+                                    lineBean.setId(bean.getId());
+                                    nextlineList.add(lineBean);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
 
     OnItemMenuClickListener mItemMenuClickListener = new OnItemMenuClickListener() {
         @Override
@@ -251,11 +347,19 @@ public class WeekPlanFrgment extends BaseFragment {
     };
 
 
-    @OnClick({R.id.task_date, R.id.task_add, R.id.plan_create, R.id.plan_submit})
+    @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit, R.id.add_plan_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:
                 showWeek();
+                break;
+            case R.id.add_plan_ll:
+                Intent intent1 = new Intent(getContext(), NextMonthPlanActivity.class);
+//                intent1.putExtra("list", (Serializable) nextPatrolList);
+//                intent1.putExtra("linelist", (Serializable) nextLineList);
+                intent1.putExtra("year", nextYear);
+                intent1.putExtra("week", nextWeek);
+                startActivityForResult(intent1, 10);
                 break;
             case R.id.plan_submit:
                 if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || mJobType.contains(Constant.RUN_SUPERVISOR)) {
@@ -293,36 +397,16 @@ public class WeekPlanFrgment extends BaseFragment {
                     dialog.show();
                 }
                 break;
-            case R.id.task_add:
-                if (popWinShare == null) {
-                    //自定义的单击事件
-                    OnClickLintener paramOnClickListener = new OnClickLintener();
-                    popWinShare = new PopMenmuDialog(getActivity(), paramOnClickListener, dip2px(getContext(), 140), dip2px(getContext(), 80));
-                    //监听窗口的焦点事件，点击窗口外面则取消显示
-                    popWinShare.getContentView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                            if (!hasFocus) {
-                                popWinShare.dismiss();
-                            }
-                        }
-                    });
-                    popWinShare.setTitle("制定下周计划","制定临时计划");
-                }
-
-                //设置默认获取焦点
-                popWinShare.setFocusable(true);
-                //以某个控件的x和y的偏移量位置开始显示窗口
-                popWinShare.showAsDropDown(taskAdd, 0, 0);
-                //如果窗口存在，则更新
-                popWinShare.update();
-                break;
-
-            case R.id.plan_create:
+            case R.id.add_plan_iv:
+            case R.id.add_plan_right:
+                Intent intent = new Intent(getContext(), AddWeekPlanActivity.class);
+                intent.putExtra("year", nextYear);
+                intent.putExtra("week", nextWeek);
+                startActivityForResult(intent, 10);
                 break;
         }
     }
+
     class OnClickLintener implements View.OnClickListener {
 
         @Override
@@ -344,10 +428,12 @@ public class WeekPlanFrgment extends BaseFragment {
         }
 
     }
+
     public static int dip2px(Context context, float dipValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
+
     //提交周计划审核
     public void submitWeekPlan(String status) {
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
@@ -361,9 +447,9 @@ public class WeekPlanFrgment extends BaseFragment {
                     @Override
                     protected void onSuccees(BaseResult<List<MonthPlanBean>> t) throws Exception {
                         if (t.getCode() == 1) {
-                            if ("1".equals(status)){
+                            if ("1".equals(status)) {
                                 Toast.makeText(getContext(), "一键提交成功", Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(getContext(), "一键审核成功", Toast.LENGTH_SHORT).show();
                             }
                             getWeekList();
@@ -380,27 +466,17 @@ public class WeekPlanFrgment extends BaseFragment {
 
     //初始化月份数据
     public void initdata() {
-        for (int i = 2018; i < 2100; i++) {
+        for (int i = 2019; i < 2100; i++) {
             years.add(i + "年");
-            ArrayList<String> options2Items_01 = new ArrayList<>();
-            List<List<String>> toptions2Items1 = new ArrayList<>();
-            for (int j = 1; j < 13; j++) {
-                options2Items_01.add(j + "月");
-
-                List<String> options3Items_01 = new ArrayList<>();
-                int weekNumOfMonth = DateUatil.getWeekNumOfMonth(i + "", j + "");
-                for (int y = 1; y < weekNumOfMonth + 1; y++) {
-
-                    Map<String, Object> scopeForWeeks = TimeUtil.getScopeForWeeks(i,j,y);
-                    String beginDate =TimeUtil.dateToDay((String) scopeForWeeks.get("beginDate"));
-                    String endDate =TimeUtil.dateToDay((String) scopeForWeeks.get("endDate"));
-                    options3Items_01.add(beginDate+"-" + endDate+ "("+y+")");
-                }
-                toptions2Items1.add(options3Items_01);
+            int maxWeekNumOfYear = TimeUtil.getMaxWeekNumOfYear(i);
+            List<String> options3Items_01 = new ArrayList<>();
+            for (int j =0 ; j < maxWeekNumOfYear; j++) {
+                String firstDayOfWeek = TimeUtil.getFirstDayOfWeek(i, j);
+                String lastDayOfWeek = TimeUtil.getLastDayOfWeek(i, j);
+                    options3Items_01.add("第"+(j+1)+"周("+firstDayOfWeek+"-"+lastDayOfWeek+")");
 
             }
-            weeks.add(toptions2Items1);
-            months.add(options2Items_01);
+            weeks.add(options3Items_01);
         }
 
     }
@@ -414,17 +490,16 @@ public class WeekPlanFrgment extends BaseFragment {
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
 
                 //返回的分别是三个级别的选中位置
-                String time = years.get(options1) + months.get(options1).get(option2) + weeks.get(options1).get(option2).get(options3);
+                String time = years.get(options1) + weeks.get(options1).get(option2);
                 year = years.get(options1).split("年")[0];
-                month = months.get(options1).get(option2).split("月")[0];
-                String date = weeks.get(options1).get(option2).get(options3);
-                week =date.substring(date.length()-2,date.length()-1);
+                String date = weeks.get(options1).get(option2);
+                week = Integer.parseInt(date.split("第")[0].split("周")[0]);
                 taskDate.setText(time);
                 getWeekList();
             }
         }).build();
-        pvOptions.setPicker(years, months, weeks);
-        pvOptions.setSelectOptions(years.indexOf(year + "年"), Integer.parseInt(month) - 1, Integer.parseInt(currWeek) - 1);
+        pvOptions.setPicker(years, weeks);
+        pvOptions.setSelectOptions(years.indexOf(year + "年"),week-1);
         pvOptions.show();
     }
 

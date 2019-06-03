@@ -1,15 +1,12 @@
 package com.patrol.terminal.adapter;
 
-import android.content.Intent;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.AddMonthPlanActivity;
 import com.patrol.terminal.bean.WeekListBean;
-import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.HorizontalLineView;
 
@@ -49,10 +46,15 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
                 viewHolder.setBackgroundRes(R.id.item_plan_date_tv, R.drawable.plan_day_bg);
                 break;
         }
-        viewHolder.setText(R.id.item_line_status, StringUtil.getYxbWeekState(item.getAudit_status()));
+        if ("0".equals(item.getDone_status())){
+            viewHolder.setText(R.id.item_line_status,"分配状态: 未分配");
+        }else {
+            viewHolder.setText(R.id.item_line_status,"分配状态:已分配");
+        }
+
 
         viewHolder.setText(R.id.item_plan_device_name, item.getLine_name() + item.getName())
-                .setText(R.id.item_plan_content, "类型 : " + item.getType_name());
+                .setText(R.id.item_plan_content, "工作内容 : " + StringUtil.getTypeSign(item.getType_sign()));
         HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
         view.setVisibility(View.VISIBLE);
         view.setWeekState(item.getAudit_status());
@@ -68,13 +70,6 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
             ProgressBar progressBar = viewHolder.getView(R.id.plan_progressbar_probar);
             progressBar.setMax(item.getAll_num());
             progressBar.setProgress(item.getDone_num());
-            if (Double.parseDouble(item.getDone_rate())==100){
-                view.setWeekState("5");
-                viewHolder.setText(R.id.item_line_status, "状态 : 已完成" );
-            }else {
-                view.setWeekState("4");
-                viewHolder.setText(R.id.item_line_status, "状态 : 执行中" );
-            }
 
         } else {
             viewHolder.setGone(R.id.plan_progressbar_ll, false);
@@ -82,7 +77,5 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
         viewHolder.setVisible(R.id.item_line_state, false);
         viewHolder.setVisible(R.id.month_plan_go, true);
         viewHolder.setVisible(R.id.plan_to_change, false);
-
-
     }
 }

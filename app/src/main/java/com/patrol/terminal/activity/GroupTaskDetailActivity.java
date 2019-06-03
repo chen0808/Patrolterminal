@@ -20,6 +20,7 @@ import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
@@ -113,10 +114,16 @@ public class GroupTaskDetailActivity extends Activity {
         tvLineDate.setText("小组负责人 :" + bean.getDuty_user_name());
         tvLineTower.setText("杆  段 : " + bean.getName());
 
-        DefectBean planTypeBean = new DefectBean();
-        planTypeBean.setContent(bean.getLine_name() + bean.getName() + bean.getType_name() + "任务");
-        planTypeBean.setType(0);
-        typeList.add(planTypeBean);
+        String type_sign = bean.getType_sign();
+        String[] split = type_sign.split(",");
+        for (int i = 0; i <split.length; i++) {
+            String type = split[i];
+            DefectBean planTypeBean = new DefectBean();
+            planTypeBean.setContent(StringUtil.getTypeSign(type) + "任务");
+            planTypeBean.setType(0);
+            typeList.add(planTypeBean);
+        }
+        adapter.setNewData(typeList);
     }
 
 

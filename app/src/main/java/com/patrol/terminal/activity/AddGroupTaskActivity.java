@@ -123,7 +123,7 @@ public class AddGroupTaskActivity extends BaseActivity {
     private void initview() {
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         inteDate();
-        titleName.setText("制定班组任务");
+        titleName.setText("制定任务");
         adapter = new AddGroupTaskAdapter(this, results);
         selectAdapter = new GroupTaskSelectAdapter(this, selectType);
         groupTaskTypeLv.setAdapter(adapter);

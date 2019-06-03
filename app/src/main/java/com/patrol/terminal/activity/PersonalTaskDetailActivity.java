@@ -17,7 +17,6 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PlanTypeBean;
-import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -123,14 +122,18 @@ public class PersonalTaskDetailActivity extends Activity {
                 intent.putExtra("audit_status",bean.getAudit_status());
                 intent.putExtra("typename",bean.getType_name());
                 switch (bean.getType_sign()) {
+
                     case "1":
+                    case "2":
+                    case "7":
+                    case "11":
                         intent.setClass(PersonalTaskDetailActivity.this, PatrolRecordActivity.class);
                         SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_id", bean.getTower_id());
                         SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_id", bean.getLine_id());
                         SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_name", bean.getLine_name());
                         SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_name", bean.getTower_name());
                         break;
-                    case "2":
+                    case "5":
                         intent.setClass(PersonalTaskDetailActivity.this, HongWaiCeWenActivity.class);
                         break;
                     case "3":
@@ -139,20 +142,18 @@ public class PersonalTaskDetailActivity extends Activity {
                     case "10":
                         intent.setClass(PersonalTaskDetailActivity.this, JueYuanZiLingZhiJianCeActivity.class);
                         break;
-                    case "5":
-                        intent.setClass(PersonalTaskDetailActivity.this, HongWaiCeWenActivity.class);
-                        break;
                     case "6":
                         intent.setClass(PersonalTaskDetailActivity.this, XieGanTaQingXieCeWenActivity.class);
                         break;
 
 
                 }
-
                 startActivityForResult(intent,25);
             }
         });
     }
+
+
 
     //获取个人任务列表
     public void getPersonalList() {

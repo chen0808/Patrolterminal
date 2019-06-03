@@ -31,7 +31,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ShowImageActivity"></activity>
+        <activity android:name=".activity.NextMonthPlanActivity"></activity>
+        <activity android:name=".activity.ShowImageActivity" />
         <activity android:name=".activity.YXCheckActivity" />
         <activity android:name=".activity.TemporaryActivity" />
         <activity android:name=".activity.MakeDutyActivity" />
@@ -52,7 +53,7 @@
         <activity android:name=".activity.AddMonthPlanActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.TicketSafeActivity" />
-        <activity android:name=".activity.SafeListActivity"></activity>
+        <activity android:name=".activity.SafeListActivity" />
         <activity android:name=".activity.SpecialAttrListActivity" />
         <activity
             android:name=".activity.NewTaskActivity"

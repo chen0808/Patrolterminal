@@ -318,7 +318,7 @@ public interface ApiServise {
 
     //周计划列表
     @GET("/plan/week/tower/listGET ")
-    Observable<BaseResult<List<WeekListBean>>> getWeekList(@Query("year") String year, @Query("month") String month, @Query("week") String week, @Query("dep_id") String dep_id, @Query("audit_status") String audit_status, @Query("order") String order);
+    Observable<BaseResult<List<WeekListBean>>> getWeekList(@Query("year") String year, @Query("week") String week, @Query("dep_id") String dep_id, @Query("audit_status") String audit_status, @Query("order") String order);
 
     //日计划列表
     @GET("/plan/day/tower/listGET")
@@ -411,10 +411,10 @@ public interface ApiServise {
     //计划类型
     @GET("plan/type/listGET")
     Observable<BaseResult<List<LineTypeBean>>> getLineType();
-
     //计划类型
     @GET("plan/type/listGET")
-    Observable<BaseResult<List<LineTypeBean>>> getLineType(@Query("temp") String temp);
+    Observable<BaseResult<List<LineTypeBean>>> getWorkType(@Query("order") String temp);
+
 
     //获取临时任务线路的杆塔
     @GET("/eq/tower/partGET")
@@ -512,7 +512,7 @@ public interface ApiServise {
 //                                               @Part() List<MultipartBody.Part> parts);
     Observable<BaseResult> commitPatrolRecord(@PartMap Map<String, RequestBody> params);
 
-    //巡视内容对应隐患列表
+    //巡视内容对应的特殊属性
     @GET("eq/tower/wares/towerByIdGET")
     Observable<BaseResult<List<SpecialAttrBean>>> getSpecialAttr(@Query("id") String p_id);
 

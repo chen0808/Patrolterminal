@@ -1,13 +1,8 @@
 package com.patrol.terminal.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-import com.chad.library.adapter.base.entity.AbstractExpandableItem;
-import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.patrol.terminal.adapter.MonthPlanListAdapter;
-
-public class MonthPlanBean implements Parcelable {
+public class MonthPlanBean implements Serializable {
 
 
 
@@ -36,6 +31,16 @@ public class MonthPlanBean implements Parcelable {
     private String line_name;
     private String audit_status;
     private String dep_name;
+    // 线路总长度(km) - pda用于计算线路总长
+    private Double line_length;
+
+    public Double getLine_length() {
+        return line_length;
+    }
+
+    public void setLine_length(Double line_length) {
+        this.line_length = line_length;
+    }
 
     public String getType_name() {
         return type_name;
@@ -499,124 +504,4 @@ public class MonthPlanBean implements Parcelable {
         this.userName2 = userName2;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.type_name);
-        dest.writeString(this.plan_type);
-        dest.writeString(this.dep_id);
-        dest.writeInt(this.month);
-        dest.writeInt(this.year);
-        dest.writeString(this.type_sign);
-        dest.writeString(this.month_id);
-        dest.writeString(this.line_name);
-        dest.writeString(this.audit_status);
-        dest.writeString(this.dep_name);
-        dest.writeString(this.id);
-        dest.writeString(this.apply_dep_id);
-        dest.writeString(this.apply_dep_name);
-        dest.writeString(this.voltage_level);
-        dest.writeString(this.line_id);
-        dest.writeString(this.repair_content);
-        dest.writeString(this.is_blackout);
-        dest.writeString(this.blackout_range);
-        dest.writeString(this.task_source);
-        dest.writeString(this.start_time);
-        dest.writeString(this.end_time);
-        dest.writeInt(this.blackout_days);
-        dest.writeString(this.last_repair_time);
-        dest.writeString(this.risk_level);
-        dest.writeString(this.type_id);
-        dest.writeString(this.type_val);
-        dest.writeString(this.substation_id);
-        dest.writeString(this.remark);
-        dest.writeInt(this.week);
-        dest.writeInt(this.day);
-        dest.writeString(this.month_audit_status);
-        dest.writeString(this.week_audit_status);
-        dest.writeString(this.done_status);
-        dest.writeString(this.done_time);
-        dest.writeString(this.is_ele);
-        dest.writeString(this.ele_user_id);
-        dest.writeString(this.ele_user_name);
-        dest.writeString(this.safe_user_id);
-        dest.writeString(this.safe_user_name);
-        dest.writeString(this.check_user_id);
-        dest.writeString(this.check_user_name);
-        dest.writeString(this.taskList);
-        dest.writeString(this.userId1);
-        dest.writeString(this.userName1);
-        dest.writeString(this.userId2);
-        dest.writeString(this.userName2);
-        dest.writeString(this.allot_status);
-    }
-
-    public MonthPlanBean() {
-    }
-
-    protected MonthPlanBean(Parcel in) {
-        this.type_name = in.readString();
-        this.plan_type = in.readString();
-        this.dep_id = in.readString();
-        this.month = in.readInt();
-        this.year = in.readInt();
-        this.type_sign = in.readString();
-        this.month_id = in.readString();
-        this.line_name = in.readString();
-        this.audit_status = in.readString();
-        this.dep_name = in.readString();
-        this.id = in.readString();
-        this.apply_dep_id = in.readString();
-        this.apply_dep_name = in.readString();
-        this.voltage_level = in.readString();
-        this.line_id = in.readString();
-        this.repair_content = in.readString();
-        this.is_blackout = in.readString();
-        this.blackout_range = in.readString();
-        this.task_source = in.readString();
-        this.start_time = in.readString();
-        this.end_time = in.readString();
-        this.blackout_days = in.readInt();
-        this.last_repair_time = in.readString();
-        this.risk_level = in.readString();
-        this.type_id = in.readString();
-        this.type_val = in.readString();
-        this.substation_id = in.readString();
-        this.remark = in.readString();
-        this.week = in.readInt();
-        this.day = in.readInt();
-        this.month_audit_status = in.readString();
-        this.week_audit_status = in.readString();
-        this.done_status = in.readString();
-        this.done_time = in.readString();
-        this.is_ele = in.readString();
-        this.ele_user_id = in.readString();
-        this.ele_user_name = in.readString();
-        this.safe_user_id = in.readString();
-        this.safe_user_name = in.readString();
-        this.check_user_id = in.readString();
-        this.check_user_name = in.readString();
-        this.taskList = in.readString();
-        this.userId1 = in.readString();
-        this.userName1 = in.readString();
-        this.userId2 = in.readString();
-        this.userName2 = in.readString();
-        this.allot_status = in.readString();
-    }
-
-    public static final Parcelable.Creator<MonthPlanBean> CREATOR = new Parcelable.Creator<MonthPlanBean>() {
-        @Override
-        public MonthPlanBean createFromParcel(Parcel source) {
-            return new MonthPlanBean(source);
-        }
-
-        @Override
-        public MonthPlanBean[] newArray(int size) {
-            return new MonthPlanBean[size];
-        }
-    };
 }

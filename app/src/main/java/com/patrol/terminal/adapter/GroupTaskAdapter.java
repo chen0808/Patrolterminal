@@ -1,6 +1,5 @@
 package com.patrol.terminal.adapter;
 
-import android.view.View;
 import android.widget.ProgressBar;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -65,7 +64,7 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
             progressBar.setProgress(item.getDone_num());
         }
         viewHolder.setText(R.id.item_task_personal, "小组负责人 :"+item.getDuty_user_name())
-                .setText(R.id.item_task_name, item.getLine_name()+item.getName()+item.getType_name()+"任务")
+                .setText(R.id.item_task_name, item.getLine_name()+item.getName()+"任务")
                 .setText(R.id.item_task_type,"班组 :"+ item.getDep_name());
 
 

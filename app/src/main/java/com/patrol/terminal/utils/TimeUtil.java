@@ -346,4 +346,97 @@ public class TimeUtil {
 		String getTime = day+"日";
 		return getTime;
 	}
+
+	// 获取当前时间所在年的周数
+	public static int getWeekOfYear(Date date) {
+		Calendar c = new GregorianCalendar();
+		c.setFirstDayOfWeek(Calendar.MONDAY);
+		c.setMinimalDaysInFirstWeek(7);
+		c.setTime(date);
+
+		return c.get(Calendar.WEEK_OF_YEAR);
+	}
+
+	// 获取当前时间所在年的最大周数
+	public static int getMaxWeekNumOfYear(int year) {
+		Calendar c = new GregorianCalendar();
+		c.set(year, Calendar.DECEMBER, 31, 23, 59, 59);
+
+		return getWeekOfYear(c.getTime());
+	}
+
+	// 获取某年的第几周的开始日期
+	public static String getFirstDayOfWeek(int year, int week) {
+		Calendar c = new GregorianCalendar();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, Calendar.JANUARY);
+		c.set(Calendar.DATE, 1);
+
+		Calendar cal = (GregorianCalendar) c.clone();
+		cal.add(Calendar.DATE, week * 7);
+
+		return getFirstDayOfWeek(cal.getTime());
+	}
+
+	// 获取某年的第几周的结束日期
+	public static String getLastDayOfWeek(int year, int week) {
+		Calendar c = new GregorianCalendar();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, Calendar.JANUARY);
+		c.set(Calendar.DATE, 1);
+
+		Calendar cal = (GregorianCalendar) c.clone();
+		cal.add(Calendar.DATE, week * 7);
+
+		return getLastDayOfWeek(cal.getTime());
+	}
+	// 获取某年的第几周的所在月份
+	public static String getMonthOfWeek(int year, int week) {
+		Calendar c = new GregorianCalendar();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, Calendar.JANUARY);
+		c.set(Calendar.DATE, 1);
+
+		Calendar cal = (GregorianCalendar) c.clone();
+		cal.add(Calendar.DATE, week * 7);
+		c.setFirstDayOfWeek(Calendar.MONDAY);
+		c.setTime(cal.getTime());
+		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek() + 6); // Sunday
+		Date time = c.getTime();
+		String month = DateUatil.getMonth(time);
+		return month;
+	}
+
+	// 获取当前时间所在周的开始日期
+	public static String getFirstDayOfWeek(Date date) {
+		Calendar c = new GregorianCalendar();
+		c.setFirstDayOfWeek(Calendar.MONDAY);
+		c.setTime(date);
+		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek()); // Monday
+		Date time = c.getTime();
+		String date1 = DateUatil.getMonthAndDay(time);
+		return date1;
+	}
+
+	// 获取当前时间所在周的结束日期
+	public static String getLastDayOfWeek(Date date) {
+		Calendar c = new GregorianCalendar();
+		c.setFirstDayOfWeek(Calendar.MONDAY);
+		c.setTime(date);
+		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek() + 6); // Sunday
+		Date time = c.getTime();
+		String monthAndDay = DateUatil.getMonthAndDay(time);
+		return monthAndDay;
+	}
+
+	public static int getCurrWeek(){
+		Calendar cal = Calendar.getInstance();//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
+		cal.setFirstDayOfWeek(Calendar.MONDAY); // 设置每周的第一天为星期一
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);// 每周从周一开始
+		cal.setMinimalDaysInFirstWeek(7); // 设置每周最少为7天
+		cal.setTime(new Date());
+		int weeks=cal.get(Calendar.WEEK_OF_YEAR);
+		return  weeks+1;
+	}
+
 }

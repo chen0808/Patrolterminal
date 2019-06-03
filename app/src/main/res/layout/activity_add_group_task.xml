@@ -25,7 +25,9 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout style="@style/plan_ll_styl">
+                <LinearLayout style="@style/plan_ll_styl"
+                    android:visibility="gone"
+                    >
 
                     <TextView
                         style="@style/plan_tv_styl"
@@ -44,7 +46,7 @@
 
                     <TextView
                         style="@style/plan_tv_styl"
-                        android:text="指派组长" />
+                        android:text="负责人" />
 
                     <TextView
                         android:id="@+id/group_task_group"
@@ -135,7 +137,7 @@
                             android:layout_weight="3"
                             android:gravity="center"
                             android:textSize="@dimen/sp_13"
-                            android:text="工作类型"
+                            android:text="工作内容"
                             android:textColor="@color/color_33"
                             />
                        
@@ -236,7 +238,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="7"
+                            android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:paddingLeft="5dp"
                             android:textSize="@dimen/sp_13"
@@ -251,11 +253,11 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="3"
+                            android:layout_weight="1"
                             android:gravity="center"
                             android:paddingLeft="5dp"
                             android:textSize="@dimen/sp_13"
-                            android:text="发现时间"
+                            android:text="工作内容"
                             android:textColor="@color/color_33"
                             />
 

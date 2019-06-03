@@ -169,7 +169,7 @@ public class TemporaryWeekActivity extends BaseActivity {
     public void getLineType() {
         typeNameList.clear();
         BaseRequest.getInstance().getService()
-                .getLineType("1")
+                .getWorkType("sort")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineTypeBean>>(this) {

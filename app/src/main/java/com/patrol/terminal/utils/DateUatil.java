@@ -97,6 +97,15 @@ public class DateUatil {
         return format.format(date);
     }
 
+
+    public static String getMonthAndDay(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format  = new SimpleDateFormat("MM月dd日");
+        return format.format(date);
+    }
+    public static String getMonth(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format  = new SimpleDateFormat("MM");
+        return format.format(date);
+    }
     public static String getSelectTime(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 hh时mm分");
         return format.format(date);
@@ -127,6 +136,7 @@ public class DateUatil {
     }
 
     /**
+     *
      * @return 该毫秒数转换为 * days * hours * minutes * seconds 后的格式
      * @author fy.zhang
      */
@@ -292,7 +302,6 @@ public class DateUatil {
 
     /**
      * 获取日期属于周几
-     *
      * @param time
      * @return
      */
@@ -349,6 +358,7 @@ public class DateUatil {
     }
 
 
+
     /**
      * 返回月份的字符串
      *
@@ -397,4 +407,5 @@ public class DateUatil {
         }
         return str;
     }
+
 }

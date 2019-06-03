@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.utils.RxRefreshEvent;
+import com.patrol.terminal.utils.StringUtil;
 
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class AddGroupTaskAdapter extends BaseAdapter {
             holder.itemTroubleName.setText(listBean.getLine_name()+listBean.getName());
 
 
-        holder.taskType.setText(listBean.getType_name());
+        holder.taskType.setText(StringUtil.getTypeSign(listBean.getType_sign()));
         holder.itemTroubleCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

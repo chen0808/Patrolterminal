@@ -32,6 +32,7 @@ import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.NoScrollListView;
 
 import java.util.ArrayList;
@@ -456,7 +457,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
             GroupTaskBean listBean = lineTypeBeans.get(position);
 
             holder.itemTroubleName.setText(listBean.getLine_name()+listBean.getName());
-            holder.taskType.setText(listBean.getType_name());
+            holder.taskType.setText(StringUtil.getTypeSign(listBean.getType_sign()));
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

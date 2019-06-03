@@ -27,19 +27,17 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.LineCheckBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.SavaLineBean;
 import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.utils.DateUatil;
-import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -83,6 +81,8 @@ public class TemporaryActivity extends BaseActivity {
 
     private List<String> typeNameList = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
+    private List<String> typeVal = new ArrayList<>();
+    private List<List<String>> typeSign = new ArrayList<>();
     private String typeName;
     private LineCheckBean lineCheckBean;
     private String type_id;
@@ -105,14 +105,16 @@ public class TemporaryActivity extends BaseActivity {
     }
 
     private void initview() {
-        titleName.setText("制定临时月计划");
+
         String time = DateUatil.getCurMonth();
         String[] years = time.split("年");
         String[] months = years[1].split("月");
-        month = Integer.parseInt(months[0]) + "";
+        month = Integer.parseInt(months[0]) +1+ "";
         year = years[0];
+        titleName.setText("制定"+month+"月计划");
         getLineType();
     }
+
 
     @OnClick({R.id.title_back, R.id.month_plan_type, R.id.month_plan_line, R.id.month_yes,R.id.month_plan_start, R.id.month_plan_end})
     public void onViewClicked(View view) {
@@ -127,7 +129,7 @@ public class TemporaryActivity extends BaseActivity {
                 showDay(2);
                 break;
             case R.id.month_plan_type:
-                showType();
+                showTypeSign();
                 break;
             case R.id.month_plan_line:
                 Intent intent = new Intent(this, LineCheckActivity.class);
@@ -156,7 +158,7 @@ public class TemporaryActivity extends BaseActivity {
     public void getLineType() {
         typeNameList.clear();
         BaseRequest.getInstance().getService()
-                .getLineType("1")
+                .getWorkType("val")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineTypeBean>>(this) {
@@ -167,7 +169,7 @@ public class TemporaryActivity extends BaseActivity {
                             LineTypeBean lineTypeBean = typeList.get(i);
                             typeNameList.add(lineTypeBean.getName());
                         }
-
+                        initType(typeList);
                     }
 
                     @Override
@@ -197,6 +199,56 @@ public class TemporaryActivity extends BaseActivity {
         pvOptions.show();
     }
 
+    public void initType(List<LineTypeBean> list){
+
+        List<String> list1=new ArrayList<>();
+        List<String> list2=new ArrayList<>();
+        List<String> list3=new ArrayList<>();
+        List<String> list4=new ArrayList<>();
+        typeVal.add("定巡");
+        typeVal.add("定检");
+        typeVal.add("缺陷");
+        typeVal.add("隐患");
+        for (int i = 0; i < list.size(); i++) {
+            LineTypeBean lineTypeBean = list.get(i);
+            if ("1".equals(lineTypeBean.getVal())){
+                list1.add(StringUtil.getTypeSign(lineTypeBean.getSign()));
+            }else if ("2".equals(lineTypeBean.getVal())){
+                list2.add(StringUtil.getTypeSign(lineTypeBean.getSign()));
+            }
+        }
+        list3.add("缺陷处理");
+        list4.add("隐患消除");
+       typeSign.add(list1);
+        typeSign.add(list2);
+        typeSign.add(list3);
+        typeSign.add(list4);
+
+    }
+
+    //展示工作类型
+    public void showTypeSign() {
+
+        //条件选择器
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                typeName = typeSign.get(options1).get(option2);
+                monthPlanType.setText(typeName);
+                for (int i = 0; i < typeList.size(); i++) {
+                    LineTypeBean lineTypeBean = typeList.get(i);
+                    if (typeName.equals(lineTypeBean.getName())){
+                        type_id = lineTypeBean.getId();
+                        sign = lineTypeBean.getSign();
+                    }
+                }
+
+            }
+        }).build();
+        pvOptions.setPicker(typeVal, typeSign);
+        pvOptions.setSelectOptions(0, 0);
+        pvOptions.show();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

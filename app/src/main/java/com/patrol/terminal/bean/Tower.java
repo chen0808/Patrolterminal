@@ -1,6 +1,8 @@
 package com.patrol.terminal.bean;
 
-public class Tower {
+import java.io.Serializable;
+
+public class Tower implements Serializable {
     private String tower_id;
     private String tower_type;
     private String line_id;

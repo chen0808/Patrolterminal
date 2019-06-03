@@ -27,6 +27,7 @@ import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.SavaMonthDefDanBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.RxRefreshEvent;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -146,21 +147,13 @@ public class AddMonthPlanActivity extends BaseActivity {
             curMonth = year+"年"+month+"月";
             titleName.setText(curMonth + "计划");
             //changeType = MONTH_PLAN;
-        }else if (from == Constant.FROM_WEEKPLAN_TO_ADDMONTH) {
-            curMonth = year+"年"+month+"月第"+week+"周";
-            titleName.setText(curMonth + "计划");
-            //changeType = WEEK_PLAN;
-        }else if (from == Constant.FROM_DAYPLAN_TO_ADDMONTH) {
-            curMonth = year+"年"+month+"月"+day+"日";
-            titleName.setText(curMonth + "计划");
-            //changeType = DAY_PLAN;
         }
         monthPlanDate.setText(curMonth);
         monthPlanLine.setText(line_name);
         String[] split = typename.split(",");
         for (int i = 0; i < split.length; i++) {
             DefectBean bean = new DefectBean();
-            bean.setContent(line_name+split[i]+"计划");
+            bean.setContent(StringUtil.getTypeSign(split[i])+"计划");
             bean.setFind_time("");
             bean.setType(0);
             bean.setLine_id(line_id);

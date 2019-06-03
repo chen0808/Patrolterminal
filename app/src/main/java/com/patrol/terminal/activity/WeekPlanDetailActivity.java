@@ -8,12 +8,10 @@ import android.widget.TextView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.WeekPlanDetailAdapter;
 import com.patrol.terminal.base.BaseActivity;
-import com.patrol.terminal.base.BaseRequest;
-import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DefectBean;
 import com.patrol.terminal.bean.Trace;
 import com.patrol.terminal.bean.WeekListBean;
-import com.patrol.terminal.network.ApiServise;
+import com.patrol.terminal.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class WeekPlanDetailActivity extends BaseActivity {
 
@@ -103,11 +95,16 @@ public class WeekPlanDetailActivity extends BaseActivity {
         tvLineDate.setText("月  份 : " + monthPlanDetailBean.getYear() + "年" + monthPlanDetailBean.getMonth() + "月");
             tvLineTower.setText("杆  段 : " + monthPlanDetailBean.getName());
 
-        DefectBean bean = new DefectBean();
-        bean.setContent(monthPlanDetailBean.getLine_name() +monthPlanDetailBean.getName()+ monthPlanDetailBean.getType_name() + "计划");
-        bean.setFind_time("");
-        bean.setType(0);
-        selectType.add(bean);
+        String type_sign = monthPlanDetailBean.getType_sign();
+        String[] split = type_sign.split(",");
+        for (int i = 0; i <split.length; i++) {
+            String type = split[i];
+            DefectBean planTypeBean = new DefectBean();
+            planTypeBean.setContent(StringUtil.getTypeSign(type) + "计划");
+            planTypeBean.setType(0);
+            selectType.add(planTypeBean);
+        }
+        monthPlanDetailAdapter.setNewData(selectType);
     }
 
 //

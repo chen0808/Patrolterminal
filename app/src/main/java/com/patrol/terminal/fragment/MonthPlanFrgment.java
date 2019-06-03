@@ -7,8 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +19,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddMonthPlanActivity;
 import com.patrol.terminal.activity.LineCheckActivity;
 import com.patrol.terminal.activity.MonthPlanDetailActivity;
+import com.patrol.terminal.activity.NextMonthPlanActivity;
 import com.patrol.terminal.activity.SpecialPlanDetailActivity;
 import com.patrol.terminal.activity.TemporaryActivity;
 import com.patrol.terminal.adapter.MonthPlanAdapter;
@@ -35,11 +35,14 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.PopMenmuDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,33 +58,46 @@ import io.reactivex.schedulers.Schedulers;
 public class MonthPlanFrgment extends BaseFragment {
 
 
+    @BindView(R.id.add_next_plan)
+    TextView addNextPlan;
+    @BindView(R.id.plan_submit)
+    ImageView planSubmit;
+    @BindView(R.id.add_plan_right)
+    ImageView addPlanRight;
+    @BindView(R.id.add_plan_name)
+    TextView addPlanName;
+    @BindView(R.id.add_plan_status)
+    TextView addPlanStatus;
+    @BindView(R.id.add_plan_ll)
+    RelativeLayout addPlanLl;
+    @BindView(R.id.add_plan_iv)
+    ImageView addPlanIv;
     @BindView(R.id.task_title)
     TextView taskTitle;
     @BindView(R.id.task_date)
     TextView taskDate;
-    @BindView(R.id.plan_submit)
-    TextView planSubmit;
-    @BindView(R.id.plan_create)
-    TextView planCreate;
-    @BindView(R.id.task_add)
-    ImageView taskAdd;
-    @BindView(R.id.plan_rv)
-    SwipeRecyclerView planRv;
-    @BindView(R.id.yx__month_rg)
-    RadioGroup mRg;
-    @BindView(R.id.dxdj)
-    RadioButton mDxdj;
-    @BindView(R.id.bdjh)
-    RadioButton mbdjh;
-    @BindView(R.id.ysjh)
-    RadioButton mYsjh;
-    @BindView(R.id.aqjh)
-    RadioButton mAqjh;
     @BindView(R.id.task_screen)
     ImageView taskScreen;
+    @BindView(R.id.plan_rv)
+    SwipeRecyclerView planRv;
     @BindView(R.id.plan_refresh)
-    SwipeRefreshLayout mRefrsh;
-
+    SwipeRefreshLayout planRefresh;
+    @BindView(R.id.plan_point)
+    View planPoint;
+    @BindView(R.id.plan_total_title)
+    TextView planTotalTitle;
+    @BindView(R.id.month_line_total)
+    TextView monthLineTotal;
+    @BindView(R.id.month_line_kilo_total)
+    TextView monthLineKiloTotal;
+    @BindView(R.id.month_line_110kv_num)
+    TextView monthLine110kvNum;
+    @BindView(R.id.month_line_110kv_kilo)
+    TextView monthLine110kvKilo;
+    @BindView(R.id.month_line_35kv_num)
+    TextView monthLine35kvNum;
+    @BindView(R.id.month_line_35kv_kilo)
+    TextView monthLine35kvKilo;
     private MonthPlanAdapter monthPlanAdapter;
     private TimePickerView pvTime;
     private List<Tower> lineList = new ArrayList<>();
@@ -96,10 +112,21 @@ public class MonthPlanFrgment extends BaseFragment {
     private String mJobType;
     private String depId;
     private PopMenmuDialog popWinShare;
+    private int nextMonth;
+    private int nextYear;
+    private List<MonthPlanBean> nextPatrolList;
+    private List<Tower> nextLineList;
+    private int num_total = 0;
+    private int num_110kv = 0;
+    private int num_35kv = 0;
+
+    private double kilo_total = 0;
+    private double kilo_110kv = 0;
+    private double kilo_35kv = 0;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_plan_list, container, false);
         return view;
     }
 
@@ -113,44 +140,50 @@ public class MonthPlanFrgment extends BaseFragment {
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             state = "1,2,3,4,5";
             depId = null;
-            planSubmit.setText("审核");
-            planCreate.setVisibility(View.INVISIBLE);
         } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
             state = "2,3,4,5";
-            planSubmit.setText("审核");
             depId = null;
             planSubmit.setVisibility(View.VISIBLE);
-            planCreate.setVisibility(View.INVISIBLE);
-        }else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)){
-            taskAdd.setVisibility(View.VISIBLE);
         }
         time = DateUatil.getCurMonth();
         String[] years = time.split("年");
         String[] months = years[1].split("月");
         month = Integer.parseInt(months[0]) + "";
         year = years[0];
+        if (Integer.parseInt(months[0]) < 12) {
+            nextMonth = Integer.parseInt(months[0]) + 1;
+            nextYear = Integer.parseInt(years[0]);
+        } else {
+            nextMonth = 1;
+            nextYear = Integer.parseInt(years[0]) + 1;
+        }
+
         taskDate.setText(time);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
         monthPlanAdapter = new MonthPlanAdapter(R.layout.fragment_plan_item, data, state, mJobType);
         planRv.setAdapter(monthPlanAdapter);
-
-        mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        //适配器的点击事件
+        adapterClick();
+        planRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getMonthPlanList();
+                getNextMonthPlanList();
             }
         });
         getMonthPlanList();
+        getNextMonthPlanList();
     }
-    public void adapterClick(){
+
+    public void adapterClick() {
         monthPlanAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 MonthPlanBean item = (MonthPlanBean) adapter.getItem(position);
                 //判断是否是保电计划
                 if (item.getRepair_content() != null) {
-                    switch (view.getId()){
+                    switch (view.getId()) {
                         case R.id.plan_to_change:
                             Intent intent = new Intent(mContext, LineCheckActivity.class);
                             intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
@@ -160,23 +193,20 @@ public class MonthPlanFrgment extends BaseFragment {
                             startActivityForResult(intent, 10);
                             break;
                     }
-                }else {
-                switch (view.getId()){
-                    case R.id.plan_to_change:
-                        Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
-                        intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
-                        intent.putExtra("line_name", item.getLine_name());
-                        intent.putExtra("year", item.getYear() + "");
-                        intent.putExtra("month", item.getMonth() + "");
-                        intent.putExtra("line_id", item.getLine_id() + "");
-                        intent.putExtra("id", item.getId());
-                        intent.putExtra("type", item.getFull_plan());
-                        mContext.startActivity(intent);
-                        break;
-                    case R.id.plan_deal:
-
-                        break;
-                }
+                } else {
+                    switch (view.getId()) {
+                        case R.id.plan_to_change:
+                            Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
+                            intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
+                            intent.putExtra("line_name", item.getLine_name());
+                            intent.putExtra("year", item.getYear() + "");
+                            intent.putExtra("month", item.getMonth() + "");
+                            intent.putExtra("line_id", item.getLine_id() + "");
+                            intent.putExtra("id", item.getId());
+                            intent.putExtra("type", item.getFull_plan());
+                            startActivity(intent);
+                            break;
+                    }
                 }
             }
         });
@@ -189,9 +219,9 @@ public class MonthPlanFrgment extends BaseFragment {
 
                 if (bean.getRepair_content() != null) {
                     intent.setClass(getContext(), SpecialPlanDetailActivity.class);
-                    intent.putExtra("from","month");
+                    intent.putExtra("from", "month");
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("bean", bean);
+                    bundle.putSerializable("bean", bean);
                     intent.putExtras(bundle);
                 } else {
                     intent.setClass(getContext(), MonthPlanDetailActivity.class);
@@ -207,14 +237,67 @@ public class MonthPlanFrgment extends BaseFragment {
         });
     }
 
+    //获取下月计划列表
+    public void getNextMonthPlanList() {
+        BaseRequest.getInstance().getService()
+                .getMonthPlan(nextYear, nextMonth, depId, state, "type_sign,line_id")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<MonthListBean>(getContext()) {
+
+                    @Override
+                    protected void onSuccees(BaseResult<MonthListBean> t) throws Exception {
+
+                        if (t.getCode() == 1) {
+                            MonthListBean results = t.getResults();
+                            nextLineList = getData(results, 2);
+                            nextPatrolList = results.getPatrol();
+                            if (nextPatrolList != null && nextPatrolList.size() > 0) {
+                                addPlanIv.setVisibility(View.GONE);
+                                addPlanLl.setVisibility(View.VISIBLE);
+                                addPlanName.setText(nextYear + "年" + nextMonth + "月工作计划");
+                                MonthPlanBean monthPlanBean = nextPatrolList.get(0);
+                                addPlanStatus.setText(StringUtil.getYXBstate(monthPlanBean.getAudit_status()));
+                                if ("3".equals(monthPlanBean.getAudit_status())) {
+                                    addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
+                                    addPlanStatus.setTextColor(getResources().getColor(R.color.green));
+                                }
+                                if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())) {
+                                    addPlanRight.setVisibility(View.VISIBLE);
+                                    planSubmit.setVisibility(View.VISIBLE);
+                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
+                                    planSubmit.setVisibility(View.VISIBLE);
+                                    addPlanRight.setVisibility(View.GONE);
+                                } else if (mJobType.contains(Constant.RUN_SUPERVISOR) && "2".equals(monthPlanBean.getAudit_status())) {
+                                    planSubmit.setVisibility(View.VISIBLE);
+                                    addPlanRight.setVisibility(View.GONE);
+                                } else {
+                                    addPlanRight.setVisibility(View.GONE);
+                                    planSubmit.setVisibility(View.GONE);
+                                }
+                            } else {
+                                addPlanIv.setVisibility(View.VISIBLE);
+                                addPlanLl.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+
+    }
+
     //获取月计划列表
     public void getMonthPlanList() {
-        ProgressDialog.show(getContext(), false, "正在加载中");
         data.clear();
         data1.clear();
         data2.clear();
+        ProgressDialog.show(getContext(), false, "正在加载中");
         BaseRequest.getInstance().getService()
-                .getMonthPlan(Integer.parseInt(year), Integer.parseInt(month), depId, state,"type_sign,line_id")
+                .getMonthPlan(Integer.parseInt(year), Integer.parseInt(month), depId, state, "type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<MonthListBean>(getContext()) {
@@ -225,32 +308,38 @@ public class MonthPlanFrgment extends BaseFragment {
                         if (t.getCode() == 1) {
                             MonthListBean results = t.getResults();
                             lineList.clear();
-                            getData(results);
+                            lineList = getData(results, 1);
                             monthPlanAdapter.setNewData(data);
-
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            monthLineTotal.setText("工作线路总数 : "+num_total+"条");
+                            monthLineKiloTotal.setText("总公里数 : "+decimalFormat.format(kilo_total)+"公里");
+                            monthLine110kvNum.setText("110kv线路总数 : "+num_110kv+"条");
+                            monthLine110kvKilo.setText("公里数 : "+decimalFormat.format(kilo_110kv)+"公里");
+                            monthLine35kvNum.setText("35kv线路总数 : "+num_35kv+"条");
+                            monthLine35kvKilo.setText("公里数 : "+decimalFormat.format(kilo_35kv)+"公里");
                         }
                         ProgressDialog.cancle();
-                        mRefrsh.setRefreshing(false);
+                        planRefresh.setRefreshing(false);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
-                        mRefrsh.setRefreshing(false);
+                        planRefresh.setRefreshing(false);
                     }
                 });
 
     }
 
     //提交月计划审核
-    public void submitMonthPlan(String status) {
+    public void submitMonthPlan(List<Tower> list, String status) {
         ProgressDialog.show(getContext(), false, "正在加载中...");
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
         bean.setYear(year);
         bean.setMonth(month);
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(getContext()));
-        bean.setLines(lineList);
+        bean.setLines(list);
         BaseRequest.getInstance().getService()
                 .submitMonthPlan(bean)
                 .subscribeOn(Schedulers.io())
@@ -261,9 +350,9 @@ public class MonthPlanFrgment extends BaseFragment {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             if ("1".equals(status)) {
-                                Toast.makeText(getContext(), "一键提交成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "提交成功", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getContext(), "一键审核成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "审核成功", Toast.LENGTH_SHORT).show();
                             }
                             RxRefreshEvent.publish("refreshTodo");
                             getMonthPlanList();
@@ -315,57 +404,29 @@ public class MonthPlanFrgment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.task_date, R.id.task_add, R.id.plan_create, R.id.plan_submit,R.id.task_screen})
+    @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit, R.id.task_screen, R.id.add_plan_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:
                 showMonth();
                 break;
-            case R.id.task_add:
-               Intent intent=new Intent(getContext(), TemporaryActivity.class);
-               intent.putExtra("year",year);
-                intent.putExtra("month",month);
-                startActivityForResult(intent,10);
+            case R.id.add_plan_ll:
+                Intent intent1 = new Intent(getContext(), NextMonthPlanActivity.class);
+                intent1.putExtra("list", (Serializable) nextPatrolList);
+                intent1.putExtra("linelist", (Serializable) nextLineList);
+                intent1.putExtra("year", nextYear);
+                intent1.putExtra("month", nextMonth);
+                startActivityForResult(intent1, 10);
+                break;
+            case R.id.add_plan_iv:
+            case R.id.add_plan_right:
+                Intent intent = new Intent(getContext(), TemporaryActivity.class);
+                intent.putExtra("year", year);
+                intent.putExtra("month", month);
+                startActivityForResult(intent, 10);
                 break;
             case R.id.plan_submit:
-                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
-                    CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "一键审核", "不同意", "同意") {
-                        @Override
-                        public void ok() {
-                            super.ok();
-                            submitMonthPlan("2");   //同意
-                            dismiss();
-                        }
-
-                        @Override
-                        public void cancel() {
-                            super.cancel();
-                            submitMonthPlan("4");  //不同意
-                            dismiss();
-                        }
-                    };
-                    dialog.show();
-
-                } else if (mJobType.contains((Constant.RUNNING_SQUAD_LEADER))) {
-                    submitMonthPlan("1");
-                } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
-                    CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "一键审核", "不同意", "同意") {
-                        @Override
-                        public void ok() {
-                            super.ok();
-                            submitMonthPlan("3");   //同意
-                            dismiss();
-                        }
-
-                        @Override
-                        public void cancel() {
-                            super.cancel();
-                            submitMonthPlan("4");  //不同意
-                            dismiss();
-                        }
-                    };
-                    dialog.show();
-                }
+                submit(lineList);
                 break;
             case R.id.task_screen:
                 if (popWinShare == null) {
@@ -383,14 +444,56 @@ public class MonthPlanFrgment extends BaseFragment {
                         }
                     });
                 }
-               //设置默认获取焦点
+                //设置默认获取焦点
                 popWinShare.setFocusable(true);
-               //以某个控件的x和y的偏移量位置开始显示窗口
-                popWinShare.showAsDropDown(taskAdd, 0, 0);
-               //如果窗口存在，则更新
+                //以某个控件的x和y的偏移量位置开始显示窗口
+                popWinShare.showAsDropDown(taskScreen, 0, 0);
+                //如果窗口存在，则更新
                 popWinShare.update();
                 break;
 
+        }
+    }
+
+    //提交月计划审核
+    public void submit(List<Tower> lineList) {
+        if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+            CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "审核", "不同意", "同意") {
+                @Override
+                public void ok() {
+                    super.ok();
+                    submitMonthPlan(lineList, "2");   //同意
+                    dismiss();
+                }
+
+                @Override
+                public void cancel() {
+                    super.cancel();
+                    submitMonthPlan(lineList, "4");  //不同意
+                    dismiss();
+                }
+            };
+            dialog.show();
+
+        } else if (mJobType.contains((Constant.RUNNING_SQUAD_LEADER))) {
+            submitMonthPlan(lineList, "1");
+        } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
+            CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "审核", "不同意", "同意") {
+                @Override
+                public void ok() {
+                    super.ok();
+                    submitMonthPlan(lineList, "3");   //同意
+                    dismiss();
+                }
+
+                @Override
+                public void cancel() {
+                    super.cancel();
+                    submitMonthPlan(lineList, "4");  //不同意
+                    dismiss();
+                }
+            };
+            dialog.show();
         }
     }
 
@@ -422,20 +525,30 @@ public class MonthPlanFrgment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10 && resultCode == -1) {
             getMonthPlanList();
+            getNextMonthPlanList();
         }
     }
 
-    private void getData(MonthListBean results) {
-
+    private List<Tower> getData(MonthListBean results, int type) {
+        List<Tower> lineList = new ArrayList<>();
         List<MonthPlanBean> patrol = results.getPatrol();
         List<MonthPlanBean> ele = results.getEle();
         List<MonthPlanBean> repair = results.getRepair();
         if (patrol != null) {
-            data1 = patrol;
-            data.addAll(patrol);
             for (int j = 0; j < patrol.size(); j++) {
-
                 MonthPlanBean monthPlanBean = patrol.get(j);
+                if (type==1){
+                    num_total++;
+                    kilo_total += monthPlanBean.getLine_length();
+                    if (monthPlanBean.getVoltage_level().contains("110")) {
+                        kilo_110kv =kilo_110kv+ monthPlanBean.getLine_length();
+                        num_110kv++;
+                    } else if (monthPlanBean.getVoltage_level().contains("35")) {
+                        kilo_35kv = kilo_35kv+monthPlanBean.getLine_length();
+                        num_35kv++;
+                    }
+                }
+
                 //当身份是专责时，获取需要审批的列表
                 if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
                     Tower lineBean = new Tower();
@@ -449,7 +562,7 @@ public class MonthPlanFrgment extends BaseFragment {
                     lineBean.setMonth_line_id(monthPlanBean.getId());
                     lineList.add(lineBean);
                     //当身份是班长时，获取需要审核的列表
-                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(monthPlanBean.getAudit_status())||"4".equals(monthPlanBean.getAudit_status()))){
+                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(monthPlanBean.getAudit_status()) || "4".equals(monthPlanBean.getAudit_status()))) {
                     Tower lineBean = new Tower();
                     lineBean.setLine_id(monthPlanBean.getLine_id());
                     lineBean.setMonth_line_id(monthPlanBean.getId());
@@ -457,24 +570,32 @@ public class MonthPlanFrgment extends BaseFragment {
                 }
             }
         }
-        if (repair != null) {
-            data.addAll(repair);
-            data2.addAll(repair);
-        }
-        if (ele != null) {
-            data.addAll(ele);
-            data2.addAll(ele);
-        }
-        if (lineList.size()!=0){
+        if (type == 1) {
+            if (patrol != null) {
+                data1 = patrol;
+                data.addAll(patrol);
+            }
+            if (repair != null) {
+                data.addAll(repair);
+                data2.addAll(repair);
+            }
+            if (ele != null) {
+                data.addAll(ele);
+                data2.addAll(ele);
+            }
+            if (lineList.size() != 0) {
                 planSubmit.setVisibility(View.VISIBLE);
-        }else {
-            planSubmit.setVisibility(View.GONE);
+            } else {
+                planSubmit.setVisibility(View.GONE);
+            }
         }
 
+        return lineList;
     }
 
     public static int dip2px(Context context, float dipValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
+
 }

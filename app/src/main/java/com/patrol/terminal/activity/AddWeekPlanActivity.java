@@ -30,7 +30,6 @@ import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,6 +83,7 @@ public class AddWeekPlanActivity extends BaseActivity {
     private Disposable subscribe;
     private List<String> typeName = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
+
     private String type_id;
     private String lName;
     private String type_name;
@@ -103,27 +103,10 @@ public class AddWeekPlanActivity extends BaseActivity {
     }
 
     private void initview() {
-        curMonth = DateUatil.getCurMonth();
-        year = Integer.parseInt(curMonth.substring(0, 4));
-        month = Integer.parseInt(curMonth.substring(5, 7));
-        int weekNumOfMonth = DateUatil.getWeekNumOfMonth(year+"", month+"");
-        week = DateUatil.getWeekNum()+1;
-        if (week>weekNumOfMonth){
-            week=1;
-            month=month+1;
-            if (month>12){
-                month=1;
-                year=year+1;
-            }
-        }
-        Map<String, Object> scopeForWeeks = TimeUtil.getScopeForWeeks(year,month,week);
-        beginDate = TimeUtil.dateToDate((String) scopeForWeeks.get("beginDate"));
-        endDate = TimeUtil.dateToDate((String) scopeForWeeks.get("endDate"));
-
-        titleName.setText(beginDate +"-"+ endDate +"（第"+week+")周计划制定");
+        initdate();
+        titleName.setText("第"+week+"周计划制定("+beginDate +"-"+ endDate +")");
         adapter = new AddTowerAdapter(this,results);
         monthPlanTypeLv.setAdapter(adapter);
-
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
@@ -156,7 +139,14 @@ public class AddWeekPlanActivity extends BaseActivity {
             }
         });
     }
-
+    //初始化日期
+    public void initdate() {
+       year=getIntent().getIntExtra("year",2019);
+        week=getIntent().getIntExtra("week",23);
+        beginDate = TimeUtil.getFirstDayOfWeek(year,week);
+        endDate = TimeUtil.getLastDayOfWeek(year,week);
+        month=Integer.parseInt(TimeUtil.getMonthOfWeek(year,week));
+    }
     private void getWeekInfoList() {
         ProgressDialog.show(this,false,"正在加载。。。");
         //获取周计划杆段列表
@@ -287,7 +277,7 @@ public class AddWeekPlanActivity extends BaseActivity {
     public void getLineType() {
         typeName.clear();
         BaseRequest.getInstance().getService()
-                .getLineType()
+                .getWorkType("sort")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineTypeBean>>(this) {

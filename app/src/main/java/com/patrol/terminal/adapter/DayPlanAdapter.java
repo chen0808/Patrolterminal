@@ -1,15 +1,13 @@
 package com.patrol.terminal.adapter;
 
-import android.content.Intent;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.AddMonthPlanActivity;
 import com.patrol.terminal.bean.DayListBean;
-import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.HorizontalLineView;
 
 import java.util.List;
@@ -75,7 +73,7 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
 
             view.setVisibility(View.GONE);
             viewHolder.setText(R.id.item_plan_device_name, item.getLine_name()+item.getName())
-                    .setText(R.id.item_plan_content, "类型 : " + item.getType_name());
+                    .setText(R.id.item_plan_content, "工作内容 : " + StringUtil.getTypeSign(item.getType_sign()));
 
 //            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
 //                @Override
