@@ -46,23 +46,22 @@ public class OverhaulMonthAdapter extends BaseQuickAdapter<OverhaulYearBean, Bas
        // HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
         //月检修计划:0:编制  1:待主管审核   2:审核通过    3:审核不通过
         if ("0".equals(item.getMonth_audit_status())) {
-            viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))
+            viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.green))
                     .setText(R.id.item_line_status, "状态 : 待提交审核");
-            viewHolder.setVisible(R.id.plan_to_change, true);   //提交审核后不可修改
-
-            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setClass(mContext, OverhaulAddMonthPlanActivity.class);
-                    Bundle bundle = new Bundle();
-                    if (item != null) {
-                        bundle.putParcelable("bean", item);
-                    }
-                    intent.putExtras(bundle);
-                    mContext.startActivity(intent);
-                }
-            });
+            //viewHolder.setVisible(R.id.plan_to_change, true);   //提交审核后不可修改，，将修改放到详情里面
+//            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent();
+//                    intent.setClass(mContext, OverhaulAddMonthPlanActivity.class);
+//                    Bundle bundle = new Bundle();
+//                    if (item != null) {
+//                        bundle.putParcelable("bean", item);
+//                    }
+//                    intent.putExtras(bundle);
+//                    mContext.startActivity(intent);
+//                }
+//            });
 
         } else if ("1".equals(item.getMonth_audit_status())) {
             viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))

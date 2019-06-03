@@ -316,11 +316,11 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
             if ("1".equals(status)) {   //待分发
                 titleSetting.setVisibility(View.VISIBLE);
                 taskLl.setVisibility(View.VISIBLE);
-                btnCommit.setVisibility(View.VISIBLE);
+                //btnCommit.setVisibility(View.VISIBLE);
             } else {                   //已分发
                 titleSetting.setVisibility(View.GONE);
                 taskLl.setVisibility(View.GONE);
-                btnCommit.setVisibility(View.GONE);
+                //btnCommit.setVisibility(View.GONE);
             }
         } else {
             if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {

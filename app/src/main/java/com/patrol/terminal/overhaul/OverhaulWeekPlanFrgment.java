@@ -125,6 +125,10 @@ public class OverhaulWeekPlanFrgment extends BaseFragment {
         weekAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (results.get(position) == null) {
+                    return;
+                }
+
                 Intent intent = new Intent();
                 intent.setClass(getContext(), OverhaulWeekDetailActivity.class);
                 Bundle bundle = new Bundle();
@@ -133,6 +137,29 @@ public class OverhaulWeekPlanFrgment extends BaseFragment {
                 }
                 intent.putExtras(bundle);
                 startActivity(intent);
+
+               /* String weekAuditStatus = results.get(position).getWeek_audit_status();
+                if ("1".equals(weekAuditStatus)) {  //待分发  不可修改
+                    Intent intent = new Intent();
+                    intent.setClass(getContext(), OverhaulAddMonthPlanActivity.class);
+                    Bundle bundle = new Bundle();
+                    if (result.get(position) != null) {
+                        bundle.putParcelable("bean", result.get(position));
+                    }
+                    intent.putExtra("add_month_from_type", 0);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+
+                }else {    //已分发
+                    Intent intent = new Intent();
+                    intent.setClass(getContext(), OverhaulWeekDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    if (results.get(position) != null) {
+                        bundle.putString("id", results.get(position).getId());
+                    }
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }*/
             }
         });
         //getDayList();

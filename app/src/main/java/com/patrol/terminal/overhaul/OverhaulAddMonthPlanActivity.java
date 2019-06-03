@@ -101,10 +101,13 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
         fromType = getIntent().getIntExtra("add_month_from_type", 0);  //fromType == 1是新增  fromType == 0是修改
         if (fromType == 0) {
             titleName.setText("检修月计划修改");
+            monthPlanSubmit.setText("修改");
         } else if (fromType == 1) {
             titleName.setText("检修月计划制定");
+            monthPlanSubmit.setText("提交");
         } else if (fromType == 2) {
             titleName.setText("检修周计划制定");
+            monthPlanSubmit.setText("提交");
         }
 
         rgNeedBlackout.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -129,7 +132,7 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
             monthPlanDeviceName.setEnabled(false);
             monthPlanDeviceName.setTextColor(Color.BLACK);
             monthPlanVo.setText(overhaulYearBean.getVoltage_level());
-            monthPlanVo.setEnabled(false);
+            monthPlanVo.setEnabled(true);
             monthPlanVo.setTextColor(Color.BLACK);
             if (overhaulYearBean.getIs_blackout().equals("0")) {
                 monthPlanYes.setChecked(false);
