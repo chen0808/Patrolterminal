@@ -1,5 +1,6 @@
 package com.patrol.terminal.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.ControlDepdapter1;
 import com.patrol.terminal.adapter.GroundLineAdapter;
 import com.patrol.terminal.adapter.LicensingEndAdapter;
 import com.patrol.terminal.adapter.LicensingStartedAdapter;
@@ -36,6 +38,7 @@ import com.patrol.terminal.bean.FirstTicketBean;
 import com.patrol.terminal.bean.LineName;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
+import com.patrol.terminal.bean.SelectWorkerBean;
 import com.patrol.terminal.bean.SignBean;
 import com.patrol.terminal.bean.TicketFirstEnd;
 import com.patrol.terminal.bean.TicketFirstGround;
@@ -44,6 +47,7 @@ import com.patrol.terminal.bean.TicketSafeContent;
 import com.patrol.terminal.bean.TicketSign;
 import com.patrol.terminal.bean.TicketUser;
 import com.patrol.terminal.bean.TicketWork;
+import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
@@ -222,8 +226,8 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     private GroundLineAdapter groundLineAdapter;
     private LicensingStartedAdapter licensingStartedAdapter;
     private LicensingEndAdapter licensingEndAdapter;
-    //    private String leaderName;
-//    private String leaderId;
+    private String leaderName = "";
+    private String leaderId = "";
     private String taskId;
     private String ticketType;
     private String ticketTaskType;
@@ -231,6 +235,11 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     private String lineId;
     private SafeAdapter safeAdapter;
     //    private String status;
+
+    private SelectWorkerBean workerList;
+    private boolean[] mulchoice;
+
+    private String taskContent;  //工作任务
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,9 +259,19 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         safeList.clear();
 
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
+        String userId = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
+        String userName = SPUtil.getString(this, Constant.USER, Constant.USERNAME, "");
 
-//        leaderName = getIntent().getStringExtra("leaderName");
-//        leaderId = getIntent().getStringExtra("leaderId");
+        workerList =  getIntent().getParcelableExtra("selectedUserListBeans");
+        if (workerList != null && workerList.getUserInfos() != null && workerList.getUserInfos().size() > 0) {
+            mulchoice = new boolean[workerList.getUserInfos().size()];
+        }
+
+        if (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {
+            leaderName = userName;
+            leaderId = userId;
+        }
+
         ticketType = getIntent().getStringExtra("type");
         ticketTaskType = getIntent().getStringExtra("task_type");
 
@@ -276,14 +295,14 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             if (bean != null) {
                 taskId = bean.getId();
                 lineId = bean.getLine_id();
-//                status = bean.getRepair_status();
-//                OverhaulMonthBean.PlanRepairBean planRepairBean = bean.getPlanRepair();
-//                tvUnitId.setText(planRepairBean.getRepair_content());
+                tvUnitId.setText(bean.getApply_dep_name());//单位
                 etTicketNumber.setText("暂无");
                 tvDepId.setText("带电作业班");
-//                tvLeaderId.setText(leaderName);
-//                tvSTime.setText(planRepairBean.getStart_time());
-//                tvETime.setText(planRepairBean.getEnd_time());
+                tvLeaderId.setText(leaderName);
+                tvSTime.setText(bean.getStart_time());
+                tvETime.setText(bean.getEnd_time());
+
+                taskContent = bean.getTask_content();
             }
         }
 
@@ -312,6 +331,24 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         timeCheckbox7.setOnCheckedChangeListener(this);
         timeCheckbox8.setOnCheckedChangeListener(this);
 //        }
+
+
+        //默认工作任务
+        workList = new ArrayList<>();
+        String[] taskStrs = taskContent.split("；");
+        for (int i = 0; i < taskStrs.length; i++) {
+            TicketWork ticketWork = new TicketWork("", taskStrs[i]);
+            workList.add(ticketWork);
+        }
+
+        rvTaskContent.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+        workAdapter = new WorkAdapter(R.layout.item_task_content, workList);
+        rvTaskContent.setAdapter(workAdapter);
+
+        //默认6.1
+
+        // etSwitchSafe
+
 
 //        //注意事项
 //        BaseRequest.getInstance().getService().getTicketSafe("1", "1").subscribeOn(Schedulers.io())
@@ -374,12 +411,15 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         //线路或双重设备名称
         BaseRequest.getInstance().getService().getDoubleLine(lineId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<LineName>>(this) {
+                .subscribe(new BaseObserver<LineName>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<LineName>> t) throws Exception {
-                        List<LineName> results = t.getResults();
-                        if (results != null && results.size() > 0) {
-                            tvDoubleName.setText(results.get(0).getVoltage_level() + results.get(0).getName() + ",线路编号：" + results.get(0).getLine_no() + "，色标：" + results.get(0).getLine_color() + ",位置称号：左线");
+                    protected void onSuccees(BaseResult<LineName> t) throws Exception {
+                        LineName result = t.getResults();
+                        if (result != null) {
+                            tvDoubleName.setText(result.getVoltage_level() + result.getName() +
+                                    ",线路编号：" + result.getLine_no() + "，色标：" + result.getLine_color() + ",位置称号：左线");
+                            etSwitchSafe.setText(result.getName() + "转为检修状态，拉开" + result.getStart_power_station()
+                                    + result.getName() + "开关及各侧刀闸，拉开" + result.getEnd_power_station() + "1117开和一线开关及各侧刀闸。");
                         }
                     }
 
@@ -932,7 +972,13 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
 
                 break;
             case R.id.tv_crew_id:
-                getAllSendToPerson("1");
+                //getAllSendToPerson("1");
+                if (mulchoice == null) {
+                    Toast.makeText(this, "无可选择的工作班人员!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                getAllSendToPerson();
                 break;
             case R.id.tv_s_time:
                 PickerUtils.showDate(FirstWTicketActivity.this, tvSTime);
@@ -963,6 +1009,9 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                         Toast.makeText(FirstWTicketActivity.this, "请补全任务信息", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
+                    //添加新任务的时候，之前的Edit Text内容未保存  TODO
+
                     workList.add(new TicketWork(et2.getText().toString(), et3.getText().toString()));
                     if (workAdapter != null) {
                         workAdapter.setNewData(workList);
@@ -1066,4 +1115,59 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         }
 
     }
+
+    private void getAllSendToPerson() {
+        List<SelectWorkerBean.SelectUserInfo> workerSelectUserList = workerList.getUserInfos();
+        if (workerSelectUserList != null && workerSelectUserList.size() > 0) {
+            String[] workers = new String[workerSelectUserList.size()];
+            String[] workers_id = new String[workerSelectUserList.size()];
+
+            for (int i = 0; i < workerSelectUserList.size(); i++) {
+                workers[i] = workerSelectUserList.get(i).getUserName();
+                workers_id[i] = workerSelectUserList.get(i).getUserId();
+            }
+
+            showSelectDialog(workers, workerSelectUserList);
+        }
+    }
+
+
+    private void showSelectDialog(String[] workers, List<SelectWorkerBean.SelectUserInfo> workerSelectUserList) {
+        List<SelectWorkerBean.SelectUserInfo> selectUserInfos = new ArrayList<>();
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(FirstWTicketActivity.this);
+        builder.setTitle("工作人员选择");
+        builder.setMultiChoiceItems(workers, mulchoice, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+                mulchoice[which] = isChecked;
+                Log.i("MyTest", "-->which=" + which);
+
+            }
+        });
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String s = "";
+                for (int i = 0; i < workers.length; i++) {
+                    if (mulchoice[i]) {
+                        s = s + workers[i] + ",";
+
+                        SelectWorkerBean.SelectUserInfo userInfo = new SelectWorkerBean.SelectUserInfo();
+                        userInfo.setUserId(workerSelectUserList.get(i).getUserId());
+                        userInfo.setUserName(workerSelectUserList.get(i).getUserName());
+                        selectUserInfos.add(userInfo);
+                    }
+                }
+                //selectWorkerBean.setUserInfos(selectUserInfos);
+                tvCrewId.setText(s.substring(0, s.length() - 1));
+                tvPerson.setText("共" +  selectUserInfos.size() + "人");
+            }
+        });
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
 }

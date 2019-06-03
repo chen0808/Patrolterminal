@@ -104,7 +104,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
+                android:layout_height="5dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/bg_gray"></View>
 
@@ -130,7 +130,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
+                android:layout_height="5dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/bg_gray"></View>
 
@@ -170,7 +170,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
+                android:layout_height="5dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/bg_gray"></View>
             <!-- 3.工作的线路或设备双重名称 -->
@@ -200,7 +200,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
+                android:layout_height="5dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/bg_gray"></View>
             <!-- 4.工作任务 -->
@@ -260,7 +260,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
+                android:layout_height="5dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/bg_gray"></View>
 
@@ -310,7 +310,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
+                android:layout_height="5dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/bg_gray"></View>
 
@@ -349,10 +349,12 @@
                 <EditText
                     android:id="@+id/et_switch_safe"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/stoke_gray"
                     android:gravity="top"
-                    android:padding="4dp" />
+                    android:padding="4dp"
+                    android:textColor="@color/pro_detail_light"
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"

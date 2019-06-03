@@ -3,6 +3,7 @@ package com.patrol.terminal.adapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -24,6 +25,9 @@ public class SafeAdapter extends BaseItemDraggableAdapter<TicketSafeContent, Bas
     protected void convert(BaseViewHolder helper, TicketSafeContent item) {
         helper.setText(R.id.et_content, item.getTicket_safe_content());
         EditText etContent = helper.getView(R.id.et_content);
+        TextView numTv = helper.getView(R.id.num_tv);
+        numTv.setText("(" + helper.getPosition() + 1 + ")");
+
         etContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -23,5 +23,6 @@ public class WorkAdapter extends BaseQuickAdapter<TicketWork, BaseViewHolder> {
                 .setText(R.id.tv_content, item.getWork_content());
         helper.getView(R.id.tv_name).setVisibility(View.GONE);
         helper.getView(R.id.view_name).setVisibility(View.GONE);
+
     }
 }

@@ -858,6 +858,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                             intent11.putExtra("bean", overhaulMonthBean);
                             intent11.putExtra("type", String.valueOf(nicePosition));
                             intent11.putExtra("task_type", String.valueOf(nicePosition2));
+                            intent11.putExtra("selectedUserListBeans", selectWorkerBean);
 //                        intent11.putExtra("leaderName", "叶");
                             startActivity(intent11);
                             break;

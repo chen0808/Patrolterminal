@@ -884,8 +884,8 @@ public interface ApiServise {
     Observable<BaseResult<List<OverhaulMonthBean>>> updateBzAgents(@Query("task_status") String task_status, @Query("id") String id);
 
     //线路或双重设备名称
-    @GET("eq/line/allGET")
-    Observable<BaseResult<List<LineName>>> getDoubleLine(@Query("id") String id);
+    @GET("eq/line/oneGET")
+    Observable<BaseResult<LineName>> getDoubleLine(@Query("id") String id);
 
     //特殊属性列表
     @GET("task/danger/wares/waresAllGET")
