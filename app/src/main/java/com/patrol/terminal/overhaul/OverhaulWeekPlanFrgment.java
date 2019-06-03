@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -52,6 +53,8 @@ public class OverhaulWeekPlanFrgment extends BaseFragment {
     ImageView taskAdd;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
+    @BindView(R.id.plan_refresh)
+    SwipeRefreshLayout planRefresh;
 
     private OverhaulWeekAdapter weekAdapter;
     private String time;
@@ -143,6 +146,12 @@ public class OverhaulWeekPlanFrgment extends BaseFragment {
                 }
             }
         });
+        planRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getWeekList();
+            }
+        });
     }
 
 
@@ -180,6 +189,7 @@ public class OverhaulWeekPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
+                        planRefresh.setRefreshing(false);
                         List<OverhaulYearBean> overhaulYearBeans = t.getResults();
                         for (int i = 0; i < overhaulYearBeans.size(); i++) {
                             if ("2".equals(overhaulYearBeans.get(i).getMonth_audit_status())) {   //只显示审核通过的周计划
@@ -191,6 +201,7 @@ public class OverhaulWeekPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        planRefresh.setRefreshing(false);
                         Log.e("fff", e.toString());
                     }
                 });

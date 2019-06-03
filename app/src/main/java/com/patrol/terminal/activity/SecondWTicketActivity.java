@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -66,7 +64,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class SecondWTicketActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class SecondWTicketActivity extends AppCompatActivity {
 
 
     @BindView(R.id.title_back)
@@ -107,34 +105,14 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
     RecyclerView rvRemarkSafe;
     @BindView(R.id.iv_signature_pad)
     ImageView ivSignaturePad;
-    @BindView(R.id.cb_group_time_a)
-    CheckBox cbGroupTimeA;
-    @BindView(R.id.tv_group_time_a)
-    TextView tvGroupTimeA;
     @BindView(R.id.iv_signature_pad_2)
     ImageView ivSignaturePad2;
-    @BindView(R.id.cb_group_time_b)
-    CheckBox cbGroupTimeB;
-    @BindView(R.id.tv_group_time_b)
-    TextView tvGroupTimeB;
     @BindView(R.id.iv_signature_pad_3)
     ImageView ivSignaturePad3;
-    @BindView(R.id.cb_group_time_c)
-    CheckBox cbGroupTimeC;
-    @BindView(R.id.tv_group_time_c)
-    TextView tvGroupTimeC;
     @BindView(R.id.iv_signature_pad_4)
     ImageView ivSignaturePad4;
-    @BindView(R.id.cb_work_a_time)
-    CheckBox cbWorkATime;
-    @BindView(R.id.tv_work_a_time)
-    TextView tvWorkATime;
     @BindView(R.id.iv_signature_pad_5)
     ImageView ivSignaturePad5;
-    @BindView(R.id.cb_work_b_time)
-    CheckBox cbWorkBTime;
-    @BindView(R.id.tv_work_b_time)
-    TextView tvWorkBTime;
     @BindView(R.id.tv_delay_time)
     TextView tvDelayTime;
     @BindView(R.id.et_remark)
@@ -149,6 +127,16 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
     ImageView ivSignaturePadPerson;
     @BindView(R.id.iv_safe_change)
     ImageView ivSafeChange;
+    @BindView(R.id.tv_sign_time1)
+    TextView tvSignTime1;
+    @BindView(R.id.tv_sign_time2)
+    TextView tvSignTime2;
+    @BindView(R.id.tv_sign_time3)
+    TextView tvSignTime3;
+    @BindView(R.id.tv_sign_time4)
+    TextView tvSignTime4;
+    @BindView(R.id.tv_sign_time5)
+    TextView tvSignTime5;
     private List<AddressBookLevel2> nameList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
     private TaskContentAdapter contentAdapter;
@@ -228,11 +216,7 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
 //            etRemarkSafe.setEnabled(false);
 //            etTicketNumber.setEnabled(false);
 //        } else {
-        cbGroupTimeA.setOnCheckedChangeListener(this);
-        cbGroupTimeB.setOnCheckedChangeListener(this);
-        cbGroupTimeC.setOnCheckedChangeListener(this);
-        cbWorkATime.setOnCheckedChangeListener(this);
-        cbWorkBTime.setOnCheckedChangeListener(this);
+
 //        }
 
         //已填写数据
@@ -352,18 +336,23 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
             switch (index) {
                 case 1:
                     ivSignaturePad.setImageBitmap(bitmap);
+                    tvSignTime1.setText(DateUatil.getMin());
                     break;
                 case 2:
                     ivSignaturePad2.setImageBitmap(bitmap);
+                    tvSignTime2.setText(DateUatil.getMin());
                     break;
                 case 3:
                     ivSignaturePad3.setImageBitmap(bitmap);
+                    tvSignTime3.setText(DateUatil.getMin());
                     break;
                 case 4:
                     ivSignaturePad4.setImageBitmap(bitmap);
+                    tvSignTime4.setText(DateUatil.getMin());
                     break;
                 case 5:
                     ivSignaturePad5.setImageBitmap(bitmap);
+                    tvSignTime5.setText(DateUatil.getMin());
                     break;
                 case 6:
                     ivSignaturePadPerson.setImageBitmap(bitmap);
@@ -376,7 +365,8 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
 
     @OnClick({R.id.title_back, R.id.tv_crew_id, R.id.iv_signature_pad, R.id.iv_signature_pad_2,
             R.id.iv_signature_pad_3, R.id.iv_signature_pad_4, R.id.iv_signature_pad_5, R.id.iv_signature_pad_person,
-            R.id.title_setting, R.id.iv_task_add, R.id.tv_delay_time, R.id.tv_s_time, R.id.tv_e_time, R.id.iv_safe_change})
+            R.id.title_setting, R.id.iv_task_add, R.id.tv_delay_time, R.id.tv_s_time, R.id.tv_e_time, R.id.iv_safe_change,
+            R.id.tv_sign_time1, R.id.tv_sign_time2, R.id.tv_sign_time3, R.id.tv_sign_time4, R.id.tv_sign_time5})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_safe_change:
@@ -438,6 +428,21 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
                 startActivity(intent5);
                 SignBean.setIndex(5);
 //                }
+                break;
+            case R.id.tv_sign_time1:
+                PickerUtils.showMin(SecondWTicketActivity.this, tvSignTime1);
+                break;
+            case R.id.tv_sign_time2:
+                PickerUtils.showMin(SecondWTicketActivity.this, tvSignTime2);
+                break;
+            case R.id.tv_sign_time3:
+                PickerUtils.showMin(SecondWTicketActivity.this, tvSignTime3);
+                break;
+            case R.id.tv_sign_time4:
+                PickerUtils.showMin(SecondWTicketActivity.this, tvSignTime4);
+                break;
+            case R.id.tv_sign_time5:
+                PickerUtils.showMin(SecondWTicketActivity.this, tvSignTime5);
                 break;
             case R.id.iv_signature_pad_person:
                 Intent intent6 = new Intent();
@@ -535,38 +540,18 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
             switch (sign) {
                 case "1":
                     showPic(results.getSignList().get(i), ivSignaturePad, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        tvGroupTimeA.setText(results.getSignList().get(i).getSign_time());
-                        cbGroupTimeA.setVisibility(View.GONE);
-                    }
                     break;
                 case "2":
                     showPic(results.getSignList().get(i), ivSignaturePad2, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        tvGroupTimeB.setText(results.getSignList().get(i).getSign_time());
-                        cbGroupTimeB.setVisibility(View.GONE);
-                    }
                     break;
                 case "3":
                     showPic(results.getSignList().get(i), ivSignaturePad3, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        tvGroupTimeC.setText(results.getSignList().get(i).getSign_time());
-                        cbGroupTimeC.setVisibility(View.GONE);
-                    }
                     break;
                 case "4":
                     showPic(results.getSignList().get(i), ivSignaturePad4, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        tvWorkATime.setText(results.getSignList().get(i).getSign_time());
-                        cbWorkATime.setVisibility(View.GONE);
-                    }
                     break;
                 case "5":
                     showPic(results.getSignList().get(i), ivSignaturePad5, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        tvWorkBTime.setText(results.getSignList().get(i).getSign_time());
-                        cbWorkBTime.setVisibility(View.GONE);
-                    }
                     break;
                 case "6":
                     showPic(results.getSignList().get(i), ivSignaturePadPerson, sign + ".jpg");
@@ -659,23 +644,23 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
     private void addPicList() {
         if (ivSignaturePad.getDrawable() != null) {
             File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "1");
-            signList.add(new TicketSign("1", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file1)));
+            signList.add(new TicketSign("1", tvSignTime1.getText().toString(), FileUtil.fileToBase64(file1)));
         }
         if (ivSignaturePad2.getDrawable() != null) {
             File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "2");
-            signList.add(new TicketSign("2", tvGroupTimeB.getText().toString(), FileUtil.fileToBase64(file2)));
+            signList.add(new TicketSign("2", tvSignTime2.getText().toString(), FileUtil.fileToBase64(file2)));
         }
         if (ivSignaturePad3.getDrawable() != null) {
             File file3 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad3).getDrawable()).getBitmap(), "3");
-            signList.add(new TicketSign("3", tvGroupTimeC.getText().toString(), FileUtil.fileToBase64(file3)));
+            signList.add(new TicketSign("3", tvSignTime3.getText().toString(), FileUtil.fileToBase64(file3)));
         }
         if (ivSignaturePad4.getDrawable() != null) {
             File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "4");
-            signList.add(new TicketSign("4", tvWorkATime.getText().toString(), FileUtil.fileToBase64(file4)));
+            signList.add(new TicketSign("4", tvSignTime4.getText().toString(), FileUtil.fileToBase64(file4)));
         }
         if (ivSignaturePad5.getDrawable() != null) {
             File file5 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad5).getDrawable()).getBitmap(), "5");
-            signList.add(new TicketSign("5", tvWorkBTime.getText().toString(), FileUtil.fileToBase64(file5)));
+            signList.add(new TicketSign("5", tvSignTime5.getText().toString(), FileUtil.fileToBase64(file5)));
         }
         if (ivSignaturePadPerson.getDrawable() != null) {
             File file6 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePadPerson).getDrawable()).getBitmap(), "6");
@@ -691,52 +676,5 @@ public class SecondWTicketActivity extends AppCompatActivity implements Compound
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
             return requestBody;
         }
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        switch (compoundButton.getId()) {
-            case R.id.cb_group_time_a:
-                if (isChecked) {
-                    tvGroupTimeA.setText(DateUatil.getCurrTime());
-                } else {
-                    tvGroupTimeA.setText(getResources().getString(R.string.work_ticket_time));
-                }
-
-                break;
-
-            case R.id.cb_group_time_b:
-                if (isChecked) {
-                    tvGroupTimeB.setText(DateUatil.getCurrTime());
-                } else {
-                    tvGroupTimeB.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-
-            case R.id.cb_group_time_c:
-                if (isChecked) {
-                    tvGroupTimeC.setText(DateUatil.getCurrTime());
-                } else {
-                    tvGroupTimeC.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-
-            case R.id.cb_work_a_time:
-                if (isChecked) {
-                    tvWorkATime.setText(DateUatil.getCurrTime());
-                } else {
-                    tvWorkATime.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-
-            case R.id.cb_work_b_time:
-                if (isChecked) {
-                    tvWorkBTime.setText(DateUatil.getCurrTime());
-                } else {
-                    tvWorkBTime.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-        }
-
     }
 }

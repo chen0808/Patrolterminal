@@ -404,25 +404,24 @@
 
             <!--默认当前时间-->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <CheckBox
-                    android:id="@+id/time_checkbox"
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></CheckBox>
+                    android:layout_height="wrap_content"
+                    android:text="签名时间：" />
 
                 <TextView
-                    android:id="@+id/time_tv"
+                    android:id="@+id/tv_sign_time1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="@string/work_ticket_time"></TextView>
+                    android:background="@drawable/stoke_gray"
+                    android:padding="4dp" />
             </LinearLayout>
 
             <View
@@ -702,25 +701,24 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <CheckBox
-                    android:id="@+id/time_checkbox_5"
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></CheckBox>
+                    android:layout_height="wrap_content"
+                    android:text="签名时间：" />
 
                 <TextView
-                    android:id="@+id/time_tv_5"
+                    android:id="@+id/tv_sign_time2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="@string/work_ticket_time"></TextView>
+                    android:background="@drawable/stoke_gray"
+                    android:padding="4dp" />
             </LinearLayout>
 
             <View

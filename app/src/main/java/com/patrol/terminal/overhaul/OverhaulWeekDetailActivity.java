@@ -2,6 +2,7 @@ package com.patrol.terminal.overhaul;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -31,6 +32,7 @@ import com.patrol.terminal.bean.OverhaulZZSendBean;
 import com.patrol.terminal.bean.WeekTaskInfo;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -167,6 +169,8 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
     TextView safeProgressbarNum;
     @BindView(R.id.safe_progressbar_ll)
     LinearLayout safeProgressbarLl;
+    @BindView(R.id.btn_commit)
+    Button btnCommit;
 
     private String jobType;
     private String userId;
@@ -309,12 +313,14 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
         titleSettingTv.setText("派发");
         if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {   //检修专责
             seekbarLl.setVisibility(View.VISIBLE);
-            if ("1".equals(status)) {   //待专责分发
+            if ("1".equals(status)) {   //待分发
                 titleSetting.setVisibility(View.VISIBLE);
                 taskLl.setVisibility(View.VISIBLE);
+                btnCommit.setVisibility(View.VISIBLE);
             } else {                   //已分发
                 titleSetting.setVisibility(View.GONE);
                 taskLl.setVisibility(View.GONE);
+                btnCommit.setVisibility(View.GONE);
             }
         } else {
             if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
@@ -610,11 +616,62 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.title_back, R.id.title_setting, R.id.btn_file, R.id.acceptance_plan_rl, R.id.power_preservation_rl, R.id.add_btn})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.btn_file, R.id.acceptance_plan_rl, R.id.power_preservation_rl, R.id.add_btn, R.id.btn_commit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
+                break;
+            case R.id.btn_commit:
+                OverhaulYearBean updateOverhaulYearBean = new OverhaulYearBean();
+//                if (results.getWeek_audit_status().equals("2")) {  //新增
+//                    String startTimeStr = weekPlanTimeStart.getText().toString();
+//                    if (!TextUtils.isEmpty(startTimeStr)) {
+//                        String times[] = startTimeStr.split("-");
+//                        updateOverhaulYearBean.setYear(Integer.valueOf(times[0]));
+//                        updateOverhaulYearBean.setMonth(Integer.valueOf(times[1]));
+//                        try {
+//                            updateOverhaulYearBean.setWeek(TimeUtil.getWeek(startTimeStr));
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                        updateOverhaulYearBean.setDay(Integer.valueOf(times[2]));
+//                    }
+//                    updateOverhaulYearBean.setMonth_audit_status("2");
+//                    updateOverhaulYearBean.setWeek_audit_status("1");
+//                } else {   //修改
+//                    if (overhaulYearBean != null) {
+//                        updateOverhaulYearBean.setId(overhaulYearBean.getId());
+//                        updateOverhaulYearBean.setYear(overhaulYearBean.getYear());
+//                        updateOverhaulYearBean.setMonth(overhaulYearBean.getMonth());
+//                        updateOverhaulYearBean.setWeek(overhaulYearBean.getWeek());
+//                        updateOverhaulYearBean.setDay(overhaulYearBean.getDay());
+//                    }
+//                }
+//
+//                updateOverhaulYearBean.setApply_dep_name(monthPlanNuit.getText().toString());
+//                updateOverhaulYearBean.setLine_name(monthPlanDeviceName.getText().toString());
+//                updateOverhaulYearBean.setVoltage_level(monthPlanVo.getText().toString());
+//                if (monthPlanYes.isChecked()) {
+//                    updateOverhaulYearBean.setIs_blackout("1");
+//                } else {
+//                    updateOverhaulYearBean.setIs_blackout("0");
+//                }
+//
+//                if (!TextUtils.isEmpty(monthPlanDayNum.getText().toString())) {
+//                    String[] blackout_daysStr = monthPlanDayNum.getText().toString().split("天");
+//                    updateOverhaulYearBean.setBlackout_days(Integer.valueOf(blackout_daysStr[0]));
+//                }
+//
+//                updateOverhaulYearBean.setBlackout_range(monthPlanRange.getText().toString());
+//                updateOverhaulYearBean.setTask_source(monthPlanSource.getText().toString());
+//                updateOverhaulYearBean.setStart_time(monthPlanTimeStart.getText().toString());
+//                updateOverhaulYearBean.setEnd_time(monthPlanTimeEnd.getText().toString());
+//                updateOverhaulYearBean.setRisk_level(monthPlanRishLevel.getText().toString());
+//                updateOverhaulYearBean.setRepair_content(monthPlanContent.getText().toString());
+//                updateOverhaulYearBean.setRemark(monthPlanRemark.getText().toString());
+
+                changeWeekPlan(updateOverhaulYearBean);
                 break;
             case R.id.acceptance_plan_rl:
                 String defaultSaveRootPath1 = FileDownloadUtils.getDefaultSaveRootPath();
@@ -735,6 +792,31 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
                 //AddWeekTaskDialog.show(this, mWeekTaskAdapter, mWeekTaskList);
                 break;
         }
+    }
+
+    private void changeWeekPlan(OverhaulYearBean overhaulYearBean) {
+        BaseRequest.getInstance().getService()
+                .updateJxMonthPlan(overhaulYearBean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<OverhaulYearBean>>(this) {
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            //刷新界面
+                            Toast.makeText(OverhaulWeekDetailActivity.this, "修改成功！", Toast.LENGTH_SHORT).show();
+                            RxRefreshEvent.publish("updateMonthPlan");
+                            finish();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Log.e("fff", e.toString());
+                    }
+                });
     }
 
 //    private String leaderName;

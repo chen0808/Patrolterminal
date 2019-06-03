@@ -138,7 +138,6 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                 }
             }
         });
-
         planRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -199,6 +198,7 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        planRefresh.setRefreshing(false);
                         Log.e("fff", e.toString());
                     }
                 });

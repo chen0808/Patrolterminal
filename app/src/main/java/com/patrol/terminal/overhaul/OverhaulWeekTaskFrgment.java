@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -53,6 +54,8 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
     ImageView taskAdd;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
+    @BindView(R.id.plan_refresh)
+    SwipeRefreshLayout planRefresh;
 
     private OverhaulWeekTaskAdapter weekTaskAdapter;
     private String time;
@@ -152,6 +155,12 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
                 }
             }
         });
+        planRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getWeekList();
+            }
+        });
     }
 
 
@@ -175,6 +184,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
                 .subscribe(new BaseObserver<List<JxbSignInfo>>(getActivity()) {
                     @Override
                     protected void onSuccees(BaseResult<List<JxbSignInfo>> t) throws Exception {
+                        planRefresh.setRefreshing(false);
                         List<JxbSignInfo> result = t.getResults();
                         if (result != null && result.size() > 0) {
                             SPUtil.put(getActivity(), "jxb", "sign", result.get(0).getSign());
@@ -201,6 +211,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        planRefresh.setRefreshing(false);
                     }
                 });
 

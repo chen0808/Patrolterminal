@@ -41,4 +41,16 @@ public class PickerUtils {
         }).setType(bool).build();
         pvTime.show(tv);
     }
+
+    public static void showMin(Context context, TextView tv) {
+        boolean[] bool = {true, true, true, true, true, false};
+        TimePickerView pvTime = new TimePickerBuilder(context, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                tv.setText(sdf.format(date));
+            }
+        }).setType(bool).build();
+        pvTime.show(tv);
+    }
 }

@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -38,7 +37,6 @@ import com.patrol.terminal.bean.TicketSign;
 import com.patrol.terminal.bean.TicketUser;
 import com.patrol.terminal.bean.TicketWork;
 import com.patrol.terminal.utils.Constant;
-import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
@@ -66,7 +64,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 /*电力线路带电作业工作票*/
-public class ThirdWTicketActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
+public class ThirdWTicketActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -136,8 +134,6 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
     ImageView ivSignaturePad5;
     @BindView(R.id.time_checkbox_5)
     CheckBox timeCheckbox5;
-    @BindView(R.id.time_tv_5)
-    TextView timeTv5;
     @BindView(R.id.et_remark)
     EditText etRemark;
     @BindView(R.id.et_permit_user_name)
@@ -148,6 +144,10 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
     EditText etDoneUserName;
     @BindView(R.id.iv_safe_change)
     ImageView ivSafeChange;
+    @BindView(R.id.tv_sign_time1)
+    TextView tvSignTime1;
+    @BindView(R.id.tv_sign_time2)
+    TextView tvSignTime2;
     private List<AddressBookLevel2> nameList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
     private List<TicketWork> workList = new ArrayList<>();
@@ -229,30 +229,9 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
 //            etTicketNumber.setEnabled(false);
 //            etRemarkSafe.setEnabled(false);
 //        } else {
-        timeCheckbox.setOnCheckedChangeListener(this);
-        timeCheckbox3.setOnCheckedChangeListener(this);
-        timeCheckbox5.setOnCheckedChangeListener(this);
+
 //        }
 
-        //注意事项
-//        BaseRequest.getInstance().getService().getTicketSafe(ticketType, ticketTaskType).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<List<TicketSafeBean>>(this) {
-//                    @Override
-//                    protected void onSuccees(BaseResult<List<TicketSafeBean>> t) throws Exception {
-//                        List<TicketSafeBean> results = t.getResults();
-//                        if (results != null && results.size() > 0) {
-//                            String safeWay = results.get(0).getSafe_way();
-//                            String remarkSafe = safeWay.replace("<p>", "").replace("</p>", "");
-//                            String remarkSafe2 = remarkSafe.replace("。（", "。\n  （");
-//                            etRemarkSafe.setText(remarkSafe2);
-//                        }
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                    }
-//                });
         //已填写数据
         BaseRequest.getInstance().getService().searchThirdTicket(taskId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -340,34 +319,18 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
             switch (sign) {
                 case "1":
                     showPic(results.getSignList().get(i), ivSignaturePad, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        timeTv.setText(results.getSignList().get(i).getSign_time());
-                        timeCheckbox.setVisibility(View.GONE);
-                    }
                     break;
                 case "2":
                     showPic(results.getSignList().get(i), ivSignaturePad2, sign + ".jpg");
-//                    tvGroupTimeB.setText(results.getSignList().get(i).getSign_time());
-//                    cbGroupTimeB.setVisibility(View.GONE);
                     break;
                 case "3":
                     showPic(results.getSignList().get(i), ivSignaturePad3, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        timeTv3.setText(results.getSignList().get(i).getSign_time());
-                        timeCheckbox3.setVisibility(View.GONE);
-                    }
                     break;
                 case "4":
                     showPic(results.getSignList().get(i), ivSignaturePad4, sign + ".jpg");
-//                    tvWorkATime.setText(results.getSignList().get(i).getSign_time());
-//                    cbWorkATime.setVisibility(View.GONE);
                     break;
                 case "5":
                     showPic(results.getSignList().get(i), ivSignaturePad5, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        timeTv5.setText(results.getSignList().get(i).getSign_time());
-                        timeCheckbox5.setVisibility(View.GONE);
-                    }
                     break;
             }
         }
@@ -535,23 +498,23 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
     private void addPicList() {
         if (ivSignaturePad.getDrawable() != null) {
             File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "1");
-            signList.add(new TicketSign("1", timeTv.getText().toString(), FileUtil.fileToBase64(file1)));
+            signList.add(new TicketSign("1", tvSignTime1.getText().toString(), FileUtil.fileToBase64(file1)));
         }
         if (ivSignaturePad2.getDrawable() != null) {
             File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "2");
-            signList.add(new TicketSign("2", getResources().getString(R.string.work_ticket_time), FileUtil.fileToBase64(file2)));
+            signList.add(new TicketSign("2", "", FileUtil.fileToBase64(file2)));
         }
         if (ivSignaturePad3.getDrawable() != null) {
             File file3 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad3).getDrawable()).getBitmap(), "3");
-            signList.add(new TicketSign("3", timeTv3.getText().toString(), FileUtil.fileToBase64(file3)));
+            signList.add(new TicketSign("3", "", FileUtil.fileToBase64(file3)));
         }
         if (ivSignaturePad4.getDrawable() != null) {
             File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "4");
-            signList.add(new TicketSign("4", getResources().getString(R.string.work_ticket_time), FileUtil.fileToBase64(file4)));
+            signList.add(new TicketSign("4", "", FileUtil.fileToBase64(file4)));
         }
         if (ivSignaturePad5.getDrawable() != null) {
             File file5 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad5).getDrawable()).getBitmap(), "5");
-            signList.add(new TicketSign("5", timeTv5.getText().toString(), FileUtil.fileToBase64(file5)));
+            signList.add(new TicketSign("5", tvSignTime2.getText().toString(), FileUtil.fileToBase64(file5)));
         }
     }
 
@@ -581,38 +544,6 @@ public class ThirdWTicketActivity extends BaseActivity implements CompoundButton
             }
         }
         SignBean.setBitmap(null);
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        switch (compoundButton.getId()) {
-            case R.id.time_checkbox:
-                if (isChecked) {
-                    timeTv.setText(DateUatil.getCurrTime());
-                } else {
-                    timeTv.setText(getResources().getString(R.string.work_ticket_time));
-                }
-
-                break;
-
-            case R.id.time_checkbox_3:
-                if (isChecked) {
-                    timeTv3.setText(DateUatil.getCurrTime());
-                } else {
-                    timeTv3.setText(getResources().getString(R.string.work_ticket_time));
-                }
-
-                break;
-
-            case R.id.time_checkbox_5:
-                if (isChecked) {
-                    timeTv5.setText(DateUatil.getCurrTime());
-                } else {
-                    timeTv5.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-        }
-
     }
 
     @OnClick({R.id.title_back, R.id.tv_crew_id, R.id.iv_signature_pad, R.id.iv_signature_pad_2,

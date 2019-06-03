@@ -13,7 +13,6 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.CreatePlanActivity;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -30,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -49,6 +49,8 @@ public class OverhaulYearPlanFrgment extends BaseFragment {
     ImageView taskAdd;
     @BindView(R.id.plan_submit)
     TextView planSubmit;
+    @BindView(R.id.plan_refresh)
+    SwipeRefreshLayout planRefresh;
 //    @BindView(R.id.plan_create)
 //    TextView planCreate;
 
@@ -59,7 +61,6 @@ public class OverhaulYearPlanFrgment extends BaseFragment {
     private String time;
     private String typeId;
     private String month, year;
-
 
 
     @Override
@@ -96,18 +97,25 @@ public class OverhaulYearPlanFrgment extends BaseFragment {
             }
         });
         getYearPlanList();
+        planRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getYearPlanList();
+            }
+        });
     }
 
     //获取年计划列表
     public void getYearPlanList() {
 
         BaseRequest.getInstance().getService()
-                .getOverhaulPlanList(year,null,null, null,null)
+                .getOverhaulPlanList(year, null, null, null, null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<OverhaulYearBean>>(getContext()) {
                     @Override
                     protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
+                        planRefresh.setRefreshing(false);
                         result = t.getResults();
                         yearAdapter.setNewData(result);
                         SPUtil.putString(getContext(), "date", "overhaulTime", time);
@@ -115,6 +123,7 @@ public class OverhaulYearPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        planRefresh.setRefreshing(false);
                     }
                 });
 

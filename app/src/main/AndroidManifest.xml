@@ -43,9 +43,7 @@
         <activity android:name=".overhaul.OverhaulYearDetailActivity" />
         <activity android:name=".overhaul.OverhaulMonthDetailActivity" />
         <activity android:name=".overhaul.OverhaulWeekDetailActivity" />
-        <activity android:name=".overhaul.OverhaulAddGroupActivity" />
         <activity android:name=".overhaul.OverhaulPlanActivity" />
-        <activity android:name=".overhaul.OverhaulAddWeekPlanActivity" />
         <activity android:name=".overhaul.OverhaulAddMonthPlanActivity" />
         <activity android:name=".overhaul.OverhaulAddYearPlanActivity" />
         <activity android:name=".activity.ReceiveTaskActivity" />
