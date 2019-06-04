@@ -1,8 +1,10 @@
 package com.patrol.terminal.widget;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.ControlDepdapter1;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
@@ -45,9 +48,8 @@ import io.reactivex.schedulers.Schedulers;
 public class QfrDialog extends Dialog {
     private final String[] aaa={"a","b","c","d","e"};
     private Activity context;
-    private List<String> qfrList = new ArrayList<>();
-    private Spinner qfrSpinner1;
-    private NiceSpinner qfrSpinner2;
+    private TextView qfrTv;
+    private TextView qfrTv2;
     private int qfrSpinner1Postiion = 0;
     private int qfrSpinner2Postiion = 0;
     private List<OverhaulSendUserBean2> overhaulSendUserBeans = new ArrayList<>();
@@ -72,13 +74,24 @@ public class QfrDialog extends Dialog {
         ImageView addIv = (ImageView) findViewById(R.id.add_btn_iv);
         LinearLayout qfrLl2 = (LinearLayout) findViewById(R.id.qfr_ll_2);
 
-        qfrSpinner1 = findViewById(R.id.qfr_spinner);
-        qfrSpinner2 = (NiceSpinner) findViewById(R.id.qfr_spinner_2);
+        qfrTv = (TextView)findViewById(R.id.qfr_tv);
+        qfrTv2 = (TextView) findViewById(R.id.qfr_tv_2);
 
+        findViewById(R.id.qfr_tv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View paramView) {
+                getAllSendToPerson(1);
 
-//        getAllSendToPerson();
+            }
+        });
 
-//        qfrSpinner1.attachDataSource(Arrays.asList(aaa));
+        findViewById(R.id.qfr_tv_2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View paramView) {
+                getAllSendToPerson(2);
+            }
+        });
+
 
         findViewById(R.id.add_btn_iv).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,10 +113,10 @@ public class QfrDialog extends Dialog {
         findViewById(R.id.ok_tv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View paramView) {
-//                if (TextUtils.isEmpty(qfrEt1.getText().toString())) {
-//                    Toast.makeText(context, "签发人为空！", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
+                if (TextUtils.isEmpty(qfrTv.getText().toString())) {
+                    Toast.makeText(context, "签发人不能为空！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 ok();
             }
         });
@@ -118,7 +131,9 @@ public class QfrDialog extends Dialog {
 
     }
 
-    private void getAllSendToPerson() {
+    private void getAllSendToPerson(int qfrPos) {
+        overhaulSendUserBeans.clear();
+        List<String> qfrList = new ArrayList<>();
         BaseRequest.getInstance().getService()
                 .getSendOverhaulUsers2()
                 .subscribeOn(Schedulers.io())
@@ -136,6 +151,7 @@ public class QfrDialog extends Dialog {
                                 }
                             }
                             qfrList.clear();
+                            Log.w("linmeng", "111qfrList.size():" + qfrList.size());
                             for (int i = 0; i < overhaulSendUserBeans.size(); i++) {
                                 for (int i1 = 0; i1 < overhaulSendUserBeans.get(i).getUserList().size(); i1++) {
                                     String userId = overhaulSendUserBeans.get(i).getUserList().get(i1).getId();
@@ -144,7 +160,13 @@ public class QfrDialog extends Dialog {
                                     userData.add(new OverhaulUserInfo(userId, userName));
                                 }
                             }
-                            Log.w("linmeng", "qfrList.size():" + qfrList.size());
+                            Log.w("linmeng", "222qfrList.size():" + qfrList.size());
+
+                            String zzs[] = new String[qfrList.size()];
+                            for (int i = 0; i < qfrList.size(); i++) {
+                                zzs[i] = qfrList.get(i);
+                            }
+                            showSingleChooseDialog(context, "选择签发人", zzs, qfrPos);
 
 
 //                            qfrSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -181,7 +203,7 @@ public class QfrDialog extends Dialog {
                 });
     }
 
-    private class MyAdapter extends BaseAdapter {
+    /*private class MyAdapter extends BaseAdapter {
         @Override
         public int getCount() {
             return 3;
@@ -204,5 +226,24 @@ public class QfrDialog extends Dialog {
             tvName.setText("asd");
             return view;
         }
+    }*/
+
+    public void showSingleChooseDialog(Context context, String title, String[] workers, int qfrPos) {
+        new AlertDialog.Builder(context).setTitle(title).setItems(workers, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //Toast.makeText(context, "您已经选择了: " + which + ":" + workers[which],Toast.LENGTH_LONG).show();
+//                holder.mDivisonName.setText(workers[which]);
+//                list.get(position).setDivisonName(workers[which]);
+//                list.get(position).setUserId(workers_id[which]);
+
+                if (qfrPos == 1) {
+                    qfrTv.setText(workers[which]);
+                }else if (qfrPos == 2) {
+                    qfrTv2.setText(workers[which]);
+                }
+
+                dialog.dismiss();
+            }
+        }).show();
     }
 }

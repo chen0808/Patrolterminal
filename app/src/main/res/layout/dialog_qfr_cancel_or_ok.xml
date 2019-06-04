@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_corner"
     android:gravity="center"
@@ -21,8 +21,7 @@
     <RelativeLayout
         android:id="@+id/qfr_ll"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
@@ -38,14 +37,16 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"/>
 
-        <Spinner
-            android:id="@+id/qfr_spinner"
+        <TextView
+            android:id="@+id/qfr_tv"
             android:layout_width="match_parent"
-            android:entries="@array/backlog_list"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:background="@drawable/stoke_gray"
             android:layout_toRightOf="@+id/dialog_title_tv"
             android:layout_toLeftOf="@+id/add_btn_iv"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textColor="#666666"
             />
 
         <ImageView
@@ -57,11 +58,11 @@
             android:layout_centerVertical="true"/>
 </RelativeLayout>
 
+
     <LinearLayout
         android:id="@+id/qfr_ll_2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
@@ -76,12 +77,14 @@
             android:text="签发人2："
             android:textColor="#666666" />
 
-        <org.angmarch.views.NiceSpinner
-            android:id="@+id/qfr_spinner_2"
+        <TextView
+            android:id="@+id/qfr_tv_2"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginRight="25dp"
-            android:textColor="#666666"/>
+            android:layout_height="35dp"
+            android:textColor="#666666"
+            android:background="@drawable/stoke_gray"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp" />
 
     </LinearLayout>
 
@@ -97,12 +100,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/cancel_tv"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="#666666"
@@ -118,7 +122,7 @@
         <TextView
             android:id="@+id/ok_tv"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="#cc0033"
