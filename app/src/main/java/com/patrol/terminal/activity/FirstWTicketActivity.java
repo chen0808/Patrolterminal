@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,10 @@ import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.ClassMemberBean;
 import com.patrol.terminal.bean.FirstTicketBean;
 import com.patrol.terminal.bean.LineName;
+import com.patrol.terminal.bean.OverhaulFzrSendBean;
 import com.patrol.terminal.bean.OverhaulMonthBean;
+import com.patrol.terminal.bean.OverhaulSendUserBean;
+import com.patrol.terminal.bean.OverhaulUserInfo;
 import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.bean.SelectWorkerBean;
 import com.patrol.terminal.bean.SignBean;
@@ -51,6 +55,7 @@ import com.patrol.terminal.bean.TicketSafeContent;
 import com.patrol.terminal.bean.TicketSign;
 import com.patrol.terminal.bean.TicketUser;
 import com.patrol.terminal.bean.TicketWork;
+import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
@@ -224,6 +229,10 @@ public class FirstWTicketActivity extends BaseActivity{
     private boolean[] mulchoice;
 
     private String taskContent;  //工作任务
+    private String status = "0";  //工作票状态
+    private List<OverhaulUserInfo> userData = new ArrayList<>();
+    private int signPosition = 0;
+    private int signPosition2 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,7 +302,7 @@ public class FirstWTicketActivity extends BaseActivity{
 
         titleName.setText("电力线路第一种工作票");
         titleSetting.setVisibility(View.VISIBLE);
-        titleSettingTv.setText("提交");
+
 
 //        if (!status.equals(Constant.STATUS_PRINCPIAL)) {
 //        etTicketNumber.setEnabled(false);
@@ -335,6 +344,10 @@ public class FirstWTicketActivity extends BaseActivity{
 //                    }
 //                });
 
+        if ("0".equals(status)) {        //第一次进来发送给签发人
+            titleSettingTv.setText("发送");
+        }
+
         //已填写数据
         BaseRequest.getInstance().getService().searchFirstTicket(taskId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -343,11 +356,8 @@ public class FirstWTicketActivity extends BaseActivity{
                     protected void onSuccees(BaseResult<FirstTicketBean> t) throws Exception {
                         results = t.getResults();
                         if (results == null) {
-//                            rvTaskContent.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
-//                            workAdapter = new WorkAdapter(R.layout.item_task_content, workList);
-//                            rvTaskContent.setAdapter(workAdapter);
-
                             //默认工作任务
+
                             workList = new ArrayList<>();
                             String[] taskStrs = taskContent.split("；");
                             for (int i = 0; i < taskStrs.length; i++) {
@@ -385,14 +395,21 @@ public class FirstWTicketActivity extends BaseActivity{
                     }
                 });
 
+        Log.w("linmeng", "lineId:" + lineId);
         //线路或双重设备名称
         BaseRequest.getInstance().getService().getDoubleLine(lineId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<LineName>(this) {
                     @Override
                     protected void onSuccees(BaseResult<LineName> t) throws Exception {
+                        Log.w("linmeng", "t.getResults():" +t.getResults());
                         LineName result = t.getResults();
                         if (result != null) {
+                            Log.w("linmeng", "result.getVoltage_level():" + result.getVoltage_level());
+                            Log.w("linmeng", "result.getName():" + result.getName());
+                            Log.w("linmeng", "reresult.getLine_no():" + result.getLine_no());
+                            Log.w("linmeng", "result.getLine_color():" + result.getLine_color());
+
                             tvDoubleName.setText(result.getVoltage_level() + result.getName() +
                                     ",线路编号：" + result.getLine_no() + "，色标：" + result.getLine_color() + ",位置称号：左线");
                             etSwitchSafe.setText(result.getName() + "转为检修状态，拉开" + result.getStart_power_station()
@@ -402,6 +419,7 @@ public class FirstWTicketActivity extends BaseActivity{
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Log.w("linmeng", "onFailure risNetWorkError:" + e.toString());
                     }
                 });
     }
@@ -446,7 +464,14 @@ public class FirstWTicketActivity extends BaseActivity{
         bean.setGuarder_name(etCustodyMan.getText().toString());
         bean.setGuarder_content(etCustodyContent.getText().toString());
         bean.setOther_content(etOther.getText().toString());
-        bean.setStatus("1");   //工作负责人第一次发送给签发人
+        if ("0".equals(status)) { //工作负责人第一次发送给签发人
+            status = "1";
+            bean.setStatus(status);
+        }else if ("2".equals(status)) {  //签发人签字后，负责人再次填写提交
+            status = "3";
+        }
+        bean.setStatus(status);
+
 
         //工作任务
         workList = workAdapter.getData();
@@ -463,8 +488,98 @@ public class FirstWTicketActivity extends BaseActivity{
         return bean;
     }
 
+    private void sendToQfr() {
+        OverhaulFzrSendBean overhaulFzrSendBean = new OverhaulFzrSendBean();
+        overhaulFzrSendBean.setId(taskId);
+        overhaulFzrSendBean.setTask_status("2");   //本次还不是最后提交，只是发送给签发人 3为最后提交
+        List<OverhaulFzrSendBean.UserInfo> sendSignuserList = new ArrayList<>();
+
+        OverhaulFzrSendBean.UserInfo userInfo1 = new OverhaulFzrSendBean.UserInfo();
+        userInfo1.setUser_id(userData.get(signPosition).getUser_id());
+        userInfo1.setUser_name(userData.get(signPosition).getUser_name());
+        userInfo1.setSign(Constant.STATUS_SIGN);
+        sendSignuserList.add(userInfo1);
+
+        OverhaulFzrSendBean.UserInfo userInfo2 = new OverhaulFzrSendBean.UserInfo();
+        userInfo2.setUser_id(userData.get(signPosition2).getUser_id());
+        userInfo2.setUser_name(userData.get(signPosition2).getUser_name());
+        userInfo2.setSign(Constant.STATUS_SIGN);
+        sendSignuserList.add(userInfo2);
+
+//        OverhaulFzrSendBean.UserInfo userInfo3 = new OverhaulFzrSendBean.UserInfo();
+//        userInfo3.setUser_id(userData.get(licencePosition).getUser_id());
+//        userInfo3.setUser_name(userData.get(licencePosition).getUser_name());
+//        userInfo3.setSign(Constant.STATUS_LICENCE);
+//        sendSignuserList.add(userInfo3);
+//        overhaulFzrSendBean.setUserList(userList);
+
+        overhaulFzrSendBean.setUserList(sendSignuserList);
+        overhaulFzrSendBean.setPlan_type_sign("12");
+        String dep_id = SPUtil.getString(this, Constant.USER, Constant.DEPID, "");
+        overhaulFzrSendBean.setDep_id(dep_id);
+        String user_id = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
+        overhaulFzrSendBean.setUser_id(user_id);
+        overhaulFzrSendBean.setTask_content(taskContent);
+
+
+        BaseRequest.getInstance().getService()
+                .sendOverhaulFzrPlan(overhaulFzrSendBean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<OverhaulSendUserBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<OverhaulSendUserBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            //result = t.getResults();
+                            Toast.makeText(FirstWTicketActivity.this, "发送给签发人成功！", Toast.LENGTH_SHORT).show();
+                            //产生待办
+                            //deal();
+                            //更新详情状态
+                            //initId();
+                            finish();
+                        } else {
+                            Toast.makeText(FirstWTicketActivity.this, "提交失败！", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+
+    }
+
+    private void initId() {  //查询任务
+//        BaseRequest.getInstance().getService().getTaskInfo(taskId).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<OverhaulMonthBean>(this) {
+//                    @Override
+//                    protected void onSuccees(BaseResult<OverhaulMonthBean> t) throws Exception {
+//                        overhaulMonthBean = t.getResults();
+//
+//                        initView();
+//                        initFileList();
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//                    }
+//                });
+    }
+
     //从接口获取到的数据展示在界面上
     private void setData(FirstTicketBean results) {
+        status = results.getStatus();  //状态
+        if ("0".equals(status)) {        //第一次进来发送给签发人
+            titleSettingTv.setText("发送");
+        } else if("1".equals(status)){   //签发人还未签字进来
+            titleSetting.setVisibility(View.GONE);
+        }else if("2".equals(status)){   //签发人签字后进来提交内容
+            titleSettingTv.setText("提交");
+        }else if("3".equals(status)){   //负责人提交工作票后仅查看
+            titleSetting.setVisibility(View.GONE);
+        }
+
         String crew = getCrew(results.getUserList(), "1");
         tvCrewId.setText(crew);
         tvPerson.setText("共" + (crew.length() - crew.replace(" ", "").length()) + "人");
@@ -487,6 +602,7 @@ public class FirstWTicketActivity extends BaseActivity{
         etCustodyMan.setText(results.getGuarder_name());
         etCustodyContent.setText(results.getGuarder_content());
         etOther.setText(results.getOther_content());
+        status = results.getStatus();
 
         for (int i = 0; i < results.getSignList().size(); i++) {
             switch (results.getSignList().get(i).getSign()) {
@@ -891,8 +1007,50 @@ public class FirstWTicketActivity extends BaseActivity{
                 finish();
                 break;
             case R.id.title_setting:
-                //弹框选择签发人
-                showSelectQfrDialog();
+                if ("0".equals(status)) {     //发送给签发人
+                    if (TextUtils.isEmpty(tvCrewId.getText().toString())) {
+                        Toast.makeText(this, "请选择工作班人员！", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (workList.size() > 0) {
+                        for(int i = 0; i < workList.size(); i++) {
+                            String workRangeStr = workList.get(i).getWork_range();
+                            if (TextUtils.isEmpty(workRangeStr)) {
+                                Toast.makeText(this, "请填写工作任务的工作地点或地段！", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    }
+
+                    //弹框选择签发人
+                    showSelectQfrDialog();
+
+                }else if ("2".equals(status)){   //签发人已经签字需改状态
+                    ProgressDialog.show(FirstWTicketActivity.this, true, "正在上传...");
+                    FirstTicketBean bean = getData();
+                    Map<String, RequestBody> params = setParams(bean);
+                    BaseRequest.getInstance().getService().upLoadFirstTicket(params).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new BaseObserver(FirstWTicketActivity.this) {
+                                @Override
+                                protected void onSuccees(BaseResult t) throws Exception {
+                                    ProgressDialog.cancle();
+                                    Toast.makeText(FirstWTicketActivity.this, "提交工作票成功！", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+
+                                @Override
+                                protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                                    ProgressDialog.cancle();
+                                    Toast.makeText(FirstWTicketActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+
+
+
+
                 break;
             case R.id.iv_signature_pad:
 //                if (ticketType != null && status.equals(Constant.STATUS_SIGN)) {
@@ -1022,11 +1180,14 @@ public class FirstWTicketActivity extends BaseActivity{
         }
     }
 
+
     private void showSelectQfrDialog() {
-        QfrDialog qfrDialog = new QfrDialog(this, "选择签发人", "取消", "确定") {
+        QfrDialog qfrDialog = new QfrDialog(this, "选择签发人", "取消", "确定", userData) {
             @Override
             public void ok() {
                 super.ok();
+                signPosition = getQfr1Position();
+                signPosition2 = getQfr2Position();
 
                 ProgressDialog.show(FirstWTicketActivity.this, true, "正在上传...");
                 FirstTicketBean bean = getData();
@@ -1037,8 +1198,9 @@ public class FirstWTicketActivity extends BaseActivity{
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
                                 ProgressDialog.cancle();
-                                Toast.makeText(FirstWTicketActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
-                                finish();
+                                //Toast.makeText(FirstWTicketActivity.this, "提交工作票成功！", Toast.LENGTH_SHORT).show();
+                                sendToQfr();
+                                //finish();
                             }
 
                             @Override
@@ -1107,12 +1269,6 @@ public class FirstWTicketActivity extends BaseActivity{
                 for (int i = 0; i < workers.length; i++) {
                     if (mulchoice[i]) {
                         s = s + workers[i] + ",";
-
-//                        SelectWorkerBean.SelectUserInfo userInfo = new SelectWorkerBean.SelectUserInfo();
-//                        userInfo.setUserId(workerSelectUserList.get(i).getUserId());
-//                        userInfo.setUserName(workerSelectUserList.get(i).getUserName());
-//                        selectUserInfos.add(userInfo);
-
                         TicketUser ticketUser = new TicketUser(workerSelectUserList.get(i).getUserName());
                         ticketUser.setUser_id(workerSelectUserList.get(i).getUserId());
                         ticketUser.setUser_status("1");

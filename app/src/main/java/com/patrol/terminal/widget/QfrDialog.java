@@ -53,9 +53,8 @@ public class QfrDialog extends Dialog {
     private int qfrSpinner1Postiion = 0;
     private int qfrSpinner2Postiion = 0;
     private List<OverhaulSendUserBean2> overhaulSendUserBeans = new ArrayList<>();
-    private List<OverhaulUserInfo> userData = new ArrayList<>();
 
-    public QfrDialog(Activity context, String title, String cancleStr, String okStr) {
+    public QfrDialog(Activity context, String title, String cancleStr, String okStr, final List<OverhaulUserInfo> userData) {
 
         //使用自定义Dialog样式
         super(context, R.style.custom_dialog);
@@ -80,7 +79,7 @@ public class QfrDialog extends Dialog {
         findViewById(R.id.qfr_tv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View paramView) {
-                getAllSendToPerson(1);
+                getAllSendToPerson(1, userData);
 
             }
         });
@@ -88,7 +87,7 @@ public class QfrDialog extends Dialog {
         findViewById(R.id.qfr_tv_2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View paramView) {
-                getAllSendToPerson(2);
+                getAllSendToPerson(2, userData);
             }
         });
 
@@ -125,14 +124,16 @@ public class QfrDialog extends Dialog {
 
     //确认
     public void ok() {
+
     }
 
     public void cancel() {
 
     }
 
-    private void getAllSendToPerson(int qfrPos) {
+    private void getAllSendToPerson(int qfrPos, List<OverhaulUserInfo> userData) {
         overhaulSendUserBeans.clear();
+        userData.clear();
         List<String> qfrList = new ArrayList<>();
         BaseRequest.getInstance().getService()
                 .getSendOverhaulUsers2()
@@ -203,33 +204,19 @@ public class QfrDialog extends Dialog {
                 });
     }
 
-    /*private class MyAdapter extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return 3;
-        }
+    public int  getQfr1Position()
+    {
+        return qfrSpinner1Postiion;
+    }
 
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
+    public int  getQfr2Position()
+    {
+        return qfrSpinner2Postiion;
+    }
 
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view= LayoutInflater.from(context).inflate(R.layout.item_choose,null);
-            TextView tvName = view.findViewById(R.id.tv_name);
-            tvName.setText("asd");
-            return view;
-        }
-    }*/
-
-    public void showSingleChooseDialog(Context context, String title, String[] workers, int qfrPos) {
-        new AlertDialog.Builder(context).setTitle(title).setItems(workers, new DialogInterface.OnClickListener() {
+    public void showSingleChooseDialog(Context context, String title, String[] workers, final int qfrPos) {
+        new AlertDialog.Builder(context).setTitle(title).setItems(workers, new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //Toast.makeText(context, "您已经选择了: " + which + ":" + workers[which],Toast.LENGTH_LONG).show();
 //                holder.mDivisonName.setText(workers[which]);
@@ -238,8 +225,10 @@ public class QfrDialog extends Dialog {
 
                 if (qfrPos == 1) {
                     qfrTv.setText(workers[which]);
+                    qfrSpinner1Postiion = which;
                 }else if (qfrPos == 2) {
                     qfrTv2.setText(workers[which]);
+                    qfrSpinner2Postiion = which;
                 }
 
                 dialog.dismiss();

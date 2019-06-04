@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 public class LineName implements Parcelable {
 
-
     /**
      * id : D149C9313E3F4904AF1EBEA526CDE95F
      * name : 1113建腾一线
@@ -127,7 +126,7 @@ public class LineName implements Parcelable {
     private String end_switch_code;
     private int max_permissible_current;
     private double operating_load_limit;
-    private int rated_transmission_power;
+    private double rated_transmission_power;
     private String design_unit;
     private String build_unit;
     private String construction_unit;
@@ -510,11 +509,11 @@ public class LineName implements Parcelable {
         this.operating_load_limit = operating_load_limit;
     }
 
-    public int getRated_transmission_power() {
+    public double getRated_transmission_power() {
         return rated_transmission_power;
     }
 
-    public void setRated_transmission_power(int rated_transmission_power) {
+    public void setRated_transmission_power(double rated_transmission_power) {
         this.rated_transmission_power = rated_transmission_power;
     }
 
@@ -801,7 +800,7 @@ public class LineName implements Parcelable {
         dest.writeString(this.end_switch_code);
         dest.writeInt(this.max_permissible_current);
         dest.writeDouble(this.operating_load_limit);
-        dest.writeInt(this.rated_transmission_power);
+        dest.writeDouble(this.rated_transmission_power);
         dest.writeString(this.design_unit);
         dest.writeString(this.build_unit);
         dest.writeString(this.construction_unit);

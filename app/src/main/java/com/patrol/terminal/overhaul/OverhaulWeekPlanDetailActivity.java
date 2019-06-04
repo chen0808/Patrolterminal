@@ -257,16 +257,17 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
             nsControlCard.setVisibility(View.GONE);
         } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //这里是负责人，负责人是不可以派发的，其他班员无PDA
             titleSetting.setVisibility(View.GONE);
+            llPerson.setVisibility(View.GONE);
             if (task_status.equals("2")) {   //待负责人提交
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("提交");
-                llPerson.setVisibility(View.VISIBLE);
+                //llPerson.setVisibility(View.VISIBLE);
                 controlCard.setText("填写控制卡");
                 nsControlCard.setVisibility(View.VISIBLE);
                 workPersonSelectLl.setVisibility(View.VISIBLE);
             } else {                         //负责人已提交
                 titleSetting.setVisibility(View.GONE);
-                llPerson.setVisibility(View.GONE);
+                //llPerson.setVisibility(View.GONE);
                 controlCard.setText("填写控制卡");
                 nsControlCard.setVisibility(View.GONE);
                 workPersonSelectLl.setVisibility(View.GONE);
@@ -605,40 +606,9 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                 });
     }
 
-    private void sendToMember() {
-        OverhaulFzrSendBean overhaulFzrSendBean = new OverhaulFzrSendBean();
-        overhaulFzrSendBean.setId(overhaulMonthBean.getId());
-        overhaulFzrSendBean.setTask_status("3");
-        List<OverhaulFzrSendBean.UserInfo> userList = new ArrayList<>();
-
-        OverhaulFzrSendBean.UserInfo userInfo1 = new OverhaulFzrSendBean.UserInfo();
-        userInfo1.setUser_id(userData.get(signPosition).getUser_id());
-        userInfo1.setUser_name(userData.get(signPosition).getUser_name());
-        userInfo1.setSign(Constant.STATUS_SIGN);
-        userList.add(userInfo1);
-
-        OverhaulFzrSendBean.UserInfo userInfo2 = new OverhaulFzrSendBean.UserInfo();
-        userInfo2.setUser_id(userData.get(signPosition2).getUser_id());
-        userInfo2.setUser_name(userData.get(signPosition2).getUser_name());
-        userInfo2.setSign(Constant.STATUS_SIGN);
-        userList.add(userInfo2);
-
-        OverhaulFzrSendBean.UserInfo userInfo3 = new OverhaulFzrSendBean.UserInfo();
-        userInfo3.setUser_id(userData.get(licencePosition).getUser_id());
-        userInfo3.setUser_name(userData.get(licencePosition).getUser_name());
-        userInfo3.setSign(Constant.STATUS_LICENCE);
-        userList.add(userInfo3);
-        overhaulFzrSendBean.setUserList(userList);
-
-        overhaulFzrSendBean.setPlan_type_sign("12");
-        String dep_id = SPUtil.getString(this, Constant.USER, Constant.DEPID, "");
-        overhaulFzrSendBean.setDep_id(dep_id);
-        String user_id = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
-        overhaulFzrSendBean.setUser_id(user_id);
-        overhaulFzrSendBean.setTask_content(overhaulMonthBean.getTask_content());
-
+    private void updateTaskStatus() {  //切状态  提交形成闭环
         BaseRequest.getInstance().getService()
-                .sendOverhaulFzrPlan(overhaulFzrSendBean)
+                .updateTaskStatus(overhaulMonthBean.getId(), "3")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<OverhaulSendUserBean>>(this) {
@@ -841,8 +811,9 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     bundle.putParcelable("bean", overhaulMonthBean);
                     intent.putExtras(bundle);
                     startActivity(intent);
-                } else if (jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人提交
-                    sendToMember();
+                } else if (jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER) ||jobType.contains(Constant.REFURBISHMENT_MEMBER)
+                        || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人提交
+                    updateTaskStatus();
                 }
                 break;
             case R.id.work_ticket_tv:
@@ -886,7 +857,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //                        intent14.putExtra("leaderName", leaderName);
                             startActivity(intent14);
                             break;
-                    }
+                    } //TODO  其他人员进来，或者负责人闭环后，只能查看工作票和控制卡  林梦
 //                } else {      //其他人员进来
 //                    if (planRepairBean.getTicket_type().equals("0")) {
 //                        Toast.makeText(OverhaulWeekPlanDetailActivity.this, "当前无工作票！", Toast.LENGTH_SHORT).show();

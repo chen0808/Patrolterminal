@@ -24,6 +24,7 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.TimeUtil;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -63,11 +64,11 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
 
     private List<String> years = new ArrayList<>();
     private List<List<String>> months = new ArrayList<>();
-    private List<List<List<String>>> weeks = new ArrayList<>();
+    private List<List<String>> weeks = new ArrayList<>();
 
     //private TimePickerView pvTime;
     private String year, month/*,day*/;
-    private String week;
+    private int week;
     private String userId;
     private String sign;
     private Disposable subscribe;
@@ -82,9 +83,19 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-
         //time = DateUatil.getDay(new Date(System.currentTimeMillis()));
-        initDate();
+        //初始化年月周数据
+        initWeek();
+        //time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //初始化日期控件的数据
+                initdate();
+            }
+        }).start();
+
+
         taskAdd.setVisibility(View.GONE);
         time = SPUtil.getString(getContext(), "date", "overhaulTime", DateUatil.getTime(new Date(System.currentTimeMillis())));
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
@@ -110,18 +121,17 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
 //            status="2,3";
 //        }
 
-        String[] years = time.split("年");
-        String[] months = years[1].split("月");
-        month = Integer.parseInt(months[0]) + "";
-        year = years[0];
-        week = DateUatil.getWeekNum() + "";
-        taskTitle.setText("周计划列表");
-        // taskDate.setText(time + "第" + week + "周");
+//        String[] years = time.split("年");
+//        String[] months = years[1].split("月");
+//        month = Integer.parseInt(months[0]) + "";
+//        year = years[0];
+//        week = DateUatil.getWeekNum() + "";
+        taskTitle.setText("周任务列表");
+//        // taskDate.setText(time + "第" + week + "周");
 
-        Map<String, Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), DateUatil.getWeekNum());
-        String beginDate = (String) taskDateStr.get("beginDate");
-        String endDate = (String) taskDateStr.get("endDate");
-        taskDate.setText(beginDate + "至" + endDate + "（" + "第" + week + "周" + "）");
+        String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
+        String endDate = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
+        taskDate.setText(year + "年第" + week + "周(" + beginDate + "-" + endDate + ")");
 
         // 设置监听器。
         planRv.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -163,6 +173,32 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         });
     }
 
+    //初始化日期
+    public void initWeek() {
+        time = DateUatil.getCurMonth();
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        month = Integer.parseInt(months[0]) + "";
+        year = years[0];
+        week = TimeUtil.getCurrWeek();
+    }
+    //初始化周数据
+    public void initdate() {
+        for (int i = 2019; i < 2100; i++) {
+            years.add(i + "年");
+            int maxWeekNumOfYear = TimeUtil.getMaxWeekNumOfYear(i);
+            List<String> options3Items_01 = new ArrayList<>();
+            for (int j = 1; j < maxWeekNumOfYear + 1; j++) {
+                String firstDayOfWeek = TimeUtil.getFirstDayOfWeek(i, j);
+                String lastDayOfWeek = TimeUtil.getLastDayOfWeek(i, j);
+                options3Items_01.add("第" + (j) + "周(" + firstDayOfWeek + "-" + lastDayOfWeek + ")");
+
+            }
+            weeks.add(options3Items_01);
+        }
+
+    }
+
 
     // 创建菜单：
     SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
@@ -178,7 +214,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         Log.w("linmeng", "sign:" + sign);
 
         BaseRequest.getInstance().getService()
-                .getSign(year, month, week, userId)
+                .getSign(year, month, week + "", userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<JxbSignInfo>>(getActivity()) {
@@ -189,7 +225,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
                         if (result != null && result.size() > 0) {
                             SPUtil.put(getActivity(), "jxb", "sign", result.get(0).getSign());
                             BaseRequest.getInstance().getService()
-                                    .getOverhaulTaskList(year, month, week, userId, result.get(0).getSign())
+                                    .getOverhaulTaskList(year, month, week + "", userId, result.get(0).getSign())
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new BaseObserver<List<OverhaulMonthBean>>(getContext()) {
@@ -261,49 +297,30 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
 
                 //返回的分别是三个级别的选中位置
-                String time = years.get(options1) + months.get(options1).get(option2) + weeks.get(options1).get(option2).get(options3);
+                //返回的分别是三个级别的选中位置
+                String time = years.get(options1) + weeks.get(options1).get(option2);
                 year = years.get(options1).split("年")[0];
-                month = months.get(options1).get(option2).split("月")[0];
-                week = weeks.get(options1).get(option2).get(options3).substring(1, 2);
+                String date = weeks.get(options1).get(option2);
+                week = Integer.parseInt(date.split("周")[0].split("第")[1]);
+                taskDate.setText(time);
                 //taskDate.setText(time);
 
-                Map<String, Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(week));
+                Map<String, Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), week);
                 String beginDate = (String) taskDateStr.get("beginDate");
                 String endDate = (String) taskDateStr.get("endDate");
                 taskDate.setText(beginDate + "至" + endDate + "（" + "第" + week + "周" + "）");
 
                 getWeekList();
+
+                SPUtil.putString(getContext(), "date", "overhaulTime", time);
+
             }
         }).build();
-        pvOptions.setPicker(years, months, weeks);
-        pvOptions.setSelectOptions(years.indexOf(year + "年"), Integer.parseInt(month) - 1, Integer.parseInt(week) - 1);
+        pvOptions.setPicker(years, weeks);
+        pvOptions.setSelectOptions(years.indexOf(year + "年"), week - 1);
         pvOptions.show();
     }
 
-
-    //初始化月份数据
-    public void initDate() {
-        List<List<String>> list = new ArrayList<>();
-        for (int i = 2017; i < 2100; i++) {
-            years.add(i + "年");
-            List<String> monthList = new ArrayList<>();
-
-            for (int j = 1; j < 13; j++) {
-                monthList.add(j + "月");
-                List<String> weekList = new ArrayList<>();
-
-                int weekNumOfMonth = DateUatil.getWeekNumOfMonth(i + "", j + "");
-                for (int y = 1; y < weekNumOfMonth + 1; y++) {
-                    weekList.add("第" + y + "周");
-                }
-                list.add(weekList);
-                months.add(monthList);
-
-            }
-
-            weeks.add(list);
-        }
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

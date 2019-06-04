@@ -664,6 +664,11 @@ public interface ApiServise {
     @POST("/task/repair/auditPOST")
     Observable<BaseResult<List<OverhaulSendUserBean>>> sendOverhaulFzrPlan(@Body OverhaulFzrSendBean bean);
 
+
+    //负责人填完工作票控制卡后，闭环
+    @POST("task/repair/repairPOST")
+    Observable<BaseResult<List<OverhaulSendUserBean>>> updateTaskStatus(@Query("id") String id, @Query("task_status") String task_status);
+
     @POST("plan/repair/updatePOST")
     Observable<BaseResult<List<OverhaulSendUserBean>>> updataOverhaulMonitorPlan(@Body OverhaulZZSendBean bean);
 
