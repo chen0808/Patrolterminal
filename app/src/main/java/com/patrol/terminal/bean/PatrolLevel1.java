@@ -7,20 +7,24 @@ import com.patrol.terminal.adapter.PatrolContentAdapter;
 public class PatrolLevel1 extends AbstractExpandableItem<PatrolLevel2> implements MultiItemEntity {
 
     private String title;
-    private boolean tag;
+    private String status;
     private String id;
 
-    public PatrolLevel1(String title, String id) {
-        this.title = title;
-        this.id = id;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getId() {
         return id;
     }
 
-    public PatrolLevel1(String title) {
+    public PatrolLevel1(String title, String status) {
         this.title = title;
+        this.status = status;
     }
 
     public void setId(String id) {
@@ -33,14 +37,6 @@ public class PatrolLevel1 extends AbstractExpandableItem<PatrolLevel2> implement
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public boolean isTag() {
-        return tag;
-    }
-
-    public void setTag(boolean tag) {
-        this.tag = tag;
     }
 
     @Override

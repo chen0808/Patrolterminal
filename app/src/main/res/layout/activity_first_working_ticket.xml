@@ -553,25 +553,24 @@
 
                 <!--默认当前时间-->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/time_checkbox"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></CheckBox>
+                        android:layout_height="wrap_content"
+                        android:text="签名时间：" />
 
                     <TextView
-                        android:id="@+id/tv_group_time_a"
+                        android:id="@+id/tv_sign_time1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_horizontal"
-                        android:text="@string/work_ticket_time"></TextView>
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
                 </LinearLayout>
 
                 <!--  <TextView android:layout_width="wrap_content"
@@ -712,25 +711,24 @@
                     android:text="2019年04月26日12时35分"
                     android:layout_gravity="right"></TextView>-->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/time_checkbox_2"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></CheckBox>
+                        android:layout_height="wrap_content"
+                        android:text="签名时间：" />
 
                     <TextView
-                        android:id="@+id/tv_group_time_b"
+                        android:id="@+id/tv_sign_time2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_horizontal"
-                        android:text="@string/work_ticket_time"></TextView>
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
                 </LinearLayout>
 
 
@@ -763,25 +761,24 @@
                     android:layout_gravity="right"></TextView>-->
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/time_checkbox_3"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></CheckBox>
+                        android:layout_height="wrap_content"
+                        android:text="签名时间：" />
 
                     <TextView
-                        android:id="@+id/tv_group_time_c"
+                        android:id="@+id/tv_sign_time3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_horizontal"
-                        android:text="@string/work_ticket_time"></TextView>
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
                 </LinearLayout>
 
 
@@ -931,25 +928,24 @@
                      android:text="2019年04月26日12时35分"
                      android:layout_gravity="right"></TextView>-->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/time_checkbox_7"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></CheckBox>
+                        android:layout_height="wrap_content"
+                        android:text="签名时间：" />
 
                     <TextView
-                        android:id="@+id/time_tv_7"
+                        android:id="@+id/tv_sign_time4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_horizontal"
-                        android:text="@string/work_ticket_time"></TextView>
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
                 </LinearLayout>
 
                 <View
@@ -1027,25 +1023,24 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/time_checkbox_4"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></CheckBox>
+                        android:layout_height="wrap_content"
+                        android:text="签名时间：" />
 
                     <TextView
-                        android:id="@+id/tv_change_time"
+                        android:id="@+id/tv_sign_time5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_horizontal"
-                        android:text="@string/work_ticket_time"></TextView>
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
                 </LinearLayout>
 
                 <View
@@ -1092,25 +1087,24 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/time_checkbox_5"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></CheckBox>
+                        android:layout_height="wrap_content"
+                        android:text="签名时间：" />
 
                     <TextView
-                        android:id="@+id/tv_delay_a_time"
+                        android:id="@+id/tv_sign_time6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_horizontal"
-                        android:text="@string/work_ticket_time"></TextView>
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
                 </LinearLayout>
 
                 <View
@@ -1170,25 +1164,24 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/time_checkbox_6"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></CheckBox>
+                        android:layout_height="wrap_content"
+                        android:text="签名时间：" />
 
                     <TextView
-                        android:id="@+id/tv_delay_b_time"
+                        android:id="@+id/tv_sign_time7"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_horizontal"
-                        android:text="@string/work_ticket_time"></TextView>
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
                 </LinearLayout>
 
                 <!--工作许可人签名-->
@@ -1214,25 +1207,24 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/time_checkbox_8"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></CheckBox>
+                        android:layout_height="wrap_content"
+                        android:text="签名时间：" />
 
                     <TextView
-                        android:id="@+id/tv_delay_c_time"
+                        android:id="@+id/tv_sign_time8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_horizontal"
-                        android:text="@string/work_ticket_time"></TextView>
+                        android:background="@drawable/stoke_gray"
+                        android:padding="4dp" />
                 </LinearLayout>
 
                 <View

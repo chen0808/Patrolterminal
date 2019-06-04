@@ -540,18 +540,33 @@ public class SecondWTicketActivity extends AppCompatActivity {
             switch (sign) {
                 case "1":
                     showPic(results.getSignList().get(i), ivSignaturePad, sign + ".jpg");
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime1.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "2":
                     showPic(results.getSignList().get(i), ivSignaturePad2, sign + ".jpg");
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime2.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "3":
                     showPic(results.getSignList().get(i), ivSignaturePad3, sign + ".jpg");
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime3.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "4":
                     showPic(results.getSignList().get(i), ivSignaturePad4, sign + ".jpg");
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime4.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "5":
                     showPic(results.getSignList().get(i), ivSignaturePad5, sign + ".jpg");
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime5.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "6":
                     showPic(results.getSignList().get(i), ivSignaturePadPerson, sign + ".jpg");

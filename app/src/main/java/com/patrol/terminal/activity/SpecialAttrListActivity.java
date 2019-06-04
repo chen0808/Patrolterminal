@@ -33,6 +33,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -106,13 +107,13 @@ public class SpecialAttrListActivity extends BaseActivity {
 
     public void getTower() {
         BaseRequest.getInstance().getService()
-                .getTempTower(line_id,"name")
+                .getTempTower(line_id, "name")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<Tower>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<Tower>> t) throws Exception {
-                        if (t.getCode()==1){
+                        if (t.getCode() == 1) {
                             towerList = t.getResults();
                             if (towerList != null && towerList.size() > 0) {
                                 list.clear();
@@ -121,7 +122,8 @@ public class SpecialAttrListActivity extends BaseActivity {
                                 }
                                 nsStart.attachDataSource(list);
                                 nsEnd.attachDataSource(list);
-                            }}
+                            }
+                        }
                     }
 
                     @Override
@@ -153,7 +155,7 @@ public class SpecialAttrListActivity extends BaseActivity {
             PatrolLevel1 level1 = new PatrolLevel1(listLevel1.get(i).getName(), listLevel1.get(i).getId());
             for (int j = 0; j < listLevel2.size(); j++) {
                 if (listLevel1.get(i).getId().equals(listLevel2.get(j).getP_id())) {
-                    PatrolLevel2 level2 = new PatrolLevel2("", false, "", listLevel2.get(j).getName(), listLevel2.get(j).getId());
+                    PatrolLevel2 level2 = new PatrolLevel2("", "0", "", listLevel2.get(j).getName(), listLevel2.get(j).getId());
                     level1.addSubItem(j, level2);
                     for (int k = 0; k < listLevel3.size(); k++) {
                         if (listLevel2.get(j).getId().equals(listLevel3.get(k).getP_id())) {
@@ -202,11 +204,11 @@ public class SpecialAttrListActivity extends BaseActivity {
                         .subscribe(new BaseObserver(this) {
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
-                                 if (t.getCode()==1){
-                                     Toast.makeText(SpecialAttrListActivity.this,"添加成功",Toast.LENGTH_SHORT).show();
-                                     setResult(RESULT_OK);
-                                     finish();
-                                 }
+                                if (t.getCode() == 1) {
+                                    Toast.makeText(SpecialAttrListActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                                    setResult(RESULT_OK);
+                                    finish();
+                                }
                             }
 
                             @Override

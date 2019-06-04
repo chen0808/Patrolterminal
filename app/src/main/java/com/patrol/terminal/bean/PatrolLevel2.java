@@ -8,12 +8,20 @@ public class PatrolLevel2 extends AbstractExpandableItem<PatrolLevel3> implement
     private String name;
     private String category;
     private String content;
-    private boolean tag;
+    private String status;
     private String id;
 
-    public PatrolLevel2(String content, boolean tag, String category, String name, String id) {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public PatrolLevel2(String content, String status, String category, String name, String id) {
         this.content = content;
-        this.tag = tag;
+        this.status = status;
         this.category = category;
         this.name = name;
         this.id = id;
@@ -53,14 +61,6 @@ public class PatrolLevel2 extends AbstractExpandableItem<PatrolLevel3> implement
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public boolean isTag() {
-        return tag;
-    }
-
-    public void setTag(boolean tag) {
-        this.tag = tag;
     }
 
     @Override

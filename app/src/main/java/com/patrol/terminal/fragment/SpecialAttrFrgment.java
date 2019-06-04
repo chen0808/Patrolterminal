@@ -29,6 +29,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -74,10 +75,11 @@ public class SpecialAttrFrgment extends BaseFragment {
                     @Override
                     protected void onSuccees(BaseResult<List<SpecialAttrBean>> t) throws Exception {
                         List<SpecialAttrBean> results = t.getResults();
-                        if (results!=null){
-                        rvSpecialContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        SpecialContentAdapter adapter = new SpecialContentAdapter(getData(results));
-                        rvSpecialContent.setAdapter(adapter);}
+                        if (results != null) {
+                            rvSpecialContent.setLayoutManager(new LinearLayoutManager(getActivity()));
+                            SpecialContentAdapter adapter = new SpecialContentAdapter(getData(results));
+                            rvSpecialContent.setAdapter(adapter);
+                        }
                     }
 
                     @Override
@@ -105,10 +107,10 @@ public class SpecialAttrFrgment extends BaseFragment {
             }
         }
         for (int i = 0; i < listLevel1.size(); i++) {
-            PatrolLevel1 level1 = new PatrolLevel1(listLevel1.get(i).getName());
+            PatrolLevel1 level1 = new PatrolLevel1(listLevel1.get(i).getName(), "1");
             for (int j = 0; j < listLevel2.size(); j++) {
                 if (listLevel1.get(i).getId().equals(listLevel2.get(j).getP_id())) {
-                    PatrolLevel2 level2 = new PatrolLevel2("", false, "", listLevel2.get(j).getName(), listLevel2.get(j).getId());
+                    PatrolLevel2 level2 = new PatrolLevel2("", "1", "", listLevel2.get(j).getName(), listLevel2.get(j).getId());
                     level1.addSubItem(j, level2);
                     for (int k = 0; k < listLevel3.size(); k++) {
                         if (listLevel2.get(j).getId().equals(listLevel3.get(k).getP_id())) {
@@ -141,13 +143,13 @@ public class SpecialAttrFrgment extends BaseFragment {
     public void onViewClicked() {
         Intent intent = new Intent(getActivity(), SpecialAttrListActivity.class);
         intent.putExtra("line_id", line_id);
-        startActivityForResult(intent,31);
+        startActivityForResult(intent, 31);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==31&&resultCode==-1){
+        if (requestCode == 31 && resultCode == -1) {
             getdata();
         }
     }

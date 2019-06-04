@@ -45,16 +45,14 @@ public class PatrolContentBean implements Serializable {
         private String CATEGORY;
         private String REMARKS;
         private String ID;
-        private String ISDEFECT;
         private String NAME;
+        /**
+         * STATUS : 0
+         * RECODE_ID : 922E407DCE4340F88F923034999C5168
+         */
 
-        public String getISDEFECT() {
-            return ISDEFECT;
-        }
-
-        public void setISDEFECT(String ISDEFECT) {
-            this.ISDEFECT = ISDEFECT;
-        }
+        private String STATUS;
+        private String RECODE_ID;
 
         public String getCATEGORY() {
             return CATEGORY;
@@ -86,6 +84,22 @@ public class PatrolContentBean implements Serializable {
 
         public void setNAME(String NAME) {
             this.NAME = NAME;
+        }
+
+        public String getSTATUS() {
+            return STATUS;
+        }
+
+        public void setSTATUS(String STATUS) {
+            this.STATUS = STATUS;
+        }
+
+        public String getRECODE_ID() {
+            return RECODE_ID;
+        }
+
+        public void setRECODE_ID(String RECODE_ID) {
+            this.RECODE_ID = RECODE_ID;
         }
     }
 }

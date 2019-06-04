@@ -54,7 +54,7 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                     helper.getView(R.id.cb_tag).setVisibility(View.VISIBLE);
                     helper.getView(R.id.et_remark).setVisibility(View.VISIBLE);
                     helper.setOnCheckedChangeListener(R.id.cb_tag, null);
-                    helper.setChecked(R.id.cb_tag, item1.isTag());
+                    helper.setChecked(R.id.cb_tag, item1.getStatus().equals("1"));
                     helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -64,7 +64,7 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                             } else {
                                 waresId.remove(list);
                             }
-                            item1.setTag(isChecked);
+                            item1.setStatus(isChecked ? "1" : "2");
                             addSpecial.setWaresIdList(waresId);
                         }
                     });
@@ -96,7 +96,7 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                     helper.getView(R.id.cb_tag).setVisibility(View.VISIBLE);
                     helper.getView(R.id.et_remark).setVisibility(View.VISIBLE);
                     helper.setOnCheckedChangeListener(R.id.cb_tag, null);
-                    helper.setChecked(R.id.cb_tag, item2.isTag());
+                    helper.setChecked(R.id.cb_tag, item2.equals("1"));
                     helper.setOnCheckedChangeListener(R.id.cb_tag, new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -106,7 +106,7 @@ public class SpecialListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                             } else {
                                 waresId.remove(list);
                             }
-                            item2.setTag(isChecked);
+                            item2.setStatus(isChecked ? "1" : "2");
                             addSpecial.setWaresIdList(waresId);
                         }
                     });

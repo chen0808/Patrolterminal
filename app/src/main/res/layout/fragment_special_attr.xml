@@ -15,7 +15,6 @@
         android:layout_height="48dp"
 
         android:layout_alignParentRight="true"
-        android:layout_below="@id/rv_special_content"
         android:layout_margin="40dp"
         android:background="@mipmap/add_black" />
 </RelativeLayout>

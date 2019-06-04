@@ -87,10 +87,10 @@ public class SpecialAttrActivity extends BaseActivity {
             }
         }
         for (int i = 0; i < listLevel1.size(); i++) {
-            PatrolLevel1 level1 = new PatrolLevel1(listLevel1.get(i).getName());
+            PatrolLevel1 level1 = new PatrolLevel1(listLevel1.get(i).getName(), "1");
             for (int j = 0; j < listLevel2.size(); j++) {
                 if (listLevel1.get(i).getId().equals(listLevel2.get(j).getP_id())) {
-                    PatrolLevel2 level2 = new PatrolLevel2("", false, "", listLevel2.get(j).getName(), listLevel2.get(j).getId());
+                    PatrolLevel2 level2 = new PatrolLevel2("", "1", "", listLevel2.get(j).getName(), listLevel2.get(j).getId());
                     level1.addSubItem(j, level2);
                     for (int k = 0; k < listLevel3.size(); k++) {
                         if (listLevel2.get(j).getId().equals(listLevel3.get(k).getP_id())) {

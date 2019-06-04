@@ -23,6 +23,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -56,15 +57,15 @@ public class PatrolContentFrgment extends BaseFragment {
         getdata();
     }
 
-    public void getdata(){
-        BaseRequest.getInstance().getService().getPatrolContent(task_id).subscribeOn(Schedulers.io())
+    public void getdata() {
+        BaseRequest.getInstance().getService().getPatrolContent("123").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PatrolContentBean>>(getActivity()) {
                     @Override
                     protected void onSuccees(BaseResult<List<PatrolContentBean>> t) throws Exception {
                         List<PatrolContentBean> results = t.getResults();
                         rvPatrolContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        PatrolContentAdapter adapter = new PatrolContentAdapter(getData(results));
+                        PatrolContentAdapter adapter = new PatrolContentAdapter(getData(results), getActivity());
                         rvPatrolContent.setAdapter(adapter);
                     }
 
@@ -74,13 +75,14 @@ public class PatrolContentFrgment extends BaseFragment {
                     }
                 });
     }
+
     private List<MultiItemEntity> getData(List<PatrolContentBean> results) {
         List<MultiItemEntity> list = new ArrayList<>();
         for (int i = 0; i < results.size(); i++) {
-            PatrolLevel1 level1 = new PatrolLevel1(results.get(i).getName());
+            PatrolLevel1 level1 = new PatrolLevel1(results.get(i).getName(), "0");
             for (int j = 0; j < results.get(i).getValue().size(); j++) {
                 PatrolLevel2 level2 = new PatrolLevel2(results.get(i).getValue().get(j).getREMARKS()
-                        , results.get(i).getValue().get(j).getISDEFECT().equals("N") ? true : false
+                        , results.get(i).getValue().get(j).getSTATUS()
                         , results.get(i).getValue().get(j).getCATEGORY()
                         , results.get(i).getValue().get(j).getNAME(),
                         results.get(i).getValue().get(j).getID());
@@ -94,7 +96,7 @@ public class PatrolContentFrgment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (subscribe!=null){
+        if (subscribe != null) {
             subscribe.dispose();
         }
     }

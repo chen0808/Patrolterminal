@@ -411,6 +411,7 @@ public interface ApiServise {
     //计划类型
     @GET("plan/type/listGET")
     Observable<BaseResult<List<LineTypeBean>>> getLineType();
+
     //计划类型
     @GET("plan/type/listGET")
     Observable<BaseResult<List<LineTypeBean>>> getWorkType(@Query("order") String temp);
@@ -504,13 +505,13 @@ public interface ApiServise {
 
     //缺陷录入
     @Multipart
-    @POST("task/personal/picturePOST")
+    @POST("task/personal/pictureOnePOST")
 //    Observable<BaseResult> commitPatrolContent(@Part("patrol_id") RequestBody patrol_id, @Part("category_id") RequestBody category_id,
 //                                               @Part("grade_id") RequestBody grade_id, @Part("content") RequestBody content,
 //                                               @Part("start_id") RequestBody start_id, @Part("end_id") RequestBody end_id,
 //                                               @Part("line_id") RequestBody line_id, @Part("task_id") RequestBody task_id,
 //                                               @Part() List<MultipartBody.Part> parts);
-    Observable<BaseResult> commitPatrolRecord(@PartMap Map<String, RequestBody> params);
+    Observable<BaseResult> uploadRecordPic(@PartMap Map<String, RequestBody> params);
 
     //巡视内容对应的特殊属性
     @GET("eq/tower/wares/towerByIdGET")

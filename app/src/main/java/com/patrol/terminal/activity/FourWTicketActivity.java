@@ -8,13 +8,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -49,10 +53,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,7 +62,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 /*事故应急抢修单*/
-public class FourWTicketActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
+public class FourWTicketActivity extends BaseActivity {
 
 
     @BindView(R.id.title_back)
@@ -97,20 +97,12 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     RecyclerView rvRemarkSafe;
     @BindView(R.id.iv_signature_pad)
     ImageView ivSignaturePad;
-    @BindView(R.id.time_checkbox)
-    CheckBox timeCheckbox;
-    @BindView(R.id.time_tv)
-    TextView timeTv;
     @BindView(R.id.iv_signature_pad_2)
     ImageView ivSignaturePad2;
     @BindView(R.id.iv_signature_pad_3)
     ImageView ivSignaturePad3;
     @BindView(R.id.iv_signature_pad_4)
     ImageView ivSignaturePad4;
-    @BindView(R.id.time_checkbox_1)
-    CheckBox timeCheckbox1;
-    @BindView(R.id.time_tv_1)
-    TextView timeTv1;
     @BindView(R.id.unit_tv)
     TextView unitTv;
     @BindView(R.id.tv_start_time)
@@ -129,6 +121,10 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     EditText etDutyUserName;
     @BindView(R.id.et_task_user_name)
     EditText etTaskUserName;
+    @BindView(R.id.tv_sign_time1)
+    TextView tvSignTime1;
+    @BindView(R.id.tv_sign_time2)
+    TextView tvSignTime2;
     private List<AddressBookLevel2> nameList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
     private List<TicketWork> workList = new ArrayList<>();
@@ -203,8 +199,6 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
 //            etRemarkSafe.setEnabled(false);
 //            etTicketNumber.setEnabled(false);
 //        } else {
-        timeCheckbox.setOnCheckedChangeListener(this);
-        timeCheckbox1.setOnCheckedChangeListener(this);
 //        }
 
 //        //注意事项
@@ -284,9 +278,8 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
             switch (sign) {
                 case "1":
                     showPic(results.getSignList().get(i), ivSignaturePad, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        timeTv.setText(results.getSignList().get(i).getSign_time());
-                        timeCheckbox.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime1.setText(results.getSignList().get(i).getSign_time());
                     }
                     break;
                 case "2":
@@ -301,9 +294,8 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
                     break;
                 case "4":
                     showPic(results.getSignList().get(i), ivSignaturePad4, sign + ".jpg");
-                    if (!results.getSignList().get(i).getSign_time().equals(getResources().getString(R.string.work_ticket_time))) {
-                        timeTv1.setText(results.getSignList().get(i).getSign_time());
-                        timeCheckbox1.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime2.setText(results.getSignList().get(i).getSign_time());
                     }
                     break;
             }
@@ -465,7 +457,7 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
     private void addPicList() {
         if (ivSignaturePad.getDrawable() != null) {
             File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "1");
-            signList.add(new TicketSign("1", timeTv.getText().toString(), FileUtil.fileToBase64(file1)));
+            signList.add(new TicketSign("1", tvSignTime1.getText().toString(), FileUtil.fileToBase64(file1)));
         }
         if (ivSignaturePad2.getDrawable() != null) {
             File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "2");
@@ -477,7 +469,7 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
         }
         if (ivSignaturePad4.getDrawable() != null) {
             File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "4");
-            signList.add(new TicketSign("4", timeTv1.getText().toString(), FileUtil.fileToBase64(file4)));
+            signList.add(new TicketSign("4", tvSignTime2.getText().toString(), FileUtil.fileToBase64(file4)));
         }
     }
 
@@ -490,6 +482,7 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
             switch (index) {
                 case 1:
                     ivSignaturePad.setImageBitmap(bitmap);
+                    tvSignTime1.setText(DateUatil.getMin());
                     break;
                 case 2:
                     ivSignaturePad2.setImageBitmap(bitmap);
@@ -499,36 +492,11 @@ public class FourWTicketActivity extends BaseActivity implements CompoundButton.
                     break;
                 case 4:
                     ivSignaturePad4.setImageBitmap(bitmap);
+                    tvSignTime2.setText(DateUatil.getMin());
                     break;
             }
         }
         SignBean.setBitmap(null);
-    }
-
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        switch (compoundButton.getId()) {
-            case R.id.time_checkbox:
-                if (isChecked) {
-                    timeTv.setText(DateUatil.getCurrTime());
-                } else {
-                    timeTv.setText(getResources().getString(R.string.work_ticket_time));
-                }
-
-                break;
-
-            case R.id.time_checkbox_1:
-                if (isChecked) {
-                    timeTv1.setText(DateUatil.getCurrTime());
-                } else {
-                    timeTv1.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-
-
-        }
-
     }
 
     @OnClick({R.id.title_back, R.id.tv_crew_id, R.id.iv_signature_pad, R.id.iv_signature_pad_2,

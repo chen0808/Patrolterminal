@@ -15,6 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -37,6 +43,7 @@ import com.patrol.terminal.bean.TicketSign;
 import com.patrol.terminal.bean.TicketUser;
 import com.patrol.terminal.bean.TicketWork;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
@@ -50,11 +57,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -114,16 +116,8 @@ public class ThirdWTicketActivity extends BaseActivity {
     RecyclerView rvRemarkSafe;
     @BindView(R.id.iv_signature_pad)
     ImageView ivSignaturePad;
-    @BindView(R.id.time_checkbox)
-    CheckBox timeCheckbox;
-    @BindView(R.id.time_tv)
-    TextView timeTv;
     @BindView(R.id.iv_signature_pad_2)
     ImageView ivSignaturePad2;
-    @BindView(R.id.time_checkbox_3)
-    CheckBox timeCheckbox3;
-    @BindView(R.id.time_tv_3)
-    TextView timeTv3;
     @BindView(R.id.iv_signature_pad_3)
     ImageView ivSignaturePad3;
     @BindView(R.id.et_supply_safety_measures)
@@ -132,8 +126,6 @@ public class ThirdWTicketActivity extends BaseActivity {
     ImageView ivSignaturePad4;
     @BindView(R.id.iv_signature_pad_5)
     ImageView ivSignaturePad5;
-    @BindView(R.id.time_checkbox_5)
-    CheckBox timeCheckbox5;
     @BindView(R.id.et_remark)
     EditText etRemark;
     @BindView(R.id.et_permit_user_name)
@@ -148,6 +140,8 @@ public class ThirdWTicketActivity extends BaseActivity {
     TextView tvSignTime1;
     @BindView(R.id.tv_sign_time2)
     TextView tvSignTime2;
+    @BindView(R.id.tv_sign_time3)
+    TextView tvSignTime3;
     private List<AddressBookLevel2> nameList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
     private List<TicketWork> workList = new ArrayList<>();
@@ -319,6 +313,9 @@ public class ThirdWTicketActivity extends BaseActivity {
             switch (sign) {
                 case "1":
                     showPic(results.getSignList().get(i), ivSignaturePad, sign + ".jpg");
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime1.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "2":
                     showPic(results.getSignList().get(i), ivSignaturePad2, sign + ".jpg");
@@ -331,6 +328,9 @@ public class ThirdWTicketActivity extends BaseActivity {
                     break;
                 case "5":
                     showPic(results.getSignList().get(i), ivSignaturePad5, sign + ".jpg");
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime3.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
             }
         }
@@ -527,6 +527,7 @@ public class ThirdWTicketActivity extends BaseActivity {
             switch (index) {
                 case 1:
                     ivSignaturePad.setImageBitmap(bitmap);
+                    tvSignTime1.setText(DateUatil.getMin());
                     break;
                 case 2:
                     ivSignaturePad2.setImageBitmap(bitmap);
@@ -539,6 +540,7 @@ public class ThirdWTicketActivity extends BaseActivity {
                     break;
                 case 5:
                     ivSignaturePad5.setImageBitmap(bitmap);
+                    tvSignTime3.setText(DateUatil.getMin());
                     break;
 
             }
@@ -548,7 +550,8 @@ public class ThirdWTicketActivity extends BaseActivity {
 
     @OnClick({R.id.title_back, R.id.tv_crew_id, R.id.iv_signature_pad, R.id.iv_signature_pad_2,
             R.id.iv_signature_pad_3, R.id.iv_signature_pad_4, R.id.iv_signature_pad_5,
-            R.id.title_setting, R.id.iv_task_add, R.id.tv_s_time, R.id.tv_e_time, R.id.iv_safe_change})
+            R.id.title_setting, R.id.iv_task_add, R.id.tv_s_time, R.id.tv_e_time, R.id.iv_safe_change,
+            R.id.tv_sign_time1, R.id.tv_sign_time2, R.id.tv_sign_time3})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_safe_change:
@@ -570,6 +573,15 @@ public class ThirdWTicketActivity extends BaseActivity {
                 break;
             case R.id.tv_e_time:
                 PickerUtils.showDate(ThirdWTicketActivity.this, tvETime);
+                break;
+            case R.id.tv_sign_time1:
+                PickerUtils.showMin(ThirdWTicketActivity.this, tvSignTime1);
+                break;
+            case R.id.tv_sign_time2:
+                PickerUtils.showMin(ThirdWTicketActivity.this, tvSignTime2);
+                break;
+            case R.id.tv_sign_time3:
+                PickerUtils.showMin(ThirdWTicketActivity.this, tvSignTime3);
                 break;
             case R.id.iv_signature_pad:
 //                if (ticketType != null && status.equals(Constant.STATUS_SIGN)) {

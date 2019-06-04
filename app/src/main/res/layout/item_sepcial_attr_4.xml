@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="48dp"
         android:ellipsize="end"
         android:lines="2" />
 
@@ -28,7 +27,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_toLeftOf="@id/cb_tag"
-        android:layout_toRightOf="@id/tv_title"
+        android:layout_toRightOf="@id/tv_content"
         android:ellipsize="end"
         android:visibility="gone" />
     <View
