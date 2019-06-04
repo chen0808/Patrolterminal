@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_corner"
+    android:gravity="center"
+    android:orientation="vertical">
+    
+    <!--取消确认类型的dialog-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择签发人"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/qfr_ll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+    <TextView
+        android:id="@+id/dialog_title_tv"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="签发人："
+        android:textColor="#666666"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"/>
+
+        <Spinner
+            android:id="@+id/qfr_spinner"
+            android:layout_width="match_parent"
+            android:entries="@array/backlog_list"
+            android:layout_height="40dp"
+            android:background="@drawable/stoke_gray"
+            android:layout_toRightOf="@+id/dialog_title_tv"
+            android:layout_toLeftOf="@+id/add_btn_iv"
+            />
+
+        <ImageView
+            android:id="@+id/add_btn_iv"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_black"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+</RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/qfr_ll_2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/dialog_title_tv_2"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="签发人2："
+            android:textColor="#666666" />
+
+        <org.angmarch.views.NiceSpinner
+            android:id="@+id/qfr_spinner_2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginRight="25dp"
+            android:textColor="#666666"/>
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="#D9D9D9" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/cancel_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#666666"
+            android:text="取消" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="#D9D9D9" />
+
+        <TextView
+            android:id="@+id/ok_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#cc0033"
+            android:text="确定" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -53,7 +53,9 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.patrol.terminal.widget.QfrDialog;
 import com.patrol.terminal.widget.SignDialog;
 
 import java.io.File;
@@ -473,6 +475,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         bean.setGuarder_name(etCustodyMan.getText().toString());
         bean.setGuarder_content(etCustodyContent.getText().toString());
         bean.setOther_content(etOther.getText().toString());
+        bean.setStatus("1");   //工作负责人第一次发送给签发人
 
         //工作任务
         workList = workAdapter.getData();
@@ -643,6 +646,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         params.put("guarder_name", toRequestBody(bean.getGuarder_name()));
         params.put("guarder_content", toRequestBody(bean.getGuarder_content()));
         params.put("other_content", toRequestBody(bean.getOther_content()));
+        params.put("status", toRequestBody(bean.getStatus()));
 
         // PDA工作任务集合
         if (bean.getWorkList() != null) {
@@ -899,25 +903,8 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                 finish();
                 break;
             case R.id.title_setting:
-                ProgressDialog.show(this, true, "正在上传...");
-                FirstTicketBean bean = getData();
-                Map<String, RequestBody> params = setParams(bean);
-                BaseRequest.getInstance().getService().upLoadFirstTicket(params).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new BaseObserver(this) {
-                            @Override
-                            protected void onSuccees(BaseResult t) throws Exception {
-                                ProgressDialog.cancle();
-                                Toast.makeText(FirstWTicketActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-
-                            @Override
-                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                                ProgressDialog.cancle();
-                                Toast.makeText(FirstWTicketActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                //弹框选择签发人
+                showSelectQfrDialog();
                 break;
             case R.id.iv_signature_pad:
 //                if (ticketType != null && status.equals(Constant.STATUS_SIGN)) {
@@ -1053,6 +1040,44 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                 PickerUtils.showDate(FirstWTicketActivity.this, tvPostpone);
                 break;
         }
+    }
+
+    private void showSelectQfrDialog() {
+        QfrDialog qfrDialog = new QfrDialog(this, "选择签发人", "取消" ,"确定") {
+            @Override
+            public void ok() {
+                super.ok();
+
+                ProgressDialog.show(FirstWTicketActivity.this, true, "正在上传...");
+                FirstTicketBean bean = getData();
+                Map<String, RequestBody> params = setParams(bean);
+                BaseRequest.getInstance().getService().upLoadFirstTicket(params).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new BaseObserver(FirstWTicketActivity.this) {
+                            @Override
+                            protected void onSuccees(BaseResult t) throws Exception {
+                                ProgressDialog.cancle();
+                                Toast.makeText(FirstWTicketActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+
+                            @Override
+                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                                ProgressDialog.cancle();
+                                Toast.makeText(FirstWTicketActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                dismiss();
+            }
+
+            @Override
+            public void cancel() {
+                super.cancel();
+                dismiss();
+            }
+        };
+        qfrDialog.show();
+
     }
 
     @Override

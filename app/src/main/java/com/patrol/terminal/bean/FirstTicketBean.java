@@ -28,7 +28,15 @@ public class FirstTicketBean implements Serializable {
     private String other_content;
     private String ticket_type;
     private String delay_time;
+    private String status; //发给签发人流程状态
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getDelay_time() {
         return delay_time;
