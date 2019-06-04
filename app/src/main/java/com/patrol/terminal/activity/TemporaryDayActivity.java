@@ -389,8 +389,6 @@ public class TemporaryDayActivity extends BaseActivity {
             notifyDataSetChanged();
 
         }
-
-
         class ViewHolder {
             private   TextView itemTroubleName;
             private   TextView taskType;

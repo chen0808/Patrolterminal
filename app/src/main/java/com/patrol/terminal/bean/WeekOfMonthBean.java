@@ -21,6 +21,15 @@ public class WeekOfMonthBean {
     private String line_id;
     private String towers_id;
     private String defect_id;
+    private boolean isCheck;
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
 
     public String getDefect_id() {
         return defect_id;

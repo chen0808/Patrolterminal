@@ -36,12 +36,14 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.StringUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.PopMenmuDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -98,6 +100,8 @@ public class MonthPlanFrgment extends BaseFragment {
     TextView monthLine35kvNum;
     @BindView(R.id.month_line_35kv_kilo)
     TextView monthLine35kvKilo;
+    @BindView(R.id.done_plan_range)
+    TextView donePlanRange;
     private MonthPlanAdapter monthPlanAdapter;
     private TimePickerView pvTime;
     private List<Tower> nextLineList = new ArrayList<>();
@@ -128,6 +132,9 @@ public class MonthPlanFrgment extends BaseFragment {
     private double next_kilo_total = 0;
     private double next_kilo_110kv = 0;
     private double next_kilo_35kv = 0;
+    private int done_num_total = 0;
+    private int all_num_total = 0;
+
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plan_list, container, false);
@@ -253,9 +260,16 @@ public class MonthPlanFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<MonthListBean> t) throws Exception {
 
                         if (t.getCode() == 1) {
+                            next_num_total = 0;
+                            next_num_110kv = 0;
+                            next_num_35kv = 0;
+                            next_kilo_total = 0;
+                            next_kilo_110kv = 0;
+                            next_kilo_35kv = 0;
+                            done_num_total=0;
+                            all_num_total=0;
                             MonthListBean results = t.getResults();
                             nextLineList = getData(results, 2);
-
                             nextPatrolList = results.getPatrol();
                             if (nextPatrolList != null && nextPatrolList.size() > 0) {
                                 addPlanIv.setVisibility(View.GONE);
@@ -316,6 +330,12 @@ public class MonthPlanFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<MonthListBean> t) throws Exception {
 
                         if (t.getCode() == 1) {
+                            num_total = 0;
+                            num_110kv = 0;
+                            num_35kv = 0;
+                            kilo_total = 0;
+                            kilo_110kv = 0;
+                            kilo_35kv = 0;
                             MonthListBean results = t.getResults();
                             getData(results, 1);
                             monthPlanAdapter.setNewData(data);
@@ -326,6 +346,15 @@ public class MonthPlanFrgment extends BaseFragment {
                             monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
                             monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
                             monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
+                            BigDecimal b1 = new BigDecimal(done_num_total);
+                            BigDecimal b2 = new BigDecimal(all_num_total);
+                            if (all_num_total == 0) {
+                                donePlanRange.setText("计划进度 : 0%");
+                            } else {
+                                //默认保留两位会有错误，这里设置保留小数点后4位
+                                double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
+                                donePlanRange.setText("计划进度 : " + range + "%");
+                            }
                         }
                         ProgressDialog.cancle();
                         planRefresh.setRefreshing(false);
@@ -423,12 +452,12 @@ public class MonthPlanFrgment extends BaseFragment {
                 Intent intent1 = new Intent(getContext(), NextMonthPlanActivity.class);
                 intent1.putExtra("list", (Serializable) nextPatrolList);
                 intent1.putExtra("linelist", (Serializable) nextLineList);
-                intent1.putExtra("num_total",next_num_total);
-                intent1.putExtra("kilo_total",next_kilo_total);
-                intent1.putExtra("110kv_num",next_num_110kv);
-                intent1.putExtra("110kv_kolo",next_kilo_110kv);
-                intent1.putExtra("35kv_num",next_num_35kv);
-                intent1.putExtra("35kv_kolo",next_kilo_35kv);
+                intent1.putExtra("num_total", next_num_total);
+                intent1.putExtra("kilo_total", next_kilo_total);
+                intent1.putExtra("110kv_num", next_num_110kv);
+                intent1.putExtra("110kv_kolo", next_kilo_110kv);
+                intent1.putExtra("35kv_num", next_num_35kv);
+                intent1.putExtra("35kv_kolo", next_kilo_35kv);
                 intent1.putExtra("year", nextYear);
                 intent1.putExtra("month", nextMonth);
                 startActivityForResult(intent1, 10);
@@ -447,7 +476,7 @@ public class MonthPlanFrgment extends BaseFragment {
                 if (popWinShare == null) {
                     //自定义的单击事件
                     OnClickLintener paramOnClickListener = new OnClickLintener();
-                    popWinShare = new PopMenmuDialog(getActivity(), paramOnClickListener, dip2px(getContext(), 140), dip2px(getContext(), 120));
+                    popWinShare = new PopMenmuDialog(getActivity(), paramOnClickListener, Utils.dip2px(getContext(), 140), Utils.dip2px(getContext(), 120));
                     //监听窗口的焦点事件，点击窗口外面则取消显示
                     popWinShare.getContentView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
@@ -477,27 +506,27 @@ public class MonthPlanFrgment extends BaseFragment {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitMonthPlan( "2");   //同意
+                    submitMonthPlan("2");   //同意
                     dismiss();
                 }
 
                 @Override
                 public void cancel() {
                     super.cancel();
-                    submitMonthPlan( "4");  //不同意
+                    submitMonthPlan("4");  //不同意
                     dismiss();
                 }
             };
             dialog.show();
 
         } else if (mJobType.contains((Constant.RUNNING_SQUAD_LEADER))) {
-            submitMonthPlan( "1");
+            submitMonthPlan("1");
         } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
             CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "审核", "不同意", "同意") {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitMonthPlan( "3");   //同意
+                    submitMonthPlan("3");   //同意
                     dismiss();
                 }
 
@@ -539,6 +568,7 @@ public class MonthPlanFrgment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10 && resultCode == -1) {
+
             getMonthPlanList();
             getNextMonthPlanList();
         }
@@ -555,6 +585,8 @@ public class MonthPlanFrgment extends BaseFragment {
                 if (type == 1) {
                     num_total++;
                     kilo_total += monthPlanBean.getLine_length();
+                    done_num_total = done_num_total + monthPlanBean.getDone_num();
+                    all_num_total = all_num_total + monthPlanBean.getAll_num();
                     if (monthPlanBean.getVoltage_level().contains("110")) {
                         kilo_110kv = kilo_110kv + monthPlanBean.getLine_length();
                         num_110kv++;
@@ -607,15 +639,9 @@ public class MonthPlanFrgment extends BaseFragment {
                 data.addAll(ele);
                 data2.addAll(ele);
             }
-
         }
-
         return lineList;
     }
 
-    public static int dip2px(Context context, float dipValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dipValue * scale + 0.5f);
-    }
 
 }

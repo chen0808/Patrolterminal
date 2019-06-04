@@ -31,9 +31,10 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.NextMonthPlanActivity"></activity>
-        <activity android:name=".activity.NextWeekPlanActivity"></activity>
-        <activity android:name=".activity.NextDayPlanActivity"></activity>
+        <activity android:name=".activity.CheckActivity"></activity>
+        <activity android:name=".activity.NextMonthPlanActivity" />
+        <activity android:name=".activity.NextWeekPlanActivity" />
+        <activity android:name=".activity.NextDayPlanActivity" />
         <activity android:name=".activity.ShowImageActivity" />
         <activity android:name=".activity.YXCheckActivity" />
         <activity android:name=".activity.TemporaryActivity" />

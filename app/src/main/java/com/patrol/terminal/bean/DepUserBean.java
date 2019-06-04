@@ -25,7 +25,7 @@ public class DepUserBean {
          */
 
         private String id;
-    private String user_id;
+         private String user_id;
         private String name;
         private String user_name;
 

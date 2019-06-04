@@ -223,7 +223,7 @@ public class TemporaryWeekActivity extends BaseActivity {
         }
     }
 
-    //获取每个班组负责的线路
+    //保存周计划
     public void saveWeekPlan() {
         SavaLineBean bean = new SavaLineBean();
         bean.setLine_id(lineCheckBean.getId());
@@ -294,7 +294,7 @@ public class TemporaryWeekActivity extends BaseActivity {
                 .build();
         pvTime.show();
     }
-    //获取工作类型
+    //获取杆塔
     public void getTempTower() {
         ProgressDialog.show(this,false,"正在加载。。。");
         BaseRequest.getInstance().getService()

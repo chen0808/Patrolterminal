@@ -29,6 +29,7 @@ import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.FlowGroupView;
 import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -208,7 +209,7 @@ public class AddGroupTaskActivity extends BaseActivity {
                     if (!s.isEmpty()) {
                         for (int i = 0; i < addPeoList.size(); i++) {
                             AddGroupTaskReqBean.UsersBean usersBean = addPeoList.get(i);
-                            if ("1".equals(usersBean.getIs_boss())) {
+                            if ("2".equals(usersBean.getSign())) {
                                 userList.add(usersBean.getUser_name());
                                 addPeoList.remove(i);
                             }
@@ -218,7 +219,7 @@ public class AddGroupTaskActivity extends BaseActivity {
                         DepUserBean depUserBean = personalList.get(i);
                         if (name.equals(depUserBean.getName())) {
                             AddGroupTaskReqBean.UsersBean bean=new  AddGroupTaskReqBean.UsersBean();
-                            bean.setIs_boss("1");
+                            bean.setSign("2");
                             duty_user_name = depUserBean.getName();
                             duty_user_id = depUserBean.getId();
                             bean.setUser_id(duty_user_id);
@@ -234,7 +235,7 @@ public class AddGroupTaskActivity extends BaseActivity {
                         DepUserBean depUserBean = personalList.get(i);
                         if (name.equals(depUserBean.getName())) {
                             AddGroupTaskReqBean.UsersBean bean=new  AddGroupTaskReqBean.UsersBean();
-                            bean.setIs_boss("0");
+                            bean.setSign("3");
                             bean.setUser_id(depUserBean.getId());
                             bean.setUser_name(depUserBean.getName());
                             addPeoList.add(bean);
@@ -400,12 +401,19 @@ public class AddGroupTaskActivity extends BaseActivity {
 
     //保存
     public void savaGroupTask() {
+        AddGroupTaskReqBean.UsersBean usersBean=new AddGroupTaskReqBean.UsersBean();
+        usersBean.setSign("1");
+        usersBean.setUser_id(SPUtil.getUserId(this));
+        usersBean.setUser_name(SPUtil.getUserName(this));
+        addPeoList.add(usersBean);
 
         AddGroupTaskReqBean bean = new AddGroupTaskReqBean();
         bean.setDep_id(SPUtil.getDepId(this));
         bean.setDay(day);
         bean.setMonth(month);
         bean.setYear(year);
+        bean.setWeek(TimeUtil.getWeekOfYear(new Date(System.currentTimeMillis()))+"");
+        bean.setFrom_user_id(SPUtil.getUserId(this));
         bean.setDep_name(SPUtil.getDepName(this));
         bean.setDuty_user_id(duty_user_id);
         bean.setDuty_user_name(duty_user_name);

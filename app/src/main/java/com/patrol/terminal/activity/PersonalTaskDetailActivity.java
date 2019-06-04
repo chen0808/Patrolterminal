@@ -144,6 +144,12 @@ public class PersonalTaskDetailActivity extends Activity {
                     case "6":
                         intent.setClass(PersonalTaskDetailActivity.this, XieGanTaQingXieCeWenActivity.class);
                         break;
+                    case "12":
+                        intent.setClass(PersonalTaskDetailActivity.this, MonitoringRecordActivity.class);
+                        break;
+                    case "13":
+                        intent.setClass(PersonalTaskDetailActivity.this, CheckActivity.class);
+                        break;
 
 
                 }

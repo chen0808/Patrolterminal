@@ -397,7 +397,12 @@ public class TemporaryActivity extends BaseActivity {
             }
             Tower listBean = lineTypeBeans.get(position);
             holder.itemTroubleName.setText(listBean.getName());
-            holder.itemTroubleCheck.setChecked(false);
+            boolean check = listBean.isCheck();
+            if (check==true){
+                holder.itemTroubleCheck.setChecked(true);
+            }else {
+                holder.itemTroubleCheck.setChecked(false);
+            }
             holder.taskType.setVisibility(View.GONE);
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -408,6 +413,7 @@ public class TemporaryActivity extends BaseActivity {
                         tower.setName(listBean.getName());
                         tower.setTower_id(listBean.getId());
                         selectBean.add(tower);
+                        listBean.setCheck(true);
                         holder.itemTroubleCheck.setChecked(true);
                     }else {
                         int isExit=0;
@@ -416,6 +422,7 @@ public class TemporaryActivity extends BaseActivity {
                             if (dayOfWeekBean.getTower_id().equals(listBean.getId())){
                                 isExit=1;
                                 selectBean.remove(i);
+                                listBean.setCheck(false);
                                 holder.itemTroubleCheck.setChecked(false);
                                 return;
                             }
@@ -426,6 +433,7 @@ public class TemporaryActivity extends BaseActivity {
                             tower.setTower_id(listBean.getId());
                             tower.setName(listBean.getName());
                             selectBean.add(tower);
+                            listBean.setCheck(true);
                             holder.itemTroubleCheck.setChecked(true);
                         }
                     }

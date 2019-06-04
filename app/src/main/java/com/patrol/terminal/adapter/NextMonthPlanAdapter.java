@@ -1,11 +1,14 @@
 package com.patrol.terminal.adapter;
 
+import android.content.Intent;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.LineCheckActivity;
 import com.patrol.terminal.bean.MonthPlanBean;
+import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.HorizontalLineView;
 
@@ -32,6 +35,7 @@ public class NextMonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseVi
         //添加子控件的点击事件
         viewHolder.addOnClickListener(R.id.plan_to_change);
 
+        if (item.getRepair_content() == null) {
             switch (item.getType_sign()) {
                 case "4":
                     viewHolder.setText(R.id.item_plan_date_tv, "特殊");
@@ -56,7 +60,7 @@ public class NextMonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseVi
             }
 
             //根据审核类型隐藏图标按钮
-            switch (item.getAudit_status()){
+            switch (item.getAudit_status()) {
                 case "0":
                     viewHolder.setVisible(R.id.plan_to_change, true);
                     break;
@@ -70,9 +74,29 @@ public class NextMonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseVi
             horizontalLineView.setStatus(item.getAudit_status());
             horizontalLineView.setVisibility(View.VISIBLE);
             viewHolder.setText(R.id.item_plan_device_name, item.getLine_name())
-                    .setText(R.id.item_line_status, "审核状态 :"+StringUtil.getYXBstate(item.getAudit_status()))
+                    .setText(R.id.item_line_status, "审核状态 :" + StringUtil.getYXBstate(item.getAudit_status()))
                     .setText(R.id.item_plan_content, "计划内容 : " + StringUtil.getTypeSign(item.getType_sign()));
 
+        } else {
+            viewHolder.setText(R.id.item_plan_date_tv, "保")
+                    .setVisible(R.id.plan_to_change, true);
+            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, LineCheckActivity.class);
+                    intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
+                    intent.putExtra("id", item.getId());
+                    intent.putExtra("year", item.getYear());
+                    intent.putExtra("month", item.getMonth());
+                    mContext.startActivity(intent);
+                }
+            });
+            View view = viewHolder.getView(R.id.item_plan_status);
+            view.setVisibility(View.GONE);
+            viewHolder.setText(R.id.item_plan_device_name, item.getRepair_content())
+                    .setText(R.id.item_plan_content, "停电区域 : " + item.getBlackout_range())
+                    .setText(R.id.item_line_status, "停电时间 : " + item.getStart_time() + " - " + item.getEnd_time());
+            ;
+        }
     }
-
 }

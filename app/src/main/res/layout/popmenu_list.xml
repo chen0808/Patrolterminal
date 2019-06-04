@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pop_ll"
+    android:layout_width="140dp"
+    android:layout_height="120dp"
+    android:paddingLeft="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_10"
+    android:background="@drawable/pop_white_bg"
+    android:orientation="vertical">
+
+</LinearLayout>

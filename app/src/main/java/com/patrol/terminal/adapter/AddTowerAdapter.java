@@ -59,15 +59,21 @@ public class AddTowerAdapter extends BaseAdapter {
         holder.towerNmae.setText(lineTypeBeans.get(position).getLine_name() + lineTypeBeans.get(position).getTowers_name()/*lineTypeBeans.get(position).getTowers()*/);
         holder.towerType.setText(StringUtil.getTypeSign(lineTypeBeans.get(position).getType_sign()));  //TODO
         WeekOfMonthBean listBean = lineTypeBeans.get(position);
-     holder.towerCheck.setChecked(false);
+        boolean check = listBean.isCheck();
+        if (check==true){
+            holder.towerCheck.setChecked(true);
+        }else {
+            holder.towerCheck.setChecked(false);
+        }
         holder.towerCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (holder.towerCheck.isChecked()){
-
+                       listBean.setCheck(true);
                         RxRefreshEvent.publish("add@"+listBean.getTowers_id()+"@"+listBean.getLine_id()+"@"+listBean.getLine_name()+"@"+listBean.getTowers_name()+"@"+listBean.getType_id()+"@"+listBean.getType_name()+"@"+listBean.getType_sign()+"@"+listBean.getMonth_line_id()+"@"+listBean.getDefect_id());
 
                 }else {
+                       listBean.setCheck(false);
                         RxRefreshEvent.publish("delete@"+listBean.getTowers_id());
 
                 }

@@ -19,6 +19,7 @@ import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DayPlanDetailBean;
 import com.patrol.terminal.bean.DefectBean;
 import com.patrol.terminal.bean.DefectFragmentBean;
+import com.patrol.terminal.bean.DepBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.EqTower;
 import com.patrol.terminal.bean.FieldAntiInspectionBean;
@@ -903,4 +904,9 @@ public interface ApiServise {
     //获取待办列表
     @GET("/task/remind/listGET")
     Observable<BaseResult<List<TodoListBean>>> getYXtodo(@Query("to_user_id") String user_id, @Query("done_status") String done_status, @Query("order") String order);
+
+
+    //获取班组信息
+    @GET("common/listGET")
+    Observable<BaseResult<List<DepBean>>> getDepList(@Query("table") String table, @Query("column") String column, @Query("is_work") String is_work);
 }

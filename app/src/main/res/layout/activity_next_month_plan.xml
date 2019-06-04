@@ -32,6 +32,15 @@
                 android:textSize="@dimen/sp_16"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/task_screen"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_30"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                android:scaleType="center"
+                android:src="@mipmap/screen"
+                />
             <TextView
                 android:id="@+id/next_plan_done"
                 android:layout_width="wrap_content"

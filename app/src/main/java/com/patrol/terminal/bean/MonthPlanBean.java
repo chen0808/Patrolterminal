@@ -31,6 +31,25 @@ public class MonthPlanBean implements Serializable {
     private String line_name;
     private String audit_status;
     private String dep_name;
+    private int done_num;
+    private int all_num;
+
+    public int getDone_num() {
+        return done_num;
+    }
+
+    public void setDone_num(int done_num) {
+        this.done_num = done_num;
+    }
+
+    public int getAll_num() {
+        return all_num;
+    }
+
+    public void setAll_num(int all_num) {
+        this.all_num = all_num;
+    }
+
     // 线路总长度(km) - pda用于计算线路总长
     private Double line_length;
 

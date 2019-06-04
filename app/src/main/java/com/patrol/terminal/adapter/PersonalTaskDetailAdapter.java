@@ -21,8 +21,12 @@ public class PersonalTaskDetailAdapter extends BaseQuickAdapter<PersonalTaskList
     @Override
     protected void convert(BaseViewHolder viewHolder, PersonalTaskListBean item) {
 
+        if (item.getTower_name()!=null){
          viewHolder.setText(R.id.item_plan_name,item.getTower_name()+ StringUtil.getTypeSign(item.getType_sign()) +"任务")
-                 .setText(R.id.item_plan_time,"无");
+                 .setText(R.id.item_plan_time,"无");}else {
+            viewHolder.setText(R.id.item_plan_name,StringUtil.getTypeSign(item.getType_sign()) +"任务")
+                    .setText(R.id.item_plan_time,"无");
+        }
     }
 
 }

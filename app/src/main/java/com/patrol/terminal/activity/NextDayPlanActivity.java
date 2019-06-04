@@ -77,7 +77,7 @@ public class NextDayPlanActivity extends BaseActivity {
         double kilo_35kv = getIntent().getDoubleExtra("35kv_kolo", 0);
 
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        monthLineTotal.setText("工作线路总数 : " + num_total + "条");
+        monthLineTotal.setText("杆段总数 : " + num_total + "条");
         monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
         monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
         monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");

@@ -105,7 +105,7 @@ public class OverhaulWeekPlanFrgment extends BaseFragment {
         String[] months = years[1].split("月");
         month = Integer.parseInt(months[0]) + "";
         year = years[0];
-        week = DateUatil.getWeekNum() + "";
+        week = 23 + "";
         taskTitle.setText("周计划列表");
         //taskDate.setText(time + "第" + week + "周");
 

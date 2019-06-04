@@ -169,15 +169,11 @@
                             android:id="@+id/group_task_type_lv"
                             android:layout_width="match_parent"
                             android:layout_height="150dp"
-                            android:divider="@null"
+                            android:divider="#00000000"
                             android:paddingLeft="1dp"
                             android:paddingRight="1dp"
                            ></com.patrol.terminal.widget.NoScrollListView>
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/image_overlay_false"
-                                />
+
                             <LinearLayout
                                 android:id="@+id/trouble_more"
                                 android:layout_width="match_parent"

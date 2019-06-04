@@ -8,18 +8,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddMonthPlanActivity;
-import com.patrol.terminal.activity.ChangePlanActivity;
-import com.patrol.terminal.activity.CommitDefectActivity;
 import com.patrol.terminal.activity.LineCheckActivity;
 import com.patrol.terminal.bean.MonthLevel1;
 import com.patrol.terminal.bean.MonthPlanBean;
-import com.patrol.terminal.bean.PatrolLevel1;
-import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.HorizontalLineView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MonthPlanListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
@@ -130,7 +125,6 @@ public class MonthPlanListAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                             .setText(R.id.item_line_status, "停电时间 : " + monthPlanBean.getStart_time() + " - " + monthPlanBean.getEnd_time());
                     ;
                 }
-                break;
         }
     }
 

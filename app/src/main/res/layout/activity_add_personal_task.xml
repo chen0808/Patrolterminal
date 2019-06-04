@@ -81,7 +81,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="3"
+                            android:layout_weight="4"
                             android:gravity="center_vertical"
                             android:paddingLeft="5dp"
                             android:textSize="@dimen/sp_13"
@@ -95,14 +95,14 @@
                             android:layout_weight="3"
                             android:gravity="center"
                             android:textSize="@dimen/sp_13"
-                            android:text="工作类型"
+                            android:text="工作内容"
                             android:textColor="@color/color_33"
                             />
                        
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
+                            android:layout_weight="1"
                             android:gravity="center"
                             android:paddingLeft="5dp"
                             android:textSize="@dimen/sp_13"
@@ -113,6 +113,8 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_10"
                         android:background="@color/image_overlay_false"
                         />
                     <RelativeLayout

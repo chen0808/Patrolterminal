@@ -35,6 +35,7 @@ import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -90,6 +91,8 @@ public class DayPlanFrgment extends BaseFragment {
     SwipeRecyclerView planRv;
     @BindView(R.id.plan_refresh)
     SwipeRefreshLayout planRefresh;
+    @BindView(R.id.done_plan_range)
+    TextView donePlanRange;
     private DayPlanAdapter dayPlanAdapter;
     private String time;
     private List<DayListBean> results;
@@ -109,6 +112,8 @@ public class DayPlanFrgment extends BaseFragment {
     private double next_kilo_total = 0;
     private double next_kilo_110kv = 0;
     private double next_kilo_35kv = 0;
+    private int done_num_total = 0;
+    private int all_num_total = 0;
     private int nextDay;
     private int nextmonth;
     private int nextyear;
@@ -202,16 +207,31 @@ public class DayPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onSuccees(BaseResult<List<DayListBean>> t) throws Exception {
+                        num_total = 0;
+                        kilo_total = 0;
+                        done_num_total = 0;
+                        all_num_total = 0;
                         results = t.getResults();
                         dayPlanAdapter.setNewData(results);
                         for (int i = 0; i < results.size(); i++) {
                             DayListBean dayListBean = results.get(i);
                             num_total++;
-                            kilo_total=kilo_total+dayListBean.getTowers_range();
+                            kilo_total = kilo_total + dayListBean.getTowers_range();
+                            done_num_total = done_num_total + dayListBean.getDone_num();
+                            all_num_total = all_num_total + dayListBean.getAll_num();
                         }
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
                         monthLineTotal.setText("杆段总数 : " + num_total + "条");
                         monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                        BigDecimal b1 = new BigDecimal(done_num_total);
+                        BigDecimal b2 = new BigDecimal(all_num_total);
+                        if (all_num_total == 0) {
+                            donePlanRange.setText("计划进度 : 0%");
+                        } else {
+                            //默认保留两位会有错误，这里设置保留小数点后4位
+                            double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            donePlanRange.setText("计划进度 : " + range + "%");
+                        }
                         planRefresh.setRefreshing(false);
                     }
 
@@ -222,11 +242,12 @@ public class DayPlanFrgment extends BaseFragment {
                     }
                 });
     }
+
     //获取明日计划列表
     public void getNextDayList() {
 
         BaseRequest.getInstance().getService()
-                .getDayList(nextyear+"", nextmonth+"", nextDay+"", SPUtil.getDepId(getContext()), "type_sign,line_id")
+                .getDayList(nextyear + "", nextmonth + "", nextDay + "", SPUtil.getDepId(getContext()), "type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayListBean>>(getContext()) {
@@ -238,13 +259,13 @@ public class DayPlanFrgment extends BaseFragment {
                             addPlanIv.setVisibility(View.GONE);
                             addPlanRight.setVisibility(View.VISIBLE);
                             addPlanLl.setVisibility(View.VISIBLE);
-                            addPlanName.setText(nextyear + "年第" + nextmonth + "月"+nextDay+"日工作计划");
+                            addPlanName.setText(nextyear + "年第" + nextmonth + "月" + nextDay + "日工作计划");
 
                         }
                         for (int i = 0; i < nextDayList.size(); i++) {
                             DayListBean dayListBean = nextDayList.get(i);
                             next_num_total++;
-                            next_kilo_total=kilo_total+dayListBean.getTowers_range();
+                            next_kilo_total = kilo_total + dayListBean.getTowers_range();
                         }
                     }
 
@@ -288,12 +309,12 @@ public class DayPlanFrgment extends BaseFragment {
             case R.id.add_plan_ll:
                 Intent intent1 = new Intent(getContext(), NextDayPlanActivity.class);
                 intent1.putExtra("list", (Serializable) nextDayList);
-                intent1.putExtra("num_total",next_num_total);
-                intent1.putExtra("kilo_total",next_kilo_total);
-                intent1.putExtra("110kv_num",next_num_110kv);
-                intent1.putExtra("110kv_kolo",next_kilo_110kv);
-                intent1.putExtra("35kv_num",next_num_35kv);
-                intent1.putExtra("35kv_kolo",next_kilo_35kv);
+                intent1.putExtra("num_total", next_num_total);
+                intent1.putExtra("kilo_total", next_kilo_total);
+                intent1.putExtra("110kv_num", next_num_110kv);
+                intent1.putExtra("110kv_kolo", next_kilo_110kv);
+                intent1.putExtra("35kv_num", next_num_35kv);
+                intent1.putExtra("35kv_kolo", next_kilo_35kv);
                 intent1.putExtra("year", nextyear);
                 intent1.putExtra("month", nextmonth);
                 intent1.putExtra("day", nextDay);
@@ -347,16 +368,16 @@ public class DayPlanFrgment extends BaseFragment {
         month = Integer.parseInt(months[0]) + "";
         year = years[0];
         day = Integer.parseInt(days[0]) + "";
-        nextDay = Integer.parseInt(days[0])+1;
-        nextmonth=Integer.parseInt(months[0]);
-        nextyear=Integer.parseInt(years[0]);
+        nextDay = Integer.parseInt(days[0]) + 1;
+        nextmonth = Integer.parseInt(months[0]);
+        nextyear = Integer.parseInt(years[0]);
         int monthOfDay = TimeUtil.getMonthOfDay(Integer.parseInt(year), Integer.parseInt(month));
-        if (nextDay>monthOfDay){
-            nextDay=1;
-            nextmonth = Integer.parseInt(months[0])+1;
-            if (nextmonth >12){
-                nextmonth =1;
-                nextyear = Integer.parseInt(year)+1;
+        if (nextDay > monthOfDay) {
+            nextDay = 1;
+            nextmonth = Integer.parseInt(months[0]) + 1;
+            if (nextmonth > 12) {
+                nextmonth = 1;
+                nextyear = Integer.parseInt(year) + 1;
             }
         }
 

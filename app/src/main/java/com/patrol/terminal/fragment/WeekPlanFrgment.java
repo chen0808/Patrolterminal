@@ -46,6 +46,7 @@ import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -101,6 +102,8 @@ public class WeekPlanFrgment extends BaseFragment {
     SwipeRecyclerView planRv;
     @BindView(R.id.plan_refresh)
     SwipeRefreshLayout planRefresh;
+    @BindView(R.id.done_plan_range)
+    TextView donePlanRange;
     private TimePickerView pvTime;
     private String time;
     private WeekPlanAdapter weekPlanAdapter;
@@ -133,6 +136,8 @@ public class WeekPlanFrgment extends BaseFragment {
     private double next_kilo_total = 0;
     private double next_kilo_110kv = 0;
     private double next_kilo_35kv = 0;
+    private int done_num_total = 0;
+    private int all_num_total = 0;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -160,8 +165,6 @@ public class WeekPlanFrgment extends BaseFragment {
         //初始化年月周数据
         initdate();
         taskTitle.setText("周计划列表");
-
-
         String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
         String endDate = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
         String nextBeginTime = TimeUtil.getFirstDayOfWeek(nextYear, nextWeek);
@@ -217,6 +220,7 @@ public class WeekPlanFrgment extends BaseFragment {
         year = years[0];
         week = TimeUtil.getCurrWeek();
         int maxWeekNumOfYear = TimeUtil.getMaxWeekNumOfYear(Integer.parseInt(year));
+
         if (week > maxWeekNumOfYear) {
             nextWeek = 1;
             nextYear = Integer.parseInt(year) + 1;
@@ -271,16 +275,30 @@ public class WeekPlanFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
                         num_total = 0;
                         kilo_total = 0;
+                        done_num_total = 0;
+                        all_num_total = 0;
                         results = t.getResults();
                         weekPlanAdapter.setNewData(results);
                         for (int i = 0; i < results.size(); i++) {
                             WeekListBean weekListBean = results.get(i);
                             num_total++;
                             kilo_total += weekListBean.getTowers_range();
+                            done_num_total = done_num_total + weekListBean.getDone_num();
+                            all_num_total = all_num_total + weekListBean.getAll_num();
                         }
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
                         monthLineTotal.setText("杆段总数 : " + num_total + "条");
                         monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                        BigDecimal b1 = new BigDecimal(done_num_total);
+                        BigDecimal b2 = new BigDecimal(all_num_total);
+                        if (all_num_total==0){
+                            donePlanRange.setText("计划进度 : 0%");
+                        }else {
+                            //默认保留两位会有错误，这里设置保留小数点后4位
+                            double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            donePlanRange.setText("计划进度 : "+range+"%");
+                        }
+
                         planRefresh.setRefreshing(false);
                     }
 
