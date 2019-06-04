@@ -26,7 +26,7 @@ public class SafeAdapter extends BaseItemDraggableAdapter<TicketSafeContent, Bas
         helper.setText(R.id.et_content, item.getTicket_safe_content());
         EditText etContent = helper.getView(R.id.et_content);
         TextView numTv = helper.getView(R.id.num_tv);
-        numTv.setText("(" + helper.getPosition() + 1 + ")");
+        numTv.setText("(" + (helper.getPosition() + 1) + ")");
 
         etContent.addTextChangedListener(new TextWatcher() {
             @Override

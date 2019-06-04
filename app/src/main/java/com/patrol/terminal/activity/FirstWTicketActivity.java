@@ -233,6 +233,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     private String ticketTaskType;
     private FirstTicketBean results;
     private String lineId;
+    private String applyDepId;
     private SafeAdapter safeAdapter;
     //    private String status;
 
@@ -295,6 +296,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             if (bean != null) {
                 taskId = bean.getId();
                 lineId = bean.getLine_id();
+                applyDepId = bean.getApply_dep_id();
                 tvUnitId.setText(bean.getApply_dep_name());//单位
                 etTicketNumber.setText("暂无");
                 tvDepId.setText("带电作业班");
@@ -333,17 +335,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
 //        }
 
 
-        //默认工作任务
-        workList = new ArrayList<>();
-        String[] taskStrs = taskContent.split("；");
-        for (int i = 0; i < taskStrs.length; i++) {
-            TicketWork ticketWork = new TicketWork("", taskStrs[i]);
-            workList.add(ticketWork);
-        }
 
-        rvTaskContent.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
-        workAdapter = new WorkAdapter(R.layout.item_task_content, workList);
-        rvTaskContent.setAdapter(workAdapter);
 
         //默认6.1
 
@@ -378,6 +370,18 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                     protected void onSuccees(BaseResult<FirstTicketBean> t) throws Exception {
                         results = t.getResults();
                         if (results == null) {
+//                            rvTaskContent.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+//                            workAdapter = new WorkAdapter(R.layout.item_task_content, workList);
+//                            rvTaskContent.setAdapter(workAdapter);
+
+                            //默认工作任务
+                            workList = new ArrayList<>();
+                            String[] taskStrs = taskContent.split("；");
+                            for (int i = 0; i < taskStrs.length; i++) {
+                                TicketWork ticketWork = new TicketWork("", taskStrs[i]);
+                                workList.add(ticketWork);
+                            }
+
                             rvTaskContent.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
                             workAdapter = new WorkAdapter(R.layout.item_task_content, workList);
                             rvTaskContent.setAdapter(workAdapter);
@@ -453,6 +457,12 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     //获取界面上的数据
     private FirstTicketBean getData() {
         FirstTicketBean bean = new FirstTicketBean();
+        bean.setLine_id(lineId);
+        bean.setDuty_user_id(leaderId);
+        bean.setDuty_user_name(leaderName);
+        bean.setTask_id(taskId);
+        bean.setUnit_id(applyDepId);
+        //bean.setWork_dep_id();                   TODO by linmeng
         bean.setBegin_time(tvSTime.getText().toString());
         bean.setEnd_time(tvETime.getText().toString());
         bean.setRelate_device_operate(etSwitchSafe.getText().toString());
@@ -463,7 +473,11 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         bean.setGuarder_name(etCustodyMan.getText().toString());
         bean.setGuarder_content(etCustodyContent.getText().toString());
         bean.setOther_content(etOther.getText().toString());
+
+        //工作任务
+        workList = workAdapter.getData();
         bean.setWorkList(workList);
+
         bean.setGroundList(groundList);
         bean.setPermitList(permitList);
         bean.setEndList(endList);
@@ -484,8 +498,8 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         etOldLeader.setText(crew2);
         String crew3 = getCrew(results.getUserList(), "3");
         tvLeader.setText(crew3);
-        tvLeaderId.setText(crew3);
-        tvPerson.setText(crew2 + crew3);
+        tvLeaderId.setText(results.getDuty_user_name());     //工作负责人
+        //tvPerson.setText(crew2 + crew3);
         tvSTime.setText(results.getBegin_time());
         tvETime.setText(results.getEnd_time());
         rvRemarkSafe.setLayoutManager(new LinearLayoutManager(this));
@@ -610,9 +624,14 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     //参数
     private Map<String, RequestBody> setParams(FirstTicketBean bean) {
         params.put("id", toRequestBody(results == null ? "" : results.getId()));
-        params.put("task_id", toRequestBody(taskId));
+        params.put("line_id", toRequestBody(bean.getLine_id()));
+        params.put("task_id", toRequestBody(bean.getTask_id()));
+        params.put("duty_user_id", toRequestBody(bean.getDuty_user_id()));
+        params.put("duty_user_name", toRequestBody(bean.getDuty_user_name()));
         params.put("ticket_type", toRequestBody("1"));
+        params.put("unit_id", toRequestBody(bean.getUnit_id()));
         params.put("unit_name", toRequestBody(tvUnitId.getText().toString()));
+        params.put("work_dep_id", toRequestBody(tvDepId.getText().toString()));
         params.put("work_dep_name", toRequestBody(tvDepId.getText().toString()));
         params.put("begin_time", toRequestBody(bean.getBegin_time()));
         params.put("end_time", toRequestBody(bean.getEnd_time()));
@@ -1133,7 +1152,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
 
 
     private void showSelectDialog(String[] workers, List<SelectWorkerBean.SelectUserInfo> workerSelectUserList) {
-        List<SelectWorkerBean.SelectUserInfo> selectUserInfos = new ArrayList<>();
+        //List<SelectWorkerBean.SelectUserInfo> selectUserInfos = new ArrayList<>();
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(FirstWTicketActivity.this);
         builder.setTitle("工作人员选择");
         builder.setMultiChoiceItems(workers, mulchoice, new DialogInterface.OnMultiChoiceClickListener() {
@@ -1153,15 +1172,21 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                     if (mulchoice[i]) {
                         s = s + workers[i] + ",";
 
-                        SelectWorkerBean.SelectUserInfo userInfo = new SelectWorkerBean.SelectUserInfo();
-                        userInfo.setUserId(workerSelectUserList.get(i).getUserId());
-                        userInfo.setUserName(workerSelectUserList.get(i).getUserName());
-                        selectUserInfos.add(userInfo);
+//                        SelectWorkerBean.SelectUserInfo userInfo = new SelectWorkerBean.SelectUserInfo();
+//                        userInfo.setUserId(workerSelectUserList.get(i).getUserId());
+//                        userInfo.setUserName(workerSelectUserList.get(i).getUserName());
+//                        selectUserInfos.add(userInfo);
+
+                        TicketUser ticketUser =  new TicketUser(workerSelectUserList.get(i).getUserName());
+                        ticketUser.setUser_id(workerSelectUserList.get(i).getUserId());
+                        ticketUser.setUser_status("1");
+                        ticketUser.setSign("2");
+                        userList.add(ticketUser);
                     }
                 }
                 //selectWorkerBean.setUserInfos(selectUserInfos);
                 tvCrewId.setText(s.substring(0, s.length() - 1));
-                tvPerson.setText("共" +  selectUserInfos.size() + "人");
+                tvPerson.setText("共" +  userList.size() + "人");
             }
         });
 

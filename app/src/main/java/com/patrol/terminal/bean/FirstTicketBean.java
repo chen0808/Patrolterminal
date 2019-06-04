@@ -22,12 +22,13 @@ public class FirstTicketBean implements Serializable {
     private String retain_device;
     private String remove_ground_no;
     private String remove_ground_num;
-    private String guarder_id;
+    private String guarder_id;    //监护人
     private String guarder_name;
     private String guarder_content;
     private String other_content;
     private String ticket_type;
     private String delay_time;
+
 
     public String getDelay_time() {
         return delay_time;

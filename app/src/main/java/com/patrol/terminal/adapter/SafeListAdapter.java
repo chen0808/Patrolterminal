@@ -21,6 +21,7 @@ public class SafeListAdapter extends BaseQuickAdapter<TicketSafeContent, BaseVie
     @Override
     protected void convert(BaseViewHolder helper, TicketSafeContent item) {
         helper.setText(R.id.tv, item.getContent());
+        helper.setText(R.id.name_tv, "(" + (helper.getPosition() + 1) + ")");
         CheckBox cb = helper.getView(R.id.cb);
         if (item.isTag()) {
             cb.setChecked(true);
