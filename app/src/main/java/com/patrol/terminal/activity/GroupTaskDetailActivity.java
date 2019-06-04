@@ -132,8 +132,15 @@ public class GroupTaskDetailActivity extends Activity {
         tvTableName.setText(bean.getYear() + "年" + bean.getMonth() + "月" + bean.getDay() + "日班组任务");
         tvLineName.setText("线路名称 : " + bean.getLine_name());
         tvLineNo.setText("班  组 : " + bean.getDep_name());
-        tvLineDate.setText("小组负责人 :" + bean.getDuty_user_name()==null?"暂无":bean.getDuty_user_name());
-        tvLineTower.setText("杆  段 : " + bean.getName());
+        if (bean.getDuty_user_name()==null){
+            tvLineDate.setText("小组负责人 : 暂无" );
+        }else {
+            tvLineDate.setText("小组负责人 :" + bean.getDuty_user_name());
+        }
+        if ("12".equals(bean.getType_sign())||"13".equals(bean.getType_sign())){
+            tvLineTower.setVisibility(View.GONE);
+        }else {
+        tvLineTower.setText("杆  段 : " + bean.getName());}
 
         String type_sign = bean.getType_sign();
         String[] split = type_sign.split(",");

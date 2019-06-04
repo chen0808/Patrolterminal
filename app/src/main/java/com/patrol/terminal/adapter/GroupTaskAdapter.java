@@ -21,6 +21,9 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder viewHolder, GroupTaskBean item) {
+        viewHolder.setText(R.id.item_task_personal, "小组负责人 :"+item.getDuty_user_name())
+                .setText(R.id.item_task_name, item.getLine_name()+item.getName()+"任务")
+                .setText(R.id.item_task_type,"班组 :"+ item.getDep_name());
         switch (item.getType_sign()) {
             case "4":
                 viewHolder.setText(R.id.item_task_date_tv, "特殊");
@@ -37,6 +40,16 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
             case "1":
                 viewHolder.setText(R.id.item_task_date_tv, "定巡");
                 viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_mon_bg);
+                break;
+            case "12":
+                viewHolder.setText(R.id.item_task_date_tv, "安全");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_qing_bg);
+                viewHolder .setText(R.id.item_task_name, "关于"+item.getLine_name()+"的安全质量监督任务");
+                break;
+            case "13":
+                viewHolder.setText(R.id.item_task_date_tv, "验收");
+                viewHolder .setText(R.id.item_task_name, "关于"+item.getLine_name()+"的验收任务");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_qing_bg);
                 break;
             default:
                 viewHolder.setText(R.id.item_task_date_tv, "定检");
@@ -63,10 +76,11 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
             progressBar.setMax(item.getAll_num());
             progressBar.setProgress(item.getDone_num());
         }
-        viewHolder.setText(R.id.item_task_personal, "小组负责人 :"+item.getDuty_user_name()==null?"暂无":item.getDuty_user_name())
-                .setText(R.id.item_task_name, item.getLine_name()+item.getName()+"任务")
-                .setText(R.id.item_task_type,"班组 :"+ item.getDep_name());
 
+
+        if (item.getDuty_user_name()==null){
+            viewHolder.setText(R.id.item_task_personal, "小组负责人 : 暂无");
+        }
 
 
     }

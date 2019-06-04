@@ -57,8 +57,17 @@ public class PersonalTaskListBean implements Parcelable {
         private String done_time;
         private String sub_time;
         private String towers_id;
+    private String check_report;
 
-        public String getId() {
+    public String getCheck_report() {
+        return check_report;
+    }
+
+    public void setCheck_report(String check_report) {
+        this.check_report = check_report;
+    }
+
+    public String getId() {
             return id;
         }
 
@@ -250,6 +259,7 @@ public class PersonalTaskListBean implements Parcelable {
             this.towers_id = towers_id;
         }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -281,6 +291,7 @@ public class PersonalTaskListBean implements Parcelable {
         dest.writeString(this.done_time);
         dest.writeString(this.sub_time);
         dest.writeString(this.towers_id);
+        dest.writeString(this.check_report);
     }
 
     public PersonalTaskListBean() {
@@ -311,6 +322,7 @@ public class PersonalTaskListBean implements Parcelable {
         this.done_time = in.readString();
         this.sub_time = in.readString();
         this.towers_id = in.readString();
+        this.check_report = in.readString();
     }
 
     public static final Parcelable.Creator<PersonalTaskListBean> CREATOR = new Parcelable.Creator<PersonalTaskListBean>() {

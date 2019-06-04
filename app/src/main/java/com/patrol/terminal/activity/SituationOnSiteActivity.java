@@ -11,9 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -32,6 +29,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -92,10 +91,13 @@ public class SituationOnSiteActivity extends BaseActivity {
         titleSetting.setVisibility(View.VISIBLE);
         titleName.setText("现场情况");
         titleSettingTv.setText("提交");
+
         bean = getIntent().getParcelableExtra("bean");
         if (bean != null) {
             lineName.setText(bean.getLine_name());
+            workContent.setText(bean.getName());
         }
+
         BaseRequest.getInstance().getService().searchSituation(bean.getId()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<SituationBean>(this) {

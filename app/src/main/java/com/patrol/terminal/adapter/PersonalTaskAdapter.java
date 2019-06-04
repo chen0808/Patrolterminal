@@ -38,6 +38,16 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
                 viewHolder.setText(R.id.item_task_date_tv, "定巡");
                 viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_mon_bg);
                 break;
+            case "12":
+                viewHolder.setText(R.id.item_task_date_tv, "安全");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_qing_bg);
+                viewHolder .setText(R.id.item_task_name, "关于"+item.getLine_name()+"的安全质量监督任务");
+                break;
+            case "13":
+                viewHolder.setText(R.id.item_task_date_tv, "验收");
+                viewHolder .setText(R.id.item_task_name, "关于"+item.getLine_name()+"的验收任务");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_qing_bg);
+                break;
             default:
                 viewHolder.setText(R.id.item_task_date_tv, "定检");
                 viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_day_bg);

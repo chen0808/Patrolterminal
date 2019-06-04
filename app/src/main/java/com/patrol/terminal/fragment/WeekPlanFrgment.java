@@ -520,7 +520,7 @@ public class WeekPlanFrgment extends BaseFragment {
 
     }
 
-    //初始化月份数据
+    //初始化周数据
     public void initdata() {
         for (int i = 2019; i < 2100; i++) {
             years.add(i + "年");

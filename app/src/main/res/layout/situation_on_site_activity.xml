@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="银河国际搬迁施工涉及110kV和开二三线27#-34#拆除，110kV段和开二三线20#-23#拆除。新建27#-36#线路至29#向右转北环路方向至原35#接入新建36#。110kV段和开二三线19#接入新建20#，21#，22#T接和开二三29#塔。"></TextView>
+                android:text="任务内容"></TextView>
         </LinearLayout>
 
         <ImageView

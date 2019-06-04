@@ -1,5 +1,6 @@
 package com.patrol.terminal.network;
 
+import com.patrol.terminal.adapter.SaveCheckReqBean;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AddGroupTaskReqBean;
 import com.patrol.terminal.bean.AddPersonalTaskReqBean;
@@ -336,6 +337,10 @@ public interface ApiServise {
     //组任务列表
     @GET("/task/group/list/listGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("work_user_id") String work_user_id, @Query("order") String order);
+
+    //个人任务列表获取小组任务
+    @GET("/task/group/list/listGET")
+    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("allot_status") String allot_status,@Query("work_user_id") String work_user_id, @Query("order") String order);
 
     @GET("/task/group/user/groupGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id);
@@ -909,4 +914,8 @@ public interface ApiServise {
     //获取班组信息
     @GET("common/listGET")
     Observable<BaseResult<List<DepBean>>> getDepList(@Query("table") String table, @Query("column") String column, @Query("is_work") String is_work);
+
+    //获取班组信息
+    @POST("/task/personal/updatePOST")
+    Observable<BaseResult<List<DepBean>>> savaCheck(@Body SaveCheckReqBean bean);
 }

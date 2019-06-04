@@ -162,7 +162,7 @@ public class PersonalTaskFrgment extends BaseFragment {
     //获取小组任务列表
     public void getGroupList() {
         BaseRequest.getInstance().getService()
-                .getGroupList(year, month, day,depid,null,userid,"type_sign,line_id")
+                .getGroupList(year, month, day,depid,null,"1",userid,"type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {
