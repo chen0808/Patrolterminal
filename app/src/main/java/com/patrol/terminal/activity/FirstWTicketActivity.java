@@ -1,6 +1,5 @@
 package com.patrol.terminal.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,11 +17,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.ControlDepdapter1;
 import com.patrol.terminal.adapter.GroundLineAdapter;
 import com.patrol.terminal.adapter.LicensingEndAdapter;
 import com.patrol.terminal.adapter.LicensingStartedAdapter;
@@ -47,13 +51,11 @@ import com.patrol.terminal.bean.TicketSafeContent;
 import com.patrol.terminal.bean.TicketSign;
 import com.patrol.terminal.bean.TicketUser;
 import com.patrol.terminal.bean.TicketWork;
-import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.QfrDialog;
 import com.patrol.terminal.widget.SignDialog;
@@ -65,11 +67,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -78,7 +75,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class FirstWTicketActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
+public class FirstWTicketActivity extends BaseActivity{
 
 
     @BindView(R.id.title_back)
@@ -127,40 +124,24 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     RecyclerView groundLinesToHangListView;
     @BindView(R.id.iv_signature_pad)
     ImageView ivSignaturePad;
-    @BindView(R.id.time_checkbox)
-    CheckBox timeCheckbox;
     @BindView(R.id.iv_signature_pad_2)
     ImageView ivSignaturePad2;
-    @BindView(R.id.time_checkbox_2)
-    CheckBox timeCheckbox2;
     @BindView(R.id.iv_signature_pad_3)
     ImageView ivSignaturePad3;
-    @BindView(R.id.time_checkbox_3)
-    CheckBox timeCheckbox3;
     @BindView(R.id.licensing_started_ll)
     LinearLayout licensingStartedLl;
     @BindView(R.id.licensing_started_listView)
     RecyclerView licensingStartedListView;
     @BindView(R.id.iv_signature_pad_4)
     ImageView ivSignaturePad4;
-    @BindView(R.id.time_checkbox_7)
-    CheckBox timeCheckbox7;
     @BindView(R.id.iv_signature_pad_5)
     ImageView ivSignaturePad5;
-    @BindView(R.id.time_checkbox_4)
-    CheckBox timeCheckbox4;
     @BindView(R.id.iv_signature_pad_6)
     ImageView ivSignaturePad6;
-    @BindView(R.id.time_checkbox_5)
-    CheckBox timeCheckbox5;
     @BindView(R.id.iv_signature_pad_7)
     ImageView ivSignaturePad7;
-    @BindView(R.id.time_checkbox_6)
-    CheckBox timeCheckbox6;
     @BindView(R.id.iv_signature_pad_8)
     ImageView ivSignaturePad8;
-    @BindView(R.id.time_checkbox_8)
-    CheckBox timeCheckbox8;
     @BindView(R.id.work_end_ll)
     LinearLayout workEndLl;
     @BindView(R.id.et_custody_man)
@@ -171,26 +152,10 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     EditText etOther;
     @BindView(R.id.et_switch_safe)
     EditText etSwitchSafe;
-    @BindView(R.id.tv_group_time_a)
-    TextView tvGroupTimeA;
-    @BindView(R.id.tv_group_time_b)
-    TextView tvGroupTimeB;
-    @BindView(R.id.tv_group_time_c)
-    TextView tvGroupTimeC;
     @BindView(R.id.et_old_leader)
     TextView etOldLeader;
-    @BindView(R.id.tv_change_time)
-    TextView tvChangeTime;
     @BindView(R.id.et_person_change)
     EditText etPersonChange;
-    @BindView(R.id.tv_delay_a_time)
-    TextView tvDelayATime;
-    @BindView(R.id.tv_delay_b_time)
-    TextView tvDelayBTime;
-    @BindView(R.id.tv_delay_c_time)
-    TextView tvDelayCTime;
-    @BindView(R.id.time_tv_7)
-    TextView timeTv7;
     @BindView(R.id.iv_task_add)
     ImageView ivTaskAdd;
     @BindView(R.id.rv_task_content)
@@ -216,6 +181,22 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     ImageView ivSafe;
     @BindView(R.id.iv_safe_change)
     ImageView ivSafeChange;
+    @BindView(R.id.tv_sign_time1)
+    TextView tvSignTime1;
+    @BindView(R.id.tv_sign_time2)
+    TextView tvSignTime2;
+    @BindView(R.id.tv_sign_time3)
+    TextView tvSignTime3;
+    @BindView(R.id.tv_sign_time4)
+    TextView tvSignTime4;
+    @BindView(R.id.tv_sign_time5)
+    TextView tvSignTime5;
+    @BindView(R.id.tv_sign_time6)
+    TextView tvSignTime6;
+    @BindView(R.id.tv_sign_time7)
+    TextView tvSignTime7;
+    @BindView(R.id.tv_sign_time8)
+    TextView tvSignTime8;
     private List<TicketWork> workList = new ArrayList<>();
     private List<TicketFirstGround> groundList = new ArrayList<>();
     private List<TicketFirstPermit> permitList = new ArrayList<>();
@@ -265,12 +246,12 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         String userId = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
         String userName = SPUtil.getString(this, Constant.USER, Constant.USERNAME, "");
 
-        workerList =  getIntent().getParcelableExtra("selectedUserListBeans");
+        workerList = getIntent().getParcelableExtra("selectedUserListBeans");
         if (workerList != null && workerList.getUserInfos() != null && workerList.getUserInfos().size() > 0) {
             mulchoice = new boolean[workerList.getUserInfos().size()];
         }
 
-        if (jobType.contains(Constant.REFURBISHMENT_MEMBER)||jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {
+        if (jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {
             leaderName = userName;
             leaderId = userId;
         }
@@ -326,17 +307,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
 //        etPersonChange.setEnabled(false);
 //        etSwitchSafe.setEnabled(false);
 //        } else {
-        timeCheckbox.setOnCheckedChangeListener(this);
-        timeCheckbox2.setOnCheckedChangeListener(this);
-        timeCheckbox3.setOnCheckedChangeListener(this);
-        timeCheckbox4.setOnCheckedChangeListener(this);
-        timeCheckbox5.setOnCheckedChangeListener(this);
-        timeCheckbox6.setOnCheckedChangeListener(this);
-        timeCheckbox7.setOnCheckedChangeListener(this);
-        timeCheckbox8.setOnCheckedChangeListener(this);
 //        }
-
-
 
 
         //默认6.1
@@ -521,43 +492,51 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             switch (results.getSignList().get(i).getSign()) {
                 case "1":
                     showPic(results.getSignList().get(i), ivSignaturePad, "sign1.jpg");
-                    tvGroupTimeA.setText(results.getSignList().get(i).getSign_time());
-                    timeCheckbox.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime1.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "2":
                     showPic(results.getSignList().get(i), ivSignaturePad2, "sign2.jpg");
-                    tvGroupTimeB.setText(results.getSignList().get(i).getSign_time());
-                    timeCheckbox2.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime2.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "3":
                     showPic(results.getSignList().get(i), ivSignaturePad3, "princpial1.jpg");
-                    tvGroupTimeC.setText(results.getSignList().get(i).getSign_time());
-                    timeCheckbox3.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime3.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "4":
                     showPic(results.getSignList().get(i), ivSignaturePad4, "accept1.jpg");
-                    tvChangeTime.setText(results.getSignList().get(i).getSign_time());
-                    timeCheckbox4.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime4.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "5":
                     showPic(results.getSignList().get(i), ivSignaturePad5, "sign3.jpg");
-                    tvDelayATime.setText(results.getSignList().get(i).getSign_time());
-                    timeCheckbox5.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime5.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "6":
                     showPic(results.getSignList().get(i), ivSignaturePad6, "princpial2.jpg");
-                    tvDelayBTime.setText(results.getSignList().get(i).getSign_time());
-                    timeCheckbox6.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime6.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "7":
                     showPic(results.getSignList().get(i), ivSignaturePad7, "princpial3.jpg");
-                    timeTv7.setText(results.getSignList().get(i).getSign_time());
-                    timeCheckbox7.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime7.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
                 case "8":
                     showPic(results.getSignList().get(i), ivSignaturePad8, "licence1.jpg");
-                    tvDelayCTime.setText(results.getSignList().get(i).getSign_time());
-                    timeCheckbox8.setVisibility(View.GONE);
+                    if (null != results.getSignList().get(i).getSign_time() || !("").equals(results.getSignList().get(i).getSign_time())) {
+                        tvSignTime8.setText(results.getSignList().get(i).getSign_time());
+                    }
                     break;
             }
         }
@@ -802,35 +781,35 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     private void addPicList() {
         if (ivSignaturePad.getDrawable() != null) {
             File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "1");
-            signList.add(new TicketSign("1", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file1)));
+            signList.add(new TicketSign("1", tvSignTime1.getText().toString(), FileUtil.fileToBase64(file1)));
         }
         if (ivSignaturePad2.getDrawable() != null) {
             File file2 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad2).getDrawable()).getBitmap(), "2");
-            signList.add(new TicketSign("2", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file2)));
+            signList.add(new TicketSign("2", tvSignTime2.getText().toString(), FileUtil.fileToBase64(file2)));
         }
         if (ivSignaturePad3.getDrawable() != null) {
             File file3 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad3).getDrawable()).getBitmap(), "3");
-            signList.add(new TicketSign("3", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file3)));
+            signList.add(new TicketSign("3", tvSignTime3.getText().toString(), FileUtil.fileToBase64(file3)));
         }
         if (ivSignaturePad4.getDrawable() != null) {
             File file4 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad4).getDrawable()).getBitmap(), "4");
-            signList.add(new TicketSign("4", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file4)));
+            signList.add(new TicketSign("4", tvSignTime4.getText().toString(), FileUtil.fileToBase64(file4)));
         }
         if (ivSignaturePad5.getDrawable() != null) {
             File file5 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad5).getDrawable()).getBitmap(), "5");
-            signList.add(new TicketSign("5", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file5)));
+            signList.add(new TicketSign("5", tvSignTime5.getText().toString(), FileUtil.fileToBase64(file5)));
         }
         if (ivSignaturePad6.getDrawable() != null) {
             File file6 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad6).getDrawable()).getBitmap(), "6");
-            signList.add(new TicketSign("6", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file6)));
+            signList.add(new TicketSign("6", tvSignTime6.getText().toString(), FileUtil.fileToBase64(file6)));
         }
         if (ivSignaturePad7.getDrawable() != null) {
             File file7 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad7).getDrawable()).getBitmap(), "7");
-            signList.add(new TicketSign("7", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file7)));
+            signList.add(new TicketSign("7", tvSignTime7.getText().toString(), FileUtil.fileToBase64(file7)));
         }
         if (ivSignaturePad8.getDrawable() != null) {
             File file8 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad8).getDrawable()).getBitmap(), "8");
-            signList.add(new TicketSign("8", tvGroupTimeA.getText().toString(), FileUtil.fileToBase64(file8)));
+            signList.add(new TicketSign("8", tvSignTime8.getText().toString(), FileUtil.fileToBase64(file8)));
         }
     }
 
@@ -843,27 +822,35 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             switch (index) {
                 case 1:
                     ivSignaturePad.setImageBitmap(bitmap);
+                    tvSignTime1.setText(DateUatil.getMin());
                     break;
                 case 2:
                     ivSignaturePad2.setImageBitmap(bitmap);
+                    tvSignTime2.setText(DateUatil.getMin());
                     break;
                 case 3:
                     ivSignaturePad3.setImageBitmap(bitmap);
+                    tvSignTime3.setText(DateUatil.getMin());
                     break;
                 case 4:
                     ivSignaturePad4.setImageBitmap(bitmap);
+                    tvSignTime4.setText(DateUatil.getMin());
                     break;
                 case 5:
                     ivSignaturePad5.setImageBitmap(bitmap);
+                    tvSignTime5.setText(DateUatil.getMin());
                     break;
                 case 6:
                     ivSignaturePad6.setImageBitmap(bitmap);
+                    tvSignTime6.setText(DateUatil.getMin());
                     break;
                 case 7:
                     ivSignaturePad7.setImageBitmap(bitmap);
+                    tvSignTime7.setText(DateUatil.getMin());
                     break;
                 case 8:
                     ivSignaturePad8.setImageBitmap(bitmap);
+                    tvSignTime8.setText(DateUatil.getMin());
                     break;
             }
             if (index >= 100 && index < 200) {
@@ -879,10 +866,11 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
 
     @OnClick({R.id.title_back, R.id.iv_signature_pad, R.id.iv_signature_pad_2, R.id.iv_signature_pad_3,
             R.id.iv_signature_pad_4, R.id.iv_signature_pad_5, R.id.iv_signature_pad_6, R.id.iv_signature_pad_7,
-            R.id.iv_signature_pad_8, R.id.tv_crew_id, R.id.tv_change_time, R.id.tv_delay_a_time,
-            R.id.tv_delay_b_time, R.id.tv_delay_c_time, R.id.title_setting, R.id.iv_task_add, R.id.iv_ground_lines_add,
+            R.id.iv_signature_pad_8, R.id.tv_crew_id, R.id.title_setting, R.id.iv_task_add, R.id.iv_ground_lines_add,
             R.id.iv_licensing_started_add, R.id.iv_licensing_end_add, R.id.tv_postpone,
-            R.id.tv_s_time, R.id.tv_e_time, R.id.et_old_leader, R.id.tv_leader, R.id.iv_safe, R.id.iv_safe_change})
+            R.id.tv_s_time, R.id.tv_e_time, R.id.tv_sign_time1, R.id.tv_sign_time2, R.id.tv_sign_time3, R.id.tv_sign_time4,
+            R.id.tv_sign_time5, R.id.tv_sign_time6, R.id.tv_sign_time7, R.id.tv_sign_time8,
+            R.id.et_old_leader, R.id.tv_leader, R.id.iv_safe, R.id.iv_safe_change})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_safe_change:
@@ -992,14 +980,6 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
             case R.id.tv_e_time:
                 PickerUtils.showDate(FirstWTicketActivity.this, tvETime);
                 break;
-            case R.id.tv_change_time:
-                break;
-            case R.id.tv_delay_a_time:
-                break;
-            case R.id.tv_delay_b_time:
-                break;
-            case R.id.tv_delay_c_time:
-                break;
             case R.id.iv_task_add:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_task_add, null);
@@ -1043,7 +1023,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
     }
 
     private void showSelectQfrDialog() {
-        QfrDialog qfrDialog = new QfrDialog(this, "选择签发人", "取消" ,"确定") {
+        QfrDialog qfrDialog = new QfrDialog(this, "选择签发人", "取消", "确定") {
             @Override
             public void ok() {
                 super.ok();
@@ -1091,75 +1071,6 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
         }
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        switch (compoundButton.getId()) {
-            case R.id.time_checkbox:
-                if (isChecked) {
-                    tvGroupTimeA.setText(DateUatil.getCurrTime());
-                } else {
-                    tvGroupTimeA.setText(getResources().getString(R.string.work_ticket_time));
-                }
-
-                break;
-
-            case R.id.time_checkbox_2:
-                if (isChecked) {
-                    tvGroupTimeB.setText(DateUatil.getCurrTime());
-                } else {
-                    tvGroupTimeB.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-
-            case R.id.time_checkbox_3:
-                if (isChecked) {
-                    tvGroupTimeC.setText(DateUatil.getCurrTime());
-                } else {
-                    tvGroupTimeC.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-
-            case R.id.time_checkbox_4:
-                if (isChecked) {
-                    tvChangeTime.setText(DateUatil.getCurrTime());
-                } else {
-                    tvChangeTime.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-
-            case R.id.time_checkbox_5:
-                if (isChecked) {
-                    tvDelayATime.setText(DateUatil.getCurrTime());
-                } else {
-                    tvDelayATime.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-            case R.id.time_checkbox_6:
-                if (isChecked) {
-                    tvDelayBTime.setText(DateUatil.getCurrTime());
-                } else {
-                    tvDelayBTime.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-
-            case R.id.time_checkbox_7:
-                if (isChecked) {
-                    timeTv7.setText(DateUatil.getCurrTime());
-                } else {
-                    timeTv7.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-            case R.id.time_checkbox_8:
-                if (isChecked) {
-                    tvDelayCTime.setText(DateUatil.getCurrTime());
-                } else {
-                    tvDelayCTime.setText(getResources().getString(R.string.work_ticket_time));
-                }
-                break;
-        }
-
-    }
-
     private void getAllSendToPerson() {
         List<SelectWorkerBean.SelectUserInfo> workerSelectUserList = workerList.getUserInfos();
         if (workerSelectUserList != null && workerSelectUserList.size() > 0) {
@@ -1202,7 +1113,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
 //                        userInfo.setUserName(workerSelectUserList.get(i).getUserName());
 //                        selectUserInfos.add(userInfo);
 
-                        TicketUser ticketUser =  new TicketUser(workerSelectUserList.get(i).getUserName());
+                        TicketUser ticketUser = new TicketUser(workerSelectUserList.get(i).getUserName());
                         ticketUser.setUser_id(workerSelectUserList.get(i).getUserId());
                         ticketUser.setUser_status("1");
                         ticketUser.setSign("2");
@@ -1211,7 +1122,7 @@ public class FirstWTicketActivity extends BaseActivity implements CompoundButton
                 }
                 //selectWorkerBean.setUserInfos(selectUserInfos);
                 tvCrewId.setText(s.substring(0, s.length() - 1));
-                tvPerson.setText("共" +  userList.size() + "人");
+                tvPerson.setText("共" + userList.size() + "人");
             }
         });
 
