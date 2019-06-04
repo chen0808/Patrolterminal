@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MonitoringRecordAdapter;
 import com.patrol.terminal.base.BaseActivity;
-import com.patrol.terminal.bean.DayListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean;
 
 import java.util.Arrays;
 
@@ -30,7 +30,7 @@ public class MonitoringRecordActivity extends BaseActivity implements BaseQuickA
     @BindView(R.id.rv_monitoring_record)
     RecyclerView rvMonitoringRecord;
     private String[] data = {"一、现场情况", "二、到岗到位检查", "三、现场反违章检查", "四、违章检查参考", "五、检查监督要求"};
-    private DayListBean dayListBean;
+    private PersonalTaskListBean bean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MonitoringRecordActivity extends BaseActivity implements BaseQuickA
     }
 
     private void initData() {
-        dayListBean = getIntent().getParcelableExtra("bean");
+        bean = getIntent().getParcelableExtra("bean");
     }
 
     @OnClick(R.id.title_back)
@@ -63,7 +63,7 @@ public class MonitoringRecordActivity extends BaseActivity implements BaseQuickA
         switch (position) {
             case 0:
                 Intent intent = new Intent();
-                intent.putExtra("bean", dayListBean);
+                intent.putExtra("bean", bean);
                 intent.setClass(this, SituationOnSiteActivity.class);
                 startActivity(intent);
                 break;

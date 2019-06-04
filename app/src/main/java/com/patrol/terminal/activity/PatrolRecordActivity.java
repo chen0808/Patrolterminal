@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,35 +17,26 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.base.BaseUrl;
-import com.patrol.terminal.bean.BigPicBean;
-import com.patrol.terminal.bean.PatrolRecordPicBean;
-import com.patrol.terminal.bean.PicEvent;
-import com.patrol.terminal.bean.SaveTodoReqbean;
-import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
 import com.patrol.terminal.fragment.SpecialAttrFrgment;
 import com.patrol.terminal.fragment.TroubleFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
-import com.patrol.terminal.utils.PictureSelectorConfig;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.NoScrollViewPager;
-import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SignDialog;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -61,18 +51,11 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.badge.BadgePagerTitleView;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -410,6 +393,8 @@ public class PatrolRecordActivity extends BaseActivity {
                         FileUtil.saveFile(bitmap6, filePath6);
                         ivPhoto6.setImageBitmap(bitmap6);
                         upLoadPic(PHOTO6, bitmap6);
+                        break;
+                    case PictureConfig.CHOOSE_REQUEST:
                         break;
                 }
             } catch (Exception e) {

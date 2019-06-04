@@ -8,6 +8,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.PersonalTaskDetailAdapter;
@@ -24,8 +27,6 @@ import com.patrol.terminal.widget.ProgressDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -66,7 +67,7 @@ public class PersonalTaskDetailActivity extends Activity {
     private List<PlanTypeBean> typeList = new ArrayList<>();
     private PersonalTaskDetailAdapter monthPlanDetailAdapter;
     private GroupTaskBean bean;
-    private List<PersonalTaskListBean> results=new ArrayList<>();
+    private List<PersonalTaskListBean> results = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,15 +82,15 @@ public class PersonalTaskDetailActivity extends Activity {
     private void initdata() {
         bean = getIntent().getParcelableExtra("bean");
         SPUtil.put(this, "ids", "task_id", bean.getId());
-             tvLineType.setVisibility(View.VISIBLE);
-             tvLineType.setText("执行人 : "+bean.getWork_user_name());
-            tvTableName.setText(bean.getName());
-            tvLineName.setText("线路名称 : " + bean.getLine_name());
-            tvLineNo.setText("班  组 : " + SPUtil.getDepName(PersonalTaskDetailActivity.this));
-            tvLineDate.setText("杆塔名称 : "+ bean.getName());
-            year=bean.getYear();
-        month=bean.getMonth();
-        day=bean.getDay();
+        tvLineType.setVisibility(View.VISIBLE);
+        tvLineType.setText("执行人 : " + bean.getWork_user_name());
+        tvTableName.setText(bean.getName());
+        tvLineName.setText("线路名称 : " + bean.getLine_name());
+        tvLineNo.setText("班  组 : " + SPUtil.getDepName(PersonalTaskDetailActivity.this));
+        tvLineDate.setText("杆塔名称 : " + bean.getName());
+        year = bean.getYear();
+        month = bean.getMonth();
+        day = bean.getDay();
 
     }
 
@@ -113,14 +114,14 @@ public class PersonalTaskDetailActivity extends Activity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PersonalTaskListBean bean = results.get(position);
                 Intent intent = new Intent();
-                intent.putExtra("line_id",bean.getLine_id());
-                intent.putExtra("line_name",bean.getLine_name());
-                intent.putExtra("tower_id",bean.getTower_id());
-                intent.putExtra("tower_name",bean.getTower_name());
-                intent.putExtra("task_id",bean.getId());
-                intent.putExtra("sign",bean.getType_sign());
-                intent.putExtra("audit_status",bean.getAudit_status());
-                intent.putExtra("typename",bean.getType_name());
+                intent.putExtra("line_id", bean.getLine_id());
+                intent.putExtra("line_name", bean.getLine_name());
+                intent.putExtra("tower_id", bean.getTower_id());
+                intent.putExtra("tower_name", bean.getTower_name());
+                intent.putExtra("task_id", bean.getId());
+                intent.putExtra("sign", bean.getType_sign());
+                intent.putExtra("audit_status", bean.getAudit_status());
+                intent.putExtra("typename", bean.getType_name());
                 switch (bean.getType_sign()) {
                     case "1":
                     case "2":
@@ -146,6 +147,7 @@ public class PersonalTaskDetailActivity extends Activity {
                         break;
                     case "12":
                         intent.setClass(PersonalTaskDetailActivity.this, MonitoringRecordActivity.class);
+                        intent.putExtra("bean", bean);
                         break;
                     case "13":
                         intent.setClass(PersonalTaskDetailActivity.this, CheckActivity.class);
@@ -153,19 +155,18 @@ public class PersonalTaskDetailActivity extends Activity {
 
 
                 }
-                startActivityForResult(intent,25);
+                startActivityForResult(intent, 25);
             }
         });
     }
 
 
-
     //获取个人任务列表
     public void getPersonalList() {
 
-        ProgressDialog.show(this,false,"正在加载。。。");
+        ProgressDialog.show(this, false, "正在加载。。。");
         BaseRequest.getInstance().getService()
-                .getPersonalListOfGroup(year+"",month+"", day+"",bean.getId())
+                .getPersonalListOfGroup(year + "", month + "", day + "", bean.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(this) {
@@ -187,7 +188,7 @@ public class PersonalTaskDetailActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==25&&resultCode==RESULT_OK){
+        if (requestCode == 25 && resultCode == RESULT_OK) {
             getPersonalList();
             RxRefreshEvent.publish("refreshPersonal");
         }

@@ -11,6 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -20,7 +23,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
-import com.patrol.terminal.bean.DayListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.SignBean;
 import com.patrol.terminal.bean.SituationBean;
 import com.patrol.terminal.widget.SignDialog;
@@ -29,8 +32,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -72,12 +73,11 @@ public class SituationOnSiteActivity extends BaseActivity {
     ImageView ivSignaturePad;
     @BindView(R.id.et_remark)
     EditText etRemark;
-    private DayListBean dayListBean;
-    private String id = "aaa";
-    private String task_id = "bbb";
+    private PersonalTaskListBean bean;
     private Map<String, RequestBody> params = new HashMap<>();
     private Bitmap bitmap;
     private File file;
+    private SituationBean results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,16 +92,16 @@ public class SituationOnSiteActivity extends BaseActivity {
         titleSetting.setVisibility(View.VISIBLE);
         titleName.setText("现场情况");
         titleSettingTv.setText("提交");
-        dayListBean = getIntent().getParcelableExtra("bean");
-        if (dayListBean != null) {
-            lineName.setText(dayListBean.getLine_name());
+        bean = getIntent().getParcelableExtra("bean");
+        if (bean != null) {
+            lineName.setText(bean.getLine_name());
         }
-        BaseRequest.getInstance().getService().searchSituation(task_id).subscribeOn(Schedulers.io())
+        BaseRequest.getInstance().getService().searchSituation(bean.getId()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<SituationBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<SituationBean> t) throws Exception {
-                        SituationBean results = t.getResults();
+                        results = t.getResults();
                         etRemark.setText(results.getRemark());
                         Glide.with(SituationOnSiteActivity.this).asBitmap().load(BaseUrl.BASE_URL + results.getSysFile().getFile_path() + results.getSysFile().getFilename()).into(new SimpleTarget<Bitmap>() {
                             @Override
@@ -124,8 +124,8 @@ public class SituationOnSiteActivity extends BaseActivity {
 
     private SituationBean getData() {
         SituationBean bean = new SituationBean();
-        bean.setId(id);
-        bean.setTask_id(task_id);
+        bean.setId(results == null ? "" : results.getId());
+        bean.setTask_id(bean.getId());
         bean.setUnit(workUnit.getText().toString());
         bean.setRespon(fzrName.getText().toString());
         bean.setStart_time(startTime.getText().toString());
@@ -137,8 +137,8 @@ public class SituationOnSiteActivity extends BaseActivity {
     }
 
     private Map<String, RequestBody> setParams(SituationBean bean) {
-        params.put("id", toRequestBody(id));
-        params.put("task_id", toRequestBody(task_id));
+        params.put("id", toRequestBody(bean.getId()));
+        params.put("task_id", toRequestBody(bean.getTask_id()));
         params.put("unit", toRequestBody(bean.getUnit()));
         params.put("respon", toRequestBody(bean.getRespon()));
         params.put("start_time", toRequestBody(bean.getStart_time()));
