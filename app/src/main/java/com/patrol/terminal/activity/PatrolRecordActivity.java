@@ -127,6 +127,7 @@ public class PatrolRecordActivity extends BaseActivity {
         tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
         tower_name = getIntent().getStringExtra("tower_name");
+        SPUtil.put(this, "ids", "tower_name", tower_name);
         audit_status = getIntent().getStringExtra("audit_status");
 
         sign = getIntent().getStringExtra("sign");
@@ -399,6 +400,7 @@ public class PatrolRecordActivity extends BaseActivity {
                         break;
                     case PictureConfig.CHOOSE_REQUEST:
                         localMedia = PictureSelector.obtainMultipleResult(data);
+                        Constant.picList = localMedia;
                         break;
                 }
             } catch (Exception e) {

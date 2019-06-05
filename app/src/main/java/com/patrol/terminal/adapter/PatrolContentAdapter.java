@@ -2,31 +2,43 @@ package com.patrol.terminal.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Switch;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.CommitDefectActivity;
-import com.patrol.terminal.activity.PlusImageActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.PictureSelectorConfig;
+import com.patrol.terminal.utils.RxRefreshEvent;
+import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.ProgressDialog;
 
 import org.angmarch.views.NiceSpinner;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
 
@@ -38,6 +50,7 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
     private String[] strings = {"否", "是"};
     private PatrolLevel1 mItem1;
     private String[] nsType = {"危急", "严重", "一般"};
+    private Map<String, RequestBody> params = new HashMap<>();
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -132,11 +145,11 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                     helper.setImageResource(R.id.iv_check, R.mipmap.patrol_undefined);
                 } else if (item2.getStatus().equals("1")) {
                     helper.setImageResource(R.id.iv_check, R.mipmap.patrol_false);
-                    helper.setVisible(R.id.ll_content, true);
+                    helper.setGone(R.id.ll_content, true);
                     initGridView(gridView);
                 } else {
                     helper.setImageResource(R.id.iv_check, R.mipmap.patrol_true);
-                    helper.setVisible(R.id.ll_content, false);
+                    helper.setGone(R.id.ll_content, false);
                 }
                 ImageView ivCheck2 = helper.getView(R.id.iv_check);
                 ivCheck2.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +170,14 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                                 dialog.dismiss();
                             }
                         }).show();
+                    }
+                });
+                EditText etContent = helper.getView(R.id.et_content);
+                ImageView ivCommit = helper.getView(R.id.iv_commit);
+                ivCommit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        uploadItem(item2, etContent.getText().toString());
                     }
                 });
                 break;
@@ -201,5 +222,65 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
      */
     private void selectPic(int maxTotal) {
         PictureSelectorConfig.initMultiConfig2(activity, maxTotal);
+    }
+
+    private void uploadItem(PatrolLevel2 item2, String content) {
+        params.put("task_id", toRequestBody(item2.getTask_id()));
+        params.put("grade_id", toRequestBody("37E5647975394B1E952DC5D2796C7D73"));
+        params.put("content", toRequestBody(content));
+        params.put("patrol_id", toRequestBody(item2.getPatrol_id()));
+        params.put("towerList[0].id", toRequestBody(item2.getId()));
+        // TODO 杆塔名从个人任务获取
+        String tower_name = (String) SPUtil.get(mContext, "ids", "tower_name", "");
+        if (tower_name != null) {
+            params.put("towerList[0].name", toRequestBody(tower_name));
+        } else {
+            Toast.makeText(mContext, "杆塔名为空", Toast.LENGTH_SHORT).show();
+        }
+        if (mPicList.size() == 0) {
+            Toast.makeText(mContext, "请上传图片", Toast.LENGTH_SHORT).show();
+        } else {
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(mPicList.get(0)));
+            params.put("towerList[0].file", requestFile);
+        }
+        BaseRequest.getInstance().getService().commitPatrolContent(params).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(mContext) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        Toast.makeText(mContext, "上传成功！", Toast.LENGTH_SHORT).show();
+                        RxRefreshEvent.publish("updateDefect@2");
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public RequestBody toRequestBody(String value) {
+        if (value != null) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            return requestBody;
+        } else {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            return requestBody;
+        }
+    }
+
+    // 处理选择的照片的地址
+    public void refreshAdapter(List<LocalMedia> picList) {
+        mPicList.clear();
+        for (LocalMedia localMedia : picList) {
+            //被压缩后的图片路径
+            if (localMedia.isCompressed()) {
+                String compressPath = localMedia.getCompressPath(); //压缩后的图片路径
+                mPicList.add(compressPath); //把图片添加到将要上传的图片数组中
+                mGridViewAddImgAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }

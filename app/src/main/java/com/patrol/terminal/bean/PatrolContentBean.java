@@ -42,64 +42,75 @@ public class PatrolContentBean implements Serializable {
          * NAME : 导线、地线
          */
 
-        private String CATEGORY;
-        private String REMARKS;
-        private String ID;
-        private String NAME;
-        /**
-         * STATUS : 0
-         * RECODE_ID : 922E407DCE4340F88F923034999C5168
-         */
+        private String category;
+        private String remarks;
+        private String id;
+        private String name;
+        private String task_id;
+        private String patrol_id;
+        private String status;
 
-        private String STATUS;
-        private String RECODE_ID;
-
-        public String getCATEGORY() {
-            return CATEGORY;
+        public ValueBean(String id, String task_id, String patrol_id, String status) {
+            this.id = id;
+            this.task_id = task_id;
+            this.patrol_id = patrol_id;
+            this.status = status;
         }
 
-        public void setCATEGORY(String CATEGORY) {
-            this.CATEGORY = CATEGORY;
+        public String getCategory() {
+            return category;
         }
 
-        public String getREMARKS() {
-            return REMARKS;
+        public void setCategory(String category) {
+            this.category = category;
         }
 
-        public void setREMARKS(String REMARKS) {
-            this.REMARKS = REMARKS;
+        public String getRemarks() {
+            return remarks;
         }
 
-        public String getID() {
-            return ID;
+        public void setRemarks(String remarks) {
+            this.remarks = remarks;
         }
 
-        public void setID(String ID) {
-            this.ID = ID;
+        public String getId() {
+            return id;
         }
 
-        public String getNAME() {
-            return NAME;
+        public void setId(String id) {
+            this.id = id;
         }
 
-        public void setNAME(String NAME) {
-            this.NAME = NAME;
+        public String getName() {
+            return name;
         }
 
-        public String getSTATUS() {
-            return STATUS;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public void setSTATUS(String STATUS) {
-            this.STATUS = STATUS;
+        public String getTask_id() {
+            return task_id;
         }
 
-        public String getRECODE_ID() {
-            return RECODE_ID;
+        public void setTask_id(String task_id) {
+            this.task_id = task_id;
         }
 
-        public void setRECODE_ID(String RECODE_ID) {
-            this.RECODE_ID = RECODE_ID;
+        public String getPatrol_id() {
+            return patrol_id;
+        }
+
+        public void setPatrol_id(String patrol_id) {
+            this.patrol_id = patrol_id;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
         }
     }
 }

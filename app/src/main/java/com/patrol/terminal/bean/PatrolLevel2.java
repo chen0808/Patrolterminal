@@ -10,6 +10,30 @@ public class PatrolLevel2 extends AbstractExpandableItem<PatrolLevel3> implement
     private String content;
     private String status;
     private String id;
+    private String patrol_id;
+    private String task_id;
+
+    public PatrolLevel2(String content, String status, String category, String name, String id, String task_id, String patrol_id) {
+        this.content = content;
+        this.status = status;
+        this.category = category;
+        this.name = name;
+        this.id = id;
+        this.task_id = task_id;
+        this.patrol_id = patrol_id;
+    }
+
+    public String getPatrol_id() {
+        return patrol_id;
+    }
+
+    public void setPatrol_id(String patrol_id) {
+        this.patrol_id = patrol_id;
+    }
+
+    public String getTask_id() {
+        return task_id;
+    }
 
     public String getStatus() {
         return status;
@@ -25,6 +49,10 @@ public class PatrolLevel2 extends AbstractExpandableItem<PatrolLevel3> implement
         this.category = category;
         this.name = name;
         this.id = id;
+    }
+
+    public void setTask_id(String task_id) {
+        this.task_id = task_id;
     }
 
     public PatrolLevel2(String name) {

@@ -1,5 +1,9 @@
 package com.patrol.terminal.utils;
 
+import com.luck.picture.lib.entity.LocalMedia;
+
+import java.util.List;
+
 public class Constant {
     public static final int MAP_REQUEST_CODE = 100;//地图界面返回数据
     public static String TYPE = "type";  //计划类型
@@ -109,4 +113,5 @@ public class Constant {
     public static final String TRAIN_TEMP_PLAN = "train_temp_plan";
 
     public static boolean isContent = false;
+    public static List<LocalMedia> picList = null;
 }

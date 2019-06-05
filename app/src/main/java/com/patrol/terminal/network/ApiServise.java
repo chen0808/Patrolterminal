@@ -340,7 +340,7 @@ public interface ApiServise {
 
     //个人任务列表获取小组任务
     @GET("/task/group/list/listGET")
-    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("allot_status") String allot_status,@Query("work_user_id") String work_user_id, @Query("order") String order);
+    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("allot_status") String allot_status, @Query("work_user_id") String work_user_id, @Query("order") String order);
 
     @GET("/task/group/user/groupGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id);
@@ -492,8 +492,12 @@ public interface ApiServise {
     Observable<BaseResult> upLoadTowerBias(@QueryMap Map<String, String> params);
 
     //缺陷巡视内容列表
-    @GET("task/defect/patrol/patrolList")
+    @GET("task/defect/patrol/recode/pda/listGET")
     Observable<BaseResult<List<PatrolContentBean>>> getPatrolContent(@Query("task_id") String task_id);
+
+    //巡视之后的状态上传
+    @POST("task/defect/patrol/recode/updateBatchPOST")
+    Observable<BaseResult> upLoadPatrolContent(@Body RequestBody info);
 
     //巡视内容对应缺陷标准列表
     @GET("task/defect/grade/gradeList")
