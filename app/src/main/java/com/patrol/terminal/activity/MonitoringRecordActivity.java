@@ -67,7 +67,8 @@ public class MonitoringRecordActivity extends BaseActivity implements BaseQuickA
         adapter.setOnItemClickListener(this);
 
         initData();
-        audit_status = bean.getAudit_status();
+        if (bean!=null){
+        audit_status = bean.getAudit_status();}
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) && "2".equals(audit_status)) {
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("审核");
@@ -98,6 +99,7 @@ public class MonitoringRecordActivity extends BaseActivity implements BaseQuickA
             case 1:
                 Intent intent1 = new Intent();
                 intent1.putExtra("task_id", bean.getId());
+                intent1.putExtra("audit_status", bean.getAudit_status());
                 intent1.setClass(this, GetToPostCheckActivity.class);
                 startActivity(intent1);
                 break;
@@ -105,6 +107,7 @@ public class MonitoringRecordActivity extends BaseActivity implements BaseQuickA
             case 2:
                 Intent intent2 = new Intent();
                 intent2.putExtra("task_id", bean.getId());
+                intent2.putExtra("audit_status", bean.getAudit_status());
                 intent2.setClass(this, FieldAntiInspectionActivity.class);
                 startActivity(intent2);
                 break;
@@ -118,6 +121,8 @@ public class MonitoringRecordActivity extends BaseActivity implements BaseQuickA
             case 4:
                 Intent intent4 = new Intent();
                 intent4.setClass(this, InspectionRequirementsActivity.class);
+                intent4.putExtra("audit_status", bean.getAudit_status());
+                intent4.putExtra("task_id", bean.getId());
                 startActivity(intent4);
                 break;
         }

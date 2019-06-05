@@ -55,6 +55,7 @@ public class GetToPostCheckActivity extends BaseActivity {
     private List<PostCheckBean> posCtheckBean = new ArrayList<>();
     private String task_id = "";
     private List<GetToPostCheckBean> getToPostCheckBeans;
+    private String audit_status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +70,14 @@ public class GetToPostCheckActivity extends BaseActivity {
         titleBack.setVisibility(View.VISIBLE);
         titleName.setText("到岗到位检查");
         task_id = getIntent().getStringExtra("task_id");
+        audit_status = getIntent().getStringExtra("audit_status");
 
+        if ("0".equals(audit_status)||"4".equals(audit_status)){
+            controlCardSubmit.setVisibility(View.VISIBLE);
+        }else {
+            controlCardSubmit.setVisibility(View.GONE);
 
+        }
         getToPostCheck();
     }
 

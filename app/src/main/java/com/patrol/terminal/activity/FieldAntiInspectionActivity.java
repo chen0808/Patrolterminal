@@ -70,7 +70,13 @@ public class FieldAntiInspectionActivity extends BaseActivity {
         titleName.setText("现场反违章检查");
 
         task_id = getIntent().getStringExtra("task_id");
+        String audit_status = getIntent().getStringExtra("audit_status");
+        if ("0".equals(audit_status)||"4".equals(audit_status)){
+            controlCardSubmit.setVisibility(View.VISIBLE);
+        }else {
+            controlCardSubmit.setVisibility(View.GONE);
 
+        }
         getFieldAntiInspection();
     }
 

@@ -52,12 +52,15 @@
     </LinearLayout>
 
     <EditText
+        android:id="@+id/divison_inspections_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:minHeight="@dimen/dp_200"
         android:layout_margin="10dp"
-        android:background="@color/write_order_grat"
-        android:gravity="center_horizontal"
+        android:background="@drawable/btn_white_bg"
+        android:hint="请输入检查情况"
+        android:gravity="left"
         android:padding="10dp"></EditText>
 
 

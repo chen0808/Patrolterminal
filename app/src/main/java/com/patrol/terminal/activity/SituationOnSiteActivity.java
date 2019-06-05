@@ -92,6 +92,7 @@ public class SituationOnSiteActivity extends BaseActivity {
     private String unit;
     private String name;
     private String remark;
+    private String task_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,16 +110,19 @@ public class SituationOnSiteActivity extends BaseActivity {
 
         bean = getIntent().getParcelableExtra("bean");
         if (bean != null) {
+            task_id = bean.getId();
             lineName.setText(bean.getLine_name());
             workContent.setText(bean.getName());
             if ("0".equals(bean.getAudit_status())||"4".equals(bean.getAudit_status())){
                 menban.setVisibility(View.GONE);
+                titleSetting.setVisibility(View.VISIBLE);
             }else {
                 menban.setVisibility(View.VISIBLE);
+                titleSetting.setVisibility(View.GONE);
             }
         }
 
-        BaseRequest.getInstance().getService().searchSituation(bean.getId()).subscribeOn(Schedulers.io())
+        BaseRequest.getInstance().getService().searchSituation(task_id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<SituationBean>(this) {
                     @Override
@@ -167,7 +171,7 @@ public class SituationOnSiteActivity extends BaseActivity {
         bean.setCheck(remark);
         bean.setDep_name(workclass);
         bean.setContent(workContent.getText().toString());
-        bean.setTask_id(this.bean.getId());
+        bean.setTask_id(task_id);
         bean.setLine_id(this.bean.getLine_id());
         bean.setLine_name(this.bean.getLine_name());
         bean.setUser_id(SPUtil.getUserId(this));

@@ -378,14 +378,14 @@ public class MonthPlanFrgment extends BaseFragment {
     }
 
     //提交月计划审核
-    public void submitMonthPlan(String status) {
+    public void submitMonthPlan(List<Tower> list,String status,int type) {
         ProgressDialog.show(getContext(), false, "正在加载中...");
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
         bean.setYear(year);
         bean.setMonth(month);
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(getContext()));
-        bean.setLines(nextLineList);
+        bean.setLines(list);
         BaseRequest.getInstance().getService()
                 .submitMonthPlan(bean)
                 .subscribeOn(Schedulers.io())
@@ -401,7 +401,13 @@ public class MonthPlanFrgment extends BaseFragment {
                                 Toast.makeText(getContext(), "审核成功", Toast.LENGTH_SHORT).show();
                             }
                             RxRefreshEvent.publish("refreshTodo");
-                            getNextMonthPlanList();
+                            if (type==1){
+                                getMonthPlanList();
+                            }else {
+                                getNextMonthPlanList();
+                            }
+
+
                         } else {
                             Toast.makeText(getContext(), t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
@@ -478,10 +484,10 @@ public class MonthPlanFrgment extends BaseFragment {
                 startActivityForResult(intent, 10);
                 break;
             case R.id.plan_submit_next:
-                submit(nextLineList);
+                submit(nextLineList,2);
                 break;
             case R.id.plan_submit:
-                submit(lineList);
+                submit(lineList,1);
                 break;
             case R.id.task_screen:
                 if (popWinShare == null) {
@@ -511,40 +517,40 @@ public class MonthPlanFrgment extends BaseFragment {
     }
 
     //提交月计划审核
-    public void submit(List<Tower> list) {
+    public void submit(List<Tower> list,int type) {
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "审核", "不同意", "同意") {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitMonthPlan("2");   //同意
+                    submitMonthPlan(list,"2",type);   //同意
                     dismiss();
                 }
 
                 @Override
                 public void cancel() {
                     super.cancel();
-                    submitMonthPlan("4");  //不同意
+                    submitMonthPlan(list,"4",type);  //不同意
                     dismiss();
                 }
             };
             dialog.show();
 
         } else if (mJobType.contains((Constant.RUNNING_SQUAD_LEADER))) {
-            submitMonthPlan("1");
+            submitMonthPlan(list,"1",type);
         } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
             CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "审核", "不同意", "同意") {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitMonthPlan("3");   //同意
+                    submitMonthPlan(list,"3",type);   //同意
                     dismiss();
                 }
 
                 @Override
                 public void cancel() {
                     super.cancel();
-                    submitMonthPlan("4");  //不同意
+                    submitMonthPlan(list,"4",type);  //不同意
                     dismiss();
                 }
             };
@@ -579,7 +585,6 @@ public class MonthPlanFrgment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10 && resultCode == -1) {
-
             getMonthPlanList();
             getNextMonthPlanList();
         }

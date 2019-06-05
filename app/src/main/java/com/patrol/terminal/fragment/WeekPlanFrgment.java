@@ -284,7 +284,7 @@ public class WeekPlanFrgment extends BaseFragment {
                         for (int i = 0; i < results.size(); i++) {
                             WeekListBean weekListBean = results.get(i);
                             num_total++;
-                            kilo_total += weekListBean.getTowers_range();
+                            kilo_total =kilo_total+ weekListBean.getTowers_range();
                             done_num_total = done_num_total + weekListBean.getDone_num();
                             all_num_total = all_num_total + weekListBean.getAll_num();
                             //当身份是运行班专责时，获取到需要审核的列表
@@ -313,7 +313,7 @@ public class WeekPlanFrgment extends BaseFragment {
                             double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
                             donePlanRange.setText("计划进度 : "+range+"%");
                         }
-                        if (nextlineList.size() != 0) {
+                        if (lineList.size() != 0) {
                             planSubmit.setVisibility(View.VISIBLE);
                         } else {
                             planSubmit.setVisibility(View.GONE);
@@ -323,7 +323,6 @@ public class WeekPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
                         planRefresh.setRefreshing(false);
                     }
                 });
@@ -436,10 +435,10 @@ public class WeekPlanFrgment extends BaseFragment {
                 startActivityForResult(intent1, 10);
                 break;
             case R.id.plan_submit:
-               subimt(lineList);
+               subimt(lineList,1);
                 break;
             case R.id.plan_submit_next:
-                subimt(nextlineList);
+                subimt(nextlineList,2);
                 break;
             case R.id.add_plan_iv:
             case R.id.add_plan_right:
@@ -451,20 +450,20 @@ public class WeekPlanFrgment extends BaseFragment {
         }
     }
 
-    public void subimt(List<Tower> list){
+    public void subimt(List<Tower> list, int type){
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || mJobType.contains(Constant.RUN_SUPERVISOR)) {
             CancelOrOkDialog dialog = new CancelOrOkDialog(getActivity(), "一键审核", "不同意", "同意") {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitWeekPlan(list,"2");   //同意
+                    submitWeekPlan(list,"2",type);   //同意
                     dismiss();
                 }
 
                 @Override
                 public void cancel() {
                     super.cancel();
-                    submitWeekPlan(list,"3");  //不同意
+                    submitWeekPlan(list,"3",type);  //不同意
                     dismiss();
                 }
             };
@@ -474,7 +473,7 @@ public class WeekPlanFrgment extends BaseFragment {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitWeekPlan(list,"1");   //同意
+                    submitWeekPlan(list,"1",type);   //同意
                     dismiss();
                 }
 
@@ -495,7 +494,7 @@ public class WeekPlanFrgment extends BaseFragment {
     }
 
     //提交周计划审核
-    public void submitWeekPlan(List<Tower>list,String status) {
+    public void submitWeekPlan(List<Tower>list,String status,int type) {
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
         bean.setAudit_status(status);
         bean.setTowers(list);
@@ -509,10 +508,19 @@ public class WeekPlanFrgment extends BaseFragment {
                         if (t.getCode() == 1) {
                             if ("1".equals(status)) {
                                 Toast.makeText(getContext(), "提交成功", Toast.LENGTH_SHORT).show();
+
                             } else {
+
                                 Toast.makeText(getContext(), "审核成功", Toast.LENGTH_SHORT).show();
                             }
-                            getNextWeekList();
+
+                            if (type==1){
+                                getWeekList();
+                            }else {
+                                getNextWeekList();
+                            }
+
+
                         }
                     }
 
