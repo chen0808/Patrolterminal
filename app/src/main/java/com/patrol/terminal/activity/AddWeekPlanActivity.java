@@ -152,7 +152,7 @@ public class AddWeekPlanActivity extends BaseActivity {
     //初始化日期
     public void initdate() {
        year=getIntent().getIntExtra("year",2019);
-        week=getIntent().getIntExtra("week",23);
+        week=getIntent().getIntExtra("week",23)-1;
         beginDate = TimeUtil.getFirstDayOfWeek(year,week);
         endDate = TimeUtil.getLastDayOfWeek(year,week);
         month=Integer.parseInt(TimeUtil.getMonthOfWeek(year,week));

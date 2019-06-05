@@ -64,6 +64,8 @@ public class MonthPlanFrgment extends BaseFragment {
     TextView addNextPlan;
     @BindView(R.id.plan_submit)
     ImageView planSubmit;
+    @BindView(R.id.plan_submit_next)
+    ImageView planSubmitNext;
     @BindView(R.id.add_plan_right)
     ImageView addPlanRight;
     @BindView(R.id.add_plan_name)
@@ -105,6 +107,7 @@ public class MonthPlanFrgment extends BaseFragment {
     private MonthPlanAdapter monthPlanAdapter;
     private TimePickerView pvTime;
     private List<Tower> nextLineList = new ArrayList<>();
+    private List<Tower> lineList = new ArrayList<>();
     private List<MonthPlanBean> data = new ArrayList<>();
     private List<MonthPlanBean> data1 = new ArrayList<>();
     private List<MonthPlanBean> data2 = new ArrayList<>();
@@ -299,9 +302,9 @@ public class MonthPlanFrgment extends BaseFragment {
                                 addPlanLl.setVisibility(View.GONE);
                             }
                             if (nextLineList.size() != 0) {
-                                planSubmit.setVisibility(View.VISIBLE);
+                                planSubmitNext.setVisibility(View.VISIBLE);
                             } else {
-                                planSubmit.setVisibility(View.GONE);
+                                planSubmitNext.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -337,7 +340,7 @@ public class MonthPlanFrgment extends BaseFragment {
                             kilo_110kv = 0;
                             kilo_35kv = 0;
                             MonthListBean results = t.getResults();
-                            getData(results, 1);
+                            lineList=getData(results, 1);
                             monthPlanAdapter.setNewData(data);
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
                             monthLineTotal.setText("工作线路总数 : " + num_total + "条");
@@ -355,6 +358,11 @@ public class MonthPlanFrgment extends BaseFragment {
                                 double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
                                 donePlanRange.setText("计划进度 : " + range + "%");
                             }
+                        }
+                        if (lineList.size()==0){
+                            planSubmit.setVisibility(View.GONE);
+                        }else {
+                            planSubmit.setVisibility(View.VISIBLE);
                         }
                         ProgressDialog.cancle();
                         planRefresh.setRefreshing(false);
@@ -442,7 +450,7 @@ public class MonthPlanFrgment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit, R.id.task_screen, R.id.add_plan_ll})
+    @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit, R.id.task_screen, R.id.add_plan_ll,R.id.plan_submit_next})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:
@@ -469,8 +477,11 @@ public class MonthPlanFrgment extends BaseFragment {
                 intent.putExtra("month", month);
                 startActivityForResult(intent, 10);
                 break;
+            case R.id.plan_submit_next:
+                submit(nextLineList);
+                break;
             case R.id.plan_submit:
-                submit();
+                submit(lineList);
                 break;
             case R.id.task_screen:
                 if (popWinShare == null) {
@@ -500,7 +511,7 @@ public class MonthPlanFrgment extends BaseFragment {
     }
 
     //提交月计划审核
-    public void submit() {
+    public void submit(List<Tower> list) {
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             CancelOrOkDialog dialog = new CancelOrOkDialog(mContext, "审核", "不同意", "同意") {
                 @Override
@@ -603,7 +614,7 @@ public class MonthPlanFrgment extends BaseFragment {
                     } else if (monthPlanBean.getVoltage_level().contains("35")) {
                         next_kilo_35kv = kilo_35kv + monthPlanBean.getLine_length();
                         next_num_35kv++;
-                    }
+                    }}
                     //当身份是专责时，获取需要审批的列表
                     if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
                         Tower lineBean = new Tower();
@@ -622,7 +633,7 @@ public class MonthPlanFrgment extends BaseFragment {
                         lineBean.setLine_id(monthPlanBean.getLine_id());
                         lineBean.setMonth_line_id(monthPlanBean.getId());
                         lineList.add(lineBean);
-                    }
+
                 }
             }
         }

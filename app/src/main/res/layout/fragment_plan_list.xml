@@ -39,7 +39,7 @@
                         android:textStyle="bold" />
 
                     <ImageView
-                        android:id="@+id/plan_submit"
+                        android:id="@+id/plan_submit_next"
                         android:layout_width="@dimen/dp_50"
                         android:layout_height="@dimen/dp_30"
                         android:layout_alignParentRight="true"
@@ -142,7 +142,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/dp_20"
-                        android:text="完成进度 :66%"
+                        android:text="完成进度 :0%"
                         />
                 </RelativeLayout>
 
@@ -239,6 +239,15 @@
                         android:layout_toRightOf="@id/task_title"
                         android:gravity="center_vertical"
                         android:text="2019年6月" />
+                    <ImageView
+                        android:id="@+id/plan_submit"
+                        android:layout_width="@dimen/dp_50"
+                        android:layout_height="@dimen/dp_30"
+                        android:layout_alignParentRight="true"
+                        android:visibility="gone"
+                        android:layout_marginRight="50dp"
+                        android:scaleType="center"
+                        android:src="@mipmap/deal_icon" />
 
                     <ImageView
                         android:id="@+id/task_screen"

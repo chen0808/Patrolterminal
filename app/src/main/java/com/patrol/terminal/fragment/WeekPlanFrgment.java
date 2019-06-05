@@ -20,7 +20,6 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddWeekPlanActivity;
 import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.activity.SpecialPlanDetailActivity;
-import com.patrol.terminal.activity.TemporaryWeekActivity;
 import com.patrol.terminal.activity.WeekPlanDetailActivity;
 import com.patrol.terminal.adapter.WeekPlanAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -66,6 +65,8 @@ public class WeekPlanFrgment extends BaseFragment {
     TextView addNextPlan;
     @BindView(R.id.plan_submit)
     ImageView planSubmit;
+    @BindView(R.id.plan_submit_next)
+    ImageView planSubmitNext;
     @BindView(R.id.add_plan_right)
     ImageView addPlanRight;
     @BindView(R.id.plan_point)
@@ -114,6 +115,7 @@ public class WeekPlanFrgment extends BaseFragment {
     private int week;
     private String state;
     private List<Tower> nextlineList = new ArrayList<>();
+    private List<Tower> lineList = new ArrayList<>();
     private String mJobType;
     private String depId;
     private List<WeekListBean> results = new ArrayList<>();
@@ -285,6 +287,19 @@ public class WeekPlanFrgment extends BaseFragment {
                             kilo_total += weekListBean.getTowers_range();
                             done_num_total = done_num_total + weekListBean.getDone_num();
                             all_num_total = all_num_total + weekListBean.getAll_num();
+                            //当身份是运行班专责时，获取到需要审核的列表
+                            if (weekListBean.getWeek_id() != null) {
+                                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(weekListBean.getAudit_status())) {
+                                    Tower lineBean = new Tower();
+                                    lineBean.setId(weekListBean.getId());
+                                    lineList.add(lineBean);
+                                    //当身份是运行班专责时，获取到需要发布的列表
+                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(weekListBean.getAudit_status()) || "3".equals(weekListBean.getAudit_status()))) {
+                                    Tower lineBean = new Tower();
+                                    lineBean.setId(weekListBean.getId());
+                                    lineList.add(lineBean);
+                                }
+                            }
                         }
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
                         monthLineTotal.setText("杆段总数 : " + num_total + "条");
@@ -298,7 +313,11 @@ public class WeekPlanFrgment extends BaseFragment {
                             double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
                             donePlanRange.setText("计划进度 : "+range+"%");
                         }
-
+                        if (nextlineList.size() != 0) {
+                            planSubmit.setVisibility(View.VISIBLE);
+                        } else {
+                            planSubmit.setVisibility(View.GONE);
+                        }
                         planRefresh.setRefreshing(false);
                     }
 
@@ -369,9 +388,9 @@ public class WeekPlanFrgment extends BaseFragment {
                             }
                         }
                         if (nextlineList.size() != 0) {
-                            planSubmit.setVisibility(View.VISIBLE);
+                            planSubmitNext.setVisibility(View.VISIBLE);
                         } else {
-                            planSubmit.setVisibility(View.GONE);
+                            planSubmitNext.setVisibility(View.GONE);
                         }
                     }
 
@@ -413,45 +432,14 @@ public class WeekPlanFrgment extends BaseFragment {
                 intent1.putExtra("35kv_num", next_num_35kv);
                 intent1.putExtra("35kv_kolo", next_kilo_35kv);
                 intent1.putExtra("year", nextYear);
-                intent1.putExtra("year", nextYear);
                 intent1.putExtra("week", nextWeek);
                 startActivityForResult(intent1, 10);
                 break;
             case R.id.plan_submit:
-                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || mJobType.contains(Constant.RUN_SUPERVISOR)) {
-                    CancelOrOkDialog dialog = new CancelOrOkDialog(getActivity(), "一键审核", "不同意", "同意") {
-                        @Override
-                        public void ok() {
-                            super.ok();
-                            submitWeekPlan("2");   //同意
-                            dismiss();
-                        }
-
-                        @Override
-                        public void cancel() {
-                            super.cancel();
-                            submitWeekPlan("3");  //不同意
-                            dismiss();
-                        }
-                    };
-                    dialog.show();
-                } else if (mJobType.contains((Constant.RUNNING_SQUAD_LEADER))) {
-                    CancelOrOkDialog dialog = new CancelOrOkDialog(getActivity(), "是否一键提交审核", "取消", "确定") {
-                        @Override
-                        public void ok() {
-                            super.ok();
-                            submitWeekPlan("1");   //同意
-                            dismiss();
-                        }
-
-                        @Override
-                        public void cancel() {
-                            super.cancel();
-                            dismiss();
-                        }
-                    };
-                    dialog.show();
-                }
+               subimt(lineList);
+                break;
+            case R.id.plan_submit_next:
+                subimt(nextlineList);
                 break;
             case R.id.add_plan_iv:
             case R.id.add_plan_right:
@@ -463,27 +451,43 @@ public class WeekPlanFrgment extends BaseFragment {
         }
     }
 
-    class OnClickLintener implements View.OnClickListener {
+    public void subimt(List<Tower> list){
+        if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || mJobType.contains(Constant.RUN_SUPERVISOR)) {
+            CancelOrOkDialog dialog = new CancelOrOkDialog(getActivity(), "一键审核", "不同意", "同意") {
+                @Override
+                public void ok() {
+                    super.ok();
+                    submitWeekPlan(list,"2");   //同意
+                    dismiss();
+                }
 
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.all:
-                    startActivityForResult(new Intent(getContext(), AddWeekPlanActivity.class), 10);
-                    break;
-                case R.id.popmenmu1:
-                    startActivityForResult(new Intent(getContext(), TemporaryWeekActivity.class), 10);
-                    break;
-                case R.id.popmenmu2:
+                @Override
+                public void cancel() {
+                    super.cancel();
+                    submitWeekPlan(list,"3");  //不同意
+                    dismiss();
+                }
+            };
+            dialog.show();
+        } else if (mJobType.contains((Constant.RUNNING_SQUAD_LEADER))) {
+            CancelOrOkDialog dialog = new CancelOrOkDialog(getActivity(), "是否一键提交审核", "取消", "确定") {
+                @Override
+                public void ok() {
+                    super.ok();
+                    submitWeekPlan(list,"1");   //同意
+                    dismiss();
+                }
 
-                    break;
-                default:
-                    break;
-            }
-            popWinShare.dismiss();
+                @Override
+                public void cancel() {
+                    super.cancel();
+                    dismiss();
+                }
+            };
+            dialog.show();
         }
-
     }
+
 
     public static int dip2px(Context context, float dipValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -491,10 +495,10 @@ public class WeekPlanFrgment extends BaseFragment {
     }
 
     //提交周计划审核
-    public void submitWeekPlan(String status) {
+    public void submitWeekPlan(List<Tower>list,String status) {
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
         bean.setAudit_status(status);
-        bean.setTowers(nextlineList);
+        bean.setTowers(list);
         BaseRequest.getInstance().getService()
                 .submitWeekPlan(bean)
                 .subscribeOn(Schedulers.io())
@@ -504,9 +508,9 @@ public class WeekPlanFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<MonthPlanBean>> t) throws Exception {
                         if (t.getCode() == 1) {
                             if ("1".equals(status)) {
-                                Toast.makeText(getContext(), "一键提交成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "提交成功", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getContext(), "一键审核成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "审核成功", Toast.LENGTH_SHORT).show();
                             }
                             getNextWeekList();
                         }

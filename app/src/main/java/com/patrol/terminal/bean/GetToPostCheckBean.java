@@ -15,13 +15,13 @@ public class GetToPostCheckBean implements Serializable {
     private String check_id;
     private String check_content;
     private String task_position_id;
-    private int status;
+    private String status;
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

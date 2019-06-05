@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -7,6 +8,9 @@
 
     <include layout="@layout/include_title"></include>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="2019年4月"></TextView>
+                android:text="点击选择开始时间"></TextView>
         </LinearLayout>
 
         <ImageView
@@ -77,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="2019年4月"></TextView>
+                android:text="点击选择结束时间"></TextView>
         </LinearLayout>
 
         <ImageView
@@ -121,12 +125,13 @@
                 android:layout_height="wrap_content"
                 android:text="运维班组："></TextView>
 
-            <TextView
+            <EditText
                 android:id="@+id/work_class"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_13"
                 android:layout_marginLeft="10dp"
-                android:text="检修班"></TextView>
+               android:hint="请输入运维班组"></EditText>
         </LinearLayout>
 
         <ImageView
@@ -145,12 +150,13 @@
                 android:layout_height="wrap_content"
                 android:text="施工单位："></TextView>
 
-            <TextView
+            <EditText
                 android:id="@+id/work_unit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="倚能集团输电分公司"></TextView>
+                android:textSize="@dimen/sp_13"
+                android:hint="请输入施工单位"></EditText>
         </LinearLayout>
 
         <ImageView
@@ -169,12 +175,13 @@
                 android:layout_height="wrap_content"
                 android:text="施工负责人："></TextView>
 
-            <TextView
+            <EditText
                 android:id="@+id/fzr_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_13"
                 android:layout_marginLeft="10dp"
-                android:text="张富强"></TextView>
+                android:hint="请输入施工负责人"></EditText>
         </LinearLayout>
 
         <ImageView
@@ -197,6 +204,8 @@
                 android:id="@+id/et_remark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_13"
+                android:hint="请输入检查情况"
                 android:padding="5dp" />
         </LinearLayout>
 
@@ -229,6 +238,10 @@
         </LinearLayout>
 
     </LinearLayout>
-
+        <TextView
+            android:id="@+id/menban"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TextView>
+    </RelativeLayout>
 
 </LinearLayout>

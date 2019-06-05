@@ -352,7 +352,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                         if (t.getCode() == 1) {
                             GroupBean results = t.getResults();
                             if (results!=null){
-                                if ("1".contains(results.getIs_boss())){
+                                if ("2".contains(results.getSign())){
                                     SPUtil.putString(getContext(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
 
                                 }

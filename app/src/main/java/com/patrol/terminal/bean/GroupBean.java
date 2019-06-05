@@ -24,11 +24,20 @@ public class GroupBean {
     private String user_name;
     private String dep_id;
     private String dep_name;
+    private String sign;
     private int year;
     private int month;
     private int week;
     private int day;
     private String is_boss;
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
 
     public String getId() {
         return id;

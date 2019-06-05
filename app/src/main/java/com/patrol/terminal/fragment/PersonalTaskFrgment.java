@@ -107,7 +107,7 @@ public class PersonalTaskFrgment extends BaseFragment {
                 Bundle bundle=new Bundle();
                 bundle.putParcelable("bean",bean);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,12);
             }
         });
         getGroupList();

@@ -61,6 +61,7 @@ public class FieldAntiInspectionAdapter extends BaseAdapter {
             holder.mContentTv.setText(list.get(position).getCheck_content());
             holder.mLevelTv.setText((list.get(position).getIllegal_type()));
             holder.mScoreTv.setText(list.get(position).getScore());
+            holder.mCheckPersonEt.setText(list.get(position).getCheck_user());
             holder.mCheckPersonEt.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

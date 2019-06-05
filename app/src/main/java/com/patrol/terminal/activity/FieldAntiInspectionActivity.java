@@ -1,21 +1,25 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.FieldAntiInspectionAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.FieldAntiInspectionBean;
-import com.patrol.terminal.widget.NoScrollListView;
+import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,24 +43,18 @@ public class FieldAntiInspectionActivity extends BaseActivity {
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
     @BindView(R.id.guanliweizhang_lv)
-    NoScrollListView guanliweizhangLv;
+    LinearLayout guanliweizhangLv;
     @BindView(R.id.xingweiweizhang_lv)
-    NoScrollListView xingweiweizhangLv;
+    LinearLayout xingweiweizhangLv;
     @BindView(R.id.zhuagnzhiweizhang_lv)
-    NoScrollListView zhuagnzhiweizhangLv;
+    LinearLayout zhuagnzhiweizhangLv;
     @BindView(R.id.control_card_submit)
     TextView controlCardSubmit;
 
-    private FieldAntiInspectionAdapter mFieldAntiInspectionAdapter1;
-    private FieldAntiInspectionAdapter mFieldAntiInspectionAdapter2;
-    private FieldAntiInspectionAdapter mFieldAntiInspectionAdapter3;
-
-    private List<FieldAntiInspectionBean> fieldAntiInspectionBeans1 = new ArrayList<>();
-    private List<FieldAntiInspectionBean> fieldAntiInspectionBeans2 = new ArrayList<>();
-    private List<FieldAntiInspectionBean> fieldAntiInspectionBeans3 = new ArrayList<>();
 
     private List<FieldAntiInspectionBean> fieldAntiInspectionBeans = new ArrayList<>();
-    private String task_id = "aaa";
+    private String task_id = "";
+    private List<FieldAntiInspectionBean> inspectionBeans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,53 +69,69 @@ public class FieldAntiInspectionActivity extends BaseActivity {
         titleBack.setVisibility(View.VISIBLE);
         titleName.setText("现场反违章检查");
 
-        mFieldAntiInspectionAdapter1 = new FieldAntiInspectionAdapter(this);
-        guanliweizhangLv.setAdapter(mFieldAntiInspectionAdapter1);
-
-        mFieldAntiInspectionAdapter2 = new FieldAntiInspectionAdapter(this);
-        xingweiweizhangLv.setAdapter(mFieldAntiInspectionAdapter2);
-
-        mFieldAntiInspectionAdapter3 = new FieldAntiInspectionAdapter(this);
-        zhuagnzhiweizhangLv.setAdapter(mFieldAntiInspectionAdapter3);
+        task_id = getIntent().getStringExtra("task_id");
 
         getFieldAntiInspection();
     }
 
     private void getFieldAntiInspection() {
-        fieldAntiInspectionBeans1.clear();
-        fieldAntiInspectionBeans2.clear();
-        fieldAntiInspectionBeans3.clear();
+        ProgressDialog.show(this, false, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getFieldAntiInspection()
+                .getFieldAntiInspection(task_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<FieldAntiInspectionBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<FieldAntiInspectionBean>> t) throws Exception {
                         if (t.getCode() == 1) {
-                            List<FieldAntiInspectionBean> fieldAntiInspectionBeans = t.getResults();
-                            for (int i = 0; i < fieldAntiInspectionBeans.size(); i++) {
-                                if (fieldAntiInspectionBeans.get(i).getIllegal().equals("1")) {
-                                    fieldAntiInspectionBeans1.add(fieldAntiInspectionBeans.get(i));
+                            inspectionBeans = t.getResults();
+                            for (int i = 0; i < inspectionBeans.size(); i++) {
+                                FieldAntiInspectionBean fieldAntiInspectionBean = inspectionBeans.get(i);
+                                View convertView = View.inflate(FieldAntiInspectionActivity.this,R.layout.item_field_anti_inspection_listview, null);
 
-                                } else if (fieldAntiInspectionBeans.get(i).getIllegal().equals("2")) {
-                                    fieldAntiInspectionBeans2.add(fieldAntiInspectionBeans.get(i));
+                                TextView mContentTv = convertView.findViewById(R.id.item_content_tv);
+                                TextView mLevelTv = convertView.findViewById(R.id.level_tv);
+                                TextView mScoreTv = convertView.findViewById(R.id.score_tv);
+                                EditText mCheckPersonEt = convertView.findViewById(R.id.check_person_et);
+                                ImageView mLineIv = convertView.findViewById(R.id.item_line_iv);
 
-                                } else if (fieldAntiInspectionBeans.get(i).getIllegal().equals("3")) {
-                                    fieldAntiInspectionBeans3.add(fieldAntiInspectionBeans.get(i));
+                                mContentTv.setText(fieldAntiInspectionBean.getCheck_content());
+                               mLevelTv.setText((fieldAntiInspectionBean.getIllegal_type()));
+                               mScoreTv.setText(fieldAntiInspectionBean.getScore());
+                               mCheckPersonEt.setText(fieldAntiInspectionBean.getCheck_user());
+                                mCheckPersonEt.addTextChangedListener(new TextWatcher() {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                    }
+
+                                    @Override
+                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    }
+
+                                    @Override
+                                    public void afterTextChanged(Editable s) {
+                                        fieldAntiInspectionBean.setCheck_user(s.toString());
+                                    }
+                                });
+
+                                if (inspectionBeans.get(i).getIllegal().equals("1")) {
+                                    guanliweizhangLv.addView(convertView);
+
+                                } else if (inspectionBeans.get(i).getIllegal().equals("2")) {
+                                    xingweiweizhangLv.addView(convertView);
+
+                                } else if (inspectionBeans.get(i).getIllegal().equals("3")) {
+                                    zhuagnzhiweizhangLv.addView(convertView);
 
                                 }
                             }
-
-                            mFieldAntiInspectionAdapter1.setData(fieldAntiInspectionBeans1);
-                            mFieldAntiInspectionAdapter2.setData(fieldAntiInspectionBeans2);
-                            mFieldAntiInspectionAdapter3.setData(fieldAntiInspectionBeans3);
                         }
+                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
+                        ProgressDialog.cancle();
                     }
                 });
     }
@@ -130,24 +144,21 @@ public class FieldAntiInspectionActivity extends BaseActivity {
                 break;
             case R.id.control_card_submit:
                 fieldAntiInspectionBeans.clear();
-                for (int i = 0; i < fieldAntiInspectionBeans1.size(); i++) {
-                    fieldAntiInspectionBeans.add(new FieldAntiInspectionBean(fieldAntiInspectionBeans1.get(i).getTask_illegal_id(), fieldAntiInspectionBeans1.get(i).getCheck_user() == null ? "x" : fieldAntiInspectionBeans1.get(i).getCheck_user(), task_id));
-                }
-                for (int i = 0; i < fieldAntiInspectionBeans2.size(); i++) {
-                    fieldAntiInspectionBeans.add(new FieldAntiInspectionBean(fieldAntiInspectionBeans2.get(i).getTask_illegal_id(), fieldAntiInspectionBeans2.get(i).getCheck_user() == null ? "x" : fieldAntiInspectionBeans2.get(i).getCheck_user(), task_id));
-                }
-                for (int i = 0; i < fieldAntiInspectionBeans3.size(); i++) {
-                    fieldAntiInspectionBeans.add(new FieldAntiInspectionBean(fieldAntiInspectionBeans3.get(i).getTask_illegal_id(), fieldAntiInspectionBeans3.get(i).getCheck_user() == null ? "x" : fieldAntiInspectionBeans3.get(i).getCheck_user(), task_id));
+                for (int i = 0; i < inspectionBeans.size(); i++) {
+                    fieldAntiInspectionBeans.add(new FieldAntiInspectionBean(inspectionBeans.get(i).getTask_illegal_id(), inspectionBeans.get(i).getCheck_user() == null ? "x" : inspectionBeans.get(i).getCheck_user(), task_id));
                 }
                 String json = new Gson().toJson(fieldAntiInspectionBeans);
                 Log.d("TAG", json);
                 RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
-                BaseRequest.getInstance().getService().sendPostCheck(body).subscribeOn(Schedulers.io())
+                BaseRequest.getInstance().getService().sendPostIllegal(body).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new BaseObserver(this) {
                             @Override
                             protected void onSuccees(BaseResult t) throws Exception {
-
+                                if (t.getCode() == 1) {
+                                    Toast.makeText(FieldAntiInspectionActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
                             }
 
                             @Override

@@ -5,7 +5,14 @@
     android:orientation="vertical">
 
     <include layout="@layout/include_title"></include>
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -69,7 +76,7 @@
             android:layout_height="match_parent"
             android:src="@color/write_order_grat"></ImageView>
 
-        <com.patrol.terminal.widget.NoScrollListView
+        <LinearLayout
             android:id="@+id/work_task_lv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -77,7 +84,8 @@
             android:divider="@null"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_10"
-            ></com.patrol.terminal.widget.NoScrollListView>
+            android:orientation="vertical"
+            ></LinearLayout>
 
     </LinearLayout>
 
@@ -105,7 +113,7 @@
             android:layout_height="match_parent"
             android:src="@color/write_order_grat"></ImageView>
 
-        <com.patrol.terminal.widget.NoScrollListView
+        <LinearLayout
             android:id="@+id/safe_lv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -113,24 +121,26 @@
             android:divider="@null"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_10"
-            ></com.patrol.terminal.widget.NoScrollListView>
+            android:orientation="vertical"
+            ></LinearLayout>
 
     </LinearLayout>
 
     <ImageView android:layout_width="match_parent"
         android:layout_height="1dp"
         android:src="@color/write_order_grat"></ImageView>
+        <TextView
+            android:id="@+id/control_card_submit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_20"
+            android:background="@color/gray_plan"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+    </LinearLayout>
+</ScrollView>
 
-
-    <TextView
-        android:id="@+id/control_card_submit"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:layout_marginTop="@dimen/dp_20"
-        android:background="@color/gray_plan"
-        android:gravity="center"
-        android:text="提交"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_16" />
 
 </LinearLayout>

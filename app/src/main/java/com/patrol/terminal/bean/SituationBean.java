@@ -1,25 +1,64 @@
 package com.patrol.terminal.bean;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 public class SituationBean implements Serializable {
+
+    // 数据id
     private String id;
-    private String task_id;
-    private String unit;
-    private String respon;
-    private String start_time;
-    private String end_time;
     private int year;
     private int month;
-    private String remark;
-    /**
-     * month : 5
-     * sysFile : {"content":"sign.jpg","data_id":"D7B4095B304D4483B489300C5ED57AD9","file_path":"/upload.folder/","file_size":"77523","file_type":"1","filename":"149f15b1-b76c-45f5-ab8c-99ebb1ab0761.jpg","id":"C22D6FE177ED4785BF3E3AD07AB21AE4","old_name":"sign.jpg","repair_type":"0"}
-     * year : 2019
-     */
-    private SysFileBean sysFile;
+    private int day;
+    // 运行任务id
+    private String task_id;
+
+    // 线路名称
+    private String line_id;
+
+    // 线路名字
+    private String line_name;
+
+    // 开始时间
+    private String start_time;
+
+    // 结束时间
+    private String end_time;
+
+    // 作业内容
+    private String content;
+
+    // 运维班组id
+    private String dep_id;
+
+    // 运维班组名字
+    private String dep_name;
+
+    // 施工单位id
+    private String unit_id;
+
+    // 施工单位名字
+    private String unit_name;
+
+    // 施工负责人id
+    private String duty_user_id;
+
+    // 施工负责人名字
+    private String duty_user_name;
+
+    // 检查情况
+    private String check_content;
+
+    // 签名路径
+    private String file_path;
+
+    // 文件名字
+    private String filename;
+
+    // 质量监督员id
+    private String user_id;
+
+    // 质量监督员名字
+    private String user_name;
 
     public int getYear() {
         return year;
@@ -37,13 +76,18 @@ public class SituationBean implements Serializable {
         this.month = month;
     }
 
-    public SysFileBean getSysFile() {
-        return sysFile;
+    public int getDay() {
+        return day;
     }
 
-    public void setSysFile(SysFileBean sysFile) {
-        this.sysFile = sysFile;
+    public void setDay(int day) {
+        this.day = day;
     }
+
+    /*** 自定义字段 ***/
+
+    // PDA工作票签名文件BASE64
+    private String file;
 
     public String getId() {
         return id;
@@ -61,20 +105,20 @@ public class SituationBean implements Serializable {
         this.task_id = task_id;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getLine_id() {
+        return line_id;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setLine_id(String line_id) {
+        this.line_id = line_id;
     }
 
-    public String getRespon() {
-        return respon;
+    public String getLine_name() {
+        return line_name;
     }
 
-    public void setRespon(String respon) {
-        this.respon = respon;
+    public void setLine_name(String line_name) {
+        this.line_name = line_name;
     }
 
     public String getStart_time() {
@@ -93,108 +137,107 @@ public class SituationBean implements Serializable {
         this.end_time = end_time;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getContent() {
+        return content;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public static class SysFileBean {
-        /**
-         * content : sign.jpg
-         * data_id : D7B4095B304D4483B489300C5ED57AD9
-         * file_path : /upload.folder/
-         * file_size : 77523
-         * file_type : 1
-         * filename : 149f15b1-b76c-45f5-ab8c-99ebb1ab0761.jpg
-         * id : C22D6FE177ED4785BF3E3AD07AB21AE4
-         * old_name : sign.jpg
-         * repair_type : 0
-         */
+    public String getDep_id() {
+        return dep_id;
+    }
 
-        private String content;
-        private String data_id;
-        private String file_path;
-        private String file_size;
-        private String file_type;
-        private String filename;
-        @SerializedName("id")
-        private String idX;
-        private String old_name;
-        private String repair_type;
+    public void setDep_id(String dep_id) {
+        this.dep_id = dep_id;
+    }
 
-        public String getContent() {
-            return content;
-        }
+    public String getDep_name() {
+        return dep_name;
+    }
 
-        public void setContent(String content) {
-            this.content = content;
-        }
+    public void setDep_name(String dep_name) {
+        this.dep_name = dep_name;
+    }
 
-        public String getData_id() {
-            return data_id;
-        }
+    public String getUnit_id() {
+        return unit_id;
+    }
 
-        public void setData_id(String data_id) {
-            this.data_id = data_id;
-        }
+    public void setUnit_id(String unit_id) {
+        this.unit_id = unit_id;
+    }
 
-        public String getFile_path() {
-            return file_path;
-        }
+    public String getUnit_name() {
+        return unit_name;
+    }
 
-        public void setFile_path(String file_path) {
-            this.file_path = file_path;
-        }
+    public void setUnit_name(String unit_name) {
+        this.unit_name = unit_name;
+    }
 
-        public String getFile_size() {
-            return file_size;
-        }
+    public String getDuty_user_id() {
+        return duty_user_id;
+    }
 
-        public void setFile_size(String file_size) {
-            this.file_size = file_size;
-        }
+    public void setDuty_user_id(String duty_user_id) {
+        this.duty_user_id = duty_user_id;
+    }
 
-        public String getFile_type() {
-            return file_type;
-        }
+    public String getDuty_user_name() {
+        return duty_user_name;
+    }
 
-        public void setFile_type(String file_type) {
-            this.file_type = file_type;
-        }
+    public void setDuty_user_name(String duty_user_name) {
+        this.duty_user_name = duty_user_name;
+    }
 
-        public String getFilename() {
-            return filename;
-        }
+    public String getCheck() {
+        return check_content;
+    }
 
-        public void setFilename(String filename) {
-            this.filename = filename;
-        }
+    public void setCheck(String check) {
+        this.check_content = check;
+    }
 
-        public String getIdX() {
-            return idX;
-        }
+    public String getFile_path() {
+        return file_path;
+    }
 
-        public void setIdX(String idX) {
-            this.idX = idX;
-        }
+    public void setFile_path(String file_path) {
+        this.file_path = file_path;
+    }
 
-        public String getOld_name() {
-            return old_name;
-        }
+    public String getFilename() {
+        return filename;
+    }
 
-        public void setOld_name(String old_name) {
-            this.old_name = old_name;
-        }
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
-        public String getRepair_type() {
-            return repair_type;
-        }
+    public String getUser_id() {
+        return user_id;
+    }
 
-        public void setRepair_type(String repair_type) {
-            this.repair_type = repair_type;
-        }
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 }

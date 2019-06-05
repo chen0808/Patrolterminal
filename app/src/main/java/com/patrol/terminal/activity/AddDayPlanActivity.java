@@ -345,7 +345,7 @@ public class AddDayPlanActivity extends BaseActivity {
     public void inteDate() {
         month = getIntent().getIntExtra("month",6)+"";
         year = getIntent().getIntExtra("year",2019)+"";
-        day = getIntent().getIntExtra("day",1)+"";
+        day = getIntent().getIntExtra("day",1)-1+"";
     }
 
     class TempTowerAdapter extends BaseAdapter {

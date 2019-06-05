@@ -1,8 +1,6 @@
 package com.patrol.terminal.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,11 +13,9 @@ import com.patrol.terminal.adapter.WeekPlanDetailAdapter;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.AddressBookLevel2;
 import com.patrol.terminal.bean.CreateRobTaskBean;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DefectBean;
-import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -75,9 +71,7 @@ public class GroupTaskDetailActivity extends Activity {
     private List<GroupTaskBean> selectList = new ArrayList<>();
     private int type = 1;
     private GroupTaskBean bean;
-    List<AddressBookLevel2> namelist = new ArrayList();
-    private List<DepUserBean> depUserBeanList;
-    private String[] names;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,11 +103,7 @@ public class GroupTaskDetailActivity extends Activity {
     //获取月计划列表
     public void getGroupList() {
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign()))) {
-            titleSetting.setVisibility(View.VISIBLE);
-            titleSettingTv.setText("指派");
-            getPersonal();
-        } else if (jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER) && "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
+       if (jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER) && "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
             type = 1;
             taskSubmit.setVisibility(View.VISIBLE);
         } else if ("1".equals(bean.getIs_rob())) {
@@ -155,14 +145,11 @@ public class GroupTaskDetailActivity extends Activity {
     }
 
 
-    @OnClick({R.id.title_back, R.id.task_submit, R.id.title_setting})
+    @OnClick({R.id.title_back, R.id.task_submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
-                break;
-            case R.id.title_setting:
-                showSingleChooseDialog(names);
                 break;
             case R.id.task_submit:
                 if (type == 1) {
@@ -215,8 +202,8 @@ public class GroupTaskDetailActivity extends Activity {
         bean.setGroup_list_id(bean.getId());
         bean.setUser_id(user_id);
         bean.setUser_name(username);
-
         selectList.add(bean);
+
         //获取月计划列表
         BaseRequest.getInstance().getService()
                 .addPersonTask(selectList)
@@ -257,40 +244,5 @@ public class GroupTaskDetailActivity extends Activity {
                 });
     }
 
-    //获取每个班组组员列表
-    public void getPersonal() {
 
-        BaseRequest.getInstance().getService()
-                .getPersonal(year, month, day, SPUtil.getDepId(this))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DepUserBean>>(this) {
-
-
-                    @Override
-                    protected void onSuccees(BaseResult<List<DepUserBean>> t) throws Exception {
-                        depUserBeanList = t.getResults();
-                        names = new String[depUserBeanList.size()];
-                        for (int i = 0; i < depUserBeanList.size(); i++) {
-                            names[i] = depUserBeanList.get(i).getName();
-                        }
-
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                    }
-                });
-    }
-
-    public void showSingleChooseDialog(String[] names) {
-        new AlertDialog.Builder(this).setTitle("选择组员").setItems(names, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                DepUserBean depUserBean = depUserBeanList.get(which);
-                addPersonTask(depUserBean.getUser_id(), depUserBean.getName(), 2);
-                dialog.dismiss();
-            }
-        }).show();
-    }
 }

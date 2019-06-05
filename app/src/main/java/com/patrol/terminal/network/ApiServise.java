@@ -747,25 +747,33 @@ public interface ApiServise {
 //    Observable<BaseResult> releaseDeal(@Body OverhaulZZSendBean bean);
 
     //上传现场质量监督记录现场情况
-    @Multipart
-    @POST("task/supervise/pda/updatePOST")
-    Observable<BaseResult> upLoadSituation(@PartMap Map<String, RequestBody> params);
+    @POST("task/supervise/savePOST")
+    Observable<BaseResult> upLoadSituation(@Body SituationBean params);
 
     //查询现场质量监督记录现场情况
     @GET("task/supervise/oneGET")
     Observable<BaseResult<SituationBean>> searchSituation(@Query("task_id") String id);
 
     //现场勘察记录表-到岗到位检查获取模板
-    @GET("task/position/listGET")
-    Observable<BaseResult<List<GetToPostCheckBean>>> getToPostCheck();
+    @GET("/task/position/status/pda/listGET")
+    Observable<BaseResult<List<GetToPostCheckBean>>> getToPostCheck(@Query("task_id") String id);
 
     //到岗到位检查提交
     @POST("task/position/status/list/updatePOST")
     Observable<BaseResult> sendPostCheck(@Body RequestBody body);
 
+
+    //反违章提交
+    @POST("task/illegal/user/list/updatePOST")
+    Observable<BaseResult> sendPostIllegal(@Body RequestBody body);
+
+    //到岗到位检查提查看
+    @POST("task/position/status/list/listGET")
+    Observable<BaseResult> getPostCheck(@Body RequestBody body);
+
     //现场勘察记录表-现场反违章检查
-    @GET("task/illegal/listGET")
-    Observable<BaseResult<List<FieldAntiInspectionBean>>> getFieldAntiInspection();
+    @GET("task/illegal/user/pda/listGET")
+    Observable<BaseResult<List<FieldAntiInspectionBean>>> getFieldAntiInspection(@Query("task_id") String id);
 
     //上传第一种工作票
     @Multipart

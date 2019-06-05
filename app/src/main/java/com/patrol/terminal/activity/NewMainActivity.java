@@ -246,7 +246,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                         if (t.getCode() == 1) {
                             GroupBean results = t.getResults();
                             if (results != null) {
-                                if ("1".contains(results.getIs_boss())) {
+                                if ("2".contains(results.getSign())) {
                                     SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
                                     jobType = Constant.RUNNING_SQUAD_TEMA_LEADER;
                                 }

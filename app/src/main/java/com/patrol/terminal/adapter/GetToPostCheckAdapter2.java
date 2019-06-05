@@ -17,11 +17,11 @@ import com.patrol.terminal.bean.GetToPostCheckBean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetToPostCheckAdapter extends BaseAdapter {
+public class GetToPostCheckAdapter2 extends BaseAdapter {
     private Context context;
     private List<GetToPostCheckBean> list=new ArrayList<>();
 
-    public GetToPostCheckAdapter(Context context) {
+    public GetToPostCheckAdapter2(Context context) {
         this.context = context;
     }
 

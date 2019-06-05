@@ -47,10 +47,15 @@ public class StringUtil {
         String[] split = sign.split(",");
         for (int i = 0; i < split.length; i++) {
             int index = Integer.parseInt(split[i])-1;
-            if (i==0){
+            if (split.length==0){
                 typeNmae=typeSigns[index];
             }else {
-                typeNmae=(i+"."+typeNmae)+";"+(i+1)+"."+typeSigns[i];
+                if (i==0){
+                    typeNmae= (i+1)+"."+typeSigns[index];
+                }else {
+                    typeNmae=typeNmae+";"+(i+1)+"."+typeSigns[index];
+                }
+
             }
         }
         return typeNmae;

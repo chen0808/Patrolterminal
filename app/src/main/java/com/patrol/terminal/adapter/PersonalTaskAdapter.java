@@ -70,7 +70,7 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
         progressBar.setMax(item.getAll_num());
         progressBar.setProgress(item.getDone_num());
         viewHolder.setText(R.id.item_task_personal, "工作日期 :"+item.getYear()+"年"+item.getMonth()+"月"+item.getDay()+"日")
-                .setText(R.id.item_task_name, item.getLine_name()+item.getName()+"任务")
+                .setText(R.id.item_task_name, item.getLine_name()+"任务")
                 .setText(R.id.item_task_type,"班组 :"+item.getDep_name());
 
 
