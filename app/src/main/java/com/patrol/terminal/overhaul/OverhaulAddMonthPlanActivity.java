@@ -21,10 +21,12 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.OverhaulYearBean;
+import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.TimeUtil;
 
+import java.sql.Time;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -194,7 +196,7 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
                         updateOverhaulYearBean.setYear(Integer.valueOf(times[0]));
                         updateOverhaulYearBean.setMonth(Integer.valueOf(times[1]));
                         try {
-                            updateOverhaulYearBean.setWeek(TimeUtil.getWeek(startTimeStr));
+                            updateOverhaulYearBean.setWeek(TimeUtil.getWeekOfDate(DateUatil.dateToLong(startTimeStr)));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

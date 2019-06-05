@@ -812,7 +812,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     intent.putExtras(bundle);
                     startActivity(intent);
                 } else if (jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER) ||jobType.contains(Constant.REFURBISHMENT_MEMBER)
-                        || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人提交
+                        || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人提交,更新状态为3形成闭环
                     updateTaskStatus();
                 }
                 break;
@@ -857,7 +857,11 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //                        intent14.putExtra("leaderName", leaderName);
                             startActivity(intent14);
                             break;
-                    } //TODO  其他人员进来，或者负责人闭环后，只能查看工作票和控制卡  林梦
+                    }
+                }else {   //TODO  其他人员进来，或者负责人闭环后，只能查看工作票和控制卡  林梦
+
+                }
+
 //                } else {      //其他人员进来
 //                    if (planRepairBean.getTicket_type().equals("0")) {
 //                        Toast.makeText(OverhaulWeekPlanDetailActivity.this, "当前无工作票！", Toast.LENGTH_SHORT).show();
@@ -903,7 +907,6 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
 //                                break;
 //                        }
 //                    }
-                }
                 break;
             case R.id.control_card:
                 int entenType;

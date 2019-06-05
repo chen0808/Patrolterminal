@@ -439,6 +439,15 @@ public class TimeUtil {
 		return  weeks+1;
 	}
 
+	public static int getWeekOfDate(long time){
+		Calendar cal = Calendar.getInstance();//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
+		cal.setFirstDayOfWeek(Calendar.MONDAY); // 设置每周的第一天为星期一
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);// 每周从周一开始
+		cal.setMinimalDaysInFirstWeek(7); // 设置每周最少为7天
+		cal.setTime(new Date(time));
+		int weeks=cal.get(Calendar.WEEK_OF_YEAR);
+		return  weeks+1;
+	}
 	public static int getMonthOfDay(int year,int month){
 		int day = 0;
 		if(year%4==0&&year%100!=0||year%400==0){

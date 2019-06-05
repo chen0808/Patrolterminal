@@ -342,7 +342,19 @@ public class DateUatil {
         }
         return times;
     }
+    public static long dateToLong(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //String times = "";
+        long longs=0;
+        try {
+            Date date = sdf.parse(time);
+            longs=date.getTime();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return longs;
+    }
     /**
      * 获取数字
      *

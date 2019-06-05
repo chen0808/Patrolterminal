@@ -33,6 +33,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
 import com.patrol.terminal.fragment.SpecialAttrFrgment2;
+import com.patrol.terminal.fragment.SpecialAttrFrgment3;
 import com.patrol.terminal.fragment.TroubleFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
@@ -142,10 +143,10 @@ public class PatrolRecordActivity extends BaseActivity {
 
     private void initview() {
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new PatrolContentFrgment());
-        fragmentList.add(new SpecialAttrFrgment2());
-        fragmentList.add(new DefectFrgment());
-        fragmentList.add(new TroubleFrgment());
+        fragmentList.add(new PatrolContentFrgment()); //常规巡视
+        fragmentList.add(new SpecialAttrFrgment3());  //特殊属性
+        fragmentList.add(new DefectFrgment());        //缺陷
+        fragmentList.add(new TroubleFrgment());       //隐患
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(pagerAdapter);
         initMagicIndicator();
