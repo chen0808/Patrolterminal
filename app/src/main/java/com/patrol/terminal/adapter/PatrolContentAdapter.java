@@ -229,17 +229,30 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
         params.put("grade_id", toRequestBody("37E5647975394B1E952DC5D2796C7D73"));
         params.put("content", toRequestBody(content));
         params.put("patrol_id", toRequestBody(item2.getPatrol_id()));
-//        params.put("line_id",toRequestBody());
-//        params.put("line_name",toRequestBody());
-//        params.put("start_name",toRequestBody());
-//        params.put("find_user_id",toRequestBody());
-//        params.put("find_user_name",toRequestBody());
+        String line_id = (String) SPUtil.get(mContext, "ids", "line_id", "");
+        if (line_id != null || !line_id.equals("")) {
+            params.put("line_id", toRequestBody(line_id));
+        }
+        String line_name = (String) SPUtil.get(mContext, "ids", "line_name", "");
+        if (line_name != null || !line_name.equals("")) {
+            params.put("line_name", toRequestBody(line_name));
+        }
+        String find_user_id = (String) SPUtil.get(mContext, "ids", "find_user_id", "");
+        if (find_user_id != null || !find_user_id.equals("")) {
+            params.put("find_user_id", toRequestBody(find_user_id));
+        }
+        String find_user_name = (String) SPUtil.get(mContext, "ids", "find_user_name", "");
+        if (find_user_name != null || !find_user_name.equals("")) {
+            params.put("find_user_name", toRequestBody(find_user_name));
+        }
         params.put("towerList[0].id", toRequestBody(item2.getId()));
         //杆塔名从个人任务获取
         String tower_name = (String) SPUtil.get(mContext, "ids", "tower_name", "");
-        if (tower_name != null) {
+        if (tower_name != null || !tower_name.equals("")) {
+            params.put("start_name", toRequestBody(tower_name));
             params.put("towerList[0].name", toRequestBody(tower_name));
         } else {
+            params.put("start_name", toRequestBody("#001"));
             params.put("towerList[0].name", toRequestBody("#001"));
         }
         if (mPicList.size() == 0) {
