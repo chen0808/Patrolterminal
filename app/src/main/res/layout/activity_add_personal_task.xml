@@ -26,7 +26,9 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout style="@style/plan_ll_styl">
+                <LinearLayout style="@style/plan_ll_styl"
+                    android:visibility="gone"
+                    >
 
                     <TextView
                         style="@style/plan_tv_styl"

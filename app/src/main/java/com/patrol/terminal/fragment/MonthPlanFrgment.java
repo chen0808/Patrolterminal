@@ -200,7 +200,6 @@ public class MonthPlanFrgment extends BaseFragment {
                     switch (view.getId()) {
                         case R.id.plan_to_change:
                             Intent intent = new Intent(mContext, LineCheckActivity.class);
-                            intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
                             intent.putExtra("id", item.getId());
                             intent.putExtra("year", item.getYear());
                             intent.putExtra("month", item.getMonth());

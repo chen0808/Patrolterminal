@@ -78,6 +78,7 @@ public class PersonalTaskDetailActivity extends Activity {
     private String[] names;
     private List<GroupTaskBean> selectList = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +93,7 @@ public class PersonalTaskDetailActivity extends Activity {
         bean = getIntent().getParcelableExtra("bean");
         SPUtil.put(this, "ids", "task_id", bean.getId());
         tvLineType.setVisibility(View.VISIBLE);
-        tvLineType.setText("执行人 : " + bean.getWork_user_name());
+
         tvTableName.setText(bean.getName());
         tvLineName.setText("线路名称 : " + bean.getLine_name());
         tvLineNo.setText("班  组 : " + SPUtil.getDepName(PersonalTaskDetailActivity.this));
@@ -101,7 +102,14 @@ public class PersonalTaskDetailActivity extends Activity {
         } else {
             tvLineDate.setText("杆塔名称 : " + bean.getName());
         }
-
+            tvLineType.setText("执行人 : " + bean.getWork_user_name());
+        String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign()))&&bean.getWork_user_name()==null) {
+            titleSetting.setVisibility(View.VISIBLE);
+            titleSettingTv.setText("指派");
+            tvLineType.setText("执行人 : 暂无" );
+            getPersonal();
+        }
         year = bean.getYear();
         month = bean.getMonth();
         day = bean.getDay();
@@ -111,12 +119,7 @@ public class PersonalTaskDetailActivity extends Activity {
 
     private void initView() {
         tvLineTower.setVisibility(View.GONE);
-        String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign()))&&"0".equals(bean.getAllot_status())) {
-            titleSetting.setVisibility(View.VISIBLE);
-            titleSettingTv.setText("指派");
-            getPersonal();
-        }
+
         titleName.setText("个人任务详情");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         monthPlanDetailRc.setLayoutManager(manager);
@@ -189,6 +192,7 @@ public class PersonalTaskDetailActivity extends Activity {
                     protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         results = t.getResults();
                         monthPlanDetailAdapter.setNewData(results);
+
                         ProgressDialog.cancle();
                     }
 
@@ -246,14 +250,13 @@ public class PersonalTaskDetailActivity extends Activity {
         }).show();
     }
 
-    //抢单
+    //指派个人任务
     public void addPersonTask(String user_id, String username, int flag) {
         ProgressDialog.show(this, false, "正在加载。。。");
         bean.setGroup_list_id(bean.getId());
         bean.setUser_id(user_id);
         bean.setUser_name(username);
         selectList.add(bean);
-
         //获取月计划列表
         BaseRequest.getInstance().getService()
                 .addPersonTask(selectList)
@@ -268,6 +271,7 @@ public class PersonalTaskDetailActivity extends Activity {
                             tvLineType.setVisibility(View.VISIBLE);
                             tvLineType.setText("执行人 : " + username);
                             RxRefreshEvent.publish("refreshPersonal");
+                            getPersonalList();
                             setResult(RESULT_OK);
                         } else {
                             Toast.makeText(PersonalTaskDetailActivity.this, "网络连接失败，服务器异常", Toast.LENGTH_SHORT).show();

@@ -237,7 +237,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         String year = years[0];
         String day = Integer.parseInt(days[0]) + "";
         BaseRequest.getInstance().getService()
-                .getGroupName(year, month, day, SPUtil.getDepId(this), SPUtil.getUserId(this))
+                .getGroupName(year, month, day, SPUtil.getDepId(this), SPUtil.getUserId(this),"2")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<GroupBean>(this) {
@@ -247,7 +247,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                             GroupBean results = t.getResults();
                             if (results != null) {
                                 if ("2".contains(results.getSign())) {
-                                    SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
+                                    SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER+","+Constant.RUNNING_SQUAD_MEMBER);
                                     jobType = Constant.RUNNING_SQUAD_TEMA_LEADER;
                                 }
                             }

@@ -343,7 +343,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
         String year =years[0];
         String day=Integer.parseInt(days[0])+"";
         BaseRequest.getInstance().getService()
-                .getGroupName(year,month,day,SPUtil.getDepId(getContext()),SPUtil.getUserId(getContext()))
+                .getGroupName(year,month,day,SPUtil.getDepId(getContext()),SPUtil.getUserId(getContext()),"2")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<GroupBean>(getContext()) {
@@ -354,7 +354,6 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                             if (results!=null){
                                 if ("2".contains(results.getSign())){
                                     SPUtil.putString(getContext(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
-
                                 }
                             }
                         }

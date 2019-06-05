@@ -141,7 +141,7 @@ public class GroupTaskFrgment extends BaseFragment {
     public void getGroupList() {
 
         BaseRequest.getInstance().getService()
-                .getGroupList(year, month, day,depId,duty_user_id,userId,"type_sign,line_id")
+                .getGroupList(year, month, day,depId,duty_user_id,userId,"type_sign,line_id","1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {

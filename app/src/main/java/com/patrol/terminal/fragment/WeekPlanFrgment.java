@@ -275,6 +275,7 @@ public class WeekPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
+                        lineList.clear();
                         num_total = 0;
                         kilo_total = 0;
                         done_num_total = 0;
@@ -338,6 +339,7 @@ public class WeekPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
+                        nextlineList.clear();
                         next_num_total = 0;
                         next_kilo_total = 0;
                         nextlineList.clear();

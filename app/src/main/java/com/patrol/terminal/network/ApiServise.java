@@ -174,6 +174,9 @@ public interface ApiServise {
     @POST("/task/personal/savePOST")
     Observable<BaseResult<List<DayOfWeekBean>>> addPersonTask(@Body List<GroupTaskBean> bean);
 
+    //指派验收任务
+    @POST("/task/personal/updatePOST")
+    Observable<BaseResult<List<DayOfWeekBean>>> updatePersonTask(@Body GroupTaskBean bean);
 
     //根据当前日期查询所属周下所有计划接口
     @GET("/plan/week/tower/weekGET")
@@ -336,11 +339,11 @@ public interface ApiServise {
 
     //组任务列表
     @GET("/task/group/list/listGET")
-    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("work_user_id") String work_user_id, @Query("order") String order);
+    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("work_user_id") String work_user_id, @Query("order") String order, @Query("safe") String safe);
 
     //个人任务列表获取小组任务
     @GET("/task/group/list/listGET")
-    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("allot_status") String allot_status, @Query("work_user_id") String work_user_id, @Query("order") String order);
+    Observable<BaseResult<List<GroupTaskBean>>> getPersonalOfGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("allot_status") String allot_status,@Query("work_user_id") String work_user_id, @Query("order") String order);
 
     @GET("/task/group/user/groupGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id);
@@ -568,7 +571,7 @@ public interface ApiServise {
 
     //获取运行班小组长
     @GET("/task/group/user/oneGET")
-    Observable<BaseResult<GroupBean>> getGroupName(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("user_id") String user_id);
+    Observable<BaseResult<GroupBean>> getGroupName(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("user_id") String user_id, @Query("sign") String sign);
 
     //获取检修班人员状态
     @GET("task/repair/user/listGET")
