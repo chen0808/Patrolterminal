@@ -75,4 +75,16 @@
     <string name="btn_set_destroy">设置销毁密码</string>
     <string name="btn_del_access">删除访问密码</string>
     <string name="btn_del_destroy">删除销毁密码</string>
+
+    <string-array name="level">
+        <item>"110kV"</item>
+        <item>"35kV"</item>
+    </string-array>
+
+    <string-array name="type">
+        <item>"高速铁路"</item>
+        <item>"高速公路"</item>
+        <item>"重要输电线路"</item>
+        <item>"普通公路"</item>
+    </string-array>
 </resources>

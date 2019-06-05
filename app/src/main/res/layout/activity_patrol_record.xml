@@ -24,8 +24,8 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@color/image_overlay_false"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="@color/image_overlay_false">
 
                 <ImageView
                     android:id="@+id/iv_photo1"
@@ -33,64 +33,62 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
 
-                     />
-
-                <TextView
-                    android:layout_width="@dimen/dp_100"
-                    android:layout_height="@dimen/dp_50"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:drawableTop="@mipmap/add_black"
-                    android:text="全貌" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
-                android:background="@color/image_overlay_false"
-                android:layout_marginRight="4dp"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/iv_photo2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                   />
-
-                <TextView
-                    android:layout_width="@dimen/dp_100"
-                    android:layout_height="@dimen/dp_50"
-                    android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:drawableTop="@mipmap/add_black"
-                    android:text="杆号牌" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@color/image_overlay_false"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/iv_photo3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
                     />
 
                 <TextView
                     android:layout_width="@dimen/dp_100"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/white"
-                    android:gravity="center"
                     android:drawableTop="@mipmap/add_black"
-                    android:text="塔头" />
+                    android:gravity="center"
+                    android:text="全貌"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:background="@color/image_overlay_false">
+
+                <ImageView
+                    android:id="@+id/iv_photo2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerInParent="true"
+                    android:drawableTop="@mipmap/add_black"
+                    android:gravity="center"
+                    android:text="杆号牌"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/image_overlay_false">
+
+                <ImageView
+                    android:id="@+id/iv_photo3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerInParent="true"
+                    android:drawableTop="@mipmap/add_black"
+                    android:gravity="center"
+                    android:text="塔头"
+                    android:textColor="@color/white" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -105,24 +103,23 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@color/image_overlay_false"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="@color/image_overlay_false">
 
                 <ImageView
                     android:id="@+id/iv_photo4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                 />
+                    android:scaleType="centerCrop" />
 
                 <TextView
                     android:layout_width="@dimen/dp_100"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:textColor="@color/white"
                     android:drawableTop="@mipmap/add_black"
-                    android:text="大号侧通道" />
+                    android:gravity="center"
+                    android:text="大号侧通道"
+                    android:textColor="@color/white" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -130,47 +127,45 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
-                android:background="@color/image_overlay_false"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="@color/image_overlay_false">
 
                 <ImageView
                     android:id="@+id/iv_photo5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                     />
+                    android:scaleType="centerCrop" />
 
                 <TextView
                     android:layout_width="@dimen/dp_100"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:textColor="@color/white"
                     android:drawableTop="@mipmap/add_black"
-                    android:text="小号侧通道" />
+                    android:gravity="center"
+                    android:text="小号侧通道"
+                    android:textColor="@color/white" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@color/image_overlay_false"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="@color/image_overlay_false">
 
                 <ImageView
                     android:id="@+id/iv_photo6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    />
+                    android:scaleType="centerCrop" />
 
                 <TextView
                     android:layout_width="@dimen/dp_100"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:textColor="@color/white"
                     android:drawableTop="@mipmap/add_black"
-                    android:text="基础" />
+                    android:gravity="center"
+                    android:text="基础"
+                    android:textColor="@color/white" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -206,6 +201,7 @@
         android:backgroundTint="@color/white"
         android:clickable="true"
         android:src="@mipmap/map"
+        android:visibility="gone"
         app:borderWidth="0dp"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"

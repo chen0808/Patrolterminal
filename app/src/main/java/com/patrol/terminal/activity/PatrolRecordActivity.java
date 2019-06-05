@@ -21,7 +21,9 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -30,7 +32,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
-import com.patrol.terminal.fragment.SpecialAttrFrgment;
+import com.patrol.terminal.fragment.SpecialAttrFrgment2;
 import com.patrol.terminal.fragment.TroubleFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
@@ -111,6 +113,7 @@ public class PatrolRecordActivity extends BaseActivity {
     public static final int PHOTO4 = 4;
     public static final int PHOTO5 = 5;
     public static final int PHOTO6 = 6;
+    private List<LocalMedia> localMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +140,7 @@ public class PatrolRecordActivity extends BaseActivity {
     private void initview() {
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new PatrolContentFrgment());
-        fragmentList.add(new SpecialAttrFrgment());
+        fragmentList.add(new SpecialAttrFrgment2());
         fragmentList.add(new DefectFrgment());
         fragmentList.add(new TroubleFrgment());
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
@@ -395,12 +398,18 @@ public class PatrolRecordActivity extends BaseActivity {
                         upLoadPic(PHOTO6, bitmap6);
                         break;
                     case PictureConfig.CHOOSE_REQUEST:
+                        localMedia = PictureSelector.obtainMultipleResult(data);
                         break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public List<LocalMedia> getPics() {
+        return localMedia;
     }
 
     private void upLoadPic(int sign, Bitmap bitmap) {

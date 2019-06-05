@@ -108,4 +108,5 @@ public class Constant {
     public static final String TRAIN_MONTH_PLAN = "train_month_plan";
     public static final String TRAIN_TEMP_PLAN = "train_temp_plan";
 
+    public static boolean isContent = false;
 }

@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.SpecialAttrListActivity;
@@ -26,9 +29,6 @@ import com.patrol.terminal.utils.SPUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,7 +54,6 @@ public class SpecialAttrFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-
         tower_id = (String) SPUtil.get(getActivity(), "ids", "tower_id", "");
         line_id = (String) SPUtil.get(getActivity(), "ids", "line_id", "");
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
