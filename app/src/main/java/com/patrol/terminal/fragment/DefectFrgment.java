@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DefectFragmentAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -19,8 +22,6 @@ import com.patrol.terminal.utils.SPUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -30,9 +31,9 @@ import io.reactivex.schedulers.Schedulers;
 public class DefectFrgment extends BaseFragment {
     @BindView(R.id.rv_defect)
     RecyclerView rvDefect;
-    private String task_id;
+    private String tower_id;
     private Disposable subscribe;
-    private List<DefectFragmentBean> results=new ArrayList<>();
+    private List<DefectFragmentBean> results = new ArrayList<>();
     private DefectFragmentAdapter adapter;
 
 
@@ -45,7 +46,7 @@ public class DefectFrgment extends BaseFragment {
     @Override
     protected void initData() {
         rvDefect.setLayoutManager(new LinearLayoutManager(getActivity()));
-         adapter = new DefectFragmentAdapter(R.layout.fragment_defect_item, results);
+        adapter = new DefectFragmentAdapter(R.layout.fragment_defect_item, results);
         rvDefect.setAdapter(adapter);
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
@@ -56,11 +57,15 @@ public class DefectFrgment extends BaseFragment {
                 }
             }
         });
-        task_id = (String) SPUtil.get(getActivity(), "ids", "task_id", "");
+        tower_id = (String) SPUtil.get(getActivity(), "ids", "tower_id", "");
+        if (tower_id.equals("") || tower_id == null) {
+            tower_id = "662CFCB4D6A54009956EF859727C1F78";
+        }
         getdata();
     }
-    public void getdata(){
-        BaseRequest.getInstance().getService().getDefectFragment(task_id).subscribeOn(Schedulers.io())
+
+    public void getdata() {
+        BaseRequest.getInstance().getService().getDefectFragment(tower_id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(getActivity()) {
                     @Override
@@ -75,10 +80,11 @@ public class DefectFrgment extends BaseFragment {
                     }
                 });
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (subscribe!=null){
+        if (subscribe != null) {
             subscribe.dispose();
         }
     }

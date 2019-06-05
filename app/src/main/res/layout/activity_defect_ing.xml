@@ -23,42 +23,42 @@
                 android:id="@+id/defect_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="巡视内容：日常巡检" />
+                android:text="巡视内容" />
 
             <TextView
                 android:id="@+id/defect_line_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="线路名称：桃开一线" />
+                android:text="线路名称：" />
 
             <TextView
                 android:id="@+id/defect_tower_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="杆塔名称：01号杆塔" />
+                android:text="杆塔名称：" />
 
             <TextView
                 android:id="@+id/defect_find_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="发现人：刘海生" />
+                android:text="发现人：" />
 
             <TextView
                 android:id="@+id/defect_allote_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="状态：待审核" />
+                android:text="状态：" />
 
             <TextView
                 android:id="@+id/defect_deal_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="处理人：刘海生" />
+                android:text="处理人：" />
 
             <!--<TextView-->
                 <!--android:id="@+id/defect_pat_name"-->
@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="工作班组：检修班组" />
+                android:text="工作班组：" />
 
             <!--<TextView-->
                 <!--android:id="@+id/defect_reamark"-->
@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:columnWidth="60dp"
+                android:columnWidth="120dp"
                 android:horizontalSpacing="10dp"
                 android:numColumns="auto_fit"
                 android:verticalSpacing="10dp" />

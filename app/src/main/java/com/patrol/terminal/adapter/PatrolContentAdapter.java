@@ -229,19 +229,26 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
         params.put("grade_id", toRequestBody("37E5647975394B1E952DC5D2796C7D73"));
         params.put("content", toRequestBody(content));
         params.put("patrol_id", toRequestBody(item2.getPatrol_id()));
+//        params.put("line_id",toRequestBody());
+//        params.put("line_name",toRequestBody());
+//        params.put("start_name",toRequestBody());
+//        params.put("find_user_id",toRequestBody());
+//        params.put("find_user_name",toRequestBody());
         params.put("towerList[0].id", toRequestBody(item2.getId()));
-        // TODO 杆塔名从个人任务获取
+        //杆塔名从个人任务获取
         String tower_name = (String) SPUtil.get(mContext, "ids", "tower_name", "");
         if (tower_name != null) {
             params.put("towerList[0].name", toRequestBody(tower_name));
         } else {
-            Toast.makeText(mContext, "杆塔名为空", Toast.LENGTH_SHORT).show();
+            params.put("towerList[0].name", toRequestBody("#001"));
         }
         if (mPicList.size() == 0) {
             Toast.makeText(mContext, "请上传图片", Toast.LENGTH_SHORT).show();
         } else {
-            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(mPicList.get(0)));
-            params.put("towerList[0].file", requestFile);
+            File file = new File(mPicList.get(0));
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//            params.put("towerList[0].file", requestFile);
+            params.put("file\"; filename=\"" + file.getName(), requestFile);
         }
         BaseRequest.getInstance().getService().commitPatrolContent(params).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

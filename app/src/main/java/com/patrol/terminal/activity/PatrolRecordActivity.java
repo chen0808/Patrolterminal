@@ -127,7 +127,9 @@ public class PatrolRecordActivity extends BaseActivity {
         tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
         tower_name = getIntent().getStringExtra("tower_name");
-        SPUtil.put(this, "ids", "tower_name", tower_name);
+        if (tower_name != null) {
+            SPUtil.put(this, "ids", "tower_name", tower_name);
+        }
         audit_status = getIntent().getStringExtra("audit_status");
 
         sign = getIntent().getStringExtra("sign");

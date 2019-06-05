@@ -567,7 +567,7 @@ public interface ApiServise {
 
     //巡视记录缺陷列表
     @GET("/task/defect/listGET")
-    Observable<BaseResult<List<DefectFragmentBean>>> getDefectFragment(@Query("task_id") String task_id);
+    Observable<BaseResult<List<DefectFragmentBean>>> getDefectFragment(@Query("start_id") String task_id);
 
     //获取运行班小组长
     @GET("/task/group/user/oneGET")
