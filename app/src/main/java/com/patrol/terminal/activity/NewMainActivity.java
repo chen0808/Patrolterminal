@@ -167,7 +167,6 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
             } else {   //其他角色待办
                 mFragments.add(new TodosManageFragment());
             }
-
         }
 
         mFragments.add(new AnylyzeFrgment());

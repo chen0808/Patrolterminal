@@ -2,6 +2,7 @@ package com.patrol.terminal.overhaul;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,9 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.LineCheckActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.LineCheckBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.PickerUtils;
@@ -29,6 +32,7 @@ import com.patrol.terminal.utils.TimeUtil;
 import java.sql.Time;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +57,7 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
     @BindView(R.id.month_plan_nuit)
     EditText monthPlanNuit;
     @BindView(R.id.month_plan_device_name)
-    EditText monthPlanDeviceName;
+    TextView monthPlanDeviceName;
     @BindView(R.id.month_plan_month)
     TextView monthPlanMonth;
     @BindView(R.id.month_plan_yes)
@@ -93,6 +97,7 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
 
     private OverhaulYearBean overhaulYearBean;
     private int fromType = 0;
+    private LineCheckBean selectBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,12 +168,30 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1001 && resultCode == RESULT_OK) {
+            selectBean = (LineCheckBean) data.getSerializableExtra("bean");
+            monthPlanDeviceName.setText(selectBean.getName());
+        }
+
+    }
+
     @OnClick({R.id.title_back, R.id.month_plan_time_start, R.id.month_plan_time_end, R.id.month_plan_source,
-            R.id.month_plan_range, R.id.month_plan_submit, R.id.month_plan_rish_level, R.id.dian_month_plan_rish_level, R.id.month_plan_vo})
+            R.id.month_plan_range, R.id.month_plan_submit, R.id.month_plan_rish_level, R.id.dian_month_plan_rish_level,
+            R.id.month_plan_vo, R.id.month_plan_device_name})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
+                break;
+
+            case R.id.month_plan_device_name:
+                Intent intent = new Intent();
+                intent.setClass(this, LineCheckActivity.class);
+                intent.putExtra("from","Temporary");
+                startActivityForResult(intent , 1001);
                 break;
 
             case R.id.month_plan_time_start:
@@ -217,6 +240,7 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
                     }
                 }
 
+                updateOverhaulYearBean.setLine_id(selectBean.getId());
                 updateOverhaulYearBean.setApply_dep_name(monthPlanNuit.getText().toString());
                 updateOverhaulYearBean.setLine_name(monthPlanDeviceName.getText().toString());
                 updateOverhaulYearBean.setVoltage_level(monthPlanVo.getText().toString());

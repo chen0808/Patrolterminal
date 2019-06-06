@@ -573,7 +573,8 @@ public class FirstWTicketActivity extends BaseActivity{
         if ("0".equals(status)) {        //第一次进来发送给签发人
             titleSettingTv.setText("发送");
         } else if("1".equals(status)){   //签发人还未签字进来
-            titleSetting.setVisibility(View.GONE);
+            //titleSetting.setVisibility(View.GONE);
+            titleSettingTv.setText("提交");   //暂时让编辑，待办还未做好  TODO
         }else if("2".equals(status)){   //签发人签字后进来提交内容
             titleSettingTv.setText("提交");
         }else if("3".equals(status)){   //负责人提交工作票后仅查看

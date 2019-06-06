@@ -131,7 +131,11 @@ public class TodosManageFragment extends BaseFragment implements BaseQuickAdapte
         Log.w("linmeng", "toDoManageAdapter jobType:" + jobType);
         if (jobType.contains(Constant.REFURBISHMENT_LEADER)) {
             getBzAgentsTodo("4");
-        } else {
+        }
+//        else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {  //如果是签发人 ，这里需要修改
+////            getQfrTodo();
+////        }
+        else {
             getOverhaulTodo();
         }
 
