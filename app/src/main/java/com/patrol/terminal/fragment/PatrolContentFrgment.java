@@ -72,7 +72,7 @@ public class PatrolContentFrgment extends BaseFragment {
     }
 
     public void getdata() {
-        BaseRequest.getInstance().getService().getPatrolContent("C16D44496A834E959411F49F2C73FF7E").subscribeOn(Schedulers.io())
+        BaseRequest.getInstance().getService().getPatrolContent(task_id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PatrolContentBean>>(getActivity()) {
                     @Override
