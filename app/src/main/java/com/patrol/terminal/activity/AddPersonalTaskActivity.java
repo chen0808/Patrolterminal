@@ -181,10 +181,11 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 String name = userList.get(options1);
                 userList.remove(options1);
                 if (s.isEmpty()) {
+
                 } else {
                     for (int i = 0; i < addPeoList.size(); i++) {
                         DepUserBean depUserBean = addPeoList.get(i);
-                        if ("1".equals(depUserBean.getIs_boss())) {
+                        if ("2".equals(depUserBean.getSign())) {
                             userList.add(depUserBean.getUser_name());
                             addPeoList.remove(i);
                         }
@@ -481,6 +482,8 @@ public class AddPersonalTaskActivity extends BaseActivity {
                         }
                         if (isExit==0){
                             listBean.setGroup_list_id(listBean.getId());
+                            listBean.setUser_id(SPUtil.getUserId(AddPersonalTaskActivity.this));
+                            listBean.setUser_name(SPUtil.getUserName(AddPersonalTaskActivity.this));
                             selectBean.add(listBean);
                             holder.itemTroubleCheck.setChecked(true);
                         }

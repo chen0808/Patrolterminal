@@ -18,7 +18,6 @@ import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.TroubleActivity;
 import com.patrol.terminal.adapter.BackLogAdapter;
-import com.patrol.terminal.adapter.BackLogTaskAdapter;
 import com.patrol.terminal.adapter.PlanFinishRateAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
@@ -206,7 +205,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
             sign = "4";
         }
 
-       if (jobType.equals(Constant.REFURBISHMENT_SPECIALIZED)) {
+       if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {
            getZzWeekList();
        }else {
            getWeekList(sign);

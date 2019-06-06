@@ -105,10 +105,10 @@ public class PersonalTaskDetailActivity extends Activity {
         }
         tvLineType.setText("执行人 : " + bean.getWork_user_name());
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign())) && bean.getWork_user_name() == null) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign()))&&bean.getWork_user_name()==null) {
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("指派");
-            tvLineType.setText("执行人 : 暂无");
+            tvLineType.setText("执行人 : 暂无" );
             getPersonal();
         }
         year = bean.getYear();
@@ -298,8 +298,8 @@ public class PersonalTaskDetailActivity extends Activity {
                 finish();
                 break;
             case R.id.title_setting:
-                if (names == null) {
-                    Toast.makeText(this, "暂未获取人员列表信息,请稍后再试", Toast.LENGTH_SHORT).show();
+                if (names==null){
+                    Toast.makeText(this,"暂未获取人员列表信息,请稍后再试",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showSingleChooseDialog(names);
