@@ -108,7 +108,7 @@
                 style="@style/plan_et_styl"
                 android:background="@null"
                 android:hint="请输入停电天数"
-                android:inputType="number" />
+                android:inputType="number|numberDecimal" />
         </LinearLayout>
 
         <View style="@style/line_styl" />

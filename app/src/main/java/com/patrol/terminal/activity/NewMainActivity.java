@@ -31,7 +31,6 @@ import com.patrol.terminal.fragment.JXHomeFragment;
 import com.patrol.terminal.fragment.MeFragement;
 import com.patrol.terminal.fragment.TodosManageFragment;
 import com.patrol.terminal.fragment.YXTodosManageFragment;
-import com.patrol.terminal.fragment.ZyHomeFragment;
 import com.patrol.terminal.training.TrainingHomeFragment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -142,11 +141,9 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         //分配每个职位进来的首页
         if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {     //培训专责
             mFragments.add(new TrainingHomeFragment());
-        } else if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+        } else if (jobType.contains("yx")) {
             mFragments.add(new HomeFragment());
-        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-            mFragments.add(new ZyHomeFragment());
-        } else {
+        }  else {
             mFragments.add(new JXHomeFragment());
         }
 

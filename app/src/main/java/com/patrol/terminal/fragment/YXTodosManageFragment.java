@@ -21,7 +21,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
-import com.patrol.terminal.bean.TodoListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
@@ -73,8 +73,8 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     private static final int IS_DONE_PAGE = 1;
     private int isTodoPage = IS_TODO_PAGE;
     private String status;
-    private List<TodoListBean> results=new ArrayList<>();
-    private List<TodoListBean> resultsHave=new ArrayList<>();
+    private List<PersonalTaskListBean> results=new ArrayList<>();
+    private List<PersonalTaskListBean> resultsHave=new ArrayList<>();
 
     private String jobType;
     private Disposable subscribe;
@@ -223,13 +223,13 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     };
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        TodoListBean todoListBean;
+        PersonalTaskListBean todoListBean;
         if (isTodoPage ==IS_TODO_PAGE){
              todoListBean = results.get(position);
         }else {
             todoListBean = resultsHave.get(position);
         }
-        String deal_type = todoListBean.getSign();
+        String deal_type = todoListBean.getType_sign();
         String data_id = todoListBean.getId();
         Intent intent = Utils.goTodo(getContext(), deal_type);
         intent.putExtra("audit_status",todoListBean.getDone_status());
@@ -279,12 +279,12 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     private void getYXtodo() {
 
         BaseRequest.getInstance().getService()
-                .getYXtodo(SPUtil.getUserId(getContext()),"0","create_time")
+                .getDepPersonalList(year,month,day,SPUtil.getUserId(getContext()),"1,2,3,4,5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TodoListBean>>(getContext()) {
+                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
                     @Override
-                    protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         Log.i("555555555","refreshTodo");
                         if (t.getCode() == 1) {
                             fragTodoRef.setRefreshing(false);
@@ -307,12 +307,12 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     }
     public void getYXtodoHave() {
         BaseRequest.getInstance().getService()
-                .getYXtodo(SPUtil.getUserId(getContext()),"1","create_time")
+                .getDepPersonalList(year,month,day,SPUtil.getUserId(getContext()),"1,2,3,4,5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TodoListBean>>(getContext()) {
+                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
                     @Override
-                    protected void onSuccees(BaseResult<List<TodoListBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         fragTodoRef.setRefreshing(false);
                         resultsHave = t.getResults();
                         if (isTodoPage ==IS_DONE_PAGE){

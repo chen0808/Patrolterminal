@@ -3,23 +3,23 @@ package com.patrol.terminal.adapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.bean.TodoListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean;
 
 import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class YXTodoManageAdapter extends BaseQuickAdapter<TodoListBean, BaseViewHolder> {
+public class YXTodoManageAdapter extends BaseQuickAdapter<PersonalTaskListBean, BaseViewHolder> {
 
 
-    public YXTodoManageAdapter(int layoutResId, @Nullable List<TodoListBean> data) {
+    public YXTodoManageAdapter(int layoutResId, @Nullable List<PersonalTaskListBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder viewHolder, TodoListBean item) {
-        String deal_type = item.getSign();
-        String remind_type = item.getRemind_type();
+    protected void convert(BaseViewHolder viewHolder, PersonalTaskListBean item) {
+        String deal_type = item.getType_sign();
+        String remind_type = item.getPlan_type();
         String done_status = item.getDone_status();
         switch (deal_type) {
             case "1":
@@ -47,8 +47,8 @@ public class YXTodoManageAdapter extends BaseQuickAdapter<TodoListBean, BaseView
 
         }
 
-        viewHolder.setText(R.id.item_todo_title, item.getTitle());
-        viewHolder.setText(R.id.item_todo_name, "提交人 :"+item.getFrom_user_name());
-        viewHolder.setText(R.id.item_todo_time, "提交时间 :" + item.getCreate_time());
+        viewHolder.setText(R.id.item_todo_title, item.getLine_name());
+        viewHolder.setText(R.id.item_todo_name, "提交人 :"+item.getUser_name());
+        viewHolder.setText(R.id.item_todo_time, "提交时间 :" + item.getDone_time());
     }
 }

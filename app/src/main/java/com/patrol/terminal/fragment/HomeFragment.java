@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.CheckActivity;
 import com.patrol.terminal.activity.DefectActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
 import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
 import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
+import com.patrol.terminal.activity.MonitoringRecordActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
@@ -167,8 +169,6 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             Random random=new Random();
             data.add(new PlanFinishRateBean("日计划", random.nextInt(100), random.nextInt(100)));
             data.add(new PlanFinishRateBean("周计划", random.nextInt(100), random.nextInt(100)));
-
-
         }
         if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED)) {
             status = "1,2,3,4,5";
@@ -183,8 +183,10 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 if (type.startsWith("refreshTodo")) {
                     if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                         getYXtodo("2");
-                    } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                    } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
                         getYXtodo("1");
+                    }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+                        getYXtodo("0");
                     }
 
                 }
@@ -196,17 +198,25 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         initPlanFinishRate();
         getPersonalList();
         getLastTask();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             getYXtodo("2");
-        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
             getYXtodo("1");
+        }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+            getYXtodo("0");
         }
     }
 
     //获取已完成任务
     private void getLastTask() {
         BaseRequest.getInstance().getService()
-                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()),"3","5")
+                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()),"3","5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
@@ -255,9 +265,12 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         intent.putExtra("task_id", data_id);
         switch (deal_type) {
             case "1":
+            case "2":
+            case "7":
+            case "11":
                 intent.setClass(getContext(), PatrolRecordActivity.class);
                 break;
-            case "2":
+            case "5":
                 intent.setClass(getContext(), HongWaiCeWenActivity.class);
                 break;
             case "3":
@@ -266,13 +279,15 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             case "10":
                 intent.setClass(getContext(), JueYuanZiLingZhiJianCeActivity.class);
                 break;
-            case "5":
-                intent.setClass(getContext(), HongWaiCeWenActivity.class);
-                break;
             case "6":
                 intent.setClass(getContext(), XieGanTaQingXieCeWenActivity.class);
                 break;
-
+            case "12":
+                intent.setClass(getContext(), MonitoringRecordActivity.class);
+                break;
+            case "13":
+                intent.setClass(getContext(), CheckActivity.class);
+                break;
         }
         startActivity(intent);
     }
@@ -308,7 +323,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     public void getPersonalList() {
 
         BaseRequest.getInstance().getService()
-                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()),"5")
+                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()),"5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
@@ -374,12 +389,9 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             case R.id.rl_trouble:
                 startActivity(new Intent(getActivity(), TroubleActivity.class));
                 break;
-
             case R.id.scanner_iv:  //扫一扫
                 progressDialog.show(getContext(), false, "正在搜索RFID...");
                 //openRFID();
-
-
                 break;
         }
     }
@@ -423,16 +435,14 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 
     public void getYXtodo(String status) {
         BaseRequest.getInstance().getService()
-                .getDepPersonalList(year, month, day, SPUtil.getDepId(getContext()),status,"5")
+                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()),status,"5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
                     @Override
                     protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         backLogData = t.getResults();
-
                         adapter.setNewData(backLogData);
-
                         if (backLogData.size() == 0) {
                             homeTodoNoData.setVisibility(View.VISIBLE);
                         } else {

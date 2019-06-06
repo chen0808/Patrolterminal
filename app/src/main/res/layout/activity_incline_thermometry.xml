@@ -87,7 +87,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="正面倾斜"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
 
                 <EditText
@@ -100,7 +100,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="侧面倾斜"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
             </LinearLayout>
 
@@ -119,7 +119,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="倾斜率"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
 
                 <EditText
@@ -132,7 +132,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="横断两端高差"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
             </LinearLayout>
 

@@ -83,7 +83,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/stoke_gray"
-        android:inputType="number"
+        android:inputType="number|numberDecimal"
         android:hint="脉冲零值（低值）绝缘子片数合计"
         android:padding="4dp" />
 

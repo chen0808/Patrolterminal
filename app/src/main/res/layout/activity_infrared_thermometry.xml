@@ -101,7 +101,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="大号侧"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
 
                 <EditText
@@ -114,7 +114,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="小号侧"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
             </LinearLayout>
 
@@ -141,7 +141,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="大号侧"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
 
                 <EditText
@@ -154,7 +154,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="小号侧"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
             </LinearLayout>
 
@@ -181,7 +181,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="大号侧"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
 
                 <EditText
@@ -194,7 +194,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="小号侧"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
             </LinearLayout>
 
@@ -213,7 +213,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="环境温度"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
 
                 <EditText
@@ -226,7 +226,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/stoke_gray"
                     android:hint="检查结果"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:padding="4dp" />
             </LinearLayout>
 

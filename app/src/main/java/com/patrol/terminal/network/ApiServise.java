@@ -373,11 +373,12 @@ public interface ApiServise {
 
     //个人任务列表
     @GET("task/personal/listGET")
-    Observable<BaseResult<List<PersonalTaskListBean>>> getDepPersonalList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("limit") String limit);
+    Observable<BaseResult<List<PersonalTaskListBean>>> getDepPersonalList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id, @Query("limit") String limit);
 
     //个人任务列表
     @GET("task/personal/listGET")
-    Observable<BaseResult<List<PersonalTaskListBean>>> getDepPersonalList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("audit_status") String audit_status, @Query("limit") String limit);
+    Observable<BaseResult<List<PersonalTaskListBean>>> getDepPersonalList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id, @Query("audit_status") String audit_status, @Query("limit") String limit);
+
 
     //日计划详情
     @GET("/plan/day/line/allGET")

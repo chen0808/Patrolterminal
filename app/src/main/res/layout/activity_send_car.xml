@@ -423,7 +423,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:gravity="right|center_vertical"
-                        android:inputType="number"
+                        android:inputType="number|numberDecimal"
                         android:padding="4dp"
                         android:text="人"
                         android:textSize="14sp" />
