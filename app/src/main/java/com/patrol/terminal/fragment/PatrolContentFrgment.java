@@ -152,7 +152,7 @@ public class PatrolContentFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
                         Toast.makeText(getActivity(), "上传成功！", Toast.LENGTH_SHORT).show();
-                        RxRefreshEvent.publish("updateDefect@2");
+                        getActivity().finish();
                     }
 
                     @Override

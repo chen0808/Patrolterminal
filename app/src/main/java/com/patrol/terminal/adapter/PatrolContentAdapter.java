@@ -96,6 +96,19 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                 } else {
                     helper.setImageResource(R.id.iv_check, R.mipmap.patrol_true);
                 }
+                List<PatrolLevel2> items = item1.getSubItems();
+                int size = items.size();
+                int count = 0;
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).getStatus().equals("2")) {
+                        count++;
+                    }
+                }
+                if (count == size) {
+                    helper.setImageResource(R.id.iv_check, R.mipmap.patrol_true);
+                } else {
+                    helper.setImageResource(R.id.iv_check, R.mipmap.patrol_undefined);
+                }
                 ImageView ivCheck = helper.getView(R.id.iv_check);
                 ivCheck.setOnClickListener(new View.OnClickListener() {
                     @Override
