@@ -285,16 +285,12 @@ public class MonthPlanFrgment extends BaseFragment {
                                 }
                                 if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())) {
                                     addPlanRight.setVisibility(View.VISIBLE);
-                                    planSubmit.setVisibility(View.VISIBLE);
                                 } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
-                                    planSubmit.setVisibility(View.VISIBLE);
                                     addPlanRight.setVisibility(View.GONE);
                                 } else if (mJobType.contains(Constant.RUN_SUPERVISOR) && "2".equals(monthPlanBean.getAudit_status())) {
-                                    planSubmit.setVisibility(View.VISIBLE);
                                     addPlanRight.setVisibility(View.GONE);
                                 } else {
                                     addPlanRight.setVisibility(View.GONE);
-                                    planSubmit.setVisibility(View.GONE);
                                 }
                             } else {
                                 addPlanIv.setVisibility(View.VISIBLE);

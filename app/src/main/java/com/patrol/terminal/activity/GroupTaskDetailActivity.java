@@ -36,6 +36,7 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+//小组任务详情
 public class GroupTaskDetailActivity extends Activity {
 
 

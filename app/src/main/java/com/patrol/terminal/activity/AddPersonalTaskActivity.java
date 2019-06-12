@@ -327,6 +327,11 @@ public class AddPersonalTaskActivity extends BaseActivity {
             Toast.makeText(this,"请添加组员",Toast.LENGTH_SHORT).show();
             return;
         }
+        for (int i = 0; i < selectBean.size(); i++) {
+            GroupTaskBean groupTaskBean = selectBean.get(i);
+            groupTaskBean.setUser_id(addPeoList.get(0).getUser_id());
+            groupTaskBean.setUser_name(addPeoList.get(0).getUser_name());
+        }
         BaseRequest.getInstance().getService()
                 .addPersonTask(selectBean)
                 .subscribeOn(Schedulers.io())
@@ -464,9 +469,6 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (selectBean.size()==0){
                         listBean.setGroup_list_id(listBean.getId());
-
-                        listBean.setUser_id(SPUtil.getUserId(AddPersonalTaskActivity.this));
-                        listBean.setUser_name(SPUtil.getUserName(AddPersonalTaskActivity.this));
                         selectBean.add(listBean);
                         holder.itemTroubleCheck.setChecked(true);
                     }else {
@@ -482,8 +484,6 @@ public class AddPersonalTaskActivity extends BaseActivity {
                         }
                         if (isExit==0){
                             listBean.setGroup_list_id(listBean.getId());
-                            listBean.setUser_id(SPUtil.getUserId(AddPersonalTaskActivity.this));
-                            listBean.setUser_name(SPUtil.getUserName(AddPersonalTaskActivity.this));
                             selectBean.add(listBean);
                             holder.itemTroubleCheck.setChecked(true);
                         }

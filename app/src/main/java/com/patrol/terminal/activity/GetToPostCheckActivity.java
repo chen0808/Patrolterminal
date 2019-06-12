@@ -32,6 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
+//到岗位置检查
 public class GetToPostCheckActivity extends BaseActivity {
 
 

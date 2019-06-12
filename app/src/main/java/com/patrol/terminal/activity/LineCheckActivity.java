@@ -40,7 +40,7 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-/*通讯录*/
+/*选择线路*/
 public class LineCheckActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
