@@ -467,7 +467,7 @@ public class AddDayPlanActivity extends BaseActivity {
             }
         }
     }
-    //获取工作类型
+    //获取线路杆塔
     public void getTempTower() {
         ProgressDialog.show(this,false,"正在加载。。。");
         BaseRequest.getInstance().getService()

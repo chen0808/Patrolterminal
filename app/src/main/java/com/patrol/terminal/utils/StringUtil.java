@@ -47,7 +47,7 @@ public class StringUtil {
         String[] split = sign.split(",");
         for (int i = 0; i < split.length; i++) {
             int index = Integer.parseInt(split[i])-1;
-            if (split.length==0){
+            if (split.length==1){
                 typeNmae=typeSigns[index];
             }else {
                 if (i==0){

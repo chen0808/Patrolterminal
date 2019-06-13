@@ -2,6 +2,7 @@ package com.patrol.terminal.overhaul;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,20 +17,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.LineCheckActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.LineCheckBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
+import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.TimeUtil;
+import com.patrol.terminal.widget.ProgressDialog;
 
-import java.sql.Time;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -53,7 +59,7 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
     @BindView(R.id.month_plan_nuit)
     EditText monthPlanNuit;
     @BindView(R.id.month_plan_device_name)
-    EditText monthPlanDeviceName;
+    TextView monthPlanDeviceName;
     @BindView(R.id.month_plan_month)
     TextView monthPlanMonth;
     @BindView(R.id.month_plan_yes)
@@ -62,8 +68,6 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
     RadioButton monthPlanNo;
     @BindView(R.id.month_plan_day_num)
     EditText monthPlanDayNum;
-    @BindView(R.id.month_plan_range)
-    TextView monthPlanRange;
     @BindView(R.id.month_plan_source)
     TextView monthPlanSource;
     @BindView(R.id.month_plan_time_start)
@@ -90,9 +94,16 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
     LinearLayout llBlackoutRange;
     @BindView(R.id.rg_need_blackout)
     RadioGroup rgNeedBlackout;
+    @BindView(R.id.month_plan_start_range)
+    TextView monthPlanStartRange;
+    @BindView(R.id.month_plan_end_range)
+    TextView monthPlanEndRange;
 
     private OverhaulYearBean overhaulYearBean;
     private int fromType = 0;
+    private LineCheckBean lineCheckBean;
+    private String[] towers;
+    private List<Tower> towerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +160,6 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
                 llBlackoutRange.setVisibility(View.VISIBLE);
                 powerFailureLl.setVisibility(View.VISIBLE);
                 monthPlanDayNum.setText(String.valueOf(overhaulYearBean.getBlackout_days()));
-                monthPlanRange.setText(overhaulYearBean.getBlackout_range());
                 monthPlanSource.setText(overhaulYearBean.getTask_source());
                 monthPlanTimeStart.setText(overhaulYearBean.getStart_time());
                 monthPlanTimeEnd.setText(overhaulYearBean.getEnd_time());
@@ -164,13 +174,32 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.title_back, R.id.month_plan_time_start, R.id.month_plan_time_end, R.id.month_plan_source,
-            R.id.month_plan_range, R.id.month_plan_submit, R.id.month_plan_rish_level, R.id.dian_month_plan_rish_level, R.id.month_plan_vo})
+             R.id.month_plan_submit, R.id.month_plan_rish_level, R.id.dian_month_plan_rish_level, R.id.month_plan_vo, R.id.month_plan_device_name,R.id.month_plan_start_range,R.id.month_plan_end_range})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
-
+            case R.id.month_plan_start_range:
+                if (lineCheckBean==null){
+                    Toast.makeText(this,"请先选择设备名称",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+               showTowerDialog(1);
+                break;
+            case R.id.month_plan_end_range:
+                if (lineCheckBean==null){
+                    Toast.makeText(this,"请先选择设备名称",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                showTowerDialog(2);
+                break;
+            case R.id.month_plan_device_name:
+                Intent intent = new Intent();
+                intent.setClass(this, LineCheckActivity.class);
+                intent.putExtra("from", "Temporary");
+                startActivityForResult(intent, 107);
+                break;
             case R.id.month_plan_time_start:
                 PickerUtils.showDate(OverhaulAddMonthPlanActivity.this, monthPlanTimeStart);
                 break;
@@ -180,14 +209,20 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
                 break;
 
             case R.id.month_plan_source:
+
                 showTaskDialog();
                 break;
 
             case R.id.month_plan_vo:
+
                 showDianyaLevel();
                 break;
 
             case R.id.month_plan_submit:
+                if (towerEnd<towerStart){
+                    Toast.makeText(OverhaulAddMonthPlanActivity.this,"终点杆塔不能低于起始杆塔",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 OverhaulYearBean updateOverhaulYearBean = new OverhaulYearBean();
                 if (fromType == 1 || fromType == 2) {  //新增
                     String startTimeStr = monthPlanTimeStart.getText().toString();
@@ -231,7 +266,6 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
                     updateOverhaulYearBean.setBlackout_days(Integer.valueOf(blackout_daysStr[0]));
                 }
 
-                updateOverhaulYearBean.setBlackout_range(monthPlanRange.getText().toString());
                 updateOverhaulYearBean.setTask_source(monthPlanSource.getText().toString());
                 updateOverhaulYearBean.setStart_time(monthPlanTimeStart.getText().toString());
                 updateOverhaulYearBean.setEnd_time(monthPlanTimeEnd.getText().toString());
@@ -250,9 +284,7 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
                 showDianRistDialog();
                 break;
 
-            case R.id.month_plan_range:
-                showTingdianDialog();
-                break;
+
         }
     }
 
@@ -343,6 +375,8 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
     }
 
     private int riskCheckItem = 0;
+    private int towerStart = 0;
+    private int towerEnd = -1;
 
     private void showRistDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(OverhaulAddMonthPlanActivity.this);
@@ -362,6 +396,30 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
         dialog.show();
     }
 
+
+    private void showTowerDialog(int type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(OverhaulAddMonthPlanActivity.this);
+        builder.setTitle("杆塔选择");
+        builder.setSingleChoiceItems(towers, riskCheckItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (type == 1) {
+                    towerStart = which;
+                    monthPlanStartRange.setText(towers[towerStart]);
+                } else {
+                    towerEnd = which;
+
+
+                    monthPlanEndRange.setText(towers[towerEnd]);
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     private int dianRiskCheckItem = 0;
 
@@ -385,21 +443,58 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
 
     private int tingdianCheckItem = 0;
 
-    private void showTingdianDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(OverhaulAddMonthPlanActivity.this);
-        builder.setTitle("停电范围选择");
-        String[] taskSourceNames = getResources().getStringArray(R.array.tingdian_range_names);
+//    private void showTingdianDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(OverhaulAddMonthPlanActivity.this);
+//        builder.setTitle("停电范围选择");
+//        String[] taskSourceNames = getResources().getStringArray(R.array.tingdian_range_names);
+//
+//        builder.setSingleChoiceItems(taskSourceNames, tingdianCheckItem, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                tingdianCheckItem = which;
+//                monthPlanRange.setText(taskSourceNames[tingdianCheckItem]);
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
 
-        builder.setSingleChoiceItems(taskSourceNames, tingdianCheckItem, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                tingdianCheckItem = which;
-                monthPlanRange.setText(taskSourceNames[tingdianCheckItem]);
-                dialog.dismiss();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 107 && resultCode == -1) {
+            if (data != null) {
+                lineCheckBean = (LineCheckBean) data.getSerializableExtra("bean");
+                monthPlanDeviceName.setText(lineCheckBean.getName());
+                getTempTower();
             }
-        });
+        }
+    }
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+    //获取线路杆塔
+    public void getTempTower() {
+        ProgressDialog.show(this, false, "正在加载。。。");
+        BaseRequest.getInstance().getService()
+                .getTempTower(lineCheckBean.getId(), "name")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<Tower>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<Tower>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        towerList = t.getResults();
+                        towers = new String[towerList.size()];
+                        for (int i = 0; i < towerList.size(); i++) {
+                            towers[i] = towerList.get(i).getName();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
     }
 }
