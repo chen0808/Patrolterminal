@@ -134,21 +134,26 @@ public class AddGroupTaskActivity extends BaseActivity {
             @Override
             public void accept(GroupOfDayBean type) throws Exception {
                 if (selectType.size()==0){
-                    type.setDay_tower_id(type.getId());
+                    if (type.getId()!=null){
+                        type.setDay_tower_id(type.getId());
+                    }
+
                     type.setId(null);
                     selectType.add(type);
                 }else {
                     int isExit=0;
                     for (int i = 0; i < selectType.size(); i++) {
                         GroupOfDayBean dayOfWeekBean = selectType.get(i);
-                        if (dayOfWeekBean.getDay_tower_id().equals(type.getId())){
+                        if (dayOfWeekBean.getDay_tower_id().equals(type.getDay_tower_id())){
                             isExit=1;
                             selectType.remove(i);
-                            return;
+                            break;
                         }
                     }
                     if (isExit==0){
-                        type.setDay_tower_id(type.getId());
+                        if (type.getId()!=null){
+                            type.setDay_tower_id(type.getId());
+                        }
                         type.setId(null);
                         selectType.add(type);
                     }

@@ -469,6 +469,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (selectBean.size()==0){
                         listBean.setGroup_list_id(listBean.getId());
+                        listBean.setId(null);
                         selectBean.add(listBean);
                         holder.itemTroubleCheck.setChecked(true);
                     }else {
@@ -479,7 +480,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                                 isExit=1;
                                 selectBean.remove(i);
                                 holder.itemTroubleCheck.setChecked(false);
-                                return;
+                                break;
                             }
                         }
                         if (isExit==0){
