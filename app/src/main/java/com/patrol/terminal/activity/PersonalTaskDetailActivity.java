@@ -11,6 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.PersonalTaskDetailAdapter;
@@ -31,8 +34,6 @@ import com.patrol.terminal.widget.ProgressDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -104,10 +105,10 @@ public class PersonalTaskDetailActivity extends Activity {
         }
         tvLineType.setText("执行人 : " + bean.getWork_user_name());
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign()))&&bean.getWork_user_name()==null) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign())) && bean.getWork_user_name() == null) {
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("指派");
-            tvLineType.setText("执行人 : 暂无" );
+            tvLineType.setText("执行人 : 暂无");
             getPersonal();
         }
         year = bean.getYear();
@@ -145,12 +146,12 @@ public class PersonalTaskDetailActivity extends Activity {
                     case "7":
                     case "11":
                         intent.setClass(PersonalTaskDetailActivity.this, PatrolRecordActivity.class);
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_id", bean.getTower_id());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_id", bean.getLine_id());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_name", bean.getLine_name());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_name", bean.getTower_name());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_id", bean.getUser_id());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_name", bean.getUser_name());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_id", bean.getTower_id() == null ? "" : bean.getTower_id());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_id", bean.getLine_id() == null ? "" : bean.getLine_id());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_name", bean.getLine_name() == null ? "" : bean.getLine_name());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_name", bean.getTower_name() == null ? "" : bean.getTower_name());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_id", bean.getUser_id() == null ? "" : bean.getUser_id());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_name", bean.getUser_name() == null ? "" : bean.getUser_name());
                         break;
                     case "5":
                         intent.setClass(PersonalTaskDetailActivity.this, HongWaiCeWenActivity.class);
@@ -297,8 +298,8 @@ public class PersonalTaskDetailActivity extends Activity {
                 finish();
                 break;
             case R.id.title_setting:
-                if (names==null){
-                    Toast.makeText(this,"暂未获取人员列表信息,请稍后再试",Toast.LENGTH_SHORT).show();
+                if (names == null) {
+                    Toast.makeText(this, "暂未获取人员列表信息,请稍后再试", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showSingleChooseDialog(names);

@@ -11,6 +11,12 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -42,11 +48,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -148,14 +149,14 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         }
 
         //分配每个职位进来的待办
-        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.REFURBISHMENT_MEMBER)
-                || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
-                || jobType.contains(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
-            mainExameRb.setVisibility(View.GONE);
-
-            mFragments.add(new TodosManageFragment());  //只是不显示，以免RideoButton点击错乱
-
-        } else {                                                    //有待办的角色
+//        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.REFURBISHMENT_MEMBER)
+//                || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
+//                || jobType.contains(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
+//            mainExameRb.setVisibility(View.GONE);
+//
+//            mFragments.add(new TodosManageFragment());  //只是不显示，以免RideoButton点击错乱
+//
+//        } else {                                                    //有待办的角色
             mainExameRb.setVisibility(View.VISIBLE);
 
             if (jobType.contains("yx")) {   //运行待办
@@ -163,8 +164,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
             } else {   //其他角色待办
                 mFragments.add(new TodosManageFragment());
             }
-
-        }
+//        }
 
         mFragments.add(new AnylyzeFrgment());
         mFragments.add(new MeFragement());

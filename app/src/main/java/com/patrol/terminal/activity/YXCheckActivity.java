@@ -1,12 +1,15 @@
 package com.patrol.terminal.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
@@ -25,9 +28,6 @@ import com.patrol.terminal.widget.ProgressDialog;
 import java.util.Date;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -63,8 +63,8 @@ public class YXCheckActivity extends BaseActivity implements BaseQuickAdapter.On
     private static final int IS_DONE_PAGE = 1;
     private int isTodoPage = IS_TODO_PAGE;
     private String status;
-    private List<PersonalTaskListBean> results;
-    private List<PersonalTaskListBean> resultsHave;
+//    private List<PersonalTaskListBean> results;
+//    private List<PersonalTaskListBean> resultsHave;
 
     private String jobType;
     private Disposable subscribe;
@@ -93,7 +93,7 @@ public class YXCheckActivity extends BaseActivity implements BaseQuickAdapter.On
         getYXtodo();
         LinearLayoutManager manager = new LinearLayoutManager(mActivity);
         fragTodoRv.setLayoutManager(manager);
-        toDoManageAdapter = new YXTodoManageAdapter(R.layout.fragment_yxtodo_item, results);
+//        toDoManageAdapter = new YXTodoManageAdapter(R.layout.fragment_yxtodo_item, results);
         fragTodoRv.setAdapter(toDoManageAdapter);
 
         fragTodoRef.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -139,8 +139,8 @@ public class YXCheckActivity extends BaseActivity implements BaseQuickAdapter.On
                 doneTv.setTextColor(getResources().getColor(R.color.white));
 
                 isTodoPage = IS_TODO_PAGE;
-                toDoManageAdapter.setNewData(results);
-                toDoManageAdapter.setNewData(results);
+//                toDoManageAdapter.setNewData(results);
+//                toDoManageAdapter.setNewData(results);
                 break;
 
             case R.id.done_tv:
@@ -150,8 +150,8 @@ public class YXCheckActivity extends BaseActivity implements BaseQuickAdapter.On
                 doneTv.setTextColor(getResources().getColor(R.color.date_color));
 
                 isTodoPage = IS_DONE_PAGE;
-                toDoManageAdapter.setNewData(results);
-                toDoManageAdapter.setNewData(resultsHave);
+//                toDoManageAdapter.setNewData(results);
+//                toDoManageAdapter.setNewData(resultsHave);
                 break;
             case R.id.title_back:
                 finish();
@@ -161,38 +161,38 @@ public class YXCheckActivity extends BaseActivity implements BaseQuickAdapter.On
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        PersonalTaskListBean todoListBean;
-        if (isTodoPage == IS_TODO_PAGE) {
-            todoListBean = results.get(position);
-        } else {
-            todoListBean = resultsHave.get(position);
-        }
-        String deal_type = todoListBean.getType_sign();
-        String data_id = todoListBean.getId();
-        Intent intent = new Intent();
-        intent.putExtra("audit_status", todoListBean.getDone_status());
-        intent.putExtra("task_id", data_id);
-        switch (deal_type) {
-            case "1":
-                intent.setClass(this, PatrolRecordActivity.class);
-                break;
-            case "2":
-                intent.setClass(this, HongWaiCeWenActivity.class);
-                break;
-            case "3":
-                intent.setClass(this, JiediDianZuCeLiangActicivity.class);
-                break;
-            case "10":
-                intent.setClass(this, JueYuanZiLingZhiJianCeActivity.class);
-                break;
-            case "5":
-                intent.setClass(this, HongWaiCeWenActivity.class);
-                break;
-            case "6":
-                intent.setClass(this, XieGanTaQingXieCeWenActivity.class);
-                break;
-        }
-        startActivity(intent);
+//        PersonalTaskListBean todoListBean;
+//        if (isTodoPage == IS_TODO_PAGE) {
+//            todoListBean = results.get(position);
+//        } else {
+//            todoListBean = resultsHave.get(position);
+//        }
+//        String deal_type = todoListBean.getType_sign();
+//        String data_id = todoListBean.getId();
+//        Intent intent = new Intent();
+//        intent.putExtra("audit_status", todoListBean.getDone_status());
+//        intent.putExtra("task_id", data_id);
+//        switch (deal_type) {
+//            case "1":
+//                intent.setClass(this, PatrolRecordActivity.class);
+//                break;
+//            case "2":
+//                intent.setClass(this, HongWaiCeWenActivity.class);
+//                break;
+//            case "3":
+//                intent.setClass(this, JiediDianZuCeLiangActicivity.class);
+//                break;
+//            case "10":
+//                intent.setClass(this, JueYuanZiLingZhiJianCeActivity.class);
+//                break;
+//            case "5":
+//                intent.setClass(this, HongWaiCeWenActivity.class);
+//                break;
+//            case "6":
+//                intent.setClass(this, XieGanTaQingXieCeWenActivity.class);
+//                break;
+//        }
+//        startActivity(intent);
     }
 
     public void getYXtodo() {
@@ -208,7 +208,7 @@ public class YXCheckActivity extends BaseActivity implements BaseQuickAdapter.On
                         fragTodoRef.setRefreshing(false);
 
                         if (isTodoPage == IS_TODO_PAGE) {
-                            toDoManageAdapter.setNewData(results);
+//                            toDoManageAdapter.setNewData(results);
                         }
                     }
                     @Override

@@ -1,9 +1,18 @@
 package com.patrol.terminal.bean;
 
 public class SaveTodoReqbean {
-    private  String id;
-    private  String audit_status;
-    private  String from_user_id;
+    private String id;
+    private String audit_status;
+    private String from_user_id;
+    private String type_sign;
+
+    public String getType_sign() {
+        return type_sign;
+    }
+
+    public void setType_sign(String type_sign) {
+        this.type_sign = type_sign;
+    }
 
     public String getFrom_user_id() {
         return from_user_id;

@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
@@ -40,7 +42,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -235,7 +236,7 @@ public class TemporaryActivity extends BaseActivity {
                 monthPlanType.setText(typeName);
                 for (int i = 0; i < typeList.size(); i++) {
                     LineTypeBean lineTypeBean = typeList.get(i);
-                    if (typeName.equals(lineTypeBean.getName())){
+                    if (typeName.contains(lineTypeBean.getName())) {
                         type_id = lineTypeBean.getId();
                         sign = lineTypeBean.getSign();
                     }

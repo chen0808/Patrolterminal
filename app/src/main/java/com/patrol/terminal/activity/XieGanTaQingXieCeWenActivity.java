@@ -16,7 +16,6 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GTQXCLbean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
-import com.patrol.terminal.bean.TodoListBean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -26,7 +25,6 @@ import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -128,15 +126,14 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
             }
             mengban.setVisibility(View.VISIBLE);
             btnCommit.setVisibility(View.GONE);
-        }
-        else if ("2".equals(audit_status)) {
+        } else if ("2".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
             btnCommit.setVisibility(View.GONE);
-        }else if ("4".equals(audit_status)) {
+        } else if ("4".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 titleSetting.setVisibility(View.GONE);
                 mengban.setVisibility(View.VISIBLE);
@@ -155,7 +152,6 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
             mengban.setVisibility(View.VISIBLE);
             btnCommit.setVisibility(View.GONE);
         }
-
 
 
     }
@@ -258,7 +254,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
 
         saveTodoReqbean.setAudit_status(state);
         saveTodoReqbean.setId(task_id);
-
+        saveTodoReqbean.setType_sign(sign);
         BaseRequest.getInstance().getService()
                 .saveTodoAudit(saveTodoReqbean)
                 .subscribeOn(Schedulers.io())

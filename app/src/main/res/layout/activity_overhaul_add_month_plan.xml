@@ -19,7 +19,7 @@
             android:id="@+id/month_plan_nuit"
             style="@style/plan_et_styl"
             android:background="@null"
-            android:hint="请输入申请单位" />
+            android:hint="输电运检中心" />
     </LinearLayout>
 
     <View style="@style/line_styl" />

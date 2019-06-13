@@ -274,7 +274,7 @@ public class HongWaiCeWenActivity extends BaseActivity {
 
         saveTodoReqbean.setAudit_status(state);
         saveTodoReqbean.setId(task_id);
-
+        saveTodoReqbean.setType_sign(sign);
         BaseRequest.getInstance().getService()
                 .saveTodoAudit(saveTodoReqbean)
                 .subscribeOn(Schedulers.io())

@@ -2,7 +2,7 @@ package com.patrol.terminal.utils;
 
 public class StringUtil {
 
-    private static String[] typeSigns=new String[]{"定期巡视","故障巡视","接电电阻检测","特殊性巡视","红外测温检测","杆塔倾斜检测","保电巡视","缺陷消除","隐患处理","绝缘子零值检测","监督性巡视","安全监督","验收报告"};
+    private static String[] typeSigns = new String[]{"定期巡视", "故障巡视", "接地电阻检测", "特殊性巡视", "红外测温检测", "杆塔倾斜检测", "保电巡视", "缺陷消除", "隐患处理", "绝缘子零值检测", "监督性巡视", "安全监督", "验收报告"};
     //获取运行班月计划审核状态
     public static String getYXBstate(String state) {
         switch (state) {

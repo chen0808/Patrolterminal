@@ -79,6 +79,7 @@ import com.patrol.terminal.bean.SubmitPlanReqBean;
 import com.patrol.terminal.bean.SubmitPlanReqStateBean;
 import com.patrol.terminal.bean.ThirdTicketBean;
 import com.patrol.terminal.bean.TicketSafeContent;
+import com.patrol.terminal.bean.TodoBean;
 import com.patrol.terminal.bean.TodoListBean;
 import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.TowerListBean;
@@ -136,7 +137,7 @@ public interface ApiServise {
     @GET("plan/month/planGET")
     Observable<BaseResult<MonthListBean>> getMonthPlan(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("audit_status") String audit_status, @Query("order") String order);
 
-    //月计划列表
+    //线路列表
     @GET("/plan/month/lineGET")
     Observable<BaseResult<List<LineCheckBean>>> getLineList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_sign") String type_sign);
 
@@ -343,7 +344,7 @@ public interface ApiServise {
 
     //个人任务列表获取小组任务
     @GET("/task/group/list/listGET")
-    Observable<BaseResult<List<GroupTaskBean>>> getPersonalOfGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("allot_status") String allot_status,@Query("work_user_id") String work_user_id, @Query("order") String order);
+    Observable<BaseResult<List<GroupTaskBean>>> getPersonalOfGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("allot_status") String allot_status, @Query("work_user_id") String work_user_id, @Query("order") String order);
 
     @GET("/task/group/user/groupGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id);
@@ -374,6 +375,10 @@ public interface ApiServise {
     //个人任务列表
     @GET("task/personal/listGET")
     Observable<BaseResult<List<PersonalTaskListBean>>> getDepPersonalList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id, @Query("limit") String limit);
+
+    //待办列表
+    @GET("task/remind/listGET")
+    Observable<BaseResult<List<TodoBean>>> todoList(@Query("to_user_id") String to_user_id);
 
     //个人任务列表
     @GET("task/personal/listGET")
@@ -891,8 +896,8 @@ public interface ApiServise {
     @GET("task/temperature/byIdGE")
     Observable<BaseResult<HwcwBean>> getHWCWbyId(@Query("id") String id);
 
-    //更新个人任务代办信息
-    @POST("/task/personal/updatePOST ")
+    //提交审核代办信息
+    @POST("/task/personal/auditPOST ")
     Observable<BaseResult<TypeBean>> saveTodoAudit(@Body SaveTodoReqbean reqbean);
 
     //上传个人位置信息
@@ -939,4 +944,9 @@ public interface ApiServise {
     //获取班组信息
     @POST("/task/personal/updatePOST")
     Observable<BaseResult<List<DepBean>>> savaCheck(@Body SaveCheckReqBean bean);
+
+
+    //巡视记录图片列表
+    @GET("task/patrol/img/listGET")
+    Observable<BaseResult<List<PatrolRecordPicBean>>> getRecordPicList(@Query("task_id") String task_id);
 }

@@ -1,6 +1,7 @@
 package com.patrol.terminal.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -30,16 +33,22 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.PatrolRecordPicBean;
+import com.patrol.terminal.bean.SaveTodoReqbean;
+import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
-import com.patrol.terminal.fragment.SpecialAttrFrgment2;
 import com.patrol.terminal.fragment.SpecialAttrFrgment3;
 import com.patrol.terminal.fragment.TroubleFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.NoScrollViewPager;
+import com.patrol.terminal.widget.PinchImageView;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SignDialog;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -115,6 +124,7 @@ public class PatrolRecordActivity extends BaseActivity {
     public static final int PHOTO5 = 5;
     public static final int PHOTO6 = 6;
     private List<LocalMedia> localMedia;
+    private List<PatrolRecordPicBean> picBeanList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +148,63 @@ public class PatrolRecordActivity extends BaseActivity {
         initview();
 //        getPartrolRecord();
 //        getYXtodo();
+        initPic();
+    }
 
+    private void initPic() {
+        BaseRequest.getInstance().getService()
+                .getRecordPicList(task_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
+
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
+                        picBeanList = t.getResults();
+                        for (int i = 0; i < picBeanList.size(); i++) {
+                            showPic(picBeanList.get(i));
+                        }
+                        if (picBeanList.size() == 6) {
+                            titleSetting.setVisibility(View.VISIBLE);
+                            if (audit_status.equals("0") || audit_status.equals("4")) {
+                                titleSettingTv.setText("提交");
+                            } else {
+                                titleSettingTv.setText("审核");
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+
+                });
+    }
+
+    private void showPic(PatrolRecordPicBean picBean) {
+        String path = BaseUrl.BASE_URL + picBean.getFile_path() + picBean.getFilename();
+        switch (picBean.getSign()) {
+            case "1":
+                Glide.with(this).load(path).into(ivPhoto1);
+                break;
+            case "2":
+                Glide.with(this).load(path).into(ivPhoto2);
+                break;
+            case "3":
+                Glide.with(this).load(path).into(ivPhoto3);
+                break;
+            case "4":
+                Glide.with(this).load(path).into(ivPhoto4);
+                break;
+            case "5":
+                Glide.with(this).load(path).into(ivPhoto5);
+                break;
+            case "6":
+                Glide.with(this).load(path).into(ivPhoto6);
+                break;
+        }
     }
 
     private void initview() {
@@ -284,56 +350,81 @@ public class PatrolRecordActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-//                if ((jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) && (!"0".equals(audit_status))) {
-//
-//                    CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
-//                        @Override
-//                        public void ok() {
-//                            super.ok();
-//                            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-//                                saveTodoAudit("3");   //同意
-//                            } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-//                                saveTodoAudit("2");   //同意
-//                            }
-//
-//                            dismiss();
-//                        }
-//
-//                        @Override
-//                        public void cancel() {
-//                            super.cancel();
-//                            saveTodoAudit("4");  //不同意
-//                            dismiss();
-//                        }
-//                    };
-//                    dialog.show();
-//                } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-////                    commitPatrolRecord();
-//                }
+
+                if ((jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) && (!"0".equals(audit_status))) {
+
+                    CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
+                        @Override
+                        public void ok() {
+                            super.ok();
+                            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                                saveTodoAudit("3");   //同意
+                            } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                                saveTodoAudit("2");   //同意
+                            }
+
+                            dismiss();
+                        }
+
+                        @Override
+                        public void cancel() {
+                            super.cancel();
+                            saveTodoAudit("4");  //不同意
+                            dismiss();
+                        }
+                    };
+                    dialog.show();
+                } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {//组员提交，待负责人审核
+                    saveTodoAudit("1");
+                }
                 break;
             case R.id.iv_photo1:
-                photoUri1 = patrUri("record_1", PHOTO1);
-                startCamera(PHOTO1, photoUri1);
+                if (audit_status.equals("0") || audit_status.equals("4")) {
+                    photoUri1 = patrUri("record_1", PHOTO1);
+                    startCamera(PHOTO1, photoUri1);
+                } else {
+                    showBigImage(PHOTO1);
+                }
                 break;
             case R.id.iv_photo2:
-                photoUri2 = patrUri("record_2", PHOTO2);
-                startCamera(PHOTO2, photoUri2);
+                if (audit_status.equals("0") || audit_status.equals("4")) {
+                    photoUri2 = patrUri("record_2", PHOTO2);
+                    startCamera(PHOTO2, photoUri2);
+                } else {
+                    showBigImage(PHOTO2);
+                }
                 break;
             case R.id.iv_photo3:
-                photoUri3 = patrUri("record_3", PHOTO3);
-                startCamera(PHOTO3, photoUri3);
+                if (audit_status.equals("0") || audit_status.equals("4")) {
+                    photoUri3 = patrUri("record_3", PHOTO3);
+                    startCamera(PHOTO3, photoUri3);
+                } else {
+                    showBigImage(PHOTO3);
+                }
                 break;
             case R.id.iv_photo4:
-                photoUri4 = patrUri("record_4", PHOTO4);
-                startCamera(PHOTO4, photoUri4);
+                if (audit_status.equals("0") || audit_status.equals("4")) {
+                    photoUri4 = patrUri("record_4", PHOTO4);
+                    startCamera(PHOTO4, photoUri4);
+                } else {
+                    showBigImage(PHOTO4);
+                }
                 break;
             case R.id.iv_photo5:
-                photoUri5 = patrUri("record_5", PHOTO5);
-                startCamera(PHOTO5, photoUri5);
+                if (audit_status.equals("0") || audit_status.equals("4")) {
+                    photoUri5 = patrUri("record_5", PHOTO5);
+                    startCamera(PHOTO5, photoUri5);
+                } else {
+                    showBigImage(PHOTO5);
+                }
                 break;
             case R.id.iv_photo6:
-                photoUri6 = patrUri("record_6", PHOTO6);
-                startCamera(PHOTO6, photoUri6);
+                if (audit_status.equals("0") || audit_status.equals("4")) {
+                    photoUri6 = patrUri("record_6", PHOTO6);
+                    startCamera(PHOTO6, photoUri6);
+                } else {
+                    showBigImage(PHOTO6);
+                }
                 break;
             case R.id.fab:
                 startActivity(new Intent(this, MapActivity.class));
@@ -347,6 +438,20 @@ public class PatrolRecordActivity extends BaseActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         startActivityForResult(intent, requestCode);
+    }
+
+    //查看大图
+    private void showBigImage(int photo) {
+        Dialog dialog = new Dialog(this);
+
+        dialog.setContentView(R.layout.dialog_big_image);
+        PinchImageView iv = dialog.findViewById(R.id.iv);
+        for (int i = 0; i < picBeanList.size(); i++) {
+            if (picBeanList.get(i).getSign() != null && picBeanList.get(i).getSign().equals(String.valueOf(photo))) {
+                Glide.with(this).load(BaseUrl.BASE_URL + picBeanList.get(i).getFile_path() + picBeanList.get(i).getFilename()).into(iv);
+            }
+        }
+        dialog.show();
     }
 
     public RequestBody toRequestBody(String value) {
@@ -366,37 +471,37 @@ public class PatrolRecordActivity extends BaseActivity {
             try {
                 switch (requestCode) {
                     case PHOTO1:
-                        Bitmap bitmap1 = FileUtil.compressBySize(filePath1, 720, 1068);  //设置压缩后图片的高度和宽度
+                        Bitmap bitmap1 = FileUtil.compressBySize(filePath1, 1080, 1920);  //设置压缩后图片的高度和宽度
                         FileUtil.saveFile(bitmap1, filePath1);
                         ivPhoto1.setImageBitmap(bitmap1);
                         upLoadPic(PHOTO1, bitmap1);
                         break;
                     case PHOTO2:
-                        Bitmap bitmap2 = FileUtil.compressBySize(filePath2, 720, 1068);  //设置压缩后图片的高度和宽度
+                        Bitmap bitmap2 = FileUtil.compressBySize(filePath2, 1080, 1920);  //设置压缩后图片的高度和宽度
                         FileUtil.saveFile(bitmap2, filePath2);
                         ivPhoto2.setImageBitmap(bitmap2);
                         upLoadPic(PHOTO2, bitmap2);
                         break;
                     case PHOTO3:
-                        Bitmap bitmap3 = FileUtil.compressBySize(filePath3, 720, 1068);  //设置压缩后图片的高度和宽度
+                        Bitmap bitmap3 = FileUtil.compressBySize(filePath3, 1080, 1920);  //设置压缩后图片的高度和宽度
                         FileUtil.saveFile(bitmap3, filePath3);
                         ivPhoto3.setImageBitmap(bitmap3);
                         upLoadPic(PHOTO3, bitmap3);
                         break;
                     case PHOTO4:
-                        Bitmap bitmap4 = FileUtil.compressBySize(filePath4, 720, 1068);  //设置压缩后图片的高度和宽度
+                        Bitmap bitmap4 = FileUtil.compressBySize(filePath4, 1080, 1920);  //设置压缩后图片的高度和宽度
                         FileUtil.saveFile(bitmap4, filePath4);
                         ivPhoto4.setImageBitmap(bitmap4);
                         upLoadPic(PHOTO4, bitmap4);
                         break;
                     case PHOTO5:
-                        Bitmap bitmap5 = FileUtil.compressBySize(filePath5, 720, 1068);  //设置压缩后图片的高度和宽度
+                        Bitmap bitmap5 = FileUtil.compressBySize(filePath5, 1080, 1920);  //设置压缩后图片的高度和宽度
                         FileUtil.saveFile(bitmap5, filePath5);
                         ivPhoto5.setImageBitmap(bitmap5);
                         upLoadPic(PHOTO5, bitmap5);
                         break;
                     case PHOTO6:
-                        Bitmap bitmap6 = FileUtil.compressBySize(filePath6, 720, 1068);  //设置压缩后图片的高度和宽度
+                        Bitmap bitmap6 = FileUtil.compressBySize(filePath6, 1080, 1920);  //设置压缩后图片的高度和宽度
                         FileUtil.saveFile(bitmap6, filePath6);
                         ivPhoto6.setImageBitmap(bitmap6);
                         upLoadPic(PHOTO6, bitmap6);
@@ -405,6 +510,15 @@ public class PatrolRecordActivity extends BaseActivity {
                         localMedia = PictureSelector.obtainMultipleResult(data);
                         Constant.picList = localMedia;
                         break;
+                }
+                if (ivPhoto1.getDrawable() != null && ivPhoto2.getDrawable() != null && ivPhoto3.getDrawable() != null
+                        && ivPhoto4.getDrawable() != null && ivPhoto5.getDrawable() != null && ivPhoto6.getDrawable() != null) {
+                    titleSetting.setVisibility(View.VISIBLE);
+                    if (audit_status.equals("0") || audit_status.equals("4")) {
+                        titleSettingTv.setText("提交");
+                    } else {
+                        titleSettingTv.setText("审核");
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -418,9 +532,12 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     private void upLoadPic(int sign, Bitmap bitmap) {
+        ProgressDialog.show(this, false, "正在上传图片");
+        Log.d("signsign", "sign:" + sign);
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), SignDialog.saveBitmapFile(bitmap, sign + ".jpg"));
+        params.clear();
         params.put("file" + "\"; filename=\"" + sign + ".jpg", requestFile);
-        params.put("id", toRequestBody("aaa"));
+        params.put("id", toRequestBody(task_id));
         params.put("sign", toRequestBody(String.valueOf(sign)));
         BaseRequest.getInstance().getService()
                 .uploadRecordPic(params)
@@ -431,14 +548,50 @@ public class PatrolRecordActivity extends BaseActivity {
 
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
                         Toast.makeText(PatrolRecordActivity.this, "图片上传成功！", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                         Toast.makeText(PatrolRecordActivity.this, "图片上传失败，请重新上传！", Toast.LENGTH_SHORT).show();
                     }
 
+                });
+    }
+
+    //保存待办信息
+    public void saveTodoAudit(String state) {
+
+        SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
+
+        saveTodoReqbean.setAudit_status(state);
+        saveTodoReqbean.setId(task_id);
+        saveTodoReqbean.setType_sign(sign);
+        saveTodoReqbean.setFrom_user_id(SPUtil.getUserId(this));
+        BaseRequest.getInstance().getService()
+                .saveTodoAudit(saveTodoReqbean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<TypeBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.getCode() == 1) {
+                            Toast.makeText(PatrolRecordActivity.this, "成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            RxRefreshEvent.publish("refreshGroup");
+                            RxRefreshEvent.publish("refreshTodo");
+                            finish();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
                 });
     }
 
@@ -656,36 +809,4 @@ public class PatrolRecordActivity extends BaseActivity {
 ////    }
 //    }
 //
-//    //保存待办信息
-//    public void saveTodoAudit(String state) {
-//
-//        SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
-//
-//        saveTodoReqbean.setAudit_status(state);
-//        saveTodoReqbean.setId(task_id);
-//        saveTodoReqbean.setFrom_user_id(SPUtil.getUserId(this));
-//        BaseRequest.getInstance().getService()
-//                .saveTodoAudit(saveTodoReqbean)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<TypeBean>(this) {
-//                    @Override
-//                    protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
-//                        ProgressDialog.cancle();
-//                        if (t.getCode() == 1) {
-//                            Toast.makeText(PatrolRecordActivity.this, "审批成功", Toast.LENGTH_SHORT).show();
-//                            setResult(RESULT_OK);
-//                            RxRefreshEvent.publish("refreshGroup");
-//                            RxRefreshEvent.publish("refreshTodo");
-//                            finish();
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                        ProgressDialog.cancle();
-//                    }
-//                });
-//    }
 }
