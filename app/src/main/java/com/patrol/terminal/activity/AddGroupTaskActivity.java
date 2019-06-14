@@ -1,5 +1,6 @@
 package com.patrol.terminal.activity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
@@ -109,7 +112,9 @@ public class AddGroupTaskActivity extends BaseActivity {
     private String duty_user_name;
     private String duty_user_id;
     private List<GroupOfDayBean> patSelectList=new ArrayList<>();
-
+    private AlertDialog personalDialog;
+    private String[] personals;
+    private  List<String> personalPosin=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,6 +181,78 @@ public class AddGroupTaskActivity extends BaseActivity {
         }
         adapter.setData(list);
     }
+    public void showPersonal(){
+        boolean[] booleans=new boolean[personals.length];
+        for (int i = 0; i < personals.length; i++) {
+            String personal = personals[i];
+            int i1 = personalPosin.indexOf(personal);
+            if (i1==-1){
+                booleans[i]=false;
+            }else {
+                booleans[i]=true;
+            }
+        }
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle("选择组员");
+        /**
+         *第一个参数:弹出框的消息集合，一般为字符串集合
+         * 第二个参数：默认被选中的，布尔类数组
+         * 第三个参数：勾选事件监听
+         */
+        alertBuilder.setMultiChoiceItems(personals, booleans, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i, boolean isChecked) {
+
+                if (isChecked){
+                    personalPosin.add(personals[i]);
+                    Toast.makeText(AddGroupTaskActivity.this, "选择" + personals[i], Toast.LENGTH_SHORT).show();
+                }else {
+                    for (int j = 0; j < personalPosin.size(); j++) {
+                        String s = personalPosin.get(j);
+                        if (s.equals(personals[i])){
+                            personalPosin.remove(j);
+                            break;
+                        }
+                    }
+                    Toast.makeText(AddGroupTaskActivity.this, "取消选择" + personals[i], Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        alertBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int position) {
+                incontinuityTower.removeAllViews();
+                for (int j = 0; j < personalPosin.size(); j++) {
+                    String name = personalPosin.get(j);
+                        addTextView(name);
+                        for (int i = 0; i < personalList.size(); i++) {
+                            DepUserBean depUserBean = personalList.get(i);
+                            if (name.equals(depUserBean.getName())) {
+                                AddGroupTaskReqBean.UsersBean bean=new  AddGroupTaskReqBean.UsersBean();
+                                bean.setSign("3");
+                                bean.setUser_id(depUserBean.getId());
+                                bean.setUser_name(depUserBean.getName());
+                                addPeoList.add(bean);
+                            }
+                        }
+
+                }
+
+                personalDialog.dismiss();
+            }
+        });
+
+        alertBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                personalDialog.dismiss();
+            }
+        });
+
+
+        personalDialog = alertBuilder.create();
+        personalDialog.show();
+    }
 
     //获取日计划列表
     public void getDayList() {
@@ -186,7 +263,6 @@ public class AddGroupTaskActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupOfDayBean>>(this) {
-
 
                                @Override
                                protected void onSuccees(BaseResult<List<GroupOfDayBean>> t) throws Exception {
@@ -232,21 +308,6 @@ public class AddGroupTaskActivity extends BaseActivity {
                             addPeoList.add(bean);
                         }
                     }
-                } else {
-                    String name = userList.get(options1);
-                    addTextView(name);
-                    userList.remove(options1);
-                    for (int i = 0; i < personalList.size(); i++) {
-                        DepUserBean depUserBean = personalList.get(i);
-                        if (name.equals(depUserBean.getName())) {
-                            AddGroupTaskReqBean.UsersBean bean=new  AddGroupTaskReqBean.UsersBean();
-                            bean.setSign("3");
-                            bean.setUser_id(depUserBean.getId());
-                            bean.setUser_name(depUserBean.getName());
-                            addPeoList.add(bean);
-                        }
-                    }
-
                 }
 
 
@@ -348,8 +409,10 @@ public class AddGroupTaskActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<List<DepUserBean>> t) throws Exception {
                         personalList = t.getResults();
+                        personals = new String[personalList.size()];
                         for (int i = 0; i < personalList.size(); i++) {
                             userList.add(personalList.get(i).getName());
+                            personals[i]=personalList.get(i).getName();
                         }
 
                     }
@@ -470,7 +533,7 @@ public class AddGroupTaskActivity extends BaseActivity {
                 showPersonalLine(0);
                 break;
             case R.id.add_group_people:
-                showPersonalLine(1);
+               showPersonal();
                 break;
             case R.id.add_more_iv:
                 if (type == 0) {

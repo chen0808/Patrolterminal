@@ -408,15 +408,11 @@ public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
                     monthPlanStartRange.setText(towers[towerStart]);
                 } else {
                     towerEnd = which;
-
-
                     monthPlanEndRange.setText(towers[towerEnd]);
                 }
-
                 dialog.dismiss();
             }
         });
-
         AlertDialog dialog = builder.create();
         dialog.show();
     }
