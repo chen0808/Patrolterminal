@@ -81,10 +81,43 @@
         <item>"35kV"</item>
     </string-array>
 
+    <string-array name="link_type">
+        <item>"直线"</item>
+        <item>"耐张"</item>
+    </string-array>
+
+    <string-array name="weather">
+        <item>晴</item>
+        <item>阴</item>
+        <item>多云</item>
+        <item>雨</item>
+        <item>雪</item>
+        <item>雾</item>
+        <item>霾</item>
+        <item>沙尘暴</item>
+        <item>冰雹</item>
+        <item>浮沉</item>
+        <item>扬沙</item>
+    </string-array>
+
+    <string-array name="verdict">
+        <item>合格</item>
+        <item>不合格</item>
+    </string-array>
+
     <string-array name="type">
         <item>"高速铁路"</item>
         <item>"高速公路"</item>
         <item>"重要输电线路"</item>
         <item>"普通公路"</item>
+    </string-array>
+
+    <string-array name="dep_name">
+        <item>"西固运维班"</item>
+        <item>"兰州运维班"</item>
+        <item>"新城运维班"</item>
+        <item>"盐海运维班"</item>
+        <item>"开永运维班"</item>
+        <item>"和华运维班"</item>
     </string-array>
 </resources>

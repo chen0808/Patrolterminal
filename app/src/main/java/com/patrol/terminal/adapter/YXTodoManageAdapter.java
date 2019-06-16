@@ -25,12 +25,12 @@ public class YXTodoManageAdapter extends BaseQuickAdapter<TodoBean, BaseViewHold
             case "1":
                 viewHolder.setText(R.id.item_todo_type_tv, "巡");
                 break;
-            case "2":
-            case "3":
-            case "4":
             case "5":
             case "6":
+            case "7":
+            case "8":
                 viewHolder.setText(R.id.item_todo_type_tv, "检");
+                viewHolder.setBackgroundRes(R.id.item_todo_type_tv, R.drawable.plan_yellow_bg);
                 break;
             case "20":
                 viewHolder.setText(R.id.item_todo_type_tv, "修");

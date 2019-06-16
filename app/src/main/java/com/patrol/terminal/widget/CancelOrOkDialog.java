@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
-import com.patrol.terminal.fragment.MonthPlanFrgment;
 
 /**
  * 取消或者确认类型的Dialog
@@ -24,7 +23,7 @@ public class CancelOrOkDialog extends Dialog {
         //指定布局
         setContentView(R.layout.dialog_cancel_or_ok);
         //点击外部不可消失
-        setCancelable(false);
+//        setCancelable(false);
 
         //设置标题
         TextView titleTv = (TextView) findViewById(R.id.dialog_title_tv);

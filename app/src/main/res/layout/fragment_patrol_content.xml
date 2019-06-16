@@ -20,6 +20,6 @@
         android:layout_marginRight="60dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/selector_commit_bg"
-        android:text="提交"
+        android:text="保存"
         android:textColor="@color/white" />
 </RelativeLayout>

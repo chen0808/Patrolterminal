@@ -233,13 +233,33 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
 //        }else {
 //            todoListBean = resultsHave.get(position);
 //        }
+        clearTodo(results.get(position).getId());
         String deal_type = results.get(position).getFlow_sign();
         String task_id = results.get(position).getData_id();
         Intent intent = Utils.goTodo(getContext(), deal_type);
         intent.putExtra("audit_status", results.get(position).getNode_sign());
         intent.putExtra("task_id", task_id);
-        intent.putExtra("sign", deal_type);
+//        intent.putExtra("sign", deal_type);
         startActivity(intent);
+    }
+
+    private void clearTodo(String id) {
+        BaseRequest.getInstance().getService()
+                .clearTodo(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(getContext()) {
+
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        getYXtodo();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Log.e("fff", e.toString());
+                    }
+                });
     }
 
     //获取周检修计划列表
@@ -284,7 +304,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     private void getYXtodo() {
         String userId = SPUtil.getUserId(getContext());
         BaseRequest.getInstance().getService()
-                .todoList(userId)
+                .todoList(userId, "flow_sign")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<TodoBean>>(getContext()) {

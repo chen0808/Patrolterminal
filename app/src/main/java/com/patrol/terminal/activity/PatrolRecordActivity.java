@@ -36,6 +36,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
+import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
@@ -112,11 +113,6 @@ public class PatrolRecordActivity extends BaseActivity {
     private MyFragmentPagerAdapter pagerAdapter;
     private Disposable subscribe;
     private Map<String, RequestBody> params = new HashMap<>();
-    private String line_name, jobType;
-    private String tower_id;
-    private String tower_name, task_id, sign, typename, audit_status;
-    private List<Map<String, File>> fileList = new ArrayList<>();
-    private List<String> picList = new ArrayList<>();
     public static final int PHOTO1 = 1;
     public static final int PHOTO2 = 2;
     public static final int PHOTO3 = 3;
@@ -125,30 +121,64 @@ public class PatrolRecordActivity extends BaseActivity {
     public static final int PHOTO6 = 6;
     private List<LocalMedia> localMedia;
     private List<PatrolRecordPicBean> picBeanList;
+    private String jobType;
+    private String task_id;
+    private String sign;
+    private String audit_status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patrol_record);
         ButterKnife.bind(this);
+        titleName.setText("巡视记录");
 
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
-        titleName.setText("巡视记录");
-        line_name = getIntent().getStringExtra("line_name");
-        tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
-        tower_name = getIntent().getStringExtra("tower_name");
-        if (tower_name != null) {
-            SPUtil.put(this, "ids", "tower_name", tower_name);
-        }
         audit_status = getIntent().getStringExtra("audit_status");
-
-        sign = getIntent().getStringExtra("sign");
-        typename = getIntent().getStringExtra("typename");
         initview();
 //        getPartrolRecord();
-//        getYXtodo();
+        getYXtodo();
         initPic();
+        getTask(task_id);
+    }
+
+    private void getTask(String task_id) {
+        BaseRequest.getInstance().getService()
+                .getTask(task_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<TaskBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
+                        TaskBean bean = t.getResults();
+                        sign = bean.getType_sign();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+    }
+
+    private void getYXtodo() {
+        if ("1".equals(audit_status)) {
+            titleSetting.setVisibility(View.VISIBLE);
+            titleSettingTv.setText("审批");
+        } else if ("2".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
+            }
+        } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("提交");
+            }
+        } else {
+            titleSetting.setVisibility(View.GONE);
+        }
     }
 
     private void initPic() {
@@ -350,16 +380,16 @@ public class PatrolRecordActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-
-                if ((jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) && (!"0".equals(audit_status))) {
-
+                if (audit_status.equals("0") || audit_status.equals("4")) {
+                    saveTodoAudit("1");
+                } else {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
                         @Override
                         public void ok() {
                             super.ok();
                             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                                 saveTodoAudit("3");   //同意
-                            } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+                            } else {
                                 saveTodoAudit("2");   //同意
                             }
 
@@ -374,8 +404,6 @@ public class PatrolRecordActivity extends BaseActivity {
                         }
                     };
                     dialog.show();
-                } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {//组员提交，待负责人审核
-                    saveTodoAudit("1");
                 }
                 break;
             case R.id.iv_photo1:

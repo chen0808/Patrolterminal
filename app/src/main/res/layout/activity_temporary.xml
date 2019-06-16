@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -101,27 +100,27 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_20"
                 android:background="@color/white"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout style="@style/plan_ll_styl">
 
                     <TextView
                         style="@style/plan_tv_styl"
+                        android:layout_gravity="center_vertical"
                         android:text="选择杆段" />
-
                 </LinearLayout>
 
                 <View style="@style/line_styl" />
 
 
-                <ListView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/month_plan_tower"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_20"
                     android:layout_marginRight="@dimen/dp_20"
-                    android:layout_marginBottom="@dimen/dp_40"></ListView>
+                    android:layout_marginBottom="@dimen/dp_40"></androidx.recyclerview.widget.RecyclerView>
 
 
             </LinearLayout>

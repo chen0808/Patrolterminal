@@ -68,6 +68,7 @@ import com.patrol.terminal.bean.PositionListBean;
 import com.patrol.terminal.bean.RfInfo;
 import com.patrol.terminal.bean.SavaEleLineBean;
 import com.patrol.terminal.bean.SavaLineBean;
+import com.patrol.terminal.bean.SavaLineBean2;
 import com.patrol.terminal.bean.SavaMonthDefDanBean;
 import com.patrol.terminal.bean.SaveDefMonthReqBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
@@ -77,6 +78,7 @@ import com.patrol.terminal.bean.SpecialAttrBean;
 import com.patrol.terminal.bean.SpecialAttrList;
 import com.patrol.terminal.bean.SubmitPlanReqBean;
 import com.patrol.terminal.bean.SubmitPlanReqStateBean;
+import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.ThirdTicketBean;
 import com.patrol.terminal.bean.TicketSafeContent;
 import com.patrol.terminal.bean.TodoBean;
@@ -141,13 +143,17 @@ public interface ApiServise {
     @GET("/plan/month/lineGET")
     Observable<BaseResult<List<LineCheckBean>>> getLineList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_sign") String type_sign);
 
+    //月计划线路列表
+    @GET("/plan/month/lineGET")
+    Observable<BaseResult<List<LineCheckBean>>> getLineList2(@Query("year") String year, @Query("month") String month, @Query("dep_id") String dep_id);
+
     //周计划添加获取月计划列表
     @GET("plan/month/line/monthGET")
     Observable<BaseResult<List<WeekOfMonthBean>>> getWeekList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_id") String type_id);
 
     //获取周计划杆段列表
     @GET("plan/month/line/monthGET")
-    Observable<BaseResult<List<WeekOfMonthBean>>> getWeekListWeek(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_id") String type_id, @Query("line_id") String line_id);
+    Observable<BaseResult<List<WeekOfMonthBean>>> getWeekListWeek(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_sign") String type_sign, @Query("line_id") String line_id);
 
     //月计划列表
     @GET("/plan/month/dataGET")
@@ -195,6 +201,10 @@ public interface ApiServise {
     //添加日计划
     @POST("/plan/month/line/tempPOST")
     Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body SavaLineBean bean);
+
+    //添加日计划
+    @POST("/plan/month/line/tempPOST")
+    Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body SavaLineBean2 bean);
 
     //添加日计划
     @POST("/plan/week/tower/tempPOST")
@@ -378,7 +388,7 @@ public interface ApiServise {
 
     //待办列表
     @GET("task/remind/listGET")
-    Observable<BaseResult<List<TodoBean>>> todoList(@Query("to_user_id") String to_user_id);
+    Observable<BaseResult<List<TodoBean>>> todoList(@Query("to_user_id") String to_user_id, @Query("order") String order);
 
     //个人任务列表
     @GET("task/personal/listGET")
@@ -949,4 +959,16 @@ public interface ApiServise {
     //巡视记录图片列表
     @GET("task/patrol/img/listGET")
     Observable<BaseResult<List<PatrolRecordPicBean>>> getRecordPicList(@Query("task_id") String task_id);
+
+    //查询杆塔型号
+    @GET("common/oneGET")
+    Observable<BaseResult<HwcwBean>> getTowerModel(@Query("table") String table, @Query("column") String column, @Query("id") String id);
+
+    //查询单个任务信息
+    @GET("task/personal/byIdGET")
+    Observable<BaseResult<TaskBean>> getTask(@Query("id") String id);
+
+    //消除已审核待办
+    @POST("task/remind/dealPOST")
+    Observable<BaseResult> clearTodo(@Query("id") String id);
 }

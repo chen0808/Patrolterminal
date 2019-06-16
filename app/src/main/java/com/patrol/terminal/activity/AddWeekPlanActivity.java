@@ -164,7 +164,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         ProgressDialog.show(this, false, "正在加载。。。");
         //获取周计划杆段列表
         BaseRequest.getInstance().getService()
-                .getWeekListWeek(year, month, SPUtil.getDepId(this), null, null)
+                .getWeekListWeek(year, month, SPUtil.getDepId(this), sign, line_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekOfMonthBean>>(this) {
@@ -232,9 +232,9 @@ public class AddWeekPlanActivity extends BaseActivity {
                     LineTypeBean lineTypeBean = typeList.get(i);
                     if (type_name.contains(lineTypeBean.getName())) {
                         sign = lineTypeBean.getSign();
+                        getWeekInfoList();
                     }
                 }
-
             }
         }).build();
         pvOptions.setPicker(typeVal, typeSign);
@@ -369,6 +369,7 @@ public class AddWeekPlanActivity extends BaseActivity {
                 selectType.clear();
                 lineCheckBean = (LineCheckBean) data.getSerializableExtra("bean");
                 line_id = lineCheckBean.getId();
+                getWeekInfoList();
                 monthPlanLine.setText(lineCheckBean.getName());
                 getTempTower();
             }

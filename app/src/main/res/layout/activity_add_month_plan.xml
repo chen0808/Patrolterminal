@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -89,6 +88,7 @@
                 </LinearLayout>
 
                 <View style="@style/line_styl" />
+
                 <LinearLayout
                     android:id="@+id/mon_plan_type_ll"
                     android:layout_width="match_parent"
@@ -97,39 +97,38 @@
                     android:background="@color/white"
                     android:orientation="vertical">
 
-                        <RadioGroup
-                            android:id="@+id/month_plan_type_rg"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_40"
-                            android:orientation="horizontal"
-                            android:paddingRight="@dimen/dp_40"
-                            android:layout_marginLeft="@dimen/dp_50"
-                           >
+                    <RadioGroup
+                        android:id="@+id/month_plan_type_rg"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_marginLeft="@dimen/dp_50"
+                        android:orientation="horizontal"
+                        android:paddingRight="@dimen/dp_40">
 
-                            <RadioButton
-                                android:id="@+id/month_plan_type1"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:background="@drawable/selector_type_bg"
-                                android:button="@null"
-                                android:checked="true"
-                                android:gravity="center"
-                                android:text="缺陷库"
-                                android:textColor="@drawable/plan_tv_color_selector" />
+                        <RadioButton
+                            android:id="@+id/month_plan_type1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_type_bg"
+                            android:button="@null"
+                            android:checked="true"
+                            android:gravity="center"
+                            android:text="缺陷库"
+                            android:textColor="@drawable/plan_tv_color_selector" />
 
-                            <RadioButton
-                                android:id="@+id/month_plan_type2"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:layout_marginLeft="@dimen/dp_40"
-                                android:background="@drawable/selector_type_bg"
-                                android:button="@null"
-                                android:gravity="center"
-                                android:text="隐患库"
-                                android:textColor="@drawable/plan_tv_color_selector" />
-                        </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/month_plan_type2"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/dp_40"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_type_bg"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="隐患库"
+                            android:textColor="@drawable/plan_tv_color_selector" />
+                    </RadioGroup>
 
 
                     <LinearLayout
@@ -140,8 +139,7 @@
                         android:layout_marginRight="11dp"
 
                         android:background="@color/image_overlay_false"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="0dp"
@@ -149,193 +147,188 @@
                             android:layout_weight="5"
                             android:gravity="center"
                             android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
                             android:text="缺陷名称"
                             android:textColor="@color/color_33"
-                            />
+                            android:textSize="@dimen/sp_13" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
                             android:gravity="center"
-                            android:textSize="@dimen/sp_12"
                             android:text="缺陷等级"
                             android:textColor="@color/color_33"
-                            />
+                            android:textSize="@dimen/sp_12" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
                             android:gravity="center"
-                            android:textSize="@dimen/sp_13"
                             android:text="优先级"
                             android:textColor="@color/color_33"
-                            />
+                            android:textSize="@dimen/sp_13" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="3"
                             android:gravity="center"
-                            android:textSize="@dimen/sp_13"
                             android:text="发现时间"
                             android:textColor="@color/color_33"
-                            />
+                            android:textSize="@dimen/sp_13" />
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
                             android:text=""
                             android:textColor="@color/color_33"
-                            />
+                            android:textSize="@dimen/sp_13" />
                     </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_10"
-                        android:layout_marginRight="@dimen/dp_10"
-                        >
+                        android:layout_marginRight="@dimen/dp_10">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-                        <com.patrol.terminal.widget.NoScrollListView
-                            android:id="@+id/month_plan_type_lv"
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:paddingLeft="1dp"
-                            android:paddingRight="1dp"
-                           ></com.patrol.terminal.widget.NoScrollListView>
+                            android:orientation="vertical">
+
+                            <com.patrol.terminal.widget.NoScrollListView
+                                android:id="@+id/month_plan_type_lv"
+                                android:layout_width="match_parent"
+                                android:layout_height="150dp"
+                                android:paddingLeft="1dp"
+                                android:paddingRight="1dp"></com.patrol.terminal.widget.NoScrollListView>
+
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:background="@color/image_overlay_false"
-                                />
+                                android:background="@color/image_overlay_false" />
+
                             <LinearLayout
                                 android:id="@+id/trouble_more"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dp_30"
                                 android:gravity="center_horizontal"
                                 android:orientation="horizontal"
-                                android:visibility="gone"
                                 android:paddingLeft="1dp"
                                 android:paddingRight="1dp"
+                                android:visibility="gone"
 
                                 >
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:orientation="horizontal"
                                     android:background="@color/color_f2"
-                                    >
-                                <View
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"
-                                    android:background="@color/image_overlay_false"
-                                    />
-                                <ImageView
-                                    android:id="@+id/add_more_iv"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:src="@mipmap/icon_newol_down"
-                                    />
-                                <View
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"
-                                    android:background="@color/image_overlay_false"
-                                    />
+                                    android:orientation="horizontal">
+
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/image_overlay_false" />
+
+                                    <ImageView
+                                        android:id="@+id/add_more_iv"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:src="@mipmap/icon_newol_down" />
+
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/image_overlay_false" />
                                 </LinearLayout>
                             </LinearLayout>
 
                         </LinearLayout>
+
                         <TextView
                             android:id="@+id/month_plan_no_data"
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:gravity="center"
                             android:text="暂无数据"
-                            android:visibility="invisible"
-                            android:textSize="@dimen/sp_22" />
+                            android:textSize="@dimen/sp_22"
+                            android:visibility="invisible" />
 
                     </RelativeLayout>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_10"
-                    android:background="@color/main_bg" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_10"
+                        android:background="@color/main_bg" />
 
-                <LinearLayout style="@style/plan_ll_styl">
+                    <LinearLayout style="@style/plan_ll_styl">
 
-                    <TextView
-                        style="@style/plan_tv_styl"
-                        android:layout_marginLeft="@dimen/dp_20"
-                        android:text="计划明细" />
-                </LinearLayout>
+                        <TextView
+                            style="@style/plan_tv_styl"
+                            android:layout_marginLeft="@dimen/dp_20"
+                            android:text="计划明细" />
+                    </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_40"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_10"
-                        android:paddingLeft="1dp"
-                        android:paddingRight="1dp"
                         android:background="@color/image_overlay_false"
                         android:orientation="horizontal"
-                        >
+                        android:paddingLeft="1dp"
+                        android:paddingRight="1dp">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="7"
                             android:gravity="center_vertical"
                             android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
                             android:text="计划名称"
                             android:textColor="@color/color_33"
-                            />
+                            android:textSize="@dimen/sp_13" />
+
                         <View
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
-                            android:background="@color/image_overlay_false"
-                            />
+                            android:background="@color/image_overlay_false" />
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="3"
                             android:gravity="center"
                             android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
                             android:text="发现时间"
                             android:textColor="@color/color_33"
-                            />
+                            android:textSize="@dimen/sp_13" />
 
                     </LinearLayout>
 
-                <com.patrol.terminal.widget.NoScrollListView
-                    android:id="@+id/manth_plan_detail_lv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_marginRight="@dimen/dp_10"
-                  ></com.patrol.terminal.widget.NoScrollListView>
+                    <com.patrol.terminal.widget.NoScrollListView
+                        android:id="@+id/manth_plan_detail_lv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_10"></com.patrol.terminal.widget.NoScrollListView>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_10"
                         android:layout_marginBottom="@dimen/dp_20"
-                        android:background="@color/image_overlay_false"
-                        />
+                        android:background="@color/image_overlay_false" />
 
-            </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
@@ -353,7 +346,7 @@
             android:layout_weight="2"
             android:background="@color/gray_plan"
             android:gravity="center"
-            android:text="提交"
+            android:text="保存"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_16" />
 

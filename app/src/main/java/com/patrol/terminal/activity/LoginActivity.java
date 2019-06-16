@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -17,9 +19,6 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
 
-import java.util.List;
-
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -76,29 +75,26 @@ public class LoginActivity extends BaseActivity {
                             SPUtil.putString(LoginActivity.this, Constant.USER, Constant.USERID, results.getId());
                             SPUtil.putString(LoginActivity.this, Constant.USER, Constant.TELEPHONE, results.getTelephone());
                             SPUtil.putString(LoginActivity.this, Constant.USER, Constant.SEX, results.getSex());
-                                    SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPNAME, results.getDep_name());
-                                    SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPID, results.getDep_id());
+                            SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPNAME, results.getDep_name());
+                            SPUtil.putString(LoginActivity.this, Constant.USER, Constant.DEPID, results.getDep_id());
 
-                          if (results.getSysJobList()!=null) {
-                              String job="";
-                              String firstJob="";
-                              for (int i = 0; i < results.getSysJobList().size(); i++) {
-                                  LoginReqBean.SysJobListBean sysJobListBean = results.getSysJobList().get(i);
-                                  String sign = sysJobListBean.getSign();
-                                  if (i==0){
-                                      job=sign;
-                                      firstJob=sign;
-                                  }else {
-                                      job=job+","+sign;
-                                  }
-                              }
+                            if (results.getSysJobList() != null) {
+                                String job = "";
+                                String firstJob = "";
+                                for (int i = 0; i < results.getSysJobList().size(); i++) {
+                                    LoginReqBean.SysJobListBean sysJobListBean = results.getSysJobList().get(i);
+                                    String sign = sysJobListBean.getSign();
+                                    if (i == 0) {
+                                        job = sign;
+                                        firstJob = sign;
+                                    } else {
+                                        job = job + "," + sign;
+                                    }
+                                }
                                 SPUtil.putString(LoginActivity.this, Constant.USER, Constant.JOBTYPE, job);
 
                                 goToMainActivity(firstJob);
                             }
-
-
-
 
 
 //                            startActivity(new Intent(LoginActivity.this, NewMainActivity.class));
@@ -118,7 +114,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==-1) {
+        if (resultCode == -1) {
             switch (requestCode) {
                 case DEP_CHOOSE_REQUEST:
 

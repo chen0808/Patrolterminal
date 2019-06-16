@@ -8,6 +8,7 @@ import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
 import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
+import com.patrol.terminal.activity.NextMonthPlanActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
 
@@ -99,7 +100,7 @@ public class Utils {
       Intent intent=new Intent();
       switch (sign){
           case "1":
-              intent.setClass(context,NewPlanActivity.class);
+              intent.setClass(context, NextMonthPlanActivity.class);
               intent.putExtra("from","todoMonth");
               break;
           case "2":
