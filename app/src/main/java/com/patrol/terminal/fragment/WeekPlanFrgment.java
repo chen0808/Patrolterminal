@@ -142,6 +142,7 @@ public class WeekPlanFrgment extends BaseFragment {
     private double next_kilo_35kv = 0;
     private int done_num_total = 0;
     private int all_num_total = 0;
+    private WeekListBean weekListBean;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -270,7 +271,7 @@ public class WeekPlanFrgment extends BaseFragment {
     //获取本周计划
     public void getWeekList() {
         BaseRequest.getInstance().getService()
-                .getWeekList(year, week + "", depId, state, "type_sign,line_id")
+                .getWeekList(year, week + "", depId, state, "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekListBean>>(getContext()) {
@@ -334,7 +335,7 @@ public class WeekPlanFrgment extends BaseFragment {
     //获取下周计划
     public void getNextWeekList() {
         BaseRequest.getInstance().getService()
-                .getWeekList(nextYear + "", nextWeek + "", depId, state, "type_sign,line_id")
+                .getWeekList(nextYear + "", nextWeek + "", depId, state, "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekListBean>>(getContext()) {
@@ -351,7 +352,7 @@ public class WeekPlanFrgment extends BaseFragment {
                             addPlanLl.setVisibility(View.VISIBLE);
                             addPlanName.setText(nextYear + "年第" + nextWeek + "周工作计划");
 
-                            WeekListBean weekListBean = nextWeekList.get(0);
+                            weekListBean = nextWeekList.get(0);
                             String audit_status = weekListBean.getAudit_status();
                             addPlanStatus.setText(StringUtil.getYxbWeekState(weekListBean.getAudit_status()));
                             if ("2".equals(weekListBean.getAudit_status())) {
@@ -436,6 +437,7 @@ public class WeekPlanFrgment extends BaseFragment {
                 intent1.putExtra("35kv_kolo", next_kilo_35kv);
                 intent1.putExtra("year", nextYear);
                 intent1.putExtra("week", nextWeek);
+                intent1.putExtra("audit_status", weekListBean.getAudit_status());
                 startActivityForResult(intent1, 10);
                 break;
             case R.id.plan_submit:

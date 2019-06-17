@@ -85,20 +85,20 @@ public class AddDayPlanActivity extends BaseActivity {
     private List<DayOfWeekBean> selectType = new ArrayList<>();
     private AddDayAdapter adapter;
     private List<DayOfWeekBean> results;
-    private List<DayOfWeekBean> linList=new ArrayList<>();
+    private List<DayOfWeekBean> linList = new ArrayList<>();
     private Disposable subscribe;
-    private List<LineTypeBean> typeList=new ArrayList<>();
+    private List<LineTypeBean> typeList = new ArrayList<>();
     private String type_id;
     private String day;
     private String lineName;
     private String typeName;
-    private List<DayOfWeekBean> lineList=new ArrayList<>();
+    private List<DayOfWeekBean> lineList = new ArrayList<>();
 
     private String sign;
     private List<String> typeVal = new ArrayList<>();
     private List<List<String>> typeSign = new ArrayList<>();
 
-    private List<Tower> selectBean=new ArrayList<>();
+    private List<Tower> selectBean = new ArrayList<>();
     private LineCheckBean lineCheckBean;
     private String line_id;
 
@@ -118,7 +118,7 @@ public class AddDayPlanActivity extends BaseActivity {
     private void initview() {
 
         inteDate();
-        titleName.setText(year+"年"+month+"月" +day+ "日计划制定");
+        titleName.setText(year + "年" + month + "月" + day + "日计划制定");
         adapter = new AddDayAdapter(this, linList);
         monthPlanTypeLv.setAdapter(adapter);
 
@@ -126,21 +126,21 @@ public class AddDayPlanActivity extends BaseActivity {
 
             @Override
             public void accept(DayOfWeekBean type) throws Exception {
-                if (selectType.size()==0){
+                if (selectType.size() == 0) {
                     type.setWeek_tower_id(type.getId());
                     type.setDay(day);
                     selectType.add(type);
-                }else {
-                    int isExit=0;
+                } else {
+                    int isExit = 0;
                     for (int i = 0; i < selectType.size(); i++) {
                         DayOfWeekBean dayOfWeekBean = selectType.get(i);
-                        if (dayOfWeekBean.getId().equals(type.getId())){
-                            isExit=1;
+                        if (dayOfWeekBean.getId().equals(type.getId())) {
+                            isExit = 1;
                             selectType.remove(i);
                             return;
                         }
                     }
-                    if (isExit==0){
+                    if (isExit == 0) {
                         type.setWeek_tower_id(type.getId());
                         type.setDay(day);
                         selectType.add(type);
@@ -151,7 +151,7 @@ public class AddDayPlanActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.title_back, R.id.month_plan_line, R.id.month_plan_type,R.id.month_yes, R.id.trouble_more})
+    @OnClick({R.id.title_back, R.id.month_plan_line, R.id.month_plan_type, R.id.month_yes, R.id.trouble_more})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -166,9 +166,9 @@ public class AddDayPlanActivity extends BaseActivity {
                 showTypeSign();
                 break;
             case R.id.month_yes:
-                if (line_id==null){
+                if (line_id == null) {
                     saveDay();
-                }else {
+                } else {
                     saveDayPlan();
                 }
                 break;
@@ -214,7 +214,7 @@ public class AddDayPlanActivity extends BaseActivity {
     public void getLine() {
         //获取月计划列表
         BaseRequest.getInstance().getService()
-                .getDayPlan(year,month, SPUtil.getDepId(this))
+                .getDayPlan(year, month, SPUtil.getDepId(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
@@ -223,10 +223,10 @@ public class AddDayPlanActivity extends BaseActivity {
                         lineList = t.getResults();
                         for (int i = 0; i < lineList.size(); i++) {
                             DayOfWeekBean bean = lineList.get(i);
-                                String line_name = bean.getLine_name();
-                                if (lineNameList.indexOf(line_name)==-1){
-                                    lineNameList.add(line_name);
-                                }
+                            String line_name = bean.getLine_name();
+                            if (lineNameList.indexOf(line_name) == -1) {
+                                lineNameList.add(line_name);
+                            }
                         }
                     }
 
@@ -235,12 +235,13 @@ public class AddDayPlanActivity extends BaseActivity {
                     }
                 });
     }
+
     //获取每个班组负责的线路
     public void getWeekPlan() {
-        ProgressDialog.show(this,false,"正在加载。。。。");
+        ProgressDialog.show(this, false, "正在加载。。。。");
         //获取月计划列表
         BaseRequest.getInstance().getService()
-                .getDayPlan(year,month, SPUtil.getDepId(this),type_id,null)
+                .getDayPlan(year, month, SPUtil.getDepId(this), type_id, null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
@@ -268,7 +269,7 @@ public class AddDayPlanActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
                         typeList = t.getResults();
-                       initType(typeList);
+                        initType(typeList);
 
                     }
 
@@ -282,8 +283,8 @@ public class AddDayPlanActivity extends BaseActivity {
     //保存
     public void saveDay() {
 
-        if (selectType.size()==0){
-            Toast.makeText(this,"请添加计划",Toast.LENGTH_SHORT).show();
+        if (selectType.size() == 0) {
+            Toast.makeText(this, "请添加计划", Toast.LENGTH_SHORT).show();
             return;
         }
         BaseRequest.getInstance().getService()
@@ -293,11 +294,11 @@ public class AddDayPlanActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<LineTypeBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
-                        if (t.getCode()==1){
+                        if (t.getCode() == 1) {
                             setResult(RESULT_OK);
                             Toast.makeText(AddDayPlanActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                             finish();
-                        }else {
+                        } else {
                             Toast.makeText(AddDayPlanActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
 
@@ -318,20 +319,21 @@ public class AddDayPlanActivity extends BaseActivity {
             subscribe.dispose();
         }
     }
-    public void initType(List<LineTypeBean> list){
-        List<String> list1=new ArrayList<>();
-        List<String> list2=new ArrayList<>();
-        List<String> list3=new ArrayList<>();
-        List<String> list4=new ArrayList<>();
+
+    public void initType(List<LineTypeBean> list) {
+        List<String> list1 = new ArrayList<>();
+        List<String> list2 = new ArrayList<>();
+        List<String> list3 = new ArrayList<>();
+        List<String> list4 = new ArrayList<>();
         typeVal.add("定巡");
         typeVal.add("定检");
         typeVal.add("缺陷");
         typeVal.add("隐患");
         for (int i = 0; i < list.size(); i++) {
             LineTypeBean lineTypeBean = list.get(i);
-            if ("1".equals(lineTypeBean.getVal())){
+            if ("1".equals(lineTypeBean.getVal())) {
                 list1.add(StringUtil.getTypeSign(lineTypeBean.getSign()));
-            }else if ("2".equals(lineTypeBean.getVal())){
+            } else if ("2".equals(lineTypeBean.getVal())) {
                 list2.add(StringUtil.getTypeSign(lineTypeBean.getSign()));
             }
         }
@@ -344,15 +346,87 @@ public class AddDayPlanActivity extends BaseActivity {
     }
 
     public void inteDate() {
-        month = getIntent().getIntExtra("month",6)+"";
-        year = getIntent().getIntExtra("year",2019)+"";
-        day = getIntent().getIntExtra("day",1)-1+"";
+        month = getIntent().getStringExtra("month");
+        year = getIntent().getStringExtra("year");
+        day = getIntent().getStringExtra("day");
+    }
+
+    //获取线路杆塔
+    public void getTempTower() {
+        ProgressDialog.show(this, false, "正在加载。。。");
+        BaseRequest.getInstance().getService()
+                .getTempTower(line_id, "name")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<Tower>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<Tower>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        TempTowerAdapter adapter = new TempTowerAdapter(AddDayPlanActivity.this, t.getResults());
+                        monthPlanTypeLv.setAdapter(adapter);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 24 && resultCode == RESULT_OK) {
+            if (data != null) {
+                selectType.clear();
+                lineCheckBean = (LineCheckBean) data.getSerializableExtra("bean");
+                line_id = lineCheckBean.getId();
+                monthPlanLine.setText(lineCheckBean.getName());
+                getTempTower();
+            }
+        }
+    }
+
+    //保存日临时计划
+    public void saveDayPlan() {
+        SavaLineBean bean = new SavaLineBean();
+        bean.setLine_id(lineCheckBean.getId());
+        bean.setLine_name(lineCheckBean.getName());
+        bean.setType_id(type_id);
+        bean.setType_sign(sign);
+        bean.setType_name(typeName);
+        bean.setStart_time(year + "-" + month + "-" + day);
+        bean.setEnd_time(year + "-" + month + "-" + day);
+        bean.setYear(year);
+        bean.setDay(day);
+        bean.setMonth(month);
+        bean.setTowers(selectBean);
+        //获取月计划列表
+        BaseRequest.getInstance().getService()
+                .saveDayPlan(bean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<LineTypeBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            Toast.makeText(AddDayPlanActivity.this, "制定成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
     }
 
     class TempTowerAdapter extends BaseAdapter {
         private Context context;
         private List<Tower> lineTypeBeans;
-        private int type=0;
+        private int type = 0;
+
         public TempTowerAdapter(Context context, List<Tower> traceList) {
             this.context = context;
             this.lineTypeBeans = traceList;
@@ -394,37 +468,37 @@ public class AddDayPlanActivity extends BaseActivity {
             Tower listBean = lineTypeBeans.get(position);
             holder.itemTroubleName.setText(listBean.getName());
             boolean check = listBean.isCheck();
-            if (check==true){
+            if (check == true) {
                 holder.itemTroubleCheck.setChecked(true);
-            }else {
+            } else {
                 holder.itemTroubleCheck.setChecked(false);
             }
             holder.taskType.setVisibility(View.GONE);
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (selectBean.size()==0){
-                        Tower tower=new Tower();
+                    if (selectBean.size() == 0) {
+                        Tower tower = new Tower();
                         tower.setTower_type("2");
                         tower.setName(listBean.getName());
                         tower.setTower_id(listBean.getId());
                         selectBean.add(tower);
                         listBean.setCheck(true);
                         holder.itemTroubleCheck.setChecked(true);
-                    }else {
-                        int isExit=0;
+                    } else {
+                        int isExit = 0;
                         for (int i = 0; i < selectBean.size(); i++) {
                             Tower dayOfWeekBean = selectBean.get(i);
-                            if (dayOfWeekBean.getTower_id().equals(listBean.getId())){
-                                isExit=1;
+                            if (dayOfWeekBean.getTower_id().equals(listBean.getId())) {
+                                isExit = 1;
                                 selectBean.remove(i);
                                 listBean.setCheck(false);
                                 holder.itemTroubleCheck.setChecked(false);
                                 return;
                             }
                         }
-                        if (isExit==0){
-                            Tower tower=new Tower();
+                        if (isExit == 0) {
+                            Tower tower = new Tower();
                             tower.setTower_type("2");
                             tower.setTower_id(listBean.getId());
                             tower.setName(listBean.getName());
@@ -445,82 +519,13 @@ public class AddDayPlanActivity extends BaseActivity {
             notifyDataSetChanged();
 
         }
+
         class ViewHolder {
-            private   TextView itemTroubleName;
-            private   TextView taskType;
-            private   RelativeLayout item;
+            private TextView itemTroubleName;
+            private TextView taskType;
+            private RelativeLayout item;
             private CheckBox itemTroubleCheck;
             private RadioButton itemTaskCheck;
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 24 && resultCode == RESULT_OK) {
-            if (data != null) {
-                selectType.clear();
-                lineCheckBean = (LineCheckBean) data.getSerializableExtra("bean");
-                line_id = lineCheckBean.getId();
-                monthPlanLine.setText(lineCheckBean.getName());
-                getTempTower();
-            }
-        }
-    }
-    //获取线路杆塔
-    public void getTempTower() {
-        ProgressDialog.show(this,false,"正在加载。。。");
-        BaseRequest.getInstance().getService()
-                .getTempTower(line_id,"name")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<Tower>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<Tower>> t) throws Exception {
-                        ProgressDialog.cancle();
-                        TempTowerAdapter adapter=new TempTowerAdapter(AddDayPlanActivity.this,t.getResults());
-                        monthPlanTypeLv.setAdapter(adapter);
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                    }
-                });
-    }
-
-    //保存日临时计划
-    public void saveDayPlan() {
-        SavaLineBean bean = new SavaLineBean();
-        bean.setLine_id(lineCheckBean.getId());
-        bean.setLine_name(lineCheckBean.getName());
-        bean.setType_id(type_id);
-        bean.setType_sign(sign);
-        bean.setType_name(typeName);
-        bean.setStart_time(year+"-"+month+"-"+day);
-        bean.setEnd_time(year+"-"+month+"-"+day);
-        bean.setYear(year);
-        bean.setDay(day);
-        bean.setMonth(month);
-        bean.setTowers(selectBean);
-        //获取月计划列表
-        BaseRequest.getInstance().getService()
-                .saveDayPlan(bean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<LineTypeBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
-                        if (t.getCode() == 1) {
-                            Toast.makeText(AddDayPlanActivity.this, "制定成功", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK);
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                    }
-                });
     }
 }

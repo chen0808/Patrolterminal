@@ -78,6 +78,7 @@ public class NextMonthPlanActivity extends BaseActivity {
     @BindView(R.id.next_plan_done)
     TextView nextPlanDone;
     private String state;
+    private String state2;
     private NextMonthPlanAdapter monthPlanAdapter;
     private List<MonthPlanBean> list = new ArrayList<>();
     private String mJobType;
@@ -134,6 +135,7 @@ public class NextMonthPlanActivity extends BaseActivity {
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("撤回");
         } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+            state2 = "1,2,3";
             depId = null;
             taskScreen.setVisibility(View.VISIBLE);
             if ("1".equals(state)) {
@@ -141,6 +143,7 @@ public class NextMonthPlanActivity extends BaseActivity {
                 titleSettingTv.setText("审核");
             }
         } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
+            state2 = "1,2,3";
             depId = null;
             taskScreen.setVisibility(View.VISIBLE);
             if ("2".equals(state)) {
@@ -177,7 +180,7 @@ public class NextMonthPlanActivity extends BaseActivity {
             nextYear = Integer.parseInt(years[0]) + 1;
         }
         BaseRequest.getInstance().getService()
-                .getMonthPlan(nextYear, nextMonth, depId, "0,1,2,3,4", "create_time desc,type_sign,line_id")
+                .getMonthPlan(nextYear, nextMonth, depId, state2, "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<MonthListBean>(this) {
@@ -208,6 +211,7 @@ public class NextMonthPlanActivity extends BaseActivity {
                                 monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
                                 monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
                                 titleName.setText(nextYear + "年" + nextMonth + "月计划列表");
+
                                 state = monthPlanBean.getAudit_status();
 
                                 LinearLayoutManager manager = new LinearLayoutManager(NextMonthPlanActivity.this);

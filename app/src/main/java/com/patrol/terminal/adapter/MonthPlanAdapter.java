@@ -93,7 +93,7 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
                 viewHolder.setText(R.id.item_line_status, "分配状态 : 已分配");
             }
             viewHolder.setText(R.id.item_plan_device_name, item.getLine_name())
-                    .setText(R.id.item_plan_content, "计划内容 : " + StringUtil.getTypeSign(item.getType_sign()));
+                    .setText(R.id.item_plan_content, StringUtil.getTypeSign(item.getType_sign()));
             TextView tvContent = viewHolder.getView(R.id.item_plan_content);
             String text = tvContent.getText().toString();
             String colorText = setColor(text);

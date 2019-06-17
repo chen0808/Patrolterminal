@@ -51,14 +51,16 @@ public class AddTowerAdapter extends BaseAdapter {
         } else {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_add_tower, parent, false);
-            holder.towerNmae = (TextView) convertView.findViewById(R.id.item_add_tower_name);
+            holder.tvLineName = convertView.findViewById(R.id.tv_line_name);
+            holder.tvTowerName = (TextView) convertView.findViewById(R.id.tv_tower_name);
             holder.towerCheck = (CheckBox) convertView.findViewById(R.id.item_add_tower_check);
             holder.towerType = (TextView) convertView.findViewById(R.id.item_add_tower_type);
             convertView.setTag(holder);
         }
 
 
-        holder.towerNmae.setText(lineTypeBeans.get(position).getLine_name() + "\n" + lineTypeBeans.get(position).getTowers_name()/*lineTypeBeans.get(position).getTowers()*/);
+        holder.tvLineName.setText(lineTypeBeans.get(position).getLine_name()/*lineTypeBeans.get(position).getTowers()*/);
+        holder.tvTowerName.setText(lineTypeBeans.get(position).getTowers_name());
         holder.towerType.setText(StringUtil.getTypeSign(lineTypeBeans.get(position).getType_sign()));  //TODO
 
         TextView tvContent = holder.towerType;
@@ -78,7 +80,15 @@ public class AddTowerAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (holder.towerCheck.isChecked()) {
                     listBean.setCheck(true);
-                    RxRefreshEvent.publish("add@" + listBean.getTowers_id() + "@" + listBean.getLine_id() + "@" + listBean.getLine_name() + "@" + listBean.getTowers_name() + "@" + listBean.getType_id() + "@" + listBean.getType_name() + "@" + listBean.getType_sign() + "@" + listBean.getMonth_line_id() + "@" + listBean.getDefect_id());
+                    String defectId = listBean.getDefect_id() == null ? "" : listBean.getDefect_id();
+                    String towersId = listBean.getTowers_id() == null ? "" : listBean.getTowers_id();
+                    RxRefreshEvent.publish("add@" + towersId + "@" +
+                            listBean.getLine_id() + "@" + listBean.getLine_name() + "@" +
+                            listBean.getTowers_name() + "@" + listBean.getType_id() + "@" +
+                            listBean.getType_name() + "@" + listBean.getType_sign() + "@" +
+                            listBean.getMonth_line_id() + "@" + defectId + "@" +
+                            listBean.getStart_id() + "@" + listBean.getEnd_id() + "@" +
+                            listBean.getTower_type() + "@" + listBean.getMonth_tower_id());
 
                 } else {
                     listBean.setCheck(false);
@@ -147,7 +157,8 @@ public class AddTowerAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        private TextView towerNmae;
+        private TextView tvLineName;
+        private TextView tvTowerName;
         private CheckBox towerCheck;
         private TextView towerType;
 

@@ -19,6 +19,17 @@ public class Tower implements Serializable {
     private String month_line_id;
     private String sort;
     private boolean isCheck;
+    private String start_id;
+    private String end_id;
+    private String month_tower_id;
+
+    public String getMonth_tower_id() {
+        return month_tower_id;
+    }
+
+    public void setMonth_tower_id(String month_tower_id) {
+        this.month_tower_id = month_tower_id;
+    }
 
     public boolean isCheck() {
         return isCheck;
@@ -34,6 +45,22 @@ public class Tower implements Serializable {
 
     public void setSort(String sort) {
         this.sort = sort;
+    }
+
+    public String getStart_id() {
+        return start_id;
+    }
+
+    public void setStart_id(String start_id) {
+        this.start_id = start_id;
+    }
+
+    public String getEnd_id() {
+        return end_id;
+    }
+
+    public void setEnd_id(String end_id) {
+        this.end_id = end_id;
     }
 
     public String getDefect_id() {

@@ -13,7 +13,7 @@
         android:layout_gravity="center_vertical">
 
         <AutoCompleteTextView
-            android:id="@+id/atv_content"
+            android:id="@+id/tv_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
