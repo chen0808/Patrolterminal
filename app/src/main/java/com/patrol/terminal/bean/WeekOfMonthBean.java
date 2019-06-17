@@ -22,6 +22,42 @@ public class WeekOfMonthBean {
     private String towers_id;
     private String defect_id;
     private boolean isCheck;
+    private String start_id;
+    private String end_id;
+    private String tower_type;
+    private String month_tower_id;
+
+    public String getMonth_tower_id() {
+        return month_tower_id;
+    }
+
+    public void setMonth_tower_id(String month_tower_id) {
+        this.month_tower_id = month_tower_id;
+    }
+
+    public String getTower_type() {
+        return tower_type;
+    }
+
+    public void setTower_type(String tower_type) {
+        this.tower_type = tower_type;
+    }
+
+    public String getStart_id() {
+        return start_id;
+    }
+
+    public void setStart_id(String start_id) {
+        this.start_id = start_id;
+    }
+
+    public String getEnd_id() {
+        return end_id;
+    }
+
+    public void setEnd_id(String end_id) {
+        this.end_id = end_id;
+    }
 
     public boolean isCheck() {
         return isCheck;

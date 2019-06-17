@@ -83,6 +83,10 @@ public class TemporaryActivity extends BaseActivity {
     RecyclerView monthPlanTower;
     @BindView(R.id.mon_plan_tower_ll)
     LinearLayout monPlanTowerLl;
+    @BindView(R.id.ll_start_time)
+    LinearLayout llStartTime;
+    @BindView(R.id.ll_end_time)
+    LinearLayout llEndTime;
 
     private List<String> typeNameList = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
@@ -112,6 +116,7 @@ public class TemporaryActivity extends BaseActivity {
     private String startDay;
     private String endMonth;
     private String endDay;
+    private String day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,13 +136,20 @@ public class TemporaryActivity extends BaseActivity {
         year = getIntent().getStringExtra("year");
         month = getIntent().getStringExtra("month");
         week = getIntent().getStringExtra("week");
+        day = getIntent().getStringExtra("day");
         if (month != null) {
-            titleName.setText("制定" + month + "月计划");
+            if (day == null) {
+                titleName.setText("制定" + month + "月临时计划");
+            } else {
+                titleName.setText("制定" + year + "年" + month + "月" + day + "日临时计划");
+                llStartTime.setVisibility(View.GONE);
+                llEndTime.setVisibility(View.GONE);
+            }
         } else if (week != null) {
-            titleName.setText("制定" + week + "周计划");
+            titleName.setText("制定" + week + "周临时计划");
             //获取当前周起始和终止日期
-            String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
-            String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
+            String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
+            String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
             String[] start = beginDate.split("月");
             startMonth = start[0];
             startDay = start[1].split("日")[0];

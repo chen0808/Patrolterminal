@@ -3,42 +3,46 @@
     android:id="@+id/add_tower_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/dp_30"
     android:gravity="center"
+    android:minHeight="40dp"
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/item_add_tower_name"
+        android:id="@+id/tv_line_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2019年4月桃开一线月计划"
-        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        />
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_tower_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="4dp"
+        android:text="杆塔" />
 
     <TextView
         android:id="@+id/item_add_tower_type"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
-        android:text="杆段类型"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_10"
         android:layout_toLeftOf="@+id/item_add_tower_check"
-        />
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="杆段类型" />
 
     <CheckBox
         android:id="@+id/item_add_tower_check"
         android:layout_width="@dimen/dp_40"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        />
+        android:layout_centerVertical="true" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:layout_alignParentBottom="true"
-        android:background="@color/image_overlay_false"
-        />
+        android:background="@color/image_overlay_false" />
 </RelativeLayout>

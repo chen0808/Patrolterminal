@@ -24,6 +24,7 @@ import com.patrol.terminal.bean.SubmitPlanReqBean;
 import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.WeekListBean;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.TimeUtil;
@@ -94,6 +95,8 @@ public class NextWeekPlanActivity extends BaseActivity {
     private double kilo_110kv;
     private int num_35kv;
     private double kilo_35kv;
+    private String state2;
+    private String time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,48 +108,63 @@ public class NextWeekPlanActivity extends BaseActivity {
 
     private void initview() {
         planTotalTitle.setText("下周工作计划汇总");
-        list = (List<WeekListBean>) getIntent().getSerializableExtra("list");
-        lineList = (List<Tower>) getIntent().getSerializableExtra("linelist");
+//        list = (List<WeekListBean>) getIntent().getSerializableExtra("list");
+//        lineList = (List<Tower>) getIntent().getSerializableExtra("linelist");
 
-        num_total = getIntent().getIntExtra("num_total", 0);
-        kilo_total = getIntent().getDoubleExtra("kilo_total", 0);
-        num_110kv = getIntent().getIntExtra("110kv_num", 0);
-        kilo_110kv = getIntent().getDoubleExtra("110kv_kolo", 0);
-        num_35kv = getIntent().getIntExtra("35kv_num", 0);
-        kilo_35kv = getIntent().getDoubleExtra("35kv_kolo", 0);
+//        num_total = getIntent().getIntExtra("num_total", 0);
+//        kilo_total = getIntent().getDoubleExtra("kilo_total", 0);
+//        num_110kv = getIntent().getIntExtra("110kv_num", 0);
+//        kilo_110kv = getIntent().getDoubleExtra("110kv_kolo", 0);
+//        num_35kv = getIntent().getIntExtra("35kv_num", 0);
+//        kilo_35kv = getIntent().getDoubleExtra("35kv_kolo", 0);
 
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        monthLineTotal.setText("杆段总数 : " + num_total + "条");
-        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
-        monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
-        monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
-        monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
-        monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
-        year = getIntent().getIntExtra("year", 0);
-        week = getIntent().getIntExtra("week", 0);
+//        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+//        monthLineTotal.setText("杆段总数 : " + num_total + "条");
+//        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+//        monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
+//        monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
+//        monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
+//        monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
+//        year = getIntent().getIntExtra("year", 0);
+//        week = getIntent().getIntExtra("week", 0);
+//        WeekListBean weekListBean = list.get(0);
+
+        time = DateUatil.getCurMonth();
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+//        month = Integer.parseInt(months[0]) + "";
+        year = Integer.valueOf(years[0]);
+        week = TimeUtil.getCurrWeek() + 1;
         String nextBeginTime = TimeUtil.getFirstDayOfWeek(year, week);
         String nextEndTime = TimeUtil.getLastDayOfWeek(year, week);
         titleName.setText("第" + week + "周计划(" + nextBeginTime + "-" + nextEndTime + ")");
-        WeekListBean weekListBean = list.get(0);
-        state = weekListBean.getAudit_status();
+        depId = SPUtil.getDepId(this);
+        state = getIntent().getStringExtra("audit_status");
         mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(state) || "3".equals(state))) {
+        //判断
+        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(state) || "4".equals(state))) {
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("提交");
         } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "1".equals(state)) {
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("撤回");
         } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+            state2 = "1,2,3";
+            depId = null;
             taskScreen.setVisibility(View.VISIBLE);
             if ("1".equals(state)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("审核");
             }
+        } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
+            state2 = "1,2,3";
+            depId = null;
+            taskScreen.setVisibility(View.VISIBLE);
+            if ("2".equals(state)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审核");
+            }
         }
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        nextPlanRv.setLayoutManager(manager);
-        monthPlanAdapter = new NextWeekPlanAdapter(R.layout.fragment_plan_item, list, state, mJobType);
-        nextPlanRv.setAdapter(monthPlanAdapter);
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
@@ -157,14 +175,14 @@ public class NextWeekPlanActivity extends BaseActivity {
                 }
             }
         });
-        adapterClick();
+        getWeekList();
         getDepList();
     }
 
-    //获取本周计划
+    //获取下周计划
     public void getWeekList() {
         BaseRequest.getInstance().getService()
-                .getWeekList(year + "", week + "", depId, state, "type_sign,line_id")
+                .getWeekList(String.valueOf(year), String.valueOf(week), depId, state, "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekListBean>>(this) {
@@ -174,7 +192,8 @@ public class NextWeekPlanActivity extends BaseActivity {
                         num_total = 0;
                         kilo_total = 0;
                         List<WeekListBean> results = t.getResults();
-                        monthPlanAdapter.setNewData(results);
+//                        monthPlanAdapter.setNewData(results);
+                        lineList = getData(results);
                         for (int i = 0; i < results.size(); i++) {
                             WeekListBean weekListBean = results.get(i);
                             num_total++;
@@ -183,6 +202,20 @@ public class NextWeekPlanActivity extends BaseActivity {
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
                         monthLineTotal.setText("杆段总数 : " + num_total + "条");
                         monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                        monthLineTotal.setText("杆段总数 : " + num_total + "条");
+                        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                        monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
+                        monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
+                        monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
+                        monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
+
+                        state = results.get(0).getAudit_status();
+
+                        LinearLayoutManager manager = new LinearLayoutManager(NextWeekPlanActivity.this);
+                        nextPlanRv.setLayoutManager(manager);
+                        monthPlanAdapter = new NextWeekPlanAdapter(R.layout.fragment_plan_item, results, state, mJobType);
+                        nextPlanRv.setAdapter(monthPlanAdapter);
+                        adapterClick();
                     }
 
                     @Override
@@ -361,7 +394,7 @@ public class NextWeekPlanActivity extends BaseActivity {
         bean.setWeek(week + "");
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(NextWeekPlanActivity.this));
-        bean.setLines(list);
+        bean.setTowers(list);
         BaseRequest.getInstance().getService()
                 .submitWeekPlan(bean)
                 .subscribeOn(Schedulers.io())
@@ -398,5 +431,40 @@ public class NextWeekPlanActivity extends BaseActivity {
         if (subscribe != null) {
             subscribe.dispose();
         }
+    }
+
+    private List<Tower> getData(List<WeekListBean> results) {
+        List<Tower> lineList = new ArrayList<>();
+        if (results != null) {
+            for (int j = 0; j < results.size(); j++) {
+                WeekListBean weekListBean = results.get(j);
+//                num_total++;
+//                kilo_total += monthPlanBean.getLine_length();
+//                if (monthPlanBean.getVoltage_level().contains("110")) {
+//                    kilo_110kv = kilo_110kv + monthPlanBean.getLine_length();
+//                    num_110kv++;
+//                } else if (monthPlanBean.getVoltage_level().contains("35")) {
+//                    kilo_35kv = kilo_35kv + monthPlanBean.getLine_length();
+//                    num_35kv++;
+//                }
+                //当身份是专责时，获取需要审批的列表
+                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(weekListBean.getAudit_status())) {
+                    Tower lineBean = new Tower();
+                    lineBean.setId(weekListBean.getId());
+                    lineList.add(lineBean);
+                    //当身份是主管时，获取需要审批的列表
+                } else if (mJobType.contains(Constant.RUN_SUPERVISOR) && "2".equals(weekListBean.getAudit_status())) {
+                    Tower lineBean = new Tower();
+                    lineBean.setId(weekListBean.getId());
+                    lineList.add(lineBean);
+                    //当身份是班长时，获取需要审核的列表
+                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(weekListBean.getAudit_status()) || "1".equals(weekListBean.getAudit_status()) || "4".equals(weekListBean.getAudit_status()))) {
+                    Tower lineBean = new Tower();
+                    lineBean.setId(weekListBean.getId());
+                    lineList.add(lineBean);
+                }
+            }
+        }
+        return lineList;
     }
 }

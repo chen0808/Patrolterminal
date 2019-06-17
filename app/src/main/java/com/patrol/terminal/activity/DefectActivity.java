@@ -46,8 +46,8 @@ public class DefectActivity extends BaseActivity {
     ImageView ivSearch;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
-    @BindView(R.id.atv_content)
-    AutoCompleteTextView atvContent;
+    @BindView(R.id.tv_content)
+    AutoCompleteTextView tvContent;
     private MyFragmentPagerAdapter taskPagerAdapter;
     private DefectIngAdapter groupTaskAdapter;
     private String jobType;
@@ -70,7 +70,7 @@ public class DefectActivity extends BaseActivity {
         }
         ProgressDialog.show(DefectActivity.this, false, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getAllDefact(dep_id, "find_time")
+                .getAllDefact(/*dep_id, */"find_time")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(this) {
@@ -113,7 +113,7 @@ public class DefectActivity extends BaseActivity {
         String data[] = getResources().getStringArray(R.array.auto_textview_contents);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(DefectActivity.
                 this, android.R.layout.simple_dropdown_item_1line, data);
-        atvContent.setAdapter(adapter);
+        tvContent.setAdapter(adapter);
     }
 
     @Override

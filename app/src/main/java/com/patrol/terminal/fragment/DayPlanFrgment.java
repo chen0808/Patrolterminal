@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -19,6 +22,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddDayPlanActivity;
 import com.patrol.terminal.activity.DayPlanDetailActivity;
 import com.patrol.terminal.activity.NextDayPlanActivity;
+import com.patrol.terminal.activity.TemporaryActivity;
 import com.patrol.terminal.adapter.DayPlanAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
@@ -41,8 +45,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -298,12 +300,17 @@ public class DayPlanFrgment extends BaseFragment {
                 showDay();
                 break;
             case R.id.add_plan_right:
+                Intent intent2 = new Intent(getContext(), TemporaryActivity.class);
+                intent2.putExtra("year", String.valueOf(nextyear));
+                intent2.putExtra("month", String.valueOf(nextmonth));
+                intent2.putExtra("day", String.valueOf(nextDay));
+                startActivityForResult(intent2, 10);
+                break;
             case R.id.add_plan_iv:
-
                 Intent intent = new Intent(getContext(), AddDayPlanActivity.class);
-                intent.putExtra("year", nextyear);
-                intent.putExtra("month", nextmonth);
-                intent.putExtra("day", nextDay);
+                intent.putExtra("year", String.valueOf(nextyear));
+                intent.putExtra("month", String.valueOf(nextmonth));
+                intent.putExtra("day", String.valueOf(nextDay));
                 startActivityForResult(intent, 10);
                 break;
             case R.id.add_plan_ll:

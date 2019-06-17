@@ -130,11 +130,15 @@ public class AddWeekPlanActivity extends BaseActivity {
                     bean.setLine_id(split[2]);
                     bean.setLine_name(split[3]);
                     bean.setName(split[4]);
-                    bean.setType_id(split[5]);
-                    bean.setType_name(split[6]);
+//                    bean.setType_id(split[5]);
+//                    bean.setType_name(split[6]);
                     bean.setType_sign(split[7]);
                     bean.setMonth_line_id(split[8]);
                     bean.setDefect_id(split[9]);
+                    bean.setStart_id(split[10]);
+                    bean.setEnd_id(split[11]);
+                    bean.setTower_type(split[12]);
+                    bean.setMonth_tower_id(split[13]);
                     bean.setDep_id(SPUtil.getDepId(AddWeekPlanActivity.this));
                     bean.setDep_name(SPUtil.getDepName(AddWeekPlanActivity.this));
                     selectType.add(bean);
@@ -178,7 +182,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         ProgressDialog.show(this, false, "正在加载。。。");
         //获取周计划杆段列表
         BaseRequest.getInstance().getService()
-                .getWeekListWeek(year, String.valueOf(week), SPUtil.getDepId(this), sign, line_id)
+                .getWeekListWeek(year, month, SPUtil.getDepId(this), sign, line_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekOfMonthBean>>(this) {
@@ -310,7 +314,7 @@ public class AddWeekPlanActivity extends BaseActivity {
 
         PlanWeekReqBean bean = new PlanWeekReqBean();
         bean.setYear(year + "");
-        bean.setMonth(month + "");
+//        bean.setMonth(month + "");
         bean.setWeek(week + "");
         bean.setBegin_time(DateUatil.dateToDate(year + "年" + beginDate));
         bean.setEnd_time(DateUatil.dateToDate(year + "年" + endDate));
@@ -423,7 +427,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         bean.setStart_time(beginDate);
         bean.setEnd_time(endDate);
         bean.setYear(year + "");
-        bean.setMonth(month + "");
+//        bean.setMonth(month + "");
         bean.setWeek(week + "");
         bean.setTowers(selectType);
         //获取月计划列表
@@ -504,9 +508,11 @@ public class AddWeekPlanActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (selectType.size() == 0) {
                         Tower tower = new Tower();
-                        tower.setTower_type("2");
+                        tower.setTower_type(listBean.getTower_type());
                         tower.setName(listBean.getName());
                         tower.setTower_id(listBean.getId());
+                        tower.setStart_id(listBean.getStart_id());
+                        tower.setEnd_id(listBean.getEnd_id());
                         listBean.setCheck(true);
                         selectType.add(tower);
                         holder.itemTroubleCheck.setChecked(true);
@@ -524,9 +530,11 @@ public class AddWeekPlanActivity extends BaseActivity {
                         }
                         if (isExit == 0) {
                             Tower tower = new Tower();
-                            tower.setTower_type("2");
+                            tower.setTower_type(listBean.getTower_type());
                             tower.setTower_id(listBean.getId());
                             tower.setName(listBean.getName());
+                            tower.setStart_id(listBean.getStart_id());
+                            tower.setEnd_id(listBean.getEnd_id());
                             selectType.add(tower);
                             listBean.setCheck(true);
                             holder.itemTroubleCheck.setChecked(true);

@@ -93,9 +93,7 @@ public class LineCheckActivity2 extends BaseActivity {
         month = getIntent().getStringExtra("month");
         week = getIntent().getStringExtra("week");
         if (month != null) {
-            titleName.setText("制定" + month + "月计划");
         } else if (week != null) {
-            titleName.setText("制定" + week + "周计划");
             //获取当前周起始和终止日期
             String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
             String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
