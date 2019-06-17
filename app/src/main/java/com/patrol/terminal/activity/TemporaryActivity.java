@@ -38,6 +38,7 @@ import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.TowerPart;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.StringUtil;
+import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
@@ -93,8 +94,9 @@ public class TemporaryActivity extends BaseActivity {
     private LineCheckBean lineCheckBean;
     //    private String type_id;
     private String sign;
-    private String month;
     private String year;
+    private String month;
+    private String week;
     private String starttime;
     private String endTime;
     private long start = 0;
@@ -106,6 +108,10 @@ public class TemporaryActivity extends BaseActivity {
     private String tower_type = "3";
     private List<TowerPart> towerPart = new ArrayList<>();
     private TowerPartAdapter adapter;
+    private String startMonth;
+    private String startDay;
+    private String endMonth;
+    private String endDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,12 +123,28 @@ public class TemporaryActivity extends BaseActivity {
 
     private void initview() {
 
-        String time = DateUatil.getCurMonth();
-        String[] years = time.split("年");
-        String[] months = years[1].split("月");
-        month = Integer.parseInt(months[0]) + 1 + "";
-        year = years[0];
-        titleName.setText("制定" + month + "月计划");
+//        String time = DateUatil.getCurMonth();
+//        String[] years = time.split("年");
+//        String[] months = years[1].split("月");
+//        year = years[0];
+//        month = Integer.parseInt(months[0]) + 1 + "";
+        year = getIntent().getStringExtra("year");
+        month = getIntent().getStringExtra("month");
+        week = getIntent().getStringExtra("week");
+        if (month != null) {
+            titleName.setText("制定" + month + "月计划");
+        } else if (week != null) {
+            titleName.setText("制定" + week + "周计划");
+            //获取当前周起始和终止日期
+            String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
+            String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
+            String[] start = beginDate.split("月");
+            startMonth = start[0];
+            startDay = start[1].split("日")[0];
+            String[] end = end2Date.split("月");
+            endMonth = end[0];
+            endDay = end[1].split("日")[0];
+        }
         getLineType();
     }
 
@@ -148,6 +170,7 @@ public class TemporaryActivity extends BaseActivity {
                 intent.putExtra("from", "Temporary");
                 intent.putExtra("year", year);
                 intent.putExtra("month", month);
+                intent.putExtra("week", week);
                 startActivityForResult(intent, 24);
                 break;
             case R.id.month_yes:
@@ -317,8 +340,8 @@ public class TemporaryActivity extends BaseActivity {
         bean.setType_name(typeName);
         bean.setStart_time(starttime);
         bean.setEnd_time(endTime);
-        bean.setYear(year);
-        bean.setMonth(month);
+        bean.setYear(String.valueOf(year));
+        bean.setMonth(String.valueOf(month));
         List<TowerPart> data = adapter.getData();
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getName_start() != null && data.get(i).getName_end() != null) {
@@ -350,9 +373,14 @@ public class TemporaryActivity extends BaseActivity {
     public void showDay(int type) {
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();
-        startDate.set(Integer.parseInt(year), Integer.parseInt(month) - 1, 1);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Integer.parseInt(year), Integer.parseInt(month) - 1, 31);
+        if (month != null) {
+            startDate.set(Integer.valueOf(year), Integer.valueOf(month) - 1, 1);
+            endDate.set(Integer.valueOf(year), Integer.valueOf(month) - 1, 31);
+        } else if (week != null) {
+            startDate.set(Integer.valueOf(year), Integer.valueOf(startMonth) - 1, Integer.valueOf(startDay));
+            endDate.set(Integer.valueOf(year), Integer.valueOf(endMonth) - 1, Integer.valueOf(endDay));
+        }
         //时间选择器 ，自定义布局
         //选中事件回调
 //是否只显示中间选中项的label文字，false则每项item全部都带有label。

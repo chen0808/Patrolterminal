@@ -11,6 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
@@ -20,6 +23,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddWeekPlanActivity;
 import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.activity.SpecialPlanDetailActivity;
+import com.patrol.terminal.activity.TemporaryActivity;
 import com.patrol.terminal.activity.WeekPlanDetailActivity;
 import com.patrol.terminal.adapter.WeekPlanAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -51,8 +55,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -285,7 +287,7 @@ public class WeekPlanFrgment extends BaseFragment {
                         for (int i = 0; i < results.size(); i++) {
                             WeekListBean weekListBean = results.get(i);
                             num_total++;
-                            kilo_total =kilo_total+ weekListBean.getTowers_range();
+                            kilo_total = kilo_total + weekListBean.getTowers_range();
                             done_num_total = done_num_total + weekListBean.getDone_num();
                             all_num_total = all_num_total + weekListBean.getAll_num();
                             //当身份是运行班专责时，获取到需要审核的列表
@@ -307,12 +309,12 @@ public class WeekPlanFrgment extends BaseFragment {
                         monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
                         BigDecimal b1 = new BigDecimal(done_num_total);
                         BigDecimal b2 = new BigDecimal(all_num_total);
-                        if (all_num_total==0){
+                        if (all_num_total == 0) {
                             donePlanRange.setText("计划进度 : 0%");
-                        }else {
+                        } else {
                             //默认保留两位会有错误，这里设置保留小数点后4位
                             double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
-                            donePlanRange.setText("计划进度 : "+range+"%");
+                            donePlanRange.setText("计划进度 : " + range + "%");
                         }
                         if (lineList.size() != 0) {
                             planSubmit.setVisibility(View.VISIBLE);
@@ -437,35 +439,40 @@ public class WeekPlanFrgment extends BaseFragment {
                 startActivityForResult(intent1, 10);
                 break;
             case R.id.plan_submit:
-               subimt(lineList,1);
+                subimt(lineList, 1);
                 break;
             case R.id.plan_submit_next:
-                subimt(nextlineList,2);
+                subimt(nextlineList, 2);
                 break;
             case R.id.add_plan_iv:
-            case R.id.add_plan_right:
                 Intent intent = new Intent(getContext(), AddWeekPlanActivity.class);
                 intent.putExtra("year", nextYear);
                 intent.putExtra("week", nextWeek);
                 startActivityForResult(intent, 10);
                 break;
+            case R.id.add_plan_right:
+                Intent intent2 = new Intent(getContext(), TemporaryActivity.class);
+                intent2.putExtra("year", String.valueOf(nextYear));
+                intent2.putExtra("week", String.valueOf(nextWeek));
+                startActivityForResult(intent2, 10);
+                break;
         }
     }
 
-    public void subimt(List<Tower> list, int type){
+    public void subimt(List<Tower> list, int type) {
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || mJobType.contains(Constant.RUN_SUPERVISOR)) {
             CancelOrOkDialog dialog = new CancelOrOkDialog(getActivity(), "一键审核", "不同意", "同意") {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitWeekPlan(list,"2",type);   //同意
+                    submitWeekPlan(list, "2", type);   //同意
                     dismiss();
                 }
 
                 @Override
                 public void cancel() {
                     super.cancel();
-                    submitWeekPlan(list,"3",type);  //不同意
+                    submitWeekPlan(list, "3", type);  //不同意
                     dismiss();
                 }
             };
@@ -475,7 +482,7 @@ public class WeekPlanFrgment extends BaseFragment {
                 @Override
                 public void ok() {
                     super.ok();
-                    submitWeekPlan(list,"1",type);   //同意
+                    submitWeekPlan(list, "1", type);   //同意
                     dismiss();
                 }
 
@@ -496,7 +503,7 @@ public class WeekPlanFrgment extends BaseFragment {
     }
 
     //提交周计划审核
-    public void submitWeekPlan(List<Tower>list,String status,int type) {
+    public void submitWeekPlan(List<Tower> list, String status, int type) {
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
         bean.setAudit_status(status);
         bean.setTowers(list);
@@ -516,9 +523,9 @@ public class WeekPlanFrgment extends BaseFragment {
                                 Toast.makeText(getContext(), "审核成功", Toast.LENGTH_SHORT).show();
                             }
 
-                            if (type==1){
+                            if (type == 1) {
                                 getWeekList();
-                            }else {
+                            } else {
                                 getNextWeekList();
                             }
 

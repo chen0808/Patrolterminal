@@ -153,7 +153,7 @@ public interface ApiServise {
 
     //获取周计划杆段列表
     @GET("plan/month/line/monthGET")
-    Observable<BaseResult<List<WeekOfMonthBean>>> getWeekListWeek(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_sign") String type_sign, @Query("line_id") String line_id);
+    Observable<BaseResult<List<WeekOfMonthBean>>> getWeekListWeek(@Query("year") int year, @Query("week") String week, @Query("dep_id") String dep_id, @Query("type_sign") String type_sign, @Query("line_id") String line_id);
 
     //月计划列表
     @GET("/plan/month/dataGET")

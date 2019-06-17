@@ -27,9 +27,11 @@ import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.SavaEleLineBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -67,6 +69,12 @@ public class LineCheckActivity2 extends BaseActivity {
     private LineCheckBean selectBean;
     private String from;
     private String type_sign;
+    private String week;
+    private String startMonth;
+    private String startDay;
+    private String[] start;
+    private String endMonth;
+    private String endDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +91,26 @@ public class LineCheckActivity2 extends BaseActivity {
         }
         year = getIntent().getStringExtra("year");
         month = getIntent().getStringExtra("month");
+        week = getIntent().getStringExtra("week");
+        if (month != null) {
+            titleName.setText("制定" + month + "月计划");
+        } else if (week != null) {
+            titleName.setText("制定" + week + "周计划");
+            //获取当前周起始和终止日期
+            String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
+            String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
+            String[] start = beginDate.split("月");
+            startMonth = start[0];
+            startDay = start[1].split("日")[0];
+            String[] end = end2Date.split("月");
+            endMonth = end[0];
+            endDay = end[1].split("日")[0];
+            if (startMonth == endMonth) {
+                month = startMonth;
+            } else {
+                month = Integer.valueOf(startMonth) + "," + Integer.valueOf(endMonth);
+            }
+        }
         id = getIntent().getStringExtra("id");
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
             dep_id = SPUtil.getDepId(this);

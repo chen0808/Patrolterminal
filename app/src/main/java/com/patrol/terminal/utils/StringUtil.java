@@ -50,12 +50,12 @@ public class StringUtil {
         for (int i = 0; i < split.length; i++) {
             int index = Integer.parseInt(split[i]) - 1;
             if (split.length == 1) {
-                typeNmae = typeSigns[index];
+                typeNmae = "1、" + typeSigns[index];
             } else {
                 if (i == 0) {
-                    typeNmae = (i + 1) + "." + typeSigns[index];
+                    typeNmae = (i + 1) + "、" + typeSigns[index];
                 } else {
-                    typeNmae = typeNmae + ";&#160;&#160;" + (i + 1) + "." + typeSigns[index];
+                    typeNmae = typeNmae + "<br/>" + (i + 1) + "、" + typeSigns[index];
                 }
 
             }

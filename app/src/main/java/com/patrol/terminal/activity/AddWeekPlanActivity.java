@@ -41,6 +41,7 @@ import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -84,7 +85,7 @@ public class AddWeekPlanActivity extends BaseActivity {
     private List<String> lineName = new ArrayList<>();
 
     private int year;
-    private int month;
+    private String month;
     private int week;
     private int type = 0;
     private List<Tower> selectType = new ArrayList<>();
@@ -153,18 +154,31 @@ public class AddWeekPlanActivity extends BaseActivity {
 
     //初始化日期
     public void initdate() {
-        year = getIntent().getIntExtra("year", 2019);
-        week = getIntent().getIntExtra("week", 23);
+        year = getIntent().getIntExtra("year", 0);
+        week = getIntent().getIntExtra("week", 0);
         beginDate = TimeUtil.getFirstDayOfWeek(year, week);
         endDate = TimeUtil.getLastDayOfWeek(year, week);
-        month = Integer.parseInt(TimeUtil.getMonthOfWeek(year, week));
+        //获取下周起始和终止日期
+        String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
+        String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
+        String[] start = beginDate.split("月");
+        String startMonth = start[0];
+        String startDay = start[1].split("日")[0];
+        String[] end = end2Date.split("月");
+        String endMonth = end[0];
+        String endDay = end[1].split("日")[0];
+        if (startMonth.equals(endMonth)) {
+            month = Integer.valueOf(startMonth) + "";
+        } else {
+            month = Integer.valueOf(startMonth) + "," + Integer.valueOf(endMonth);
+        }
     }
 
     private void getWeekInfoList() {
         ProgressDialog.show(this, false, "正在加载。。。");
         //获取周计划杆段列表
         BaseRequest.getInstance().getService()
-                .getWeekListWeek(year, month, SPUtil.getDepId(this), sign, line_id)
+                .getWeekListWeek(year, String.valueOf(week), SPUtil.getDepId(this), sign, line_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekOfMonthBean>>(this) {
@@ -247,7 +261,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         lineName.clear();
         //获取月计划列表
         BaseRequest.getInstance().getService()
-                .getWeekList(year, month, SPUtil.getDepId(this), null)
+                .getWeekList(year, Integer.valueOf(month), SPUtil.getDepId(this), null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekOfMonthBean>>(this) {

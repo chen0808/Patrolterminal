@@ -8,6 +8,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.NextWeekPlanAdapter;
@@ -33,8 +36,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -108,7 +109,7 @@ public class NextWeekPlanActivity extends BaseActivity {
         lineList = (List<Tower>) getIntent().getSerializableExtra("linelist");
 
         num_total = getIntent().getIntExtra("num_total", 0);
-         kilo_total = getIntent().getDoubleExtra("kilo_total", 0);
+        kilo_total = getIntent().getDoubleExtra("kilo_total", 0);
         num_110kv = getIntent().getIntExtra("110kv_num", 0);
         kilo_110kv = getIntent().getDoubleExtra("110kv_kolo", 0);
         num_35kv = getIntent().getIntExtra("35kv_num", 0);
@@ -121,15 +122,15 @@ public class NextWeekPlanActivity extends BaseActivity {
         monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
         monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
         monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
-        year = getIntent().getIntExtra("year", 2019);
-        week = getIntent().getIntExtra("week", 23);
+        year = getIntent().getIntExtra("year", 0);
+        week = getIntent().getIntExtra("week", 0);
         String nextBeginTime = TimeUtil.getFirstDayOfWeek(year, week);
         String nextEndTime = TimeUtil.getLastDayOfWeek(year, week);
         titleName.setText("第" + week + "周计划(" + nextBeginTime + "-" + nextEndTime + ")");
         WeekListBean weekListBean = list.get(0);
         state = weekListBean.getAudit_status();
         mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(state)||"3".equals(state))) {
+        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(state) || "3".equals(state))) {
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("提交");
         } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "1".equals(state)) {
@@ -159,10 +160,11 @@ public class NextWeekPlanActivity extends BaseActivity {
         adapterClick();
         getDepList();
     }
+
     //获取本周计划
     public void getWeekList() {
         BaseRequest.getInstance().getService()
-                .getWeekList(year+"", week + "", depId, state, "type_sign,line_id")
+                .getWeekList(year + "", week + "", depId, state, "type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekListBean>>(this) {
@@ -171,7 +173,7 @@ public class NextWeekPlanActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
                         num_total = 0;
                         kilo_total = 0;
-                        List<WeekListBean>  results = t.getResults();
+                        List<WeekListBean> results = t.getResults();
                         monthPlanAdapter.setNewData(results);
                         for (int i = 0; i < results.size(); i++) {
                             WeekListBean weekListBean = results.get(i);
@@ -238,7 +240,7 @@ public class NextWeekPlanActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.title_back, R.id.title_setting,R.id.task_screen})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.task_screen})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -351,20 +353,20 @@ public class NextWeekPlanActivity extends BaseActivity {
         }
     }
 
-    //提交月计划审核
+    //提交周计划审核
     public void submitMonthPlan(List<Tower> list, String status) {
         ProgressDialog.show(NextWeekPlanActivity.this, false, "正在加载中...");
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
         bean.setYear(year + "");
-        bean.setMonth(week + "");
+        bean.setWeek(week + "");
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(NextWeekPlanActivity.this));
         bean.setLines(list);
         BaseRequest.getInstance().getService()
-                .submitMonthPlan(bean)
+                .submitWeekPlan(bean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<MonthPlanBean>>(NextWeekPlanActivity.this) {
+                .subscribe(new BaseObserver<List<MonthPlanBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<MonthPlanBean>> t) throws Exception {
                         ProgressDialog.cancle();
@@ -388,13 +390,12 @@ public class NextWeekPlanActivity extends BaseActivity {
                         ProgressDialog.cancle();
                     }
                 });
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscribe!=null){
+        if (subscribe != null) {
             subscribe.dispose();
         }
     }

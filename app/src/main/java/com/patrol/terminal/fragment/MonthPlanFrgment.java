@@ -478,8 +478,8 @@ public class MonthPlanFrgment extends BaseFragment {
             case R.id.add_plan_iv:
             case R.id.add_plan_right:
                 Intent intent = new Intent(getContext(), TemporaryActivity.class);
-                intent.putExtra("year", year);
-                intent.putExtra("month", month);
+                intent.putExtra("year", String.valueOf(nextYear));
+                intent.putExtra("month", String.valueOf(nextMonth));
                 startActivityForResult(intent, 10);
                 break;
             case R.id.plan_submit_next:
