@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_access"
-                android:inputType="number"
+                android:inputType="number|numberDecimal"
                 android:maxLength="8"
                 android:textSize="@dimen/text_size_common" />
 
@@ -105,7 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_destroy"
-                android:inputType="number"
+                android:inputType="number|numberDecimal"
                 android:maxLength="8"
                 android:textSize="@dimen/text_size_common" />
 
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_common"
                 android:hint="@string/hint_unit"
-                android:inputType="number"
+                android:inputType="number|numberDecimal"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -157,7 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_unit"
-                android:inputType="number"
+                android:inputType="number|numberDecimal"
                 android:textSize="@dimen/text_size_common" />
 
         </LinearLayout>
@@ -180,7 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_write_data"
-            android:inputType="number"
+            android:inputType="number|numberDecimal"
             android:textSize="@dimen/text_size_common" />
 
     </LinearLayout>

@@ -22,16 +22,16 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.LineCheckBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.SavaEleLineBean;
-import com.patrol.terminal.bean.SavaLineBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,7 +41,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /*选择线路*/
-public class LineCheckActivity extends BaseActivity {
+public class LineCheckActivity2 extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -59,16 +59,22 @@ public class LineCheckActivity extends BaseActivity {
     ImageView searchLine;
     @BindView(R.id.rv_line_check)
     ListView rvLineCheck;
-    private int year;
-    private int month;
+    private String year;
+    private String month;
     private String dep_id;
     private String id;
-    private int selectPosin=-1;
+    private int selectPosin = -1;
     private List<LineCheckBean> results = new ArrayList<>();
     private LineCheckAdapter adapter;
     private LineCheckBean selectBean;
     private String from;
     private String type_sign;
+    private String week;
+    private String startMonth;
+    private String startDay;
+    private String[] start;
+    private String endMonth;
+    private String endDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,21 +84,41 @@ public class LineCheckActivity extends BaseActivity {
 
         from = getIntent().getStringExtra("from");
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
-        if ("Temporary".equals(from)){
+        if ("Temporary".equals(from)) {
             titleName.setText("选择线路");
-        }else {
+        } else {
             titleName.setText("保电计划制定");
         }
-        year = getIntent().getIntExtra("year", 2019);
-        month = getIntent().getIntExtra("month", 5);
+        year = getIntent().getStringExtra("year");
+        month = getIntent().getStringExtra("month");
+        week = getIntent().getStringExtra("week");
+        if (month != null) {
+            titleName.setText("制定" + month + "月计划");
+        } else if (week != null) {
+            titleName.setText("制定" + week + "周计划");
+            //获取当前周起始和终止日期
+            String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
+            String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
+            String[] start = beginDate.split("月");
+            startMonth = start[0];
+            startDay = start[1].split("日")[0];
+            String[] end = end2Date.split("月");
+            endMonth = end[0];
+            endDay = end[1].split("日")[0];
+            if (startMonth == endMonth) {
+                month = startMonth;
+            } else {
+                month = Integer.valueOf(startMonth) + "," + Integer.valueOf(endMonth);
+            }
+        }
         id = getIntent().getStringExtra("id");
-        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) ) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
-            dep_id=SPUtil.getDepId(this);
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
+            dep_id = SPUtil.getDepId(this);
             type_sign = "2,4,7,8,9,10";
         }
         adapter = new LineCheckAdapter(this, results);
         rvLineCheck.setAdapter(adapter);
-
+        rvLineCheck.setEmptyView(findViewById(R.id.empty));
         rvLineCheck.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -111,7 +137,7 @@ public class LineCheckActivity extends BaseActivity {
     private void initData() {
         ProgressDialog.show(this, false, "正在加载。。。");
         BaseRequest.getInstance().getService()
-                .getLineList(year,month,dep_id,type_sign)
+                .getLineList2(year, month, dep_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineCheckBean>>(this) {
@@ -121,7 +147,7 @@ public class LineCheckActivity extends BaseActivity {
                             results = t.getResults();
                             adapter.setData(results);
                         } else {
-                            Toast.makeText(LineCheckActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LineCheckActivity2.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
                         ProgressDialog.cancle();
                     }
@@ -142,33 +168,65 @@ public class LineCheckActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-                    if (selectBean==null){
-                        Toast.makeText(LineCheckActivity.this,"请选择一条线路",Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if ("Temporary".equals(from)){
-                        Intent intent=new Intent();
-                        Bundle bundle=new Bundle();
+                if (selectBean == null) {
+                    Toast.makeText(LineCheckActivity2.this, "请选择一条线路", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if ("Temporary".equals(from)) {
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
 
-                        bundle.putSerializable("bean",selectBean);
-                        intent.putExtras(bundle);
-                        setResult(RESULT_OK,intent);
-                        finish();
-                    }else {
-                        saveMonthPlan();
-                    }
+                    bundle.putSerializable("bean", selectBean);
+                    intent.putExtras(bundle);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    saveMonthPlan();
+                }
 
                 break;
             case R.id.search_line:
                 String trim = lineNameEt.getText().toString().trim();
-                for (int i = 0; i <results.size() ; i++) {
+                for (int i = 0; i < results.size(); i++) {
                     LineCheckBean lineCheckBean = results.get(i);
-                    if (lineCheckBean.getName().contains(trim)){
+                    if (lineCheckBean.getName().contains(trim)) {
                         rvLineCheck.setSelection(i);
                     }
                 }
                 break;
         }
+    }
+
+    //获取每个班组负责的线路
+    public void saveMonthPlan() {
+        ProgressDialog.show(this, false, "正在加载。。。");
+        SavaEleLineBean bean = new SavaEleLineBean();
+        bean.setLine_id(selectBean.getId());
+        bean.setLine_name(selectBean.getName());
+        bean.setYear(year + "");
+        bean.setMonth(month + "");
+        bean.setRepair_id(id);
+        //获取月计划列表
+        BaseRequest.getInstance().getService()
+                .saveMonthPlan(bean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<LineTypeBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            Toast.makeText(LineCheckActivity2.this, "制定成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                        ProgressDialog.cancle();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
     }
 
     class LineCheckAdapter extends BaseAdapter {
@@ -235,38 +293,6 @@ public class LineCheckActivity extends BaseActivity {
             private RadioButton lineCheckRb;
         }
 
-    }
-
-    //获取每个班组负责的线路
-    public void saveMonthPlan() {
-       ProgressDialog.show(this,false,"正在加载。。。");
-        SavaEleLineBean bean=new SavaEleLineBean();
-        bean.setLine_id(selectBean.getId());
-        bean.setLine_name(selectBean.getName());
-        bean.setYear(year+"");
-        bean.setMonth(month+"");
-        bean.setRepair_id(id);
-        //获取月计划列表
-        BaseRequest.getInstance().getService()
-                .saveMonthPlan(bean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<LineTypeBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
-                         if (t.getCode()==1){
-                              Toast.makeText(LineCheckActivity.this,"制定成功",Toast.LENGTH_SHORT).show();
-                              setResult(RESULT_OK);
-                              finish();
-                         }
-                        ProgressDialog.cancle();
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                    }
-                });
     }
 
 }

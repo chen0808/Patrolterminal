@@ -19,7 +19,7 @@
             android:id="@+id/month_plan_nuit"
             style="@style/plan_et_styl"
             android:background="@null"
-            android:hint="请输入申请单位" />
+            android:hint="输电运检中心" />
     </LinearLayout>
 
     <View style="@style/line_styl" />
@@ -33,7 +33,6 @@
         <TextView
             android:id="@+id/month_plan_device_name"
             style="@style/plan_et_styl"
-            android:background="@null"
             android:hint="输入设备名称" />
     </LinearLayout>
 
@@ -108,7 +107,7 @@
                 style="@style/plan_et_styl"
                 android:background="@null"
                 android:hint="请输入停电天数"
-                android:inputType="number" />
+                android:inputType="number|numberDecimal" />
         </LinearLayout>
 
         <View style="@style/line_styl" />
@@ -122,11 +121,25 @@
                 android:text="停电范围" />
 
             <TextView
-                android:id="@+id/month_plan_range"
-                style="@style/plan_et_styl"
+                android:id="@+id/month_plan_start_range"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:hint="选择起始杆塔" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/color_33"
+                android:text="至" />
+            <TextView
+                android:id="@+id/month_plan_end_range"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_marginRight="@dimen/dp_20"
-                android:drawableRight="@mipmap/icon_go"
-                android:hint="点击选择停电范围" />
+                android:hint="选择终点杆塔" />
         </LinearLayout>
 
         <View style="@style/line_styl" />

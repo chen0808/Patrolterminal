@@ -1,36 +1,36 @@
 package com.patrol.terminal.adapter;
 
+import androidx.annotation.Nullable;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.bean.TodoListBean;
+import com.patrol.terminal.bean.TodoBean;
 
 import java.util.List;
 
-import androidx.annotation.Nullable;
-
-public class YXTodoManageAdapter extends BaseQuickAdapter<TodoListBean, BaseViewHolder> {
+public class YXTodoManageAdapter extends BaseQuickAdapter<TodoBean, BaseViewHolder> {
 
 
-    public YXTodoManageAdapter(int layoutResId, @Nullable List<TodoListBean> data) {
+    public YXTodoManageAdapter(int layoutResId, @Nullable List<TodoBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder viewHolder, TodoListBean item) {
-        String deal_type = item.getSign();
+    protected void convert(BaseViewHolder viewHolder, TodoBean item) {
+        String deal_type = item.getFlow_sign();
         String remind_type = item.getRemind_type();
         String done_status = item.getDone_status();
         switch (deal_type) {
             case "1":
                 viewHolder.setText(R.id.item_todo_type_tv, "巡");
                 break;
-            case "2":
-            case "3":
-            case "4":
             case "5":
             case "6":
+            case "7":
+            case "8":
                 viewHolder.setText(R.id.item_todo_type_tv, "检");
+                viewHolder.setBackgroundRes(R.id.item_todo_type_tv, R.drawable.plan_yellow_bg);
                 break;
             case "20":
                 viewHolder.setText(R.id.item_todo_type_tv, "修");
@@ -48,7 +48,7 @@ public class YXTodoManageAdapter extends BaseQuickAdapter<TodoListBean, BaseView
         }
 
         viewHolder.setText(R.id.item_todo_title, item.getTitle());
-        viewHolder.setText(R.id.item_todo_name, "提交人 :"+item.getFrom_user_name());
+        viewHolder.setText(R.id.item_todo_name, "提交人 :" + item.getFrom_user_name());
         viewHolder.setText(R.id.item_todo_time, "提交时间 :" + item.getCreate_time());
     }
 }

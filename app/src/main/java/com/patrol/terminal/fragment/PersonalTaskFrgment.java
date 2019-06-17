@@ -80,13 +80,13 @@ public class PersonalTaskFrgment extends BaseFragment {
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) ) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
             depid=SPUtil.getDepId(getContext());
           taskAdd.setVisibility(View.GONE);
-        }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
-            userid=SPUtil.getUserId(getContext());
-            taskAdd.setVisibility(View.GONE);
         }else if (jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
             taskAdd.setVisibility(View.GONE);
         }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
             userid=SPUtil.getUserId(getContext());
+        }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+            userid=SPUtil.getUserId(getContext());
+            taskAdd.setVisibility(View.GONE);
         }
         planCreate.setVisibility(View.GONE);
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));

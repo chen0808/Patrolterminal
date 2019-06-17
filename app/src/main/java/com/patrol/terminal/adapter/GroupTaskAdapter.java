@@ -67,8 +67,15 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
             viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_red_bg);
             viewHolder.setGone(R.id.plan_progressbar_ll,false);
         }else {
+
+            if ("1".equals(item.getIs_rob())){
+                viewHolder.setText(R.id.item_line_state, "已抢单");
+                viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_green_bg);
+            }else{
                 viewHolder.setText(R.id.item_line_state, "已分配");
-                viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_red_bg);
+                viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_green_bg);
+            }
+
             viewHolder.setGone(R.id.plan_progressbar_ll,true);
             viewHolder.setText(R.id.plan_progressbar_tv,"任务进度("+item.getDone_num()+"/"+item.getAll_num()+") :")
                     .setText(R.id.plan_progressbar_num,item.getDone_rate()+"%");

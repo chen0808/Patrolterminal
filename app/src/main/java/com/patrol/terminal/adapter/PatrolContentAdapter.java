@@ -8,6 +8,9 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -22,7 +25,6 @@ import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.PictureSelectorConfig;
-import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -95,6 +97,19 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                     helper.setImageResource(R.id.iv_check, R.mipmap.patrol_false);
                 } else {
                     helper.setImageResource(R.id.iv_check, R.mipmap.patrol_true);
+                }
+                List<PatrolLevel2> items = item1.getSubItems();
+                int size = items.size();
+                int count = 0;
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).getStatus().equals("2")) {
+                        count++;
+                    }
+                }
+                if (count == size) {
+                    helper.setImageResource(R.id.iv_check, R.mipmap.patrol_true);
+                } else {
+                    helper.setImageResource(R.id.iv_check, R.mipmap.patrol_undefined);
                 }
                 ImageView ivCheck = helper.getView(R.id.iv_check);
                 ivCheck.setOnClickListener(new View.OnClickListener() {
@@ -172,12 +187,23 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                         }).show();
                     }
                 });
+                RelativeLayout rlContent = helper.getView(R.id.rl_content);
+                LinearLayout llContent = helper.getView(R.id.ll_content);
+                TextView tvItemContent = helper.getView(R.id.tv_item_content);
                 EditText etContent = helper.getView(R.id.et_content);
                 ImageView ivCommit = helper.getView(R.id.iv_commit);
                 ivCommit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        uploadItem(item2, etContent.getText().toString());
+                        uploadItem(item2, etContent.getText().toString(), rlContent, llContent, tvItemContent);
+                    }
+                });
+                ImageView ivEdit = helper.getView(R.id.iv_edit);
+                ivEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rlContent.setVisibility(View.GONE);
+                        llContent.setVisibility(View.VISIBLE);
                     }
                 });
                 break;
@@ -224,7 +250,7 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
         PictureSelectorConfig.initMultiConfig2(activity, maxTotal);
     }
 
-    private void uploadItem(PatrolLevel2 item2, String content) {
+    private void uploadItem(PatrolLevel2 item2, String content, RelativeLayout rlContent, LinearLayout llContent, TextView tvContent) {
         params.put("task_id", toRequestBody(item2.getTask_id()));
         params.put("grade_id", toRequestBody("37E5647975394B1E952DC5D2796C7D73"));
         params.put("content", toRequestBody(content));
@@ -270,7 +296,10 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
                         Toast.makeText(mContext, "上传成功！", Toast.LENGTH_SHORT).show();
-                        RxRefreshEvent.publish("updateDefect@2");
+//                        RxRefreshEvent.publish("updateDefect@2");
+                        rlContent.setVisibility(View.VISIBLE);
+                        llContent.setVisibility(View.GONE);
+                        tvContent.setText(content);
                     }
 
                     @Override

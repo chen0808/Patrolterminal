@@ -36,6 +36,7 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+//小组任务详情
 public class GroupTaskDetailActivity extends Activity {
 
 
@@ -103,7 +104,7 @@ public class GroupTaskDetailActivity extends Activity {
     //获取月计划列表
     public void getGroupList() {
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-       if (jobType.equals(Constant.RUNNING_SQUAD_TEMA_LEADER) && "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
+       if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) && "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
             type = 1;
             taskSubmit.setVisibility(View.VISIBLE);
         } else if ("1".equals(bean.getIs_rob())) {
@@ -127,10 +128,7 @@ public class GroupTaskDetailActivity extends Activity {
         }else {
             tvLineDate.setText("小组负责人 :" + bean.getDuty_user_name());
         }
-        if ("12".equals(bean.getType_sign())||"13".equals(bean.getType_sign())){
-            tvLineTower.setVisibility(View.GONE);
-        }else {
-        tvLineTower.setText("杆  段 : " + bean.getName());}
+        tvLineTower.setText("杆  段 : " + bean.getName());
 
         String type_sign = bean.getType_sign();
         String[] split = type_sign.split(",");

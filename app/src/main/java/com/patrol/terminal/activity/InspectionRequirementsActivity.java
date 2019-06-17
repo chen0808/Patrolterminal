@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+//检查监督要求
 public class InspectionRequirementsActivity extends BaseActivity {
 
 

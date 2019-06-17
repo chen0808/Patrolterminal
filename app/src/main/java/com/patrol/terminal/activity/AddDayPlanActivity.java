@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
@@ -38,7 +40,6 @@ import com.patrol.terminal.widget.ProgressDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -197,7 +198,7 @@ public class AddDayPlanActivity extends BaseActivity {
                 monthPlanType.setText(typeName);
                 for (int i = 0; i < typeList.size(); i++) {
                     LineTypeBean lineTypeBean = typeList.get(i);
-                    if (typeName.equals(lineTypeBean.getName())){
+                    if (typeName.contains(lineTypeBean.getName())) {
                         sign = lineTypeBean.getSign();
                     }
                 }
@@ -345,7 +346,7 @@ public class AddDayPlanActivity extends BaseActivity {
     public void inteDate() {
         month = getIntent().getIntExtra("month",6)+"";
         year = getIntent().getIntExtra("year",2019)+"";
-        day = getIntent().getIntExtra("day",1)+"";
+        day = getIntent().getIntExtra("day",1)-1+"";
     }
 
     class TempTowerAdapter extends BaseAdapter {
@@ -466,7 +467,7 @@ public class AddDayPlanActivity extends BaseActivity {
             }
         }
     }
-    //获取工作类型
+    //获取线路杆塔
     public void getTempTower() {
         ProgressDialog.show(this,false,"正在加载。。。");
         BaseRequest.getInstance().getService()

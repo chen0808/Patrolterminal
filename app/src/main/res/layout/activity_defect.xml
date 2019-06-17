@@ -8,9 +8,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center_vertical">
+
+        <AutoCompleteTextView
+            android:id="@+id/atv_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/stoke_gray"
+            android:completionHintView="@null"
+            android:completionThreshold="1"
+            android:dropDownHorizontalOffset="5dp"
+            android:gravity="center"
+            android:hint="请输入搜索内容"
+            android:minHeight="40dp"
+            android:padding="2dp"
+            android:textColor="@color/black" />
+
 
         <TextView
             android:layout_width="0dp"
@@ -21,7 +39,8 @@
             android:background="@drawable/stoke_gray"
             android:padding="2dp"
             android:text="线路名称"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="0dp"
@@ -32,7 +51,8 @@
             android:background="@drawable/stoke_gray"
             android:padding="2dp"
             android:text="线路级别"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_search"

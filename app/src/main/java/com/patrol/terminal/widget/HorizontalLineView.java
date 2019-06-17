@@ -5,11 +5,11 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.patrol.terminal.R;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -28,10 +28,6 @@ public class HorizontalLineView extends LinearLayout {
     View line3;
     @BindView(R.id.view4)
     View view4;
-    @BindView(R.id.line4)
-    View line4;
-    @BindView(R.id.view5)
-    View view5;
 
     public HorizontalLineView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -42,40 +38,42 @@ public class HorizontalLineView extends LinearLayout {
     public void setStatus(String type) {
         switch (type) {
             case "0":
+            case "4":
+                view2.setBackgroundResource(R.drawable.gray_oval);
+                line1.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view3.setBackgroundResource(R.drawable.gray_oval);
+                line2.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view4.setBackgroundResource(R.drawable.gray_oval);
+                line3.setBackgroundColor(getResources().getColor(R.color.color_69));
                 break;
             case "1":
+                view2.setBackgroundResource(R.drawable.green_oval);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view3.setBackgroundResource(R.drawable.gray_oval);
+                line2.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view4.setBackgroundResource(R.drawable.gray_oval);
+                line3.setBackgroundColor(getResources().getColor(R.color.color_69));
+                break;
             case "2":
                 view2.setBackgroundResource(R.drawable.green_oval);
                 line1.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view3.setBackgroundResource(R.drawable.green_oval);
+                line2.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view4.setBackgroundResource(R.drawable.gray_oval);
+                line3.setBackgroundColor(getResources().getColor(R.color.color_69));
                 break;
             case "3":
-            case "4":
-                view2.setBackgroundResource(R.drawable.green_oval);
-                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view3.setBackgroundResource(R.drawable.green_oval);
-                line2.setBackgroundColor(getResources().getColor(R.color.line_green));
-                break;
-            case "5":
                 view2.setBackgroundResource(R.drawable.green_oval);
                 line1.setBackgroundColor(getResources().getColor(R.color.line_green));
                 view3.setBackgroundResource(R.drawable.green_oval);
                 line2.setBackgroundColor(getResources().getColor(R.color.line_green));
                 view4.setBackgroundResource(R.drawable.green_oval);
                 line3.setBackgroundColor(getResources().getColor(R.color.line_green));
-                break;
-            case "6":
-                view2.setBackgroundResource(R.drawable.green_oval);
-                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view3.setBackgroundResource(R.drawable.green_oval);
-                line2.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view4.setBackgroundResource(R.drawable.green_oval);
-                line3.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view5.setBackgroundResource(R.drawable.green_oval);
-                line4.setBackgroundColor(getResources().getColor(R.color.line_green));
                 break;
 
         }
     }
+
     public void setWeekState(String type) {
         switch (type) {
             case "0":
@@ -106,15 +104,16 @@ public class HorizontalLineView extends LinearLayout {
                 line2.setBackgroundColor(getResources().getColor(R.color.line_green));
                 view4.setBackgroundResource(R.drawable.green_oval);
                 line3.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view5.setBackgroundResource(R.drawable.green_oval);
-                line4.setBackgroundColor(getResources().getColor(R.color.line_green));
+//                view5.setBackgroundResource(R.drawable.green_oval);
+//                line4.setBackgroundColor(getResources().getColor(R.color.line_green));
                 break;
 
         }
     }
-    public void setOverStatus(String type){
 
-        switch (type){
+    public void setOverStatus(String type) {
+
+        switch (type) {
             case "0":
                 break;
             case "1":
@@ -122,7 +121,7 @@ public class HorizontalLineView extends LinearLayout {
                 line1.setBackgroundColor(getResources().getColor(R.color.line_green));
                 break;
             case "2":
-            /*case "5":*/
+                /*case "5":*/
                 view2.setBackgroundResource(R.drawable.green_oval);
                 line1.setBackgroundColor(getResources().getColor(R.color.line_green));
                 view3.setBackgroundResource(R.drawable.green_oval);

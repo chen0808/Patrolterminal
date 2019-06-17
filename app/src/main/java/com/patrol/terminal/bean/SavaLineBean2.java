@@ -2,9 +2,12 @@ package com.patrol.terminal.bean;
 
 import java.util.List;
 
-public class SavaLineBean {
+public class SavaLineBean2 {
     private String type_id, type_sign, type_name, line_id, line_name, year, month, week, day;
     private String start_time;
+    // 结束时间
+    private String end_time;
+    private List<TowerPart> towers;
 
     public String getDay() {
         return day;
@@ -22,11 +25,6 @@ public class SavaLineBean {
         this.week = week;
     }
 
-    // 结束时间
-    private String end_time;
-
-    private List<Tower> towers;
-
     public String getStart_time() {
         return start_time;
     }
@@ -43,11 +41,11 @@ public class SavaLineBean {
         this.end_time = end_time;
     }
 
-    public List<Tower> getTowers() {
+    public List<TowerPart> getTowers() {
         return towers;
     }
 
-    public void setTowers(List<Tower> towers) {
+    public void setTowers(List<TowerPart> towers) {
         this.towers = towers;
     }
 

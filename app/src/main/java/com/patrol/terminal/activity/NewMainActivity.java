@@ -11,6 +11,12 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -31,7 +37,6 @@ import com.patrol.terminal.fragment.JXHomeFragment;
 import com.patrol.terminal.fragment.MeFragement;
 import com.patrol.terminal.fragment.TodosManageFragment;
 import com.patrol.terminal.fragment.YXTodosManageFragment;
-import com.patrol.terminal.fragment.ZyHomeFragment;
 import com.patrol.terminal.training.TrainingHomeFragment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -43,11 +48,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -93,11 +93,10 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         jobType = SPUtil.getString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         FileDownloader.init(this);
         checkPremission();
-        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)) {
             getGroupName();
-        } else {
-            initView();
         }
+        initView();
         //RFIDManager.getRFIDInstance().init(this, "001583EA5423", "", this);
         //初始化定位
         initLocation();
@@ -143,23 +142,21 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         //分配每个职位进来的首页
         if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {     //培训专责
             mFragments.add(new TrainingHomeFragment());
-        } else if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+        } else if (jobType.contains("yx")) {
             mFragments.add(new HomeFragment());
-        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-            mFragments.add(new ZyHomeFragment());
-        } else {
+        }  else {
             mFragments.add(new JXHomeFragment());
         }
 
         //分配每个职位进来的待办
-        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.REFURBISHMENT_MEMBER)
-                || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
-                || jobType.contains(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
-            mainExameRb.setVisibility(View.GONE);
-
-            mFragments.add(new TodosManageFragment());  //只是不显示，以免RideoButton点击错乱
-
-        } else {                                                    //有待办的角色
+//        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.REFURBISHMENT_MEMBER)
+//                || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)
+//                || jobType.contains(Constant.TRAINING_SPECIALIZED)) {  //无待办的角色
+//            mainExameRb.setVisibility(View.GONE);
+//
+//            mFragments.add(new TodosManageFragment());  //只是不显示，以免RideoButton点击错乱
+//
+//        } else {                                                    //有待办的角色
             mainExameRb.setVisibility(View.VISIBLE);
 
             if (jobType.contains("yx")) {   //运行待办
@@ -167,7 +164,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
             } else {   //其他角色待办
                 mFragments.add(new TodosManageFragment());
             }
-        }
+//        }
 
         mFragments.add(new AnylyzeFrgment());
         mFragments.add(new MeFragement());
@@ -250,7 +247,6 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                                     jobType = Constant.RUNNING_SQUAD_TEMA_LEADER;
                                 }
                             }
-                            initView();
                         }
 
                     }

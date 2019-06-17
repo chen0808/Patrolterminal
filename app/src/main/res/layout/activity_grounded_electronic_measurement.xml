@@ -7,9 +7,9 @@
     <include layout="@layout/include_title"></include>
 
     <ScrollView
-        android:layout_marginTop="49dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="49dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,11 +37,11 @@
                         android:text="线路名称" />
 
                     <TextView
-                        android:id="@+id/et_line_id"
+                        android:id="@+id/tv_line_id"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="4dp"
-                        android:gravity="center_vertical"
                         android:layout_weight="1"
                         android:background="@drawable/stoke_gray"
                         android:padding="4dp" />
@@ -64,11 +64,11 @@
                         android:text="杆塔号" />
 
                     <TextView
-                        android:id="@+id/et_tower_name"
+                        android:id="@+id/tv_tower_name"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="4dp"
-                        android:gravity="center_vertical"
                         android:layout_weight="1"
                         android:background="@drawable/stoke_gray"
                         android:padding="4dp" />
@@ -95,10 +95,11 @@
                         android:layout_gravity="center_vertical"
                         android:text="杆塔型号" />
 
-                    <EditText
-                        android:id="@+id/et_tower_id"
+                    <TextView
+                        android:id="@+id/tv_tower_type"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/stoke_gray"
@@ -119,31 +120,57 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/et_a_resistor"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp"
-                    android:inputType="number"
                     android:layout_weight="1"
-                    android:background="@drawable/stoke_gray"
-                    android:hint="电阻测量值（A）"
-                    android:padding="4dp" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/et_b_resistor"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="电阻测量值（A）" />
+
+                    <EditText
+                        android:id="@+id/et_a_resistor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:inputType="number|numberDecimal"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:inputType="number"
                     android:layout_marginRight="16dp"
                     android:layout_weight="1"
-                    android:background="@drawable/stoke_gray"
-                    android:hint="电阻测量值（B）"
-                    android:padding="4dp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="电阻测量值（B）" />
+
+                    <EditText
+                        android:id="@+id/et_b_resistor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:inputType="number|numberDecimal"
+                        android:padding="4dp" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -151,31 +178,57 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/et_c_resistor"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:inputType="number"
                     android:layout_marginRight="16dp"
                     android:layout_weight="1"
-                    android:background="@drawable/stoke_gray"
-                    android:hint="电阻测量值（C）"
-                    android:padding="4dp" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/et_d_resistor"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="电阻测量值（C）" />
+
+                    <EditText
+                        android:id="@+id/et_c_resistor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:inputType="number|numberDecimal"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_weight="1"
-                    android:inputType="number"
-                    android:background="@drawable/stoke_gray"
-                    android:hint="电阻测量值（D）"
-                    android:padding="4dp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="电阻测量值（D）" />
+
+                    <EditText
+                        android:id="@+id/et_d_resistor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:inputType="number|numberDecimal"
+                        android:padding="4dp" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -183,17 +236,33 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/et_weather"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_weight="1"
-                    android:background="@drawable/stoke_gray"
-                    android:hint="测量天气"
-                    android:padding="4dp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="测量天气" />
+
+                    <Spinner
+                        android:id="@+id/sp_weather"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/stoke_gray"
+                        android:entries="@array/weather"
+                        android:gravity="center"
+                        android:padding="4dp" />
+                </LinearLayout>
 
                 <View
                     android:layout_width="0dp"
@@ -204,28 +273,42 @@
                     android:layout_weight="1"></View>
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/et_verdict"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@drawable/stoke_gray"
-                android:gravity="top"
-                android:hint="结论"
-                android:padding="4dp" />
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="结论" />
+
+                <Spinner
+                    android:id="@+id/sp_verdict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/verdict"></Spinner>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="备注" />
 
             <EditText
                 android:id="@+id/et_note"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="100dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/stoke_gray"
                 android:gravity="top"
-                android:hint="备注"
                 android:padding="4dp" />
 
             <Button
@@ -235,17 +318,17 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="40dp"
                 android:background="@color/bg_gray"
-                android:text="提交" />
+                android:text="保存" />
         </LinearLayout>
     </ScrollView>
+
     <RelativeLayout
         android:id="@+id/mengban"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="49dp"
-        android:visibility="gone"
         android:clickable="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        />
+        android:visibility="gone" />
 </RelativeLayout>

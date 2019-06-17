@@ -28,7 +28,7 @@ public class DepUserBean {
          private String user_id;
         private String name;
         private String user_name;
-
+    private String sign;
         private String login;
         private String password;
         private String sex;
@@ -44,6 +44,14 @@ public class DepUserBean {
         private String sysJobList;
         private String sysDepList;
         private String sysRoleList;
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
 
     public String getUser_id() {
         return user_id;

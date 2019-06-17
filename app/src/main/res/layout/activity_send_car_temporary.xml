@@ -159,7 +159,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/stoke_gray"
-            android:inputType="number" />
+            android:inputType="number|numberDecimal" />
     </LinearLayout>
 
     <LinearLayout

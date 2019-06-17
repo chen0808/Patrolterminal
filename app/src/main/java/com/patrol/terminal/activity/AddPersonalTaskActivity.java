@@ -181,10 +181,11 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 String name = userList.get(options1);
                 userList.remove(options1);
                 if (s.isEmpty()) {
+
                 } else {
                     for (int i = 0; i < addPeoList.size(); i++) {
                         DepUserBean depUserBean = addPeoList.get(i);
-                        if ("1".equals(depUserBean.getIs_boss())) {
+                        if ("2".equals(depUserBean.getSign())) {
                             userList.add(depUserBean.getUser_name());
                             addPeoList.remove(i);
                         }
@@ -326,6 +327,11 @@ public class AddPersonalTaskActivity extends BaseActivity {
             Toast.makeText(this,"请添加组员",Toast.LENGTH_SHORT).show();
             return;
         }
+        for (int i = 0; i < selectBean.size(); i++) {
+            GroupTaskBean groupTaskBean = selectBean.get(i);
+            groupTaskBean.setUser_id(addPeoList.get(0).getUser_id());
+            groupTaskBean.setUser_name(addPeoList.get(0).getUser_name());
+        }
         BaseRequest.getInstance().getService()
                 .addPersonTask(selectBean)
                 .subscribeOn(Schedulers.io())
@@ -463,9 +469,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (selectBean.size()==0){
                         listBean.setGroup_list_id(listBean.getId());
-
-                        listBean.setUser_id(SPUtil.getUserId(AddPersonalTaskActivity.this));
-                        listBean.setUser_name(SPUtil.getUserName(AddPersonalTaskActivity.this));
+                        listBean.setId(null);
                         selectBean.add(listBean);
                         holder.itemTroubleCheck.setChecked(true);
                     }else {
@@ -476,7 +480,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                                 isExit=1;
                                 selectBean.remove(i);
                                 holder.itemTroubleCheck.setChecked(false);
-                                return;
+                                break;
                             }
                         }
                         if (isExit==0){

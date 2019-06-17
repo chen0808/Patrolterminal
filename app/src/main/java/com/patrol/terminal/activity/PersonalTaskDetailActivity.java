@@ -105,7 +105,7 @@ public class PersonalTaskDetailActivity extends Activity {
         }
         tvLineType.setText("执行人 : " + bean.getWork_user_name());
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (jobType.equals(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign())) && bean.getWork_user_name() == null) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign())) && bean.getWork_user_name() == null) {
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("指派");
             tvLineType.setText("执行人 : 暂无");
@@ -146,12 +146,12 @@ public class PersonalTaskDetailActivity extends Activity {
                     case "7":
                     case "11":
                         intent.setClass(PersonalTaskDetailActivity.this, PatrolRecordActivity.class);
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_id", bean.getTower_id());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_id", bean.getLine_id());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_name", bean.getLine_name());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_name", bean.getTower_name());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_id", bean.getUser_id());
-                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_name", bean.getUser_name());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_id", bean.getTower_id() == null ? "" : bean.getTower_id());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_id", bean.getLine_id() == null ? "" : bean.getLine_id());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_name", bean.getLine_name() == null ? "" : bean.getLine_name());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_name", bean.getTower_name() == null ? "" : bean.getTower_name());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_id", bean.getUser_id() == null ? "" : bean.getUser_id());
+                        SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_name", bean.getUser_name() == null ? "" : bean.getUser_name());
                         break;
                     case "5":
                         intent.setClass(PersonalTaskDetailActivity.this, HongWaiCeWenActivity.class);

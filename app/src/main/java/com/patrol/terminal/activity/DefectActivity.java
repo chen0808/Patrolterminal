@@ -2,9 +2,13 @@ package com.patrol.terminal.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DefectIngAdapter;
@@ -21,7 +25,6 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -43,6 +46,8 @@ public class DefectActivity extends BaseActivity {
     ImageView ivSearch;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
+    @BindView(R.id.atv_content)
+    AutoCompleteTextView atvContent;
     private MyFragmentPagerAdapter taskPagerAdapter;
     private DefectIngAdapter groupTaskAdapter;
     private String jobType;
@@ -59,13 +64,13 @@ public class DefectActivity extends BaseActivity {
     }
 
     private void getAllDef() {
-        String dep_id=SPUtil.getDepId(this);
-        if ((jobType.contains("_zz")||jobType.contains("_zg"))&&!jobType.contains("b_zz")){
-            dep_id=null;
+        String dep_id = SPUtil.getDepId(this);
+        if ((jobType.contains("_zz") || jobType.contains("_zg")) && !jobType.contains("b_zz")) {
+            dep_id = null;
         }
-        ProgressDialog.show(DefectActivity.this,false,"正在加载中。。。。");
+        ProgressDialog.show(DefectActivity.this, false, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getAllDefact(dep_id,"find_time")
+                .getAllDefact(dep_id, "find_time")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(this) {
@@ -104,6 +109,11 @@ public class DefectActivity extends BaseActivity {
         titleName.setText("缺陷查询");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         planRv.setLayoutManager(manager);
+
+        String data[] = getResources().getStringArray(R.array.auto_textview_contents);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(DefectActivity.
+                this, android.R.layout.simple_dropdown_item_1line, data);
+        atvContent.setAdapter(adapter);
     }
 
     @Override

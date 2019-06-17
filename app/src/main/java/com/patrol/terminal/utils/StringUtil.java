@@ -2,7 +2,8 @@ package com.patrol.terminal.utils;
 
 public class StringUtil {
 
-    private static String[] typeSigns=new String[]{"定期巡视","故障巡视","接电电阻检测","特殊性巡视","红外测温检测","杆塔倾斜检测","保电巡视","缺陷消除","隐患处理","绝缘子零值检测","监督性巡视","安全监督","验收报告"};
+    private static String[] typeSigns = new String[]{"定期巡视", "故障巡视", "接地电阻检测", "特殊性巡视", "红外测温检测", "杆塔倾斜检测", "保电巡视", "缺陷消除", "隐患处理", "绝缘子零值检测", "监督性巡视", "安全监督", "验收报告"};
+
     //获取运行班月计划审核状态
     public static String getYXBstate(String state) {
         switch (state) {
@@ -12,10 +13,10 @@ public class StringUtil {
                 return "待专责审核";
             case "2":
                 return "待主管审核";
-            case "4":
-                return "审核不通过";
             case "3":
                 return "审核通过";
+            case "4":
+                return "审核不通过";
             case "5":
                 return "执行中";
             case "6":
@@ -23,6 +24,7 @@ public class StringUtil {
         }
         return "";
     }
+
     //获取运行班审核状态
     public static String getYxbWeekState(String state) {
         switch (state) {
@@ -42,18 +44,18 @@ public class StringUtil {
         return "";
     }
 
-    public static String getTypeSign(String sign){
-        String typeNmae="";
+    public static String getTypeSign(String sign) {
+        String typeNmae = "";
         String[] split = sign.split(",");
         for (int i = 0; i < split.length; i++) {
-            int index = Integer.parseInt(split[i])-1;
-            if (split.length==0){
-                typeNmae=typeSigns[index];
-            }else {
-                if (i==0){
-                    typeNmae= (i+1)+"."+typeSigns[index];
-                }else {
-                    typeNmae=typeNmae+";"+(i+1)+"."+typeSigns[index];
+            int index = Integer.parseInt(split[i]) - 1;
+            if (split.length == 1) {
+                typeNmae = "1、" + typeSigns[index];
+            } else {
+                if (i == 0) {
+                    typeNmae = (i + 1) + "、" + typeSigns[index];
+                } else {
+                    typeNmae = typeNmae + "<br/>" + (i + 1) + "、" + typeSigns[index];
                 }
 
             }

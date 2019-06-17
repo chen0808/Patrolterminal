@@ -23,7 +23,7 @@ public class BackTodoYXAdapter extends BaseQuickAdapter<PersonalTaskListBean, Ba
         if ("12".equals(item.getType_sign())||"13".equals(item.getType_sign())){
             helper.setText(R.id.tv_title, position+1+".关于" +item.getLine_name()+"的"+ StringUtil.getTypeSign(item.getType_sign())+"待办");
         }else {
-            helper.setText(R.id.tv_title, position+1+"." +item.getLine_name()+item.getTower_name()+"的任务");
+            helper.setText(R.id.tv_title, position+1+"." +item.getLine_name()+item.getTower_name()+"的待办");
         }
     }
 }
