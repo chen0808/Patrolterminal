@@ -221,7 +221,7 @@ public class NextMonthPlanActivity extends BaseActivity {
                                 adapterClick();
 //                                if ("3".equals(monthPlanBean.getAudit_status())) {
 //                                    addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
-//                                    addPlanStatus.setTextColor(getResources().getColor(R.color.green));
+//                                    addPlanStatus.setText(getResources().getColor(R.color.green));
 //                                }
 //                                if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())) {
 //                                    addPlanRight.setVisibility(View.VISIBLE);

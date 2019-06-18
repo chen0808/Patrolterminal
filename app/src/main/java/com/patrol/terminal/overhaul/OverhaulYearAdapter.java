@@ -41,13 +41,13 @@ public class OverhaulYearAdapter extends BaseQuickAdapter<OverhaulYearBean, Base
 //        viewHolder.setVisible(R.id.item_line_state, false);
 //        HorizontalLineView view = viewHolder.getView(R.id.item_plan_status);
 //        if ("0".equals(item.getAudit_status())) {
-//            viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))
+//            viewHolder .setText(R.id.item_line_status, mContext.getResources().getColor(R.color.write_red))
 //                    .setText(R.id.item_line_status, "状态 : 审核中");
 //        } else if ("1".equals(item.getAudit_status())) {
-//            viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.green))
+//            viewHolder .setText(R.id.item_line_status, mContext.getResources().getColor(R.color.green))
 //                    .setText(R.id.item_line_status, "状态 : 审核通过");
 //        } else if ("2".equals(item.getAudit_status())) {
-//            viewHolder .setTextColor(R.id.item_line_status, mContext.getResources().getColor(R.color.green))
+//            viewHolder .setText(R.id.item_line_status, mContext.getResources().getColor(R.color.green))
 //                    .setText(R.id.item_line_status, "状态 : 审核不通过");
 //        }
 //        view.setStatus(item.getAudit_status());

@@ -58,6 +58,7 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+/*月计划*/
 public class MonthPlanFrgment extends BaseFragment {
 
 
@@ -284,7 +285,7 @@ public class MonthPlanFrgment extends BaseFragment {
                                 addPlanStatus.setText(StringUtil.getYXBstate(monthPlanBean.getAudit_status()));
 //                                if ("3".equals(monthPlanBean.getAudit_status())) {
 //                                    addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
-//                                    addPlanStatus.setTextColor(getResources().getColor(R.color.green));
+//                                    addPlanStatus.setText(getResources().getColor(R.color.green));
 //                                }
 //                                if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())) {
 //                                    addPlanRight.setVisibility(View.VISIBLE);
