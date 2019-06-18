@@ -1,65 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <include  layout="@layout/include_title"/>
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
     <LinearLayout
         android:id="@+id/task_rg"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_30"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginBottom="@dimen/dp_10"
-        android:visibility="gone"
         android:orientation="horizontal"
-        >
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/task_def"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
             android:layout_marginLeft="@dimen/dp_20"
+            android:layout_weight="1"
             android:background="@drawable/selector_choose_bg"
-            android:textColor="@drawable/selector_main_tv_color"
             android:button="@null"
             android:checked="true"
+            android:gravity="center"
             android:text="缺陷"
-            />
+            android:textColor="@drawable/selector_main_tv_color" />
+
         <TextView
             android:id="@+id/task_dan"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
             android:layout_marginLeft="@dimen/dp_20"
+            android:layout_weight="1"
             android:background="@drawable/selector_choose_bg"
-            android:textColor="@drawable/selector_main_tv_color"
             android:button="@null"
+            android:gravity="center"
             android:text="隐患"
-            />
+            android:textColor="@drawable/selector_main_tv_color" />
+
         <TextView
             android:id="@+id/task_cheak"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginLeft="@dimen/dp_20"
             android:layout_marginRight="@dimen/dp_20"
-            android:gravity="center"
+            android:layout_weight="1"
             android:background="@drawable/selector_choose_bg"
-            android:textColor="@drawable/selector_main_tv_color"
             android:button="@null"
+            android:gravity="center"
             android:text="检测"
-            />
+            android:textColor="@drawable/selector_main_tv_color" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray_plan"
+        android:background="@color/base_status_bar"
         android:orientation="vertical">
 
         <net.lucode.hackware.magicindicator.MagicIndicator
@@ -73,6 +71,5 @@
     <com.patrol.terminal.widget.NoScrollViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 </LinearLayout>

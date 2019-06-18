@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -37,7 +39,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -87,7 +88,7 @@ public class NewPlanActivity extends BaseActivity {
         viewPager.setAdapter(taskPagerAdapter);
         initMagicIndicator();
 
-        viewPager.setNoScroll(true);
+//        viewPager.setNoScroll(true);
         viewPager.setOffscreenPageLimit(5);
         String from = getIntent().getStringExtra("from");
         if ("todoMonth".equals(from)){

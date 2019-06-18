@@ -3,6 +3,8 @@ package com.patrol.terminal.adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
@@ -12,8 +14,6 @@ import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.HorizontalLineView;
 
 import java.util.List;
-
-import androidx.annotation.Nullable;
 
 public class NextDayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder> {
 
@@ -39,12 +39,13 @@ public class NextDayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHo
         AdapterUtils.setIconText(icon, item.getDep_name());
 
         //线路
-        viewHolder.setText(R.id.tv_line_name,item.getLine_name());
+        viewHolder.setText(R.id.tv_line_name, item.getLine_name() + "   " + item.getName());
 
         //时间
-//        if (item.getStart_time()!=null&&item.getEnd_time()!=null){
-//            viewHolder.setText(R.id.tv_time, "开始时间：" + item.getStart_time() + "   结束时间：" + item.getEnd_time());
-//        }
+        if (item.getStart_time() != null && item.getEnd_time() != null) {
+            viewHolder.setText(R.id.tv_time, "时间：" + item.getStart_time() + " ~ " + item.getEnd_time());
+            viewHolder.setVisible(R.id.tv_time, true);
+        }
 
         //编辑
         ImageView edit = viewHolder.getView(R.id.iv_edit);

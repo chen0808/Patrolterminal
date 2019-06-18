@@ -83,7 +83,7 @@ public class NewTaskActivity extends BaseActivity {
 
     private void initview() {
         titleName.setText("任务管理");
-        taskRg.setVisibility(View.VISIBLE);
+//        taskRg.setVisibility(View.VISIBLE);
         String time = DateUatil.getTime(new Date(System.currentTimeMillis()));
         SPUtil.putString(this, "date", "time", time);
         String job = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
@@ -93,7 +93,7 @@ public class NewTaskActivity extends BaseActivity {
         taskPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(taskPagerAdapter);
         initMagicIndicator(job);
-        viewPager.setNoScroll(true);
+//        viewPager.setNoScroll(true);
         viewPager.setOffscreenPageLimit(5);
 
     }

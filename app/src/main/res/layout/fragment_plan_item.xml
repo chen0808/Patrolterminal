@@ -94,12 +94,22 @@
 
     <TextView
         android:id="@+id/tv_time"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_content"
-        android:visibility="gone"
         android:layout_toRightOf="@id/item_plan_date_ll"
-        android:textSize="@dimen/sp_13" />
+        android:textSize="@dimen/sp_13"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_allot_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_time"
+        android:layout_toRightOf="@id/item_plan_date_ll"
+        android:text="分配状态"
+        android:textSize="13sp"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_edit"
@@ -132,7 +142,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_time"
+        android:layout_below="@id/tv_allot_status"
         android:layout_marginRight="@dimen/dp_50"
         android:layout_marginBottom="@dimen/dp_5"
         android:layout_toRightOf="@id/item_plan_date_ll"

@@ -1,7 +1,5 @@
 package com.patrol.terminal.adapter;
 
-import android.text.Html;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,11 +36,11 @@ public class NextWeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseView
         AdapterUtils.setIconText(icon, item.getDep_name());
 
         //线路
-        viewHolder.setText(R.id.tv_line_name,item.getLine_name());
+        viewHolder.setText(R.id.tv_line_name, item.getLine_name() + "   " + item.getName());
 
         //时间
         if (item.getStart_time() != null && item.getEnd_time() != null) {
-            viewHolder.setText(R.id.tv_time, "开始时间：" + item.getStart_time() + "   结束时间：" + item.getEnd_time());
+            viewHolder.setText(R.id.tv_time, "时间：" + item.getStart_time() + " ~ " + item.getEnd_time());
             viewHolder.setVisible(R.id.tv_time, true);
         }
 
