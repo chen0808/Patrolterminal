@@ -7,13 +7,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.base.BaseActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 //检修班周计划制定界面
-public class OverhaulAddWeekPlanActivity extends AppCompatActivity {
+public class OverhaulAddWeekPlanActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;

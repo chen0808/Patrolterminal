@@ -8,11 +8,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DayTaskAdapter;
+import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.utils.DateUatil;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
@@ -28,7 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DayTaskListActivity extends AppCompatActivity {
+public class DayTaskListActivity extends BaseActivity {
 
 
     @BindView(R.id.title_name)

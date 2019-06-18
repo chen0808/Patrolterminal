@@ -1,11 +1,12 @@
 package com.patrol.terminal.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-public class CaptureActivity extends Activity {
+import com.patrol.terminal.base.BaseActivity;
+
+public class CaptureActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

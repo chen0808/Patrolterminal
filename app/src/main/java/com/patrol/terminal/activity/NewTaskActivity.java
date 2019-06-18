@@ -11,14 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
+import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.fragment.GroupTaskFrgment;
 import com.patrol.terminal.fragment.PersonalTaskFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -37,13 +39,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NewTaskActivity extends AppCompatActivity {
+public class NewTaskActivity extends BaseActivity {
 
 
     @BindView(R.id.title_back)
@@ -149,22 +149,22 @@ public class NewTaskActivity extends AppCompatActivity {
 
     @OnClick({R.id.title_back, R.id.task_def, R.id.task_dan, R.id.task_cheak})
     public void onViewClicked(View view) {
-        Intent intent=new Intent();
+        Intent intent = new Intent();
         switch (view.getId()) {
 
             case R.id.title_back:
                 finish();
                 break;
             case R.id.task_def:
-                intent.setClass(this,DefectActivity.class);
+                intent.setClass(this, DefectActivity.class);
                 startActivity(intent);
                 break;
             case R.id.task_dan:
-                intent.setClass(this,TroubleActivity.class);
+                intent.setClass(this, TroubleActivity.class);
                 startActivity(intent);
                 break;
             case R.id.task_cheak:
-                intent.setClass(this,YXCheckActivity.class);
+                intent.setClass(this, YXCheckActivity.class);
                 startActivity(intent);
                 break;
         }

@@ -7,12 +7,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.CreatePlanActivity;
+import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -29,8 +32,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,7 +39,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /*检修其他人员主界面*/
-public class OverhaulWeekPlanActivity extends AppCompatActivity {
+public class OverhaulWeekPlanActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;

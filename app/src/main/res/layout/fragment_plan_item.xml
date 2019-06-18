@@ -80,7 +80,7 @@
         android:layout_below="@id/item_plan_device_name"
         android:layout_marginRight="100dp"
         android:layout_toRightOf="@id/item_plan_content_text"
-        android:text="计划类型:红外测温"
+        android:text="红外测温"
         android:textSize="@dimen/sp_13" />
 
     <ImageView
@@ -94,12 +94,22 @@
         android:src="@mipmap/icon_go" />
 
     <TextView
-        android:id="@+id/item_line_status"
+        android:id="@+id/tv_start_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_plan_content"
         android:layout_toRightOf="@id/item_plan_date_ll"
-        android:text="状态：审核中"
+        android:text="开始时间："
+        android:textSize="@dimen/sp_13" />
+
+    <TextView
+        android:id="@+id/tv_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_plan_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/tv_start_time"
+        android:text="结束时间："
         android:textSize="@dimen/sp_13" />
 
     <ImageView
@@ -133,7 +143,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/item_line_status"
+        android:layout_below="@id/tv_start_time"
         android:layout_marginRight="@dimen/dp_50"
         android:layout_marginBottom="@dimen/dp_5"
         android:layout_toRightOf="@id/item_plan_date_ll"

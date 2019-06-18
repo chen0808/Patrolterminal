@@ -1,32 +1,24 @@
 package com.patrol.terminal.activity;
 
-import android.app.Activity;
-import android.app.AppComponentFactory;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DepChooseAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.utils.Constant;
-import com.patrol.terminal.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class DepChooseActivity extends Activity {
+public class DepChooseActivity extends BaseActivity {
     @BindView(R.id.rv_dep_choose)
     RecyclerView rvDepChoose;
 

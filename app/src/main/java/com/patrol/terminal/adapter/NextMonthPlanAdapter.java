@@ -103,7 +103,8 @@ public class NextMonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseVi
             horizontalLineView.setStatus(item.getAudit_status());
             horizontalLineView.setVisibility(View.VISIBLE);
             viewHolder.setText(R.id.item_plan_device_name, item.getLine_name())
-                    .setText(R.id.item_line_status, "审核状态：" + StringUtil.getYXBstate(item.getAudit_status()))
+                    .setText(R.id.tv_start_time, "开始时间：" + item.getStart_time())
+                    .setText(R.id.tv_end_time, "结束时间：" + item.getEnd_time())
                     .setText(R.id.item_plan_content, StringUtil.getTypeSign(item.getType_sign()));
             TextView tvContent = viewHolder.getView(R.id.item_plan_content);
             String text = tvContent.getText().toString();
