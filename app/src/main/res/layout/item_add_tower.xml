@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:minHeight="40dp"
-    android:orientation="horizontal">
+    android:minHeight="70dp"
+   >
 
     <TextView
         android:id="@+id/tv_line_name"
@@ -16,13 +16,17 @@
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/tv_tower_name"
+    android:id="@+id/tv_tower_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/tv_line_name"
+    android:text="杆塔" />
+    <TextView
+        android:id="@+id/tv_tower_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="4dp"
-        android:text="杆塔" />
-
+        android:layout_below="@id/tv_tower_name"
+        android:text="日期" />
     <TextView
         android:id="@+id/item_add_tower_type"
         android:layout_width="140dp"

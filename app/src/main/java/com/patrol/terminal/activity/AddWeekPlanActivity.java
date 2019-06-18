@@ -420,8 +420,6 @@ public class AddWeekPlanActivity extends BaseActivity {
     //保存周计划
     public void saveWeekPlan() {
         SavaLineBean bean = new SavaLineBean();
-        bean.setLine_id(lineCheckBean.getId());
-        bean.setLine_name(lineCheckBean.getName());
         bean.setType_sign(sign);
         bean.setType_name(type_name);
         bean.setStart_time(beginDate);

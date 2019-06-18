@@ -137,6 +137,9 @@
             android:name=".activity.WeekPlanListActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.LineCheckWeekActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.AddWeekPlanActivity"
             android:screenOrientation="portrait" />
         <activity

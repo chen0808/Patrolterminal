@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.maps.model.Text;
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -41,7 +42,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /*选择线路*/
-public class LineCheckActivity2 extends BaseActivity {
+public class LineCheckWeekActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -59,6 +60,9 @@ public class LineCheckActivity2 extends BaseActivity {
     ImageView searchLine;
     @BindView(R.id.rv_line_check)
     ListView rvLineCheck;
+    @BindView(R.id.plan_empty)
+    TextView empty;
+
     private String year;
     private String month;
     private String dep_id;
@@ -81,7 +85,7 @@ public class LineCheckActivity2 extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_line_check);
         ButterKnife.bind(this);
-
+        empty.setText("本班组本周所有线路均有巡视计划");
         from = getIntent().getStringExtra("from");
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         if ("Temporary".equals(from)) {
@@ -116,7 +120,7 @@ public class LineCheckActivity2 extends BaseActivity {
         }
         adapter = new LineCheckAdapter(this, results);
         rvLineCheck.setAdapter(adapter);
-        rvLineCheck.setEmptyView(findViewById(R.id.plan_empty));
+        rvLineCheck.setEmptyView(empty);
         rvLineCheck.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -135,7 +139,7 @@ public class LineCheckActivity2 extends BaseActivity {
     private void initData() {
         ProgressDialog.show(this, false, "正在加载。。。");
         BaseRequest.getInstance().getService()
-                .getLineList2(year, month, dep_id)
+                .getLineListWeek(year, week, dep_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineCheckBean>>(this) {
@@ -145,7 +149,7 @@ public class LineCheckActivity2 extends BaseActivity {
                             results = t.getResults();
                             adapter.setData(results);
                         } else {
-                            Toast.makeText(LineCheckActivity2.this, t.getMsg(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LineCheckWeekActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
                         ProgressDialog.cancle();
                     }
@@ -167,7 +171,7 @@ public class LineCheckActivity2 extends BaseActivity {
                 break;
             case R.id.title_setting:
                 if (selectBean == null) {
-                    Toast.makeText(LineCheckActivity2.this, "请选择一条线路", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LineCheckWeekActivity.this, "请选择一条线路", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if ("Temporary".equals(from)) {
@@ -213,7 +217,7 @@ public class LineCheckActivity2 extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
                         if (t.getCode() == 1) {
-                            Toast.makeText(LineCheckActivity2.this, "制定成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LineCheckWeekActivity.this, "制定成功", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
                             finish();
                         }

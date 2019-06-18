@@ -66,6 +66,7 @@
     <RelativeLayout
         android:id="@+id/to_do_rl"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="@dimen/dp_40"
         android:background="@color/gray_plan">
 

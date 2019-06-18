@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,6 +25,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupBean;
 import com.patrol.terminal.bean.OverhaulYearBean;
+import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TodoBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -198,7 +200,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
 //                toDoManageAdapter.setNewData(resultsHave);
                 break;
             case R.id.title_setting:
-
+                clearTodoAll();
                 break;
         }
     }
@@ -234,9 +236,8 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
 //            todoListBean = resultsHave.get(position);
 //        }
         clearTodo(results.get(position).getId());
-        String deal_type = results.get(position).getFlow_sign();
         String task_id = results.get(position).getData_id();
-        Intent intent = Utils.goTodo(getContext(), deal_type);
+        Intent intent = Utils.goTodo(getContext(), results.get(position));
         intent.putExtra("audit_status", results.get(position).getNode_sign());
         intent.putExtra("task_id", task_id);
 //        intent.putExtra("sign", deal_type);
@@ -385,6 +386,29 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                                     SPUtil.putString(getContext(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER);
                                 }
                             }
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }
+
+    //消除所有查看类型待办
+    public void clearTodoAll() {
+
+        BaseRequest.getInstance().getService()
+                .clearTodoAll(SPUtil.getUserId(getContext()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<TaskBean>(getContext()) {
+                    @Override
+                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            Toast.makeText(getContext(),"处理完成",Toast.LENGTH_SHORT).show();
+                            getYXtodo();
                         }
 
                     }

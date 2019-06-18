@@ -1,5 +1,7 @@
 package com.patrol.terminal.adapter;
 
+import android.text.Html;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,7 +58,6 @@ public class NextWeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseView
         TextView tvContent = viewHolder.getView(R.id.tv_content);
         AdapterUtils.setText(tvContent, StringUtil.getTypeSign(item.getType_sign()));
 
-        //添加子控件的点击事件
-        viewHolder.addOnClickListener(R.id.plan_to_change);
     }
+
 }

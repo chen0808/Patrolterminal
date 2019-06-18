@@ -360,14 +360,11 @@ public class WeekPlanFrgment extends BaseFragment {
                                 addPlanStatus.setTextColor(getResources().getColor(R.color.green));
                             }
                             if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(audit_status)) {
-                                addPlanRight.setVisibility(View.VISIBLE);
-                                planSubmit.setVisibility(View.VISIBLE);
+                                planSubmitNext.setVisibility(View.VISIBLE);
                             } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(audit_status)) {
-                                planSubmit.setVisibility(View.VISIBLE);
-                                addPlanRight.setVisibility(View.GONE);
+                                planSubmitNext.setVisibility(View.VISIBLE);
                             } else {
-                                addPlanRight.setVisibility(View.GONE);
-                                planSubmit.setVisibility(View.GONE);
+                                planSubmitNext.setVisibility(View.GONE);
                             }
                         } else {
                             addPlanIv.setVisibility(View.VISIBLE);
@@ -419,7 +416,7 @@ public class WeekPlanFrgment extends BaseFragment {
     };
 
 
-    @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit, R.id.add_plan_ll})
+    @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit_next,R.id.plan_submit, R.id.add_plan_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:
@@ -507,7 +504,10 @@ public class WeekPlanFrgment extends BaseFragment {
     //提交周计划审核
     public void submitWeekPlan(List<Tower> list, String status, int type) {
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
+        bean.setYear(year + "");
+        bean.setWeek(week + "");
         bean.setAudit_status(status);
+        bean.setFrom_user_id(SPUtil.getUserId(getContext()));
         bean.setTowers(list);
         BaseRequest.getInstance().getService()
                 .submitWeekPlan(bean)

@@ -52,7 +52,7 @@
             android:layout_marginBottom="@dimen/dp_40"></ListView>
 
         <TextView
-            android:id="@+id/empty"
+            android:id="@+id/plan_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

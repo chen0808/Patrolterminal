@@ -77,7 +77,7 @@
                     android:id="@+id/month_plan_type"
                     style="@style/plan_et_styl"
                     android:layout_marginRight="@dimen/dp_20"
-                    android:drawableRight="@mipmap/icon_go"
+                    android:drawableRight="@mipmap/screen"
                     android:text="点击选择工作类型" />
             </LinearLayout>
 
@@ -94,7 +94,7 @@
                     android:id="@+id/month_plan_line"
                     style="@style/plan_et_styl"
                     android:layout_marginRight="@dimen/dp_20"
-                    android:drawableRight="@mipmap/icon_go"
+                    android:drawableRight="@mipmap/screen"
                     android:text="点击选择线路" />
             </LinearLayout>
 
@@ -115,8 +115,6 @@
                         android:text="计划内容" />
 
                 </LinearLayout>
-
-                <View style="@style/line_styl" />
 
 
                 <LinearLayout

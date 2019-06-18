@@ -51,6 +51,7 @@ public class AddDayAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_add_tower, parent, false);
             holder.tvTowerName = convertView.findViewById(R.id.tv_tower_name);
+            holder.tvTowerDate = convertView.findViewById(R.id.tv_tower_date);
             holder.tvLineName = (TextView) convertView.findViewById(R.id.tv_line_name);
             holder.towerCheck = (CheckBox) convertView.findViewById(R.id.item_add_tower_check);
             holder.towerType = (TextView) convertView.findViewById(R.id.item_add_tower_type);
@@ -59,6 +60,7 @@ public class AddDayAdapter extends BaseAdapter {
         DayOfWeekBean listBean = lineTypeBeans.get(position);
         String planName = listBean.getLine_name() + listBean.getName();
         holder.tvLineName.setText(listBean.getLine_name());
+        holder.tvTowerDate.setText(listBean.getStart_time()+"至"+listBean.getEnd_time());
         holder.tvTowerName.setText(listBean.getName());
         holder.towerType.setText(StringUtil.getTypeSign(listBean.getType_sign()));
         holder.towerCheck.setChecked(false);
@@ -138,7 +140,7 @@ public class AddDayAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        private TextView tvLineName, tvTowerName, towerType;
+        private TextView tvLineName, tvTowerName, towerType,tvTowerDate;
         private CheckBox towerCheck;
 
     }

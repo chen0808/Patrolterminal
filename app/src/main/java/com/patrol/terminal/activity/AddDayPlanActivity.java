@@ -32,12 +32,17 @@ import com.patrol.terminal.bean.LineCheckBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.SavaLineBean;
 import com.patrol.terminal.bean.Tower;
+import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.StringUtil;
+import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -101,6 +106,7 @@ public class AddDayPlanActivity extends BaseActivity {
     private List<Tower> selectBean = new ArrayList<>();
     private LineCheckBean lineCheckBean;
     private String line_id;
+    private String week;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,7 +247,7 @@ public class AddDayPlanActivity extends BaseActivity {
         ProgressDialog.show(this, false, "正在加载。。。。");
         //获取月计划列表
         BaseRequest.getInstance().getService()
-                .getDayPlan(year, month, SPUtil.getDepId(this), type_id, null)
+                .getDayPlan(year, week, SPUtil.getDepId(this), type_id, null,"end_time,line_id,name")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
@@ -349,6 +355,14 @@ public class AddDayPlanActivity extends BaseActivity {
         month = getIntent().getStringExtra("month");
         year = getIntent().getStringExtra("year");
         day = getIntent().getStringExtra("day");
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date parse = format.parse(year + "-" + month + "-" + day);
+            week = TimeUtil.getWeekOfDate(parse.getTime())+"";
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     //获取线路杆塔

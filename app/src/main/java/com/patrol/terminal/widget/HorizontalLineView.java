@@ -5,11 +5,11 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-
-import androidx.annotation.Nullable;
+import android.widget.TextView;
 
 import com.patrol.terminal.R;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -28,6 +28,8 @@ public class HorizontalLineView extends LinearLayout {
     View line3;
     @BindView(R.id.view4)
     View view4;
+    @BindView(R.id.tv3)
+    TextView tv3;
 
     public HorizontalLineView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -75,6 +77,9 @@ public class HorizontalLineView extends LinearLayout {
     }
 
     public void setWeekState(String type) {
+        tv3.setVisibility(GONE);
+        view3.setVisibility(GONE);
+        line2.setVisibility(GONE);
         switch (type) {
             case "0":
                 break;
@@ -86,8 +91,8 @@ public class HorizontalLineView extends LinearLayout {
             case "3":
                 view2.setBackgroundResource(R.drawable.green_oval);
                 line1.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view3.setBackgroundResource(R.drawable.green_oval);
-                line2.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view4.setBackgroundResource(R.drawable.green_oval);
+                line3.setBackgroundColor(getResources().getColor(R.color.line_green));
                 break;
             case "4":
                 view2.setBackgroundResource(R.drawable.green_oval);

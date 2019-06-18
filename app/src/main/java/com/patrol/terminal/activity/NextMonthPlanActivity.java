@@ -179,6 +179,12 @@ public class NextMonthPlanActivity extends BaseActivity {
             nextMonth = 1;
             nextYear = Integer.parseInt(years[0]) + 1;
         }
+        String from = getIntent().getStringExtra("from");
+        if ("todoMonth".equals(from)){
+            year=getIntent().getIntExtra("year",2019);
+            month=getIntent().getIntExtra("month",6);
+        }
+        ProgressDialog.show(this,false,"正在加载中。。。。");
         BaseRequest.getInstance().getService()
                 .getMonthPlan(nextYear, nextMonth, depId, state2, "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
@@ -242,11 +248,12 @@ public class NextMonthPlanActivity extends BaseActivity {
 //                                planSubmitNext.setVisibility(View.GONE);
                             }
                         }
+                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
+                        ProgressDialog.cancle();
                     }
                 });
 
@@ -468,8 +475,6 @@ public class NextMonthPlanActivity extends BaseActivity {
 
     //获取所有班组
     public void getDepList() {
-        ProgressDialog.show(NextMonthPlanActivity.this, false, "正在加载中...");
-
         BaseRequest.getInstance().getService()
                 .getDepList("SYS_DEP", "ID,name", "1")
                 .subscribeOn(Schedulers.io())
@@ -477,14 +482,12 @@ public class NextMonthPlanActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<DepBean>>(NextMonthPlanActivity.this) {
                     @Override
                     protected void onSuccees(BaseResult<List<DepBean>> t) throws Exception {
-                        ProgressDialog.cancle();
                         depList = t.getResults();
 
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
                     }
                 });
 

@@ -178,7 +178,13 @@ public class TemporaryActivity extends BaseActivity {
                 showTypeSign2();
                 break;
             case R.id.month_plan_line:
-                Intent intent = new Intent(this, LineCheckActivity2.class);
+                Intent intent = new Intent();
+                if (month==null){
+                  intent.setClass(this, LineCheckWeekActivity.class);
+                }else {
+                    intent.setClass(this, LineCheckActivity2.class);
+                }
+
                 intent.putExtra("from", "Temporary");
                 intent.putExtra("year", year);
                 intent.putExtra("month", month);
@@ -202,7 +208,16 @@ public class TemporaryActivity extends BaseActivity {
                     Toast.makeText(this, "请选择起始结束时间，且起始时间不能大于结束时间", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                saveMonthPlan();
+                if (adapter.getData()!=null&&adapter.getData().size()>0){
+                    Toast.makeText(this, "请选择杆段", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (month !=null){
+                    saveMonthPlan();
+                }else {
+                    saveWeekPlan();
+                }
+
                 break;
         }
     }
@@ -342,7 +357,7 @@ public class TemporaryActivity extends BaseActivity {
         }
     }
 
-    //获取每个班组负责的线路
+    //保存临时月计划
     public void saveMonthPlan() {
         SavaLineBean2 bean = new SavaLineBean2();
         bean.setLine_id(lineCheckBean.getId());
@@ -364,6 +379,45 @@ public class TemporaryActivity extends BaseActivity {
         //获取月计划列表
         BaseRequest.getInstance().getService()
                 .saveMonthPlan(bean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<LineTypeBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            Toast.makeText(TemporaryActivity.this, "制定成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }
+
+    //保存临时周计划
+    public void saveWeekPlan() {
+        SavaLineBean2 bean = new SavaLineBean2();
+        bean.setLine_id(lineCheckBean.getId());
+        bean.setLine_name(lineCheckBean.getName());
+//        bean.setType_id(type_id);
+        bean.setType_sign(sign);
+        bean.setType_name(typeName);
+        bean.setStart_time(starttime);
+        bean.setEnd_time(endTime);
+        bean.setYear(String.valueOf(year));
+        bean.setWeek(String.valueOf(week));
+        List<TowerPart> data = adapter.getData();
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getName_start() != null && data.get(i).getName_end() != null) {
+                data.get(i).setName(data.get(i).getName_start() + "-" + data.get(i).getName_end());
+            }
+        }
+        bean.setTowers(data);
+        BaseRequest.getInstance().getService()
+                .saveWeekPlan(bean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineTypeBean>>(this) {

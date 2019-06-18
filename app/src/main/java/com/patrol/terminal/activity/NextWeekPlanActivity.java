@@ -135,6 +135,11 @@ public class NextWeekPlanActivity extends BaseActivity {
 //        month = Integer.parseInt(months[0]) + "";
         year = Integer.valueOf(years[0]);
         week = TimeUtil.getCurrWeek() + 1;
+        String from = getIntent().getStringExtra("from");
+        if ("todoWeek".equals(from)){
+            year=getIntent().getIntExtra("year",2019);
+            week=getIntent().getIntExtra("week",25);
+        }
         String nextBeginTime = TimeUtil.getFirstDayOfWeek(year, week);
         String nextEndTime = TimeUtil.getLastDayOfWeek(year, week);
         titleName.setText("第" + week + "周计划(" + nextBeginTime + "-" + nextEndTime + ")");
@@ -181,8 +186,9 @@ public class NextWeekPlanActivity extends BaseActivity {
 
     //获取下周计划
     public void getWeekList() {
+        ProgressDialog.show(this,false,"正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getWeekList(String.valueOf(year), String.valueOf(week), depId, state, "create_time desc,type_sign,line_id")
+                .getWeekList(String.valueOf(year), String.valueOf(week), depId, state2, "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekListBean>>(this) {
@@ -191,11 +197,11 @@ public class NextWeekPlanActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
                         num_total = 0;
                         kilo_total = 0;
-                        List<WeekListBean> results = t.getResults();
+                       list = t.getResults();
 //                        monthPlanAdapter.setNewData(results);
-                        lineList = getData(results);
-                        for (int i = 0; i < results.size(); i++) {
-                            WeekListBean weekListBean = results.get(i);
+                        lineList = getData(list);
+                        for (int i = 0; i < list.size(); i++) {
+                            WeekListBean weekListBean = list.get(i);
                             num_total++;
                             kilo_total += weekListBean.getTowers_range();
                         }
@@ -209,13 +215,14 @@ public class NextWeekPlanActivity extends BaseActivity {
                         monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
                         monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
 
-                        state = results.get(0).getAudit_status();
+                        state = list.get(0).getAudit_status();
 
                         LinearLayoutManager manager = new LinearLayoutManager(NextWeekPlanActivity.this);
                         nextPlanRv.setLayoutManager(manager);
-                        monthPlanAdapter = new NextWeekPlanAdapter(R.layout.fragment_plan_item, results, state, mJobType);
+                        monthPlanAdapter = new NextWeekPlanAdapter(R.layout.fragment_plan_item, list, state, mJobType);
                         nextPlanRv.setAdapter(monthPlanAdapter);
                         adapterClick();
+                        ProgressDialog.cancle();
                     }
 
                     @Override
@@ -227,7 +234,6 @@ public class NextWeekPlanActivity extends BaseActivity {
 
     //获取所有班组
     public void getDepList() {
-        ProgressDialog.show(NextWeekPlanActivity.this, false, "正在加载中...");
 
         BaseRequest.getInstance().getService()
                 .getDepList("SYS_DEP", "ID,name", "1")
@@ -236,14 +242,11 @@ public class NextWeekPlanActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<DepBean>>(NextWeekPlanActivity.this) {
                     @Override
                     protected void onSuccees(BaseResult<List<DepBean>> t) throws Exception {
-                        ProgressDialog.cancle();
                         depList = t.getResults();
-
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
                     }
                 });
 

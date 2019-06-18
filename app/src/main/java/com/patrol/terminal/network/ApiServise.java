@@ -143,10 +143,13 @@ public interface ApiServise {
     @GET("/plan/month/lineGET")
     Observable<BaseResult<List<LineCheckBean>>> getLineList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_sign") String type_sign);
 
-    //月计划线路列表
+    //制定临时月计划线路列表
     @GET("/plan/month/lineGET")
     Observable<BaseResult<List<LineCheckBean>>> getLineList2(@Query("year") String year, @Query("month") String month, @Query("dep_id") String dep_id);
 
+    //制定临时周计划线路列表
+    @GET("/plan/week/lineGET")
+    Observable<BaseResult<List<LineCheckBean>>> getLineListWeek(@Query("year") String year, @Query("week") String month, @Query("dep_id") String dep_id);
     //周计划添加获取月计划列表
     @GET("plan/month/line/monthGET")
     Observable<BaseResult<List<WeekOfMonthBean>>> getWeekList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_id") String type_id);
@@ -187,7 +190,8 @@ public interface ApiServise {
 
     //根据当前日期查询所属周下所有计划接口
     @GET("/plan/week/tower/weekGET")
-    Observable<BaseResult<List<DayOfWeekBean>>> getDayPlan(@Query("year") String year, @Query("month") String month, @Query("dep_id") String dep_id, @Query("type_id") String type_id, @Query("line_id") String line_id);
+    Observable<BaseResult<List<DayOfWeekBean>>> getDayPlan(@Query("year") String year, @Query("week") String week,
+                                                           @Query("dep_id") String dep_id, @Query("type_id") String type_id, @Query("line_id") String line_id, @Query("order") String order);
 
     //添加日计划
     @POST("/plan/day/savePOST")
@@ -202,9 +206,14 @@ public interface ApiServise {
     @POST("/plan/month/line/tempPOST")
     Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body SavaLineBean bean);
 
-    //添加日计划
+    //保存临时月计划
     @POST("/plan/month/line/tempPOST")
     Observable<BaseResult<List<LineTypeBean>>> saveMonthPlan(@Body SavaLineBean2 bean);
+
+
+    //保存临时周计划
+    @POST("/plan/week/tower/tempPOST")
+    Observable<BaseResult<List<LineTypeBean>>> saveWeekPlan(@Body SavaLineBean2 bean);
 
     //添加日计划
     @POST("/plan/week/tower/tempPOST")
@@ -970,5 +979,10 @@ public interface ApiServise {
 
     //消除已审核待办
     @POST("task/remind/dealPOST")
-    Observable<BaseResult> clearTodo(@Query("id") String id);
+    Observable<BaseResult> clearTodo(@Query("id") String id);    //消除已审核待办
+    //一键消除已审核待办
+    @POST("task/remind/batchPOST")
+    Observable<BaseResult<TaskBean>> clearTodoAll(@Query("user_id") String user_id);
+
+
 }
