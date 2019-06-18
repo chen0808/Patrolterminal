@@ -119,6 +119,10 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         });
     }
 
+    public void setFragment(int index) {
+        fragmentVp.setCurrentItem(index);
+    }
+
     private void checkPremission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             //申请权限，REQUEST_TAKE_PHOTO_PERMISSION是自定义的常量
@@ -144,7 +148,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
             mFragments.add(new TrainingHomeFragment());
         } else if (jobType.contains("yx")) {
             mFragments.add(new HomeFragment());
-        }  else {
+        } else {
             mFragments.add(new JXHomeFragment());
         }
 
@@ -157,13 +161,13 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //            mFragments.add(new TodosManageFragment());  //只是不显示，以免RideoButton点击错乱
 //
 //        } else {                                                    //有待办的角色
-            mainExameRb.setVisibility(View.VISIBLE);
+        mainExameRb.setVisibility(View.VISIBLE);
 
-            if (jobType.contains("yx")) {   //运行待办
-                mFragments.add(new YXTodosManageFragment());
-            } else {   //其他角色待办
-                mFragments.add(new TodosManageFragment());
-            }
+        if (jobType.contains("yx")) {   //运行待办
+            mFragments.add(new YXTodosManageFragment());
+        } else {   //其他角色待办
+            mFragments.add(new TodosManageFragment());
+        }
 //        }
 
         mFragments.add(new AnylyzeFrgment());
@@ -233,7 +237,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         String year = years[0];
         String day = Integer.parseInt(days[0]) + "";
         BaseRequest.getInstance().getService()
-                .getGroupName(year, month, day, SPUtil.getDepId(this), SPUtil.getUserId(this),"2")
+                .getGroupName(year, month, day, SPUtil.getDepId(this), SPUtil.getUserId(this), "2")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<GroupBean>(this) {
@@ -243,7 +247,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                             GroupBean results = t.getResults();
                             if (results != null) {
                                 if ("2".contains(results.getSign())) {
-                                    SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER+","+Constant.RUNNING_SQUAD_MEMBER);
+                                    SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER + "," + Constant.RUNNING_SQUAD_MEMBER);
                                     jobType = Constant.RUNNING_SQUAD_TEMA_LEADER;
                                 }
                             }

@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.CheckActivity;
@@ -19,6 +22,7 @@ import com.patrol.terminal.activity.HongWaiCeWenActivity;
 import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
 import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
 import com.patrol.terminal.activity.MonitoringRecordActivity;
+import com.patrol.terminal.activity.NewMainActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
@@ -44,8 +48,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -108,6 +110,16 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     ImageView dataChange;
     @BindView(R.id.wanchenglv_name)
     TextView wanchenglvNmae;
+    @BindView(R.id.rl_title)
+    RelativeLayout rlTitle;
+    @BindView(R.id.rl_todo)
+    RelativeLayout rlTodo;
+    @BindView(R.id.rl_task_now)
+    RelativeLayout rlTaskNow;
+    @BindView(R.id.rl_task_history)
+    RelativeLayout rlTaskHistory;
+    @BindView(R.id.rl_day_plan_finish)
+    RelativeLayout rlDayPlanFinish;
 
     private List<PersonalTaskListBean> backLogData = new ArrayList<>();
     private List<PersonalTaskListBean> taskData = new ArrayList<>();
@@ -120,7 +132,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     private ProgressDialog progressDialog;
     private BackLogTaskAdapter backLogTaskAdapter;
     private String year, month, day, time;
-    private int type=1;
+    private int type = 1;
     private PlanFinishRateAdapter planFinishRateAdapter;
     private BackLogTaskAdapter lastTaskAdapter;
     private Disposable refreshTodo;
@@ -154,7 +166,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             rlPlan.setVisibility(View.VISIBLE);
             dataChange.setVisibility(View.VISIBLE);
-            Random random=new Random();
+            Random random = new Random();
             data.add(new PlanFinishRateBean("刘海生", random.nextInt(100), random.nextInt(100)));
             data.add(new PlanFinishRateBean("蒋秀珍", random.nextInt(100), random.nextInt(100)));
             data.add(new PlanFinishRateBean("胡作铸", random.nextInt(100), random.nextInt(100)));
@@ -166,7 +178,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             rlPlan.setVisibility(View.GONE);
             wanchenglvNmae.setText("类别");
             homeDoneData.setText("完成率");
-            Random random=new Random();
+            Random random = new Random();
             data.add(new PlanFinishRateBean("日计划", random.nextInt(100), random.nextInt(100)));
             data.add(new PlanFinishRateBean("周计划", random.nextInt(100), random.nextInt(100)));
         }
@@ -183,9 +195,9 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 if (type.startsWith("refreshTodo")) {
                     if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                         getYXtodo("2");
-                    } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+                    } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                         getYXtodo("1");
-                    }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+                    } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
                         getYXtodo("0");
                     }
 
@@ -206,9 +218,9 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         super.onResume();
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             getYXtodo("2");
-        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             getYXtodo("1");
-        }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
             getYXtodo("0");
         }
     }
@@ -216,7 +228,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     //获取已完成任务
     private void getLastTask() {
         BaseRequest.getInstance().getService()
-                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()),"3","5")
+                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()), "3", "5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
@@ -258,7 +270,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     }
 
     //首页跳转
-    public void gotoPersonal(PersonalTaskListBean todoListBean){
+    public void gotoPersonal(PersonalTaskListBean todoListBean) {
         String deal_type = todoListBean.getType_sign();
         String data_id = todoListBean.getId();
         Intent intent = new Intent();
@@ -291,6 +303,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         }
         startActivity(intent);
     }
+
     //当前任务
     private void initTask() {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -305,6 +318,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             }
         });
     }
+
     //历史任务
     private void initLastTask() {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -319,11 +333,12 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             }
         });
     }
+
     //获取个人任务列表
     public void getPersonalList() {
 
         BaseRequest.getInstance().getService()
-                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()),"5")
+                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()), "5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
@@ -362,7 +377,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     }
 
 
-    @OnClick({R.id.rl_plan, R.id.rl_task, R.id.rl_defact, R.id.rl_trouble, R.id.scanner_iv})
+    @OnClick({R.id.rl_plan, R.id.rl_task, R.id.rl_defact, R.id.rl_trouble, R.id.scanner_iv, R.id.rl_todo, R.id.rl_task_now, R.id.rl_task_history, R.id.rl_day_plan_finish})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_plan:
@@ -392,6 +407,17 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             case R.id.scanner_iv:  //扫一扫
                 progressDialog.show(getContext(), false, "正在搜索RFID...");
                 //openRFID();
+                break;
+            case R.id.rl_todo:
+                ((NewMainActivity) getActivity()).setFragment(1);
+                break;
+            case R.id.rl_task_now:
+                getActivity().startActivity(new Intent(getActivity(), NewTaskActivity.class));
+                break;
+            case R.id.rl_task_history:
+                getActivity().startActivity(new Intent(getActivity(), NewTaskActivity.class));
+                break;
+            case R.id.rl_day_plan_finish:
                 break;
         }
     }
@@ -435,7 +461,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 
     public void getYXtodo(String status) {
         BaseRequest.getInstance().getService()
-                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()),status,"5")
+                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()), status, "5")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
@@ -497,12 +523,12 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     @OnClick(R.id.data_change)
     public void onViewClicked() {
 
-        if (type ==1){
-            type =2;
+        if (type == 1) {
+            type = 2;
             planFinishRateAdapter.setNewData(data1);
             homeDoneData.setText("周计划完成率");
-        }else if (type ==2){
-            type =1;
+        } else if (type == 2) {
+            type = 1;
             planFinishRateAdapter.setNewData(data);
             homeDoneData.setText("日计划完成率");
         }
@@ -511,7 +537,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (refreshTodo!=null){
+        if (refreshTodo != null) {
             refreshTodo.dispose();
         }
     }

@@ -81,6 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_task_personal"
+        android:layout_marginBottom="10dp"
         android:layout_toRightOf="@id/item_task_date_ll"
         android:text="未完成"
         android:textSize="@dimen/sp_13" />

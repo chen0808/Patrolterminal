@@ -2,7 +2,6 @@ package com.patrol.terminal.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -130,7 +129,7 @@ public class NewTaskActivity extends BaseActivity {
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator linePagerIndicator = new LinePagerIndicator(context);
-                linePagerIndicator.setColors(Color.WHITE);
+                linePagerIndicator.setColors(getResources().getColor(R.color.orange_vip));
                 linePagerIndicator.setLineHeight(15);
                 return linePagerIndicator;
             }
