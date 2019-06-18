@@ -15,10 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
@@ -46,6 +42,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -87,7 +86,10 @@ public class TemporaryActivity extends BaseActivity {
     LinearLayout llStartTime;
     @BindView(R.id.ll_end_time)
     LinearLayout llEndTime;
-
+    @BindView(R.id.line4)
+    View line4;
+    @BindView(R.id.line5)
+    View line5;
     private List<String> typeNameList = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
     private List<String> typeVal = new ArrayList<>();
@@ -144,6 +146,8 @@ public class TemporaryActivity extends BaseActivity {
                 titleName.setText("制定" + year + "年" + month + "月" + day + "日临时计划");
                 llStartTime.setVisibility(View.GONE);
                 llEndTime.setVisibility(View.GONE);
+                line4.setVisibility(View.GONE);
+                line5.setVisibility(View.GONE);
             }
         } else if (week != null) {
             titleName.setText("制定" + week + "周临时计划");
@@ -179,9 +183,11 @@ public class TemporaryActivity extends BaseActivity {
                 break;
             case R.id.month_plan_line:
                 Intent intent = new Intent();
-                if (month==null){
-                  intent.setClass(this, LineCheckWeekActivity.class);
-                }else {
+                if (month == null) {
+                    intent.setClass(this, LineCheckWeekActivity.class);
+                } else if (day != null) {
+                    intent.setClass(this, LineCheckDayActivity.class);
+                } else {
                     intent.setClass(this, LineCheckActivity2.class);
                 }
 
@@ -189,6 +195,7 @@ public class TemporaryActivity extends BaseActivity {
                 intent.putExtra("year", year);
                 intent.putExtra("month", month);
                 intent.putExtra("week", week);
+                intent.putExtra("week", day);
                 startActivityForResult(intent, 24);
                 break;
             case R.id.month_yes:
@@ -204,18 +211,21 @@ public class TemporaryActivity extends BaseActivity {
 //                    Toast.makeText(this, "请选择工作类型", Toast.LENGTH_SHORT).show();
 //                    return;
 //                }
-                if (start > end && start != 0 && end != 0) {
+                if (start > end && start != 0 && end != -1&&day==null) {
                     Toast.makeText(this, "请选择起始结束时间，且起始时间不能大于结束时间", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (adapter.getData()!=null&&adapter.getData().size()>0){
+                if (adapter.getData() == null || adapter.getData().size() == 0) {
                     Toast.makeText(this, "请选择杆段", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (month !=null){
-                    saveMonthPlan();
-                }else {
+                if (month == null) {
                     saveWeekPlan();
+
+                } else if (day != null) {
+                    saveDayPlan();
+                } else {
+                    saveMonthPlan();
                 }
 
                 break;
@@ -418,6 +428,46 @@ public class TemporaryActivity extends BaseActivity {
         bean.setTowers(data);
         BaseRequest.getInstance().getService()
                 .saveWeekPlan(bean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<LineTypeBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<LineTypeBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            Toast.makeText(TemporaryActivity.this, "制定成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }
+
+    //保存临时日计划
+    public void saveDayPlan() {
+        SavaLineBean2 bean = new SavaLineBean2();
+        bean.setLine_id(lineCheckBean.getId());
+        bean.setLine_name(lineCheckBean.getName());
+//        bean.setType_id(type_id);
+        bean.setType_sign(sign);
+        bean.setType_name(typeName);
+        bean.setStart_time(year+"-"+month+"-"+day);
+        bean.setEnd_time(year+"-"+month+"-"+day);
+        bean.setYear(String.valueOf(year));
+        bean.setMonth(String.valueOf(month));
+        bean.setDay(String.valueOf(day));
+        List<TowerPart> data = adapter.getData();
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getName_start() != null && data.get(i).getName_end() != null) {
+                data.get(i).setName(data.get(i).getName_start() + "-" + data.get(i).getName_end());
+            }
+        }
+        bean.setTowers(data);
+        BaseRequest.getInstance().getService()
+                .saveDayPlan(bean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LineTypeBean>>(this) {

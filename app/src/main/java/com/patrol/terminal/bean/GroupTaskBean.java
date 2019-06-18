@@ -72,6 +72,24 @@ public class GroupTaskBean implements Parcelable {
     private String group_list_id;
     private String user_id;
     private String user_name;
+    private String from_user_id;
+    private String from_user_name;
+
+    public String getFrom_user_id() {
+        return from_user_id;
+    }
+
+    public void setFrom_user_id(String from_user_id) {
+        this.from_user_id = from_user_id;
+    }
+
+    public String getFrom_user_name() {
+        return from_user_name;
+    }
+
+    public void setFrom_user_name(String from_user_name) {
+        this.from_user_name = from_user_name;
+    }
 
     public String getId() {
         return id;
@@ -313,6 +331,31 @@ public class GroupTaskBean implements Parcelable {
         this.done_rate = done_rate;
     }
 
+
+    public void setGroup_list_id(String group_list_id) {
+        this.group_list_id = group_list_id;
+    }
+
+    public String getGroup_list_id() {
+        return group_list_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -350,6 +393,11 @@ public class GroupTaskBean implements Parcelable {
         dest.writeInt(this.done_num);
         dest.writeInt(this.all_num);
         dest.writeString(this.done_rate);
+        dest.writeString(this.group_list_id);
+        dest.writeString(this.user_id);
+        dest.writeString(this.user_name);
+        dest.writeString(this.from_user_id);
+        dest.writeString(this.from_user_name);
     }
 
     public GroupTaskBean() {
@@ -386,9 +434,14 @@ public class GroupTaskBean implements Parcelable {
         this.done_num = in.readInt();
         this.all_num = in.readInt();
         this.done_rate = in.readString();
+        this.group_list_id = in.readString();
+        this.user_id = in.readString();
+        this.user_name = in.readString();
+        this.from_user_id = in.readString();
+        this.from_user_name = in.readString();
     }
 
-    public static final Creator<GroupTaskBean> CREATOR = new Creator<GroupTaskBean>() {
+    public static final Parcelable.Creator<GroupTaskBean> CREATOR = new Parcelable.Creator<GroupTaskBean>() {
         @Override
         public GroupTaskBean createFromParcel(Parcel source) {
             return new GroupTaskBean(source);
@@ -399,28 +452,4 @@ public class GroupTaskBean implements Parcelable {
             return new GroupTaskBean[size];
         }
     };
-
-    public void setGroup_list_id(String group_list_id) {
-        this.group_list_id = group_list_id;
-    }
-
-    public String getGroup_list_id() {
-        return group_list_id;
-    }
-
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
-
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
-
-    public String getUser_name() {
-        return user_name;
-    }
 }

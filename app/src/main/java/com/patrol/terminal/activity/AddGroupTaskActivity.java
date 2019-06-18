@@ -205,7 +205,6 @@ public class AddGroupTaskActivity extends BaseActivity {
 
                 if (isChecked){
                     personalPosin.add(personals[i]);
-                    Toast.makeText(AddGroupTaskActivity.this, "选择" + personals[i], Toast.LENGTH_SHORT).show();
                 }else {
                     for (int j = 0; j < personalPosin.size(); j++) {
                         String s = personalPosin.get(j);
@@ -214,7 +213,6 @@ public class AddGroupTaskActivity extends BaseActivity {
                             break;
                         }
                     }
-                    Toast.makeText(AddGroupTaskActivity.this, "取消选择" + personals[i], Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -344,8 +342,8 @@ public class AddGroupTaskActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String tower = tv.getText().toString();
-                for (int i = 0; i < personalList.size(); i++) {
-                    if (tower.equals(personalList.get(i).getName())) {
+                for (int i = 0; i < addPeoList.size(); i++) {
+                    if (tower.equals(addPeoList.get(i).getUser_name())) {
                         userList.add(i, tower);
                         addPeoList.remove(i);
                     }
@@ -482,6 +480,7 @@ public class AddGroupTaskActivity extends BaseActivity {
         bean.setYear(year);
         bean.setWeek(TimeUtil.getWeekOfYear(new Date(System.currentTimeMillis()))+"");
         bean.setFrom_user_id(SPUtil.getUserId(this));
+        bean.setFrom_user_name(SPUtil.getUserName(this));
         bean.setDep_name(SPUtil.getDepName(this));
         bean.setDuty_user_id(duty_user_id);
         bean.setDuty_user_name(duty_user_name);
@@ -546,6 +545,19 @@ public class AddGroupTaskActivity extends BaseActivity {
                 adapter.setType(type);
                 break;
             case R.id.month_yes:
+                if (duty_user_id==null){
+                    Toast.makeText(this,"请先选择负责人",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (selectType.size()==0){
+                    Toast.makeText(this,"请先添加日计划",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (addPeoList.size()<2){
+                    Toast.makeText(this,"请添加组员",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 savaGroupTask();
                 break;
         }

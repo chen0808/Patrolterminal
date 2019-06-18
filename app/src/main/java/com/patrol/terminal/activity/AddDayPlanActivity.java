@@ -134,6 +134,9 @@ public class AddDayPlanActivity extends BaseActivity {
             public void accept(DayOfWeekBean type) throws Exception {
                 if (selectType.size() == 0) {
                     type.setWeek_tower_id(type.getId());
+                    type.setMonth(Integer.parseInt(month));
+                    type.setStart_time(year+"-"+month+"-"+day);
+                    type.setEnd_time(year+"-"+month+"-"+day);
                     type.setDay(day);
                     selectType.add(type);
                 } else {
@@ -148,6 +151,9 @@ public class AddDayPlanActivity extends BaseActivity {
                     }
                     if (isExit == 0) {
                         type.setWeek_tower_id(type.getId());
+                        type.setMonth(Integer.parseInt(month));
+                        type.setStart_time(year+"-"+month+"-"+day);
+                        type.setEnd_time(year+"-"+month+"-"+day);
                         type.setDay(day);
                         selectType.add(type);
                     }

@@ -45,6 +45,8 @@ public class GroupOfDayBean {
     private String name;
     private String tower_id;
     private String towers_id;
+    private String start_id;
+    private String end_id;
     private String tower_type;
     private int year;
     private int month;
@@ -55,6 +57,22 @@ public class GroupOfDayBean {
     private String done_status;
     private String done_time;
     private String day_tower_id;
+
+    public String getStart_id() {
+        return start_id;
+    }
+
+    public void setStart_id(String start_id) {
+        this.start_id = start_id;
+    }
+
+    public String getEnd_id() {
+        return end_id;
+    }
+
+    public void setEnd_id(String end_id) {
+        this.end_id = end_id;
+    }
 
     public String getDay_tower_id() {
         return day_tower_id;

@@ -202,7 +202,7 @@ public class DayPlanFrgment extends BaseFragment {
     //获取日计划列表
     public void getDayList() {
         BaseRequest.getInstance().getService()
-                .getDayList(year, month, day, SPUtil.getDepId(getContext()), "type_sign,line_id")
+                .getDayList(year, month, day, SPUtil.getDepId(getContext()), "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayListBean>>(getContext()) {
@@ -249,7 +249,7 @@ public class DayPlanFrgment extends BaseFragment {
     public void getNextDayList() {
 
         BaseRequest.getInstance().getService()
-                .getDayList(nextyear + "", nextmonth + "", nextDay + "", SPUtil.getDepId(getContext()), "type_sign,line_id")
+                .getDayList(nextyear + "", nextmonth + "", nextDay + "", SPUtil.getDepId(getContext()), "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayListBean>>(getContext()) {

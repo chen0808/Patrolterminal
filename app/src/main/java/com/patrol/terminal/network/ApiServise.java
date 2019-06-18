@@ -153,6 +153,9 @@ public interface ApiServise {
     //周计划添加获取月计划列表
     @GET("plan/month/line/monthGET")
     Observable<BaseResult<List<WeekOfMonthBean>>> getWeekList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_id") String type_id);
+    //制定临时日计划线路列表
+    @GET("/plan/day/lineGET")
+    Observable<BaseResult<List<LineCheckBean>>> getLineListday(@Query("year") String year, @Query("month") String month, @Query("day") String day,@Query("dep_id") String dep_id);
 
     //获取周计划杆段列表
     @GET("plan/month/line/monthGET")
@@ -214,6 +217,9 @@ public interface ApiServise {
     //保存临时周计划
     @POST("/plan/week/tower/tempPOST")
     Observable<BaseResult<List<LineTypeBean>>> saveWeekPlan(@Body SavaLineBean2 bean);
+    //保存临时日计划
+    @POST("/plan/day/tower/tempPOST")
+    Observable<BaseResult<List<LineTypeBean>>> saveDayPlan(@Body SavaLineBean2 bean);
 
     //添加日计划
     @POST("/plan/week/tower/tempPOST")
@@ -263,7 +269,7 @@ public interface ApiServise {
 
     //组长获取组成员列表
     @GET("/task/group/user/teamGET")
-    Observable<BaseResult<List<DepUserBean>>> getGroupPersonal(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("user_id") String user_id);
+    Observable<BaseResult<List<DepUserBean>>> getGroupPersonal(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("user_id") String user_id,@Query("sign") String sign);
 
     //组长获取组任务列表
     @GET("/task/group/list/listGET")
@@ -984,5 +990,9 @@ public interface ApiServise {
     @POST("task/remind/batchPOST")
     Observable<BaseResult<TaskBean>> clearTodoAll(@Query("user_id") String user_id);
 
+
+    //一键消除已审核待办
+   @POST("task/remind/batchPOST")
+   Observable<BaseResult<TaskBean>> clearTodo(@Query("to_user_id" )String to_user_id,@Query("flow_sign") String flow_sign);
 
 }

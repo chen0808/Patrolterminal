@@ -1,6 +1,7 @@
 package com.patrol.terminal.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.EqTower;
 import com.patrol.terminal.bean.GroupOfDayBean;
+import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.StringUtil;
 
 import java.util.List;
@@ -64,9 +66,8 @@ public class GroupTaskSelectAdapter extends BaseAdapter {
             convertView.setTag(holder);
         }
         GroupOfDayBean dangerBean = lineTypeBeans.get(position);
-
+      AdapterUtils.setText(holder.time,StringUtil.getTypeSign(dangerBean.getType_sign()));
       holder.name.setText(dangerBean.getLine_name()+dangerBean.getName()+"任务");
-        holder.time.setText(StringUtil.getTypeSign(dangerBean.getType_sign()));
         return convertView;
     }
 

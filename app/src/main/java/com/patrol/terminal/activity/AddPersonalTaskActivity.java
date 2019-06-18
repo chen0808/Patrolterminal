@@ -29,6 +29,7 @@ import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.LineTypeBean;
+import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
@@ -197,6 +198,8 @@ public class AddPersonalTaskActivity extends BaseActivity {
                         addPeoList.add(depUserBean);
                     }
                 }
+                monthYes.setText("指派");
+                monthYes.setBackgroundColor(getResources().getColor(R.color.gray_plan));
             }
         }).build();
         pvOptions.setPicker(userList);
@@ -253,7 +256,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
     public void getPersonal() {
 
         BaseRequest.getInstance().getService()
-                .getGroupPersonal(year, month, day,SPUtil.getDepId(this), SPUtil.getUserId(this))
+                .getGroupPersonal(year, month, day,SPUtil.getDepId(this), SPUtil.getUserId(this),"2")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DepUserBean>>(this) {
@@ -323,14 +326,17 @@ public class AddPersonalTaskActivity extends BaseActivity {
             Toast.makeText(this,"请添加任务",Toast.LENGTH_SHORT).show();
             return;
         }
-        if (addPeoList.size()==0){
-            Toast.makeText(this,"请添加组员",Toast.LENGTH_SHORT).show();
-            return;
-        }
+
         for (int i = 0; i < selectBean.size(); i++) {
             GroupTaskBean groupTaskBean = selectBean.get(i);
+            if (addPeoList.size()==0){
+                groupTaskBean.setIs_rob("1");
+            }else {
             groupTaskBean.setUser_id(addPeoList.get(0).getUser_id());
             groupTaskBean.setUser_name(addPeoList.get(0).getUser_name());
+            }
+            groupTaskBean.setFrom_user_id(SPUtil.getUserId(this));
+            groupTaskBean.setFrom_user_name(SPUtil.getUserName(this));
         }
         BaseRequest.getInstance().getService()
                 .addPersonTask(selectBean)
@@ -453,6 +459,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 holder = new ViewHolder();
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_add_group_task, parent, false);
                 holder.itemTroubleName = (TextView) convertView.findViewById(R.id.add_group_task_name);
+                holder.itemTroubleTower = (TextView) convertView.findViewById(R.id.add_group_task_tower);
                 holder.taskType = (TextView) convertView.findViewById(R.id.add_group_task_type);
                 holder.itemTroubleCheck = (CheckBox) convertView.findViewById(R.id.add_group_task_check);
                 holder.itemTaskCheck = (RadioButton) convertView.findViewById(R.id.add_group_task_rb);
@@ -462,8 +469,9 @@ public class AddPersonalTaskActivity extends BaseActivity {
             }
             GroupTaskBean listBean = lineTypeBeans.get(position);
 
-            holder.itemTroubleName.setText(listBean.getLine_name()+listBean.getName());
-            holder.taskType.setText(StringUtil.getTypeSign(listBean.getType_sign()));
+            holder.itemTroubleName.setText(listBean.getLine_name());
+            holder.itemTroubleTower.setText(listBean.getName());
+            AdapterUtils.setText( holder.taskType,StringUtil.getTypeSign(listBean.getType_sign()));
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -504,7 +512,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
 
 
          class ViewHolder {
-            private   TextView itemTroubleName;
+            private   TextView itemTroubleName,itemTroubleTower;
             private   TextView taskType;
              private   RelativeLayout item;
             private CheckBox itemTroubleCheck;

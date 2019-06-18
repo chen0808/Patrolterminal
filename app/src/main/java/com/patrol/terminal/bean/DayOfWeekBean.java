@@ -44,12 +44,30 @@ public class DayOfWeekBean {
     private String name;
     private String tower_id;
     private String towers_id;
+    private String start_id;
+    private String end_id;
     private String tower_type;
     private int year;
     private int month;
     private int week;
     private String start_time;
     private String end_time;
+
+    public String getStart_id() {
+        return start_id;
+    }
+
+    public void setStart_id(String start_id) {
+        this.start_id = start_id;
+    }
+
+    public String getEnd_id() {
+        return end_id;
+    }
+
+    public void setEnd_id(String end_id) {
+        this.end_id = end_id;
+    }
 
     private String allot_status;
     private String audit_status;

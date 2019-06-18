@@ -244,6 +244,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
         startActivity(intent);
     }
 
+    //清除待办
     private void clearTodo(String id) {
         BaseRequest.getInstance().getService()
                 .clearTodo(id)
@@ -305,7 +306,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     private void getYXtodo() {
         String userId = SPUtil.getUserId(getContext());
         BaseRequest.getInstance().getService()
-                .todoList(userId, "flow_sign")
+                .todoList(userId, "flow_sign,create_time,title")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<TodoBean>>(getContext()) {

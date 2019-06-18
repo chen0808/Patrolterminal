@@ -167,7 +167,10 @@
             android:name=".activity.SignActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.MapActivity"
+        android:name=".activity.MapActivity"
+        android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LineCheckDayActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.DayPlanDetailActivity"

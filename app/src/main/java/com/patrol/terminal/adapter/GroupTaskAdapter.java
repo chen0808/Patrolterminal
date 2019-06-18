@@ -1,11 +1,15 @@
 package com.patrol.terminal.adapter;
 
+import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.GroupTaskBean;
+import com.patrol.terminal.utils.AdapterUtils;
+import com.patrol.terminal.utils.StringUtil;
 
 import java.util.List;
 
@@ -21,42 +25,14 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder viewHolder, GroupTaskBean item) {
+        //图标
+        TextView icon = viewHolder.getView(R.id.item_task_date_tv);
+        AdapterUtils.setIconText(icon, item.getDep_name());
         viewHolder.setText(R.id.item_task_personal, "小组负责人 :"+item.getDuty_user_name())
-                .setText(R.id.item_task_name, item.getLine_name()+item.getName()+"任务")
-                .setText(R.id.item_task_type,"班组 :"+ item.getDep_name());
-        switch (item.getType_sign()) {
-            case "4":
-                viewHolder.setText(R.id.item_task_date_tv, "特殊");
-                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_week_bg);
-                break;
-            case "7":
-                viewHolder.setText(R.id.item_task_date_tv, "保电");
-                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_qing_bg);
-                break;
-            case "2":
-                viewHolder.setText(R.id.item_task_date_tv, "故障");
-                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_yellow_bg);
-                break;
-            case "1":
-                viewHolder.setText(R.id.item_task_date_tv, "定巡");
-                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_mon_bg);
-                break;
-            case "12":
-                viewHolder.setText(R.id.item_task_date_tv, "安全");
-                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_qing_bg);
-                viewHolder .setText(R.id.item_task_name, "关于"+item.getLine_name()+"的安全质量监督任务");
-                break;
-            case "13":
-                viewHolder.setText(R.id.item_task_date_tv, "验收");
-                viewHolder .setText(R.id.item_task_name, "关于"+item.getLine_name()+"的验收任务");
-                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_qing_bg);
-                break;
-            default:
-                viewHolder.setText(R.id.item_task_date_tv, "定检");
-                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.plan_day_bg);
-                break;
-        }
+                .setText(R.id.item_task_name, item.getLine_name()+item.getName()+"任务") ;
 
+        TextView type = viewHolder.getView(R.id.item_task_type);
+        AdapterUtils.setText(type, StringUtil.getTypeSign(item.getType_sign()));
         if ("1".equals(item.getIs_rob())){
             viewHolder.setText(R.id.item_task_date_tv, "抢");
             viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.group_red_bg);

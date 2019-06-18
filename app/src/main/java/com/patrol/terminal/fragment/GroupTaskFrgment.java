@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -21,6 +22,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupTaskBean;
+import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.YXtoJXbean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 import com.patrol.terminal.utils.Constant;
@@ -89,6 +91,7 @@ public class GroupTaskFrgment extends BaseFragment {
         taskAdd.setVisibility(View.GONE);
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         getData();
+        clearTodoAll();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
         groupTaskAdapter = new GroupTaskAdapter(R.layout.fragment_task_item, result);
@@ -114,6 +117,7 @@ public class GroupTaskFrgment extends BaseFragment {
                 }
             }
         });
+
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -292,5 +296,27 @@ public class GroupTaskFrgment extends BaseFragment {
         if (refreshGroup!=null){
             refreshGroup.dispose();
         }
+    }
+
+    //消除所有查看类型待办
+    public void clearTodoAll() {
+
+        BaseRequest.getInstance().getService()
+                .clearTodo(SPUtil.getUserId(getContext()),"3")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<TaskBean>(getContext()) {
+                    @Override
+                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            RxRefreshEvent.publish("refreshTodo");
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
     }
 }

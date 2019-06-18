@@ -1,6 +1,7 @@
 package com.patrol.terminal.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.GroupOfDayBean;
+import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.StringUtil;
 
@@ -49,6 +51,8 @@ public class AddGroupTaskAdapter extends BaseAdapter {
         } else {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_add_group_task, parent, false);
+
+            holder.itemTroubleTower = (TextView) convertView.findViewById(R.id.add_group_task_tower);
             holder.itemTroubleName = (TextView) convertView.findViewById(R.id.add_group_task_name);
             holder.taskType = (TextView) convertView.findViewById(R.id.add_group_task_type);
             holder.itemTroubleCheck = (CheckBox) convertView.findViewById(R.id.add_group_task_check);
@@ -56,10 +60,9 @@ public class AddGroupTaskAdapter extends BaseAdapter {
         }
         GroupOfDayBean listBean = lineTypeBeans.get(position);
 
-            holder.itemTroubleName.setText(listBean.getLine_name()+listBean.getName());
-
-
-        holder.taskType.setText(StringUtil.getTypeSign(listBean.getType_sign()));
+            holder.itemTroubleName.setText(listBean.getLine_name());
+        holder.itemTroubleTower.setText(listBean.getName());
+        AdapterUtils.setText( holder.taskType,StringUtil.getTypeSign(listBean.getType_sign()));
         holder.itemTroubleCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +80,7 @@ public class AddGroupTaskAdapter extends BaseAdapter {
 
 
     static class ViewHolder {
-      private   TextView itemTroubleName;
+      private   TextView itemTroubleName,itemTroubleTower;
         private   TextView taskType;
         private  CheckBox itemTroubleCheck;
 

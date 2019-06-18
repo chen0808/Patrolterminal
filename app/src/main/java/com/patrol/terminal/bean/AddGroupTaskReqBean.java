@@ -24,6 +24,8 @@ public class AddGroupTaskReqBean {
     private String dep_name;
     private String duty_user_id; //小组负责人id
     private String from_user_id;  //班长id
+    private String from_user_name;  //班长id
+
     private String duty_user_name;
     private String year;
     private String month;
@@ -33,6 +35,14 @@ public class AddGroupTaskReqBean {
     private List<UsersBean> users;
     private List<DefectBean> defects;
     private List<DefectBean> dangers;
+
+    public String getFrom_user_name() {
+        return from_user_name;
+    }
+
+    public void setFrom_user_name(String from_user_name) {
+        this.from_user_name = from_user_name;
+    }
 
     public String getWeek() {
         return week;
