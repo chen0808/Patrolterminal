@@ -3,5 +3,5 @@
     <corners
         android:bottomRightRadius="4dp"
         android:topRightRadius="4dp"></corners>
-    <solid android:color="@color/gray_plan"></solid>
+    <solid android:color="@color/base_status_bar"></solid>
 </shape>

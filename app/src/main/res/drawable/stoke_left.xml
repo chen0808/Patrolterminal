@@ -5,5 +5,5 @@
         android:topLeftRadius="4dp"></corners>
     <stroke
         android:width="1dp"
-        android:color="@color/gray_plan"></stroke>
+        android:color="@color/base_status_bar"></stroke>
 </shape>

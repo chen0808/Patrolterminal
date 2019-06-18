@@ -3,7 +3,7 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <solid android:color="@color/gray_plan" />
+    <solid android:color="@color/base_status_bar" />
     <corners
         android:bottomLeftRadius="15dp"
         android:bottomRightRadius="15dp"

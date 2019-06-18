@@ -174,7 +174,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/gray_plan"
+            android:background="@color/base_status_bar"
             android:orientation="vertical">
 
             <net.lucode.hackware.magicindicator.MagicIndicator

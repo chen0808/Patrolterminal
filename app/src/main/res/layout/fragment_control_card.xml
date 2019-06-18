@@ -316,7 +316,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_40"
             android:layout_marginTop="@dimen/dp_20"
-            android:background="@color/gray_plan"
+            android:background="@color/base_status_bar"
             android:gravity="center"
             android:text="提交"
             android:textColor="@color/white"

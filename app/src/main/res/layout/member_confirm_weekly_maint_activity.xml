@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
-        android:background="@color/gray_plan"
+        android:background="@color/base_status_bar"
         >
         <TextView
             android:id="@+id/week_maintenace_tv"

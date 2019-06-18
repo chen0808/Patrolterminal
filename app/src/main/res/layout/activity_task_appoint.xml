@@ -133,7 +133,7 @@
                 android:layout_height="@dimen/dp_40"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp_20"
-                android:background="@color/gray_plan"
+                android:background="@color/base_status_bar"
                 android:scaleType="center"
                 android:src="@mipmap/add_black" />
             </RelativeLayout>
@@ -187,7 +187,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_40"
             android:layout_weight="1"
-            android:background="@color/gray_plan"
+            android:background="@color/base_status_bar"
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:text="提交"

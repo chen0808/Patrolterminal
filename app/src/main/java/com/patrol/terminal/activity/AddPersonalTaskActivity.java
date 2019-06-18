@@ -199,7 +199,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                     }
                 }
                 monthYes.setText("指派");
-                monthYes.setBackgroundColor(getResources().getColor(R.color.gray_plan));
+                monthYes.setBackgroundColor(getResources().getColor(R.color.base_status_bar));
             }
         }).build();
         pvOptions.setPicker(userList);
