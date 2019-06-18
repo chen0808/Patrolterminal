@@ -18,7 +18,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/item_plan_date_tv"
+            android:id="@+id/tv_icon"
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
             android:layout_gravity="center_horizontal"
@@ -38,24 +38,24 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/item_plan_device_name"
+        android:id="@+id/tv_line_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/item_plan_date_ll"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="名称:逃开一线4月计划"
+        android:text="名称:桃开一线4月计划"
         android:textColor="@color/color_10"
         android:textSize="@dimen/sp_15" />
 
     <TextView
-        android:id="@+id/item_line_state"
+        android:id="@+id/tv_line_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginTop="7dp"
-        android:layout_toRightOf="@id/item_plan_device_name"
+        android:layout_toRightOf="@id/tv_line_name"
         android:background="@drawable/state_red_bg"
         android:paddingLeft="@dimen/dp_5"
         android:paddingRight="@dimen/dp_5"
@@ -65,26 +65,26 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/item_plan_content_text"
+        android:id="@+id/tv_content_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/item_plan_device_name"
+        android:layout_below="@id/tv_line_name"
         android:layout_toRightOf="@id/item_plan_date_ll"
         android:text="计划类型："
         android:textSize="@dimen/sp_13" />
 
     <TextView
-        android:id="@+id/item_plan_content"
+        android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/item_plan_device_name"
+        android:layout_below="@id/tv_line_name"
         android:layout_marginRight="100dp"
-        android:layout_toRightOf="@id/item_plan_content_text"
+        android:layout_toRightOf="@id/tv_content_name"
         android:text="红外测温"
         android:textSize="@dimen/sp_13" />
 
     <ImageView
-        android:id="@+id/month_plan_go"
+        android:id="@+id/iv_detail"
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_50"
         android:layout_alignParentRight="true"
@@ -94,26 +94,16 @@
         android:src="@mipmap/icon_go" />
 
     <TextView
-        android:id="@+id/tv_start_time"
+        android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/item_plan_content"
+        android:layout_below="@id/tv_content_name"
         android:layout_toRightOf="@id/item_plan_date_ll"
         android:text="开始时间："
         android:textSize="@dimen/sp_13" />
 
-    <TextView
-        android:id="@+id/tv_end_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/item_plan_content"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/tv_start_time"
-        android:text="结束时间："
-        android:textSize="@dimen/sp_13" />
-
     <ImageView
-        android:id="@+id/plan_to_change"
+        android:id="@+id/iv_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -143,7 +133,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_start_time"
+        android:layout_below="@id/tv_time"
         android:layout_marginRight="@dimen/dp_50"
         android:layout_marginBottom="@dimen/dp_5"
         android:layout_toRightOf="@id/item_plan_date_ll"
@@ -189,7 +179,7 @@
         </LinearLayout>
 
         <com.patrol.terminal.widget.HorizontalLineView
-            android:id="@+id/item_plan_status"
+            android:id="@+id/hlv_plan_state"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_30"
             android:visibility="gone"></com.patrol.terminal.widget.HorizontalLineView>

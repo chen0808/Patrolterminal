@@ -65,9 +65,9 @@ public class WeekReceiveAdapter extends BaseAdapter {
 //        boolean ischeck = listBean.isIscheck();
 //        holder.ischeck=ischeck;
 //        if ( holder.ischeck){
-//            holder.name.setTextColor(context.getResources().getColor(R.color.color_69));
+//            holder.name.setText(context.getResources().getColor(R.color.color_69));
 //        }else {
-//            holder.name.setTextColor(context.getResources().getColor(R.color.tv_gray));
+//            holder.name.setText(context.getResources().getColor(R.color.tv_gray));
 //        }
 //        holder.name.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -75,7 +75,7 @@ public class WeekReceiveAdapter extends BaseAdapter {
 //                if (holder.ischeck){
 //                    RxRefreshEvent.publish("add@"+listBean.getId()+"@"+listBean.getVal()+"@"+listBean.getName());
 //                }else {
-//                    holder.name.setTextColor(context.getResources().getColor(R.color.tv_gray));
+//                    holder.name.setText(context.getResources().getColor(R.color.tv_gray));
 //                    RxRefreshEvent.publish("delete@"+listBean.getId()+"@"+listBean.getVal()+"@"+listBean.getName());
 //                }
 //
