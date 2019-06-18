@@ -77,8 +77,8 @@ public class NewPlanActivity extends BaseActivity {
 
     private void initview() {
         titleName.setText("运行计划管理");
-         String  time = DateUatil.getTime(new Date(System.currentTimeMillis()));
-        SPUtil.putString(this,"date","time",time);
+        String time = DateUatil.getTime(new Date(System.currentTimeMillis()));
+        SPUtil.putString(this, "date", "time", time);
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new MonthPlanFrgment());
         fragmentList.add(new WeekPlanFrgment());
@@ -91,9 +91,9 @@ public class NewPlanActivity extends BaseActivity {
 //        viewPager.setNoScroll(true);
         viewPager.setOffscreenPageLimit(5);
         String from = getIntent().getStringExtra("from");
-        if ("todoMonth".equals(from)){
+        if ("todoMonth".equals(from)) {
             viewPager.setCurrentItem(0);
-        }else if ("todoWeek".equals(from)){
+        } else if ("todoWeek".equals(from)) {
             viewPager.setCurrentItem(1);
         }
     }
@@ -105,10 +105,10 @@ public class NewPlanActivity extends BaseActivity {
             public int getCount() {
                 return mDataList.size();
             }
+
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
-
                 SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
                 simplePagerTitleView.setNormalColor(getResources().getColor(R.color.white));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
@@ -128,6 +128,7 @@ public class NewPlanActivity extends BaseActivity {
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator linePagerIndicator = new LinePagerIndicator(context);
                 linePagerIndicator.setColors(Color.WHITE);
+                linePagerIndicator.setLineHeight(15);
                 return linePagerIndicator;
             }
         });
@@ -137,7 +138,7 @@ public class NewPlanActivity extends BaseActivity {
         titleContainer.setDividerDrawable(new ColorDrawable() {
             @Override
             public int getIntrinsicWidth() {
-                return UIUtil.dip2px(NewPlanActivity.this, 15);
+                return UIUtil.dip2px(NewPlanActivity.this, 60);
             }
         });
         ViewPagerHelper.bind(magicIndicator, viewPager);

@@ -131,6 +131,7 @@ public class NewTaskActivity extends BaseActivity {
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator linePagerIndicator = new LinePagerIndicator(context);
                 linePagerIndicator.setColors(Color.WHITE);
+                linePagerIndicator.setLineHeight(15);
                 return linePagerIndicator;
             }
         });
@@ -140,7 +141,7 @@ public class NewTaskActivity extends BaseActivity {
         titleContainer.setDividerDrawable(new ColorDrawable() {
             @Override
             public int getIntrinsicWidth() {
-                return UIUtil.dip2px(NewTaskActivity.this, 15);
+                return UIUtil.dip2px(NewTaskActivity.this, 60);
             }
         });
         ViewPagerHelper.bind(magicIndicator4, viewPager);
