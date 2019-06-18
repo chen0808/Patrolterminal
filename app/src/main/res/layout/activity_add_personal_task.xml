@@ -86,20 +86,20 @@
                             android:layout_weight="4"
                             android:gravity="center_vertical"
                             android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
-                            android:text="任务名称"
+                            android:textSize="@dimen/sp_15"
+                            android:text="任务内容"
                             android:textColor="@color/color_33"
                             />
                         
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="3"
-                            android:gravity="center"
-                            android:textSize="@dimen/sp_13"
-                            android:text="工作内容"
-                            android:textColor="@color/color_33"
-                            />
+                        <!--<TextView-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_weight="3"-->
+                            <!--android:gravity="center"-->
+                            <!--android:textSize="@dimen/sp_13"-->
+                            <!--android:text="工作内容"-->
+                            <!--android:textColor="@color/color_33"-->
+                            <!--/>-->
                        
                         <TextView
                             android:layout_width="0dp"
@@ -194,7 +194,9 @@
 
 
 
-                    <LinearLayout style="@style/plan_ll_styl">
+                    <LinearLayout style="@style/plan_ll_styl"
+                        android:layout_marginTop="@dimen/dp_20"
+                        >
 
                         <TextView
                             style="@style/plan_tv_styl"
@@ -214,9 +216,9 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="3"
-                            android:gravity="center_vertical"
+                            android:gravity="center"
                             android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
+                            android:textSize="@dimen/sp_15"
                             android:text="任务名称"
                             android:textColor="@color/color_33"
                             />
@@ -229,9 +231,10 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="3"
-                            android:gravity="center"
-                            android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
+                            android:gravity="center_vertical"
+
+                            android:paddingLeft="50dp"
+                            android:textSize="@dimen/sp_15"
                             android:text="工作内容"
                             android:textColor="@color/color_33"
                             />

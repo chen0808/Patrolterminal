@@ -74,6 +74,24 @@ public class GroupTaskBean implements Parcelable {
     private String user_name;
     private String from_user_id;
     private String from_user_name;
+    private String start_id;
+    private String end_id;
+
+    public String getStart_id() {
+        return start_id;
+    }
+
+    public void setStart_id(String start_id) {
+        this.start_id = start_id;
+    }
+
+    public String getEnd_id() {
+        return end_id;
+    }
+
+    public void setEnd_id(String end_id) {
+        this.end_id = end_id;
+    }
 
     public String getFrom_user_id() {
         return from_user_id;
@@ -356,6 +374,7 @@ public class GroupTaskBean implements Parcelable {
         return user_name;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -398,6 +417,8 @@ public class GroupTaskBean implements Parcelable {
         dest.writeString(this.user_name);
         dest.writeString(this.from_user_id);
         dest.writeString(this.from_user_name);
+        dest.writeString(this.start_id);
+        dest.writeString(this.end_id);
     }
 
     public GroupTaskBean() {
@@ -439,6 +460,8 @@ public class GroupTaskBean implements Parcelable {
         this.user_name = in.readString();
         this.from_user_id = in.readString();
         this.from_user_name = in.readString();
+        this.start_id = in.readString();
+        this.end_id = in.readString();
     }
 
     public static final Parcelable.Creator<GroupTaskBean> CREATOR = new Parcelable.Creator<GroupTaskBean>() {

@@ -1,6 +1,7 @@
 package com.patrol.terminal.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.AddGroupTaskReqBean;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupTaskBean;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -95,7 +98,6 @@ public class AddPersonalTaskActivity extends BaseActivity {
     private List<LineTypeBean> typeList = new ArrayList<>();
     private String type_id;
     private String type_val;
-    private List<String> userList = new ArrayList<>();
     private String time;
     private String day;
     private String w_id;
@@ -103,6 +105,9 @@ public class AddPersonalTaskActivity extends BaseActivity {
     private List<DepUserBean> personalList;
     private List<DepUserBean> addPeoList = new ArrayList<>();
     private  List<GroupTaskBean> selectBean=new ArrayList<>();
+    private AlertDialog personalDialog;
+    private int dutyPositon;
+    private String[] personals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,41 +176,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
     }
 
 
-    //展示人员列表
-    private void showPersonalLine() {// 不联动的多级选项
-        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int option2, int options3, View v) {
 
-                String s = groupTaskGroup.getText().toString();
-                groupTaskGroup.setText(userList.get(options1));
-                String name = userList.get(options1);
-                userList.remove(options1);
-                if (s.isEmpty()) {
-
-                } else {
-                    for (int i = 0; i < addPeoList.size(); i++) {
-                        DepUserBean depUserBean = addPeoList.get(i);
-                        if ("2".equals(depUserBean.getSign())) {
-                            userList.add(depUserBean.getUser_name());
-                            addPeoList.remove(i);
-                        }
-                    }
-                }
-                for (int i = 0; i < personalList.size(); i++) {
-                    DepUserBean depUserBean = personalList.get(i);
-                    if (name.equals(depUserBean.getUser_name())) {
-                        addPeoList.add(depUserBean);
-                    }
-                }
-                monthYes.setText("指派");
-                monthYes.setBackgroundColor(getResources().getColor(R.color.base_status_bar));
-            }
-        }).build();
-        pvOptions.setPicker(userList);
-        pvOptions.show();
-
-    }
 
 
     //类型添加选项框
@@ -263,9 +234,11 @@ public class AddPersonalTaskActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<List<DepUserBean>> t) throws Exception {
                         personalList = t.getResults();
+                        personals = new String[personalList.size()];
                         for (int i = 0; i < personalList.size(); i++) {
-                            userList.add(personalList.get(i).getUser_name());
+                            personals[i]=personalList.get(i).getUser_name();
                         }
+
 
                     }
 
@@ -386,11 +359,11 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 showType();
                 break;
             case R.id.group_task_group:
-                if (userList.size()==0){
+                if (personals.length==0){
                     Toast.makeText(this,"暂未获取到组员列表信息",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                showPersonalLine();
+                showPersonalGroup();
                 break;
             case R.id.add_more_iv:
                 if (type == 0) {
@@ -476,15 +449,16 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     if (selectBean.size()==0){
+                        if (listBean.getId()!=null){
                         listBean.setGroup_list_id(listBean.getId());
-                        listBean.setId(null);
+                        listBean.setId(null);}
                         selectBean.add(listBean);
                         holder.itemTroubleCheck.setChecked(true);
                     }else {
                         int isExit=0;
                         for (int i = 0; i < selectBean.size(); i++) {
                             GroupTaskBean dayOfWeekBean = selectBean.get(i);
-                            if (dayOfWeekBean.getId().equals(listBean.getId())){
+                            if (dayOfWeekBean.getGroup_list_id().equals(listBean.getGroup_list_id())){
                                 isExit=1;
                                 selectBean.remove(i);
                                 holder.itemTroubleCheck.setChecked(false);
@@ -492,7 +466,9 @@ public class AddPersonalTaskActivity extends BaseActivity {
                             }
                         }
                         if (isExit==0){
-                            listBean.setGroup_list_id(listBean.getId());
+                            if (listBean.getId()!=null){
+                                listBean.setGroup_list_id(listBean.getId());
+                                listBean.setId(null);}
                             selectBean.add(listBean);
                             holder.itemTroubleCheck.setChecked(true);
                         }
@@ -524,5 +500,48 @@ public class AddPersonalTaskActivity extends BaseActivity {
             notifyDataSetChanged();
 
         }
+    }
+
+    public void showPersonalGroup(){
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle("选择负责人");
+        /**
+         *第一个参数:弹出框的消息集合，一般为字符串集合
+         * 第二个参数：默认被选中的，布尔类数组
+         * 第三个参数：勾选事件监听
+         */
+        alertBuilder.setSingleChoiceItems(personals, dutyPositon, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int options1) {
+
+                dutyPositon = options1;
+                String s = groupTaskGroup.getText().toString();
+                groupTaskGroup.setText(personals[options1]);
+                String name = personals[options1];
+                if (s.isEmpty()) {
+
+                } else {
+                    for (int i = 0; i < addPeoList.size(); i++) {
+                        DepUserBean depUserBean = addPeoList.get(i);
+                        if ("2".equals(depUserBean.getSign())) {
+                            addPeoList.remove(i);
+                        }
+                    }
+                }
+                for (int i = 0; i < personalList.size(); i++) {
+                    DepUserBean depUserBean = personalList.get(i);
+                    if (name.equals(depUserBean.getUser_name())) {
+                        addPeoList.add(depUserBean);
+                    }
+                }
+                monthYes.setText("指派");
+                monthYes.setBackgroundColor(getResources().getColor(R.color.base_status_bar));
+                personalDialog.dismiss();
+            }
+        });
+
+        personalDialog = alertBuilder.create();
+        personalDialog.show();
     }
 }

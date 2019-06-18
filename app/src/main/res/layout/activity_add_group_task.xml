@@ -74,11 +74,11 @@
                             android:text="指派组员" />
                         <ImageView
                             android:id="@+id/add_group_people"
-                            android:layout_width="@dimen/dp_40"
+                            android:layout_width="@dimen/dp_80"
                             android:layout_height="@dimen/dp_40"
-                            android:layout_alignParentRight="true"
                             android:layout_marginRight="@dimen/dp_20"
                             android:background="@color/base_status_bar"
+                            android:layout_centerHorizontal="true"
                             android:scaleType="center"
                             android:src="@mipmap/add_black" />
                     </RelativeLayout>
@@ -126,20 +126,20 @@
                             android:layout_weight="5"
                             android:gravity="center_vertical"
                             android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
-                            android:text="计划名称"
+                            android:textSize="@dimen/sp_15"
+                            android:text="计划内容"
                             android:textColor="@color/color_33"
                             />
                         
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="3"
-                            android:gravity="center"
-                            android:textSize="@dimen/sp_13"
-                            android:text="工作内容"
-                            android:textColor="@color/color_33"
-                            />
+                        <!--<TextView-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_weight="3"-->
+                            <!--android:gravity="center"-->
+                            <!--android:textSize="@dimen/sp_15"-->
+                            <!--android:text="工作内容"-->
+                            <!--android:textColor="@color/color_33"-->
+                            <!--/>-->
                        
                         <TextView
                             android:layout_width="0dp"
@@ -235,9 +235,9 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
+                            android:gravity="center"
                             android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
+                            android:textSize="@dimen/sp_15"
                             android:text="任务名称"
                             android:textColor="@color/color_33"
                             />
@@ -252,7 +252,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:paddingLeft="5dp"
-                            android:textSize="@dimen/sp_13"
+                            android:textSize="@dimen/sp_15"
                             android:text="工作内容"
                             android:textColor="@color/color_33"
                             />

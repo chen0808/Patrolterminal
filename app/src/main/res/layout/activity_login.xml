@@ -47,10 +47,11 @@
                 <EditText
                     android:id="@+id/et_user_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_centerInParent="true"
+                    android:gravity="center_vertical"
                     android:layout_marginLeft="48dp"
-                    android:layout_marginRight="48dp"
+                    android:layout_marginRight="28dp"
                     android:background="@null" />
             </RelativeLayout>
 
@@ -72,10 +73,11 @@
                 <EditText
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_centerInParent="true"
+                    android:gravity="center_vertical"
                     android:layout_marginLeft="48dp"
-                    android:layout_marginRight="48dp"
+                    android:layout_marginRight="28dp"
                     android:background="@null" />
             </RelativeLayout>
 

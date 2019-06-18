@@ -115,6 +115,9 @@ public class AddGroupTaskActivity extends BaseActivity {
     private AlertDialog personalDialog;
     private String[] personals;
     private  List<String> personalPosin=new ArrayList<>();
+    private int dutyPositon;
+    private AlertDialog personalGroupDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,11 +177,11 @@ public class AddGroupTaskActivity extends BaseActivity {
         } else {
             groupTaskNoData.setVisibility(View.GONE);
         }
-        if (list.size() > 4) {
-            troubleMore.setVisibility(View.VISIBLE);
-        } else {
-            troubleMore.setVisibility(View.GONE);
-        }
+//        if (list.size() > 4) {
+//            troubleMore.setVisibility(View.VISIBLE);
+//        } else {
+//            troubleMore.setVisibility(View.GONE);
+//        }
         adapter.setData(list);
     }
     public void showPersonal(){
@@ -251,40 +254,24 @@ public class AddGroupTaskActivity extends BaseActivity {
         personalDialog = alertBuilder.create();
         personalDialog.show();
     }
+    public void showPersonalGroup(){
 
-    //获取日计划列表
-    public void getDayList() {
-        ProgressDialog.show(this,false,"正在加载中");
-
-        BaseRequest.getInstance().getService()
-                .getDayofGroup( year,month,day,SPUtil.getDepId(this), type_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<GroupOfDayBean>>(this) {
-
-                               @Override
-                               protected void onSuccees(BaseResult<List<GroupOfDayBean>> t) throws Exception {
-                                  results = t.getResults();
-                                   adapter.setData(results);
-                               }
-
-                               @Override
-                               protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                               }});
-    }
-
-
-    //展示人员列表
-    private void showPersonalLine(int type) {// 不联动的多级选项
-        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle("选择负责人");
+        /**
+         *第一个参数:弹出框的消息集合，一般为字符串集合
+         * 第二个参数：默认被选中的，布尔类数组
+         * 第三个参数：勾选事件监听
+         */
+        alertBuilder.setSingleChoiceItems(personals, dutyPositon, new DialogInterface.OnClickListener() {
             @Override
-            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+            public void onClick(DialogInterface dialog, int options1) {
+
+                dutyPositon = options1;
                 if (type == 0) {
                     String s = groupTaskGroup.getText().toString();
-                    groupTaskGroup.setText(userList.get(options1));
-                    String name = userList.get(options1);
-                    userList.remove(options1);
+                    groupTaskGroup.setText(personals[options1]);
+                    String name =personals[options1];
                     if (!s.isEmpty()) {
                         for (int i = 0; i < addPeoList.size(); i++) {
                             AddGroupTaskReqBean.UsersBean usersBean = addPeoList.get(i);
@@ -307,14 +294,75 @@ public class AddGroupTaskActivity extends BaseActivity {
                         }
                     }
                 }
-
-
+                personalGroupDialog.dismiss();
             }
-        }).build();
-        pvOptions.setPicker(userList);
-        pvOptions.show();
+        });
 
+        personalGroupDialog = alertBuilder.create();
+        personalGroupDialog.show();
     }
+
+    //获取日计划列表
+    public void getDayList() {
+        ProgressDialog.show(this,false,"正在加载中");
+
+        BaseRequest.getInstance().getService()
+                .getDayofGroup( year,month,day,SPUtil.getDepId(this), type_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<GroupOfDayBean>>(this) {
+
+                               @Override
+                               protected void onSuccees(BaseResult<List<GroupOfDayBean>> t) throws Exception {
+                                  results = t.getResults();
+                                 setVisibility(results);
+                               }
+
+                               @Override
+                               protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                               }});
+    }
+
+
+//    //展示人员列表
+//    private void showPersonalLine(int type) {// 不联动的多级选项
+//        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+//            @Override
+//            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+//                if (type == 0) {
+//                    String s = groupTaskGroup.getText().toString();
+//                    groupTaskGroup.setText(userList.get(options1));
+//                    String name = userList.get(options1);
+//                    userList.remove(options1);
+//                    if (!s.isEmpty()) {
+//                        for (int i = 0; i < addPeoList.size(); i++) {
+//                            AddGroupTaskReqBean.UsersBean usersBean = addPeoList.get(i);
+//                            if ("2".equals(usersBean.getSign())) {
+//                                userList.add(usersBean.getUser_name());
+//                                addPeoList.remove(i);
+//                            }
+//                        }
+//                    }
+//                    for (int i = 0; i < personalList.size(); i++) {
+//                        DepUserBean depUserBean = personalList.get(i);
+//                        if (name.equals(depUserBean.getName())) {
+//                            AddGroupTaskReqBean.UsersBean bean=new  AddGroupTaskReqBean.UsersBean();
+//                            bean.setSign("2");
+//                            duty_user_name = depUserBean.getName();
+//                            duty_user_id = depUserBean.getId();
+//                            bean.setUser_id(duty_user_id);
+//                            bean.setUser_name(duty_user_name);
+//                            addPeoList.add(bean);
+//                        }
+//                    }
+//                }
+//            }
+//        }).build();
+//        pvOptions.setPicker(userList);
+//        pvOptions.show();
+//
+//    }
 
     /**
      * 动态添加布局
@@ -344,8 +392,12 @@ public class AddGroupTaskActivity extends BaseActivity {
                 String tower = tv.getText().toString();
                 for (int i = 0; i < addPeoList.size(); i++) {
                     if (tower.equals(addPeoList.get(i).getUser_name())) {
-                        userList.add(i, tower);
                         addPeoList.remove(i);
+                    }
+                }
+                for (int i = 0; i < personalPosin.size(); i++) {
+                    if (tower.equals(personalPosin.get(i))) {
+                        personalPosin.remove(i);
                     }
                 }
                 incontinuityTower.removeView(v);
@@ -529,7 +581,7 @@ public class AddGroupTaskActivity extends BaseActivity {
                 showType();
                 break;
             case R.id.group_task_group:
-                showPersonalLine(0);
+                showPersonalGroup();
                 break;
             case R.id.add_group_people:
                showPersonal();
