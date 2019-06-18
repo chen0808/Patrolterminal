@@ -69,7 +69,7 @@ public class DayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder
             viewHolder.setGone(R.id.plan_progressbar_ll, false);
             viewHolder.setText(R.id.tv_line_state, "状态 : 未分配");
         }
-        viewHolder.setVisible(R.id.item_line_state, false);
+        viewHolder.setVisible(R.id.tv_line_state, false);
         viewHolder.setVisible(R.id.iv_edit, false);
     }
 }

@@ -30,14 +30,13 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
         AdapterUtils.setIconText(icon, item.getDep_name());
 
         //线路
-        viewHolder.setText(R.id.tv_line_name, item.getLine_name());
+        viewHolder.setText(R.id.tv_line_name, item.getLine_name() + "   " + item.getName());
 
         //时间
-//            if (item.getStart_time() != null && item.getEnd_time() != null) {
-//                viewHolder.setText(R.id.tv_time, "开始时间：" + item.getStart_time() + "   结束时间：" + item.getEnd_time());
-//            }else {
-//                viewHolder.setVisible(R.id.tv_time, true);
-//            }
+        if (item.getStart_time() != null && item.getEnd_time() != null) {
+            viewHolder.setText(R.id.tv_time, "开始时间：" + item.getStart_time() + "   结束时间：" + item.getEnd_time());
+            viewHolder.setVisible(R.id.tv_time, true);
+        }
 
         //编辑
         ImageView edit = viewHolder.getView(R.id.iv_edit);
