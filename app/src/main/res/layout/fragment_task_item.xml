@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp_10"
     android:layout_marginLeft="@dimen/dp_10"
+    android:layout_marginTop="@dimen/dp_10"
     android:layout_marginRight="@dimen/dp_10"
     android:background="@drawable/btn_white">
 
@@ -11,8 +11,8 @@
         android:id="@+id/item_task_date_ll"
         android:layout_width="@dimen/dp_50"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_10"
         android:orientation="vertical">
 
@@ -39,32 +39,16 @@
     <TextView
         android:id="@+id/item_task_name"
         android:layout_width="match_parent"
-        android:layout_marginRight="@dimen/dp_80"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="@dimen/dp_80"
         android:layout_toRightOf="@id/item_task_date_ll"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="名称:xxxx"
         android:textColor="@color/color_10"
         android:textSize="@dimen/sp_14" />
 
-    <TextView
-        android:id="@+id/item_line_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="@dimen/dp_20"
-        android:background="@drawable/state_red_bg"
-        android:paddingLeft="@dimen/dp_10"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:paddingRight="@dimen/dp_10"
-        android:text="未完成"
-        android:textColor="@color/write_red"
-        android:textSize="@dimen/sp_11"
-       />
     <TextView
         android:id="@+id/tv_content_name"
         android:layout_width="wrap_content"
@@ -73,6 +57,7 @@
         android:layout_toRightOf="@id/item_task_date_ll"
         android:text="计划类型："
         android:textSize="@dimen/sp_13" />
+
     <TextView
         android:id="@+id/item_task_type"
         android:layout_width="wrap_content"
@@ -87,55 +72,62 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_task_type"
-        android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/item_task_date_ll"
-        android:layout_marginBottom="@dimen/dp_5"
         android:text="小组负责人：xx"
         android:textSize="@dimen/sp_13" />
+
+    <TextView
+        android:id="@+id/item_line_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_task_personal"
+        android:layout_toRightOf="@id/item_task_date_ll"
+        android:text="未完成"
+        android:textSize="@dimen/sp_13" />
+
     <LinearLayout
         android:id="@+id/plan_progressbar_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/item_task_date_ll"
-        android:layout_marginRight="@dimen/dp_80"
-        android:visibility="gone"
         android:layout_below="@id/item_task_personal"
+        android:layout_marginRight="@dimen/dp_80"
         android:layout_marginBottom="@dimen/dp_5"
+        android:layout_toRightOf="@id/item_task_date_ll"
         android:orientation="horizontal"
-        >
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/plan_progressbar_tv"
             android:layout_width="0dp"
-            android:layout_weight="11"
             android:layout_height="@dimen/dp_20"
-            android:gravity="center_vertical"
             android:layout_marginRight="@dimen/dp_10"
-            android:textSize="@dimen/sp_13"
+            android:layout_weight="11"
+            android:gravity="center_vertical"
             android:text="任务进度(0/10):"
-            />
+            android:textSize="@dimen/sp_13" />
+
         <ProgressBar
             android:id="@+id/plan_progressbar_probar"
             style="?android:attr/progressBarStyleHorizontal"
 
             android:layout_width="0dp"
-            android:layout_weight="10"
             android:layout_height="10dp"
             android:layout_gravity="center"
+            android:layout_weight="10"
             android:max="100"
-            android:progress="0"
-            />
+            android:progress="0" />
+
         <TextView
             android:id="@+id/plan_progressbar_num"
             android:layout_width="0dp"
-            android:layout_weight="4"
             android:layout_height="@dimen/dp_20"
-            android:gravity="center_vertical"
-            android:textSize="@dimen/sp_11"
             android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="4"
+            android:gravity="center_vertical"
             android:text="0%"
-            />
+            android:textSize="@dimen/sp_11" />
     </LinearLayout>
+
     <ImageView
         android:id="@+id/month_plan_go"
         android:layout_width="@dimen/dp_50"

@@ -50,6 +50,7 @@ public class NextWeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseView
 
         //审核状态
         HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
+        viewHolder.setVisible(R.id.hlv_plan_state, true);
         horizontalLineView.setStatus(item.getAudit_status());
 
         //计划类型
