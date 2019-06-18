@@ -5,6 +5,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.WeekPlanDetailAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -17,8 +20,6 @@ import com.patrol.terminal.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -104,7 +105,7 @@ public class DayPlanDetailActivity extends BaseActivity {
         for (int i = 0; i <split.length; i++) {
             String type = split[i];
             DefectBean planTypeBean = new DefectBean();
-            planTypeBean.setContent(StringUtil.getTypeSign(type) + "计划");
+            planTypeBean.setContent(StringUtil.typeSigns[Integer.valueOf(type) - 1] + "计划");
             planTypeBean.setType(0);
             typeList.add(planTypeBean);
         }

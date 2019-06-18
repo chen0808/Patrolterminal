@@ -136,7 +136,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
         for (int i = 0; i < split.length; i++) {
             String type = split[i];
             DefectBean planTypeBean = new DefectBean();
-            planTypeBean.setContent(StringUtil.getTypeSign(type) + "任务");
+            planTypeBean.setContent(StringUtil.typeSigns[Integer.valueOf(type) - 1] + "任务");
             planTypeBean.setType(0);
             typeList.add(planTypeBean);
         }

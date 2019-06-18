@@ -42,10 +42,10 @@ public class NextDayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHo
         viewHolder.setText(R.id.tv_line_name, item.getLine_name() + "   " + item.getName());
 
         //时间
-        if (item.getStart_time() != null && item.getEnd_time() != null) {
-            viewHolder.setText(R.id.tv_time, "时间：" + item.getStart_time() + " ~ " + item.getEnd_time());
-            viewHolder.setVisible(R.id.tv_time, true);
-        }
+//        if (item.getStart_time() != null && item.getEnd_time() != null) {
+//            viewHolder.setText(R.id.tv_time, "时间：" + item.getStart_time() + " ~ " + item.getEnd_time());
+//            viewHolder.setVisible(R.id.tv_time, true);
+//        }
 
         //编辑
         ImageView edit = viewHolder.getView(R.id.iv_edit);
