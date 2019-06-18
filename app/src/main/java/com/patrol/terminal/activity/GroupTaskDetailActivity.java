@@ -164,12 +164,22 @@ public class GroupTaskDetailActivity extends BaseActivity {
     //生成抢单任务
     public void createRobTask() {
         ProgressDialog.show(this, false, "正在加载。。。");
+        List<CreateRobTaskBean> list=new ArrayList();
         CreateRobTaskBean createRobTaskBean = new CreateRobTaskBean();
         createRobTaskBean.setId(bean.getId());
         createRobTaskBean.setIs_rob("1");
+        createRobTaskBean.setGroup_id(bean.getGroup_id());
+        createRobTaskBean.setLine_name(bean.getLine_name());
+        createRobTaskBean.setYear(bean.getYear()+"");
+        createRobTaskBean.setMonth(bean.getMonth()+"");
+        createRobTaskBean.setDay(bean.getDay()+"");
+        createRobTaskBean.setName(bean.getName());
+        createRobTaskBean.setFrom_user_id(SPUtil.getUserId(this));
+        createRobTaskBean.setFrom_user_name(SPUtil.getUserName(this));
+        list.add(createRobTaskBean);
         //获取月计划列表
         BaseRequest.getInstance().getService()
-                .createRobTask(createRobTaskBean)
+                .createRobTasks(list)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
@@ -178,7 +188,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             type = 2;
                             taskSubmit.setText("抢单");
-                            taskSubmit.setBackgroundColor(getResources().getColor(R.color.write_red));
+                            taskSubmit.setBackgroundColor(getResources().getColor(R.color.base_status_bar));
                             Toast.makeText(GroupTaskDetailActivity.this, "成功生成抢单任务", Toast.LENGTH_SHORT).show();
                             tvTableName.setVisibility(View.VISIBLE);
                             tvTableName.setText("关于" + bean.getLine_name() + bean.getName() + "的抢单任务");
@@ -198,9 +208,9 @@ public class GroupTaskDetailActivity extends BaseActivity {
     //抢单
     public void addPersonTask(String user_id, String username, int flag) {
         ProgressDialog.show(this, false, "正在加载。。。");
-        bean.setGroup_list_id(bean.getId());
-        bean.setUser_id(user_id);
-        bean.setUser_name(username);
+//        bean.setGroup_list_id(bean.getId());
+        bean.setWork_user_id(user_id);
+        bean.setWork_user_name(username);
         selectList.add(bean);
 
         //获取月计划列表

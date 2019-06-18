@@ -256,9 +256,9 @@ public class PersonalTaskDetailActivity extends BaseActivity {
     //指派个人任务
     public void addPersonTask(String user_id, String username, int flag) {
         ProgressDialog.show(this, false, "正在加载。。。");
-        bean.setGroup_list_id(bean.getId());
-        bean.setUser_id(user_id);
-        bean.setUser_name(username);
+//        bean.setGroup_list_id(bean.getId());
+        bean.setWork_user_name(user_id);
+        bean.setWork_user_id(username);
         selectList.add(bean);
         //获取月计划列表
         BaseRequest.getInstance().getService()

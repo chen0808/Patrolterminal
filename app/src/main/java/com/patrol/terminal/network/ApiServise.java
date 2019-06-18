@@ -183,8 +183,11 @@ public interface ApiServise {
     @POST("/task/group/list/updatePOST")
     Observable<BaseResult<List<DayOfWeekBean>>> createRobTask(@Body CreateRobTaskBean bean);
 
-    //生成抢单任务
-    @POST("/task/personal/savePOST")
+    //批量生成抢单任务
+    @POST("/task/group/list/robPOST")
+    Observable<BaseResult<List<DayOfWeekBean>>> createRobTasks(@Body  List<CreateRobTaskBean> bean);
+    //生成个人任务
+    @POST("/task/group/list/savePOST")
     Observable<BaseResult<List<DayOfWeekBean>>> addPersonTask(@Body List<GroupTaskBean> bean);
 
     //指派验收任务

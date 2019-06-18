@@ -174,6 +174,10 @@ public class AddGroupTaskActivity extends BaseActivity {
     public void setVisibility(List<GroupOfDayBean> list) {
         if (list.size() == 0) {
             groupTaskNoData.setVisibility(View.VISIBLE);
+            monthYes.setBackgroundColor(getResources().getColor(R.color.image_overlay_false));
+            monthYes.setClickable(false);
+            monthYes.setFocusable(false);
+            monthYes.setEnabled(false);
         } else {
             groupTaskNoData.setVisibility(View.GONE);
         }
