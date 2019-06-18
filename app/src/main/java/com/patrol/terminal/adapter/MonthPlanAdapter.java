@@ -48,6 +48,8 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
             //时间
             if (item.getStart_time() != null && item.getEnd_time() != null) {
                 viewHolder.setText(R.id.tv_time, "开始时间：" + item.getStart_time() + "   结束时间：" + item.getEnd_time());
+            } else {
+                viewHolder.setVisible(R.id.tv_time, true);
             }
 
             //编辑
@@ -62,7 +64,6 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
             TextView tvContent = viewHolder.getView(R.id.tv_content);
             AdapterUtils.setText(tvContent, StringUtil.getTypeSign(item.getType_sign()));
         } else {
-
             viewHolder.setText(R.id.tv_icon, "保")
                     .setBackgroundRes(R.id.tv_icon, R.drawable.plan_green_bg);
             //判断分配状态
