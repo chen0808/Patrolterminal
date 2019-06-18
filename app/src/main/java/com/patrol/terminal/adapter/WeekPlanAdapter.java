@@ -52,9 +52,9 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
         AdapterUtils.setText(tvContent, StringUtil.getTypeSign(item.getType_sign()));
 
         if ("0".equals(item.getDone_status())) {
-            viewHolder.setText(R.id.item_line_status, "分配状态: 未分配");
+            viewHolder.setText(R.id.tv_line_state, "分配状态: 未分配");
         } else {
-            viewHolder.setText(R.id.item_line_status, "分配状态:已分配");
+            viewHolder.setText(R.id.tv_line_state, "分配状态:已分配");
         }
 
         if ("1".equals(item.getAllot_status())) {
@@ -67,8 +67,8 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
         } else {
             viewHolder.setGone(R.id.plan_progressbar_ll, false);
         }
-        viewHolder.setVisible(R.id.item_line_state, false);
-        viewHolder.setVisible(R.id.month_plan_go, true);
-        viewHolder.setVisible(R.id.plan_to_change, false);
+        viewHolder.setVisible(R.id.tv_line_state, false);
+        viewHolder.setVisible(R.id.iv_detail, true);
+        viewHolder.setVisible(R.id.iv_edit, false);
     }
 }
