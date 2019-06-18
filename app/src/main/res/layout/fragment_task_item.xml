@@ -89,7 +89,7 @@
         android:id="@+id/plan_progressbar_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/item_task_personal"
+        android:layout_below="@id/item_line_state"
         android:layout_marginRight="@dimen/dp_80"
         android:layout_marginBottom="@dimen/dp_5"
         android:layout_toRightOf="@id/item_task_date_ll"

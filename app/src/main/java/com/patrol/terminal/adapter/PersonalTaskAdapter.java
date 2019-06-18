@@ -3,6 +3,8 @@ package com.patrol.terminal.adapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
@@ -11,8 +13,6 @@ import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.StringUtil;
 
 import java.util.List;
-
-import androidx.annotation.Nullable;
 
 public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHolder> {
     private int type = 1;
@@ -33,11 +33,11 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
         String finish_status = item.getDone_status();
 
             if ("0".equals(finish_status)){
-                viewHolder.setText(R.id.item_line_state, "未完成");
-                viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_red_bg);
+                viewHolder.setText(R.id.item_line_state, "完成状态：未完成");
+//                viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_red_bg);
             }else {
-                viewHolder.setText(R.id.item_line_state, "已完成");
-                viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_green_bg);
+                viewHolder.setText(R.id.item_line_state, "完成状态：已完成");
+//                viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_green_bg);
             }
         viewHolder.setGone(R.id.plan_progressbar_ll,true);
         viewHolder.setText(R.id.plan_progressbar_tv,"任务进度("+item.getDone_num()+"/"+item.getAll_num()+") :")
