@@ -8,7 +8,6 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -16,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.TaskListAdapter;
+import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.MonthPlanBean;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TaskListActivity extends AppCompatActivity {
+public class TaskListActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;

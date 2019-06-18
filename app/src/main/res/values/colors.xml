@@ -91,4 +91,7 @@
     <color name="login_bg">#FF40639A</color>
     <color name="home_title_bg">#FF1D2D46</color>
     <color name="home_btn_bg">#788DB0</color>
+
+    <color name="base_status_bar">#1D2D46</color>
+    <color name="base_navigation_bar">#1D2D46</color>
 </resources>

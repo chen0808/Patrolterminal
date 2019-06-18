@@ -18,10 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.LineCheckActivity;
+import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
@@ -44,7 +44,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 //检修班月计划添加和修订界面
-public class OverhaulAddMonthPlanActivity extends AppCompatActivity {
+public class OverhaulAddMonthPlanActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;

@@ -6,13 +6,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.base.BaseActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PatrolStandardActivity extends AppCompatActivity {
+public class PatrolStandardActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;

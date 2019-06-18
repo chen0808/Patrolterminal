@@ -7,8 +7,11 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
+import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.fragment.ControlDepFrgment;
 import com.patrol.terminal.fragment.ControlToolFragment;
 import com.patrol.terminal.fragment.NewControlQualityFragment;
@@ -17,14 +20,12 @@ import com.patrol.terminal.widget.NoScrollViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /*填写控制卡*/
-public class ControlCardActivity extends AppCompatActivity {
+public class ControlCardActivity extends BaseActivity {
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)

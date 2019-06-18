@@ -110,8 +110,15 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
                 viewHolder.setVisible(R.id.plan_to_change, false);
                 viewHolder.setText(R.id.item_plan_content, "分配状态 : 已分配");
             }
-            viewHolder.setText(R.id.item_plan_device_name, "基于" + item.getLine_name() + "的保电计划")
-                    .setText(R.id.item_line_status, "停电时间 : " + item.getStart_time() + " - " + item.getEnd_time());
+            if (item.getStart_time() != null) {
+                String startTime = "停电开始时间：" + item.getStart_time();
+                viewHolder.setText(R.id.tv_start_time, startTime);
+            }
+            if (item.getEnd_time() != null) {
+                String endTime = "结束时间：" + item.getEnd_time();
+                viewHolder.setText(R.id.tv_end_time, endTime);
+            }
+            viewHolder.setText(R.id.item_plan_device_name, "基于" + item.getLine_name() + "的保电计划");
         }
     }
 

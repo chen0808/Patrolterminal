@@ -92,13 +92,12 @@ public class NextWeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseView
                 break;
         }
 
-            viewHolder.setGone(R.id.item_line_state, false);
-            HorizontalLineView horizontalLineView = viewHolder.getView(R.id.item_plan_status);
-            horizontalLineView.setStatus(item.getAudit_status());
-            horizontalLineView.setVisibility(View.VISIBLE);
-            viewHolder.setText(R.id.item_plan_device_name, item.getLine_name())
-                    .setText(R.id.item_line_status, "审核状态 :"+StringUtil.getYXBstate(item.getAudit_status()))
-                    .setText(R.id.item_plan_content, StringUtil.getTypeSign(item.getType_sign()));
+        viewHolder.setGone(R.id.item_line_state, false);
+        HorizontalLineView horizontalLineView = viewHolder.getView(R.id.item_plan_status);
+        horizontalLineView.setStatus(item.getAudit_status());
+        horizontalLineView.setVisibility(View.VISIBLE);
+        viewHolder.setText(R.id.item_plan_device_name, item.getLine_name())
+                .setText(R.id.item_plan_content, StringUtil.getTypeSign(item.getType_sign()));
         TextView tvContent = viewHolder.getView(R.id.item_plan_content);
         String text = tvContent.getText().toString();
         String colorText = setColor(text);

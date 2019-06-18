@@ -18,6 +18,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
+import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.LineBean;
 import com.patrol.terminal.bean.WeekPlanBean;
 import com.patrol.terminal.utils.Constant;
@@ -31,12 +32,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DayPlanMakeActivity extends AppCompatActivity {
+public class DayPlanMakeActivity extends BaseActivity {
 
 
     @BindView(R.id.title_back)

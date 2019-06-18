@@ -7,11 +7,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.WeekPlanAdapter;
+import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.WeekListBean;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -26,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WeekPlanListActivity extends AppCompatActivity {
+public class WeekPlanListActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;

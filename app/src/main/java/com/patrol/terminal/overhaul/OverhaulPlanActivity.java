@@ -12,8 +12,11 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
+import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
@@ -36,14 +39,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 //检修班计划管理界面
-public class OverhaulPlanActivity extends AppCompatActivity {
+public class OverhaulPlanActivity extends BaseActivity {
 
     @BindView(R.id.title_name)
     TextView titleName;
