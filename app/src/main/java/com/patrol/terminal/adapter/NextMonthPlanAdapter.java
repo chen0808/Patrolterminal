@@ -44,7 +44,7 @@ public class NextMonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseVi
             if (item.getStart_time() != null && item.getEnd_time() != null) {
                 viewHolder.setText(R.id.tv_time, "开始时间：" + item.getStart_time() + "   结束时间：" + item.getEnd_time());
             } else {
-                viewHolder.setVisible(R.id.tv_time, true);
+                viewHolder.setVisible(R.id.tv_time, false);
             }
 
             //编辑
