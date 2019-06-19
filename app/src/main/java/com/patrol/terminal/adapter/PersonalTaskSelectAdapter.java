@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.EqTower;
 import com.patrol.terminal.bean.GroupTaskBean;
+import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.StringUtil;
 
 import java.util.List;
@@ -62,7 +63,7 @@ public class PersonalTaskSelectAdapter extends BaseAdapter {
         }
         GroupTaskBean bean = list.get(position);
         holder.name.setText(bean.getLine_name()+bean.getName()+"任务");
-        holder.time.setText(StringUtil.getTypeSign(bean.getType_sign()));
+        AdapterUtils.setText(holder.time,StringUtil.getTypeSign(bean.getType_sign()));
         return convertView;
     }
 
