@@ -9,7 +9,7 @@ import com.patrol.terminal.R;
 
 public class AdapterUtils {
     //设置图标文字
-    public static void setIconText(TextView icon, String dep_name){
+    public static void setIconText(TextView icon, String dep_name) {
         switch (dep_name) {
             case "西固运维班":
                 icon.setText("西固");
@@ -35,6 +35,9 @@ public class AdapterUtils {
                 icon.setText("和华");
                 icon.setBackgroundResource(R.drawable.plan_red_bg);
                 break;
+            case "榆中运维班":
+                icon.setText("榆中");
+                icon.setBackgroundResource(R.drawable.plan_green_bg);
         }
     }
 
@@ -98,7 +101,7 @@ public class AdapterUtils {
     }
 
     //设置是否可以修改
-    public static void setStatus(ImageView edit,String audit_status){
+    public static void setStatus(ImageView edit, String audit_status) {
         switch (audit_status) {
             case "0":
             case "4":
