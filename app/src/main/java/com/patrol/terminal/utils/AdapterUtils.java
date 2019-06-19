@@ -88,6 +88,12 @@ public class AdapterUtils {
         if (text.contains("已抢单")) {
             text = text.replace("已抢单", "<font color='#057dff'>已抢单</font>");
         }
+        if (text.contains("已完成")) {
+            text = text.replace("已完成", "<font color='#8BC34A'>已完成</font>");
+        }
+        if (text.contains("未完成")) {
+            text = text.replace("未完成", "<font color='#fb5050'>未完成</font>");
+        }
         textView.setText(Html.fromHtml(text));
     }
 
