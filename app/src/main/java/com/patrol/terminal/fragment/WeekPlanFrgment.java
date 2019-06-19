@@ -158,6 +158,9 @@ public class WeekPlanFrgment extends BaseFragment {
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             state = "1,2,3,4,5";
             depId = null;
+        }else if (mJobType.contains(Constant.RUN_SUPERVISOR)){
+            state = "2,3,4,5";
+            depId = null;
         }
         new Thread(new Runnable() {
             @Override

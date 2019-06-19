@@ -534,9 +534,10 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         }
     }
 
+
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         if (refreshTodo != null) {
             refreshTodo.dispose();
         }

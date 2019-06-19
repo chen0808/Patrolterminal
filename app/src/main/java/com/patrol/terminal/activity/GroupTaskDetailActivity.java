@@ -82,7 +82,14 @@ public class GroupTaskDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
         bean = (GroupTaskBean) getIntent().getParcelableExtra("GroupTaskBean");
-        getGroupList();
+        String from = getIntent().getStringExtra("from");
+        if ("todoGroup".equals(from)){
+            String task_id = getIntent().getStringExtra("task_id");
+            getGroupList(task_id);
+        }else {
+            getGroupList();
+        }
+
     }
 
 
@@ -105,7 +112,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
     //获取月计划列表
     public void getGroupList() {
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-       if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) && "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
+       if ((jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_LEADER))&& "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
             type = 1;
             taskSubmit.setVisibility(View.VISIBLE);
         } else if ("1".equals(bean.getIs_rob())) {
@@ -189,9 +196,10 @@ public class GroupTaskDetailActivity extends BaseActivity {
                             type = 2;
                             taskSubmit.setText("抢单");
                             taskSubmit.setBackgroundColor(getResources().getColor(R.color.base_status_bar));
-                            Toast.makeText(GroupTaskDetailActivity.this, "成功生成抢单任务", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GroupTaskDetailActivity.this, "生成抢单任务", Toast.LENGTH_SHORT).show();
                             tvTableName.setVisibility(View.VISIBLE);
                             tvTableName.setText("关于" + bean.getLine_name() + bean.getName() + "的抢单任务");
+                            RxRefreshEvent.publish("refreshTodo");
                             setResult(RESULT_OK);
 
                         }
@@ -234,6 +242,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                             tvLineType.setVisibility(View.VISIBLE);
                             tvLineType.setText("执行人 : " + username);
                             RxRefreshEvent.publish("refreshPersonal");
+                            RxRefreshEvent.publish("refreshTodo");
                             setResult(RESULT_OK);
                         } else {
                             if (flag == 1) {
@@ -254,5 +263,25 @@ public class GroupTaskDetailActivity extends BaseActivity {
                 });
     }
 
+    //获取小组任务详情
+    public void getGroupList(String id) {
 
+        BaseRequest.getInstance().getService()
+                .getGroupDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<GroupTaskBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<GroupTaskBean> t) throws Exception {
+                        bean=t.getResults();
+                        getGroupList();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+
+    }
 }
