@@ -50,7 +50,7 @@ public class StringUtil {
         for (int i = 0; i < split.length; i++) {
             int index = Integer.parseInt(split[i]) - 1;
             if (split.length == 1) {
-                typeNmae = "1、" + typeSigns[index];
+                typeNmae =  typeSigns[index];
             } else {
                 if (i == 0) {
                     typeNmae = (i + 1) + "、" + typeSigns[index];

@@ -370,6 +370,10 @@ public interface ApiServise {
     @GET("/task/group/list/listGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("work_user_id") String work_user_id, @Query("order") String order, @Query("safe") String safe);
 
+    //组任务详情
+    @GET("/task/group/list/byIdGET")
+    Observable<BaseResult<GroupTaskBean>> getGroupDetail(@Query("id") String id);
+
     //个人任务列表获取小组任务
     @GET("/task/group/list/listGET")
     Observable<BaseResult<List<GroupTaskBean>>> getPersonalOfGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("allot_status") String allot_status, @Query("work_user_id") String work_user_id, @Query("order") String order);
@@ -417,9 +421,6 @@ public interface ApiServise {
     @GET("/plan/day/line/allGET")
     Observable<BaseResult<List<WeekPlanDetailBean>>> getDayDetail(@Query("id") String d_id);
 
-    //小组任务详情
-    @GET("task/group/list/listGET")
-    Observable<BaseResult<List<GroupTaskBean>>> getGroupDetail(@Query("id") String id);
 
     //个人任务详情
     @GET("/plan/type/dataGET")

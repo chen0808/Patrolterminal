@@ -86,12 +86,18 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_month_plan_detail);
         ButterKnife.bind(this);
         initView();
-        initdata();
-        getPersonalList();
+        bean = getIntent().getParcelableExtra("bean");
+        String from = getIntent().getStringExtra("from");
+        if ("todoPersonal".equals(from)){
+            String task_id = getIntent().getStringExtra("task_id");
+            getGroupList(task_id);
+        }else {
+            initdata();
+        }
     }
 
     private void initdata() {
-        bean = getIntent().getParcelableExtra("bean");
+
         SPUtil.put(this, "ids", "task_id", bean.getId());
         tvLineType.setVisibility(View.VISIBLE);
 
@@ -114,20 +120,18 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         year = bean.getYear();
         month = bean.getMonth();
         day = bean.getDay();
-
+        getPersonalList();
     }
 
 
     private void initView() {
         tvLineTower.setVisibility(View.GONE);
-
         titleName.setText("个人任务详情");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         monthPlanDetailRc.setLayoutManager(manager);
         monthPlanDetailAdapter = new PersonalTaskDetailAdapter(R.layout.item_plan_detail, results);
         monthPlanDetailRc.setAdapter(monthPlanDetailAdapter);
         monthPlanDetailAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PersonalTaskListBean bean = results.get(position);
@@ -305,5 +309,27 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 showSingleChooseDialog(names);
                 break;
         }
+    }
+
+    //获取小组任务详情
+    public void getGroupList(String id) {
+
+        BaseRequest.getInstance().getService()
+                .getGroupDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<GroupTaskBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<GroupTaskBean> t) throws Exception {
+                        bean=t.getResults();
+                        initdata();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+
     }
 }
