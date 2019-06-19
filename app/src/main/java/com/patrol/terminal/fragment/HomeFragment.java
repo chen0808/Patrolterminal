@@ -412,7 +412,9 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 ((NewMainActivity) getActivity()).setFragment(1);
                 break;
             case R.id.rl_task_now:
-                getActivity().startActivity(new Intent(getActivity(), NewTaskActivity.class));
+                Intent intent = new Intent(getActivity(), NewTaskActivity.class);
+                intent.putExtra("index", 1);
+                getActivity().startActivity(intent);
                 break;
             case R.id.rl_task_history:
                 getActivity().startActivity(new Intent(getActivity(), NewTaskActivity.class));

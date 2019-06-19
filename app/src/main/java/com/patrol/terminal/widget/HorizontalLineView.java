@@ -7,9 +7,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.patrol.terminal.R;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -41,36 +42,41 @@ public class HorizontalLineView extends LinearLayout {
         switch (type) {
             case "0":
             case "4":
-                view2.setBackgroundResource(R.drawable.gray_oval);
+                view1.setBackgroundResource(R.drawable.line_point_0);
                 line1.setBackgroundColor(getResources().getColor(R.color.color_69));
-                view3.setBackgroundResource(R.drawable.gray_oval);
+                view2.setBackgroundResource(R.drawable.gray_oval);
                 line2.setBackgroundColor(getResources().getColor(R.color.color_69));
-                view4.setBackgroundResource(R.drawable.gray_oval);
+                view3.setBackgroundResource(R.drawable.gray_oval);
                 line3.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view4.setBackgroundResource(R.drawable.gray_oval);
                 break;
             case "1":
-                view2.setBackgroundResource(R.drawable.green_oval);
-                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view3.setBackgroundResource(R.drawable.gray_oval);
+                view1.setBackgroundResource(R.drawable.line_point_1);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_point_1));
+                view2.setBackgroundResource(R.drawable.line_point_1);
                 line2.setBackgroundColor(getResources().getColor(R.color.color_69));
-                view4.setBackgroundResource(R.drawable.gray_oval);
+                view3.setBackgroundResource(R.drawable.gray_oval);
                 line3.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view4.setBackgroundResource(R.drawable.gray_oval);
                 break;
             case "2":
-                view2.setBackgroundResource(R.drawable.green_oval);
-                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view3.setBackgroundResource(R.drawable.green_oval);
-                line2.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view4.setBackgroundResource(R.drawable.gray_oval);
+                view1.setBackgroundResource(R.drawable.line_point_2);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_point_2));
+                view2.setBackgroundResource(R.drawable.line_point_2);
+                line2.setBackgroundColor(getResources().getColor(R.color.line_point_2));
+                view3.setBackgroundResource(R.drawable.line_point_2);
                 line3.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view4.setBackgroundResource(R.drawable.gray_oval);
                 break;
             case "3":
-                view2.setBackgroundResource(R.drawable.green_oval);
-                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view3.setBackgroundResource(R.drawable.green_oval);
-                line2.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view4.setBackgroundResource(R.drawable.green_oval);
-                line3.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view1.setBackgroundResource(R.drawable.line_point_3);
+                view1.setBackgroundResource(R.drawable.line_point_3);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_point_3));
+                view2.setBackgroundResource(R.drawable.line_point_3);
+                line2.setBackgroundColor(getResources().getColor(R.color.line_point_3));
+                view3.setBackgroundResource(R.drawable.line_point_3);
+                line3.setBackgroundColor(getResources().getColor(R.color.line_point_3));
+                view4.setBackgroundResource(R.drawable.line_point_3);
                 break;
 
         }
