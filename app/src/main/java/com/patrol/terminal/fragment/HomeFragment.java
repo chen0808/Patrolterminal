@@ -204,7 +204,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 }
             }
         });
-        initBackLog();
+//        initBackLog();
         initTask();
         initLastTask();
         initPlanFinishRate();

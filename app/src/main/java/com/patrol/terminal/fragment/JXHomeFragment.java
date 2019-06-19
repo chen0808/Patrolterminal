@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DefectActivity;
@@ -43,8 +46,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -155,7 +156,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         }else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.REFURBISHMENT_LEADER)
                 || jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)
                 || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) { //检修班长和检修专责,保电专责，验收专责，安全专责只有待办和当前任务 //检修主管只在待办审核月计划
-            llBacklog.setVisibility(View.VISIBLE);
+//            llBacklog.setVisibility(View.VISIBLE);
             llLastTask.setVisibility(View.GONE);
         }
 

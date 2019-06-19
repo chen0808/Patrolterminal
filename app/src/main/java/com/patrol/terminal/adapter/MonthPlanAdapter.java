@@ -1,5 +1,6 @@
 package com.patrol.terminal.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,6 +58,7 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
 
             //审核状态
             HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
+            horizontalLineView.setVisibility(View.VISIBLE);
             horizontalLineView.setStatus(item.getAudit_status());
 
             //计划类型
@@ -66,13 +68,13 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
             viewHolder.setText(R.id.tv_icon, "保")
                     .setBackgroundRes(R.id.tv_icon, R.drawable.plan_green_bg);
             //判断分配状态
-            viewHolder.setText(R.id.tv_content_name, "分配状态：");
+            viewHolder.setText(R.id.tv_allot_status, "分配状态：");
             if ("0".equals(item.getAllot_status())) {
                 viewHolder.setVisible(R.id.iv_edit, true);
-                viewHolder.setText(R.id.tv_content, "未分配");
+                viewHolder.setText(R.id.tv_allot_status, "未分配");
             } else {
                 viewHolder.setVisible(R.id.iv_edit, false);
-                viewHolder.setText(R.id.tv_content, "已分配");
+                viewHolder.setText(R.id.tv_allot_status, "已分配");
             }
 //            if (item.getStart_time() != null) {
 //                String startTime = "停电开始时间：" + item.getStart_time();

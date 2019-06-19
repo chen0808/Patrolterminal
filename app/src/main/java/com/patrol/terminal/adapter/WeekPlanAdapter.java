@@ -1,5 +1,6 @@
 package com.patrol.terminal.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
 
         //审核状态
         HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
+        horizontalLineView.setVisibility(View.VISIBLE);
         horizontalLineView.setStatus(item.getAudit_status());
 
         //计划类型
