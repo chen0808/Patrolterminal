@@ -53,11 +53,11 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
         AdapterUtils.setText(tvContent, StringUtil.getTypeSign(item.getType_sign()));
 
         if ("0".equals(item.getDone_status())) {
-            viewHolder.setText(R.id.tv_allot_status, "分配状态: 未分配");
-            viewHolder.setTextColor(R.id.tv_allot_status, mContext.getResources().getColor(R.color.home_red));
+            TextView tvAllorStatus = viewHolder.getView(R.id.tv_allot_status);
+            AdapterUtils.setText(tvAllorStatus, "分配状态：未分配");
         } else {
-            viewHolder.setText(R.id.tv_allot_status, "分配状态:已分配");
-            viewHolder.setTextColor(R.id.tv_allot_status, mContext.getResources().getColor(R.color.line_green));
+            TextView tvAllorStatus = viewHolder.getView(R.id.tv_allot_status);
+            AdapterUtils.setText(tvAllorStatus, "分配状态：已分配");
         }
 
         if ("1".equals(item.getAllot_status())) {

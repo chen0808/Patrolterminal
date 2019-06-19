@@ -68,15 +68,14 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
             viewHolder.setText(R.id.tv_icon, "保")
                     .setBackgroundRes(R.id.tv_icon, R.drawable.plan_green_bg);
             //判断分配状态
-            viewHolder.setText(R.id.tv_allot_status, "分配状态：");
             if ("0".equals(item.getAllot_status())) {
                 viewHolder.setVisible(R.id.iv_edit, true);
-                viewHolder.setText(R.id.tv_allot_status, "未分配");
-                viewHolder.setTextColor(R.id.tv_allot_status, mContext.getResources().getColor(R.color.home_red));
+                TextView tvAllorStatus = viewHolder.getView(R.id.tv_allot_status);
+                AdapterUtils.setText(tvAllorStatus, "分配状态：未分配");
             } else {
                 viewHolder.setVisible(R.id.iv_edit, false);
-                viewHolder.setText(R.id.tv_allot_status, "已分配");
-                viewHolder.setTextColor(R.id.tv_allot_status, mContext.getResources().getColor(R.color.line_green));
+                TextView tvAllorStatus = viewHolder.getView(R.id.tv_allot_status);
+                AdapterUtils.setText(tvAllorStatus, "分配状态：已分配");
             }
 //            if (item.getStart_time() != null) {
 //                String startTime = "停电开始时间：" + item.getStart_time();

@@ -5,10 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 
 public class AdapterUtils {
@@ -82,6 +78,15 @@ public class AdapterUtils {
         }
         if (text.contains("验收")) {
             text = text.replace("验收", "<font color='#0070ff'>验收</font>");
+        }
+        if (text.contains("已分配")) {
+            text = text.replace("已分配", "<font color='#8BC34A'>已分配</font>");
+        }
+        if (text.contains("未分配")) {
+            text = text.replace("未分配", "<font color='#fb5050'>未分配</font>");
+        }
+        if (text.contains("已抢单")) {
+            text = text.replace("已抢单", "<font color='#057dff'>已抢单</font>");
         }
         textView.setText(Html.fromHtml(text));
     }
