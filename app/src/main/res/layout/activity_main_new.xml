@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <com.patrol.terminal.widget.NoScrollViewPager
         android:id="@+id/fragment_vp"
@@ -8,13 +8,24 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/home_bottom" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_gray"></View>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/home_bottom"
+        android:background="@color/bg_gray"></View>
 
     <RelativeLayout
         android:id="@+id/home_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:layout_alignParentBottom="true"
-        >
+        android:layout_marginBottom="1dp">
         <!-- 底部tab -->
         <RadioGroup
             android:id="@+id/ll_bottom_tab"
@@ -24,62 +35,61 @@
             android:background="@color/base_navigation_bar"
             android:baselineAligned="true"
             android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/main_home_rb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/title_home"
-                android:gravity="center"
+                android:button="@null"
                 android:checked="true"
                 android:drawableTop="@drawable/selector_home_rb"
-                android:button="@null"
-                />
+                android:gravity="center"
+                android:text="@string/title_home" />
+
             <RadioButton
                 android:id="@+id/main_exame_rb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/title_dashboard"
-                android:gravity="center"
-                android:drawableTop="@drawable/selector_exame_rb"
                 android:button="@null"
-                />
+                android:drawableTop="@drawable/selector_exame_rb"
+                android:gravity="center"
+                android:text="@string/title_dashboard" />
+
             <RadioButton
                 android:id="@+id/main_history_rb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/title_analyze"
-                android:gravity="center"
-                android:drawableTop="@drawable/selector_history_rb"
                 android:button="@null"
-                />
+                android:drawableTop="@drawable/selector_history_rb"
+                android:gravity="center"
+                android:text="@string/title_analyze" />
+
             <RadioButton
                 android:id="@+id/main_my_rb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/title_me"
-                android:gravity="center"
-                android:drawableTop="@drawable/selector_my_rb"
                 android:button="@null"
-                />
+                android:drawableTop="@drawable/selector_my_rb"
+                android:gravity="center"
+                android:text="@string/title_me" />
 
         </RadioGroup>
+
         <TextView
             android:id="@+id/todo_num"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:text="0"
-            android:gravity="center"
-            android:visibility="gone"
-            android:textSize="@dimen/sp_11"
-            android:textColor="@color/white"
-           android:layout_marginLeft="160dp"
+            android:layout_marginLeft="160dp"
             android:background="@drawable/plan_red_bg"
-            />
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_11"
+            android:visibility="gone" />
     </RelativeLayout>
 </RelativeLayout>

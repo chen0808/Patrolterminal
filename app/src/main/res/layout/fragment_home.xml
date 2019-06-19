@@ -190,6 +190,11 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/main_top" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="20dp"></View>
@@ -211,7 +216,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
                 android:src="@mipmap/todo" />
 
             <TextView
@@ -219,7 +225,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="50dp"
                 android:text="待办"
                 android:textSize="20sp" />
         </RelativeLayout>
@@ -239,7 +245,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
                 android:src="@mipmap/task_now" />
 
             <TextView
@@ -247,7 +254,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="50dp"
                 android:text="当前任务"
                 android:textSize="20sp" />
         </RelativeLayout>
@@ -276,7 +283,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
                 android:src="@mipmap/task_history" />
 
             <TextView
@@ -284,7 +292,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="50dp"
                 android:text="历史任务"
                 android:textSize="20sp" />
         </RelativeLayout>
@@ -304,7 +312,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
                 android:src="@mipmap/day_plan_finish" />
 
             <TextView
@@ -312,7 +321,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="50dp"
                 android:text="日计划完成"
                 android:textSize="20sp" />
         </RelativeLayout>
@@ -324,10 +333,6 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"></View>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/main_bottom" />
 
     <RelativeLayout
         android:id="@+id/ll_backlog"
