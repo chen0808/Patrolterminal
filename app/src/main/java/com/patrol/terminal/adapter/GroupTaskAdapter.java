@@ -39,13 +39,16 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
         String allot_status = item.getAllot_status();
         if ("0".equals(allot_status)) {
             viewHolder.setText(R.id.item_line_state, "分配状态：未分配");
+            viewHolder.setTextColor(R.id.tv_allot_status, mContext.getResources().getColor(R.color.home_red));
             viewHolder.setGone(R.id.plan_progressbar_ll, false);
         } else {
 
             if ("1".equals(item.getIs_rob())) {
                 viewHolder.setText(R.id.item_line_state, "分配状态：已抢单");
+                viewHolder.setTextColor(R.id.tv_allot_status, mContext.getResources().getColor(R.color.blue));
             } else {
                 viewHolder.setText(R.id.item_line_state, "分配状态：已分配");
+                viewHolder.setTextColor(R.id.tv_allot_status, mContext.getResources().getColor(R.color.line_green));
             }
 
             viewHolder.setGone(R.id.plan_progressbar_ll, true);

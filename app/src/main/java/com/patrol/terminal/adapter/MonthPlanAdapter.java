@@ -72,9 +72,11 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
             if ("0".equals(item.getAllot_status())) {
                 viewHolder.setVisible(R.id.iv_edit, true);
                 viewHolder.setText(R.id.tv_allot_status, "未分配");
+                viewHolder.setTextColor(R.id.tv_allot_status, mContext.getResources().getColor(R.color.home_red));
             } else {
                 viewHolder.setVisible(R.id.iv_edit, false);
                 viewHolder.setText(R.id.tv_allot_status, "已分配");
+                viewHolder.setTextColor(R.id.tv_allot_status, mContext.getResources().getColor(R.color.line_green));
             }
 //            if (item.getStart_time() != null) {
 //                String startTime = "停电开始时间：" + item.getStart_time();
