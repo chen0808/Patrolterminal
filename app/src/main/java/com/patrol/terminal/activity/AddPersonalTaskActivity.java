@@ -298,11 +298,10 @@ public class AddPersonalTaskActivity extends BaseActivity {
     //保存
     public void savaGroupTask() {
 
-
         for (int i = 0; i < selectBean.size(); i++) {
             GroupTaskBean groupTaskBean = selectBean.get(i);
 
-            groupTaskBean.setWork_user_name(addPeoList.get(0).getUser_id());
+            groupTaskBean.setWork_user_id(addPeoList.get(0).getUser_id());
             groupTaskBean.setWork_user_name(addPeoList.get(0).getUser_name());
             groupTaskBean.setFrom_user_id(SPUtil.getUserId(this));
             groupTaskBean.setFrom_user_name(SPUtil.getUserName(this));
@@ -361,7 +360,9 @@ public class AddPersonalTaskActivity extends BaseActivity {
                         if (t.getCode() == 1) {
 
                             Toast.makeText(AddPersonalTaskActivity.this, "生成抢单任务", Toast.LENGTH_SHORT).show();
+                           RxRefreshEvent.publish("refreshGroup");
                             setResult(RESULT_OK);
+                            finish();
                         }
                         ProgressDialog.cancle();
 
@@ -572,7 +573,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 } else {
                     for (int i = 0; i < addPeoList.size(); i++) {
                         DepUserBean depUserBean = addPeoList.get(i);
-                        if ("2".equals(depUserBean.getSign())) {
+                        if (s.equals(depUserBean.getUser_name())) {
                             addPeoList.remove(i);
                         }
                     }

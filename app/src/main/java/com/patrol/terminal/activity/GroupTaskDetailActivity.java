@@ -112,7 +112,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
             type = 2;
             taskSubmit.setVisibility(View.VISIBLE);
             taskSubmit.setText("抢单");
-            taskSubmit.setBackgroundColor(getResources().getColor(R.color.write_red));
+            taskSubmit.setBackgroundColor(getResources().getColor(R.color.base_status_bar));
             tvTableName.setVisibility(View.VISIBLE);
             tvTableName.setText("关于" + bean.getLine_name() + bean.getName() + "的抢单任务");
         }
@@ -193,6 +193,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                             tvTableName.setVisibility(View.VISIBLE);
                             tvTableName.setText("关于" + bean.getLine_name() + bean.getName() + "的抢单任务");
                             setResult(RESULT_OK);
+
                         }
                         ProgressDialog.cancle();
 
