@@ -68,6 +68,7 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
             viewHolder.setText(R.id.tv_icon, "保")
                     .setBackgroundRes(R.id.tv_icon, R.drawable.plan_green_bg);
             //判断分配状态
+            viewHolder.setVisible(R.id.tv_allot_status, true);
             if ("0".equals(item.getAllot_status())) {
                 viewHolder.setVisible(R.id.iv_edit, true);
                 TextView tvAllorStatus = viewHolder.getView(R.id.tv_allot_status);
