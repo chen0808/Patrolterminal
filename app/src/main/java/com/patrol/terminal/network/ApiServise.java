@@ -186,6 +186,10 @@ public interface ApiServise {
     //批量生成抢单任务
     @POST("/task/group/list/robPOST")
     Observable<BaseResult<List<DayOfWeekBean>>> createRobTasks(@Body  List<CreateRobTaskBean> bean);
+
+    //批量生成抢单任务
+    @POST("/task/group/list/recallPOST")
+    Observable<BaseResult<List<DayOfWeekBean>>> cancleRobTasks(@Body  List<CreateRobTaskBean> bean);
     //生成个人任务
     @POST("/task/group/list/savePOST")
     Observable<BaseResult<List<DayOfWeekBean>>> addPersonTask(@Body List<GroupTaskBean> bean);
@@ -619,7 +623,7 @@ public interface ApiServise {
     //获取所有缺陷库
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
     @GET("task/defect/listGET")
-    Observable<BaseResult<List<DefectFragmentBean>>> getAllDefact(/*@Query("dep_id") String type_id, */@Query("order") String order);
+    Observable<BaseResult<List<DefectFragmentBean>>> getAllDefact(/*@Query("dep_id") String type_id, */@Query("order") String order,@Query("limit") String limit);
 
     //获取所有隐患库task/defect/saveDefect
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1

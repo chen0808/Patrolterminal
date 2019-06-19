@@ -70,7 +70,7 @@ public class DefectActivity extends BaseActivity {
         }
         ProgressDialog.show(DefectActivity.this, false, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getAllDefact(/*dep_id, */"find_time")
+                .getAllDefact(/*dep_id, */"find_time","50")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(this) {

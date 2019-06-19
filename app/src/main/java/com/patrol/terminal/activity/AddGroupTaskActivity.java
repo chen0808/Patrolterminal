@@ -29,6 +29,7 @@ import com.patrol.terminal.bean.DefectBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.LineTypeBean;
+import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
@@ -523,6 +524,11 @@ public class AddGroupTaskActivity extends BaseActivity {
 
     //保存
     public void savaGroupTask() {
+        if (duty_user_id.equals(SPUtil.getUserId(this))){
+            String string = SPUtil.getString(AddGroupTaskActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+            SPUtil.putString(AddGroupTaskActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER + "," + string);
+
+        }
         AddGroupTaskReqBean.UsersBean usersBean=new AddGroupTaskReqBean.UsersBean();
         usersBean.setSign("1");
         usersBean.setUser_id(SPUtil.getUserId(this));

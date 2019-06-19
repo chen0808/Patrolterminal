@@ -93,7 +93,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         jobType = SPUtil.getString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         FileDownloader.init(this);
         checkPremission();
-        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
             getGroupName();
         }
         initView();
@@ -247,8 +247,8 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                             GroupBean results = t.getResults();
                             if (results != null) {
                                 if ("2".contains(results.getSign())) {
-                                    SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER + "," + Constant.RUNNING_SQUAD_MEMBER);
-                                    jobType = Constant.RUNNING_SQUAD_TEMA_LEADER;
+                                    SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER + "," + jobType);
+                                    jobType = jobType+","+Constant.RUNNING_SQUAD_TEMA_LEADER;
                                 }
                             }
                         }

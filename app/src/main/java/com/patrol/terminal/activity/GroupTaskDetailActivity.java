@@ -1,5 +1,6 @@
 package com.patrol.terminal.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -7,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +21,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.CreateRobTaskBean;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DefectBean;
+import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -73,6 +76,9 @@ public class GroupTaskDetailActivity extends BaseActivity {
     private List<GroupTaskBean> selectList = new ArrayList<>();
     private int type = 1;
     private GroupTaskBean bean;
+    private List<DepUserBean> personalList;
+    private String[] personals;
+    private AlertDialog personalDialog;
 
 
     @Override
@@ -115,6 +121,13 @@ public class GroupTaskDetailActivity extends BaseActivity {
        if ((jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_LEADER))&& "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
             type = 1;
             taskSubmit.setVisibility(View.VISIBLE);
+
+            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+                titleSettingTv.setText("指派");
+                titleSetting.setVisibility(View.VISIBLE);
+                getPersonal();
+            }
+
         } else if ("1".equals(bean.getIs_rob())) {
             type = 2;
             taskSubmit.setVisibility(View.VISIBLE);
@@ -122,6 +135,10 @@ public class GroupTaskDetailActivity extends BaseActivity {
             taskSubmit.setBackgroundColor(getResources().getColor(R.color.base_status_bar));
             tvTableName.setVisibility(View.VISIBLE);
             tvTableName.setText("关于" + bean.getLine_name() + bean.getName() + "的抢单任务");
+           if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+               titleSettingTv.setText("撤销");
+               titleSetting.setVisibility(View.VISIBLE);
+           }
         }
 
         if ("1".equals(bean.getAllot_status())) {
@@ -151,11 +168,20 @@ public class GroupTaskDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.title_back, R.id.task_submit})
+    @OnClick({R.id.title_back, R.id.task_submit,R.id.title_setting_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
+                break;
+            case R.id.title_setting_tv:
+                String name = titleSettingTv.getText().toString();
+                if ("指派".equals(name)) {
+                    showPersonalGroup();
+                }else if ("撤销".equals(name)){
+                    cancleRobTask();
+                }
+
                 break;
             case R.id.task_submit:
                 if (type == 1) {
@@ -199,6 +225,8 @@ public class GroupTaskDetailActivity extends BaseActivity {
                             Toast.makeText(GroupTaskDetailActivity.this, "生成抢单任务", Toast.LENGTH_SHORT).show();
                             tvTableName.setVisibility(View.VISIBLE);
                             tvTableName.setText("关于" + bean.getLine_name() + bean.getName() + "的抢单任务");
+                            titleSettingTv.setText("撤销");
+                            titleSetting.setVisibility(View.VISIBLE);
                             RxRefreshEvent.publish("refreshTodo");
                             setResult(RESULT_OK);
 
@@ -213,7 +241,53 @@ public class GroupTaskDetailActivity extends BaseActivity {
                     }
                 });
     }
+    //撤销抢单任务
+    public void cancleRobTask() {
+        ProgressDialog.show(this, false, "正在加载。。。");
+        List<CreateRobTaskBean> list=new ArrayList();
+        CreateRobTaskBean createRobTaskBean = new CreateRobTaskBean();
+        createRobTaskBean.setId(bean.getId());
+        createRobTaskBean.setIs_rob("0");
+        createRobTaskBean.setGroup_id(bean.getGroup_id());
+        createRobTaskBean.setLine_name(bean.getLine_name());
+        createRobTaskBean.setYear(bean.getYear()+"");
+        createRobTaskBean.setMonth(bean.getMonth()+"");
+        createRobTaskBean.setDay(bean.getDay()+"");
+        createRobTaskBean.setName(bean.getName());
+        createRobTaskBean.setFrom_user_id(SPUtil.getUserId(this));
+        createRobTaskBean.setFrom_user_name(SPUtil.getUserName(this));
+        list.add(createRobTaskBean);
+        //获取月计划列表
+        BaseRequest.getInstance().getService()
+                .cancleRobTasks(list)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            type = 2;
+                            taskSubmit.setText("生成抢单任务");
+                            taskSubmit.setBackgroundColor(getResources().getColor(R.color.write_red));
+                            Toast.makeText(GroupTaskDetailActivity.this, "撤销成功", Toast.LENGTH_SHORT).show();
+                            tvTableName.setVisibility(View.GONE);
+                            titleSettingTv.setText("指派");
+                            titleSetting.setVisibility(View.VISIBLE);
+                            getPersonal();
+                            RxRefreshEvent.publish("refreshTodo");
+                            setResult(RESULT_OK);
 
+                        }
+                        ProgressDialog.cancle();
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
     //抢单
     public void addPersonTask(String user_id, String username, int flag) {
         ProgressDialog.show(this, false, "正在加载。。。");
@@ -283,5 +357,91 @@ public class GroupTaskDetailActivity extends BaseActivity {
                     }
                 });
 
+    }
+    //获取每个班组组员列表
+    public void getPersonal() {
+
+        BaseRequest.getInstance().getService()
+                .getGroupPersonal(year, month, day, SPUtil.getDepId(this), SPUtil.getUserId(this), "2")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DepUserBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<DepUserBean>> t) throws Exception {
+                        personalList = t.getResults();
+                        personals = new String[personalList.size()];
+                        for (int i = 0; i < personalList.size(); i++) {
+                            personals[i] = personalList.get(i).getUser_name();
+                        }
+
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }
+
+    public void showPersonalGroup() {
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle("选择负责人");
+        /**
+         *第一个参数:弹出框的消息集合，一般为字符串集合
+         * 第二个参数：默认被选中的，布尔类数组
+         * 第三个参数：勾选事件监听
+         */
+        alertBuilder.setSingleChoiceItems(personals, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int options1) {
+
+                String name = personals[options1];
+                for (int i = 0; i < personalList.size(); i++) {
+                    DepUserBean depUserBean = personalList.get(i);
+                    if (name.equals(depUserBean.getUser_name())) {
+                        savaGroupTask(depUserBean);
+                    }
+                }
+                personalDialog.dismiss();
+            }
+        });
+
+        personalDialog = alertBuilder.create();
+        personalDialog.show();
+    }
+
+    //保存
+    public void savaGroupTask(  DepUserBean depUserBean) {
+    List<GroupTaskBean> selectBean=new ArrayList<>();
+
+        bean.setWork_user_id(depUserBean.getUser_id());
+        bean.setWork_user_name(depUserBean.getUser_name());
+        bean.setFrom_user_id(SPUtil.getUserId(this));
+        bean.setFrom_user_name(SPUtil.getUserName(this));
+        selectBean.add(bean);
+        BaseRequest.getInstance().getService()
+                .addPersonTask(selectBean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            setResult(RESULT_OK);
+                            RxRefreshEvent.publish("refreshGroup");
+                            Toast.makeText(GroupTaskDetailActivity.this, "指派成功", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(GroupTaskDetailActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
     }
 }
