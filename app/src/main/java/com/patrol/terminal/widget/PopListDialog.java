@@ -31,7 +31,7 @@ private Activity paramActivity;
         for (int i = 0; i <data.size(); i++) {
             DepBean depBean = data.get(i);
             TextView textView=new TextView(paramActivity);
-            ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Utils.dip2px(paramActivity, 30));
+            ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Utils.dip2px(paramActivity, 40));
             textView.setLayoutParams(params);
             textView.setGravity(Gravity.CENTER);
             textView.setText(depBean.getName());

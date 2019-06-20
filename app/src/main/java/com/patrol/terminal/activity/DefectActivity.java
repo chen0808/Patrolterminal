@@ -199,9 +199,6 @@ public class DefectActivity extends BaseActivity {
                 searchDelete.setVisibility(View.GONE);
                 search = "";
                 tvContent.setText("");
-                pageNum=1;
-                groupTaskAdapter.setNewData(defectdata);
-                getAllDef();
                 break;
         }
     }

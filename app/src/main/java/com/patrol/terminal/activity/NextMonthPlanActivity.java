@@ -336,7 +336,7 @@ public class NextMonthPlanActivity extends BaseActivity {
                 }
                 if (popWinShare == null) {
                     //自定义的单击事件
-                    popWinShare = new PopListDialog(this, dip2px(this, 100), dip2px(this, 31) * depList.size(), depList);
+                    popWinShare = new PopListDialog(this, dip2px(this, 120), dip2px(this, 41) * depList.size()+dip2px(this, 15), depList);
                     //监听窗口的焦点事件，点击窗口外面则取消显示
                     popWinShare.getContentView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
@@ -351,7 +351,7 @@ public class NextMonthPlanActivity extends BaseActivity {
                 //设置默认获取焦点
                 popWinShare.setFocusable(true);
                 //以某个控件的x和y的偏移量位置开始显示窗口
-                popWinShare.showAsDropDown(taskScreen, 0, 0);
+                popWinShare.showAsDropDown(taskScreen, -225, 0);
                 //如果窗口存在，则更新
                 popWinShare.update();
                 break;
