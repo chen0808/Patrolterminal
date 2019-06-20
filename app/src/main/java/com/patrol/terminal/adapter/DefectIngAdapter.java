@@ -44,8 +44,8 @@ public class DefectIngAdapter extends BaseQuickAdapter<DefectFragmentBean, BaseV
             viewHolder.setTextColor(R.id.item_line_state, mContext.getResources().getColor(R.color.green));
             viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_green_bg);
         }
-        viewHolder.setText(R.id.tv_name, "内容:" + item.getContent())
-                .setText(R.id.tv_time, "处理措施：" + item.getDeal_notes())
+        viewHolder.setText(R.id.tv_name, "内容：" + item.getContent())
+                .setText(R.id.tv_time, "线路杆塔：" + item.getLine_name()+item.getStart_name())
                 .setText(R.id.tv_detail, "发现时间：" + item.getFind_time());
 
         if (mType == 0) {

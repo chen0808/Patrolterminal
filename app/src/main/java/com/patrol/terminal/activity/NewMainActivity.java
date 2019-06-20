@@ -277,7 +277,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         // 设置定位监听
         locationClient.setLocationListener(locationListener);
 
-        startLocation();
+//        startLocation();
     }
 
     /**
@@ -370,7 +370,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //            positionInfo.setData_id(null);
 //            positionInfo.setSign(null);
                     positionInfo.setUser_id(userId);
-                    setPositon(positionInfo);
+//                    setPositon(positionInfo);
 
                     Log.w("linmeng", "longitude:" + longitude + ",latitude:" + latitude + ",locationTime:" + locationTime + ",address:" + address);
                 }

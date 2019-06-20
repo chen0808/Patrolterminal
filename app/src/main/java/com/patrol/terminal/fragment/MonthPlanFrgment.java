@@ -507,8 +507,14 @@ public class MonthPlanFrgment extends BaseFragment {
                 }
                 //设置默认获取焦点
                 popWinShare.setFocusable(true);
+                if (popWinShare.isShowing()) {
+                    popWinShare.dismiss();
+                } else {
+                    popWinShare.showAsDropDown(taskScreen, -250, 0);
+//popupWindow.showAtLocation(imageView, Gravity.BOTTOM, 100, 100);
+                }
                 //以某个控件的x和y的偏移量位置开始显示窗口
-                popWinShare.showAsDropDown(taskScreen, 0, 0);
+//                popWinShare.showAsDropDown(taskScreen, 200, 0);
                 //如果窗口存在，则更新
                 popWinShare.update();
                 break;

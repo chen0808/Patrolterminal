@@ -64,6 +64,8 @@ public class DefectIngDetailActivity extends BaseActivity {
 
     private DefectPicAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
+    private int page=1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,10 @@ public class DefectIngDetailActivity extends BaseActivity {
         DefectFragmentBean bean = getIntent().getParcelableExtra("bean");
         titleName.setText("缺陷详情");
         defectContent.setText("内容：" + bean.getContent());
+        defectLineName.setText("线路名称："+bean.getLine_name());
+        defectTowerName.setText("杆塔名称："+bean.getStart_name());
+        defectFindName.setText("发现人："+bean.getDeal_dep_name());
+
 //        defectDepName.setText("工作班组：" + bean.getDeal_dep_name());
         getPartrolRecord(bean.getId());
         mGridViewAddImgAdapter = new DefectPicAdapter(this, mPicList);

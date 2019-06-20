@@ -1,7 +1,9 @@
 package com.patrol.terminal.widget;
 
 import android.app.Activity;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -46,3 +48,5 @@ public class PopMenmuDialog extends PopupWindow {
         layoutCopy.setVisibility(View.GONE);
     }
 }
+
+

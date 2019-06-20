@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:src="@mipmap/home_plan" />
+                   />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -113,6 +113,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="10dp"
+                    android:drawableTop="@mipmap/home_plan"
                     android:text="计划"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
@@ -129,13 +130,14 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:src="@mipmap/home_task" />
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
+                    android:drawableTop="@mipmap/home_task"
                     android:layout_marginBottom="10dp"
                     android:text="任务"
                     android:textColor="@color/white"
@@ -154,13 +156,14 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:src="@mipmap/home_defect" />
+                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
+                    android:drawableTop="@mipmap/home_defect"
                     android:layout_marginBottom="10dp"
                     android:text="缺陷"
                     android:textColor="@color/white"
@@ -178,7 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:src="@mipmap/home_trouble" />
+                   />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -186,6 +189,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="10dp"
+                    android:drawableTop="@mipmap/home_trouble"
                     android:text="隐患"
                     android:textColor="@color/white"
                     android:textSize="12sp" />

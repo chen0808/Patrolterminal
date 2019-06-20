@@ -355,6 +355,21 @@ public class DateUatil {
         }
         return longs;
     }
+
+    public static String dateTodate(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        //String times = "";
+        String format="";
+        try {
+            Date date = sdf.parse(time);
+           long longs=date.getTime();
+             format = sdf1.format(new Date(longs));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return format;
+    }
     /**
      * 获取数字
      *

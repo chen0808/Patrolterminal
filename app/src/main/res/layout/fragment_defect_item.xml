@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="4dp">
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp_20"
+    android:layout_marginRight="@dimen/dp_20"
+    android:layout_marginBottom="@dimen/dp_5"
+    android:background="@drawable/stoke_home_list"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_gray">
+        android:layout_height="wrap_content"
+       >
 
         <TextView
             android:id="@+id/iv_icon"
@@ -27,8 +29,8 @@
             android:background="@mipmap/green_circle_bg"/>
 
         <LinearLayout
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@id/iv_icon"
             android:orientation="vertical">
@@ -37,8 +39,11 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginRight="@dimen/dp_40"
+                android:layout_marginTop="8dp"
                 android:text="巡视内容名称"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -54,8 +59,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:ellipsize="end"
-                android:lines="2" />
+                android:layout_marginBottom="8dp"
+                android:text="日期"
+               />
         </LinearLayout>
 
         <TextView
@@ -70,6 +76,7 @@
             android:background="@drawable/state_red_bg"
             android:paddingLeft="@dimen/dp_4"
             android:paddingRight="@dimen/dp_4"
+            android:visibility="gone"
             android:textColor="@color/write_red"
             android:textSize="@dimen/sp_11"
             android:padding="5dp"/>
@@ -84,4 +91,4 @@
             android:scaleType="center"
             android:src="@mipmap/icon_go" />
     </RelativeLayout>
-</androidx.cardview.widget.CardView>
+</RelativeLayout>
