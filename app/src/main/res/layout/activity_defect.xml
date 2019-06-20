@@ -9,14 +9,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_5"
         android:background="@drawable/stoke_gray"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginBottom="@dimen/dp_5"
-        android:layout_gravity="center_vertical">
+        android:focusableInTouchMode="true">
+
         <ImageView
             android:id="@+id/iv_search"
             android:layout_width="48dp"
@@ -24,29 +25,30 @@
             android:layout_marginLeft="16dp"
             android:scaleType="center"
             android:src="@mipmap/search" />
+
         <AutoCompleteTextView
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_toRightOf="@id/iv_search"
+            android:background="@null"
             android:completionHintView="@null"
             android:completionThreshold="1"
-            android:layout_toRightOf="@id/iv_search"
             android:dropDownHorizontalOffset="5dp"
             android:gravity="center_vertical"
-            android:background="@null"
             android:hint="请输入线路名称"
             android:padding="2dp"
             android:textColor="@color/black" />
-<ImageView
-    android:id="@+id/search_delete"
-    android:layout_width="@dimen/dp_40"
-    android:layout_height="@dimen/dp_40"
-    android:src="@mipmap/search_delete"
-    android:scaleType="center"
-    android:visibility="gone"
-    android:layout_centerVertical="true"
-    android:layout_alignParentRight="true"
-    />
+
+        <ImageView
+            android:id="@+id/search_delete"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:scaleType="center"
+            android:src="@mipmap/search_delete"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <com.yanzhenjie.recyclerview.SwipeRecyclerView

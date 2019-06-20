@@ -49,7 +49,15 @@ public class DefectIngAdapter extends BaseQuickAdapter<DefectFragmentBean, BaseV
                 .setText(R.id.tv_detail, "发现时间：" + item.getFind_time());
 
         if (mType == 0) {
-            viewHolder.setText(R.id.iv_icon, "缺陷");
+            viewHolder.setText(R.id.iv_icon,item.getGrade_name());
+            if ("一般".equals(item.getGrade_name())){
+
+                viewHolder.setBackgroundRes(R.id.iv_icon,R.drawable.plan_week_bg);
+            }else if ("严重".equals(item.getGrade_name())){
+                viewHolder.setBackgroundRes(R.id.iv_icon,R.drawable.plan_yellow_bg);
+            }else if ("危急".equals(item.getGrade_name())){
+                viewHolder.setBackgroundRes(R.id.iv_icon,R.drawable.plan_red_bg);
+            }
         }else if (mType == 1) {
             viewHolder.setText(R.id.iv_icon, "隐患");
         }

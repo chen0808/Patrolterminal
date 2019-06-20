@@ -55,14 +55,14 @@ public class DefectIngDetailActivity extends BaseActivity {
     TextView defectAlloteStatus;
     @BindView(R.id.defect_deal_name)
     TextView defectDealName;
-    @BindView(R.id.tv)
-    TextView tv;
     @BindView(R.id.defect_gridView)
     GridView defectGridView;
     @BindView(R.id.defect_level)
     TextView defectLevel;
     @BindView(R.id.defect_deal_content)
     TextView defectDealContent;
+    @BindView(R.id.deffect_img)
+    TextView deffectImg;
 
     private DefectPicAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
@@ -82,33 +82,39 @@ public class DefectIngDetailActivity extends BaseActivity {
     private void initview() {
         DefectFragmentBean bean = (DefectFragmentBean) getIntent().getSerializableExtra("bean");
         titleName.setText("缺陷详情");
-        defectContent.setText("内容：" + bean.getContent());
-        defectLineName.setText("线路名称：" + bean.getLine_name());
-        defectTowerName.setText("杆塔名称：" + bean.getStart_name());
+        defectContent.setText(bean.getContent());
+        defectLineName.setText(bean.getLine_name());
+        defectTowerName.setText(bean.getStart_name());
         if (bean.getFind_user_name() == null) {
-            defectFindName.setText("发现人：暂无");
+            defectFindName.setText("暂无");
         } else {
-            defectFindName.setText("发现人：" + bean.getDeal_dep_name());
+            defectFindName.setText(bean.getFind_user_name());
         }
         if (bean.getDeal_user_name() == null) {
-            defectDealName.setText("处理人：暂无");
+            defectDealName.setText("暂无");
         } else {
-            defectDealName.setText("处理人：" + bean.getDeal_dep_name());
+            defectDealName.setText(bean.getDeal_user_name());
         }
 
         if ("0".equals(bean.getAudit_status())) {
-            defectAlloteStatus.setText("状态：审核中");
+            defectAlloteStatus.setText("审核中");
         } else if ("1".equals(bean.getAudit_status())) {
-            defectAlloteStatus.setText("状态：已审核");
+            defectAlloteStatus.setText("已审核");
         }
 
-        defectLevel.setText("缺陷等级：" + bean.getGrade_name());
+        if ("一般".equals(bean.getGrade_name())) {
+            defectLevel.setTextColor(getResources().getColor(R.color.blue));
+        } else if ("严重".equals(bean.getGrade_name())) {
+            defectLevel.setTextColor(getResources().getColor(R.color.line_point_1));
+        } else if ("危急".equals(bean.getGrade_name())) {
+            defectLevel.setTextColor(getResources().getColor(R.color.line_point_0));
+        }
+        defectLevel.setText(bean.getGrade_name());
         if (bean.getDeal_notes() == null) {
-            defectDealContent.setText("处理措施：暂无");
+            defectDealContent.setText("暂无");
         } else {
-            defectDealContent.setText("处理措施：" + bean.getDeal_notes());
+            defectDealContent.setText(bean.getDeal_notes());
         }
-
 
 
 //        defectDepName.setText("工作班组：" + bean.getDeal_dep_name());
@@ -149,6 +155,8 @@ public class DefectIngDetailActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
                         if (t.getCode() == 1) {
                             List<PatrolRecordPicBean> results = t.getResults();
+                            if (results.size()>0){
+                                deffectImg.setVisibility(View.VISIBLE);
                             for (int i = 0; i < results.size(); i++) {
                                 PatrolRecordPicBean overhaulFileBean = results.get(i);
                                 String file_path = overhaulFileBean.getFile_path();
@@ -157,6 +165,9 @@ public class DefectIngDetailActivity extends BaseActivity {
 
                                     mPicList.add(compressPath);
                                 }
+                            }
+                            }else {
+                                deffectImg.setVisibility(View.GONE);
                             }
                             mGridViewAddImgAdapter.notifyDataSetChanged();
                         }
