@@ -1,7 +1,11 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,6 +19,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.TroubleFragmentBean;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
@@ -41,11 +46,33 @@ public class TroubleActivity extends BaseActivity {
     ImageView ivSearch;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
+    @BindView(R.id.tv_content)
+    AutoCompleteTextView tvContent;
+    @BindView(R.id.search_delete)
+    ImageView searchDelete;
     private TroubleAdapter adapter;
     private int page_num = 0;
     private int page_size = 10;
     private List<TroubleFragmentBean> troubleList = new ArrayList<>();
+    private List<TroubleFragmentBean> searchList = new ArrayList<>();
+    private List<String> lineList = new ArrayList<>();
+    private String search;
     //private List<DefectDetailBean> result = new ArrayList<>();
+    private Handler handler = new Handler();
+    /**
+     * 延迟线程，看是否还有下一个字符输入
+     */
+    private Runnable delayRun = new Runnable() {
+
+        @Override
+        public void run() {
+            //在这里调用服务器的接口，获取数据
+//            getSearchResult(editString, "all", 1, "true");
+            page_num = 0;
+            adapter.setNewData(troubleList);
+            getAllTrouble();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,35 +80,8 @@ public class TroubleActivity extends BaseActivity {
         setContentView(R.layout.activity_trouble);
         ButterKnife.bind(this);
         initview();
-        getAllDef();
-    }
-
-    private void getAllDef() {
-        BaseRequest.getInstance().getService()
-                .getAllDanger(page_num, page_size, "线")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TroubleFragmentBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<TroubleFragmentBean>> t) throws Exception {
-                        if (t.getCode() == 1) {
-                            List<TroubleFragmentBean> result = t.getResults();
-                            if (result != null && result.size() > 0) {
-                                planRv.loadMoreFinish(false, true);
-                                troubleList.addAll(result);
-                                setDataToList(troubleList);
-                            } else {
-                                planRv.loadMoreFinish(true, false);
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
+        getAllTrouble();
+        search();
     }
 
     private void setDataToList(List<TroubleFragmentBean> beans) {
@@ -89,16 +89,50 @@ public class TroubleActivity extends BaseActivity {
         planRv.setAdapter(adapter);
     }
 
-    private void initview() {
-        titleName.setText("隐患查询");
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        planRv.setLayoutManager(manager);
-        planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
+    private void search() {
+//        String data[] = getResources().getStringArray(R.array.auto_textview_contents);
+//        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(TroubleActivity.
+//                this, android.R.layout.simple_dropdown_item_1line, lineList);
+//        tvContent.setAdapter(adapter1);
+        tvContent.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onLoadMore() {
-                page_num++;
-                getAllDef();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                search = s.toString();
+                if (s.length() == 0) {
+                    searchDelete.setVisibility(View.GONE);
+                } else {
+                    searchDelete.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                search = tvContent.getText().toString();
+               /* if (delayRun != null) {
+                    //每次editText有变化的时候，则移除上次发出的延迟线程
+                    handler.removeCallbacks(delayRun);
+                }
+
+                handler.postDelayed(delayRun, 1000);*/
+                if (search.equals("")) {
+                    adapter.setNewData(troubleList);
+                } else {
+                    searchList.clear();
+                    for (int i = 0; i < troubleList.size(); i++) {
+                        if (troubleList.get(i).getLine_name().contains(search)) {
+                            searchList.add(troubleList.get(i));
+                        }
+                    }
+                    adapter.setNewData(searchList);
+                }
+            }
+
         });
     }
 
@@ -119,5 +153,50 @@ public class TroubleActivity extends BaseActivity {
             case R.id.iv_search:
                 break;
         }
+    }
+
+    private void getAllTrouble() {
+        ProgressDialog.show(this, true, "正在加载...");
+        BaseRequest.getInstance().getService()
+                .getAllDanger(page_num, page_size, "线")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<TroubleFragmentBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<TroubleFragmentBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            List<TroubleFragmentBean> result = t.getResults();
+                            if (result != null && result.size() > 0) {
+                                planRv.loadMoreFinish(false, true);
+                                troubleList.addAll(result);
+                                setDataToList(troubleList);
+                                for (int i = 0; i < result.size(); i++) {
+                                    lineList.add(result.get(i).getLine_name());
+                                }
+                            } else {
+                                planRv.loadMoreFinish(true, false);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+    }
+
+    private void initview() {
+        titleName.setText("隐患查询");
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        planRv.setLayoutManager(manager);
+        planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                page_num++;
+                getAllTrouble();
+            }
+        });
     }
 }

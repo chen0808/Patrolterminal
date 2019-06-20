@@ -29,7 +29,7 @@ public class AdapterUtils {
                 break;
             case "开永运维班":
                 icon.setText("开永");
-                icon.setBackgroundResource(R.drawable.plan_date_bg);
+                icon.setBackgroundResource(R.drawable.plan_kaiyong_bg);
                 break;
             case "和华运维班":
                 icon.setText("和华");
