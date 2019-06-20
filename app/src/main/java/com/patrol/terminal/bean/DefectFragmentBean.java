@@ -67,6 +67,24 @@ public class DefectFragmentBean implements Serializable {
         private String end_id;
         private String line_name;
     private String  find_user_name;
+    private String  deal_user_name;
+    private String  grade_name;
+
+    public String getGrade_name() {
+        return grade_name;
+    }
+
+    public void setGrade_name(String grade_name) {
+        this.grade_name = grade_name;
+    }
+
+    public String getDeal_user_name() {
+        return deal_user_name;
+    }
+
+    public void setDeal_user_name(String deal_user_name) {
+        this.deal_user_name = deal_user_name;
+    }
 
     public String getFind_user_name() {
         return find_user_name;

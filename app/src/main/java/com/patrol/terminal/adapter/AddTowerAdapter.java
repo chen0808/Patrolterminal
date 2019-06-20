@@ -52,6 +52,8 @@ public class AddTowerAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_add_tower, parent, false);
             holder.tvLineName = convertView.findViewById(R.id.tv_line_name);
+            holder.tvLineDate = convertView.findViewById(R.id.tv_tower_date);
+
             holder.tvTowerName = (TextView) convertView.findViewById(R.id.tv_tower_name);
             holder.towerCheck = (CheckBox) convertView.findViewById(R.id.item_add_tower_check);
             holder.towerType = (TextView) convertView.findViewById(R.id.item_add_tower_type);
@@ -62,7 +64,7 @@ public class AddTowerAdapter extends BaseAdapter {
         holder.tvLineName.setText(lineTypeBeans.get(position).getLine_name()/*lineTypeBeans.get(position).getTowers()*/);
         holder.tvTowerName.setText(lineTypeBeans.get(position).getTowers_name());
         holder.towerType.setText(StringUtil.getTypeSign(lineTypeBeans.get(position).getType_sign()));  //TODO
-
+        holder.tvLineDate.setText(lineTypeBeans.get(position).getYear()+"-"+lineTypeBeans.get(position).getMonth());
         TextView tvContent = holder.towerType;
         String text = tvContent.getText().toString();
         String colorText = setColor(text);
@@ -157,7 +159,7 @@ public class AddTowerAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        private TextView tvLineName;
+        private TextView tvLineName,tvLineDate;
         private TextView tvTowerName;
         private CheckBox towerCheck;
         private TextView towerType;

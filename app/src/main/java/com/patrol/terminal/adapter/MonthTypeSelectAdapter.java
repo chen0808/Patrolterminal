@@ -57,7 +57,7 @@ public class MonthTypeSelectAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         } else {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_select_type, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_select_type_new, parent, false);
             holder.name = (TextView) convertView.findViewById(R.id.item_plan_device_name);
             holder.time = (TextView) convertView.findViewById(R.id.item_plan_time);
             convertView.setTag(holder);

@@ -55,16 +55,18 @@ public class DefectIngDetailActivity extends BaseActivity {
     TextView defectAlloteStatus;
     @BindView(R.id.defect_deal_name)
     TextView defectDealName;
-    @BindView(R.id.defect_dep_name)
-    TextView defectDepName;
     @BindView(R.id.tv)
     TextView tv;
     @BindView(R.id.defect_gridView)
     GridView defectGridView;
+    @BindView(R.id.defect_level)
+    TextView defectLevel;
+    @BindView(R.id.defect_deal_content)
+    TextView defectDealContent;
 
     private DefectPicAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
-    private int page=1;
+    private int page = 1;
 
 
     @Override
@@ -81,12 +83,30 @@ public class DefectIngDetailActivity extends BaseActivity {
         DefectFragmentBean bean = (DefectFragmentBean) getIntent().getSerializableExtra("bean");
         titleName.setText("缺陷详情");
         defectContent.setText("内容：" + bean.getContent());
-        defectLineName.setText("线路名称："+bean.getLine_name());
-        defectTowerName.setText("杆塔名称："+bean.getStart_name());
-        if (bean.getFind_user_name()==null){
+        defectLineName.setText("线路名称：" + bean.getLine_name());
+        defectTowerName.setText("杆塔名称：" + bean.getStart_name());
+        if (bean.getFind_user_name() == null) {
             defectFindName.setText("发现人：暂无");
-        }else {
-            defectFindName.setText("发现人："+bean.getDeal_dep_name());
+        } else {
+            defectFindName.setText("发现人：" + bean.getDeal_dep_name());
+        }
+        if (bean.getDeal_user_name() == null) {
+            defectDealName.setText("处理人：暂无");
+        } else {
+            defectDealName.setText("处理人：" + bean.getDeal_dep_name());
+        }
+
+        if ("0".equals(bean.getAudit_status())) {
+            defectAlloteStatus.setText("状态：审核中");
+        } else if ("1".equals(bean.getAudit_status())) {
+            defectAlloteStatus.setText("状态：已审核");
+        }
+
+        defectLevel.setText("缺陷等级：" + bean.getGrade_name());
+        if (bean.getDeal_notes() == null) {
+            defectDealContent.setText("处理措施：暂无");
+        } else {
+            defectDealContent.setText("处理措施：" + bean.getDeal_notes());
         }
 
 
@@ -99,7 +119,7 @@ public class DefectIngDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                    viewPluImg(position);
+                viewPluImg(position);
 
             }
         });

@@ -27,6 +27,7 @@ import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.SavaMonthDefDanBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.RxRefreshEvent;
+import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -135,7 +136,7 @@ public class AddMonthPlanActivity extends BaseActivity {
     private void initview() {
         from = getIntent().getIntExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
         Log.w("linmeng", "initview from:" + from);
-
+        monthPlanClass.setText(SPUtil.getDepName(this));
         line_name = getIntent().getStringExtra("line_name");
         String typename  = getIntent().getStringExtra("type");
         year= getIntent().getStringExtra("year");

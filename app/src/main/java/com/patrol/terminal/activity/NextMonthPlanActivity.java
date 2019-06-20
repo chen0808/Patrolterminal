@@ -267,7 +267,7 @@ public class NextMonthPlanActivity extends BaseActivity {
                 //判断是否是保电计划
                 if (item.getRepair_content() != null) {
                     switch (view.getId()) {
-                        case R.id.plan_to_change:
+                        case R.id.iv_edit:
                             Intent intent = new Intent(NextMonthPlanActivity.this, LineCheckActivity.class);
                             intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
                             intent.putExtra("id", item.getId());
@@ -278,7 +278,7 @@ public class NextMonthPlanActivity extends BaseActivity {
                     }
                 } else {
                     switch (view.getId()) {
-                        case R.id.plan_to_change:
+                        case R.id.iv_edit:
                             Intent intent = new Intent(NextMonthPlanActivity.this, AddMonthPlanActivity.class);
                             intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
                             intent.putExtra("line_name", item.getLine_name());

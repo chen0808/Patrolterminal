@@ -188,22 +188,22 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 
             status = "4,5";
         }
-        refreshTodo = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
-
-            @Override
-            public void accept(String type) throws Exception {
-                if (type.startsWith("refreshTodo")) {
-                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                        getYXtodo("2");
-                    } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-                        getYXtodo("1");
-                    } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-                        getYXtodo("0");
-                    }
-
-                }
-            }
-        });
+//        refreshTodo = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+//
+//            @Override
+//            public void accept(String type) throws Exception {
+//                if (type.startsWith("refreshTodo")) {
+//                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+//                        getYXtodo("2");
+//                    } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+//                        getYXtodo("1");
+//                    } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+//                        getYXtodo("0");
+//                    }
+//
+//                }
+//            }
+//        });
 //        initBackLog();
         initTask();
         initLastTask();
@@ -216,13 +216,13 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     @Override
     public void onResume() {
         super.onResume();
-        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-            getYXtodo("2");
-        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-            getYXtodo("1");
-        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-            getYXtodo("0");
-        }
+//        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+//            getYXtodo("2");
+//        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+//            getYXtodo("1");
+//        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+//            getYXtodo("0");
+//        }
     }
 
     //获取已完成任务
@@ -468,7 +468,8 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                     @Override
                     protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         backLogData = t.getResults();
-                        adapter.setNewData(backLogData);
+                        if (adapter!=null){
+                        adapter.setNewData(backLogData);}
                         if (backLogData.size() == 0) {
                             homeTodoNoData.setVisibility(View.VISIBLE);
                         } else {

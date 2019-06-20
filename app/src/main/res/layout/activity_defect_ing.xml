@@ -23,6 +23,7 @@
                 android:id="@+id/defect_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_15"
                 android:text="巡视内容" />
 
             <TextView
@@ -30,12 +31,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:textSize="@dimen/sp_15"
                 android:text="线路名称：" />
 
             <TextView
                 android:id="@+id/defect_tower_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_15"
                 android:layout_marginTop="8dp"
                 android:text="杆塔名称：" />
 
@@ -44,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:textSize="@dimen/sp_15"
                 android:text="发现人：" />
 
             <TextView
@@ -51,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:textSize="@dimen/sp_15"
                 android:text="状态：" />
 
             <TextView
@@ -58,6 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:textSize="@dimen/sp_15"
                 android:text="处理人：" />
 
             <!--<TextView-->
@@ -75,18 +81,20 @@
                 <!--android:text="工作负责人：李四" />-->
 
             <TextView
-                android:id="@+id/defect_dep_name"
+                android:id="@+id/defect_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_15"
+                android:layout_marginTop="8dp"
+                android:text="缺陷等级：" />
+
+            <TextView
+                android:id="@+id/defect_deal_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="工作班组：" />
-
-            <!--<TextView-->
-                <!--android:id="@+id/defect_reamark"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:text="备注：截止目前，共完成X项检修工作，完成率x%，其中加装附引流x套，探伤检测x处……" />-->
+                android:textSize="@dimen/sp_15"
+                android:text="处理措施：" />
 
             <TextView
                 android:id="@+id/tv"
