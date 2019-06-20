@@ -9,15 +9,12 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.DefectIngAdapter;
-import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
-import com.patrol.terminal.adapter.TroubleIngAdapter;
+import com.patrol.terminal.adapter.TroubleAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.DefectDetailBean;
-import com.patrol.terminal.bean.DefectFragmentBean;
+import com.patrol.terminal.bean.TroubleFragmentBean;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
@@ -44,8 +41,10 @@ public class TroubleActivity extends BaseActivity {
     ImageView ivSearch;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
-    private MyFragmentPagerAdapter taskPagerAdapter;
-    private DefectIngAdapter groupTaskAdapter;
+    private TroubleAdapter adapter;
+    private int page_num = 0;
+    private int page_size = 10;
+    private List<TroubleFragmentBean> troubleList = new ArrayList<>();
     //private List<DefectDetailBean> result = new ArrayList<>();
 
     @Override
@@ -59,16 +58,20 @@ public class TroubleActivity extends BaseActivity {
 
     private void getAllDef() {
         BaseRequest.getInstance().getService()
-                .getAllDanger()
+                .getAllDanger(page_num, page_size, "线")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectFragmentBean>>(this) {
+                .subscribe(new BaseObserver<List<TroubleFragmentBean>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<DefectFragmentBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<TroubleFragmentBean>> t) throws Exception {
                         if (t.getCode() == 1) {
-                            List<DefectFragmentBean> result = t.getResults();
+                            List<TroubleFragmentBean> result = t.getResults();
                             if (result != null && result.size() > 0) {
-                                setDataToList(result);
+                                planRv.loadMoreFinish(false, true);
+                                troubleList.addAll(result);
+                                setDataToList(troubleList);
+                            } else {
+                                planRv.loadMoreFinish(true, false);
                             }
                         }
 
@@ -81,24 +84,22 @@ public class TroubleActivity extends BaseActivity {
                 });
     }
 
-    private void setDataToList(List<DefectFragmentBean> beans) {
-
-//        for (int i = 0; i < 10; i++) {
-//            result.add(i, new DefectDetailBean("461faasdgarea466", "巡视" + i + "号杆塔", String.valueOf(i % 2), "巡视类型", "2019-04-15",
-//                    "备注:备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注",
-//                    "检测人", "工作负责人", "工作班组", "是否确认", "确认审核员id", "杆塔名"));
-//        }
-        groupTaskAdapter = new DefectIngAdapter(R.layout.fragment_defect_item, beans, 1);
-        planRv.setAdapter(groupTaskAdapter);
-
-
+    private void setDataToList(List<TroubleFragmentBean> beans) {
+        adapter = new TroubleAdapter(R.layout.fragment_defect_item, beans);
+        planRv.setAdapter(adapter);
     }
 
     private void initview() {
         titleName.setText("隐患查询");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         planRv.setLayoutManager(manager);
-
+        planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                page_num++;
+                getAllDef();
+            }
+        });
     }
 
     @Override

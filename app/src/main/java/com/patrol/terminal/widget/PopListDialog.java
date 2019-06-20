@@ -1,6 +1,7 @@
 package com.patrol.terminal.widget;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ private Activity paramActivity;
             TextView textView=new TextView(paramActivity);
             ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Utils.dip2px(paramActivity, 40));
             textView.setLayoutParams(params);
+            textView.setTextColor(Color.WHITE);
             textView.setGravity(Gravity.CENTER);
             textView.setText(depBean.getName());
             textView.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +47,7 @@ private Activity paramActivity;
             listView.addView(textView);
             if (i!=data.size()-1){
                 View view=new View(paramActivity);
-                view.setBackgroundColor(paramActivity.getResources().getColor(R.color.image_overlay_false));
+                view.setBackgroundColor(paramActivity.getResources().getColor(R.color.color_fa));
                 ViewGroup.LayoutParams viewpar=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,2);
                 view.setLayoutParams(viewpar);
                 listView.addView(view);

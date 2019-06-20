@@ -58,6 +58,7 @@
         <activity android:name=".activity.TicketSafeActivity" />
         <activity android:name=".activity.SafeListActivity" />
         <activity android:name=".activity.SpecialAttrListActivity" />
+        <activity android:name=".activity.TroubleDetailActivity"></activity>
         <activity
             android:name=".activity.NewTaskActivity"
             android:screenOrientation="portrait" />
@@ -167,8 +168,8 @@
             android:name=".activity.SignActivity"
             android:screenOrientation="landscape" />
         <activity
-        android:name=".activity.MapActivity"
-        android:screenOrientation="portrait" />
+            android:name=".activity.MapActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LineCheckDayActivity"
             android:screenOrientation="portrait" />

@@ -113,7 +113,7 @@ public class NewTaskActivity extends BaseActivity {
                 BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
 
                 SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.white));
+                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.black_gray));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
                 simplePagerTitleView.setText(mDataList.get(index));
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {

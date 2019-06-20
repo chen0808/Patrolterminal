@@ -2,104 +2,7 @@ package com.patrol.terminal.network;
 
 import com.patrol.terminal.adapter.SaveCheckReqBean;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.AddGroupTaskReqBean;
-import com.patrol.terminal.bean.AddPersonalTaskReqBean;
-import com.patrol.terminal.bean.AddressBookBean;
-import com.patrol.terminal.bean.AllControlCarBean;
-import com.patrol.terminal.bean.ClassMemberBean;
-import com.patrol.terminal.bean.ControlCardBean;
-import com.patrol.terminal.bean.ControlDepWorkBean;
-import com.patrol.terminal.bean.ControlDepWorkBean2;
-import com.patrol.terminal.bean.ControlQualityBean;
-import com.patrol.terminal.bean.ControlToolBean;
-import com.patrol.terminal.bean.ControlToolBeanList;
-import com.patrol.terminal.bean.CreateRobTaskBean;
-import com.patrol.terminal.bean.DangerBean;
-import com.patrol.terminal.bean.DayListBean;
-import com.patrol.terminal.bean.DayOfWeekBean;
-import com.patrol.terminal.bean.DayPlanDetailBean;
-import com.patrol.terminal.bean.DefectBean;
-import com.patrol.terminal.bean.DefectFragmentBean;
-import com.patrol.terminal.bean.DepBean;
-import com.patrol.terminal.bean.DepUserBean;
-import com.patrol.terminal.bean.EqTower;
-import com.patrol.terminal.bean.FieldAntiInspectionBean;
-import com.patrol.terminal.bean.FirstTicketBean;
-import com.patrol.terminal.bean.FourTicketBean;
-import com.patrol.terminal.bean.GTQXCLbean;
-import com.patrol.terminal.bean.GetToPostCheckBean;
-import com.patrol.terminal.bean.GradeBean;
-import com.patrol.terminal.bean.GroupBean;
-import com.patrol.terminal.bean.GroupOfDayBean;
-import com.patrol.terminal.bean.GroupTaskBean;
-import com.patrol.terminal.bean.HwcwBean;
-import com.patrol.terminal.bean.JDDZbean;
-import com.patrol.terminal.bean.JYZbean;
-import com.patrol.terminal.bean.JxbSignInfo;
-import com.patrol.terminal.bean.LineBean;
-import com.patrol.terminal.bean.LineCheckBean;
-import com.patrol.terminal.bean.LineName;
-import com.patrol.terminal.bean.LineTypeBean;
-import com.patrol.terminal.bean.LoginReqBean;
-import com.patrol.terminal.bean.MonthListBean;
-import com.patrol.terminal.bean.MonthPlanBean;
-import com.patrol.terminal.bean.MonthPlanDetailBean;
-import com.patrol.terminal.bean.OvaTodoBean;
-import com.patrol.terminal.bean.OverPlanReqBean;
-import com.patrol.terminal.bean.OverhaulFzrSendBean;
-import com.patrol.terminal.bean.OverhaulMonitorSendBean;
-import com.patrol.terminal.bean.OverhaulMonthBean;
-import com.patrol.terminal.bean.OverhaulSendUserBean;
-import com.patrol.terminal.bean.OverhaulSendUserBean2;
-import com.patrol.terminal.bean.OverhaulYearBean;
-import com.patrol.terminal.bean.OverhaulZZSendBean;
-import com.patrol.terminal.bean.OverhaulZzTaskBean;
-import com.patrol.terminal.bean.PatrolContentBean;
-import com.patrol.terminal.bean.PatrolDetailBean;
-import com.patrol.terminal.bean.PatrolListBean;
-import com.patrol.terminal.bean.PatrolRecordBean;
-import com.patrol.terminal.bean.PatrolRecordPicBean;
-import com.patrol.terminal.bean.PersonalTaskListBean;
-import com.patrol.terminal.bean.PlanRepairBean;
-import com.patrol.terminal.bean.PlanTypeBean;
-import com.patrol.terminal.bean.PlanWeekReqBean;
-import com.patrol.terminal.bean.PositionInfo;
-import com.patrol.terminal.bean.PositionListBean;
-import com.patrol.terminal.bean.RfInfo;
-import com.patrol.terminal.bean.SavaEleLineBean;
-import com.patrol.terminal.bean.SavaLineBean;
-import com.patrol.terminal.bean.SavaLineBean2;
-import com.patrol.terminal.bean.SavaMonthDefDanBean;
-import com.patrol.terminal.bean.SaveDefMonthReqBean;
-import com.patrol.terminal.bean.SaveTodoReqbean;
-import com.patrol.terminal.bean.SecondTicketBean;
-import com.patrol.terminal.bean.SituationBean;
-import com.patrol.terminal.bean.SpecialAttrBean;
-import com.patrol.terminal.bean.SpecialAttrList;
-import com.patrol.terminal.bean.SubmitPlanReqBean;
-import com.patrol.terminal.bean.SubmitPlanReqStateBean;
-import com.patrol.terminal.bean.TaskBean;
-import com.patrol.terminal.bean.ThirdTicketBean;
-import com.patrol.terminal.bean.TicketSafeContent;
-import com.patrol.terminal.bean.TodoBean;
-import com.patrol.terminal.bean.TodoListBean;
-import com.patrol.terminal.bean.Tower;
-import com.patrol.terminal.bean.TowerListBean;
-import com.patrol.terminal.bean.TrainAuditorBean;
-import com.patrol.terminal.bean.TrainLevelBean;
-import com.patrol.terminal.bean.TrainingAddTaskBean;
-import com.patrol.terminal.bean.TrainingAddTempBean;
-import com.patrol.terminal.bean.TrainingMonthPlanBean;
-import com.patrol.terminal.bean.TrainingTaskBean;
-import com.patrol.terminal.bean.TrainingTempPlanBean;
-import com.patrol.terminal.bean.TrainingYearPlanBean;
-import com.patrol.terminal.bean.TypeBean;
-import com.patrol.terminal.bean.UserBean;
-import com.patrol.terminal.bean.WeekListBean;
-import com.patrol.terminal.bean.WeekOfMonthBean;
-import com.patrol.terminal.bean.WeekPlanBean;
-import com.patrol.terminal.bean.WeekPlanDetailBean;
-import com.patrol.terminal.bean.YXtoJXbean;
+import com.patrol.terminal.bean.*;
 import com.patrol.terminal.overhaul.OverhaulFileBean;
 
 import java.util.List;
@@ -150,12 +53,14 @@ public interface ApiServise {
     //制定临时周计划线路列表
     @GET("/plan/week/lineGET")
     Observable<BaseResult<List<LineCheckBean>>> getLineListWeek(@Query("year") String year, @Query("week") String month, @Query("dep_id") String dep_id);
+
     //周计划添加获取月计划列表
     @GET("plan/month/line/monthGET")
     Observable<BaseResult<List<WeekOfMonthBean>>> getWeekList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id, @Query("type_id") String type_id);
+
     //制定临时日计划线路列表
     @GET("/plan/day/lineGET")
-    Observable<BaseResult<List<LineCheckBean>>> getLineListday(@Query("year") String year, @Query("month") String month, @Query("day") String day,@Query("dep_id") String dep_id);
+    Observable<BaseResult<List<LineCheckBean>>> getLineListday(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
 
     //获取周计划杆段列表
     @GET("plan/month/line/monthGET")
@@ -189,11 +94,12 @@ public interface ApiServise {
 
     //批量生成抢单任务
     @POST("/task/group/list/robPOST")
-    Observable<BaseResult<List<DayOfWeekBean>>> createRobTasks(@Body  List<CreateRobTaskBean> bean);
+    Observable<BaseResult<List<DayOfWeekBean>>> createRobTasks(@Body List<CreateRobTaskBean> bean);
 
     //批量生成抢单任务
     @POST("/task/group/list/recallPOST")
-    Observable<BaseResult<List<DayOfWeekBean>>> cancleRobTasks(@Body  List<CreateRobTaskBean> bean);
+    Observable<BaseResult<List<DayOfWeekBean>>> cancleRobTasks(@Body List<CreateRobTaskBean> bean);
+
     //生成个人任务
     @POST("/task/group/list/savePOST")
     Observable<BaseResult<List<DayOfWeekBean>>> addPersonTask(@Body List<GroupTaskBean> bean);
@@ -228,6 +134,7 @@ public interface ApiServise {
     //保存临时周计划
     @POST("/plan/week/tower/tempPOST")
     Observable<BaseResult<List<LineTypeBean>>> saveWeekPlan(@Body SavaLineBean2 bean);
+
     //保存临时日计划
     @POST("/plan/day/tower/tempPOST")
     Observable<BaseResult<List<LineTypeBean>>> saveDayPlan(@Body SavaLineBean2 bean);
@@ -280,7 +187,7 @@ public interface ApiServise {
 
     //组长获取组成员列表
     @GET("/task/group/user/teamGET")
-    Observable<BaseResult<List<DepUserBean>>> getGroupPersonal(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("user_id") String user_id,@Query("sign") String sign);
+    Observable<BaseResult<List<DepUserBean>>> getGroupPersonal(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("user_id") String user_id, @Query("sign") String sign);
 
     //组长获取组任务列表
     @GET("/task/group/list/listGET")
@@ -627,13 +534,12 @@ public interface ApiServise {
     //获取所有缺陷库
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
     @GET("/task/defect/pdaPageGET")
-    Observable<BaseResult<List<DefectFragmentBean>>> getAllDefact(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("search") String search,@Query("order") String order);
+    Observable<BaseResult<List<DefectFragmentBean>>> getAllDefact(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("search") String search, @Query("order") String order);
 
     //获取所有隐患库task/defect/saveDefect
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
-    @GET("task/danger/listGET")
-    Observable<BaseResult<List<DefectFragmentBean>>> getAllDanger();
-
+    @GET("task/trouble/pdaPageGET")
+    Observable<BaseResult<List<TroubleFragmentBean>>> getAllDanger(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("search") String search);
 
 
     //获取检修年,月,周计划列表
@@ -1000,13 +906,14 @@ public interface ApiServise {
     //消除已审核待办
     @POST("task/remind/dealPOST")
     Observable<BaseResult> clearTodo(@Query("id") String id);    //消除已审核待办
+
     //一键消除已审核待办
     @POST("task/remind/batchPOST")
     Observable<BaseResult<TaskBean>> clearTodoAll(@Query("user_id") String user_id);
 
 
     //一键消除已审核待办
-   @POST("task/remind/batchPOST")
-   Observable<BaseResult<TaskBean>> clearTodo(@Query("to_user_id" )String to_user_id,@Query("flow_sign") String flow_sign);
+    @POST("task/remind/batchPOST")
+    Observable<BaseResult<TaskBean>> clearTodo(@Query("to_user_id") String to_user_id, @Query("flow_sign") String flow_sign);
 
 }

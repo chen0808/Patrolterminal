@@ -493,7 +493,7 @@ public class MonthPlanFrgment extends BaseFragment {
                 if (popWinShare == null) {
                     //自定义的单击事件
                     OnClickLintener paramOnClickListener = new OnClickLintener();
-                    popWinShare = new PopMenmuDialog(getActivity(), paramOnClickListener, Utils.dip2px(getContext(), 140), Utils.dip2px(getContext(), 120));
+                    popWinShare = new PopMenmuDialog(getActivity(), paramOnClickListener, Utils.dip2px(getContext(), 100), Utils.dip2px(getContext(), 100));
                     //监听窗口的焦点事件，点击窗口外面则取消显示
                     popWinShare.getContentView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
