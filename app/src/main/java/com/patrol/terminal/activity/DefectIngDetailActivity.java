@@ -78,12 +78,17 @@ public class DefectIngDetailActivity extends BaseActivity {
     }
 
     private void initview() {
-        DefectFragmentBean bean = getIntent().getParcelableExtra("bean");
+        DefectFragmentBean bean = (DefectFragmentBean) getIntent().getSerializableExtra("bean");
         titleName.setText("缺陷详情");
         defectContent.setText("内容：" + bean.getContent());
         defectLineName.setText("线路名称："+bean.getLine_name());
         defectTowerName.setText("杆塔名称："+bean.getStart_name());
-        defectFindName.setText("发现人："+bean.getDeal_dep_name());
+        if (bean.getFind_user_name()==null){
+            defectFindName.setText("发现人：暂无");
+        }else {
+            defectFindName.setText("发现人："+bean.getDeal_dep_name());
+        }
+
 
 //        defectDepName.setText("工作班组：" + bean.getDeal_dep_name());
         getPartrolRecord(bean.getId());

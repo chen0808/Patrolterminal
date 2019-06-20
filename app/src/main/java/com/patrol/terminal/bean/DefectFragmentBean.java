@@ -3,7 +3,9 @@ package com.patrol.terminal.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class DefectFragmentBean implements Parcelable {
+import java.io.Serializable;
+
+public class DefectFragmentBean implements Serializable {
 
         /**
          * id : AD9E62D662974A9094A17C8E325AEED2
@@ -64,8 +66,17 @@ public class DefectFragmentBean implements Parcelable {
         private String start_id;
         private String end_id;
         private String line_name;
+    private String  find_user_name;
 
-        public String getId() {
+    public String getFind_user_name() {
+        return find_user_name;
+    }
+
+    public void setFind_user_name(String find_user_name) {
+        this.find_user_name = find_user_name;
+    }
+
+    public String getId() {
             return id;
         }
 
@@ -289,86 +300,5 @@ public class DefectFragmentBean implements Parcelable {
             this.line_name = line_name;
         }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.month_line_id);
-        dest.writeString(this.week_id);
-        dest.writeString(this.day_id);
-        dest.writeString(this.group_id);
-        dest.writeString(this.task_id);
-        dest.writeString(this.category_id);
-        dest.writeString(this.grade_id);
-        dest.writeString(this.patrol_id);
-        dest.writeString(this.content);
-        dest.writeString(this.line_id);
-        dest.writeString(this.start_name);
-        dest.writeString(this.end_name);
-        dest.writeString(this.find_time);
-        dest.writeString(this.deal_notes);
-        dest.writeString(this.status);
-        dest.writeString(this.deal_dep_name);
-        dest.writeString(this.deal_time);
-        dest.writeString(this.auditor);
-        dest.writeString(this.audit_status);
-        dest.writeString(this.week_line_id);
-        dest.writeString(this.day_line_id);
-        dest.writeString(this.month_id);
-        dest.writeString(this.group_list_id);
-        dest.writeString(this.deal_dep_id);
-        dest.writeString(this.start_id);
-        dest.writeString(this.end_id);
-        dest.writeString(this.line_name);
-    }
-
-    public DefectFragmentBean() {
-    }
-
-    protected DefectFragmentBean(Parcel in) {
-        this.id = in.readString();
-        this.month_line_id = in.readString();
-        this.week_id = in.readString();
-        this.day_id = in.readString();
-        this.group_id = in.readString();
-        this.task_id = in.readString();
-        this.category_id = in.readString();
-        this.grade_id = in.readString();
-        this.patrol_id = in.readString();
-        this.content = in.readString();
-        this.line_id = in.readString();
-        this.start_name = in.readString();
-        this.end_name = in.readString();
-        this.find_time = in.readString();
-        this.deal_notes = in.readString();
-        this.status = in.readString();
-        this.deal_dep_name = in.readString();
-        this.deal_time = in.readString();
-        this.auditor = in.readString();
-        this.audit_status = in.readString();
-        this.week_line_id = in.readString();
-        this.day_line_id = in.readString();
-        this.month_id = in.readString();
-        this.group_list_id = in.readString();
-        this.deal_dep_id = in.readString();
-        this.start_id = in.readString();
-        this.end_id = in.readString();
-        this.line_name = in.readString();
-    }
-
-    public static final Parcelable.Creator<DefectFragmentBean> CREATOR = new Parcelable.Creator<DefectFragmentBean>() {
-        @Override
-        public DefectFragmentBean createFromParcel(Parcel source) {
-            return new DefectFragmentBean(source);
-        }
-
-        @Override
-        public DefectFragmentBean[] newArray(int size) {
-            return new DefectFragmentBean[size];
-        }
-    };
 }
