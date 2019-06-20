@@ -28,7 +28,7 @@ public class DefectFragmentAdapter extends BaseQuickAdapter<DefectFragmentBean, 
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, DefectIngDetailActivity.class);
                 Bundle bundle=new Bundle();
-                bundle.putParcelable("bean",item);
+                bundle.putSerializable("bean",item);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }

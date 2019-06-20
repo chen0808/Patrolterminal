@@ -90,6 +90,7 @@ public class DefectIngDetailActivity extends BaseActivity {
         }
 
 
+
 //        defectDepName.setText("工作班组：" + bean.getDeal_dep_name());
         getPartrolRecord(bean.getId());
         mGridViewAddImgAdapter = new DefectPicAdapter(this, mPicList);
