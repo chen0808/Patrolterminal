@@ -3,13 +3,11 @@ package com.patrol.terminal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
@@ -32,11 +30,20 @@ import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.PopListDialog;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
+import com.yanzhenjie.recyclerview.SwipeMenu;
+import com.yanzhenjie.recyclerview.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
+
+import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,6 +51,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.internal.Util;
 
 public class NextWeekPlanActivity extends BaseActivity {
 
@@ -59,7 +67,7 @@ public class NextWeekPlanActivity extends BaseActivity {
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
     @BindView(R.id.next_plan_rv)
-    RecyclerView nextPlanRv;
+    SwipeRecyclerView nextPlanRv;
     @BindView(R.id.plan_total_title)
     TextView planTotalTitle;
     @BindView(R.id.month_line_total)
@@ -78,6 +86,8 @@ public class NextWeekPlanActivity extends BaseActivity {
     ImageView taskScreen;
     @BindView(R.id.next_plan_done)
     TextView nextPlanDone;
+    @BindView(R.id.task_add_iv)
+    ImageView taskAddIv;
     private String state;
     private NextWeekPlanAdapter monthPlanAdapter;
     private List<WeekListBean> list;
@@ -128,7 +138,11 @@ public class NextWeekPlanActivity extends BaseActivity {
 //        year = getIntent().getIntExtra("year", 0);
 //        week = getIntent().getIntExtra("week", 0);
 //        WeekListBean weekListBean = list.get(0);
+        // 设置监听器。
+        nextPlanRv.setSwipeMenuCreator(mSwipeMenuCreator);
 
+        // 菜单点击监听。
+        nextPlanRv.setOnItemMenuClickListener(mItemMenuClickListener);
         time = DateUatil.getCurMonth();
         String[] years = time.split("年");
         String[] months = years[1].split("月");
@@ -136,13 +150,13 @@ public class NextWeekPlanActivity extends BaseActivity {
         year = Integer.valueOf(years[0]);
         week = TimeUtil.getCurrWeek() + 1;
         String from = getIntent().getStringExtra("from");
-        if ("todoWeek".equals(from)){
-            year=getIntent().getIntExtra("year",2019);
-            week=getIntent().getIntExtra("week",25);
+        if ("todoWeek".equals(from)) {
+            year = getIntent().getIntExtra("year", 2019);
+            week = getIntent().getIntExtra("week", 25);
         }
         String nextBeginTime = TimeUtil.getFirstDayOfWeek(year, week);
         String nextEndTime = TimeUtil.getLastDayOfWeek(year, week);
-        titleName.setText("第" + week + "周计划(" + nextBeginTime + "-" + nextEndTime + ")");
+        titleName.setText("第" + week + "周计划(" + nextBeginTime + "至" + nextEndTime + ")");
         depId = SPUtil.getDepId(this);
         state = getIntent().getStringExtra("audit_status");
         mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
@@ -186,7 +200,7 @@ public class NextWeekPlanActivity extends BaseActivity {
 
     //获取下周计划
     public void getWeekList() {
-        ProgressDialog.show(this,false,"正在加载中。。。。");
+        ProgressDialog.show(this, false, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
                 .getWeekList(String.valueOf(year), String.valueOf(week), depId, state2, "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
@@ -197,7 +211,7 @@ public class NextWeekPlanActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
                         num_total = 0;
                         kilo_total = 0;
-                       list = t.getResults();
+                        list = t.getResults();
 //                        monthPlanAdapter.setNewData(results);
                         lineList = getData(list);
                         for (int i = 0; i < list.size(); i++) {
@@ -216,7 +230,11 @@ public class NextWeekPlanActivity extends BaseActivity {
                         monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
 
                         state = list.get(0).getAudit_status();
-
+                         if ("0".equals(state)){
+                             taskAddIv.setVisibility(View.VISIBLE);
+                         }else {
+                             taskAddIv.setVisibility(View.GONE);
+                         }
                         LinearLayoutManager manager = new LinearLayoutManager(NextWeekPlanActivity.this);
                         nextPlanRv.setLayoutManager(manager);
                         monthPlanAdapter = new NextWeekPlanAdapter(R.layout.fragment_plan_item, list, state, mJobType);
@@ -276,11 +294,17 @@ public class NextWeekPlanActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.title_back, R.id.title_setting, R.id.task_screen})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.task_screen, R.id.task_add_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
+                break;
+            case R.id.task_add_iv:
+                Intent intent = new Intent(this, AddWeekPlanActivity.class);
+                intent.putExtra("year", year);
+                intent.putExtra("week", week);
+                startActivityForResult(intent, 10);
                 break;
             case R.id.title_setting:
                 submit(lineList);
@@ -428,6 +452,37 @@ public class NextWeekPlanActivity extends BaseActivity {
                 });
     }
 
+    //删除月计划
+    public void deleteWeekPlan( String id,int position) {
+        ProgressDialog.show(NextWeekPlanActivity.this, false, "正在加载中...");
+        BaseRequest.getInstance().getService()
+                .deleteWeekPlan(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<MonthPlanBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<MonthPlanBean>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.getCode() == 1) {
+                            num_total--;
+                            kilo_total=kilo_total-list.get(position).getTowers_range();
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            monthLineTotal.setText("杆段总数 : " + num_total + "条");
+                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                            list.remove(position);
+                            monthPlanAdapter.notifyItemRemoved(position);
+                        } else {
+                            Toast.makeText(NextWeekPlanActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -470,4 +525,46 @@ public class NextWeekPlanActivity extends BaseActivity {
         }
         return lineList;
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10 && resultCode == -1) {
+            getWeekList();
+        }
+    }
+    // 创建菜单：
+    SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
+            int width = getResources().getDimensionPixelSize(R.dimen.dp_60);
+
+            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
+            // 2. 指定具体的高，比如80;
+            // 3. WRAP_CONTENT，自身高度，不推荐;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            SwipeMenuItem deleteItem1 = new SwipeMenuItem(NextWeekPlanActivity.this);
+            deleteItem1.setImage(R.mipmap.search_delete);
+            deleteItem1.setWidth(width);
+            deleteItem1.setHeight(height);
+//            deleteItem1.setBackground(R.color.home_red);
+//            deleteItem1.setTextSize(15);
+//            deleteItem1.setTextColorResource(R.color.white);
+//            deleteItem1.setText("删除");
+            // 各种文字和图标属性设置。
+            rightMenu.addMenuItem(deleteItem1); // 在Item右侧添加一个菜单。
+            // 注意：哪边不想要菜单，那么不要添加即可。
+        }
+    };
+    OnItemMenuClickListener mItemMenuClickListener = new OnItemMenuClickListener() {
+        @Override
+        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
+            // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
+            menuBridge.closeMenu();
+            deleteWeekPlan(list.get(position).getId(),position);
+            // 左侧还是右侧菜单：
+            int direction = menuBridge.getDirection();
+            // 菜单在Item中的Position：
+            int menuPosition = menuBridge.getPosition();
+        }
+    };
 }

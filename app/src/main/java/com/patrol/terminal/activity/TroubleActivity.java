@@ -151,6 +151,9 @@ public class TroubleActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_search:
+                searchDelete.setVisibility(View.GONE);
+                search = "";
+                tvContent.setText("");
                 break;
         }
     }

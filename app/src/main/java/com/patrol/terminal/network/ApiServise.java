@@ -227,6 +227,10 @@ public interface ApiServise {
     @POST("/plan/week/auditPOST")
     Observable<BaseResult<List<MonthPlanBean>>> submitWeekPlan(@Body SubmitPlanReqBean bean);
 
+    //删除周计划
+    @POST("/plan/week/tower/deletePOST")
+    Observable<BaseResult<List<MonthPlanBean>>> deleteWeekPlan(@Query("id") String id);
+
     //月计划添加
     @POST("/plan/month/auditPOST")
     Observable<BaseResult<List<MonthPlanBean>>> submitMonthPlan(@Body SubmitPlanReqBean bean);

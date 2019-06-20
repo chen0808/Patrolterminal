@@ -42,11 +42,14 @@ public class NextWeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseView
         if (item.getStart_time() != null && item.getEnd_time() != null) {
             viewHolder.setText(R.id.tv_time, "时间：" + item.getStart_time() + " ~ " + item.getEnd_time());
             viewHolder.setVisible(R.id.tv_time, true);
+        }else {
+            viewHolder.setVisible(R.id.tv_time, false);
         }
 
-        //编辑
-        ImageView edit = viewHolder.getView(R.id.iv_edit);
-        AdapterUtils.setStatus(edit, item.getAudit_status());
+//        编辑
+//        ImageView edit = viewHolder.getView(R.id.iv_edit);
+//        AdapterUtils.setStatus(edit, item.getAudit_status());
+        viewHolder.setGone(R.id.iv_edit,false);
 
         //审核状态
         HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);

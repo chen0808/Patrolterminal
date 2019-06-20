@@ -546,7 +546,6 @@ public class NextMonthPlanActivity extends BaseActivity {
     private List<Tower> getData(MonthListBean results, int type) {
         List<Tower> lineList = new ArrayList<>();
         List<MonthPlanBean> patrol = results.getPatrol();
-        List<MonthPlanBean> ele = results.getEle();
         List<MonthPlanBean> repair = results.getRepair();
         if (patrol != null) {
             for (int j = 0; j < patrol.size(); j++) {
@@ -586,14 +585,11 @@ public class NextMonthPlanActivity extends BaseActivity {
                 data1 = patrol;
                 data.addAll(patrol);
             }
-            if (repair != null) {
+            if (repair != null&&mJobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
                 data.addAll(repair);
                 data2.addAll(repair);
             }
-            if (ele != null) {
-                data.addAll(ele);
-                data2.addAll(ele);
-            }
+
         }
         return lineList;
     }

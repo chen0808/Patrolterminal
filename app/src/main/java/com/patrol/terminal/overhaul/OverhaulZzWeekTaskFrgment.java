@@ -127,7 +127,7 @@ public class OverhaulZzWeekTaskFrgment extends BaseFragment {
 
         String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
         String endDate = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
-        taskDate.setText(year + "年第" + week + "周(" + beginDate + "-" + endDate + ")");
+        taskDate.setText(year + "年第" + week + "周(" + beginDate + "至" + endDate + ")");
 
         // 设置监听器。
         planRv.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -196,7 +196,7 @@ public class OverhaulZzWeekTaskFrgment extends BaseFragment {
             for (int j = 1; j < maxWeekNumOfYear + 1; j++) {
                 String firstDayOfWeek = TimeUtil.getFirstDayOfWeek(i, j);
                 String lastDayOfWeek = TimeUtil.getLastDayOfWeek(i, j);
-                options3Items_01.add("第" + (j) + "周(" + firstDayOfWeek + "-" + lastDayOfWeek + ")");
+                options3Items_01.add("第" + (j) + "周(" + firstDayOfWeek + "至" + lastDayOfWeek + ")");
 
             }
             weeks.add(options3Items_01);

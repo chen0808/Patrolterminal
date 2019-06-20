@@ -65,7 +65,6 @@ public class DefectActivity extends BaseActivity {
     private int pageNum = 1;
     private int count = 10;
     private String search = "";
-    private long time = 0;
   private List<DefectFragmentBean> defectdata=new ArrayList<>();
     private String dep_id;
     //private List<DefectDetailBean> mDefectDetailList = new ArrayList<>();

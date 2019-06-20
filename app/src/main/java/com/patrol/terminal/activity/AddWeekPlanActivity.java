@@ -165,12 +165,10 @@ public class AddWeekPlanActivity extends BaseActivity {
         //获取下周起始和终止日期
         String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
         String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
-        String[] start = beginDate.split("月");
+        String[] start = beginDate.split("-");
         String startMonth = start[0];
-        String startDay = start[1].split("日")[0];
-        String[] end = end2Date.split("月");
+        String[] end = end2Date.split("-");
         String endMonth = end[0];
-        String endDay = end[1].split("日")[0];
         if (startMonth.equals(endMonth)) {
             month = Integer.valueOf(startMonth) + "";
         } else {
@@ -316,8 +314,8 @@ public class AddWeekPlanActivity extends BaseActivity {
         bean.setYear(year + "");
 //        bean.setMonth(month + "");
         bean.setWeek(week + "");
-        bean.setBegin_time(DateUatil.dateToDate(year + "年" + beginDate));
-        bean.setEnd_time(DateUatil.dateToDate(year + "年" + endDate));
+        bean.setBegin_time(year + "-"+ beginDate);
+        bean.setEnd_time(year + "-" + endDate);
         bean.setTowers(selectType);
 
         BaseRequest.getInstance().getService()

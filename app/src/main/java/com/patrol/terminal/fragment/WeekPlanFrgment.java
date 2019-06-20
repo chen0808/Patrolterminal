@@ -177,8 +177,8 @@ public class WeekPlanFrgment extends BaseFragment {
         String endDate = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
         String nextBeginTime = TimeUtil.getFirstDayOfWeek(nextYear, nextWeek);
         String nextEndTime = TimeUtil.getLastDayOfWeek(nextYear, nextWeek);
-        taskDate.setText(year + "年第" + week + "周(" + beginDate + "-" + endDate + ")");
-        addNextPlan.setText("下周工作计划制定(" + nextBeginTime + "-" + nextEndTime + ")");
+        taskDate.setText(year + "年第" + week + "周(" + beginDate + "至" + endDate + ")");
+        addNextPlan.setText("下周计划制定(" + nextBeginTime + "至" + nextEndTime + ")");
         planTotalTitle.setText("本周计划工作汇总");
         // 设置监听器。
         planRv.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -357,6 +357,7 @@ public class WeekPlanFrgment extends BaseFragment {
 
                             weekListBean = nextWeekList.get(0);
                             String audit_status = weekListBean.getAudit_status();
+                            addPlanStatus.setVisibility(View.VISIBLE);
                             addPlanStatus.setText(StringUtil.getYxbWeekState(weekListBean.getAudit_status()));
                             if ("2".equals(weekListBean.getAudit_status())) {
                                 addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
@@ -555,7 +556,7 @@ public class WeekPlanFrgment extends BaseFragment {
             for (int j = 1; j < maxWeekNumOfYear + 1; j++) {
                 String firstDayOfWeek = TimeUtil.getFirstDayOfWeek(i, j);
                 String lastDayOfWeek = TimeUtil.getLastDayOfWeek(i, j);
-                options3Items_01.add("第" + (j) + "周(" + firstDayOfWeek + "-" + lastDayOfWeek + ")");
+                options3Items_01.add("第" + (j) + "周(" + firstDayOfWeek + "至" + lastDayOfWeek + ")");
 
             }
             weeks.add(options3Items_01);

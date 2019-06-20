@@ -35,7 +35,7 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
     @Override
     protected void convert(BaseViewHolder viewHolder, MonthPlanBean item) {
         //添加子控件的点击事件
-        viewHolder.addOnClickListener(R.id.plan_to_change)
+        viewHolder.addOnClickListener(R.id.iv_edit)
                 .addOnClickListener(R.id.plan_deal);
         //判断是检修计划还是运行计划
         if (item.getRepair_content() == null) {

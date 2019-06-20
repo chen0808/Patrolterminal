@@ -102,6 +102,11 @@ public class DateUatil {
         SimpleDateFormat format  = new SimpleDateFormat("MM月dd日");
         return format.format(date);
     }
+
+    public static String getMonthAndDays(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format  = new SimpleDateFormat("MM-dd");
+        return format.format(date);
+    }
     public static String getMonth(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format  = new SimpleDateFormat("MM");
         return format.format(date);

@@ -131,7 +131,7 @@
                         android:drawableLeft="@mipmap/grouo_icon"
                         android:drawablePadding="@dimen/dp_5"
                         android:gravity="center_vertical"
-                        android:text="下月工作计划制定"
+                        android:text="下月计划制定"
                         android:textColor="@color/color_33"
                         android:textSize="@dimen/sp_16"
                         android:textStyle="bold" />
@@ -172,7 +172,7 @@
                             android:id="@+id/plan_point"
                             android:layout_width="@dimen/dp_10"
                             android:layout_height="@dimen/dp_10"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="8dp"
                             android:layout_marginRight="@dimen/dp_10"
                             android:background="@drawable/plan_green_bg" />
 

@@ -130,7 +130,7 @@ public class DayPlanFrgment extends BaseFragment {
     @Override
     protected void initData() {
         addPlanStatus.setVisibility(View.GONE);
-        addNextPlan.setText("明日工作计划制定");
+        addNextPlan.setText("明日计划制定");
         planTotalTitle.setText("今日工作计划汇总");
 
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));

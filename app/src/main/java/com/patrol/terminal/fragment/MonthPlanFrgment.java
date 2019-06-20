@@ -202,7 +202,7 @@ public class MonthPlanFrgment extends BaseFragment {
                 //判断是否是保电计划
                 if (item.getRepair_content() != null) {
                     switch (view.getId()) {
-                        case R.id.plan_to_change:
+                        case R.id.iv_edit:
                             Intent intent = new Intent(mContext, LineCheckActivity.class);
                             intent.putExtra("id", item.getId());
                             intent.putExtra("year", item.getYear());
@@ -212,7 +212,7 @@ public class MonthPlanFrgment extends BaseFragment {
                     }
                 } else {
                     switch (view.getId()) {
-                        case R.id.plan_to_change:
+                        case R.id.iv_edit:
                             Intent intent = new Intent(mContext, AddMonthPlanActivity.class);
                             intent.putExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
                             intent.putExtra("line_name", item.getLine_name());
@@ -282,6 +282,7 @@ public class MonthPlanFrgment extends BaseFragment {
                                 addPlanLl.setVisibility(View.VISIBLE);
                                 addPlanName.setText(nextYear + "年" + nextMonth + "月工作计划");
                                 monthPlanBean = nextPatrolList.get(0);
+                                addPlanStatus.setVisibility(View.VISIBLE);
                                 addPlanStatus.setText(StringUtil.getYXBstate(monthPlanBean.getAudit_status()));
 //                                if ("3".equals(monthPlanBean.getAudit_status())) {
 //                                    addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
@@ -599,7 +600,6 @@ public class MonthPlanFrgment extends BaseFragment {
     private List<Tower> getData(MonthListBean results, int type) {
         List<Tower> lineList = new ArrayList<>();
         List<MonthPlanBean> patrol = results.getPatrol();
-        List<MonthPlanBean> ele = results.getEle();
         List<MonthPlanBean> repair = results.getRepair();
         if (patrol != null) {
             for (int j = 0; j < patrol.size(); j++) {
@@ -654,14 +654,11 @@ public class MonthPlanFrgment extends BaseFragment {
                 data1 = patrol;
                 data.addAll(patrol);
             }
-            if (repair != null) {
+            if (repair != null&&mJobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
                 data.addAll(repair);
                 data2.addAll(repair);
             }
-            if (ele != null) {
-                data.addAll(ele);
-                data2.addAll(ele);
-            }
+
         }
         return lineList;
     }

@@ -101,12 +101,12 @@ public class LineCheckWeekActivity extends BaseActivity {
             //获取当前周起始和终止日期
             String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
             String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
-            String[] start = beginDate.split("月");
+            String[] start = beginDate.split("-");
             startMonth = start[0];
-            startDay = start[1].split("日")[0];
-            String[] end = end2Date.split("月");
+            startDay = start[1];
+            String[] end = end2Date.split("-");
             endMonth = end[0];
-            endDay = end[1].split("日")[0];
+            endDay = end[1];
             if (startMonth == endMonth) {
                 month = startMonth;
             } else {

@@ -378,6 +378,19 @@ public class TimeUtil {
 		return getFirstDayOfWeek(cal.getTime());
 	}
 
+	// 获取第几周的起始日期
+	public static String getDateOfWeek(int year, int week) {
+		Calendar c = Calendar.getInstance();//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, Calendar.JANUARY);
+		c.set(Calendar.DATE, 1);
+
+		Calendar cal = (GregorianCalendar) c.clone();
+		cal.add(Calendar.DATE, (week-1) * 7);
+
+		return getDayOfWeek(cal.getTime());
+	}
+
 	// 获取某年的第几周的结束日期
 	public static String getLastDayOfWeek(int year, int week) {
         Calendar c = Calendar.getInstance();//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
@@ -389,6 +402,18 @@ public class TimeUtil {
 		cal.add(Calendar.DATE, (week-1) * 7);
 
 		return getLastDayOfWeek(cal.getTime());
+	}
+	// 获取某年的第几周的结束日期
+	public static String getLastDateOfWeek(int year, int week) {
+		Calendar c = Calendar.getInstance();//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, Calendar.JANUARY);
+		c.set(Calendar.DATE, 1);
+
+		Calendar cal = (GregorianCalendar) c.clone();
+		cal.add(Calendar.DATE, (week-1) * 7);
+
+		return getLastDayOfWeeks(cal.getTime());
 	}
 	// 获取某年的第几周的所在月份
 	public static String getMonthOfWeek(int year, int week) {
@@ -414,10 +439,19 @@ public class TimeUtil {
 		c.setTime(date);
 		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek()); // Monday
 		Date time = c.getTime();
-		String date1 = DateUatil.getMonthAndDay(time);
+		String date1 = DateUatil.getMonthAndDays(time);
 		return date1;
 	}
-
+	// 获取当前时间所在周的开始日期
+	public static String getDayOfWeek(Date date) {
+		Calendar c = Calendar.getInstance();//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
+		c.setFirstDayOfWeek(Calendar.MONDAY);
+		c.setTime(date);
+		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek()); // Monday
+		Date time = c.getTime();
+		String date1 = DateUatil.getMonthAndDays(time);
+		return date1;
+	}
 	// 获取当前时间所在周的结束日期
 	public static String getLastDayOfWeek(Date date) {
         Calendar c = Calendar.getInstance();//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
@@ -425,7 +459,17 @@ public class TimeUtil {
 		c.setTime(date);
 		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek() + 6); // Sunday
 		Date time = c.getTime();
-		String monthAndDay = DateUatil.getMonthAndDay(time);
+		String monthAndDay = DateUatil.getMonthAndDays(time);
+		return monthAndDay;
+	}
+	// 获取当前时间所在周的结束日期
+	public static String getLastDayOfWeeks(Date date) {
+		Calendar c = Calendar.getInstance();//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
+		c.setFirstDayOfWeek(Calendar.MONDAY);
+		c.setTime(date);
+		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek() + 6); // Sunday
+		Date time = c.getTime();
+		String monthAndDay = DateUatil.getMonthAndDays(time);
 		return monthAndDay;
 	}
 
