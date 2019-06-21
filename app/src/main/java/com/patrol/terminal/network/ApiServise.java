@@ -545,6 +545,33 @@ public interface ApiServise {
     @GET("task/trouble/pdaPageGET")
     Observable<BaseResult<List<TroubleFragmentBean>>> getAllDanger(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("search") String search);
 
+    //防鸟患
+    @GET("task/trouble/bird/listGET")
+    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);
+
+  /*  //防外破
+    @GET("task/trouble/break/listGET")
+    Observable<BaseResult<List<BirdBean>>> getBreak(@Query("id") String id);
+
+    //防鸟患
+    @GET("task/trouble/disaster/listGET")
+    Observable<BaseResult<List<BirdBean>>> getDisaster(@Query("id") String id);
+
+    //防鸟患
+    @GET("task/trouble/disaster/listGET")
+    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);
+
+    //防鸟患
+    @GET("task/trouble/bird/listGET")
+    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);
+
+    //防鸟患
+    @GET("task/trouble/bird/listGET")
+    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);
+
+    //防鸟患
+    @GET("task/trouble/bird/listGET")
+    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);*/
 
     //获取检修年,月,周计划列表
     //http://172.16.15.60:9096/plan/repair/listGET?year=2019&month=5&week=2

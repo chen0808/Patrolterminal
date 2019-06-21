@@ -31,7 +31,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.CheckActivity"></activity>
+        <activity android:name=".activity.CheckActivity" />
         <activity android:name=".activity.NextMonthPlanActivity" />
         <activity android:name=".activity.NextWeekPlanActivity" />
         <activity android:name=".activity.NextDayPlanActivity" />
@@ -58,7 +58,7 @@
         <activity android:name=".activity.TicketSafeActivity" />
         <activity android:name=".activity.SafeListActivity" />
         <activity android:name=".activity.SpecialAttrListActivity" />
-        <activity android:name=".activity.TroubleDetailActivity"></activity>
+        <activity android:name=".activity.TroubleDetailActivity" />
         <activity
             android:name=".activity.NewTaskActivity"
             android:screenOrientation="portrait" />
@@ -85,7 +85,7 @@
             android:name=".activity.PatrolRecordActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.TestActivity"></activity>
+        <activity android:name=".activity.TestActivity" />
         <activity
             android:name=".activity.ControlCardActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -102,6 +102,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

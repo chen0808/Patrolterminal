@@ -1,6 +1,7 @@
 package com.patrol.terminal.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,11 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -42,9 +48,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -93,7 +96,7 @@ public class TemporaryActivity extends BaseActivity {
     private List<String> typeNameList = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
     private List<String> typeVal = new ArrayList<>();
-    private List<String> nameList = new ArrayList<>();
+    private String[] nameList = {"监督性巡视", "故障巡视", "特殊性巡视"};
     private List<LineTypeBean> typeVal2 = new ArrayList<>();
     private List<List<String>> typeSign = new ArrayList<>();
     private String typeName;
@@ -119,6 +122,7 @@ public class TemporaryActivity extends BaseActivity {
     private String endMonth;
     private String endDay;
     private String day;
+    private AlertDialog personalGroupDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,7 +215,7 @@ public class TemporaryActivity extends BaseActivity {
 //                    Toast.makeText(this, "请选择工作类型", Toast.LENGTH_SHORT).show();
 //                    return;
 //                }
-                if (start > end && start != 0 && end != -1&&day==null) {
+                if (start > end && start != 0 && end != -1 && day == null) {
                     Toast.makeText(this, "请选择起始结束时间，且起始时间不能大于结束时间", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -331,12 +335,8 @@ public class TemporaryActivity extends BaseActivity {
         typeVal2.add(new LineTypeBean("监督性巡视", "11"));
         typeVal2.add(new LineTypeBean("故障巡视", "2"));
         typeVal2.add(new LineTypeBean("特殊性巡视", "4"));
-        nameList.clear();
-        nameList.add("监督性巡视");
-        nameList.add("故障巡视");
-        nameList.add("特殊性巡视");
         //条件选择器
-        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+       /* OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 typeName = typeVal2.get(options1).getName();
@@ -351,7 +351,32 @@ public class TemporaryActivity extends BaseActivity {
         }).build();
         pvOptions.setPicker(nameList);
         pvOptions.setSelectOptions(0);
-        pvOptions.show();
+        pvOptions.show();*/
+
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle("选择负责人");
+        /**
+         *第一个参数:弹出框的消息集合，一般为字符串集合
+         * 第二个参数：默认被选中的，布尔类数组
+         * 第三个参数：勾选事件监听
+         */
+        alertBuilder.setSingleChoiceItems(nameList, nameList.length, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int options1) {
+                monthPlanType.setText(nameList[options1]);
+                for (int i = 0; i < typeVal2.size(); i++) {
+                    LineTypeBean lineTypeBean = typeVal2.get(i);
+                    if (nameList[options1].contains(lineTypeBean.getName())) {
+                        sign = lineTypeBean.getSign();
+                    }
+                }
+                personalGroupDialog.dismiss();
+            }
+        });
+
+        personalGroupDialog = alertBuilder.create();
+        personalGroupDialog.show();
     }
 
     @Override
@@ -454,8 +479,8 @@ public class TemporaryActivity extends BaseActivity {
 //        bean.setType_id(type_id);
         bean.setType_sign(sign);
         bean.setType_name(typeName);
-        bean.setStart_time(year+"-"+month+"-"+day);
-        bean.setEnd_time(year+"-"+month+"-"+day);
+        bean.setStart_time(year + "-" + month + "-" + day);
+        bean.setEnd_time(year + "-" + month + "-" + day);
         bean.setYear(String.valueOf(year));
         bean.setMonth(String.valueOf(month));
         bean.setDay(String.valueOf(day));
