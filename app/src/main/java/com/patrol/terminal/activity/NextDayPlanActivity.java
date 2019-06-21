@@ -2,25 +2,43 @@ package com.patrol.terminal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.NextDayPlanAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DayListBean;
+import com.patrol.terminal.bean.MonthPlanBean;
+import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.ProgressDialog;
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
+import com.yanzhenjie.recyclerview.SwipeMenu;
+import com.yanzhenjie.recyclerview.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.text.DecimalFormat;
+import java.time.Year;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class NextDayPlanActivity extends BaseActivity {
 
@@ -36,7 +54,7 @@ public class NextDayPlanActivity extends BaseActivity {
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
     @BindView(R.id.next_plan_rv)
-    RecyclerView nextPlanRv;
+    SwipeRecyclerView nextPlanRv;
     @BindView(R.id.plan_total_title)
     TextView planTotalTitle;
     @BindView(R.id.month_line_total)
@@ -51,11 +69,19 @@ public class NextDayPlanActivity extends BaseActivity {
     TextView monthLine35kvNum;
     @BindView(R.id.month_line_35kv_kilo)
     TextView monthLine35kvKilo;
+    @BindView(R.id.task_add_iv)
+    ImageView taskAddIv;
+    @BindView(R.id.task_screen)
+    ImageView taskScreen;
+    @BindView(R.id.next_plan_done)
+    TextView nextPlanDone;
     private String state;
     private NextDayPlanAdapter monthPlanAdapter;
     private List<DayListBean> list;
     private int year;
-    private int month,day;
+    private int month, day;
+    private int num_total;
+    private double kilo_total;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,33 +93,64 @@ public class NextDayPlanActivity extends BaseActivity {
 
     private void initview() {
         planTotalTitle.setText("明日工作计划汇总");
-        list = (List<DayListBean>) getIntent().getSerializableExtra("list");
 
-        int num_total = getIntent().getIntExtra("num_total", 0);
-        double kilo_total = getIntent().getDoubleExtra("kilo_total", 0);
-        int num_110kv = getIntent().getIntExtra("110kv_num", 0);
-        double kilo_110kv = getIntent().getDoubleExtra("110kv_kolo", 0);
-        int num_35kv = getIntent().getIntExtra("35kv_num", 0);
-        double kilo_35kv = getIntent().getDoubleExtra("35kv_kolo", 0);
-
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        monthLineTotal.setText("杆段总数 : " + num_total + "条");
-        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
-        monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
-        monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
-        monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
-        monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
+        taskAddIv.setVisibility(View.VISIBLE);
         year = getIntent().getIntExtra("year", 2019);
         month = getIntent().getIntExtra("month", 23);
         day = getIntent().getIntExtra("day", 23);
-        titleName.setText(year+"年"+month+"月"+day+"日计划");
-        DayListBean weekListBean = list.get(0);
-        state = weekListBean.getAudit_status();
+        titleName.setText(year + "年" + month + "月" + day + "日计划");
         LinearLayoutManager manager = new LinearLayoutManager(this);
+        String mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            // 设置监听器。
+            nextPlanRv.setSwipeMenuCreator(mSwipeMenuCreator);
+
+            // 菜单点击监听。
+            nextPlanRv.setOnItemMenuClickListener(mItemMenuClickListener);
+        }
         nextPlanRv.setLayoutManager(manager);
         monthPlanAdapter = new NextDayPlanAdapter(R.layout.fragment_plan_item, list, state, "");
         nextPlanRv.setAdapter(monthPlanAdapter);
         adapterClick();
+        getDayList();
+    }
+
+    //获取日计划列表
+    public void getDayList() {
+        ProgressDialog.show(this, false, "正在加载中。。。");
+        BaseRequest.getInstance().getService()
+                .getDayList(year + "", month + "", day + "", SPUtil.getDepId(this), "line_id,name")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DayListBean>>(this) {
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<DayListBean>> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            num_total = 0;
+                            kilo_total = 0;
+                            list = t.getResults();
+
+                            for (int i = 0; i < list.size(); i++) {
+                                DayListBean dayListBean = list.get(i);
+                                num_total++;
+                                kilo_total = kilo_total + dayListBean.getTowers_range();
+
+                            }
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            monthLineTotal.setText("杆段总数 : " + num_total + "条");
+                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                            monthPlanAdapter.setNewData(list);
+                            ProgressDialog.cancle();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Log.e("fff", e.toString());
+                    }
+                });
     }
 
     public void adapterClick() {
@@ -102,10 +159,10 @@ public class NextDayPlanActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
-                Intent intent=new Intent();
+                Intent intent = new Intent();
                 intent.setClass(NextDayPlanActivity.this, DayPlanDetailActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putParcelable("bean",list.get(position));
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("bean", list.get(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -113,15 +170,95 @@ public class NextDayPlanActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.title_back, R.id.title_setting})
+    @OnClick({R.id.title_back, R.id.task_add_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
+            case R.id.task_add_iv:
+                Intent intent = new Intent(this, AddDayPlanActivity.class);
+                intent.putExtra("year", year+"");
+                intent.putExtra("month", month+"");
+                intent.putExtra("day", day+"");
+                startActivityForResult(intent, 10);
+                break;
         }
     }
 
+    // 创建菜单：
+    SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
+            int width = getResources().getDimensionPixelSize(R.dimen.dp_60);
 
+            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
+            // 2. 指定具体的高，比如80;
+            // 3. WRAP_CONTENT，自身高度，不推荐;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            SwipeMenuItem deleteItem1 = new SwipeMenuItem(NextDayPlanActivity.this);
+            deleteItem1.setImage(R.mipmap.plan_delete);
+            deleteItem1.setWidth(width);
+            deleteItem1.setHeight(height);
+//            deleteItem1.setBackground(R.color.home_red);
+//            deleteItem1.setTextSize(15);
+//            deleteItem1.setTextColorResource(R.color.white);
+//            deleteItem1.setText("删除");
+            // 各种文字和图标属性设置。
+            rightMenu.addMenuItem(deleteItem1); // 在Item右侧添加一个菜单。
+            // 注意：哪边不想要菜单，那么不要添加即可。
+        }
+    };
+    OnItemMenuClickListener mItemMenuClickListener = new OnItemMenuClickListener() {
+        @Override
+        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
+            // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
+            menuBridge.closeMenu();
+            deleteDayPlan(list.get(position).getId(), position);
+            // 左侧还是右侧菜单：
+            int direction = menuBridge.getDirection();
+            // 菜单在Item中的Position：
+            int menuPosition = menuBridge.getPosition();
+        }
+    };
 
+    //删除周计划
+    public void deleteDayPlan(String id, int position) {
+        ProgressDialog.show(NextDayPlanActivity.this, false, "正在加载中...");
+        BaseRequest.getInstance().getService()
+                .deleteDayPlan(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<MonthPlanBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<MonthPlanBean>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.getCode() == 1) {
+                            num_total--;
+                            kilo_total = kilo_total - list.get(position).getTowers_range();
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            monthLineTotal.setText("杆段总数 : " + num_total + "条");
+                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                            list.remove(position);
+                            monthPlanAdapter.notifyItemRemoved(position);
+                        } else {
+                            Toast.makeText(NextDayPlanActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10 && resultCode == -1) {
+            getDayList();
+        }
+    }
 }

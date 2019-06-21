@@ -88,17 +88,30 @@ public class HorizontalLineView extends LinearLayout {
         line2.setVisibility(GONE);
         switch (type) {
             case "0":
+            case "3":
+                view1.setBackgroundResource(R.drawable.line_point_0);
+                line1.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view2.setBackgroundResource(R.drawable.gray_oval);
+                line2.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view3.setBackgroundResource(R.drawable.gray_oval);
+                line3.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view4.setBackgroundResource(R.drawable.gray_oval);
                 break;
             case "1":
-                view2.setBackgroundResource(R.drawable.green_oval);
-                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view1.setBackgroundResource(R.drawable.line_point_1);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_point_1));
+                view2.setBackgroundResource(R.drawable.line_point_1);
+                line2.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view3.setBackgroundResource(R.drawable.gray_oval);
+                line3.setBackgroundColor(getResources().getColor(R.color.color_69));
+                view4.setBackgroundResource(R.drawable.gray_oval);
                 break;
             case "2":
-            case "3":
-                view2.setBackgroundResource(R.drawable.green_oval);
-                line1.setBackgroundColor(getResources().getColor(R.color.line_green));
-                view4.setBackgroundResource(R.drawable.green_oval);
-                line3.setBackgroundColor(getResources().getColor(R.color.line_green));
+                view1.setBackgroundResource(R.drawable.line_point_3);
+                view2.setBackgroundResource(R.drawable.line_point_3);
+                line1.setBackgroundColor(getResources().getColor(R.color.line_point_3));
+                view4.setBackgroundResource(R.drawable.line_point_3);
+                line3.setBackgroundColor(getResources().getColor(R.color.line_point_3));
                 break;
             case "4":
                 view2.setBackgroundResource(R.drawable.green_oval);

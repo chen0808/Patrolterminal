@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp_10"
-    android:layout_marginTop="@dimen/dp_10"
+    android:layout_marginTop="@dimen/dp_5"
+    android:paddingBottom="@dimen/dp_5"
+    android:layout_marginBottom="@dimen/dp_5"
     android:layout_marginRight="@dimen/dp_10"
     android:background="@drawable/btn_white">
 
@@ -112,6 +114,16 @@
         android:textSize="13sp"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/tv_audit_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_allot_status"
+        android:layout_toRightOf="@id/item_plan_date_ll"
+        android:text="审核状态"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/iv_edit"
         android:layout_width="wrap_content"
@@ -143,7 +155,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_allot_status"
+        android:layout_below="@id/tv_audit_status"
         android:layout_marginRight="@dimen/dp_50"
         android:layout_marginBottom="@dimen/dp_5"
         android:layout_toRightOf="@id/item_plan_date_ll"
@@ -154,14 +166,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="gone"
+           >
 
             <TextView
                 android:id="@+id/plan_progressbar_tv"
-                android:layout_width="0dp"
+                android:layout_width="110dp"
                 android:layout_height="@dimen/dp_20"
-                android:layout_marginRight="@dimen/dp_10"
-                android:layout_weight="6"
                 android:gravity="center_vertical"
                 android:text="任务进度(0/10):"
                 android:textSize="@dimen/sp_12" />
@@ -169,22 +180,20 @@
             <ProgressBar
                 android:id="@+id/plan_progressbar_probar"
                 style="?android:attr/progressBarStyleHorizontal"
-
-                android:layout_width="0dp"
+                android:layout_width="100dp"
                 android:layout_height="10dp"
+                android:layout_marginTop="1dp"
                 android:layout_gravity="center"
-                android:layout_weight="10"
                 android:max="100"
                 android:progress="0" />
 
             <TextView
                 android:id="@+id/plan_progressbar_num"
-                android:layout_width="0dp"
+                android:layout_width="60dp"
                 android:layout_height="@dimen/dp_20"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="0%"
+                android:text="100%"
                 android:textSize="@dimen/sp_11" />
         </LinearLayout>
 
@@ -202,6 +211,7 @@
         android:layout_height="@dimen/dp_half"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dp_20"
+        android:visibility="gone"
         android:layout_marginRight="@dimen/dp_20"
         android:background="@color/write_order_grat" />
 </RelativeLayout>

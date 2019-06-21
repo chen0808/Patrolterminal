@@ -44,15 +44,26 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
 //        AdapterUtils.setStatus(edit, item.getAudit_status());
 
         //审核状态
-        HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
-        horizontalLineView.setVisibility(View.VISIBLE);
-        horizontalLineView.setStatus(item.getAudit_status());
+        TextView tvAuditStatus = viewHolder.getView(R.id.tv_audit_status);
+
+        if ("0".equals(item.getDone_status())) {
+            AdapterUtils.setText(tvAuditStatus, "审核状态：待提交审核");
+        } else if ("1".equals(item.getDone_status())){
+            AdapterUtils.setText(tvAuditStatus, "审核状态：待专责审核");
+        }else if ("2".equals(item.getDone_status())) {
+            AdapterUtils.setText(tvAuditStatus, "审核状态：审核通过");
+        }else if ("3".equals(item.getDone_status())){
+            AdapterUtils.setText(tvAuditStatus, "审核状态：审核不通过");
+        }
+//        HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
+//        horizontalLineView.setVisibility(View.VISIBLE);
+//        horizontalLineView.setStatus(item.getAudit_status());
 
         //计划类型
         TextView tvContent = viewHolder.getView(R.id.tv_content);
         AdapterUtils.setText(tvContent, StringUtil.getTypeSign(item.getType_sign()));
 
-        if ("0".equals(item.getDone_status())) {
+        if ("0".equals(item.getAllot_status())) {
             TextView tvAllorStatus = viewHolder.getView(R.id.tv_allot_status);
             AdapterUtils.setText(tvAllorStatus, "分配状态：未分配");
         } else {
@@ -71,7 +82,7 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
             viewHolder.setGone(R.id.plan_progressbar_ll, false);
         }
         viewHolder.setVisible(R.id.tv_allot_status, true);
-        viewHolder.setVisible(R.id.iv_detail, true);
         viewHolder.setVisible(R.id.iv_edit, false);
+        viewHolder.setVisible(R.id.tv_audit_status, true);
     }
 }

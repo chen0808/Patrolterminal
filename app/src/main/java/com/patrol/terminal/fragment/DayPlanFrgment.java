@@ -315,13 +315,6 @@ public class DayPlanFrgment extends BaseFragment {
                 break;
             case R.id.add_plan_ll:
                 Intent intent1 = new Intent(getContext(), NextDayPlanActivity.class);
-                intent1.putExtra("list", (Serializable) nextDayList);
-                intent1.putExtra("num_total", next_num_total);
-                intent1.putExtra("kilo_total", next_kilo_total);
-                intent1.putExtra("110kv_num", next_num_110kv);
-                intent1.putExtra("110kv_kolo", next_kilo_110kv);
-                intent1.putExtra("35kv_num", next_num_35kv);
-                intent1.putExtra("35kv_kolo", next_kilo_35kv);
                 intent1.putExtra("year", nextyear);
                 intent1.putExtra("month", nextmonth);
                 intent1.putExtra("day", nextDay);

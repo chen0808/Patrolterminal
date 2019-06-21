@@ -138,11 +138,7 @@ public class NextWeekPlanActivity extends BaseActivity {
 //        year = getIntent().getIntExtra("year", 0);
 //        week = getIntent().getIntExtra("week", 0);
 //        WeekListBean weekListBean = list.get(0);
-        // 设置监听器。
-        nextPlanRv.setSwipeMenuCreator(mSwipeMenuCreator);
 
-        // 菜单点击监听。
-        nextPlanRv.setOnItemMenuClickListener(mItemMenuClickListener);
         time = DateUatil.getCurMonth();
         String[] years = time.split("年");
         String[] months = years[1].split("月");
@@ -202,7 +198,7 @@ public class NextWeekPlanActivity extends BaseActivity {
     public void getWeekList() {
         ProgressDialog.show(this, false, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getWeekList(String.valueOf(year), String.valueOf(week), depId, state2, "create_time desc,type_sign,line_id")
+                .getWeekList(String.valueOf(year), String.valueOf(week), depId, state2, "line_id,name")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WeekListBean>>(this) {
@@ -232,8 +228,18 @@ public class NextWeekPlanActivity extends BaseActivity {
                         state = list.get(0).getAudit_status();
                          if ("0".equals(state)){
                              taskAddIv.setVisibility(View.VISIBLE);
+                             // 设置监听器。
+                             nextPlanRv.setSwipeMenuCreator(mSwipeMenuCreator);
+
+                             // 菜单点击监听。
+                             nextPlanRv.setOnItemMenuClickListener(mItemMenuClickListener);
                          }else {
                              taskAddIv.setVisibility(View.GONE);
+                             // 设置监听器。
+                             nextPlanRv.setSwipeMenuCreator(null);
+
+                             // 菜单点击监听。
+                             nextPlanRv.setOnItemMenuClickListener(null);
                          }
                         LinearLayoutManager manager = new LinearLayoutManager(NextWeekPlanActivity.this);
                         nextPlanRv.setLayoutManager(manager);
@@ -452,7 +458,7 @@ public class NextWeekPlanActivity extends BaseActivity {
                 });
     }
 
-    //删除月计划
+    //删除周计划
     public void deleteWeekPlan( String id,int position) {
         ProgressDialog.show(NextWeekPlanActivity.this, false, "正在加载中...");
         BaseRequest.getInstance().getService()
@@ -543,7 +549,7 @@ public class NextWeekPlanActivity extends BaseActivity {
             // 3. WRAP_CONTENT，自身高度，不推荐;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             SwipeMenuItem deleteItem1 = new SwipeMenuItem(NextWeekPlanActivity.this);
-            deleteItem1.setImage(R.mipmap.search_delete);
+            deleteItem1.setImage(R.mipmap.plan_delete);
             deleteItem1.setWidth(width);
             deleteItem1.setHeight(height);
 //            deleteItem1.setBackground(R.color.home_red);
