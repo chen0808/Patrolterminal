@@ -11,20 +11,23 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_100"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/dp_20">
+        android:paddingBottom="@dimen/dp_10"
+      >
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_20"
+            >
 
             <TextView
                 android:id="@+id/plan_total_title"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="@dimen/dp_40"
                 android:drawableLeft="@mipmap/grouo_icon"
                 android:drawablePadding="@dimen/dp_5"
                 android:gravity="center_vertical"
@@ -69,65 +72,91 @@
                 android:text="完成进度 :66%"
                 android:visibility="gone" />
         </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_40">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_33"
+                android:textStyle="bold"
+                android:text="计划总数" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:textColor="@color/color_33"
+                android:textStyle="bold"
+                android:text="公里数" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/dp_20"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_40">
 
             <TextView
                 android:id="@+id/month_line_total"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="线路总条数 :0条" />
+                android:text="工作线路：0条" />
 
             <TextView
                 android:id="@+id/month_line_kilo_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_20"
-                android:text="总公里数 :0公里" />
+                android:text="0.00km" />
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/dp_20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_40">
 
             <TextView
                 android:id="@+id/month_line_110kv_num"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="110kv线路条数 :0条" />
+                android:text="110kv线路：0条" />
 
             <TextView
                 android:id="@+id/month_line_110kv_kilo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_20"
-                android:text="公里数 :0公里" />
+                android:text="0.00km" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_35kv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/dp_20"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_40">
 
             <TextView
                 android:id="@+id/month_line_35kv_num"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="35kv线路条数 :0条" />
+                android:text="35kv线路：0条" />
 
             <TextView
                 android:id="@+id/month_line_35kv_kilo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_20"
-                android:text="公里数 :0公里" />
+                android:text="0.00km" />
         </LinearLayout>
     </LinearLayout>
 

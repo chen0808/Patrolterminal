@@ -9,28 +9,18 @@
         android:layout_width="@dimen/dp_50"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp_30"
+        android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_10"
         android:orientation="vertical">
 
-        <TextView
+        <ImageView
             android:id="@+id/item_todo_type_tv"
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/plan_mon_bg"
-            android:gravity="center"
-            android:text="巡"
-            android:textColor="@color/white" />
+            android:src="@mipmap/todo1"
+           />
 
-        <TextView
-            android:id="@+id/item_plan_creater"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="xxx"
-            android:textSize="@dimen/sp_11"
-            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
@@ -72,15 +62,6 @@
             android:textSize="@dimen/sp_12" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/todo_go"
-        android:layout_width="@dimen/dp_50"
-        android:layout_height="@dimen/dp_50"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/dp_20"
-        android:scaleType="center"
-        android:src="@mipmap/icon_go" />
 
     <View
         android:layout_width="match_parent"

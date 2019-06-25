@@ -159,10 +159,10 @@ public class HongWaiCeWenActivity extends BaseActivity {
 
     public void getYXtodo() {
         if ("1".equals(audit_status)) {
-//            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("审批");
-//            }
+            }
             mengban.setVisibility(View.VISIBLE);
             btnCommit.setVisibility(View.GONE);
         } else if ("2".equals(audit_status)) {
@@ -227,7 +227,10 @@ public class HongWaiCeWenActivity extends BaseActivity {
                         Toast.makeText(this, "请填写检查结果", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    save();
+                    if (id==null) {
+                        Toast.makeText(this, "请先保存数据后再提交", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     saveTodoAudit("1");
                 } else {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
@@ -309,12 +312,13 @@ public class HongWaiCeWenActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         if (t.getCode() == 1) {
+                            if (id==null){
+                                id="123321";
+                            }
                             Toast.makeText(HongWaiCeWenActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
-
                             RxRefreshEvent.publish("refreshTodo");
                             RxRefreshEvent.publish("refreshGroup");
-                            finish();
                         }
 
                     }

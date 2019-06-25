@@ -132,12 +132,7 @@ public class MonthPlanFrgment extends BaseFragment {
     private double kilo_110kv = 0;
     private double kilo_35kv = 0;
 
-    private int next_num_total = 0;
-    private int next_num_110kv = 0;
-    private int next_num_35kv = 0;
-    private double next_kilo_total = 0;
-    private double next_kilo_110kv = 0;
-    private double next_kilo_35kv = 0;
+
     private int done_num_total = 0;
     private int all_num_total = 0;
     private MonthPlanBean monthPlanBean;
@@ -154,7 +149,7 @@ public class MonthPlanFrgment extends BaseFragment {
         taskScreen.setVisibility(View.VISIBLE);
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        state = "3";//当月只能查询已审核的月计划
+//        state = "3";//当月只能查询已审核的月计划
         nextState = "0,1,2,3,4";//下个月查出所有的月计划
         //判断
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
@@ -220,7 +215,7 @@ public class MonthPlanFrgment extends BaseFragment {
                             intent.putExtra("month", item.getMonth() + "");
                             intent.putExtra("line_id", item.getLine_id() + "");
                             intent.putExtra("id", item.getId());
-                            intent.putExtra("type", item.getFull_plan());
+                            intent.putExtra("type", item.getType_sign());
                             startActivity(intent);
                             break;
                     }
@@ -266,12 +261,6 @@ public class MonthPlanFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<MonthListBean> t) throws Exception {
 
                         if (t.getCode() == 1) {
-                            next_num_total = 0;
-                            next_num_110kv = 0;
-                            next_num_35kv = 0;
-                            next_kilo_total = 0;
-                            next_kilo_110kv = 0;
-                            next_kilo_35kv = 0;
                             done_num_total = 0;
                             all_num_total = 0;
                             MonthListBean results = t.getResults();
@@ -343,12 +332,12 @@ public class MonthPlanFrgment extends BaseFragment {
                             lineList = getData(results, 1);
                             monthPlanAdapter.setNewData(data);
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                            monthLineTotal.setText("工作线路总数 : " + num_total + "条");
-                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
-                            monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
-                            monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
-                            monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
-                            monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
+                            monthLineTotal.setText("工作线路 : " + num_total + "条");
+                            monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + " km");
+                            monthLine110kvNum.setText("110kv线路 : " + num_110kv + "条");
+                            monthLine110kvKilo.setText( decimalFormat.format(kilo_110kv) + " km");
+                            monthLine35kvNum.setText("35kv线路 : " + num_35kv + "条");
+                            monthLine35kvKilo.setText( decimalFormat.format(kilo_35kv) + " km");
                             BigDecimal b1 = new BigDecimal(done_num_total);
                             BigDecimal b2 = new BigDecimal(all_num_total);
                             if (all_num_total == 0) {
@@ -466,12 +455,6 @@ public class MonthPlanFrgment extends BaseFragment {
                 Intent intent1 = new Intent(getContext(), NextMonthPlanActivity.class);
                 intent1.putExtra("list", (Serializable) nextPatrolList);
                 intent1.putExtra("linelist", (Serializable) nextLineList);
-                intent1.putExtra("num_total", next_num_total);
-                intent1.putExtra("kilo_total", next_kilo_total);
-                intent1.putExtra("110kv_num", next_num_110kv);
-                intent1.putExtra("110kv_kolo", next_kilo_110kv);
-                intent1.putExtra("35kv_num", next_num_35kv);
-                intent1.putExtra("35kv_kolo", next_kilo_35kv);
                 intent1.putExtra("year", nextYear);
                 intent1.putExtra("month", nextMonth);
                 intent1.putExtra("audit_status", monthPlanBean.getAudit_status());
@@ -511,7 +494,7 @@ public class MonthPlanFrgment extends BaseFragment {
                 if (popWinShare.isShowing()) {
                     popWinShare.dismiss();
                 } else {
-                    popWinShare.showAsDropDown(taskScreen, -250, 0);
+                    popWinShare.showAsDropDown(taskScreen, -100, 0);
 //popupWindow.showAtLocation(imageView, Gravity.BOTTOM, 100, 100);
                 }
                 //以某个控件的x和y的偏移量位置开始显示窗口
@@ -597,6 +580,7 @@ public class MonthPlanFrgment extends BaseFragment {
         }
     }
 
+    //处理数据
     private List<Tower> getData(MonthListBean results, int type) {
         List<Tower> lineList = new ArrayList<>();
         List<MonthPlanBean> patrol = results.getPatrol();
@@ -604,6 +588,7 @@ public class MonthPlanFrgment extends BaseFragment {
         if (patrol != null) {
             for (int j = 0; j < patrol.size(); j++) {
                 MonthPlanBean monthPlanBean = patrol.get(j);
+                //汇总
                 if (type == 1) {
                     num_total++;
                     kilo_total += monthPlanBean.getLine_length();
@@ -615,16 +600,6 @@ public class MonthPlanFrgment extends BaseFragment {
                     } else if (monthPlanBean.getVoltage_level().contains("35")) {
                         kilo_35kv = kilo_35kv + monthPlanBean.getLine_length();
                         num_35kv++;
-                    }
-                } else {
-                    next_num_total++;
-                    next_kilo_total += monthPlanBean.getLine_length();
-                    if (monthPlanBean.getVoltage_level().contains("110")) {
-                        next_kilo_110kv = kilo_110kv + monthPlanBean.getLine_length();
-                        next_num_110kv++;
-                    } else if (monthPlanBean.getVoltage_level().contains("35")) {
-                        next_kilo_35kv = kilo_35kv + monthPlanBean.getLine_length();
-                        next_num_35kv++;
                     }
                 }
                 //当身份是专责时，获取需要审批的列表

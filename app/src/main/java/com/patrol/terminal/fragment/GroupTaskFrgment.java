@@ -16,21 +16,32 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddGroupTaskActivity;
 import com.patrol.terminal.activity.GroupTaskDetailActivity;
+import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.adapter.GroupTaskAdapter;
+import com.patrol.terminal.adapter.TaskContentAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupTaskBean;
+import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.bean.TaskBean;
+import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.YXtoJXbean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.ProgressDialog;
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
+import com.yanzhenjie.recyclerview.SwipeMenu;
+import com.yanzhenjie.recyclerview.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,7 +81,7 @@ public class GroupTaskFrgment extends BaseFragment {
     private String year;
     private String month;
     private String day;
-    private String userId,duty_user_id;
+    private String userId, duty_user_id;
     private String depId;
     private String jobType;
     private Disposable refreshGroup;
@@ -92,9 +103,15 @@ public class GroupTaskFrgment extends BaseFragment {
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         getData();
         clearTodoAll();
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            // 设置监听器。
+            planRv.setSwipeMenuCreator(mSwipeMenuCreator);
+            // 菜单点击监听。
+            planRv.setOnItemMenuClickListener(mItemMenuClickListener);
+        }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
-        groupTaskAdapter = new GroupTaskAdapter(R.layout.fragment_task_item, result);
+        groupTaskAdapter = new GroupTaskAdapter(R.layout.fragment_task_item, result,jobType);
         planRv.setAdapter(groupTaskAdapter);
         groupTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -102,10 +119,10 @@ public class GroupTaskFrgment extends BaseFragment {
                 Intent intent = new Intent();
                 GroupTaskBean bean = result.get(position);
                 intent.setClass(getContext(), GroupTaskDetailActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putParcelable("GroupTaskBean",bean);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("GroupTaskBean", bean);
                 intent.putExtras(bundle);
-                startActivityForResult(intent,11);
+                startActivityForResult(intent, 11);
             }
         });
         refreshGroup = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
@@ -127,7 +144,7 @@ public class GroupTaskFrgment extends BaseFragment {
     }
 
     //根据职位获取页面数据
-    public void getData(){
+    public void getData() {
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             taskAdd.setVisibility(View.VISIBLE);
             depId = SPUtil.getDepId(getContext());
@@ -141,11 +158,12 @@ public class GroupTaskFrgment extends BaseFragment {
         }
         getRepairList();
     }
+
     //获取小组任务列表
     public void getGroupList() {
 
         BaseRequest.getInstance().getService()
-                .getGroupList(year, month, day,depId,duty_user_id,userId,"duty_user_id,line_id,name","1")
+                .getGroupList(year, month, day, depId, duty_user_id, userId, "duty_user_id,line_id,name", "1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {
@@ -153,6 +171,14 @@ public class GroupTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         groupTaskAdapter.setNewData(result);
+                        for (int i = 0; i < result.size(); i++) {
+                            String allot_status = result.get(i).getAllot_status();
+                            if ("0".equals(allot_status)){
+                                planRv.setSwipeItemMenuEnabled(i,true);
+                            }else {
+                                planRv.setSwipeItemMenuEnabled(i,false);
+                            }
+                        }
                         mRefrsh.setRefreshing(false);
                     }
 
@@ -168,17 +194,17 @@ public class GroupTaskFrgment extends BaseFragment {
     public void getRepairList() {
 
         BaseRequest.getInstance().getService()
-                .getRepairList(year, month, day,SPUtil.getUserId(getContext()),"4")
+                .getRepairList(year, month, day, SPUtil.getUserId(getContext()), "4")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<YXtoJXbean>>(getContext()) {
                     @Override
                     protected void onSuccees(BaseResult<List<YXtoJXbean>> t) throws Exception {
                         List<YXtoJXbean> jxlist = t.getResults();
-                        if (jxlist!=null&&jxlist.size()>0){
+                        if (jxlist != null && jxlist.size() > 0) {
                             planSubmit.setText("检修");
                             planSubmit.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             planSubmit.setVisibility(View.GONE);
                         }
                         mRefrsh.setRefreshing(false);
@@ -196,7 +222,7 @@ public class GroupTaskFrgment extends BaseFragment {
     public void getGroupListZy() {
 
         BaseRequest.getInstance().getService()
-                .getGroupList(year, month, day,userId)
+                .getGroupList(year, month, day, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {
@@ -239,7 +265,7 @@ public class GroupTaskFrgment extends BaseFragment {
                 time = DateUatil.getDay(date);
                 taskDate.setText(time);
                 inteDate();
-                 getGroupList();
+                getGroupList();
             }
         })
                 .setDate(selectedDate)
@@ -255,7 +281,7 @@ public class GroupTaskFrgment extends BaseFragment {
         pvTime.show();
     }
 
-    @OnClick({R.id.task_date, R.id.task_add,R.id.plan_submit})
+    @OnClick({R.id.task_date, R.id.task_add, R.id.plan_submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:
@@ -263,26 +289,27 @@ public class GroupTaskFrgment extends BaseFragment {
                 break;
             case R.id.plan_submit:
                 Intent intent1 = new Intent(getContext(), OverhaulPlanActivity.class);
-                startActivityForResult(intent1,11);
+                startActivityForResult(intent1, 11);
                 break;
             case R.id.task_add:
                 Intent intent = new Intent(getContext(), AddGroupTaskActivity.class);
-                startActivityForResult(intent,11);
+                startActivityForResult(intent, 11);
                 break;
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==11&&resultCode==-1){
+        if (requestCode == 11 && resultCode == -1) {
             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 taskAdd.setVisibility(View.VISIBLE);
                 depId = SPUtil.getDepId(getContext());
                 getGroupList();
-            }else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+            } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                 duty_user_id = SPUtil.getUserId(getContext());
                 getGroupList();
-            }else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
+            } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
                 userId = SPUtil.getUserId(getContext());
                 getGroupListZy();
             }
@@ -293,7 +320,7 @@ public class GroupTaskFrgment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (refreshGroup!=null){
+        if (refreshGroup != null) {
             refreshGroup.dispose();
         }
     }
@@ -302,7 +329,7 @@ public class GroupTaskFrgment extends BaseFragment {
     public void clearTodoAll() {
 
         BaseRequest.getInstance().getService()
-                .clearTodo(SPUtil.getUserId(getContext()),"3")
+                .clearTodo(SPUtil.getUserId(getContext()), "3")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<TaskBean>(getContext()) {
@@ -316,6 +343,77 @@ public class GroupTaskFrgment extends BaseFragment {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }
+
+
+    // 创建菜单：
+    SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
+            int width = getResources().getDimensionPixelSize(R.dimen.dp_60);
+
+            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
+            // 2. 指定具体的高，比如80;
+            // 3. WRAP_CONTENT，自身高度，不推荐;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            SwipeMenuItem deleteItem1 = new SwipeMenuItem(getContext());
+            deleteItem1.setImage(R.mipmap.plan_delete);
+            deleteItem1.setWidth(width);
+            deleteItem1.setHeight(height);
+//            deleteItem1.setBackground(R.color.home_red);
+//            deleteItem1.setTextSize(15);
+//            deleteItem1.setTextColorResource(R.color.white);
+//            deleteItem1.setText("删除");
+            // 各种文字和图标属性设置。
+            rightMenu.addMenuItem(deleteItem1); // 在Item右侧添加一个菜单。
+            // 注意：哪边不想要菜单，那么不要添加即可。
+        }
+    };
+    OnItemMenuClickListener mItemMenuClickListener = new OnItemMenuClickListener() {
+        @Override
+        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
+            // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
+            menuBridge.closeMenu();
+            String allot_status = result.get(position).getAllot_status();
+            if ("0".equals(allot_status)) {
+                deleteGroupTask(result.get(position).getId(), position);
+            } else {
+                Toast.makeText(getContext(), "已经分配的小组任务不能删除", Toast.LENGTH_SHORT).show();
+            }
+
+            // 左侧还是右侧菜单：
+            int direction = menuBridge.getDirection();
+            // 菜单在Item中的Position：
+            int menuPosition = menuBridge.getPosition();
+        }
+    };
+
+    //删除周计划
+    public void deleteGroupTask(String id, int position) {
+        ProgressDialog.show(getContext(), false, "正在加载中...");
+        BaseRequest.getInstance().getService()
+                .deleteGroupTask(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<MonthPlanBean>>(getContext()) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<MonthPlanBean>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.getCode() == 1) {
+
+                            result.remove(position);
+                            groupTaskAdapter.notifyItemRemoved(position);
+                        } else {
+                            Toast.makeText(getContext(), t.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                     }
                 });
     }

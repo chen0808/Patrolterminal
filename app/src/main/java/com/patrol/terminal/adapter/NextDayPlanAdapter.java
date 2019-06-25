@@ -17,12 +17,7 @@ import java.util.List;
 
 public class NextDayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHolder> {
 
-    private String jobType;
 
-    public NextDayPlanAdapter(int layoutResId, @Nullable List<DayListBean> data, String state, String jovType) {
-        super(layoutResId, data);
-        this.jobType = jovType;
-    }
 
     public NextDayPlanAdapter(int layoutResId, @Nullable List<DayListBean> data) {
         super(layoutResId, data);

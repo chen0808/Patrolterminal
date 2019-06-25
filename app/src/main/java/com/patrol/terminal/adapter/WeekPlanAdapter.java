@@ -45,16 +45,8 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
 
         //审核状态
         TextView tvAuditStatus = viewHolder.getView(R.id.tv_audit_status);
-
-        if ("0".equals(item.getDone_status())) {
-            AdapterUtils.setText(tvAuditStatus, "审核状态：待提交审核");
-        } else if ("1".equals(item.getDone_status())){
-            AdapterUtils.setText(tvAuditStatus, "审核状态：待专责审核");
-        }else if ("2".equals(item.getDone_status())) {
-            AdapterUtils.setText(tvAuditStatus, "审核状态：审核通过");
-        }else if ("3".equals(item.getDone_status())){
-            AdapterUtils.setText(tvAuditStatus, "审核状态：审核不通过");
-        }
+        String audit_status = item.getAudit_status();
+        AdapterUtils.setText(tvAuditStatus, StringUtil.getYXBWeekText(audit_status));
 //        HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
 //        horizontalLineView.setVisibility(View.VISIBLE);
 //        horizontalLineView.setStatus(item.getAudit_status());
@@ -73,7 +65,7 @@ public class WeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseViewHold
 
         if ("1".equals(item.getAllot_status())) {
             viewHolder.setGone(R.id.plan_progressbar_ll, true);
-            viewHolder.setText(R.id.plan_progressbar_tv, "计划进度(" + item.getDone_num() + "/" + item.getAll_num() + ") :")
+            viewHolder.setText(R.id.plan_progressbar_tv, "计划进度(" + item.getDone_num() + "/" + item.getAll_num() + ")：")
                     .setText(R.id.plan_progressbar_num, item.getDone_rate() + "%");
             ProgressBar progressBar = viewHolder.getView(R.id.plan_progressbar_probar);
             progressBar.setMax(item.getAll_num());

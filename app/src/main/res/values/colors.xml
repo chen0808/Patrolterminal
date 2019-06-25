@@ -61,6 +61,7 @@
     <color name="et_bg">#efefef</color>
     <color name="order_price">#ff6c00</color>
     <color name="order_light_line">#e2e2e2</color>
+    <color name="line_de">#dedede</color>
     <color name="tra_color">#646464</color>
     <color name="orange">#ffba08</color>
     <color name="color_90">#909090</color>
@@ -82,7 +83,11 @@
     <color name="number_text">#ffff461e</color>
     <color name="title_text">#ffa0a0a0</color>
     <color name="color_33">#333333</color>
+    <color name="color_f4">#f4f4f4</color>
     <color name="blue_commit">#788DB0</color>
+
+    <color name="deffect_color">#6BA7D6</color>
+    <color name="color_de">#dedede</color>
 
     <color name="home_bottom_bar_bg">#1D2D46</color>
     <color name="blue_main_title">#22FFFFFF</color>
@@ -93,9 +98,12 @@
 
     <color name="base_status_bar">#1B81D3</color>
     <color name="base_navigation_bar">#F5F9FC</color>
+    <color name="week_plan_num">#FF9600</color>
+
+    <color name="day_plan_num">#41C81D</color>
 
     <color name="line_point_0">#ff7272</color>
     <color name="line_point_1">#f7d035</color>
     <color name="line_point_2">#057dff</color>
-    <color name="line_point_3">#057dff</color>
+    <color name="line_point_3">#00bc9f</color>
 </resources>

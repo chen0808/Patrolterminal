@@ -3,6 +3,8 @@ package com.patrol.terminal.utils;
 import android.content.Context;
 import android.content.Intent;
 
+import com.patrol.terminal.R;
+import com.patrol.terminal.activity.CaptureActivity;
 import com.patrol.terminal.activity.GroupTaskDetailActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
 import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
@@ -121,10 +123,13 @@ public class Utils {
             case "3":
                 intent.setClass(context, NewTaskActivity.class);
                 intent.putExtra("from", "todoGroup");
+                intent.putExtra("index", 0);
+
                 break;
             case "4":
                 intent.setClass(context, NewTaskActivity.class);
                 intent.putExtra("from", "todoPersonal");
+                intent.putExtra("index", 1);
                 break;
             case "5":
                 intent.setClass(context, HongWaiCeWenActivity.class);
@@ -158,4 +163,55 @@ public class Utils {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
+    public static int getTodoIcon(String sign) {
+       switch (sign){
+           case "1":
+               return R.mipmap.todo1;
+           case "2":
+               return R.mipmap.todo2;
+           case "3":
+               return R.mipmap.todo3;
+           case "4":
+               return R.mipmap.todo4;
+           case "5":
+               return R.mipmap.todo5;
+           case "6":
+               return R.mipmap.todo6;
+           case "7":
+               return R.mipmap.todo7;
+           case "8":
+               return R.mipmap.todo8;
+           case "9":
+               return R.mipmap.todo9;
+           case "10":
+               return R.mipmap.todo10;
+           case "11":
+               return R.mipmap.todo11;
+           case "12":
+               return R.mipmap.todo12;
+           case "13":
+               return R.mipmap.todo13;
+           case "14":
+               return R.mipmap.todo14;
+           case "15":
+               return R.mipmap.todo15;
+           case "16":
+               return R.mipmap.todo16;
+           case "17":
+               return R.mipmap.todo17;
+           case "18":
+               return R.mipmap.todo18;
+           case "19":
+               return R.mipmap.todo19;
+           case "20":
+               return R.mipmap.todo20;
+           case "21":
+               return R.mipmap.todo21;
+              default:
+                  return R.mipmap.todo1;
+       }
+
+
+    }
+
 }

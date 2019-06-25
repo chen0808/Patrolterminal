@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -164,6 +165,7 @@
                         android:id="@+id/et_b_up_temperature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
 
@@ -189,6 +191,7 @@
                         android:id="@+id/et_s_up_temperature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
             </LinearLayout>
@@ -228,6 +231,7 @@
                         android:id="@+id/et_b_middle_temperature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
 
@@ -253,6 +257,7 @@
                         android:id="@+id/et_s_middle_temperature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
             </LinearLayout>
@@ -292,6 +297,7 @@
                         android:id="@+id/et_b_down_temperature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
 
@@ -317,6 +323,7 @@
                         android:id="@+id/et_s_down_temperature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
             </LinearLayout>
@@ -348,6 +355,7 @@
                         android:id="@+id/et_sans_temperature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
             </LinearLayout>
@@ -379,6 +387,7 @@
                         android:id="@+id/et_check_result"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
             </LinearLayout>

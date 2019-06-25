@@ -120,10 +120,29 @@ public class NextMonthPlanActivity extends BaseActivity {
 //        kilo_110kv = getIntent().getDoubleExtra("110kv_kolo", 0);
 //        num_35kv = getIntent().getIntExtra("35kv_num", 0);
 //        kilo_35kv = getIntent().getDoubleExtra("35kv_kolo", 0);
+        String from = getIntent().getStringExtra("from");
+        if ("todoMonth".equals(from)){
+            nextYear=getIntent().getIntExtra("year",2019);
+            nextMonth=getIntent().getIntExtra("month",6);
+        }else {
+            time = DateUatil.getCurMonth();
+            String[] years = time.split("年");
+            String[] months = years[1].split("月");
+            month = Integer.parseInt(months[0]);
+            year = Integer.parseInt(years[0]);
+            if (Integer.parseInt(months[0]) < 12) {
+                nextMonth = Integer.parseInt(months[0]) + 1;
+                nextYear = Integer.parseInt(years[0]);
+            } else {
+                nextMonth = 1;
+                nextYear = Integer.parseInt(years[0]) + 1;
+            }
+        }
+        planTotalTitle.setText(nextMonth+"月工作计划汇总");
+        titleName.setText(nextYear + "年" + nextMonth + "月计划列表");
 
-
-//        year = getIntent().getIntExtra("year", 2019);
-//        month = getIntent().getIntExtra("month", 6);
+        year = getIntent().getIntExtra("year", 2019);
+        month = getIntent().getIntExtra("month", 6);
         depId = SPUtil.getDepId(this);
         state = getIntent().getStringExtra("audit_status");
         mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
@@ -167,23 +186,7 @@ public class NextMonthPlanActivity extends BaseActivity {
 
     //获取下月计划列表
     public void getNextMonthPlanList() {
-        time = DateUatil.getCurMonth();
-        String[] years = time.split("年");
-        String[] months = years[1].split("月");
-        month = Integer.parseInt(months[0]);
-        year = Integer.parseInt(years[0]);
-        if (Integer.parseInt(months[0]) < 12) {
-            nextMonth = Integer.parseInt(months[0]) + 1;
-            nextYear = Integer.parseInt(years[0]);
-        } else {
-            nextMonth = 1;
-            nextYear = Integer.parseInt(years[0]) + 1;
-        }
-        String from = getIntent().getStringExtra("from");
-        if ("todoMonth".equals(from)){
-            year=getIntent().getIntExtra("year",2019);
-            month=getIntent().getIntExtra("month",6);
-        }
+
         ProgressDialog.show(this,false,"正在加载中。。。。");
         BaseRequest.getInstance().getService()
                 .getMonthPlan(nextYear, nextMonth, depId, state2, "create_time desc,type_sign,line_id")
@@ -210,13 +213,12 @@ public class NextMonthPlanActivity extends BaseActivity {
                                 MonthPlanBean monthPlanBean = list.get(0);
 
                                 DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                                monthLineTotal.setText("工作线路总数 : " + num_total + "条");
-                                monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
-                                monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
-                                monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
-                                monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
-                                monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
-                                titleName.setText(nextYear + "年" + nextMonth + "月计划列表");
+                                monthLineTotal.setText("工作线路 : " + num_total + "条");
+                                monthLineKiloTotal.setText( decimalFormat.format(kilo_total) + " km");
+                                monthLine110kvNum.setText("110kv线路 : " + num_110kv + "条");
+                                monthLine110kvKilo.setText(decimalFormat.format(kilo_110kv) + " km");
+                                monthLine35kvNum.setText("35kv线路 : " + num_35kv + "条");
+                                monthLine35kvKilo.setText( decimalFormat.format(kilo_35kv) + " km");
 
                                 state = monthPlanBean.getAudit_status();
 
@@ -520,11 +522,11 @@ public class NextMonthPlanActivity extends BaseActivity {
                             monthPlanAdapter.setNewData(data);
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
                             monthLineTotal.setText("工作线路总数 : " + num_total + "条");
-                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + " km");
                             monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
-                            monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
+                            monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + " km");
                             monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
-                            monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
+                            monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + " km");
 
                             if (lineList.size() != 0) {
                                 titleSetting.setVisibility(View.VISIBLE);

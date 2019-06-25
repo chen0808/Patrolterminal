@@ -2,6 +2,7 @@ package com.patrol.terminal.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,17 +38,20 @@ public class CancelOrOkDialog extends Dialog {
         findViewById(R.id.cancel_tv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View paramView) {
+                if (paramView.getId()==R.id.cancel_tv){
                 //取消
-                cancel();
+                cancel();}
             }
         });
 
         findViewById(R.id.ok_tv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View paramView) {
-                ok();
+                if (paramView.getId()==R.id.ok_tv){
+                ok();}
             }
         });
+
     }
 
     //确认

@@ -10,15 +10,18 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.utils.AdapterUtils;
+import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.StringUtil;
 
 import java.util.List;
 
 public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHolder> {
     private int type = 1;
+    private String jobtype;
 
-    public GroupTaskAdapter(int layoutResId, @Nullable List<GroupTaskBean> data) {
+    public GroupTaskAdapter(int layoutResId, @Nullable List<GroupTaskBean> data,String jobtype) {
         super(layoutResId, data);
+        this.jobtype=jobtype;
     }
 
 
@@ -27,8 +30,20 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
         //图标
         TextView icon = viewHolder.getView(R.id.item_task_date_tv);
         AdapterUtils.setIconText(icon, item.getDep_name());
-        viewHolder.setText(R.id.item_task_personal, "小组负责人 :" + item.getDuty_user_name())
-                .setText(R.id.item_task_name, item.getLine_name() + item.getName() + "任务");
+        if (jobtype.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            if (item.getDuty_user_name() == null) {
+                viewHolder.setText(R.id.item_task_personal, "小组负责人： 暂无");
+            }else {
+                viewHolder.setText(R.id.item_task_personal, "小组负责人：" + item.getDuty_user_name());
+            }
+
+        }else {
+            if (item.getDuty_user_name() == null) {
+                viewHolder.setText(R.id.item_task_personal, "任务执行人：暂无");
+            }else {
+            viewHolder.setText(R.id.item_task_personal, "任务执行人：" + item.getWork_user_name());}
+        }
+        viewHolder.setText(R.id.item_task_name, item.getLine_name() + item.getName() + "任务");
 
         TextView type = viewHolder.getView(R.id.item_task_type);
         AdapterUtils.setText(type, StringUtil.getTypeSign(item.getType_sign()));
@@ -50,20 +65,14 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
                 TextView tvAllorStatus = viewHolder.getView(R.id.item_line_state);
                 AdapterUtils.setText(tvAllorStatus, "分配状态：已分配");
             }
-
-            viewHolder.setGone(R.id.plan_progressbar_ll, true);
-            viewHolder.setText(R.id.plan_progressbar_tv, "任务进度(" + item.getDone_num() + "/" + item.getAll_num() + ") :")
-                    .setText(R.id.plan_progressbar_num, item.getDone_rate() + "%");
             ProgressBar progressBar = viewHolder.getView(R.id.plan_progressbar_probar);
             progressBar.setMax(item.getAll_num());
             progressBar.setProgress(item.getDone_num());
+            viewHolder.setGone(R.id.plan_progressbar_ll, true);
+            viewHolder.setText(R.id.plan_progressbar_tv, "任务进度(" + item.getDone_num() + "/" + item.getAll_num() + ")：")
+                    .setText(R.id.plan_progressbar_num, item.getDone_rate() + "%");
+
         }
-
-
-        if (item.getDuty_user_name() == null) {
-            viewHolder.setText(R.id.item_task_personal, "小组负责人 : 暂无");
-        }
-
 
     }
 }

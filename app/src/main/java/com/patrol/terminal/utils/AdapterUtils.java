@@ -104,13 +104,13 @@ public class AdapterUtils {
             text = text.replace("待专责审核", "<font color='#f7d035'>待专责审核</font>");
         }
         if (text.contains("待主管审核")) {
-            text = text.replace("待主管审核", "<font color='#8BC34A'>待主管审核</font>");
+            text = text.replace("待主管审核", "<font color='#057dff'>待主管审核</font>");
         }
         if (text.contains("审核通过")) {
-            text = text.replace("审核通过", "<font color='#057dff'>审核通过</font>");
+            text = text.replace("审核通过", "<font color='#00bc9f'>审核通过</font>");
         }
         if (text.contains("审核不通过")) {
-            text = text.replace("审核不通过", "<font color='#057dff'>审核不通过</font>");
+            text = text.replace("审核不通过", "<font color='#ff7272'>审核不通过</font>");
         }
         textView.setText(Html.fromHtml(text));
     }

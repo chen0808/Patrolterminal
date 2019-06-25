@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.text.DecimalFormat;
-import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -75,13 +76,15 @@ public class NextDayPlanActivity extends BaseActivity {
     ImageView taskScreen;
     @BindView(R.id.next_plan_done)
     TextView nextPlanDone;
-    private String state;
+    @BindView(R.id.ll_35kv)
+    LinearLayout ll35kv;
     private NextDayPlanAdapter monthPlanAdapter;
     private List<DayListBean> list;
     private int year;
     private int month, day;
     private int num_total;
     private double kilo_total;
+    private List<String> lineNum = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,13 +95,14 @@ public class NextDayPlanActivity extends BaseActivity {
     }
 
     private void initview() {
-        planTotalTitle.setText("明日工作计划汇总");
 
+        ll35kv.setVisibility(View.GONE);
         taskAddIv.setVisibility(View.VISIBLE);
         year = getIntent().getIntExtra("year", 2019);
         month = getIntent().getIntExtra("month", 23);
         day = getIntent().getIntExtra("day", 23);
         titleName.setText(year + "年" + month + "月" + day + "日计划");
+        planTotalTitle.setText(day + "日工作计划汇总");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         String mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
@@ -109,7 +113,7 @@ public class NextDayPlanActivity extends BaseActivity {
             nextPlanRv.setOnItemMenuClickListener(mItemMenuClickListener);
         }
         nextPlanRv.setLayoutManager(manager);
-        monthPlanAdapter = new NextDayPlanAdapter(R.layout.fragment_plan_item, list, state, "");
+        monthPlanAdapter = new NextDayPlanAdapter(R.layout.fragment_plan_item, list);
         nextPlanRv.setAdapter(monthPlanAdapter);
         adapterClick();
         getDayList();
@@ -135,11 +139,15 @@ public class NextDayPlanActivity extends BaseActivity {
                                 DayListBean dayListBean = list.get(i);
                                 num_total++;
                                 kilo_total = kilo_total + dayListBean.getTowers_range();
-
+                                if (lineNum.indexOf(dayListBean.getLine_id()) == -1) {
+                                    lineNum.add(dayListBean.getLine_id());
+                                }
                             }
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                            monthLineTotal.setText("杆段总数 : " + num_total + "条");
-                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                            monthLineTotal.setText("工作线路 : " + lineNum.size() + "条");
+                            monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + "km");
+                            monthLine110kvNum.setText("工作杆段 : " + num_total + "段");
+                            monthLine110kvKilo.setText(decimalFormat.format(kilo_total) + "km");
                             monthPlanAdapter.setNewData(list);
                             ProgressDialog.cancle();
                         }
@@ -178,9 +186,9 @@ public class NextDayPlanActivity extends BaseActivity {
                 break;
             case R.id.task_add_iv:
                 Intent intent = new Intent(this, AddDayPlanActivity.class);
-                intent.putExtra("year", year+"");
-                intent.putExtra("month", month+"");
-                intent.putExtra("day", day+"");
+                intent.putExtra("year", year + "");
+                intent.putExtra("month", month + "");
+                intent.putExtra("day", day + "");
                 startActivityForResult(intent, 10);
                 break;
         }
@@ -238,7 +246,7 @@ public class NextDayPlanActivity extends BaseActivity {
                             kilo_total = kilo_total - list.get(position).getTowers_range();
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
                             monthLineTotal.setText("杆段总数 : " + num_total + "条");
-                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "km");
                             list.remove(position);
                             monthPlanAdapter.notifyItemRemoved(position);
                         } else {

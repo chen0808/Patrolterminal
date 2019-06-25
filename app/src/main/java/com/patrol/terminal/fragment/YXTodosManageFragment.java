@@ -147,7 +147,6 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
 //                    if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
 //                        getWeekList();
 //                    }
-
             }
         });
 

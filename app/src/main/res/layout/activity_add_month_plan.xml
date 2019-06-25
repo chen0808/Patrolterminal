@@ -59,7 +59,9 @@
 
                 <View style="@style/line_styl" />
 
-                <LinearLayout style="@style/plan_ll_styl">
+                <LinearLayout style="@style/plan_ll_styl"
+                    android:visibility="gone"
+                    >
 
                     <TextView
                         style="@style/plan_tv_styl"
@@ -93,7 +95,7 @@
                     android:id="@+id/mon_plan_type_ll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_40"
                     android:background="@color/white"
                     android:orientation="vertical">
 
@@ -101,15 +103,13 @@
                         android:id="@+id/month_plan_type_rg"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_40"
-                        android:layout_marginLeft="@dimen/dp_50"
-                        android:orientation="horizontal"
-                        android:paddingRight="@dimen/dp_40">
+                        android:layout_marginLeft="11dp"
+                        android:orientation="horizontal">
 
                         <RadioButton
                             android:id="@+id/month_plan_type1"
-                            android:layout_width="0dp"
+                            android:layout_width="67dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
                             android:background="@drawable/selector_type_bg"
                             android:button="@null"
                             android:checked="true"
@@ -119,10 +119,9 @@
 
                         <RadioButton
                             android:id="@+id/month_plan_type2"
-                            android:layout_width="0dp"
+                            android:layout_width="67dp"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/dp_40"
-                            android:layout_weight="1"
+                            android:layout_marginLeft="5dp"
                             android:background="@drawable/selector_type_bg"
                             android:button="@null"
                             android:gravity="center"
@@ -130,23 +129,20 @@
                             android:textColor="@drawable/plan_tv_color_selector" />
                     </RadioGroup>
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_40"
                         android:layout_marginLeft="11dp"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginRight="11dp"
-
-                        android:background="@color/image_overlay_false"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:background="@color/color_f4"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
-                            android:gravity="center"
-                            android:paddingLeft="5dp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/dp_5"
                             android:text="缺陷名称"
                             android:textColor="@color/color_33"
                             android:textSize="@dimen/sp_13" />
@@ -155,7 +151,8 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
-                            android:gravity="center"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/dp_10"
                             android:text="缺陷等级"
                             android:textColor="@color/color_33"
                             android:textSize="@dimen/sp_12" />
@@ -164,7 +161,8 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
-                            android:gravity="center"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/dp_10"
                             android:text="优先级"
                             android:textColor="@color/color_33"
                             android:textSize="@dimen/sp_13" />
@@ -193,7 +191,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_10"
-                        android:layout_marginRight="@dimen/dp_10">
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:layout_marginBottom="@dimen/dp_10">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -204,13 +203,9 @@
                                 android:id="@+id/month_plan_type_lv"
                                 android:layout_width="match_parent"
                                 android:layout_height="150dp"
+                                android:divider="@null"
                                 android:paddingLeft="1dp"
                                 android:paddingRight="1dp"></com.patrol.terminal.widget.NoScrollListView>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/image_overlay_false" />
 
                             <LinearLayout
                                 android:id="@+id/trouble_more"
@@ -220,33 +215,18 @@
                                 android:orientation="horizontal"
                                 android:paddingLeft="1dp"
                                 android:paddingRight="1dp"
-                                android:visibility="gone"
+                                android:visibility="gone">
 
-                                >
-
-                                <LinearLayout
+                                <TextView
+                                    android:id="@+id/add_more_iv"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@color/color_f2"
-                                    android:orientation="horizontal">
+                                    android:layout_height="25dp"
+                                    android:layout_weight="1"
+                                    android:background="@color/color_f4"
+                                    android:gravity="center"
+                                    android:text="查看更多"
+                                    android:textColor="@color/blue" />
 
-                                    <View
-                                        android:layout_width="1dp"
-                                        android:layout_height="match_parent"
-                                        android:background="@color/image_overlay_false" />
-
-                                    <ImageView
-                                        android:id="@+id/add_more_iv"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:src="@mipmap/icon_newol_down" />
-
-                                    <View
-                                        android:layout_width="1dp"
-                                        android:layout_height="match_parent"
-                                        android:background="@color/image_overlay_false" />
-                                </LinearLayout>
                             </LinearLayout>
 
                         </LinearLayout>
@@ -262,11 +242,6 @@
 
                     </RelativeLayout>
 
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_10"
-                        android:background="@color/main_bg" />
 
                     <LinearLayout style="@style/plan_ll_styl">
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.GroupTaskDetailAdapter;
 import com.patrol.terminal.adapter.WeekPlanDetailAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -72,7 +73,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
     TextView taskSubmit;
     private List<DefectBean> typeList = new ArrayList<>();
     private String year, month, day, id;
-    private WeekPlanDetailAdapter adapter;
+    private GroupTaskDetailAdapter adapter;
     private List<GroupTaskBean> selectList = new ArrayList<>();
     private int type = 1;
     private GroupTaskBean bean;
@@ -110,7 +111,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
         day = Integer.parseInt(days[0]) + "";
         LinearLayoutManager manager = new LinearLayoutManager(this);
         monthPlanDetailRc.setLayoutManager(manager);
-        adapter = new WeekPlanDetailAdapter(R.layout.item_plan_detail, typeList);
+        adapter = new GroupTaskDetailAdapter(R.layout.item_plan_detail, typeList);
         monthPlanDetailRc.setAdapter(adapter);
 
     }
@@ -161,7 +162,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
             String type = split[i];
             DefectBean planTypeBean = new DefectBean();
             planTypeBean.setContent(StringUtil.typeSigns[Integer.valueOf(type) - 1] + "任务");
-            planTypeBean.setType(0);
+            planTypeBean.setType(Integer.parseInt(bean.getAllot_status()));
             typeList.add(planTypeBean);
         }
         adapter.setNewData(typeList);

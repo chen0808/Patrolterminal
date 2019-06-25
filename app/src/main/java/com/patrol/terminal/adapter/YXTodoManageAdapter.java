@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.TodoBean;
+import com.patrol.terminal.utils.Utils;
 
 import java.util.List;
 
@@ -18,24 +19,12 @@ public class YXTodoManageAdapter extends BaseQuickAdapter<TodoBean, BaseViewHold
 
     @Override
     protected void convert(BaseViewHolder viewHolder, TodoBean item) {
+
         String deal_type = item.getFlow_sign();
         String remind_type = item.getRemind_type();
         String done_status = item.getDone_status();
-        switch (deal_type) {
-            case "1":
-                viewHolder.setText(R.id.item_todo_type_tv, "巡");
-                break;
-            case "5":
-            case "6":
-            case "7":
-            case "8":
-                viewHolder.setText(R.id.item_todo_type_tv, "检");
-                viewHolder.setBackgroundRes(R.id.item_todo_type_tv, R.drawable.plan_yellow_bg);
-                break;
-            case "20":
-                viewHolder.setText(R.id.item_todo_type_tv, "修");
-                break;
-        }
+                viewHolder.setImageResource(R.id.item_todo_type_tv, Utils.getTodoIcon(deal_type));
+
         if ("0".equals(done_status)) {
             viewHolder.setText(R.id.item_yxtodo_state, "未完成");
             viewHolder.setTextColor(R.id.item_yxtodo_state, mContext.getResources().getColor(R.color.write_red));

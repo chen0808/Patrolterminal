@@ -7,12 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
@@ -55,6 +53,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -107,6 +107,8 @@ public class WeekPlanFrgment extends BaseFragment {
     SwipeRefreshLayout planRefresh;
     @BindView(R.id.done_plan_range)
     TextView donePlanRange;
+    @BindView(R.id.ll_35kv)
+    LinearLayout ll35kv;
     private TimePickerView pvTime;
     private String time;
     private WeekPlanAdapter weekPlanAdapter;
@@ -143,6 +145,7 @@ public class WeekPlanFrgment extends BaseFragment {
     private int done_num_total = 0;
     private int all_num_total = 0;
     private WeekListBean weekListBean;
+    private List<String> lineNum = new ArrayList<>();
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,13 +155,13 @@ public class WeekPlanFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-
+       ll35kv.setVisibility(View.GONE);
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(getActivity(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             state = "1,2,3,4,5";
             depId = null;
-        }else if (mJobType.contains(Constant.RUN_SUPERVISOR)){
+        } else if (mJobType.contains(Constant.RUN_SUPERVISOR)) {
             state = "2,3,4,5";
             depId = null;
         }
@@ -294,6 +297,9 @@ public class WeekPlanFrgment extends BaseFragment {
                             kilo_total = kilo_total + weekListBean.getTowers_range();
                             done_num_total = done_num_total + weekListBean.getDone_num();
                             all_num_total = all_num_total + weekListBean.getAll_num();
+                            if (lineNum.indexOf(weekListBean.getLine_id()) == -1) {
+                                lineNum.add(weekListBean.getLine_id());
+                            }
                             //当身份是运行班专责时，获取到需要审核的列表
                             if (weekListBean.getWeek_id() != null) {
                                 if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(weekListBean.getAudit_status())) {
@@ -309,16 +315,18 @@ public class WeekPlanFrgment extends BaseFragment {
                             }
                         }
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                        monthLineTotal.setText("杆段总数 : " + num_total + "条");
-                        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                        monthLineTotal.setText("工作线路：" + lineNum.size() + "条");
+                        monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + " km");
+                        monthLine110kvNum.setText("工作杆段：" + num_total + "段");
+                        monthLine110kvKilo.setText(decimalFormat.format(kilo_total) + " km");
                         BigDecimal b1 = new BigDecimal(done_num_total);
                         BigDecimal b2 = new BigDecimal(all_num_total);
                         if (all_num_total == 0) {
-                            donePlanRange.setText("计划进度 : 0%");
+                            donePlanRange.setText("计划进度：0%");
                         } else {
                             //默认保留两位会有错误，这里设置保留小数点后4位
                             double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
-                            donePlanRange.setText("计划进度 : " + range + "%");
+                            donePlanRange.setText("计划进度：" + range + "%");
                         }
                         if (lineList.size() != 0) {
                             planSubmit.setVisibility(View.VISIBLE);
@@ -420,7 +428,7 @@ public class WeekPlanFrgment extends BaseFragment {
     };
 
 
-    @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit_next,R.id.plan_submit, R.id.add_plan_ll})
+    @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit_next, R.id.plan_submit, R.id.add_plan_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:

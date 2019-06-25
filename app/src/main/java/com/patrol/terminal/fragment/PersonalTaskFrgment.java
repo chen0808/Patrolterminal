@@ -66,7 +66,7 @@ public class PersonalTaskFrgment extends BaseFragment {
     private String week;
     private String year,month,day;
     private Disposable refreshPersonal;
-    private String depid,userid;
+    private String userid;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,15 +77,10 @@ public class PersonalTaskFrgment extends BaseFragment {
     @Override
     protected void initData() {
         String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
+        userid=SPUtil.getUserId(getContext());
         if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
-            userid=SPUtil.getUserId(getContext());
-        }else if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) ) {   //检修班班长，组员,验收，保电，安全专责只能看周计划
-            depid=SPUtil.getDepId(getContext());
-          taskAdd.setVisibility(View.GONE);
-        }else if (jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
-            taskAdd.setVisibility(View.GONE);
-        }else  if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)){
-            userid=SPUtil.getUserId(getContext());
+            taskAdd.setVisibility(View.VISIBLE);
+        }else {
             taskAdd.setVisibility(View.GONE);
         }
         planCreate.setVisibility(View.GONE);
@@ -162,7 +157,7 @@ public class PersonalTaskFrgment extends BaseFragment {
     //获取小组任务列表
     public void getGroupList() {
         BaseRequest.getInstance().getService()
-                .getPersonalOfGroup(year, month, day,depid,null,"1",userid,"type_sign,line_id")
+                .getPersonalOfGroup(year, month, day,null,null,"1",userid,"type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {

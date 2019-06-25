@@ -84,7 +84,7 @@ public class AddMonthPlanActivity extends BaseActivity {
     @BindView(R.id.trouble_more)
     LinearLayout troubleMore;
     @BindView(R.id.add_more_iv)
-    ImageView addMoreIv;
+    TextView addMoreIv;
 
 
     private String curMonth;
@@ -134,6 +134,7 @@ public class AddMonthPlanActivity extends BaseActivity {
     }
 
     private void initview() {
+        titleName.setText("关联缺陷和隐患");
         from = getIntent().getIntExtra("from", Constant.FROM_MONTHPLAN_TO_ADDMONTH);
         Log.w("linmeng", "initview from:" + from);
         monthPlanClass.setText(SPUtil.getDepName(this));
@@ -146,7 +147,7 @@ public class AddMonthPlanActivity extends BaseActivity {
 
         if (from == Constant.FROM_MONTHPLAN_TO_ADDMONTH) {
             curMonth = year+"年"+month+"月";
-            titleName.setText(curMonth + "计划");
+//            titleName.setText(curMonth + "计划");
             //changeType = MONTH_PLAN;
         }
         monthPlanDate.setText(curMonth);
@@ -249,10 +250,10 @@ public class AddMonthPlanActivity extends BaseActivity {
             case R.id.trouble_more:
                 if (type == 0) {
                     type = 1;
-                    addMoreIv.setImageResource(R.mipmap.icon_newol_up);
+                    addMoreIv.setText("收回");
                 } else {
                     type = 0;
-                    addMoreIv.setImageResource(R.mipmap.icon_newol_down);
+                    addMoreIv.setText("查看更多");
                 }
                 adapter.setType(type);
                 break;

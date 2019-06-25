@@ -10,16 +10,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.PlanNumBean;
 import com.patrol.terminal.fragment.GroupTaskFrgment;
 import com.patrol.terminal.fragment.PersonalTaskFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -38,9 +42,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class NewTaskActivity extends BaseActivity {
 
@@ -67,8 +76,17 @@ public class NewTaskActivity extends BaseActivity {
     MagicIndicator magicIndicator4;
     @BindView(R.id.view_pager)
     NoScrollViewPager viewPager;
+    @BindView(R.id.group_task_num)
+    TextView groupTaskNum;
+    @BindView(R.id.personal_task_num)
+    TextView personalTaskNum;
     private List<String> mDataList = new ArrayList<>();
     private MyFragmentPagerAdapter taskPagerAdapter;
+    private int year;
+    private int month;
+    private int day;
+    private String depId;
+    private Disposable subscribe;
 
 
     @Override
@@ -83,6 +101,14 @@ public class NewTaskActivity extends BaseActivity {
     private void initview() {
         titleName.setText("任务管理");
 //        taskRg.setVisibility(View.VISIBLE);
+        String mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            depId = SPUtil.getDepId(this);
+        }else {
+            depId="";
+        }
+        initdate();
+        getTaskNum();
         String time = DateUatil.getTime(new Date(System.currentTimeMillis()));
         SPUtil.putString(this, "date", "time", time);
         String job = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
@@ -96,6 +122,16 @@ public class NewTaskActivity extends BaseActivity {
         viewPager.setOffscreenPageLimit(5);
         int index = getIntent().getIntExtra("index", 0);
         viewPager.setCurrentItem(index);
+        viewPager.setNoScroll(true);
+        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.equals("refreshGroup")||type.equals("refreshPersonal")) {
+                    getTaskNum();
+                }
+            }
+        });
     }
 
     private void initMagicIndicator(String job) {
@@ -131,7 +167,7 @@ public class NewTaskActivity extends BaseActivity {
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator linePagerIndicator = new LinePagerIndicator(context);
                 linePagerIndicator.setColors(getResources().getColor(R.color.orange_vip));
-                linePagerIndicator.setLineHeight(15);
+                linePagerIndicator.setLineHeight(5);
                 return linePagerIndicator;
             }
         });
@@ -168,6 +204,47 @@ public class NewTaskActivity extends BaseActivity {
                 intent.setClass(this, YXCheckActivity.class);
                 startActivity(intent);
                 break;
+        }
+    }
+
+    //初始化日期
+    public void initdate() {
+        String time = DateUatil.getTime();
+        String[] years = time.split("-");
+        year = Integer.parseInt(years[0]);
+        month = Integer.parseInt(years[1]);
+        day = Integer.parseInt(years[2]);
+    }
+    //获取任务个数
+    public void getTaskNum() {
+
+        BaseRequest.getInstance().getService()
+                .getTaskNum(depId, year, month, day, SPUtil.getUserId(this))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<PlanNumBean>(this) {
+
+                    @Override
+                    protected void onSuccees(BaseResult<PlanNumBean> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            PlanNumBean results = t.getResults();
+                            groupTaskNum.setText(results.getCount1()+"");
+                            personalTaskNum.setText(results.getCount2()+"");
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (subscribe!=null){
+            subscribe.dispose();
         }
     }
 }

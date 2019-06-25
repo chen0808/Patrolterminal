@@ -8,11 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -38,13 +36,15 @@ import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -95,6 +95,10 @@ public class DayPlanFrgment extends BaseFragment {
     SwipeRefreshLayout planRefresh;
     @BindView(R.id.done_plan_range)
     TextView donePlanRange;
+    @BindView(R.id.ll_35kv)
+    LinearLayout ll35kv;
+    @BindView(R.id.plan_submit_next)
+    ImageView planSubmitNext;
     private DayPlanAdapter dayPlanAdapter;
     private String time;
     private List<DayListBean> results;
@@ -120,6 +124,7 @@ public class DayPlanFrgment extends BaseFragment {
     private int nextmonth;
     private int nextyear;
     private List<DayListBean> nextDayList;
+    private List<String> lineNum=new ArrayList<>();
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -129,6 +134,7 @@ public class DayPlanFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
+        ll35kv.setVisibility(View.GONE);
         addPlanStatus.setVisibility(View.GONE);
         addNextPlan.setText("明日计划制定");
         planTotalTitle.setText("今日工作计划汇总");
@@ -221,10 +227,15 @@ public class DayPlanFrgment extends BaseFragment {
                             kilo_total = kilo_total + dayListBean.getTowers_range();
                             done_num_total = done_num_total + dayListBean.getDone_num();
                             all_num_total = all_num_total + dayListBean.getAll_num();
+                            if (lineNum.indexOf(dayListBean.getLine_id())==-1){
+                                lineNum.add(dayListBean.getLine_id());
+                            }
                         }
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                        monthLineTotal.setText("杆段总数 : " + num_total + "条");
-                        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                        monthLineTotal.setText("工作线路 : " + lineNum.size() + "条");
+                        monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + "km");
+                        monthLine110kvNum.setText("工作杆段 : " + num_total + "段");
+                        monthLine110kvKilo.setText( decimalFormat.format(kilo_total) + "km");
                         BigDecimal b1 = new BigDecimal(done_num_total);
                         BigDecimal b2 = new BigDecimal(all_num_total);
                         if (all_num_total == 0) {

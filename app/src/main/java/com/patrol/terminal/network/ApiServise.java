@@ -231,9 +231,13 @@ public interface ApiServise {
     @POST("/plan/week/tower/deletePOST")
     Observable<BaseResult<List<MonthPlanBean>>> deleteWeekPlan(@Query("id") String id);
 
-    //删除周计划
+    //删除日计划
     @POST("/plan/day/tower/deletePOST")
     Observable<BaseResult<List<MonthPlanBean>>> deleteDayPlan(@Query("id") String id);
+
+    //删除小组任务
+    @POST("/task/group/list/deletePOST")
+    Observable<BaseResult<List<MonthPlanBean>>> deleteGroupTask(@Query("id") String id);
 
     //月计划添加
     @POST("/plan/month/auditPOST")
@@ -284,6 +288,15 @@ public interface ApiServise {
     //日计划列表
     @GET("/plan/day/line/dayGET")
     Observable<BaseResult<GroupOfDayBean>> getDayList(@Query("dep_id") String dep_id, @Query("type_id") String type_id);
+
+    //获取计划个数
+    @GET("plan/month/countGET")
+    Observable<BaseResult<PlanNumBean>> getPlanNum(@Query("dep_id") String dep_id, @Query("year") int year,@Query("month") int month,@Query("day") int day,@Query("week") int week);
+
+
+    //获取任务个数
+    @GET("task/group/countGET")
+    Observable<BaseResult<PlanNumBean>> getTaskNum(@Query("dep_id") String dep_id, @Query("year") int year,@Query("month") int month,@Query("day") int day,@Query("user_id") String user_id);
 
     //根据当前日期查询所属周下所有计划接口
     @GET("plan/day/tower/dayGET")
@@ -944,7 +957,7 @@ public interface ApiServise {
 
     //一键消除已审核待办
     @POST("task/remind/batchPOST")
-    Observable<BaseResult<TaskBean>> clearTodoAll(@Query("user_id") String user_id);
+    Observable<BaseResult<TaskBean>> clearTodoAll(@Query("to_user_id") String to_user_id);
 
 
     //一键消除已审核待办

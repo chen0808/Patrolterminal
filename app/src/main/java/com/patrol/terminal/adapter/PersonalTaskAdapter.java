@@ -34,18 +34,18 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
 
         if ("0".equals(finish_status)) {
             TextView tvAllorStatus = viewHolder.getView(R.id.item_line_state);
-            AdapterUtils.setText(tvAllorStatus, "分配状态：未完成");
+            AdapterUtils.setText(tvAllorStatus, "完成状态：未完成");
         } else {
             TextView tvAllorStatus = viewHolder.getView(R.id.item_line_state);
-            AdapterUtils.setText(tvAllorStatus, "分配状态：已完成");
+            AdapterUtils.setText(tvAllorStatus, "完成状态：已完成");
         }
         viewHolder.setGone(R.id.plan_progressbar_ll, true);
-        viewHolder.setText(R.id.plan_progressbar_tv, "任务进度(" + item.getDone_num() + "/" + item.getAll_num() + ") :")
+        viewHolder.setText(R.id.plan_progressbar_tv, "任务进度(" + item.getDone_num() + "/" + item.getAll_num() + ")：")
                 .setText(R.id.plan_progressbar_num, item.getDone_rate() + "%");
         ProgressBar progressBar = viewHolder.getView(R.id.plan_progressbar_probar);
         progressBar.setMax(item.getAll_num());
         progressBar.setProgress(item.getDone_num());
-        viewHolder.setText(R.id.item_task_personal, "执行人 :" + item.getWork_user_name())
+        viewHolder.setText(R.id.item_task_personal, "执行人：" + item.getWork_user_name())
                 .setText(R.id.item_task_name, item.getLine_name() + "任务");
 
 

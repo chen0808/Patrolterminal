@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +38,7 @@ import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-import net.lucode.hackware.magicindicator.buildins.UIUtil;
+import org.w3c.dom.ls.LSException;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -51,7 +52,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.internal.Util;
 
 public class NextWeekPlanActivity extends BaseActivity {
 
@@ -88,6 +88,8 @@ public class NextWeekPlanActivity extends BaseActivity {
     TextView nextPlanDone;
     @BindView(R.id.task_add_iv)
     ImageView taskAddIv;
+    @BindView(R.id.ll_35kv)
+    LinearLayout ll35kv;
     private String state;
     private NextWeekPlanAdapter monthPlanAdapter;
     private List<WeekListBean> list;
@@ -107,6 +109,7 @@ public class NextWeekPlanActivity extends BaseActivity {
     private double kilo_35kv;
     private String state2;
     private String time;
+    private List<String> lineNum = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +120,7 @@ public class NextWeekPlanActivity extends BaseActivity {
     }
 
     private void initview() {
-        planTotalTitle.setText("下周工作计划汇总");
+ll35kv.setVisibility(View.GONE);
 //        list = (List<WeekListBean>) getIntent().getSerializableExtra("list");
 //        lineList = (List<Tower>) getIntent().getSerializableExtra("linelist");
 
@@ -130,11 +133,11 @@ public class NextWeekPlanActivity extends BaseActivity {
 
 //        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 //        monthLineTotal.setText("杆段总数 : " + num_total + "条");
-//        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+//        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + " km");
 //        monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
-//        monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
+//        monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + " km");
 //        monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
-//        monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
+//        monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + " km");
 //        year = getIntent().getIntExtra("year", 0);
 //        week = getIntent().getIntExtra("week", 0);
 //        WeekListBean weekListBean = list.get(0);
@@ -150,6 +153,14 @@ public class NextWeekPlanActivity extends BaseActivity {
             year = getIntent().getIntExtra("year", 2019);
             week = getIntent().getIntExtra("week", 25);
         }
+        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            // 设置监听器。
+            nextPlanRv.setSwipeMenuCreator(mSwipeMenuCreator);
+
+            // 菜单点击监听。
+            nextPlanRv.setOnItemMenuClickListener(mItemMenuClickListener);
+        }
+        planTotalTitle.setText(week + "周工作计划汇总");
         String nextBeginTime = TimeUtil.getFirstDayOfWeek(year, week);
         String nextEndTime = TimeUtil.getLastDayOfWeek(year, week);
         titleName.setText("第" + week + "周计划(" + nextBeginTime + "至" + nextEndTime + ")");
@@ -214,33 +225,26 @@ public class NextWeekPlanActivity extends BaseActivity {
                             WeekListBean weekListBean = list.get(i);
                             num_total++;
                             kilo_total += weekListBean.getTowers_range();
+                            if (lineNum.indexOf(weekListBean.getLine_id()) == -1) {
+                                lineNum.add(weekListBean.getLine_id());
+                            }
                         }
                         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                        monthLineTotal.setText("杆段总数 : " + num_total + "条");
-                        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
-                        monthLineTotal.setText("杆段总数 : " + num_total + "条");
-                        monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
-                        monthLine110kvNum.setText("110kv线路总数 : " + num_110kv + "条");
-                        monthLine110kvKilo.setText("公里数 : " + decimalFormat.format(kilo_110kv) + "公里");
-                        monthLine35kvNum.setText("35kv线路总数 : " + num_35kv + "条");
-                        monthLine35kvKilo.setText("公里数 : " + decimalFormat.format(kilo_35kv) + "公里");
+                        monthLineTotal.setText("工作线路 : " + lineNum.size() + "条");
+                        monthLineKiloTotal.setText( decimalFormat.format(kilo_total) + "km");
+                        monthLine110kvNum.setText("工作杆段 : " + num_total + "段");
+                        monthLine110kvKilo.setText(decimalFormat.format(kilo_total) + "km");
 
                         state = list.get(0).getAudit_status();
-                         if ("0".equals(state)){
-                             taskAddIv.setVisibility(View.VISIBLE);
-                             // 设置监听器。
-                             nextPlanRv.setSwipeMenuCreator(mSwipeMenuCreator);
+                        if ("0".equals(state)) {
+                            taskAddIv.setVisibility(View.VISIBLE);
 
-                             // 菜单点击监听。
-                             nextPlanRv.setOnItemMenuClickListener(mItemMenuClickListener);
-                         }else {
-                             taskAddIv.setVisibility(View.GONE);
-                             // 设置监听器。
-                             nextPlanRv.setSwipeMenuCreator(null);
+                            nextPlanRv.setSwipeItemMenuEnabled(true);
+                        } else {
+                            taskAddIv.setVisibility(View.GONE);
+                            nextPlanRv.setSwipeItemMenuEnabled(false);
 
-                             // 菜单点击监听。
-                             nextPlanRv.setOnItemMenuClickListener(null);
-                         }
+                        }
                         LinearLayoutManager manager = new LinearLayoutManager(NextWeekPlanActivity.this);
                         nextPlanRv.setLayoutManager(manager);
                         monthPlanAdapter = new NextWeekPlanAdapter(R.layout.fragment_plan_item, list, state, mJobType);
@@ -459,7 +463,7 @@ public class NextWeekPlanActivity extends BaseActivity {
     }
 
     //删除周计划
-    public void deleteWeekPlan( String id,int position) {
+    public void deleteWeekPlan(String id, int position) {
         ProgressDialog.show(NextWeekPlanActivity.this, false, "正在加载中...");
         BaseRequest.getInstance().getService()
                 .deleteWeekPlan(id)
@@ -471,12 +475,14 @@ public class NextWeekPlanActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             num_total--;
-                            kilo_total=kilo_total-list.get(position).getTowers_range();
+                            kilo_total = kilo_total - list.get(position).getTowers_range();
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                            monthLineTotal.setText("杆段总数 : " + num_total + "条");
-                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "公里");
+                            monthLineTotal.setText("杆段 : " + num_total + "条");
+                            monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + " km");
                             list.remove(position);
                             monthPlanAdapter.notifyItemRemoved(position);
+                            if (list.size()==0){
+                            setResult(RESULT_OK);}
                         } else {
                             Toast.makeText(NextWeekPlanActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
@@ -489,6 +495,7 @@ public class NextWeekPlanActivity extends BaseActivity {
                     }
                 });
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -531,6 +538,7 @@ public class NextWeekPlanActivity extends BaseActivity {
         }
         return lineList;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -538,6 +546,7 @@ public class NextWeekPlanActivity extends BaseActivity {
             getWeekList();
         }
     }
+
     // 创建菜单：
     SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
         @Override
@@ -566,7 +575,7 @@ public class NextWeekPlanActivity extends BaseActivity {
         public void onItemClick(SwipeMenuBridge menuBridge, int position) {
             // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
             menuBridge.closeMenu();
-            deleteWeekPlan(list.get(position).getId(),position);
+            deleteWeekPlan(list.get(position).getId(), position);
             // 左侧还是右侧菜单：
             int direction = menuBridge.getDirection();
             // 菜单在Item中的Position：
