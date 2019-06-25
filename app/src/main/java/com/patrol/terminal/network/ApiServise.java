@@ -551,31 +551,31 @@ public interface ApiServise {
 
     //防鸟患
     @GET("task/trouble/bird/listGET")
-    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);
+    Observable<BaseResult<List<TroubleDetailBean>>> getBird(@Query("line_id") String id);
 
-  /*  //防外破
+    //防外破
     @GET("task/trouble/break/listGET")
-    Observable<BaseResult<List<BirdBean>>> getBreak(@Query("id") String id);
+    Observable<BaseResult<List<TroubleDetailBean>>> getBreak(@Query("line_id") String id);
 
-    //防鸟患
+    //防地灾
     @GET("task/trouble/disaster/listGET")
-    Observable<BaseResult<List<BirdBean>>> getDisaster(@Query("id") String id);
+    Observable<BaseResult<List<TroubleDetailBean>>> getDisaster(@Query("line_id") String id);
 
-    //防鸟患
-    @GET("task/trouble/disaster/listGET")
-    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);
+    //防雷
+    @GET("task/trouble/thunder/listGET")
+    Observable<BaseResult<List<TroubleDetailBean>>> getThunder(@Query("line_id") String id);
 
-    //防鸟患
-    @GET("task/trouble/bird/listGET")
-    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);
+    //防风
+    @GET("task/trouble/wind/listGET")
+    Observable<BaseResult<List<TroubleDetailBean>>> getWind(@Query("line_id") String id);
 
-    //防鸟患
-    @GET("task/trouble/bird/listGET")
-    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);
+    //防山火
+    @GET("task/trouble/fire/listGET")
+    Observable<BaseResult<List<TroubleDetailBean>>> getFire(@Query("line_id") String id);
 
-    //防鸟患
-    @GET("task/trouble/bird/listGET")
-    Observable<BaseResult<List<BirdBean>>> getBird(@Query("id") String id);*/
+    //三跨
+    @GET("task/trouble/across/listGET")
+    Observable<BaseResult<List<TroubleDetailBean>>> getAcross(@Query("line_id") String id);
 
     //获取检修年,月,周计划列表
     //http://172.16.15.60:9096/plan/repair/listGET?year=2019&month=5&week=2

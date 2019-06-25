@@ -17,7 +17,7 @@ public class BirdBean implements Serializable {
      * orders_time : null
      * arrival_time : null
      * installed : 否
-     * plna_time : 2018-12-31
+     * plan_time : 2018-12-31
      * remakes : null
      * towers : #001-#055
      * tower_number : 55
@@ -31,17 +31,17 @@ public class BirdBean implements Serializable {
     private String id;
     private String task_trouble_id;
     private String deal_notes;
-    private Object total;
+    private String total;
     private String year;
     private String category;
     private String batch;
     private String reporting_time;
-    private Object orders_company;
-    private Object orders_time;
-    private Object arrival_time;
+    private String orders_company;
+    private String orders_time;
+    private String arrival_time;
     private String installed;
-    private String plna_time;
-    private Object remakes;
+    private String plan_time;
+    private String remakes;
     private String towers;
     private String tower_number;
     private String find_time;
@@ -74,11 +74,11 @@ public class BirdBean implements Serializable {
         this.deal_notes = deal_notes;
     }
 
-    public Object getTotal() {
+    public String getTotal() {
         return total;
     }
 
-    public void setTotal(Object total) {
+    public void setTotal(String total) {
         this.total = total;
     }
 
@@ -114,27 +114,27 @@ public class BirdBean implements Serializable {
         this.reporting_time = reporting_time;
     }
 
-    public Object getOrders_company() {
+    public String getOrders_company() {
         return orders_company;
     }
 
-    public void setOrders_company(Object orders_company) {
+    public void setOrders_company(String orders_company) {
         this.orders_company = orders_company;
     }
 
-    public Object getOrders_time() {
+    public String getOrders_time() {
         return orders_time;
     }
 
-    public void setOrders_time(Object orders_time) {
+    public void setOrders_time(String orders_time) {
         this.orders_time = orders_time;
     }
 
-    public Object getArrival_time() {
+    public String getArrival_time() {
         return arrival_time;
     }
 
-    public void setArrival_time(Object arrival_time) {
+    public void setArrival_time(String arrival_time) {
         this.arrival_time = arrival_time;
     }
 
@@ -146,19 +146,19 @@ public class BirdBean implements Serializable {
         this.installed = installed;
     }
 
-    public String getPlna_time() {
-        return plna_time;
+    public String getPlan_time() {
+        return plan_time;
     }
 
-    public void setPlna_time(String plna_time) {
-        this.plna_time = plna_time;
+    public void setPlan_time(String plan_time) {
+        this.plan_time = plan_time;
     }
 
-    public Object getRemakes() {
+    public String getRemakes() {
         return remakes;
     }
 
-    public void setRemakes(Object remakes) {
+    public void setRemakes(String remakes) {
         this.remakes = remakes;
     }
 

@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -17,6 +19,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.PlusImageActivity;
+import com.patrol.terminal.activity.TestActivity;
 import com.patrol.terminal.adapter.GridViewAdapter2;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.utils.Constant;
@@ -161,6 +164,8 @@ public class SpecialAttrFrgment3 extends BaseFragment {
     ImageView ivSave2Fangdizai;
     @BindView(R.id.fangdizai_item_ll)
     LinearLayout fangdizaiItemLl;
+    @BindView(R.id.tv_diver_way)
+    AutoCompleteTextView tvDiverWay;
 
     private String[] nsType = {"一般（III类）", "重大（II类）", "紧急（I类）"};
     private GridViewAdapter2 mGridViewAddImgAdapter;
@@ -210,6 +215,10 @@ public class SpecialAttrFrgment3 extends BaseFragment {
         initGridView(gridView2Fanglei, 777);
         initGridView(gridView2Fangfeng, 888);
         initGridView(gridView2Fangdizai, 999);
+
+        String data[] = getResources().getStringArray(R.array.auto_textview_contents);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, data);
+        tvDiverWay.setAdapter(adapter);
     }
 
     @Override
@@ -243,8 +252,8 @@ public class SpecialAttrFrgment3 extends BaseFragment {
             case 999:
                 break;
 
-                default:
-                    break;
+            default:
+                break;
 
         }
     }
@@ -316,7 +325,7 @@ public class SpecialAttrFrgment3 extends BaseFragment {
         }
     }
 
- /*   @OnClick({R.id.iv_expand, R.id.iv_expand2, R.id.iv_add, R.id.iv_add2, R.id.btn_add, R.id.iv_save2})
+   /* @OnClick({R.id.iv_expand, R.id.iv_expand2, R.id.iv_add, R.id.iv_add2, R.id.btn_add, R.id.iv_save2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_expand:
@@ -371,7 +380,7 @@ public class SpecialAttrFrgment3 extends BaseFragment {
     }*/
 
 
-    @OnClick({R.id.iv_expand_sankua, R.id.iv_expand_liufang, R.id.gaosugonglu_iv_add, R.id.gaosutielu_iv_add, R.id.putongtielu_iv_add, R.id.fagnwaipo_iv_add, R.id.fangshanhong_iv_add, R.id.fangniao_iv_add, R.id.fanglei_iv_add, R.id.fangfeng_iv_add, R.id.fangdizai_iv_add})
+    @OnClick({R.id.iv_expand_sankua, R.id.iv_expand_liufang, R.id.gaosugonglu_iv_add, R.id.gaosutielu_iv_add, R.id.putongtielu_iv_add, R.id.fagnwaipo_iv_add, R.id.fangshanhong_iv_add, R.id.fangniao_iv_add, R.id.fanglei_iv_add, R.id.fangfeng_iv_add, R.id.fangdizai_iv_add, R.id.btn_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_expand_sankua:
@@ -477,6 +486,9 @@ public class SpecialAttrFrgment3 extends BaseFragment {
                     fangdizaiItemLl.setVisibility(View.GONE);
                     isFdzOpen = false;
                 }
+                break;
+            case R.id.btn_add:
+                getActivity().startActivity(new Intent(getActivity(), TestActivity.class));
                 break;
         }
     }

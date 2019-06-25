@@ -26,18 +26,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:text="三跨"
-                    android:textSize="16sp"
-                    android:textColor="@color/blue" />
+                    android:textColor="@color/blue"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/iv_expand_sankua"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="8dp"
-                    android:src="@mipmap/btn_down"
                     android:layout_centerVertical="true"
-                    android:padding="8dp" />
+                    android:layout_marginRight="8dp"
+                    android:padding="8dp"
+                    android:src="@mipmap/btn_down" />
             </RelativeLayout>
 
             <LinearLayout
@@ -65,10 +65,10 @@
                         android:id="@+id/gaosugonglu_iv_add"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="6dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
-                        android:src="@mipmap/add_icon"/>
+                        android:padding="6dp"
+                        android:src="@mipmap/add_icon" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -127,10 +127,16 @@
                             android:layout_height="wrap_content"
                             android:text="填写隐患内容" />
 
-                        <EditText
+                        <AutoCompleteTextView
+                            android:id="@+id/tv_diver_way"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp" />
+                            android:completionHintView="@null"
+                            android:completionThreshold="1"
+                            android:dropDownHorizontalOffset="5dp"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -204,9 +210,9 @@
                         android:id="@+id/gaosutielu_iv_add"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="6dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
+                        android:padding="6dp"
                         android:src="@mipmap/add_icon" />
                 </RelativeLayout>
 
@@ -343,9 +349,9 @@
                         android:id="@+id/putongtielu_iv_add"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="6dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
+                        android:padding="6dp"
                         android:src="@mipmap/add_icon" />
                 </RelativeLayout>
 
@@ -466,12 +472,11 @@
             </LinearLayout>
 
 
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/bg_gray"
-                android:layout_marginTop="10dp"></View>
+                android:layout_marginTop="10dp"
+                android:background="@color/bg_gray"></View>
 
             <!--二.六防-->
             <RelativeLayout
@@ -484,18 +489,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:text="六防"
-                    android:textSize="16sp"
-                    android:textColor="@color/blue"/>
+                    android:textColor="@color/blue"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/iv_expand_liufang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="8dp"
-                    android:src="@mipmap/btn_down"
                     android:layout_centerVertical="true"
-                    android:padding="8dp"/>
+                    android:layout_marginRight="8dp"
+                    android:padding="8dp"
+                    android:src="@mipmap/btn_down" />
             </RelativeLayout>
 
             <LinearLayout
@@ -522,9 +527,9 @@
                         android:id="@+id/fagnwaipo_iv_add"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="6dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
+                        android:padding="6dp"
                         android:src="@mipmap/add_icon" />
                 </RelativeLayout>
 
@@ -665,9 +670,9 @@
                         android:id="@+id/fangshanhong_iv_add"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="6dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
+                        android:padding="6dp"
                         android:src="@mipmap/add_icon" />
                 </RelativeLayout>
 
@@ -808,9 +813,9 @@
                         android:id="@+id/fangniao_iv_add"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="6dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
+                        android:padding="6dp"
                         android:src="@mipmap/add_icon" />
                 </RelativeLayout>
 
@@ -951,9 +956,9 @@
                         android:id="@+id/fanglei_iv_add"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="6dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
+                        android:padding="6dp"
                         android:src="@mipmap/add_icon" />
                 </RelativeLayout>
 
@@ -1094,9 +1099,9 @@
                         android:id="@+id/fangfeng_iv_add"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="6dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
+                        android:padding="6dp"
                         android:src="@mipmap/add_icon" />
                 </RelativeLayout>
 
@@ -1237,9 +1242,9 @@
                         android:id="@+id/fangdizai_iv_add"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="6dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
+                        android:padding="6dp"
                         android:src="@mipmap/add_icon" />
                 </RelativeLayout>
 
@@ -1369,8 +1374,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/bg_gray"
-                android:layout_marginTop="10dp"></View>
+                android:layout_marginTop="10dp"
+                android:background="@color/bg_gray"></View>
 
             <EditText
                 android:id="@+id/content2"

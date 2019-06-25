@@ -28,7 +28,7 @@ public class TroubleAdapter extends BaseQuickAdapter<TroubleFragmentBean, BaseVi
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, TroubleDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("bean", item);
+                bundle.putSerializable("line_id", item.getLine_id());
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
