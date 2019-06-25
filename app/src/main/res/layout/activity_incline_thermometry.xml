@@ -140,6 +140,7 @@
                         android:id="@+id/et_front_tilt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
 
@@ -165,6 +166,7 @@
                         android:id="@+id/et_side_tilt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
             </LinearLayout>
@@ -196,6 +198,7 @@
                         android:id="@+id/et_shope_rate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
 
@@ -221,6 +224,7 @@
                         android:id="@+id/et_height_dif"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
             </LinearLayout>

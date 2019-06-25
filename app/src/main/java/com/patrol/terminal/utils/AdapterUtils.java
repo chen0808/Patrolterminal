@@ -103,6 +103,9 @@ public class AdapterUtils {
         if (text.contains("待专责审核")) {
             text = text.replace("待专责审核", "<font color='#f7d035'>待专责审核</font>");
         }
+        if (text.contains("待主管审核")) {
+            text = text.replace("待主管审核", "<font color='#8BC34A'>待主管审核</font>");
+        }
         if (text.contains("审核通过")) {
             text = text.replace("审核通过", "<font color='#057dff'>审核通过</font>");
         }

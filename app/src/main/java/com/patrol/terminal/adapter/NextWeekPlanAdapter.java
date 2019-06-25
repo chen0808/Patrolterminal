@@ -52,9 +52,20 @@ public class NextWeekPlanAdapter extends BaseQuickAdapter<WeekListBean, BaseView
         viewHolder.setGone(R.id.iv_edit,false);
 
         //审核状态
-        HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
-        viewHolder.setVisible(R.id.hlv_plan_state, true);
-        horizontalLineView.setWeekState(item.getAudit_status());
+        viewHolder.setVisible(R.id.tv_audit_status, true);
+        TextView tvAuditStatus = viewHolder.getView(R.id.tv_audit_status);
+
+        if ("0".equals(item.getDone_status())) {
+            AdapterUtils.setText(tvAuditStatus, "审核状态：待提交审核");
+        } else if ("1".equals(item.getDone_status())){
+            AdapterUtils.setText(tvAuditStatus, "审核状态：待专责审核");
+        }else if ("2".equals(item.getDone_status())) {
+            AdapterUtils.setText(tvAuditStatus, "审核状态：待主管审核");
+        }else if ("3".equals(item.getDone_status())){
+            AdapterUtils.setText(tvAuditStatus, "审核状态：审核通过");
+        }else if ("4".equals(item.getDone_status())){
+            AdapterUtils.setText(tvAuditStatus, "审核状态：审核不通过");
+        }
 
         //计划类型
         TextView tvContent = viewHolder.getView(R.id.tv_content);
