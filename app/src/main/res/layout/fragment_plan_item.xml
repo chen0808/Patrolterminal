@@ -162,16 +162,14 @@
             android:id="@+id/plan_progressbar_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_40"
             android:orientation="horizontal"
             android:visibility="gone"
            >
 
             <TextView
                 android:id="@+id/plan_progressbar_tv"
-                android:layout_width="13dp"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_20"
-                android:layout_marginRight="@dimen/dp_10"
                 android:gravity="center_vertical"
                 android:text="任务进度(0/0)："
                 android:textSize="@dimen/sp_12" />

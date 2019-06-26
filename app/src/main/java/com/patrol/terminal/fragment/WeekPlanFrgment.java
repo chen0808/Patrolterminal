@@ -183,10 +183,6 @@ public class WeekPlanFrgment extends BaseFragment {
         taskDate.setText(year + "年第" + week + "周(" + beginDate + "至" + endDate + ")");
         addNextPlan.setText("下周计划制定(" + nextBeginTime + "至" + nextEndTime + ")");
         planTotalTitle.setText("本周计划工作汇总");
-        // 设置监听器。
-        planRv.setSwipeMenuCreator(mSwipeMenuCreator);
-        // 菜单点击监听。
-        planRv.setOnItemMenuClickListener(mItemMenuClickListener);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
         weekPlanAdapter = new WeekPlanAdapter(R.layout.fragment_plan_item, results);
@@ -586,6 +582,8 @@ public class WeekPlanFrgment extends BaseFragment {
                 String date = weeks.get(options1).get(option2);
                 week = Integer.parseInt(date.split("周")[0].split("第")[1]);
                 taskDate.setText(time);
+                taskTitle.setText(week+"周计划列表");
+                planTotalTitle.setText(week+"周计划工作汇总");
                 getWeekList();
             }
         }).build();

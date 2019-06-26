@@ -427,6 +427,8 @@ public class MonthPlanFrgment extends BaseFragment {
                 String[] months = years[1].split("月");
                 month = Integer.parseInt(months[0]) + "";
                 year = years[0];
+                planTotalTitle.setText(month+"月计划工作汇总");
+                taskTitle.setText(month+"月计划列表");
                 getMonthPlanList();
                 RxRefreshEvent.publish("month@" + time);
             }
@@ -629,6 +631,7 @@ public class MonthPlanFrgment extends BaseFragment {
                 data1 = patrol;
                 data.addAll(patrol);
             }
+            //只有保电专责可以看保电计划
             if (repair != null&&mJobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
                 data.addAll(repair);
                 data2.addAll(repair);

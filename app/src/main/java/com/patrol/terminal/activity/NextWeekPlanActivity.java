@@ -153,6 +153,7 @@ ll35kv.setVisibility(View.GONE);
             year = getIntent().getIntExtra("year", 2019);
             week = getIntent().getIntExtra("week", 25);
         }
+        mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             // 设置监听器。
             nextPlanRv.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -166,7 +167,7 @@ ll35kv.setVisibility(View.GONE);
         titleName.setText("第" + week + "周计划(" + nextBeginTime + "至" + nextEndTime + ")");
         depId = SPUtil.getDepId(this);
         state = getIntent().getStringExtra("audit_status");
-        mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+
         //判断
         if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("0".equals(state) || "4".equals(state))) {
             titleSetting.setVisibility(View.VISIBLE);

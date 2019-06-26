@@ -355,6 +355,7 @@ public class DayPlanFrgment extends BaseFragment {
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 time = DateUatil.getDay(date);
                 taskDate.setText(time);
+                planTotalTitle.setText(time+"计划工作汇总");
                 inteDate();
                 getDayList();
             }

@@ -36,7 +36,7 @@
                         android:drawableLeft="@mipmap/grouo_icon"
                         android:drawablePadding="@dimen/dp_5"
                         android:gravity="center_vertical"
-                        android:text="本月工作计划汇总"
+                        android:text="本月计划工作汇总"
                         android:textColor="@color/color_33"
                         android:textSize="@dimen/sp_16"
                         android:textStyle="bold" />
