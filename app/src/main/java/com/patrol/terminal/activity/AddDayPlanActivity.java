@@ -113,8 +113,9 @@ public class AddDayPlanActivity extends BaseActivity {
     private String line_id;
     private String week;
     private String[] types;
-    private int selectNum=0;
-    private int allNum=0;
+    private int selectNum = 0;
+    private int allNum = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,8 +147,13 @@ public class AddDayPlanActivity extends BaseActivity {
                 if (selectType.size() == 0) {
                     type.setWeek_tower_id(type.getId());
                     type.setMonth(Integer.parseInt(month));
-                    type.setStart_time(year + "-" + month + "-" + day);
-                    type.setEnd_time(year + "-" + month + "-" + day);
+                    if (month.length()==1) {
+                        type.setStart_time(year + "-0" + month + "-" + day);
+                        type.setEnd_time(year + "-0" + month + "-" + day);
+                    } else {
+                        type.setStart_time(year + "-" + month + "-" + day);
+                        type.setEnd_time(year + "-" + month + "-" + day);
+                    }
                     type.setDay(day);
                     selectType.add(type);
                     selectNum++;
@@ -165,13 +171,18 @@ public class AddDayPlanActivity extends BaseActivity {
                     if (isExit == 0) {
                         type.setWeek_tower_id(type.getId());
                         type.setMonth(Integer.parseInt(month));
-                        type.setStart_time(year + "-" + month + "-" + day);
-                        type.setEnd_time(year + "-" + month + "-" + day);
+                        if (month.length()==1) {
+                            type.setStart_time(year + "-0" + month + "-" + day);
+                            type.setEnd_time(year + "-0" + month + "-" + day);
+                        } else {
+                            type.setStart_time(year + "-" + month + "-" + day);
+                            type.setEnd_time(year + "-" + month + "-" + day);
+                        }
                         type.setDay(day);
                         selectNum++;
                         selectType.add(type);
                     }
-                    addWeekNumSelect.setText(selectNum+"");
+                    addWeekNumSelect.setText(selectNum + "");
                 }
 
             }
@@ -309,8 +320,8 @@ public class AddDayPlanActivity extends BaseActivity {
                         } else {
                             dayNoData.setVisibility(View.GONE);
                             addWeekNumLl.setVisibility(View.VISIBLE);
-                            allNum=results.size();
-                            addWeekNumAll.setText("/"+allNum+")");
+                            allNum = results.size();
+                            addWeekNumAll.setText("/" + allNum + ")");
                         }
                         ProgressDialog.cancle();
                     }

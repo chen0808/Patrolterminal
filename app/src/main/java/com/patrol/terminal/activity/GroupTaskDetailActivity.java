@@ -208,7 +208,11 @@ public class GroupTaskDetailActivity extends BaseActivity {
         createRobTaskBean.setId(bean.getId());
         createRobTaskBean.setIs_rob("1");
         createRobTaskBean.setGroup_id(bean.getGroup_id());
-        createRobTaskBean.setLine_name(bean.getLine_name());
+        try {
+            createRobTaskBean.setLine_name(bean.getLine_name());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         createRobTaskBean.setYear(bean.getYear()+"");
         createRobTaskBean.setMonth(bean.getMonth()+"");
         createRobTaskBean.setDay(bean.getDay()+"");
@@ -328,10 +332,11 @@ public class GroupTaskDetailActivity extends BaseActivity {
                             if (flag == 1) {
                                 Toast.makeText(GroupTaskDetailActivity.this, "抢单失败", Toast.LENGTH_SHORT).show();
                             }else {
-                                Toast.makeText(GroupTaskDetailActivity.this, "网络连接失败，服务器异常", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GroupTaskDetailActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                             }
 
                         }
+                        getGroupList(bean.getId());
                         ProgressDialog.cancle();
 
                     }

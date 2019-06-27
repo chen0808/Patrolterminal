@@ -411,6 +411,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             case R.id.rl_todo:
                 ((NewMainActivity) getActivity()).setFragment(1);
                 break;
+
             case R.id.rl_task_now:
             case R.id.rl_task_history:
                 Intent intent = new Intent(getActivity(), NewTaskActivity.class);
@@ -418,6 +419,9 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 getActivity().startActivity(intent);
                 break;
             case R.id.rl_day_plan_finish:
+                Intent intent1 = new Intent(getActivity(), NewPlanActivity.class);
+                intent1.putExtra("index", 2);
+                getActivity().startActivity(intent1);
                 break;
         }
     }

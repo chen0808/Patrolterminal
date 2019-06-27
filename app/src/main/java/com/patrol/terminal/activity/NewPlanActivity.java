@@ -122,6 +122,8 @@ public class NewPlanActivity extends BaseActivity {
 
 //        viewPager.setNoScroll(true);
         viewPager.setOffscreenPageLimit(5);
+        int index = getIntent().getIntExtra("index", 0);
+        viewPager.setCurrentItem(index);
         String from = getIntent().getStringExtra("from");
         if ("todoMonth".equals(from)) {
             viewPager.setCurrentItem(0);
