@@ -6,20 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.DefectFragmentAdapter;
+import com.patrol.terminal.adapter.TroubleFragmentAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.DefectFragmentBean;
+import com.patrol.terminal.bean.TroubleBean;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -29,7 +30,7 @@ import io.reactivex.schedulers.Schedulers;
 public class TroubleFrgment extends BaseFragment {
     @BindView(R.id.rv_trouble)
     RecyclerView rvTrouble;
-    private String task_id;
+    private String line_id;
     private Disposable subscribe;
 
     @Override
@@ -40,7 +41,7 @@ public class TroubleFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-        task_id = (String) SPUtil.get(getActivity(), "ids", "task_id", "");
+        line_id = (String) SPUtil.get(getActivity(), "ids", "line_id", "");
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
@@ -55,14 +56,14 @@ public class TroubleFrgment extends BaseFragment {
     }
 
     private void getdata() {
-        BaseRequest.getInstance().getService().getTroubleFragment(task_id).subscribeOn(Schedulers.io())
+        BaseRequest.getInstance().getService().getTroubleFragment2(line_id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectFragmentBean>>(getActivity()) {
+                .subscribe(new BaseObserver<List<TroubleBean>>(getActivity()) {
                     @Override
-                    protected void onSuccees(BaseResult<List<DefectFragmentBean>> t) throws Exception {
-                        List<DefectFragmentBean> results = t.getResults();
+                    protected void onSuccees(BaseResult<List<TroubleBean>> t) throws Exception {
+                        List<TroubleBean> results = t.getResults();
                         rvTrouble.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        DefectFragmentAdapter adapter = new DefectFragmentAdapter(R.layout.fragment_defect_item, results);
+                        TroubleFragmentAdapter adapter = new TroubleFragmentAdapter(R.layout.fragment_defect_item, results);
                         rvTrouble.setAdapter(adapter);
                     }
 
@@ -72,10 +73,11 @@ public class TroubleFrgment extends BaseFragment {
                     }
                 });
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (subscribe!=null){
+        if (subscribe != null) {
             subscribe.dispose();
         }
     }

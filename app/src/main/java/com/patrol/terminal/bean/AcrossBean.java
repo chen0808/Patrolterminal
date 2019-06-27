@@ -34,7 +34,9 @@ public class AcrossBean implements Serializable {
     private String type_id;
     private String type_name;
     private String start_id;
+    private String start_name;
     private String end_id;
+    private String end_name;
     private String towers;
     private String task_trouble_id;
     private String across_name;
@@ -51,6 +53,40 @@ public class AcrossBean implements Serializable {
     private String is_adss;
     private String remark;
     private String status;
+    private String task_id;
+    private String tower_id;
+
+    public String getTower_id() {
+        return tower_id;
+    }
+
+    public void setTower_id(String tower_id) {
+        this.tower_id = tower_id;
+    }
+
+    public String getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(String task_id) {
+        this.task_id = task_id;
+    }
+
+    public String getStart_name() {
+        return start_name;
+    }
+
+    public void setStart_name(String start_name) {
+        this.start_name = start_name;
+    }
+
+    public String getEnd_name() {
+        return end_name;
+    }
+
+    public void setEnd_name(String end_name) {
+        this.end_name = end_name;
+    }
 
     public String getId() {
         return id;

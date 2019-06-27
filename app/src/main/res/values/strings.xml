@@ -108,7 +108,6 @@
     <string-array name="type">
         <item>"高速铁路"</item>
         <item>"高速公路"</item>
-        <item>"重要输电线路"</item>
         <item>"普通公路"</item>
     </string-array>
 

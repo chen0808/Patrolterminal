@@ -150,7 +150,6 @@ public class GetToPostCheckActivity extends BaseActivity {
                 String json = new Gson().toJson(posCtheckBean);
                 Log.d("TAG", json);
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-                ;
                 BaseRequest.getInstance().getService().sendPostCheck(body).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new BaseObserver(this) {
