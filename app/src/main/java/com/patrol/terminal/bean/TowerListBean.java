@@ -99,7 +99,7 @@ public class TowerListBean implements Serializable {
     private String voltage;
     private int span;
     private String is_terminal;
-    private int tower_calls;
+    private double tower_calls;
     private Object tower_position;
     private String is_commutation;
     private double wind_speed;
@@ -324,11 +324,11 @@ public class TowerListBean implements Serializable {
         this.is_terminal = is_terminal;
     }
 
-    public int getTower_calls() {
+    public double getTower_calls() {
         return tower_calls;
     }
 
-    public void setTower_calls(int tower_calls) {
+    public void setTower_calls(double tower_calls) {
         this.tower_calls = tower_calls;
     }
 

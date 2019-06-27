@@ -125,6 +125,11 @@ public class PatrolRecordActivity extends BaseActivity {
     private String task_id;
     private String sign;
     private String audit_status;
+    private String lineName;
+
+    public String getLineName() {
+        return lineName;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +158,7 @@ public class PatrolRecordActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
                         TaskBean bean = t.getResults();
                         sign = bean.getType_sign();
+                        lineName = bean.getLine_name();
                     }
 
                     @Override

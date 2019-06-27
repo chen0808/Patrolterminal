@@ -488,7 +488,10 @@ public class SpecialAttrFrgment3 extends BaseFragment {
                 }
                 break;
             case R.id.btn_add:
-                getActivity().startActivity(new Intent(getActivity(), TestActivity.class));
+                String lineName = ((PatrolRecordActivity) getActivity()).getLineName();
+                Intent intent = new Intent(getActivity(), TestActivity.class);
+                intent.putExtra("line_name", lineName);
+                getActivity().startActivity(intent);
                 break;
         }
     }

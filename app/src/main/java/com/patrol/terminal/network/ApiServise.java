@@ -291,12 +291,12 @@ public interface ApiServise {
 
     //获取计划个数
     @GET("plan/month/countGET")
-    Observable<BaseResult<PlanNumBean>> getPlanNum(@Query("dep_id") String dep_id, @Query("year") int year,@Query("month") int month,@Query("day") int day,@Query("week") int week);
+    Observable<BaseResult<PlanNumBean>> getPlanNum(@Query("dep_id") String dep_id, @Query("year") int year, @Query("month") int month, @Query("day") int day, @Query("week") int week);
 
 
     //获取任务个数
     @GET("task/group/countGET")
-    Observable<BaseResult<PlanNumBean>> getTaskNum(@Query("dep_id") String dep_id, @Query("year") int year,@Query("month") int month,@Query("day") int day,@Query("user_id") String user_id);
+    Observable<BaseResult<PlanNumBean>> getTaskNum(@Query("dep_id") String dep_id, @Query("year") int year, @Query("month") int month, @Query("day") int day, @Query("user_id") String user_id);
 
     //根据当前日期查询所属周下所有计划接口
     @GET("plan/day/tower/dayGET")
@@ -552,6 +552,10 @@ public interface ApiServise {
     @GET("task/danger/listGET")
     Observable<BaseResult<List<DefectFragmentBean>>> getTroubleFragment(@Query("task_id") String task_id);
 
+    //巡视记录缺陷列表
+    @GET("task/trouble/listGET")
+    Observable<BaseResult<List<TroubleBean>>> getTroubleFragment2(@Query("line_id") String line_id);
+
     //获取所有缺陷库
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
     @GET("/task/defect/pdaPageGET")
@@ -589,6 +593,10 @@ public interface ApiServise {
     //三跨
     @GET("task/trouble/across/listGET")
     Observable<BaseResult<List<TroubleDetailBean>>> getAcross(@Query("line_id") String id);
+
+    //特殊属性编辑列表
+    @GET("task/danger/wares/allGET")
+    Observable<BaseResult<List<WaresListBean>>> getWares(@Query("is_used") String is_used);
 
     //获取检修年,月,周计划列表
     //http://172.16.15.60:9096/plan/repair/listGET?year=2019&month=5&week=2
@@ -964,4 +972,35 @@ public interface ApiServise {
     @POST("task/remind/batchPOST")
     Observable<BaseResult<TaskBean>> clearTodo(@Query("to_user_id") String to_user_id, @Query("flow_sign") String flow_sign);
 
+    //提交特殊属性
+    @POST("task/trouble/across/savePOST")
+    Observable<BaseResult> saveAcross(@Body RequestBody body);
+
+    //提交防鸟特殊属性
+    @POST("task/trouble/bird/savePOST")
+    Observable<BaseResult> saveBird(@Body RequestBody body);
+
+    //提交防雷特殊属性
+    @POST("task/trouble/thunder/savePOST")
+    Observable<BaseResult> saveThunder(@Body RequestBody body);
+
+    //提交防风特殊属性
+    @POST("task/trouble/wind/savePOST")
+    Observable<BaseResult> saveWind(@Body RequestBody body);
+
+    //提交防山火特殊属性
+    @POST("task/trouble/fire/savePOST")
+    Observable<BaseResult> saveFire(@Body RequestBody body);
+
+    //提交外破特殊属性
+    @POST("task/trouble/break/savePOST")
+    Observable<BaseResult> saveBreak(@Body RequestBody body);
+
+    //提交防地灾特殊属性
+    @POST("task/trouble/disaster/savePOST")
+    Observable<BaseResult> saveDisaster(@Body RequestBody body);
+
+    //防洪防汛
+    @POST("task/trouble/flood/savePOST")
+    Observable<BaseResult> saveFlood(@Body RequestBody body);
 }
