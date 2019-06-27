@@ -101,7 +101,6 @@ public class GroupTaskFrgment extends BaseFragment {
         taskTitle.setText("组任务列表");
         taskAdd.setVisibility(View.GONE);
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
-        getData();
         clearTodoAll();
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             // 设置监听器。
@@ -159,9 +158,16 @@ public class GroupTaskFrgment extends BaseFragment {
         getRepairList();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData();;
+    }
+
     //获取小组任务列表
     public void getGroupList() {
 
+        ProgressDialog.show(getContext(),false,"正在加载。。。");
         BaseRequest.getInstance().getService()
                 .getGroupList(year, month, day, depId, duty_user_id, userId, "duty_user_id,line_id,name", "1")
                 .subscribeOn(Schedulers.io())
@@ -180,11 +186,13 @@ public class GroupTaskFrgment extends BaseFragment {
                             }
                         }
                         mRefrsh.setRefreshing(false);
+                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         mRefrsh.setRefreshing(false);
+                        ProgressDialog.cancle();
                     }
                 });
 

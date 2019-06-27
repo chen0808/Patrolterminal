@@ -2,6 +2,7 @@ package com.patrol.terminal.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -40,6 +41,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.io.OnErrorAction;
 
 //小组任务详情
 public class GroupTaskDetailActivity extends BaseActivity {
@@ -94,7 +96,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
         }else {
-            getGroupList();
+            getGroupList(bean.getId());
         }
 
     }
@@ -140,7 +142,10 @@ public class GroupTaskDetailActivity extends BaseActivity {
                titleSettingTv.setText("撤销");
                titleSetting.setVisibility(View.VISIBLE);
            }
-        }
+        }else {
+           tvTableName.setVisibility(View.GONE);
+           taskSubmit.setVisibility(View.GONE);
+       }
 
         if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
             String work_user_name = bean.getWork_user_name();
@@ -157,10 +162,11 @@ public class GroupTaskDetailActivity extends BaseActivity {
                 tvLineDate.setText("小组负责人：" + bean.getDuty_user_name());
             }
         }
-        tvTableName.setText(bean.getYear() + "年" + bean.getMonth() + "月" + bean.getDay() + "日班组任务");
+
         tvLineName.setText("线路名称：" + bean.getLine_name());
         tvLineNo.setText("班  组：" + bean.getDep_name());
         tvLineTower.setText("杆  段：" + bean.getName());
+        typeList.clear();
         String type_sign = bean.getType_sign();
         String[] split = type_sign.split(",");
         for (int i = 0; i < split.length; i++) {
@@ -286,7 +292,6 @@ public class GroupTaskDetailActivity extends BaseActivity {
                             getPersonal();
                             RxRefreshEvent.publish("refreshTodo");
                             setResult(RESULT_OK);
-
                         }
                         ProgressDialog.cancle();
 
@@ -300,12 +305,11 @@ public class GroupTaskDetailActivity extends BaseActivity {
     }
     //抢单
     public void addPersonTask(String user_id, String username, int flag) {
-        ProgressDialog.show(this, false, "正在加载。。。");
+        ProgressDialog.show(this, false, "正在抢单。。。");
 //        bean.setGroup_list_id(bean.getId());
         bean.setWork_user_id(user_id);
         bean.setWork_user_name(username);
         selectList.add(bean);
-
         //获取月计划列表
         BaseRequest.getInstance().getService()
                 .addPersonTask(selectList)
@@ -326,19 +330,18 @@ public class GroupTaskDetailActivity extends BaseActivity {
                             tvLineType.setVisibility(View.VISIBLE);
                             tvLineType.setText("执行人 : " + username);
                             RxRefreshEvent.publish("refreshPersonal");
-                            RxRefreshEvent.publish("refreshTodo");
-                            setResult(RESULT_OK);
-                        } else {
-                            if (flag == 1) {
-                                Toast.makeText(GroupTaskDetailActivity.this, "抢单失败", Toast.LENGTH_SHORT).show();
-                            }else {
-                                Toast.makeText(GroupTaskDetailActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
-                            }
-
                         }
+                        RxRefreshEvent.publish("refreshTodo");
+                        setResult(RESULT_OK);
                         getGroupList(bean.getId());
-                        ProgressDialog.cancle();
+                    }
 
+                    @Override
+                    protected void onCodeError(BaseResult<List<DayOfWeekBean>> t) throws Exception {
+                        super.onCodeError(t);
+                        getGroupList(bean.getId());
+                        RxRefreshEvent.publish("refreshTodo");
+                        setResult(RESULT_OK);
                     }
 
                     @Override
@@ -350,7 +353,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
 
     //获取小组任务详情
     public void getGroupList(String id) {
-
+        ProgressDialog.show(this, false, "正在加载。。。");
         BaseRequest.getInstance().getService()
                 .getGroupDetail(id)
                 .subscribeOn(Schedulers.io())
@@ -360,11 +363,19 @@ public class GroupTaskDetailActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<GroupTaskBean> t) throws Exception {
                         bean=t.getResults();
                         getGroupList();
+                        ProgressDialog.cancle();
                     }
 
+
+                    @Override
+                    protected void onCodeError(BaseResult<GroupTaskBean> t) throws Exception {
+                        super.onCodeError(t);
+                        ProgressDialog.cancle();
+
+                    }
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
+                        ProgressDialog.cancle();
                     }
                 });
 

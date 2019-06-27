@@ -165,7 +165,8 @@ public class AddDayPlanActivity extends BaseActivity {
                             isExit = 1;
                             selectType.remove(i);
                             selectNum--;
-                            return;
+                            break;
+
                         }
                     }
                     if (isExit == 0) {
@@ -182,9 +183,8 @@ public class AddDayPlanActivity extends BaseActivity {
                         selectNum++;
                         selectType.add(type);
                     }
-                    addWeekNumSelect.setText(selectNum + "");
                 }
-
+                addWeekNumSelect.setText(selectNum + "");
             }
         });
     }
@@ -312,6 +312,9 @@ public class AddDayPlanActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
+                        selectBean.clear();
+                        selectNum=0;
+                        addWeekNumSelect.setText(selectNum+"");
                         results = t.getResults();
                         adapter.setData(results);
                         if (results == null || results.size() == 0) {

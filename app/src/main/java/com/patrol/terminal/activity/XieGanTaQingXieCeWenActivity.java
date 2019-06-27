@@ -137,7 +137,11 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         HwcwBean bean = t.getResults();
-                        tvTowerType.setText(bean.getTower_model());
+                        if (bean != null) {
+                            tvTowerType.setText(bean.getTower_model());
+                        } else {
+                            tvTowerType.setText("无");
+                        }
                     }
 
                     @Override
@@ -150,8 +154,8 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
     public void getYXtodo() {
         if ("1".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-            titleSetting.setVisibility(View.VISIBLE);
-            titleSettingTv.setText("审批");
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
             btnCommit.setVisibility(View.GONE);
@@ -200,7 +204,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                         Toast.makeText(this, "请填写横断两端高差", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (id==null) {
+                    if (id == null) {
                         Toast.makeText(this, "请先保存数据后再提交", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -275,8 +279,8 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
                         if (t.getCode() == 1) {
-                            if (id==null){
-                                id="1111";
+                            if (id == null) {
+                                id = "1111";
                             }
                             Toast.makeText(XieGanTaQingXieCeWenActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);

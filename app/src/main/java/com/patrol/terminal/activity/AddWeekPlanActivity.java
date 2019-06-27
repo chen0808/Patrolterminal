@@ -168,19 +168,20 @@ public class AddWeekPlanActivity extends BaseActivity {
                     bean.setDep_name(SPUtil.getDepName(AddWeekPlanActivity.this));
                     selectType.add(bean);
                     selectNum++;
-                    addWeekNumSelect.setText(selectNum+"");
                 } else if (type.startsWith("delete")) {
                     String[] split = type.split("@");
                     for (int i = 0; i < selectType.size(); i++) {
-                        Tower tower = selectType.get(i);
-                        if (split[1].equals(tower.getTower_id())) {
+                        String tower_id = selectType.get(i).getTowers_id();
+                        String id = split[1];
+                        if (id.equals(tower_id)) {
                             selectType.remove(i);
                             selectNum--;
-                            addWeekNumSelect.setText(selectNum+"");
                             break;
                         }
                     }
+
                 }
+                addWeekNumSelect.setText(selectNum+"");
             }
         });
     }
@@ -232,6 +233,9 @@ public class AddWeekPlanActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<WeekOfMonthBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<WeekOfMonthBean>> t) throws Exception {
+                        selectType.clear();
+                        selectNum=0;
+                        addWeekNumSelect.setText(selectNum+"");
                         ProgressDialog.cancle();
                         results = t.getResults();
                         adapter.setData(results);
