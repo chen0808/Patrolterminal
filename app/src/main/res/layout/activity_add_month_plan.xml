@@ -57,7 +57,9 @@
 
                 </LinearLayout>
 
-                <View style="@style/line_styl" />
+                <View style="@style/line_styl"
+                    android:visibility="gone"
+                    />
 
                 <LinearLayout style="@style/plan_ll_styl"
                     android:visibility="gone"
@@ -133,7 +135,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_40"
                         android:layout_marginLeft="11dp"
-                        android:layout_marginRight="@dimen/dp_10"
+                        android:layout_marginRight="11dp"
                         android:background="@color/color_f4"
                         android:orientation="horizontal">
 
@@ -256,7 +258,7 @@
                         android:layout_height="@dimen/dp_40"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_10"
-                        android:background="@color/image_overlay_false"
+                        android:background="@color/color_f4"
                         android:orientation="horizontal"
                         android:paddingLeft="1dp"
                         android:paddingRight="1dp">
@@ -274,7 +276,7 @@
                         <View
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
-                            android:background="@color/image_overlay_false" />
+                            android:background="@color/color_f4" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -292,16 +294,11 @@
                         android:id="@+id/manth_plan_detail_lv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:divider="@null"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_10"></com.patrol.terminal.widget.NoScrollListView>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/dp_10"
-                        android:layout_marginRight="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_20"
-                        android:background="@color/image_overlay_false" />
+
 
                 </LinearLayout>
             </LinearLayout>

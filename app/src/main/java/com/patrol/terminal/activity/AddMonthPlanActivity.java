@@ -110,10 +110,7 @@ public class AddMonthPlanActivity extends BaseActivity {
     private int  index=2;
     private int from;
 
-//    private static final int MONTH_PLAN = 0;
-//    private static final int WEEK_PLAN = 1;
-//    private static final int DAY_PLAN = 2;
-//    private int changeType = MONTH_PLAN;
+
 
 
     @Override

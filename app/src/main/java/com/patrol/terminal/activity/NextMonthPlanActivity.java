@@ -372,8 +372,8 @@ public class NextMonthPlanActivity extends BaseActivity {
                 }
 
                 @Override
-                public void cancel() {
-                    super.cancel();
+                public void cancle() {
+                    super.cancle();
                     submitMonthPlan(lineList, "4");  //不同意
                     dismiss();
                 }
@@ -390,8 +390,8 @@ public class NextMonthPlanActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void cancel() {
-                        super.cancel();
+                    public void cancle() {
+                        super.cancle();
                         dismiss();
                     }
                 };
@@ -406,8 +406,8 @@ public class NextMonthPlanActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void cancel() {
-                        super.cancel();
+                    public void cancle() {
+                        super.cancle();
                         dismiss();
                     }
                 };
@@ -423,8 +423,8 @@ public class NextMonthPlanActivity extends BaseActivity {
                 }
 
                 @Override
-                public void cancel() {
-                    super.cancel();
+                public void cancle() {
+                    super.cancle();
                     submitMonthPlan(lineList, "4");  //不同意
                     dismiss();
                 }

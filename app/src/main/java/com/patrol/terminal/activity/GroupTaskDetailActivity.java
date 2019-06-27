@@ -85,7 +85,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_month_plan_detail);
+        setContentView(R.layout.activity_task_detail);
         ButterKnife.bind(this);
         initView();
         bean = (GroupTaskBean) getIntent().getParcelableExtra("GroupTaskBean");
@@ -142,20 +142,25 @@ public class GroupTaskDetailActivity extends BaseActivity {
            }
         }
 
-        if ("1".equals(bean.getAllot_status())) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+            String work_user_name = bean.getWork_user_name();
             tvLineType.setVisibility(View.VISIBLE);
-            tvLineType.setText("执行人 : " + bean.getWork_user_name());
+            if (work_user_name==null||"".equals(work_user_name)){
+                tvLineType.setText("执行人：未指定");
+            }else {
+                tvLineType.setText("执行人："+work_user_name);
+            }
+        }else {
+            if (bean.getDuty_user_name()==null||"".equals(bean.getDuty_user_name())){
+                tvLineDate.setText("小组负责人：未指定" );
+            }else {
+                tvLineDate.setText("小组负责人：" + bean.getDuty_user_name());
+            }
         }
         tvTableName.setText(bean.getYear() + "年" + bean.getMonth() + "月" + bean.getDay() + "日班组任务");
-        tvLineName.setText("线路名称 : " + bean.getLine_name());
-        tvLineNo.setText("班  组 : " + bean.getDep_name());
-        if (bean.getDuty_user_name()==null){
-            tvLineDate.setText("小组负责人 : 暂无" );
-        }else {
-            tvLineDate.setText("小组负责人 :" + bean.getDuty_user_name());
-        }
-        tvLineTower.setText("杆  段 : " + bean.getName());
-
+        tvLineName.setText("线路名称：" + bean.getLine_name());
+        tvLineNo.setText("班  组：" + bean.getDep_name());
+        tvLineTower.setText("杆  段：" + bean.getName());
         String type_sign = bean.getType_sign();
         String[] split = type_sign.split(",");
         for (int i = 0; i < split.length; i++) {
@@ -374,10 +379,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                         for (int i = 0; i < personalList.size(); i++) {
                             personals[i] = personalList.get(i).getUser_name();
                         }
-
-
                     }
-
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                     }
@@ -415,7 +417,6 @@ public class GroupTaskDetailActivity extends BaseActivity {
     //保存
     public void savaGroupTask(  DepUserBean depUserBean) {
     List<GroupTaskBean> selectBean=new ArrayList<>();
-
         bean.setWork_user_id(depUserBean.getUser_id());
         bean.setWork_user_name(depUserBean.getUser_name());
         bean.setFrom_user_id(SPUtil.getUserId(this));

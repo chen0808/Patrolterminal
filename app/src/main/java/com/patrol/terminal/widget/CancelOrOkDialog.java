@@ -40,7 +40,8 @@ public class CancelOrOkDialog extends Dialog {
             public void onClick(View paramView) {
                 if (paramView.getId()==R.id.cancel_tv){
                 //取消
-                cancel();}
+                    cancle();
+                }
             }
         });
 
@@ -54,11 +55,12 @@ public class CancelOrOkDialog extends Dialog {
 
     }
 
+
     //确认
-    public void ok() {
+   protected    void ok() {
     }
 
-    public void cancel() {
+    protected  void cancle() {
 
     }
 }

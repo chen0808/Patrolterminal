@@ -19,6 +19,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddWeekPlanActivity;
+import com.patrol.terminal.activity.NextMonthPlanActivity;
 import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.activity.SpecialPlanDetailActivity;
 import com.patrol.terminal.activity.TemporaryActivity;
@@ -37,6 +38,7 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.utils.TimeUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.PopMenmuDialog;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -109,7 +111,7 @@ public class WeekPlanFrgment extends BaseFragment {
     TextView donePlanRange;
     @BindView(R.id.ll_35kv)
     LinearLayout ll35kv;
-    private TimePickerView pvTime;
+
     private String time;
     private WeekPlanAdapter weekPlanAdapter;
     private List<String> years = new ArrayList<>();
@@ -123,27 +125,16 @@ public class WeekPlanFrgment extends BaseFragment {
     private String mJobType;
     private String depId;
     private List<WeekListBean> results = new ArrayList<>();
-    private PopMenmuDialog popWinShare;
     private int nextYear;
     private int nextWeek;
     private List<WeekListBean> nextWeekList;
-    private String nextBeginTime;
 
     private int num_total = 0;
-    private int num_110kv = 0;
-    private int num_35kv = 0;
     private double kilo_total = 0;
-    private double kilo_110kv = 0;
-    private double kilo_35kv = 0;
-
     private int next_num_total = 0;
-    private int next_num_110kv = 0;
-    private int next_num_35kv = 0;
     private double next_kilo_total = 0;
-    private double next_kilo_110kv = 0;
-    private double next_kilo_35kv = 0;
-    private int done_num_total = 0;
-    private int all_num_total = 0;
+    private int done_num_total = 0; //计划完成数
+    private int all_num_total = 0;//计划总数
     private WeekListBean weekListBean;
     private List<String> lineNum = new ArrayList<>();
 
@@ -238,36 +229,6 @@ public class WeekPlanFrgment extends BaseFragment {
 
     }
 
-    // 创建菜单：
-    SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
-        @Override
-        public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
-//            int width = getResources().getDimensionPixelSize(R.dimen.dp_60);
-//
-//            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
-//            // 2. 指定具体的高，比如80;
-//            // 3. WRAP_CONTENT，自身高度，不推荐;
-//            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-//            SwipeMenuItem deleteItem = new SwipeMenuItem(getContext());
-//            deleteItem.setWidth(width);
-//            deleteItem.setHeight(height);
-//            deleteItem.setTextSize(15);
-//            deleteItem.setTextColorResource(R.color.white);
-//            deleteItem.setBackground(R.color.orange_vip);
-//            deleteItem.setText("编辑");
-//            SwipeMenuItem deleteItem1 = new SwipeMenuItem(getContext());
-//            deleteItem1.setWidth(width);
-//            deleteItem1.setHeight(height);
-//            deleteItem1.setBackground(R.color.home_red);
-//            deleteItem1.setTextSize(15);
-//            deleteItem1.setTextColorResource(R.color.white);
-//            deleteItem1.setText("删除");
-//            // 各种文字和图标属性设置。
-//            rightMenu.addMenuItem(deleteItem); // 在Item右侧添加一个菜单。
-//            rightMenu.addMenuItem(deleteItem1); // 在Item右侧添加一个菜单。
-//            // 注意：哪边不想要菜单，那么不要添加即可。
-        }
-    };
 
 
     //获取本周计划
@@ -281,6 +242,7 @@ public class WeekPlanFrgment extends BaseFragment {
                     @Override
                     protected void onSuccees(BaseResult<List<WeekListBean>> t) throws Exception {
                         lineList.clear();
+                        lineNum.clear();
                         num_total = 0;
                         kilo_total = 0;
                         done_num_total = 0;
@@ -315,13 +277,11 @@ public class WeekPlanFrgment extends BaseFragment {
                         monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + " km");
                         monthLine110kvNum.setText("工作杆段：" + num_total + "段");
                         monthLine110kvKilo.setText(decimalFormat.format(kilo_total) + " km");
-                        BigDecimal b1 = new BigDecimal(done_num_total);
-                        BigDecimal b2 = new BigDecimal(all_num_total);
+
                         if (all_num_total == 0) {
                             donePlanRange.setText("计划进度：0%");
                         } else {
-                            //默认保留两位会有错误，这里设置保留小数点后4位
-                            double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            double range = Utils.div(done_num_total, all_num_total, 4)*100;
                             donePlanRange.setText("计划进度：" + range + "%");
                         }
                         if (lineList.size() != 0) {
@@ -358,7 +318,6 @@ public class WeekPlanFrgment extends BaseFragment {
                             addPlanIv.setVisibility(View.GONE);
                             addPlanLl.setVisibility(View.VISIBLE);
                             addPlanName.setText(nextYear + "年第" + nextWeek + "周工作计划");
-
                             weekListBean = nextWeekList.get(0);
                             String audit_status = weekListBean.getAudit_status();
                             addPlanStatus.setVisibility(View.VISIBLE);
@@ -410,20 +369,6 @@ public class WeekPlanFrgment extends BaseFragment {
                 });
     }
 
-    OnItemMenuClickListener mItemMenuClickListener = new OnItemMenuClickListener() {
-        @Override
-        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
-            // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
-            menuBridge.closeMenu();
-
-//            // 左侧还是右侧菜单：
-//            int direction = menuBridge.getDirection();
-//            // 菜单在Item中的Position：
-//            int menuPosition = menuBridge.getPosition();
-        }
-    };
-
-
     @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit_next, R.id.plan_submit, R.id.add_plan_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -431,19 +376,17 @@ public class WeekPlanFrgment extends BaseFragment {
                 showWeek();
                 break;
             case R.id.add_plan_ll:
-                Intent intent1 = new Intent(getContext(), NextWeekPlanActivity.class);
-                intent1.putExtra("list", (Serializable) nextWeekList);
-                intent1.putExtra("linelist", (Serializable) nextlineList);
-                intent1.putExtra("num_total", next_num_total);
-                intent1.putExtra("kilo_total", next_kilo_total);
-                intent1.putExtra("110kv_num", next_num_110kv);
-                intent1.putExtra("110kv_kolo", next_kilo_110kv);
-                intent1.putExtra("35kv_num", next_num_35kv);
-                intent1.putExtra("35kv_kolo", next_kilo_35kv);
-                intent1.putExtra("year", nextYear);
-                intent1.putExtra("week", nextWeek);
-                intent1.putExtra("audit_status", weekListBean.getAudit_status());
-                startActivityForResult(intent1, 10);
+
+                    Intent intent1 = new Intent(getContext(), NextWeekPlanActivity.class);
+                    intent1.putExtra("list", (Serializable) nextWeekList);
+                    intent1.putExtra("linelist", (Serializable) nextlineList);
+                    intent1.putExtra("num_total", next_num_total);
+                    intent1.putExtra("kilo_total", next_kilo_total);
+                    intent1.putExtra("year", nextYear);
+                    intent1.putExtra("week", nextWeek);
+                    intent1.putExtra("audit_status", weekListBean.getAudit_status());
+                    startActivityForResult(intent1, 10);
+
                 break;
             case R.id.plan_submit:
                 subimt(lineList, 1);
@@ -452,16 +395,29 @@ public class WeekPlanFrgment extends BaseFragment {
                 subimt(nextlineList, 2);
                 break;
             case R.id.add_plan_iv:
+                if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 Intent intent = new Intent(getContext(), AddWeekPlanActivity.class);
                 intent.putExtra("year", nextYear);
                 intent.putExtra("week", nextWeek);
+                //当本周和下周都没有数据是，添加周计划可以选择日期
+                if (results.size()==0&&nextWeekList.size()==0){
+                    intent.putExtra("from","WeekPlanFrgment");
+                }
+
                 startActivityForResult(intent, 10);
+                } else {
+                    Toast.makeText(getContext(), "您没有权限", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.add_plan_right:
+                 if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 Intent intent2 = new Intent(getContext(), TemporaryActivity.class);
                 intent2.putExtra("year", String.valueOf(nextYear));
                 intent2.putExtra("week", String.valueOf(nextWeek));
                 startActivityForResult(intent2, 10);
+                 } else {
+                     Toast.makeText(getContext(), "您没有权限", Toast.LENGTH_SHORT).show();
+                 }
                 break;
         }
     }
@@ -477,8 +433,8 @@ public class WeekPlanFrgment extends BaseFragment {
                 }
 
                 @Override
-                public void cancel() {
-                    super.cancel();
+                public void cancle() {
+                    super.cancle();
                     submitWeekPlan(list, "3", type);  //不同意
                     dismiss();
                 }
@@ -494,8 +450,8 @@ public class WeekPlanFrgment extends BaseFragment {
                 }
 
                 @Override
-                public void cancel() {
-                    super.cancel();
+                public void cancle() {
+                    super.cancle();
                     dismiss();
                 }
             };
@@ -568,7 +524,7 @@ public class WeekPlanFrgment extends BaseFragment {
 
     }
 
-    //展示月份
+    //展示周
     public void showWeek() {
 
         //条件选择器

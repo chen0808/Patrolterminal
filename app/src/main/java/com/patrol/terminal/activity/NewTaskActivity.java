@@ -85,7 +85,7 @@ public class NewTaskActivity extends BaseActivity {
     private int year;
     private int month;
     private int day;
-    private String depId;
+    private String depId="";
     private Disposable subscribe;
 
 

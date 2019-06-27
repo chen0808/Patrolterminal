@@ -176,8 +176,8 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                         }
 
                         @Override
-                        public void cancel() {
-                            super.cancel();
+                        public void cancle() {
+                            super.cancle();
                             saveTodoAudit("4");  //不同意
                             dismiss();
                         }

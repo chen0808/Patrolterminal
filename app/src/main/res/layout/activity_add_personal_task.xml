@@ -186,7 +186,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:gravity="center"
-                            android:text="暂无数据"
+                            android:text="暂无可制定的任务"
                             android:visibility="invisible"
                             android:textSize="@dimen/sp_22" />
 

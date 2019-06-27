@@ -89,7 +89,7 @@ public class NewPlanActivity extends BaseActivity {
     private int month;
     private int day;
     private int week;
-    private String depId;
+    private String depId="";
 
 
     @Override

@@ -70,8 +70,8 @@ public class OverhaulWeekTaskAdapter extends BaseQuickAdapter<OverhaulMonthBean,
                         }
 
                         @Override
-                        public void cancel() {
-                            super.cancel();
+                        public void cancle() {
+                            super.cancle();
                             getBzAgentsTodo("6", item.getId());    //不同意
                             dismiss();
                         }

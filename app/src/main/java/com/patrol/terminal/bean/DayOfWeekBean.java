@@ -52,6 +52,15 @@ public class DayOfWeekBean {
     private int week;
     private String start_time;
     private String end_time;
+    private boolean ischeck;
+
+    public boolean isIscheck() {
+        return ischeck;
+    }
+
+    public void setIscheck(boolean ischeck) {
+        this.ischeck = ischeck;
+    }
 
     public String getStart_id() {
         return start_id;

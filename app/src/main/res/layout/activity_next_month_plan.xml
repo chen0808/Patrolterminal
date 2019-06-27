@@ -28,7 +28,7 @@
                 android:id="@+id/plan_total_title"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_40"
-                android:drawableLeft="@mipmap/grouo_icon"
+                android:drawableLeft="@mipmap/plan_icon"
                 android:drawablePadding="@dimen/dp_5"
                 android:gravity="center_vertical"
                 android:text="下月工作计划汇总"

@@ -105,7 +105,7 @@ public class QfrDialog extends Dialog {
             @Override
             public void onClick(View paramView) {
                 //取消
-                cancel();
+                cancle();
             }
         });
 
@@ -127,7 +127,7 @@ public class QfrDialog extends Dialog {
 
     }
 
-    public void cancel() {
+    public void cancle() {
 
     }
 

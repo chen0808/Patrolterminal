@@ -259,8 +259,8 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                         }
 
                         @Override
-                        public void cancel() {
-                            super.cancel();
+                        public void cancle() {
+                            super.cancle();
                             dismiss();
                         }
                     };
@@ -276,8 +276,8 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                         }
 
                         @Override
-                        public void cancel() {
-                            super.cancel();
+                        public void cancle() {
+                            super.cancle();
                             for (int i = 0; i < list3.size(); i++) {
                                 OverPlanReqBean bean = list3.get(i);
                                 bean.setMonth_audit_status("3");
