@@ -2,8 +2,10 @@ package com.patrol.terminal.base;
 
 import android.accounts.NetworkErrorException;
 import android.content.Context;
+import android.widget.Toast;
 
 
+import com.patrol.terminal.activity.GroupTaskDetailActivity;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.net.ConnectException;
@@ -90,6 +92,8 @@ public abstract class BaseObserver<T> implements Observer<BaseResult<T>> {
      * @throws Exception
      */
     protected void onCodeError(BaseResult<T> t) throws Exception {
+        Toast.makeText(mContext, t.getMsg(), Toast.LENGTH_LONG).show();
+        ProgressDialog.cancle();
     }
 
     /**

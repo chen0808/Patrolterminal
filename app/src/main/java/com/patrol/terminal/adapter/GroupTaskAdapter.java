@@ -19,9 +19,9 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
     private int type = 1;
     private String jobtype;
 
-    public GroupTaskAdapter(int layoutResId, @Nullable List<GroupTaskBean> data,String jobtype) {
+    public GroupTaskAdapter(int layoutResId, @Nullable List<GroupTaskBean> data, String jobtype) {
         super(layoutResId, data);
-        this.jobtype=jobtype;
+        this.jobtype = jobtype;
     }
 
 
@@ -30,18 +30,19 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
         //图标
         TextView icon = viewHolder.getView(R.id.item_task_date_tv);
         AdapterUtils.setIconText(icon, item.getDep_name());
-        if (jobtype.contains(Constant.RUNNING_SQUAD_LEADER)) {
-            if (item.getDuty_user_name() == null) {
-                viewHolder.setText(R.id.item_task_personal, "小组负责人： 暂无");
-            }else {
-                viewHolder.setText(R.id.item_task_personal, "小组负责人：" + item.getDuty_user_name());
+        if (jobtype.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+            if (item.getWork_user_name() == null) {
+                viewHolder.setText(R.id.item_task_personal, "任务执行人：未指定");
+            } else {
+                viewHolder.setText(R.id.item_task_personal, "任务执行人：" + item.getWork_user_name());
             }
 
-        }else {
+        } else {
             if (item.getDuty_user_name() == null) {
-                viewHolder.setText(R.id.item_task_personal, "任务执行人：暂无");
-            }else {
-            viewHolder.setText(R.id.item_task_personal, "任务执行人：" + item.getWork_user_name());}
+                viewHolder.setText(R.id.item_task_personal, "小组负责人： 未指定");
+            } else {
+                viewHolder.setText(R.id.item_task_personal, "小组负责人：" + item.getDuty_user_name());
+            }
         }
         viewHolder.setText(R.id.item_task_name, item.getLine_name() + item.getName() + "任务");
 

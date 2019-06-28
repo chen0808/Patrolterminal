@@ -69,14 +69,21 @@ public class AddDayAdapter extends BaseAdapter {
         String text = tvContent.getText().toString();
         String colorText = setColor(text);
         tvContent.setText(Html.fromHtml(colorText));
-
+        boolean ischeck = listBean.isIscheck();
+        if (ischeck==true){
+            holder.towerCheck.setChecked(true);
+        }else {
+            holder.towerCheck.setChecked(false);
+        }
         holder.towerCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (holder.towerCheck.isChecked()) {
                     RxRefreshEvent.publishDay(listBean);
+                    listBean.setIscheck(true);
                 } else {
                     RxRefreshEvent.publishDay(listBean);
+                    listBean.setIscheck(false);
                 }
 
             }

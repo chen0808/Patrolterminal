@@ -51,7 +51,7 @@ public class MonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseViewHo
                 viewHolder.setText(R.id.tv_time, "时间：" + item.getStart_time() + " ~ " + item.getEnd_time());
                 viewHolder.setVisible(R.id.tv_time, true);
             }
-
+            viewHolder.setGone(R.id.tv_allot_status, false);
             //编辑
             ImageView edit = viewHolder.getView(R.id.iv_edit);
             AdapterUtils.setStatus(edit, item.getAudit_status());

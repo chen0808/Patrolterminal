@@ -117,7 +117,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
             state = "1";
             haveState = "2";
         }
-        getYXtodo();
+//        getYXtodo();
 //        getYXtodoHave();
 //        if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
 //            getWeekList();
@@ -165,6 +165,12 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getYXtodo();
     }
 
     public void inteDate() {

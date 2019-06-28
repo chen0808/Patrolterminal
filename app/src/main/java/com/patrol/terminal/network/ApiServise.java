@@ -111,7 +111,7 @@ public interface ApiServise {
     //根据当前日期查询所属周下所有计划接口
     @GET("/plan/week/tower/weekGET")
     Observable<BaseResult<List<DayOfWeekBean>>> getDayPlan(@Query("year") String year, @Query("week") String week,
-                                                           @Query("dep_id") String dep_id, @Query("type_id") String type_id, @Query("line_id") String line_id, @Query("order") String order);
+                                                           @Query("dep_id") String dep_id, @Query("type_sign") String type_sign, @Query("line_id") String line_id, @Query("order") String order);
 
     //添加日计划
     @POST("/plan/day/savePOST")

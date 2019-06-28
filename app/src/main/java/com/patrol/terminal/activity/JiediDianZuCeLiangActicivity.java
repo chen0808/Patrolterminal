@@ -134,7 +134,11 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         HwcwBean bean = t.getResults();
-                        tvTowerType.setText(bean.getTower_model());
+                        if (bean != null) {
+                            tvTowerType.setText(bean.getTower_model());
+                        } else {
+                            tvTowerType.setText("无");
+                        }
                     }
 
                     @Override
@@ -176,8 +180,8 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                         }
 
                         @Override
-                        public void cancel() {
-                            super.cancel();
+                        public void cancle() {
+                            super.cancle();
                             saveTodoAudit("4");  //不同意
                             dismiss();
                         }

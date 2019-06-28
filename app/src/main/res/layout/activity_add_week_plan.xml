@@ -83,7 +83,9 @@
 
             <View style="@style/line_styl" />
 
-            <LinearLayout style="@style/plan_ll_styl">
+            <LinearLayout style="@style/plan_ll_styl"
+                android:visibility="gone"
+                >
 
                 <TextView
                     android:id="@+id/month_plan_month"
@@ -98,7 +100,8 @@
                     android:text="点击选择线路" />
             </LinearLayout>
 
-            <View style="@style/line_styl" />
+            <View style="@style/line_styl"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/mon_plan_type_ll"
@@ -114,8 +117,46 @@
                         style="@style/plan_tv_styl"
                         android:text="计划内容" />
 
+                    <LinearLayout
+                        android:id="@+id/add_week_num_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_69"
+                        android:text="("
+                        />
+                    <TextView
+                        android:id="@+id/add_week_num_select"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/write_red"
+                        android:text="0"
+                        />
+                    <TextView
+                        android:id="@+id/add_week_num_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_69"
+                        android:text="/0)"
+                        />
+                    </LinearLayout>
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/day_no_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_200"
+                    android:text="暂无可制定的计划"
+                    android:gravity="center"
+                    android:textSize="25sp"
+                    android:visibility="gone"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -146,7 +146,6 @@ public class MonthPlanFrgment extends BaseFragment {
     @Override
     protected void initData() {
         mContext = getActivity();
-        taskScreen.setVisibility(View.VISIBLE);
         depId = SPUtil.getDepId(getContext());
         mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
 //        state = "3";//当月只能查询已审核的月计划
@@ -335,9 +334,9 @@ public class MonthPlanFrgment extends BaseFragment {
                             monthLineTotal.setText("工作线路 : " + num_total + "条");
                             monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + " km");
                             monthLine110kvNum.setText("110kv线路 : " + num_110kv + "条");
-                            monthLine110kvKilo.setText( decimalFormat.format(kilo_110kv) + " km");
+                            monthLine110kvKilo.setText(decimalFormat.format(kilo_110kv) + " km");
                             monthLine35kvNum.setText("35kv线路 : " + num_35kv + "条");
-                            monthLine35kvKilo.setText( decimalFormat.format(kilo_35kv) + " km");
+                            monthLine35kvKilo.setText(decimalFormat.format(kilo_35kv) + " km");
                             BigDecimal b1 = new BigDecimal(done_num_total);
                             BigDecimal b2 = new BigDecimal(all_num_total);
                             if (all_num_total == 0) {
@@ -427,8 +426,8 @@ public class MonthPlanFrgment extends BaseFragment {
                 String[] months = years[1].split("月");
                 month = Integer.parseInt(months[0]) + "";
                 year = years[0];
-                planTotalTitle.setText(month+"月计划工作汇总");
-                taskTitle.setText(month+"月计划列表");
+                planTotalTitle.setText(month + "月计划工作汇总");
+                taskTitle.setText(month + "月计划列表");
                 getMonthPlanList();
                 RxRefreshEvent.publish("month@" + time);
             }
@@ -454,20 +453,25 @@ public class MonthPlanFrgment extends BaseFragment {
                 showMonth();
                 break;
             case R.id.add_plan_ll:
-                Intent intent1 = new Intent(getContext(), NextMonthPlanActivity.class);
-                intent1.putExtra("list", (Serializable) nextPatrolList);
-                intent1.putExtra("linelist", (Serializable) nextLineList);
-                intent1.putExtra("year", nextYear);
-                intent1.putExtra("month", nextMonth);
-                intent1.putExtra("audit_status", monthPlanBean.getAudit_status());
-                startActivityForResult(intent1, 10);
+                    Intent intent1 = new Intent(getContext(), NextMonthPlanActivity.class);
+                    intent1.putExtra("list", (Serializable) nextPatrolList);
+                    intent1.putExtra("linelist", (Serializable) nextLineList);
+                    intent1.putExtra("year", nextYear);
+                    intent1.putExtra("month", nextMonth);
+                    intent1.putExtra("audit_status", monthPlanBean.getAudit_status());
+                    startActivityForResult(intent1, 10);
+
                 break;
             case R.id.add_plan_iv:
             case R.id.add_plan_right:
-                Intent intent = new Intent(getContext(), TemporaryActivity.class);
-                intent.putExtra("year", String.valueOf(nextYear));
-                intent.putExtra("month", String.valueOf(nextMonth));
-                startActivityForResult(intent, 10);
+                if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                    Intent intent = new Intent(getContext(), TemporaryActivity.class);
+                    intent.putExtra("year", String.valueOf(nextYear));
+                    intent.putExtra("month", String.valueOf(nextMonth));
+                    startActivityForResult(intent, 10);
+                } else {
+                    Toast.makeText(getContext(), "您没有权限", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.plan_submit_next:
                 submit(nextLineList, 2);
@@ -520,8 +524,8 @@ public class MonthPlanFrgment extends BaseFragment {
                 }
 
                 @Override
-                public void cancel() {
-                    super.cancel();
+                public void cancle() {
+                    super.cancle();
                     submitMonthPlan(list, "4", type);  //不同意
                     dismiss();
                 }
@@ -540,8 +544,8 @@ public class MonthPlanFrgment extends BaseFragment {
                 }
 
                 @Override
-                public void cancel() {
-                    super.cancel();
+                public void cancle() {
+                    super.cancle();
                     submitMonthPlan(list, "4", type);  //不同意
                     dismiss();
                 }
@@ -632,7 +636,7 @@ public class MonthPlanFrgment extends BaseFragment {
                 data.addAll(patrol);
             }
             //只有保电专责可以看保电计划
-            if (repair != null&&mJobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
+            if (repair != null && mJobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)) {
                 data.addAll(repair);
                 data2.addAll(repair);
             }

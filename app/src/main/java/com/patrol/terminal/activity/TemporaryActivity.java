@@ -101,7 +101,6 @@ public class TemporaryActivity extends BaseActivity {
     private List<List<String>> typeSign = new ArrayList<>();
     private String typeName;
     private LineCheckBean lineCheckBean;
-    //    private String type_id;
     private String sign;
     private String year;
     private String month;
@@ -112,9 +111,6 @@ public class TemporaryActivity extends BaseActivity {
     private long end = -1;
     private String line_id;
     private List<Tower> selectBean = new ArrayList<>();
-    private String start_id;
-    private String end_id;
-    private String tower_type = "3";
     private List<TowerPart> towerPart = new ArrayList<>();
     private TowerPartAdapter adapter;
     private String startMonth;
@@ -355,7 +351,7 @@ public class TemporaryActivity extends BaseActivity {
 
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setTitle("选择负责人");
+        alertBuilder.setTitle("选择工作类型");
         /**
          *第一个参数:弹出框的消息集合，一般为字符串集合
          * 第二个参数：默认被选中的，布尔类数组

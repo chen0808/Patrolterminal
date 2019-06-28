@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -20,6 +21,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddDayPlanActivity;
 import com.patrol.terminal.activity.DayPlanDetailActivity;
 import com.patrol.terminal.activity.NextDayPlanActivity;
+import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.activity.TemporaryActivity;
 import com.patrol.terminal.adapter.DayPlanAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -27,15 +29,18 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DayListBean;
+import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.TimeUtil;
+import com.patrol.terminal.utils.Utils;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -125,6 +130,7 @@ public class DayPlanFrgment extends BaseFragment {
     private int nextyear;
     private List<DayListBean> nextDayList;
     private List<String> lineNum=new ArrayList<>();
+    private String mJobType;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -138,15 +144,12 @@ public class DayPlanFrgment extends BaseFragment {
         addPlanStatus.setVisibility(View.GONE);
         addNextPlan.setText("明日计划制定");
         planTotalTitle.setText("今日工作计划汇总");
-
+        mJobType = SPUtil.getString(getActivity(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         inteDate();
         taskTitle.setText("日计划列表");
         taskDate.setText(time);
-        // 设置监听器。
-        planRv.setSwipeMenuCreator(mSwipeMenuCreator);
-        // 菜单点击监听。
-        planRv.setOnItemMenuClickListener(mItemMenuClickListener);
+
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
         dayPlanAdapter = new DayPlanAdapter(R.layout.fragment_plan_item, results);
@@ -174,37 +177,6 @@ public class DayPlanFrgment extends BaseFragment {
     }
 
 
-    // 创建菜单：
-    SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
-        @Override
-        public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
-//            int width = getResources().getDimensionPixelSize(R.dimen.dp_60);
-//
-//            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
-//            // 2. 指定具体的高，比如80;
-//            // 3. WRAP_CONTENT，自身高度，不推荐;
-//            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-//            SwipeMenuItem deleteItem = new SwipeMenuItem(getContext());
-//            deleteItem.setWidth(width);
-//            deleteItem.setHeight(height);
-//            deleteItem.setTextSize(15);
-//            deleteItem.setTextColorResource(R.color.white);
-//            deleteItem.setBackground(R.color.orange_vip);
-//            deleteItem.setText("编辑");
-//            SwipeMenuItem deleteItem1 = new SwipeMenuItem(getContext());
-//            deleteItem1.setWidth(width);
-//            deleteItem1.setHeight(height);
-//            deleteItem1.setBackground(R.color.home_red);
-//            deleteItem1.setTextSize(15);
-//            deleteItem1.setTextColorResource(R.color.white);
-//            deleteItem1.setText("删除");
-//            // 各种文字和图标属性设置。
-//            rightMenu.addMenuItem(deleteItem); // 在Item右侧添加一个菜单。
-//            rightMenu.addMenuItem(deleteItem1); // 在Item右侧添加一个菜单。
-//            // 注意：哪边不想要菜单，那么不要添加即可。
-        }
-    };
-
     //获取日计划列表
     public void getDayList() {
         BaseRequest.getInstance().getService()
@@ -215,6 +187,7 @@ public class DayPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onSuccees(BaseResult<List<DayListBean>> t) throws Exception {
+                        lineNum.clear();
                         num_total = 0;
                         kilo_total = 0;
                         done_num_total = 0;
@@ -236,13 +209,12 @@ public class DayPlanFrgment extends BaseFragment {
                         monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + "km");
                         monthLine110kvNum.setText("工作杆段 : " + num_total + "段");
                         monthLine110kvKilo.setText( decimalFormat.format(kilo_total) + "km");
-                        BigDecimal b1 = new BigDecimal(done_num_total);
-                        BigDecimal b2 = new BigDecimal(all_num_total);
+
                         if (all_num_total == 0) {
                             donePlanRange.setText("计划进度 : 0%");
                         } else {
                             //默认保留两位会有错误，这里设置保留小数点后4位
-                            double range = b1.divide(b2, 0, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            double range = Utils.div(done_num_total, all_num_total, 4)*100;
                             donePlanRange.setText("计划进度 : " + range + "%");
                         }
                         planRefresh.setRefreshing(false);
@@ -311,18 +283,28 @@ public class DayPlanFrgment extends BaseFragment {
                 showDay();
                 break;
             case R.id.add_plan_right:
+                if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 Intent intent2 = new Intent(getContext(), TemporaryActivity.class);
                 intent2.putExtra("year", String.valueOf(nextyear));
                 intent2.putExtra("month", String.valueOf(nextmonth));
                 intent2.putExtra("day", String.valueOf(nextDay));
                 startActivityForResult(intent2, 10);
+                } else {
+                    Toast.makeText(getContext(), "您没有权限", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.add_plan_iv:
-                Intent intent = new Intent(getContext(), AddDayPlanActivity.class);
-                intent.putExtra("year", String.valueOf(nextyear));
-                intent.putExtra("month", String.valueOf(nextmonth));
-                intent.putExtra("day", String.valueOf(nextDay));
-                startActivityForResult(intent, 10);
+                if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                    Intent intent = new Intent(getContext(), AddDayPlanActivity.class);
+                    intent.putExtra("year", String.valueOf(nextyear));
+                    intent.putExtra("month", String.valueOf(nextmonth));
+                    intent.putExtra("day", String.valueOf(nextDay));
+                    intent.putExtra("from", "DayPlanFrgment");
+                    startActivityForResult(intent, 10);;
+                } else {
+                    Toast.makeText(getContext(), "您没有权限", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.add_plan_ll:
                 Intent intent1 = new Intent(getContext(), NextDayPlanActivity.class);
@@ -355,8 +337,8 @@ public class DayPlanFrgment extends BaseFragment {
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 time = DateUatil.getDay(date);
                 taskDate.setText(time);
-                planTotalTitle.setText(time+"计划工作汇总");
                 inteDate();
+                planTotalTitle.setText(day+"日计划工作汇总");
                 getDayList();
             }
         })

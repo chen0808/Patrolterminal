@@ -174,8 +174,8 @@ public class MonitoringRecordActivity extends BaseActivity implements BaseQuickA
                         }
 
                         @Override
-                        public void cancel() {
-                            super.cancel();
+                        public void cancle() {
+                            super.cancle();
                             savaCheck("4");
                             dismiss();
                         }

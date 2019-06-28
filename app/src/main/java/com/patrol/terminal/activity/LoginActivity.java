@@ -1,5 +1,6 @@
 package com.patrol.terminal.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.patrol.terminal.bean.LoginReqBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,6 +63,7 @@ public class LoginActivity extends BaseActivity {
             Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
+        ProgressDialog.show(this, false,"正在登录。。。");
         BaseRequest.getInstance().getService()
                 .login(name, password/*"a0a22ac2958f9be136f3c320b6cb6a8b"*/)
                 .subscribeOn(Schedulers.io())
@@ -102,11 +105,12 @@ public class LoginActivity extends BaseActivity {
                         } else {
                             Toast.makeText(LoginActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
+                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
+                        ProgressDialog.cancle();
                     }
                 });
     }

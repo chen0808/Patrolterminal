@@ -85,7 +85,7 @@ public class NewTaskActivity extends BaseActivity {
     private int year;
     private int month;
     private int day;
-    private String depId;
+    private String depId="";
     private Disposable subscribe;
 
 
@@ -147,7 +147,6 @@ public class NewTaskActivity extends BaseActivity {
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
-
                 SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
                 simplePagerTitleView.setNormalColor(getResources().getColor(R.color.black_gray));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));

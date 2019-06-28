@@ -361,8 +361,8 @@ ll35kv.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void cancel() {
-                    super.cancel();
+                public void cancle() {
+                    super.cancle();
                     submitMonthPlan(lineList, "4");  //不同意
                     dismiss();
                 }
@@ -379,8 +379,8 @@ ll35kv.setVisibility(View.GONE);
                     }
 
                     @Override
-                    public void cancel() {
-                        super.cancel();
+                    public void cancle() {
+                        super.cancle();
                         dismiss();
                     }
                 };
@@ -395,8 +395,8 @@ ll35kv.setVisibility(View.GONE);
                     }
 
                     @Override
-                    public void cancel() {
-                        super.cancel();
+                    public void cancle() {
+                        super.cancle();
                         dismiss();
                     }
                 };
@@ -414,8 +414,8 @@ ll35kv.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void cancel() {
-                    super.cancel();
+                public void cancle() {
+                    super.cancle();
                     submitMonthPlan(lineList, "4");  //不同意
                     dismiss();
                 }

@@ -1214,8 +1214,8 @@ public class FirstWTicketActivity extends BaseActivity{
             }
 
             @Override
-            public void cancel() {
-                super.cancel();
+            public void cancle() {
+                super.cancle();
                 dismiss();
             }
         };
