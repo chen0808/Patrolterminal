@@ -94,6 +94,7 @@ public class GroupTaskFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
+        ProgressDialog.show(getContext(),true,"正在加载。。。");
         planCreate.setVisibility(View.GONE);
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         inteDate();
@@ -167,7 +168,7 @@ public class GroupTaskFrgment extends BaseFragment {
     //获取小组任务列表
     public void getGroupList() {
 
-        ProgressDialog.show(getContext(),false,"正在加载。。。");
+
         BaseRequest.getInstance().getService()
                 .getGroupList(year, month, day, depId, duty_user_id, userId, "duty_user_id,line_id,name", "1")
                 .subscribeOn(Schedulers.io())
@@ -186,7 +187,7 @@ public class GroupTaskFrgment extends BaseFragment {
                             }
                         }
                         mRefrsh.setRefreshing(false);
-                        ProgressDialog.cancle();
+                        ProgressDialog .cancle();
                     }
 
                     @Override
@@ -216,11 +217,13 @@ public class GroupTaskFrgment extends BaseFragment {
                             planSubmit.setVisibility(View.GONE);
                         }
                         mRefrsh.setRefreshing(false);
+                        ProgressDialog .cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         mRefrsh.setRefreshing(false);
+                        ProgressDialog .cancle();
                     }
                 });
 
@@ -239,11 +242,13 @@ public class GroupTaskFrgment extends BaseFragment {
                         result = t.getResults();
                         groupTaskAdapter.setNewData(result);
                         mRefrsh.setRefreshing(false);
+                        ProgressDialog .cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         mRefrsh.setRefreshing(false);
+                        ProgressDialog .cancle();
                     }
                 });
 
@@ -272,6 +277,7 @@ public class GroupTaskFrgment extends BaseFragment {
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 time = DateUatil.getDay(date);
                 taskDate.setText(time);
+                RxRefreshEvent.publish("refreshNum");
                 inteDate();
                 getGroupList();
             }
@@ -398,7 +404,7 @@ public class GroupTaskFrgment extends BaseFragment {
         }
     };
 
-    //删除周计划
+    //删除小组任务
     public void deleteGroupTask(String id, int position) {
         ProgressDialog.show(getContext(), false, "正在加载中...");
         BaseRequest.getInstance().getService()

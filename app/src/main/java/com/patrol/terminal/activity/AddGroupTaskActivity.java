@@ -556,6 +556,7 @@ public class AddGroupTaskActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<List<DangerBean>> t) throws Exception {
                         if (t.getCode() == 1) {
+                            RxRefreshEvent.publish("refreshNum");
                             setResult(RESULT_OK);
                             Toast.makeText(AddGroupTaskActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                             finish();
@@ -615,10 +616,10 @@ public class AddGroupTaskActivity extends BaseActivity {
                     Toast.makeText(this,"请先添加日计划",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (addPeoList.size()<2){
-                    Toast.makeText(this,"请添加组员",Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (addPeoList.size()<2){
+//                    Toast.makeText(this,"请添加组员",Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
 
                 savaGroupTask();
                 break;

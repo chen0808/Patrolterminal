@@ -316,6 +316,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             setResult(RESULT_OK);
                             RxRefreshEvent.publish("refreshGroup");
+                            RxRefreshEvent.publish("refreshNum");
                             Toast.makeText(AddPersonalTaskActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {

@@ -25,6 +25,7 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.internal.operators.parallel.ParallelRunOn;
 import io.reactivex.schedulers.Schedulers;
 
 public class PersonalTaskFrgment extends BaseFragment {
@@ -166,11 +168,14 @@ public class PersonalTaskFrgment extends BaseFragment {
                         result = t.getResults();
                         personalTaskAdapter.setNewData(result);
                         mRefrsh.setRefreshing(false);
+                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         mRefrsh.setRefreshing(false);
+                        ProgressDialog.cancle();
+
                     }
                 });
 
@@ -191,6 +196,8 @@ public class PersonalTaskFrgment extends BaseFragment {
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 time = DateUatil.getDay(date);
                 taskDate.setText(time);
+                RxRefreshEvent.publish("refreshNum");
+                ProgressDialog.show(getContext(),true,"正在加载。。。");
                 inteDate();
                 getGroupList();
             }

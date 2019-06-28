@@ -129,6 +129,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
             }
 
         } else if ("1".equals(bean.getIs_rob())) {
+
             type = 2;
             taskSubmit.setVisibility(View.VISIBLE);
             taskSubmit.setText("抢单");
@@ -138,10 +139,13 @@ public class GroupTaskDetailActivity extends BaseActivity {
            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
                titleSettingTv.setText("撤销");
                titleSetting.setVisibility(View.VISIBLE);
+           }else {
+               titleSetting.setVisibility(View.GONE);
            }
         }else {
            tvTableName.setVisibility(View.GONE);
            taskSubmit.setVisibility(View.GONE);
+           titleSetting.setVisibility(View.GONE);
        }
 
         if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
@@ -315,7 +319,6 @@ public class GroupTaskDetailActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
-                        if (t.getCode() == 1) {
                             type = 0;
                             taskSubmit.setVisibility(View.GONE);
                             tvTableName.setVisibility(View.GONE);
@@ -327,8 +330,8 @@ public class GroupTaskDetailActivity extends BaseActivity {
                             tvLineType.setVisibility(View.VISIBLE);
                             tvLineType.setText("执行人 : " + username);
                             RxRefreshEvent.publish("refreshPersonal");
-                        }
                         RxRefreshEvent.publish("refreshTodo");
+                        RxRefreshEvent.publish("refreshNum");
                         setResult(RESULT_OK);
                         getGroupList(bean.getId());
                     }
@@ -444,7 +447,9 @@ public class GroupTaskDetailActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
                         if (t.getCode() == 1) {
                             setResult(RESULT_OK);
-                            RxRefreshEvent.publish("refreshGroup");
+                            RxRefreshEvent.publish("refreshPersonal");
+                            RxRefreshEvent.publish("refreshTodo");
+                            RxRefreshEvent.publish("refreshNum");
                             Toast.makeText(GroupTaskDetailActivity.this, "指派成功", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {

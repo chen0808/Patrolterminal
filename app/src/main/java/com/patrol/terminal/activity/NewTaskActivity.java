@@ -127,7 +127,7 @@ public class NewTaskActivity extends BaseActivity {
 
             @Override
             public void accept(String type) throws Exception {
-                if (type.equals("refreshGroup")||type.equals("refreshPersonal")) {
+                if (type.equals("refreshNum")) {
                     getTaskNum();
                 }
             }

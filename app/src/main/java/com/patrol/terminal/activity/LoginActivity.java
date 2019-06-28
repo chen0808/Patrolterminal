@@ -84,17 +84,27 @@ public class LoginActivity extends BaseActivity {
                             if (results.getSysJobList() != null) {
                                 String job = "";
                                 String firstJob = "";
-                                for (int i = 0; i < results.getSysJobList().size(); i++) {
+                                String jobName = "";
+                                int size = results.getSysJobList().size();
+                                for (int i = 0; i <size; i++) {
                                     LoginReqBean.SysJobListBean sysJobListBean = results.getSysJobList().get(i);
                                     String sign = sysJobListBean.getSign();
-                                    if (i == 0) {
+                                    if (i==0) {
                                         job = sign;
                                         firstJob = sign;
+                                        jobName=Utils.getJobName(sign);
                                     } else {
+                                        if ("3".equals(sysJobListBean.getGrade())){
+                                            firstJob = sign;
+                                            jobName=Utils.getJobName(sign);
+                                        }else if ("2".equals(sysJobListBean.getGrade())){
+                                            jobName=jobName.split("专责")[0]+"•"+Utils.getJobName(sign);
+                                        }
                                         job = job + "," + sign;
                                     }
                                 }
                                 SPUtil.putString(LoginActivity.this, Constant.USER, Constant.JOBTYPE, job);
+                                SPUtil.putString(LoginActivity.this, Constant.USER, Constant.USERJOBNAME,jobName);
 
                                 goToMainActivity(firstJob);
                             }
@@ -137,7 +147,7 @@ public class LoginActivity extends BaseActivity {
 //            SPUtil.putString(LoginActivity.this, Constant.USER, JOBS[i], results.getJobs().get(i));
 //        }
 
-        SPUtil.putString(LoginActivity.this, Constant.USER, Constant.USERJOBNAME, Utils.getJobName(jobType));
+
 
         //角色：1.运行班班长    2.运行班组长（临时）    3.运行班班员（可能是班级的审计员）      4.检修班班长     5.检修班组长（临时）
         // 6.检修班班员（可能是班级的审计员）     7.运行专责    8.检修专责      9.主任      10.绩效专责    11.培训专责      12.汽车班班长    13.汽车班班员

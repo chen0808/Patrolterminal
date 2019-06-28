@@ -112,12 +112,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
-            android:name=".activity.PatrolAddActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.PatrolListActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.AddGroupTaskActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -190,16 +184,10 @@
             android:name=".activity.TaskListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.GroupTaskMakeActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.PersonalTaskDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PlusImageActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.PatrolDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PlanListActivity"

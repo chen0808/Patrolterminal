@@ -212,7 +212,16 @@ public class LoginReqBean implements Serializable {
         private String p_id;
         private int sort;
         private String detail;
+        private String grade;
         private String sign;
+
+        public String getGrade() {
+            return grade;
+        }
+
+        public void setGrade(String grade) {
+            this.grade = grade;
+        }
 
         public String getId() {
             return id;

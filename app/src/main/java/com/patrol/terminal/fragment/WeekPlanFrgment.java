@@ -403,7 +403,6 @@ public class WeekPlanFrgment extends BaseFragment {
                 if (results.size()==0&&nextWeekList.size()==0){
                     intent.putExtra("from","WeekPlanFrgment");
                 }
-
                 startActivityForResult(intent, 10);
                 } else {
                     Toast.makeText(getContext(), "您没有权限", Toast.LENGTH_SHORT).show();
