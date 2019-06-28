@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.FileProvider;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -205,7 +210,7 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                 } else if (item2.getStatus().equals("1")) {
                     helper.setImageResource(R.id.iv_check, R.mipmap.patrol_false);
                     helper.setGone(R.id.ll_content, true);
-                    initGridView(gridView);
+                    initGridView(gridView, item2);
                 } else {
                     helper.setImageResource(R.id.iv_check, R.mipmap.patrol_true);
                     helper.setGone(R.id.ll_content, false);
@@ -311,7 +316,9 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
         }
     }
 
-    private void initGridView(GridView gridView) {
+    Uri photoUri;
+    String filePath;
+    private void initGridView(GridView gridView, PatrolLevel2 item2) {
         mGridViewAddImgAdapter = new GridViewAdapter2(mContext, mPicList);
         gridView.setAdapter(mGridViewAddImgAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -324,14 +331,53 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                         //最多添加5张图片
 //                        viewPluImg(position);
                     } else {
-                        //添加凭证图片
-                        selectPic(Constant.MAX_SELECT_PIC_NUM - mPicList.size());
+                        //添加凭证图片    TODO By linmeng
+                        //selectPic(Constant.MAX_SELECT_PIC_NUM - mPicList.size());
+
+                        photoUri = patrUri(item2.getId() + "_" + parent.getChildCount());
+                        startCamera(1002, photoUri);
+
                     }
                 } else {
 //                    viewPluImg(position);
                 }
             }
         });
+    }
+
+    //打开相机
+    private void startCamera(int requestCode, Uri photoUri) {
+        // TODO Auto-generated method stub
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+
+
+
+
+    /**
+     * 图片保存路径  这里是在SD卡目录下创建了MyPhoto文件夹
+     *
+     * @param fileName
+     * @return
+     */
+    private Uri patrUri(String fileName) {  //指定了图片的名字，可以使用时间来命名
+        // TODO Auto-generated method stub
+        String strPhotoName = fileName + ".jpg";
+        String savePath = Environment.getExternalStorageDirectory().getPath()
+                + "/MyPhoto/";
+        File dir = new File(savePath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        filePath = savePath + strPhotoName;
+
+        return FileProvider.getUriForFile(mContext.getApplicationContext(),
+                "com.patrol.terminal.fileprovider",
+                new File(dir, strPhotoName));
     }
 
     //查看大图
