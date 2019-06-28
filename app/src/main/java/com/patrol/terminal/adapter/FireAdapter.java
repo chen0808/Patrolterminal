@@ -16,17 +16,17 @@ public class FireAdapter extends BaseQuickAdapter<TroubleDetailBean, BaseViewHol
 
     @Override
     protected void convert(BaseViewHolder helper, TroubleDetailBean item) {
-        helper.setText(R.id.tv_type_name, "隐患名字：" + item.getType_name())
-                .setText(R.id.tv_dep_name, "班组名字：" + item.getDep_name())
-                .setText(R.id.tv_line_level, "线路等级：" + item.getLine_level())
-                .setText(R.id.tv_line_name, "线路名字：" + item.getLine_name())
-                .setText(R.id.tv_find_time, "发现时间：" + item.getFind_time())
-                .setText(R.id.tv_tower_number, "基数：" + item.getTower_number())
-                .setText(R.id.tv_towers, "杆段号：" + item.getTowers())
-                .setText(R.id.tv_status, "完成状态：" + (item.getStatus().equals("0") ? "未完成" : "已完成"))
-                .setText(R.id.tv_remarks, "备注：" + (item.getRemarks() == null ? "" : item.getRemarks()))
-                .setText(R.id.tv_done_time, "完成时间：" + item.getDone_time())
-                .setText(R.id.tv_deal_notes, "处理措施：" + item.getDeal_notes())
-                .setText(R.id.tv_reason, "列入原因：" + item.getReason());
+        helper.setText(R.id.tv_type_name, item.getType_name())
+                .setText(R.id.tv_dep_name, item.getDep_name())
+                .setText(R.id.tv_line_level, item.getLine_level())
+                .setText(R.id.tv_line_name, item.getLine_name())
+                .setText(R.id.tv_find_time, item.getFind_time())
+                .setText(R.id.tv_tower_number, item.getTower_number())
+                .setText(R.id.tv_towers, item.getTowers())
+                .setText(R.id.tv_status, item.getStatus().equals("0") ? "未完成" : "已完成")
+                .setText(R.id.tv_remarks, item.getRemarks() == null ? "" : item.getRemarks())
+                .setText(R.id.tv_done_time, item.getDone_time())
+                .setText(R.id.tv_deal_notes, item.getDeal_notes())
+                .setText(R.id.tv_reason, item.getReason());
     }
 }
