@@ -3,13 +3,16 @@ package com.patrol.terminal.adapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,21 +21,22 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.DefectListActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.DefectTypeBean;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
+import com.patrol.terminal.bean.TowerListBean;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.PictureSelectorConfig;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
-import org.angmarch.views.NiceSpinner;
-
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,8 +55,16 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
     private GridViewAdapter2 mGridViewAddImgAdapter;
     private String[] strings = {"否", "是"};
     private PatrolLevel1 mItem1;
-    private String[] nsType = {"危急", "严重", "一般"};
+    private List<String> typeName = new ArrayList<>();
+    private List<String> towerNameList = new ArrayList<>();
     private Map<String, RequestBody> params = new HashMap<>();
+    private List<DefectTypeBean> defectTypeBeans;
+    private String grade_id;
+    private List<TowerListBean> towerListBeans;
+    private String startTowerId;
+    private String startTowerName;
+    private String endTowerId;
+    private String endTowerName;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -61,11 +73,59 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
      * @param data A new list is created out of this one to avoid mutable list
      */
 
-    public PatrolContentAdapter(List<MultiItemEntity> data, Activity activity) {
+    public PatrolContentAdapter(List<MultiItemEntity> data, Activity activity, String line_id) {
         super(data);
         this.activity = activity;
         addItemType(TYPE_1, R.layout.item_patrol_content_1);
         addItemType(TYPE_2, R.layout.item_patrol_content_2);
+        getType();
+        getLine(line_id);
+    }
+
+    private void getType() {
+        BaseRequest.getInstance().getService().getDefectType("qxjb").subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DefectTypeBean>>(mContext) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<DefectTypeBean>> t) throws Exception {
+                        defectTypeBeans = t.getResults();
+                        typeName.clear();
+                        for (int i = 0; i < defectTypeBeans.size(); i++) {
+                            typeName.add(defectTypeBeans.get(i).getName());
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+    }
+
+    private void getLine(String line_id) {
+        BaseRequest.getInstance().getService()
+                .towerList(line_id, "sort")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<TowerListBean>>(mContext) {
+
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<TowerListBean>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        towerListBeans = t.getResults();
+                        towerNameList.clear();
+                        for (int i = 0; i < towerListBeans.size(); i++) {
+                            towerNameList.add(towerListBeans.get(i).getName());
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+
+                });
     }
 
     @Override
@@ -138,24 +198,8 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                 break;
             case TYPE_2:
                 PatrolLevel2 item2 = (PatrolLevel2) item;
-                NiceSpinner nsContentType = helper.getView(R.id.ns_content_type);
-                nsContentType.attachDataSource(Arrays.asList(nsType));
                 GridView gridView = helper.getView(R.id.gridView);
                 helper.setText(R.id.tv_content, item2.getContent());
-//                helper.itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (item2.getStatus().equals("1")) {
-//                Intent intent = new Intent(mContext, CommitDefectActivity.class);
-//                            intent.putExtra("isPatrol", true);
-//                            intent.putExtra("patrol_id", item2.getId());
-//                            intent.putExtra("category", item2.getCategory());
-//                            intent.putExtra("name", item2.getName());
-//                            intent.putExtra("content", item2.getContent());
-//                            mContext.startActivity(intent);
-//                        }
-//                    }
-//                });
                 if (item2.getStatus().equals("0")) {
                     helper.setImageResource(R.id.iv_check, R.mipmap.patrol_undefined);
                 } else if (item2.getStatus().equals("1")) {
@@ -191,11 +235,68 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                 LinearLayout llContent = helper.getView(R.id.ll_content);
                 TextView tvItemContent = helper.getView(R.id.tv_item_content);
                 EditText etContent = helper.getView(R.id.et_content);
+                TextView tvContentType = helper.getView(R.id.tv_content_type);
+                tvContentType.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, DefectListActivity.class);
+                        intent.putExtra("category", item2.getCategory());
+                        mContext.startActivity(intent);
+                    }
+                });
+                Spinner spStart = helper.getView(R.id.sp_start);
+                Spinner spEnd = helper.getView(R.id.sp_end);
+                TextView tvTime = helper.getView(R.id.tv_time);
                 ImageView ivCommit = helper.getView(R.id.iv_commit);
+                Spinner spContentType = helper.getView(R.id.sp_content_type);
+                spContentType.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, typeName));
+                spContentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        grade_id = defectTypeBeans.get(position).getId();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+                spStart.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_dropdown_item_1line, towerNameList));
+                spEnd.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_dropdown_item_1line, towerNameList));
+                spStart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        startTowerId = towerListBeans.get(position).getId();
+                        startTowerName = towerListBeans.get(position).getName();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+                spEnd.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        endTowerId = towerListBeans.get(position).getId();
+                        endTowerName = towerListBeans.get(position).getName();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+                tvTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PickerUtils.showDate(mContext, tvTime);
+                    }
+                });
                 ivCommit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        uploadItem(item2, etContent.getText().toString(), rlContent, llContent, tvItemContent);
+                        uploadItem(item2, etContent.getText().toString(), tvTime.getText().toString(), rlContent, llContent, tvItemContent);
                     }
                 });
                 ImageView ivEdit = helper.getView(R.id.iv_edit);
@@ -250,11 +351,17 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
         PictureSelectorConfig.initMultiConfig2(activity, maxTotal);
     }
 
-    private void uploadItem(PatrolLevel2 item2, String content, RelativeLayout rlContent, LinearLayout llContent, TextView tvContent) {
+    private void uploadItem(PatrolLevel2 item2, String content, String time, RelativeLayout rlContent, LinearLayout llContent, TextView tvContent) {
         params.put("task_id", toRequestBody(item2.getTask_id()));
-        params.put("grade_id", toRequestBody("37E5647975394B1E952DC5D2796C7D73"));
+        params.put("grade_id", toRequestBody(grade_id));
         params.put("content", toRequestBody(content));
         params.put("patrol_id", toRequestBody(item2.getPatrol_id()));
+        params.put("category_id", toRequestBody(item2.getCategory()));
+        params.put("find_time", toRequestBody(time));
+        params.put("start_id", toRequestBody(startTowerId));
+        params.put("start_name", toRequestBody(startTowerName));
+        params.put("end_id", toRequestBody(endTowerId));
+        params.put("end_name", toRequestBody(endTowerName));
         String line_id = (String) SPUtil.get(mContext, "ids", "line_id", "");
         if (line_id != null || !line_id.equals("")) {
             params.put("line_id", toRequestBody(line_id));

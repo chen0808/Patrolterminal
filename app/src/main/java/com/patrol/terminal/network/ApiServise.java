@@ -537,8 +537,12 @@ public interface ApiServise {
     Observable<BaseResult<ControlToolBeanList>> postControlTool(@Body List<ControlToolBean> beans);
 
     //巡视记录缺陷列表
-    @GET("/task/defect/listGET")
-    Observable<BaseResult<List<DefectFragmentBean>>> getDefectFragment(@Query("start_id") String task_id);
+    @GET("common/listGET")
+    Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("table") String table, @Query("column") String column, @Query("where") String where, @Query("line_id") String line_id);
+
+    //巡视记录缺陷详情
+    @GET("task/defect/byIdGET")
+    Observable<BaseResult<DefectFragmentDetailBean>> getDefectDetail(@Query("id") String id);
 
     //获取运行班小组长
     @GET("/task/group/user/oneGET")
@@ -547,10 +551,6 @@ public interface ApiServise {
     //获取检修班人员状态
     @GET("task/repair/user/listGET")
     Observable<BaseResult<List<JxbSignInfo>>> getSign(@Query("year") String year, @Query("month") String month, @Query("week") String day, @Query("user_id") String user_id);
-
-    //巡视记录缺陷列表
-    @GET("task/danger/listGET")
-    Observable<BaseResult<List<DefectFragmentBean>>> getTroubleFragment(@Query("task_id") String task_id);
 
     //巡视记录缺陷列表
     @GET("task/trouble/listGET")
@@ -1003,4 +1003,12 @@ public interface ApiServise {
     //防洪防汛
     @POST("task/trouble/flood/savePOST")
     Observable<BaseResult> saveFlood(@Body RequestBody body);
+
+    //缺陷类型
+    @GET("admin/dict/listGET")
+    Observable<BaseResult<List<DefectTypeBean>>> getDefectType(@Query("p_code") String p_code);
+
+    //缺陷列表
+    @GET("task/defect/grade/allGET")
+    Observable<BaseResult<List<DefectListBean>>> getDefectList(@Query("category") String category);
 }

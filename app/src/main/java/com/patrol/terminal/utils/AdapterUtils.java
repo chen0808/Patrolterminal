@@ -112,6 +112,37 @@ public class AdapterUtils {
         if (text.contains("审核不通过")) {
             text = text.replace("审核不通过", "<font color='#ff7272'>审核不通过</font>");
         }
+
+        if (text.contains("跨高速公路")) {
+            text = text.replace("跨高速公路", "<font color='#007bff'>跨高速公路</font>");
+        }
+        if (text.contains("跨高速铁路")) {
+            text = text.replace("跨高速铁路", "<font color='#6610f2'>跨高速铁路</font>");
+        }
+        if (text.contains("跨普通铁路")) {
+            text = text.replace("跨普通铁路", "<font color='#6f42c1'>跨普通铁路</font>");
+        }
+        if (text.contains("防鸟患")) {
+            text = text.replace("防鸟患", "<font color='#e83e8c'>防鸟患</font>");
+        }
+        if (text.contains("防雷")) {
+            text = text.replace("防雷", "<font color='#d4237a'>防雷</font>");
+        }
+        if (text.contains("防风")) {
+            text = text.replace("防风", "<font color='#fd7e14'>防风</font>");
+        }
+        if (text.contains("防山火")) {
+            text = text.replace("防山火", "<font color='#ffc107'>防山火</font>");
+        }
+        if (text.contains("防外破")) {
+            text = text.replace("防外破", "<font color='#28a745'>防外破</font>");
+        }
+        if (text.contains("防地灾")) {
+            text = text.replace("防地灾", "<font color='#20c997'>防地灾</font>");
+        }
+        if (text.contains("防洪防汛")) {
+            text = text.replace("防洪防汛", "<font color='#17a2b8'>防洪防汛</font>");
+        }
         textView.setText(Html.fromHtml(text));
     }
 

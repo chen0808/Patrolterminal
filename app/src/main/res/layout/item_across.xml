@@ -6,73 +6,255 @@
     android:background="@drawable/stoke_gray"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_type_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_towers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="隐患名字："
+            android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/tv_across_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_type_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_small_tower_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_big_tower_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="班组名字："
+            android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/tv_tension"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_dep_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_is_independent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_is_double"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="跨越物名称："
+            android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/tv_is_drainage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_across_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_is_metal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_is_video"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="跨越档小号侧杆塔名字："
+            android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/tv_is_adss"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_small_tower_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_remarks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="跨越档大号侧杆塔名字："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_big_tower_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="跨越耐张段："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_tension"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="是否独立耐张段："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_is_independent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="绝缘子是否双串："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_is_double"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="是否安装附引流："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_is_drainage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="是否金属探伤："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_is_metal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="是否安装视频监控："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_is_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="是否挂接ADSS："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_is_adss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="备注："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_remarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="完成状态："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
 </LinearLayout>

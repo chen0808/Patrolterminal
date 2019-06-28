@@ -29,10 +29,10 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:orientation="vertical"
         android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:visibility="gone">
 
         <RelativeLayout
@@ -94,7 +94,56 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/stoke_gray"
+            android:orientation="horizontal"
+            android:padding="4dp">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="开始杆塔"
+                    android:textSize="12sp" />
+
+                <Spinner
+                    android:id="@+id/sp_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="结束杆塔"
+                    android:textSize="12sp" />
+
+                <Spinner
+                    android:id="@+id/sp_end"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
@@ -107,13 +156,63 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="选择缺陷等级" />
+                android:layout_gravity="center_vertical"
+                android:text="缺陷等级"
+                android:textSize="10sp" />
 
-            <org.angmarch.views.NiceSpinner
-                android:id="@+id/ns_content_type"
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/sp_content_type"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp" />
+                android:layout_marginLeft="4dp"></Spinner>
+
+            <TextView
+                android:id="@+id/tv_content_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/stoke_gray"
+                android:padding="4dp"
+                android:text="缺陷库"
+                android:textColor="@color/base_status_bar" />
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/stoke_gray"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="发现时间"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="4dp"
+                    android:background="@drawable/stoke_gray"
+                    android:gravity="center" />
+            </LinearLayout>
         </LinearLayout>
 
         <RelativeLayout

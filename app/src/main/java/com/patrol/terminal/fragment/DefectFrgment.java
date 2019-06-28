@@ -15,7 +15,7 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.DefectFragmentBean;
+import com.patrol.terminal.bean.DefectFragmentBean2;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 
@@ -31,10 +31,10 @@ import io.reactivex.schedulers.Schedulers;
 public class DefectFrgment extends BaseFragment {
     @BindView(R.id.rv_defect)
     RecyclerView rvDefect;
-    private String tower_id;
     private Disposable subscribe;
-    private List<DefectFragmentBean> results = new ArrayList<>();
+    private List<DefectFragmentBean2> results = new ArrayList<>();
     private DefectFragmentAdapter adapter;
+    private String line_id;
 
 
     @Override
@@ -57,19 +57,19 @@ public class DefectFrgment extends BaseFragment {
                 }
             }
         });
-        tower_id = (String) SPUtil.get(getActivity(), "ids", "tower_id", "");
-        if (tower_id.equals("") || tower_id == null) {
-            tower_id = "662CFCB4D6A54009956EF859727C1F78";
+        line_id = (String) SPUtil.get(getActivity(), "ids", "line_id", "");
+        if (line_id.equals("") || line_id == null) {
+            line_id = "662CFCB4D6A54009956EF859727C1F78";
         }
         getdata();
     }
 
     public void getdata() {
-        BaseRequest.getInstance().getService().getDefectFragment(tower_id).subscribeOn(Schedulers.io())
+        BaseRequest.getInstance().getService().getDefectFragment("TASK_DEFECT a,SYS_DICT b", "a.id,a.content,a.line_name,a.start_name,a.end_name,a.find_time,b.name category_name", "a.category_id=b.id", line_id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectFragmentBean>>(getActivity()) {
+                .subscribe(new BaseObserver<List<DefectFragmentBean2>>(getActivity()) {
                     @Override
-                    protected void onSuccees(BaseResult<List<DefectFragmentBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<DefectFragmentBean2>> t) throws Exception {
                         results = t.getResults();
                         adapter.setNewData(results);
                     }

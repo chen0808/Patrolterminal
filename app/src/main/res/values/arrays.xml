@@ -294,4 +294,17 @@
         <item>巡视使用的道路、桥梁的损坏情况。</item>
         <item>巡视使用的道路、桥梁损坏。</item>
     </string-array>
+
+    <string-array name="trouble_type">
+        <item>3A7703BA2EFA4B9E86732DB1B0FA4E3F</item>//普通铁路
+        <item>F0C697FDE56E42959F52B6620544240D</item>//高速铁路
+        <item>2F9D2BEF6B08403FAD1FED246B79410B</item>//高速公路
+        <item>CE0954EF596447CA9458CC230234E01A</item>//防鸟
+        <item>0D9A1042B0954BC28827C40F27FF2D06</item>//防雷
+        <item>DA73CB1A0C444E719B94F24B4110EE0D</item>//防风
+        <item>CFC9004FE3784E4EBD07A9638A3FF3C9</item>//防山火
+        <item>D71CFDD7A45B42688BE85747B8F25A86</item>//防外破
+        <item>1DCEECE9026343C0A16F918BFB74FF81</item>//防地灾
+        <item>23F5DB1BEC7F41EC893B4BC52F961F88</item>//防洪防汛
+    </string-array>
 </resources>

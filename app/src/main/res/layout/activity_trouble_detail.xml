@@ -13,59 +13,99 @@
 
         <RadioGroup
             android:id="@+id/rg_tab"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:background="@color/main_bg"
+            android:background="@color/trouble_detail_tab"
             android:orientation="vertical">
 
             <RadioButton
+                android:id="@+id/btn_across"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/selector_trouble_radiobutton_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:text="三跨"
+                android:textColor="@drawable/selector_trouble_text_color" />
+
+            <RadioButton
                 android:id="@+id/btn_bird"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="防鸟患" />
-
-            <RadioButton
-                android:id="@+id/btn_break"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="防外破" />
-
-            <RadioButton
-                android:id="@+id/btn_disaster"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="防地灾" />
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/selector_trouble_radiobutton_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:text="防鸟患"
+                android:textColor="@drawable/selector_trouble_text_color" />
 
             <RadioButton
                 android:id="@+id/btn_thunder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="防雷" />
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/selector_trouble_radiobutton_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:text="防雷"
+                android:textColor="@drawable/selector_trouble_text_color" />
 
             <RadioButton
                 android:id="@+id/btn_wind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="防风" />
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/selector_trouble_radiobutton_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:text="防风"
+                android:textColor="@drawable/selector_trouble_text_color" />
 
             <RadioButton
                 android:id="@+id/btn_fire"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="防山火" />
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/selector_trouble_radiobutton_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:text="防山火"
+                android:textColor="@drawable/selector_trouble_text_color" />
 
             <RadioButton
-                android:id="@+id/btn_across"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="三跨" />
+                android:id="@+id/btn_break"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/selector_trouble_radiobutton_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:text="防外破"
+                android:textColor="@drawable/selector_trouble_text_color" />
+
+            <RadioButton
+                android:id="@+id/btn_disaster"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/selector_trouble_radiobutton_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:text="防地灾"
+                android:textColor="@drawable/selector_trouble_text_color" />
+
+            <RadioButton
+                android:id="@+id/btn_flood"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/selector_trouble_radiobutton_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:text="防洪防汛"
+                android:textColor="@drawable/selector_trouble_text_color" />
         </RadioGroup>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_trouble"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="4dp"></androidx.recyclerview.widget.RecyclerView>
+
+
     </LinearLayout>
 
 

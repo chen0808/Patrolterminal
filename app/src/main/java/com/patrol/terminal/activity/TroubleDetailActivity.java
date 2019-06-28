@@ -65,6 +65,7 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
     @BindView(R.id.rg_tab)
     RadioGroup rgTab;
     private String lineId;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +73,17 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
         setContentView(R.layout.activity_trouble_detail);
         ButterKnife.bind(this);
         lineId = getIntent().getStringExtra("line_id");
-        getBird();
+        type = getIntent().getStringExtra("type");
         rgTab.check(rgTab.getChildAt(0).getId());
+        String[] array = getResources().getStringArray(R.array.trouble_type);
+        for (int i = 0; i < array.length; i++) {
+            if (type != null && type.equals(array[i])) {
+                if (i > 3) {
+                    rgTab.check(rgTab.getChildAt(i - 2).getId());
+                }
+            }
+        }
+        getBird();
         rgTab.setOnCheckedChangeListener(this);
     }
 
@@ -81,19 +91,19 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (checkedId == rgTab.getChildAt(0).getId()) {
-            getBird();
-        } else if (checkedId == rgTab.getChildAt(1).getId()) {
-            getBreak();
-        } else if (checkedId == rgTab.getChildAt(2).getId()) {
-            getDisaster();
-        } else if (checkedId == rgTab.getChildAt(3).getId()) {
-            getThunder();
-        } else if (checkedId == rgTab.getChildAt(4).getId()) {
-            getWind();
-        } else if (checkedId == rgTab.getChildAt(5).getId()) {
-            getFire();
-        } else if (checkedId == rgTab.getChildAt(6).getId()) {
             getAcross();
+        } else if (checkedId == rgTab.getChildAt(1).getId()) {
+            getBird();
+        } else if (checkedId == rgTab.getChildAt(2).getId()) {
+            getThunder();
+        } else if (checkedId == rgTab.getChildAt(3).getId()) {
+            getWind();
+        } else if (checkedId == rgTab.getChildAt(4).getId()) {
+            getFire();
+        } else if (checkedId == rgTab.getChildAt(5).getId()) {
+            getBreak();
+        } else if (checkedId == rgTab.getChildAt(6).getId()) {
+            getDisaster();
         }
     }
 
@@ -121,6 +131,7 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
                             rvTrouble.setLayoutManager(new LinearLayoutManager(TroubleDetailActivity.this));
                             BirdAdapter adapter = new BirdAdapter(R.layout.item_bird, result);
                             rvTrouble.setAdapter(adapter);
+                            adapter.setEmptyView(R.layout.empty, rvTrouble);
                         }
 
                     }
@@ -147,6 +158,7 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
                             rvTrouble.setLayoutManager(new LinearLayoutManager(TroubleDetailActivity.this));
                             BreakAdapter adapter = new BreakAdapter(R.layout.item_break, result);
                             rvTrouble.setAdapter(adapter);
+                            adapter.setEmptyView(R.layout.empty, rvTrouble);
                         }
 
                     }
@@ -173,6 +185,7 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
                             rvTrouble.setLayoutManager(new LinearLayoutManager(TroubleDetailActivity.this));
                             DisasterAdapter adapter = new DisasterAdapter(R.layout.item_disaster, result);
                             rvTrouble.setAdapter(adapter);
+                            adapter.setEmptyView(R.layout.empty, rvTrouble);
                         }
 
                     }
@@ -199,6 +212,7 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
                             rvTrouble.setLayoutManager(new LinearLayoutManager(TroubleDetailActivity.this));
                             ThunderAdapter adapter = new ThunderAdapter(R.layout.item_thunder, result);
                             rvTrouble.setAdapter(adapter);
+                            adapter.setEmptyView(R.layout.empty, rvTrouble);
                         }
 
                     }
@@ -225,6 +239,7 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
                             rvTrouble.setLayoutManager(new LinearLayoutManager(TroubleDetailActivity.this));
                             WindAdapter adapter = new WindAdapter(R.layout.item_wind, result);
                             rvTrouble.setAdapter(adapter);
+                            adapter.setEmptyView(R.layout.empty, rvTrouble);
                         }
 
                     }
@@ -251,6 +266,7 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
                             rvTrouble.setLayoutManager(new LinearLayoutManager(TroubleDetailActivity.this));
                             FireAdapter adapter = new FireAdapter(R.layout.item_fire, result);
                             rvTrouble.setAdapter(adapter);
+                            adapter.setEmptyView(R.layout.empty, rvTrouble);
                         }
 
                     }
@@ -277,6 +293,7 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
                             rvTrouble.setLayoutManager(new LinearLayoutManager(TroubleDetailActivity.this));
                             AcrossAdapter adapter = new AcrossAdapter(R.layout.item_across, result);
                             rvTrouble.setAdapter(adapter);
+                            adapter.setEmptyView(R.layout.empty, rvTrouble);
                         }
 
                     }

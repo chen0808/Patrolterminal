@@ -49,6 +49,7 @@ public class PatrolContentFrgment extends BaseFragment {
     private String task_id;
     private PatrolContentAdapter adapter;
     private List<PatrolContentBean.ValueBean> valueBean = new ArrayList<>();
+    private String line_id;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class PatrolContentFrgment extends BaseFragment {
             }
         });
         task_id = (String) SPUtil.get(getActivity(), "ids", "task_id", "");
+        line_id = (String) SPUtil.get(getActivity(), "ids", "line_id", "");
         getdata();
     }
 
@@ -79,7 +81,7 @@ public class PatrolContentFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<PatrolContentBean>> t) throws Exception {
                         List<PatrolContentBean> results = t.getResults();
                         rvPatrolContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        adapter = new PatrolContentAdapter(getData(results), getActivity());
+                        adapter = new PatrolContentAdapter(getData(results), getActivity(), line_id);
                         rvPatrolContent.setAdapter(adapter);
                     }
 

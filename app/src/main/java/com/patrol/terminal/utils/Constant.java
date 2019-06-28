@@ -114,4 +114,5 @@ public class Constant {
 
     public static boolean isContent = false;
     public static List<LocalMedia> picList = null;
+    public static String defectType = "";
 }

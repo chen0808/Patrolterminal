@@ -416,7 +416,7 @@ public class TestActivity extends BaseActivity {
                 });
 
         BaseRequest.getInstance().getService()
-                .towerList(lineId, "")
+                .towerList(lineId, "sort")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<TowerListBean>>(this) {

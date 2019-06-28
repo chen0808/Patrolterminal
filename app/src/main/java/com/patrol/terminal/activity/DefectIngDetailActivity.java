@@ -16,7 +16,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
-import com.patrol.terminal.bean.DefectFragmentBean;
+import com.patrol.terminal.bean.DefectFragmentDetailBean;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -72,63 +72,75 @@ public class DefectIngDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        String id = getIntent().getStringExtra("id");
         setContentView(R.layout.activity_defect_ing);
         ButterKnife.bind(this);
-
-        initview();
+        initview(id);
     }
 
-    private void initview() {
-        DefectFragmentBean bean = (DefectFragmentBean) getIntent().getSerializableExtra("bean");
+    private void initview(String id) {
         titleName.setText("缺陷详情");
-        defectContent.setText(bean.getContent());
-        defectLineName.setText(bean.getLine_name());
-        defectTowerName.setText(bean.getStart_name());
-        if (bean.getFind_user_name() == null) {
-            defectFindName.setText("暂无");
-        } else {
-            defectFindName.setText(bean.getFind_user_name());
-        }
-        if (bean.getDeal_user_name() == null) {
-            defectDealName.setText("暂无");
-        } else {
-            defectDealName.setText(bean.getDeal_user_name());
-        }
+        BaseRequest.getInstance().getService().getDefectDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<DefectFragmentDetailBean>() {
+                    @Override
+                    protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
+                        DefectFragmentDetailBean bean = t.getResults();
+                        defectContent.setText(bean.getContent());
+                        defectLineName.setText(bean.getLine_name());
+                        defectTowerName.setText(bean.getStart_name());
+                        if (bean.getFind_user_name() == null) {
+                            defectFindName.setText("暂无");
+                        } else {
+                            defectFindName.setText(bean.getFind_user_name());
+                        }
+                        if (bean.getDeal_user_name() == null) {
+                            defectDealName.setText("暂无");
+                        } else {
+                            defectDealName.setText(bean.getDeal_user_name());
+                        }
 
-        if ("0".equals(bean.getAudit_status())) {
-            defectAlloteStatus.setText("审核中");
-        } else if ("1".equals(bean.getAudit_status())) {
-            defectAlloteStatus.setText("已审核");
-        }
+                        if ("0".equals(bean.getAudit_status())) {
+                            defectAlloteStatus.setText("审核中");
+                        } else if ("1".equals(bean.getAudit_status())) {
+                            defectAlloteStatus.setText("已审核");
+                        }
 
-        if ("一般".equals(bean.getGrade_name())) {
-            defectLevel.setTextColor(getResources().getColor(R.color.blue));
-        } else if ("严重".equals(bean.getGrade_name())) {
-            defectLevel.setTextColor(getResources().getColor(R.color.line_point_1));
-        } else if ("危急".equals(bean.getGrade_name())) {
-            defectLevel.setTextColor(getResources().getColor(R.color.line_point_0));
-        }
-        defectLevel.setText(bean.getGrade_name());
-        if (bean.getDeal_notes() == null) {
-            defectDealContent.setText("暂无");
-        } else {
-            defectDealContent.setText(bean.getDeal_notes());
-        }
+                        if ("一般".equals(bean.getGrade_name())) {
+                            defectLevel.setTextColor(getResources().getColor(R.color.blue));
+                        } else if ("严重".equals(bean.getGrade_name())) {
+                            defectLevel.setTextColor(getResources().getColor(R.color.line_point_1));
+                        } else if ("危急".equals(bean.getGrade_name())) {
+                            defectLevel.setTextColor(getResources().getColor(R.color.line_point_0));
+                        }
+                        defectLevel.setText(bean.getGrade_name());
+                        if (bean.getDeal_notes() == null) {
+                            defectDealContent.setText("暂无");
+                        } else {
+                            defectDealContent.setText(bean.getDeal_notes());
+                        }
 
 
 //        defectDepName.setText("工作班组：" + bean.getDeal_dep_name());
-        getPartrolRecord(bean.getId());
-        mGridViewAddImgAdapter = new DefectPicAdapter(this, mPicList);
-        defectGridView.setAdapter(mGridViewAddImgAdapter);
-        defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                viewPluImg(position);
+                        getPartrolRecord(bean.getId());
+//                        mGridViewAddImgAdapter = new DefectPicAdapter(this, mPicList);
+                        defectGridView.setAdapter(mGridViewAddImgAdapter);
+                        defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view,
+                                                    int position, long id) {
+                                viewPluImg(position);
 
-            }
-        });
+                            }
+                        });
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
     }
 
     @OnClick({R.id.title_back})
@@ -155,18 +167,18 @@ public class DefectIngDetailActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
                         if (t.getCode() == 1) {
                             List<PatrolRecordPicBean> results = t.getResults();
-                            if (results.size()>0){
+                            if (results.size() > 0) {
                                 deffectImg.setVisibility(View.VISIBLE);
-                            for (int i = 0; i < results.size(); i++) {
-                                PatrolRecordPicBean overhaulFileBean = results.get(i);
-                                String file_path = overhaulFileBean.getFile_path();
-                                if (overhaulFileBean.getFilename() != null) {
-                                    String compressPath = BaseUrl.BASE_URL + file_path.substring(1, file_path.length()) + overhaulFileBean.getFilename();
+                                for (int i = 0; i < results.size(); i++) {
+                                    PatrolRecordPicBean overhaulFileBean = results.get(i);
+                                    String file_path = overhaulFileBean.getFile_path();
+                                    if (overhaulFileBean.getFilename() != null) {
+                                        String compressPath = BaseUrl.BASE_URL + file_path.substring(1, file_path.length()) + overhaulFileBean.getFilename();
 
-                                    mPicList.add(compressPath);
+                                        mPicList.add(compressPath);
+                                    }
                                 }
-                            }
-                            }else {
+                            } else {
                                 deffectImg.setVisibility(View.GONE);
                             }
                             mGridViewAddImgAdapter.notifyDataSetChanged();

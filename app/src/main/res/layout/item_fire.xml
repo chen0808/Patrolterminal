@@ -6,63 +6,220 @@
     android:background="@drawable/stoke_gray"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_type_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tv_dep_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_line_level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="隐患名字："
+            android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/tv_line_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_type_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_find_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_tower_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="班组名字："
+            android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/tv_towers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_dep_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_remarks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="线路等级："
+            android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/tv_done_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_line_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_deal_notes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_reason"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="线路名字："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_line_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="发现时间："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_find_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="基数："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_tower_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="杆段号："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_towers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="完成状态："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="备注："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_remarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="完成时间："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_done_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="处理措施："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_deal_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="列入原因："
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+    </LinearLayout>
 </LinearLayout>

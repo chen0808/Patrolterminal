@@ -59,6 +59,7 @@
         <activity android:name=".activity.SafeListActivity" />
         <activity android:name=".activity.SpecialAttrListActivity" />
         <activity android:name=".activity.TroubleDetailActivity" />
+        <activity android:name=".activity.DefectListActivity" />
         <activity
             android:name=".activity.NewTaskActivity"
             android:screenOrientation="portrait" />

@@ -9,8 +9,7 @@ import androidx.annotation.Nullable;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.PatrolRecordActivity;
-import com.patrol.terminal.activity.TestActivity;
+import com.patrol.terminal.activity.TroubleDetailActivity;
 import com.patrol.terminal.bean.TroubleBean;
 
 import java.util.List;
@@ -30,17 +29,17 @@ public class TroubleFragmentAdapter extends BaseQuickAdapter<TroubleBean, BaseVi
         rlDefectitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (item.getType_id().equals("3A7703BA2EFA4B9E86732DB1B0FA4E3F") || item.getType_id().equals("F0C697FDE56E42959F52B6620544240D") || item.getType_id().equals("2F9D2BEF6B08403FAD1FED246B79410B")) {
-//                    String lineName = ((PatrolRecordActivity) mContext).getLineName();
-//                    Intent intent = new Intent(mContext, TestActivity.class);
-//                    intent.putExtra("line_name", lineName);
-//                    mContext.startActivity(intent);
-//                }else if (item.getType_id().equals("CE0954EF596447CA9458CC230234E01A")){
-                String lineName = ((PatrolRecordActivity) mContext).getLineName();
-                Intent intent = new Intent(mContext, TestActivity.class);
-                intent.putExtra("line_name", lineName);
+//                String lineName = ((PatrolRecordActivity) mContext).getLineName();
+//                Intent intent = new Intent(mContext, TestActivity.class);
+//                intent.putExtra("line_name", lineName);
+//                mContext.startActivity(intent);
+
+
+                Intent intent = new Intent(mContext, TroubleDetailActivity.class);
+                intent.putExtra("line_id", item.getLine_id());
+                intent.putExtra("type", item.getType_id());
+                intent.putExtras(intent);
                 mContext.startActivity(intent);
-//                }
             }
         });
     }

@@ -32,6 +32,6 @@ public class DisasterAdapter extends BaseQuickAdapter<TroubleDetailBean, BaseVie
                 .setText(R.id.tv_scale, "规模：" + item.getScale())
                 .setText(R.id.tv_main_reason, "主要原因：" + item.getMain_reason())
                 .setText(R.id.tv_join_reason, "列入原因：" + item.getJoin_reason())
-                .setText(R.id.tv_disaster_type, "地址灾害隐患类型：" + item.getDisaster_type());
+                .setText(R.id.tv_disaster_type, "地质灾害隐患类型：" + item.getDisaster_type());
     }
 }
