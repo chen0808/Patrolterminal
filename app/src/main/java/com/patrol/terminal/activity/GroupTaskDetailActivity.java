@@ -2,7 +2,6 @@ package com.patrol.terminal.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GroupTaskDetailAdapter;
-import com.patrol.terminal.adapter.WeekPlanDetailAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -41,7 +39,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import kotlin.io.OnErrorAction;
 
 //小组任务详情
 public class GroupTaskDetailActivity extends BaseActivity {
