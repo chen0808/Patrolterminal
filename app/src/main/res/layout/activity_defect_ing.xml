@@ -9,48 +9,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="@dimen/dp_80"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:gravity="center_vertical|right"
-            android:layout_marginTop="10dp"
-            android:text="缺陷内容："
-            android:textColor="@color/color_33"
-            android:textSize="@dimen/sp_15" />
-
-        <TextView
-            android:id="@+id/defect_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="@dimen/dp_10"
-            android:gravity="center_vertical"
-            android:text="撒顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶撒顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶  大水水水水水水水水水水水水水水水水水水"
-            android:textSize="@dimen/sp_15" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:background="@color/image_overlay_false" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:minHeight="@dimen/dp_40"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="@dimen/dp_80"
+            android:layout_width="@dimen/dp_100"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_20"
             android:gravity="center_vertical|right"
             android:minHeight="@dimen/dp_40"
-            android:text="线路名称："
+            android:text="线路名字："
             android:textColor="@color/color_33"
             android:textSize="@dimen/sp_15" />
 
@@ -60,7 +28,546 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:minHeight="@dimen/dp_40"
-            android:text="xxx"
+            android:text="暂无"
+            android:textSize="@dimen/sp_15" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="开始杆塔："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_start_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="结束杆塔："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_end_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical|right"
+            android:text="缺陷内容："
+            android:textColor="@color/color_33"
+            android:textSize="@dimen/sp_15" />
+
+        <TextView
+            android:id="@+id/defect_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:text="暂无"
+            android:textSize="@dimen/sp_15" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:gravity="center_vertical|right"
+            android:minHeight="@dimen/dp_40"
+            android:text="缺陷巡视内容："
+            android:textColor="@color/color_33" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/dp_40"
+            android:text="暂无"
+            android:textSize="@dimen/sp_15" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="缺陷类别："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_category_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="缺陷级别："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_grade_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="发现时间："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_find_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="处理措施："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_deal_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="消缺班组："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_deal_dep_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="消缺时间："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_deal_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="审核人："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_auditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="审核状态："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_audit_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="缺陷状态："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="处理人："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_deal_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="发现人："
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/defect_find_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical|right"
+                android:minHeight="@dimen/dp_40"
+                android:text="发现人部门："
+                android:textColor="@color/color_33" />
+
+            <TextView
+                android:id="@+id/defect_find_dep_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/dp_40"
+                android:text="暂无"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/image_overlay_false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:gravity="center_vertical|right"
+            android:minHeight="@dimen/dp_40"
+            android:text="完成情况："
+            android:textColor="@color/color_33"
+            android:textSize="@dimen/sp_15" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/dp_40"
+            android:text="暂无"
             android:textSize="@dimen/sp_15" />
     </LinearLayout>
 
@@ -76,22 +583,22 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="@dimen/dp_80"
+            android:layout_width="@dimen/dp_100"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_20"
             android:gravity="center_vertical|right"
             android:minHeight="@dimen/dp_40"
-            android:text="杆塔名称："
+            android:text="工作备注："
             android:textColor="@color/color_33"
             android:textSize="@dimen/sp_15" />
 
         <TextView
-            android:id="@+id/defect_tower_name"
+            android:id="@+id/defect_remark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:minHeight="@dimen/dp_40"
-            android:text="xxx"
+            android:text="暂无"
             android:textSize="@dimen/sp_15" />
     </LinearLayout>
 
@@ -100,186 +607,18 @@
         android:layout_height="@dimen/dp_1"
         android:background="@color/image_overlay_false" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/deffect_img"
+        android:layout_width="@dimen/dp_100"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:gravity="center_vertical|right"
         android:minHeight="@dimen/dp_40"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="@dimen/dp_80"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:gravity="center_vertical|right"
-            android:minHeight="@dimen/dp_40"
-            android:text="发现人："
-            android:textColor="@color/color_33"
-            android:textSize="@dimen/sp_15" />
-
-        <TextView
-            android:id="@+id/defect_find_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/dp_40"
-            android:text="xxx"
-            android:textSize="@dimen/sp_15" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:background="@color/image_overlay_false" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/dp_40"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="@dimen/dp_80"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:gravity="center_vertical|right"
-            android:minHeight="@dimen/dp_40"
-            android:text="状态："
-            android:textColor="@color/color_33"
-            android:textSize="@dimen/sp_15" />
-
-        <TextView
-            android:id="@+id/defect_allote_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/dp_40"
-            android:text="xxx"
-            android:textSize="@dimen/sp_15" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:background="@color/image_overlay_false" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/dp_40"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="@dimen/dp_80"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:gravity="center_vertical|right"
-            android:minHeight="@dimen/dp_40"
-            android:text="处理人："
-            android:textColor="@color/color_33"
-            android:textSize="@dimen/sp_15" />
-
-        <TextView
-            android:id="@+id/defect_deal_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/dp_40"
-            android:text="xxx"
-            android:textSize="@dimen/sp_15" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:background="@color/image_overlay_false" />
-    <!--<TextView-->
-    <!--android:id="@+id/defect_pat_name"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="8dp"-->
-    <!--android:text="检测人：张三" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/defect_group_name"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="8dp"-->
-    <!--android:text="工作负责人：李四" />-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/dp_40"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="@dimen/dp_80"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:gravity="center_vertical|right"
-            android:minHeight="@dimen/dp_40"
-            android:text="缺陷等级："
-            android:textColor="@color/color_33"
-            android:textSize="@dimen/sp_15" />
-
-        <TextView
-            android:id="@+id/defect_level"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/dp_40"
-            android:text="xxx"
-            android:textSize="@dimen/sp_15" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:background="@color/image_overlay_false" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/dp_40"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="@dimen/dp_80"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:gravity="center_vertical|right"
-            android:minHeight="@dimen/dp_40"
-            android:text="处理措施："
-            android:textColor="@color/color_33"
-            android:textSize="@dimen/sp_15" />
-
-        <TextView
-            android:id="@+id/defect_deal_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/dp_40"
-            android:text="xxx"
-            android:textSize="@dimen/sp_15" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:background="@color/image_overlay_false" />
-
-
-
-        <TextView
-            android:id="@+id/deffect_img"
-            android:layout_width="@dimen/dp_80"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:gravity="center_vertical|right"
-            android:minHeight="@dimen/dp_40"
-            android:visibility="gone"
-            android:text="现场照片："
-            android:textColor="@color/color_33"
-            android:textSize="@dimen/sp_15" />
+        android:text="现场照片："
+        android:textColor="@color/color_33"
+        android:textSize="@dimen/sp_15"
+        android:visibility="gone" />
     <!--展示上传的图片-->
     <GridView
         android:id="@+id/defect_gridView"

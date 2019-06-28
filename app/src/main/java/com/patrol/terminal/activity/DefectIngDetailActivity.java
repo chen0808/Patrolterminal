@@ -43,27 +43,44 @@ public class DefectIngDetailActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
-    @BindView(R.id.defect_content)
-    TextView defectContent;
     @BindView(R.id.defect_line_name)
     TextView defectLineName;
-    @BindView(R.id.defect_tower_name)
-    TextView defectTowerName;
-    @BindView(R.id.defect_find_name)
-    TextView defectFindName;
-    @BindView(R.id.defect_allote_status)
-    TextView defectAlloteStatus;
-    @BindView(R.id.defect_deal_name)
-    TextView defectDealName;
-    @BindView(R.id.defect_gridView)
-    GridView defectGridView;
-    @BindView(R.id.defect_level)
-    TextView defectLevel;
-    @BindView(R.id.defect_deal_content)
-    TextView defectDealContent;
+    @BindView(R.id.defect_start_name)
+    TextView defectStartName;
+    @BindView(R.id.defect_end_name)
+    TextView defectEndName;
+    @BindView(R.id.defect_content)
+    TextView defectContent;
+    @BindView(R.id.defect_category_name)
+    TextView defectCategoryName;
+    @BindView(R.id.defect_grade_name)
+    TextView defectGradeName;
+    @BindView(R.id.defect_find_time)
+    TextView defectFindTime;
+    @BindView(R.id.defect_deal_notes)
+    TextView defectDealNotes;
+    @BindView(R.id.defect_deal_dep_name)
+    TextView defectDealDepName;
+    @BindView(R.id.defect_deal_time)
+    TextView defectDealTime;
+    @BindView(R.id.defect_auditor)
+    TextView defectAuditor;
+    @BindView(R.id.defect_audit_status)
+    TextView defectAuditStatus;
+    @BindView(R.id.defect_status)
+    TextView defectStatus;
+    @BindView(R.id.defect_deal_user_name)
+    TextView defectDealUserName;
+    @BindView(R.id.defect_find_user_name)
+    TextView defectFindUserName;
+    @BindView(R.id.defect_find_dep_name)
+    TextView defectFindDepName;
+    @BindView(R.id.defect_remark)
+    TextView defectRemark;
     @BindView(R.id.deffect_img)
     TextView deffectImg;
-
+    @BindView(R.id.defect_gridView)
+    GridView defectGridView;
     private DefectPicAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
     private int page = 1;
@@ -88,52 +105,95 @@ public class DefectIngDetailActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
                         DefectFragmentDetailBean bean = t.getResults();
                         defectContent.setText(bean.getContent());
-                        defectLineName.setText(bean.getLine_name());
-                        defectTowerName.setText(bean.getStart_name());
-                        if (bean.getFind_user_name() == null) {
-                            defectFindName.setText("暂无");
-                        } else {
-                            defectFindName.setText(bean.getFind_user_name());
+                        defectStartName.setText(bean.getStart_name());
+                        defectEndName.setText(bean.getEnd_name());
+                        defectFindTime.setText(bean.getFind_time());
+//                        缺陷状态（0：编制，1：月计划分配，2：周计划分配，3：日计划分配，4：进行中，5：已完成，6：未完成）
+                        switch (bean.getStatus()) {
+                            case "0":
+                                defectStatus.setText("编制");
+                                break;
+                            case "1":
+                                defectStatus.setText("月计划分配");
+                                break;
+                            case "2":
+                                defectStatus.setText("周计划分配");
+                                break;
+                            case "3":
+                                defectStatus.setText("日计划分配");
+                                break;
+                            case "4":
+                                defectStatus.setText("进行中");
+                                break;
+                            case "5":
+                                defectStatus.setText("已完成");
+                                break;
+                            case "6":
+                                defectStatus.setText("未完成");
+                                break;
                         }
-                        if (bean.getDeal_user_name() == null) {
-                            defectDealName.setText("暂无");
-                        } else {
-                            defectDealName.setText(bean.getDeal_user_name());
+                        if (bean.getDeal_dep_name() != null) {
+                            defectDealDepName.setText(bean.getDeal_dep_name());
+                        }
+                        if (bean.getDeal_time() != null) {
+                            defectDealTime.setText(bean.getDeal_time());
+                        }
+                        if (bean.getAuditor() != null) {
+                            defectAuditor.setText(bean.getAuditor());
+                        }
+                        defectLineName.setText(bean.getLine_name());
+                        defectFindUserName.setText(bean.getFind_user_name());
+                        if (bean.getRemark() != null) {
+                            defectRemark.setText(bean.getRemark());
+                        }
+                        if (bean.getFind_dep_name() != null) {
+                            defectFindDepName.setText(bean.getFind_dep_name());
+                        }
+                        defectCategoryName.setText(bean.getCategory_name());
+                        defectGradeName.setText(bean.getGrade_name());
+
+                        if (bean.getDeal_user_name() != null) {
+                            defectDealUserName.setText(bean.getDeal_user_name());
                         }
 
                         if ("0".equals(bean.getAudit_status())) {
-                            defectAlloteStatus.setText("审核中");
+                            defectAuditStatus.setText("审核中");
                         } else if ("1".equals(bean.getAudit_status())) {
-                            defectAlloteStatus.setText("已审核");
+                            defectAuditStatus.setText("已审核");
                         }
 
                         if ("一般".equals(bean.getGrade_name())) {
-                            defectLevel.setTextColor(getResources().getColor(R.color.blue));
+                            defectGradeName.setTextColor(getResources().getColor(R.color.blue));
                         } else if ("严重".equals(bean.getGrade_name())) {
-                            defectLevel.setTextColor(getResources().getColor(R.color.line_point_1));
+                            defectGradeName.setTextColor(getResources().getColor(R.color.line_point_1));
                         } else if ("危急".equals(bean.getGrade_name())) {
-                            defectLevel.setTextColor(getResources().getColor(R.color.line_point_0));
+                            defectGradeName.setTextColor(getResources().getColor(R.color.line_point_0));
                         }
-                        defectLevel.setText(bean.getGrade_name());
-                        if (bean.getDeal_notes() == null) {
-                            defectDealContent.setText("暂无");
-                        } else {
-                            defectDealContent.setText(bean.getDeal_notes());
+                        defectGradeName.setText(bean.getGrade_name());
+                        if (bean.getDeal_notes() != null) {
+                            defectDealNotes.setText(bean.getDeal_notes());
                         }
 
 
 //        defectDepName.setText("工作班组：" + bean.getDeal_dep_name());
-                        getPartrolRecord(bean.getId());
-//                        mGridViewAddImgAdapter = new DefectPicAdapter(this, mPicList);
-                        defectGridView.setAdapter(mGridViewAddImgAdapter);
-                        defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view,
-                                                    int position, long id) {
-                                viewPluImg(position);
-
+//                        getPartrolRecord(bean.getId());
+                        if (bean.getFileList() != null && bean.getFileList().size() > 0) {
+                            deffectImg.setVisibility(View.VISIBLE);
+                            mPicList.clear();
+                            for (int i = 0; i < bean.getFileList().size(); i++) {
+                                mPicList.add(BaseUrl.BASE_URL + bean.getFileList().get(i).getFile_path() + bean.getFileList().get(i).getFilename());
                             }
-                        });
+                            mGridViewAddImgAdapter = new DefectPicAdapter(DefectIngDetailActivity.this, mPicList);
+                            defectGridView.setAdapter(mGridViewAddImgAdapter);
+                            defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view,
+                                                        int position, long id) {
+                                    viewPluImg(position);
+
+                                }
+                            });
+                        }
                     }
 
                     @Override
@@ -152,7 +212,6 @@ public class DefectIngDetailActivity extends BaseActivity {
         }
     }
 
-    //查询接电电阻
     public void getPartrolRecord(String id) {
 
         ProgressDialog.show(this, false, "正在加载。。。。");

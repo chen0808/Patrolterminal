@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
@@ -11,8 +13,6 @@ import com.patrol.terminal.activity.DefectIngDetailActivity;
 import com.patrol.terminal.bean.DefectFragmentBean;
 
 import java.util.List;
-
-import androidx.annotation.Nullable;
 
 public class DefectIngAdapter extends BaseQuickAdapter<DefectFragmentBean, BaseViewHolder> {
     private int mType;
@@ -30,7 +30,7 @@ public class DefectIngAdapter extends BaseQuickAdapter<DefectFragmentBean, BaseV
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, DefectIngDetailActivity.class);
                 Bundle bundle=new Bundle();
-                bundle.putSerializable("bean",item);
+                bundle.putSerializable("id", item.getId());
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }

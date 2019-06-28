@@ -352,6 +352,7 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
     }
 
     private void uploadItem(PatrolLevel2 item2, String content, String time, RelativeLayout rlContent, LinearLayout llContent, TextView tvContent) {
+        params.clear();
         params.put("task_id", toRequestBody(item2.getTask_id()));
         params.put("grade_id", toRequestBody(grade_id));
         params.put("content", toRequestBody(content));
@@ -391,10 +392,12 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
         if (mPicList.size() == 0) {
             Toast.makeText(mContext, "请上传图片", Toast.LENGTH_SHORT).show();
         } else {
-            File file = new File(mPicList.get(0));
-            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            for (int i = 0; i < mPicList.size(); i++) {
+                File file = new File(mPicList.get(i));
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 //            params.put("towerList[0].file", requestFile);
-            params.put("file\"; filename=\"" + file.getName(), requestFile);
+                params.put("file\"; filename=\"" + file.getName(), requestFile);
+            }
         }
         BaseRequest.getInstance().getService().commitPatrolContent(params).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

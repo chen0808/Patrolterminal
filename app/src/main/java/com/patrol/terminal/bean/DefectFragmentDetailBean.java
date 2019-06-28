@@ -6,17 +6,7 @@ import java.util.List;
 public class DefectFragmentDetailBean implements Serializable {
 
     /**
-     * id : F42B49E755E1414DA24BF9787D7D3F0B
-     * month_line_id : null
-     * week_id : null
-     * day_id : null
-     * group_id : null
-     * task_id : null
-     * category_id : A5D9B34EEA45485EBD50B788F607AC64
-     * grade_id : 37E5647975394B1E952DC5D2796C7D73
-     * patrol_id : null
      * content : AB塔腿1米处有一长3米，宽0.4米，深1.5米的坑。
-     * line_id : E48D33C879404B7EA705E970177F252E
      * start_name : #016
      * end_name : #016
      * find_time : 2015-03-03
@@ -26,20 +16,10 @@ public class DefectFragmentDetailBean implements Serializable {
      * deal_time : null
      * auditor : null
      * audit_status : 1
-     * week_line_id : null
-     * day_line_id : null
-     * month_id : null
-     * group_list_id : null
-     * deal_dep_id : null
-     * start_id : 9D30E6605D4641CCBBC2EA6148C72C9E
-     * end_id : 9D30E6605D4641CCBBC2EA6148C72C9E
      * line_name : 1120新金二线
-     * find_user_id : null
      * find_user_name : null
-     * deal_user_id : null
      * deal_user_name : null
      * remark : null
-     * find_dep_id : null
      * find_dep_name : null
      * category_name : 杆塔基础
      * grade_name : 一般
@@ -65,8 +45,8 @@ public class DefectFragmentDetailBean implements Serializable {
     private String deal_notes;
     private String status;
     private String deal_dep_name;
-    private Object deal_time;
-    private Object auditor;
+    private String deal_time;
+    private String auditor;
     private String audit_status;
     private Object week_line_id;
     private Object day_line_id;
@@ -80,14 +60,14 @@ public class DefectFragmentDetailBean implements Serializable {
     private String find_user_name;
     private Object deal_user_id;
     private String deal_user_name;
-    private Object remark;
+    private String remark;
     private Object find_dep_id;
-    private Object find_dep_name;
+    private String find_dep_name;
     private String category_name;
     private String grade_name;
     private Object user_name;
     private Object dep_name;
-    private List<?> fileList;
+    private List<FileBean> fileList;
 
     public String getId() {
         return id;
@@ -225,19 +205,19 @@ public class DefectFragmentDetailBean implements Serializable {
         this.deal_dep_name = deal_dep_name;
     }
 
-    public Object getDeal_time() {
+    public String getDeal_time() {
         return deal_time;
     }
 
-    public void setDeal_time(Object deal_time) {
+    public void setDeal_time(String deal_time) {
         this.deal_time = deal_time;
     }
 
-    public Object getAuditor() {
+    public String getAuditor() {
         return auditor;
     }
 
-    public void setAuditor(Object auditor) {
+    public void setAuditor(String auditor) {
         this.auditor = auditor;
     }
 
@@ -345,11 +325,11 @@ public class DefectFragmentDetailBean implements Serializable {
         this.deal_user_name = deal_user_name;
     }
 
-    public Object getRemark() {
+    public String getRemark() {
         return remark;
     }
 
-    public void setRemark(Object remark) {
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 
@@ -361,11 +341,11 @@ public class DefectFragmentDetailBean implements Serializable {
         this.find_dep_id = find_dep_id;
     }
 
-    public Object getFind_dep_name() {
+    public String getFind_dep_name() {
         return find_dep_name;
     }
 
-    public void setFind_dep_name(Object find_dep_name) {
+    public void setFind_dep_name(String find_dep_name) {
         this.find_dep_name = find_dep_name;
     }
 
@@ -401,11 +381,11 @@ public class DefectFragmentDetailBean implements Serializable {
         this.dep_name = dep_name;
     }
 
-    public List<?> getFileList() {
+    public List<FileBean> getFileList() {
         return fileList;
     }
 
-    public void setFileList(List<?> fileList) {
+    public void setFileList(List<FileBean> fileList) {
         this.fileList = fileList;
     }
 }
