@@ -16,23 +16,23 @@ public class BirdAdapter extends BaseQuickAdapter<TroubleDetailBean, BaseViewHol
 
     @Override
     protected void convert(BaseViewHolder helper, TroubleDetailBean item) {
-        helper.setText(R.id.tv_type_name, "隐患名字：" + item.getType_name())
-                .setText(R.id.tv_dep_name, "班组名字：" + item.getDep_name())
-                .setText(R.id.tv_line_level, "线路等级：" + item.getLine_level())
-                .setText(R.id.tv_line_name, "线路名字：" + item.getLine_name())
-                .setText(R.id.tv_find_time, "发现时间：" + item.getFind_time())
-                .setText(R.id.tv_tower_number, "基数：" + item.getTower_number())
-                .setText(R.id.tv_towers, "杆段号：" + item.getTowers())
-                .setText(R.id.tv_remarks, "备注：" + (item.getRemarks() == null ? "" : item.getRemarks()))
-                .setText(R.id.tv_plan_time, "计划完成时间：" + item.getPlan_time())
-                .setText(R.id.tv_installed, "是否安装：" + (item.getInstalled().equals("0") ? "否" : "是"))
-                .setText(R.id.tv_arrival_time, "到货时间：" + item.getArrival_time())
-                .setText(R.id.tv_orders_time, "订货时间：" + item.getOrders_time())
-                .setText(R.id.tv_orders_company, "订货厂家：" + item.getOrders_company())
-                .setText(R.id.tv_batch, "批次：" + item.getBatch())
-                .setText(R.id.tv_category, "类别：" + item.getCategory())
-                .setText(R.id.tv_year, "年度：" + item.getYear())
-                .setText(R.id.tv_total, "数量：" + item.getTotal())
-                .setText(R.id.tv_deal_notes, "处理措施：" + item.getDeal_notes());
+        helper.setText(R.id.tv_type_name, item.getType_name())
+                .setText(R.id.tv_dep_name, item.getDep_name())
+                .setText(R.id.tv_line_level, item.getLine_level())
+                .setText(R.id.tv_line_name, item.getLine_name())
+                .setText(R.id.tv_find_time, item.getFind_time())
+                .setText(R.id.tv_tower_number, item.getTower_number())
+                .setText(R.id.tv_towers, item.getTowers())
+                .setText(R.id.tv_remarks, item.getRemarks() == null ? "" : item.getRemarks())
+                .setText(R.id.tv_plan_time, item.getPlan_time())
+                .setText(R.id.tv_installed, item.getInstalled().equals("0") ? "否" : "是")
+                .setText(R.id.tv_arrival_time, item.getArrival_time())
+                .setText(R.id.tv_orders_time, item.getOrders_time())
+                .setText(R.id.tv_orders_company, item.getOrders_company())
+                .setText(R.id.tv_batch, item.getBatch())
+                .setText(R.id.tv_category, item.getCategory())
+                .setText(R.id.tv_year, item.getYear())
+                .setText(R.id.tv_total, item.getTotal())
+                .setText(R.id.tv_deal_notes, item.getDeal_notes());
     }
 }
