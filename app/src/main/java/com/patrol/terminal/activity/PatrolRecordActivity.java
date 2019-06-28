@@ -179,7 +179,7 @@ public class PatrolRecordActivity extends BaseActivity {
             }
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-                titleSetting.setVisibility(View.VISIBLE);
+                titleSetting.setVisibility(View.GONE);
                 titleSettingTv.setText("提交");
             }
         } else {
