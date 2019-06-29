@@ -32,7 +32,7 @@ public class DefactContentDBHelper {
 
     public Cursor queryFliter(String constraint) {
         String sql = "select * from " + MyOpenhelper.TABLE.AUTO_DEFACT_TABLE + " where " + MyOpenhelper.DefactTvColumns.CONTENT + " like ?";
-        Cursor cursor = db.rawQuery(sql, new String[]{constraint+"%"});
+        Cursor cursor = db.rawQuery(sql, new String[]{"%" + constraint+"%"});
         return cursor;
     }
 
