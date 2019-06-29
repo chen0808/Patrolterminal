@@ -118,6 +118,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                 }
             }
         });
+//        getDefectList();
     }
 
     public void setFragment(int index) {
@@ -472,5 +473,19 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //        }
 //    };
 
+   /* public void getDefectList() {
+        BaseRequest.getInstance().getService().getPatrolContent().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<PatrolContentBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<PatrolContentBean>> t) throws Exception {
+                        List<PatrolContentBean> results = t.getResults();
+                        SPUtil.put(NewMainActivity.this,"list","defectList",results);
+                    }
 
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }*/
 }

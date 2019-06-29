@@ -85,7 +85,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PatrolRecordActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.TestActivity" />
         <activity

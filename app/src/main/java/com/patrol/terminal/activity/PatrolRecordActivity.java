@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -285,8 +284,8 @@ public class PatrolRecordActivity extends BaseActivity {
                 BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
 
                 SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.white));
-                simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
+                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.color_33));
+                simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.base_status_bar));
                 simplePagerTitleView.setText(data[index]);
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -302,7 +301,7 @@ public class PatrolRecordActivity extends BaseActivity {
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator linePagerIndicator = new LinePagerIndicator(context);
-                linePagerIndicator.setColors(Color.WHITE);
+                linePagerIndicator.setColors(getResources().getColor(R.color.base_status_bar));
                 return linePagerIndicator;
             }
         });
@@ -312,7 +311,7 @@ public class PatrolRecordActivity extends BaseActivity {
         titleContainer.setDividerDrawable(new ColorDrawable() {
             @Override
             public int getIntrinsicWidth() {
-                return UIUtil.dip2px(PatrolRecordActivity.this, 15);
+                return UIUtil.dip2px(PatrolRecordActivity.this, 60);
             }
         });
         ViewPagerHelper.bind(magicIndicator, viewPager);
@@ -543,6 +542,9 @@ public class PatrolRecordActivity extends BaseActivity {
                     case PictureConfig.CHOOSE_REQUEST:
                         localMedia = PictureSelector.obtainMultipleResult(data);
                         Constant.picList = localMedia;
+                        break;
+                    case Constant.DEFECT_REQUEST_CODE:
+
                         break;
                 }
                 if (ivPhoto1.getDrawable() != null && ivPhoto2.getDrawable() != null && ivPhoto3.getDrawable() != null
