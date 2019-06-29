@@ -147,7 +147,7 @@
                         />
                     </LinearLayout>
                 </LinearLayout>
-
+                <View style="@style/line_styl" />
                 <TextView
                     android:id="@+id/day_no_data"
                     android:layout_width="match_parent"

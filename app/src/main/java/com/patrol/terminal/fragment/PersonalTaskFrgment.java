@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -21,11 +22,18 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupTaskBean;
+import com.patrol.terminal.bean.SaveTodoReqbean;
+import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
+import com.yanzhenjie.recyclerview.SwipeMenu;
+import com.yanzhenjie.recyclerview.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
@@ -92,7 +100,10 @@ public class PersonalTaskFrgment extends BaseFragment {
         taskDate.setText(time);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
-
+        // 设置监听器。
+        planRv.setSwipeMenuCreator(mSwipeMenuCreator);
+        // 菜单点击监听。
+        planRv.setOnItemMenuClickListener(mItemMenuClickListener);
         personalTaskAdapter = new PersonalTaskAdapter(R.layout.fragment_task_item, result);
         planRv.setAdapter(personalTaskAdapter);
         personalTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -132,29 +143,8 @@ public class PersonalTaskFrgment extends BaseFragment {
         year = years[0];
         day = Integer.parseInt(days[0]) + "";
     }
-//    //获取个人任务列表
-//    public void getPersonalList() {
-//
-//        ProgressDialog.show(getContext(),false,"正在加载。。。");
-//        BaseRequest.getInstance().getService()
-//                .getPersonalList(year,month, day, SPUtil.getUserId(getContext()))
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
-//                    @Override
-//                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
-//                        result = t.getResults();
-//                        personalTaskAdapter.setNewData(result);
-//                        ProgressDialog.cancle();
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                        ProgressDialog.cancle();
-//                    }
-//                });
-//
-//    }
+
+
 
     //获取小组任务列表
     public void getGroupList() {
@@ -167,6 +157,16 @@ public class PersonalTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         personalTaskAdapter.setNewData(result);
+                        for (int i = 0; i < result.size(); i++) {
+                            String is_rob = result.get(i).getIs_rob();
+                            String audit_status = result.get(i).getAudit_status();
+                            String done_status = result.get(i).getDone_status();
+                            if ("1".equals(is_rob)&&("0".equals(audit_status)||"3".equals(audit_status))&&"0".equals(done_status)){
+                                planRv.setSwipeItemMenuEnabled(i,true);
+                            }else {
+                                planRv.setSwipeItemMenuEnabled(i,false);
+                            }
+                        }
                         RxRefreshEvent.publish("refreshPersonalNum@"+result.size());
                         mRefrsh.setRefreshing(false);
                         ProgressDialog.cancle();
@@ -180,6 +180,37 @@ public class PersonalTaskFrgment extends BaseFragment {
                     }
                 });
 
+    }
+
+    //抢单任务退还
+    public void robBack(String id,int position) {
+        ProgressDialog.show(getContext(),true,"正在加载。。。");
+        SaveTodoReqbean reqbean=new SaveTodoReqbean();
+        reqbean.setAudit_status("1");
+        reqbean.setFrom_user_id(SPUtil.getUserId(getContext()));
+        reqbean.setFrom_user_name(SPUtil.getUserName(getContext()));
+        reqbean.setId(id);
+        BaseRequest.getInstance().getService()
+                .robBack(reqbean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<TypeBean>(getContext()) {
+                    @Override
+                    protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
+                        result.get(position).setAudit_status("1");
+                        RxRefreshEvent.publish("refreshTodo");
+                        planRv.setSwipeItemMenuEnabled(position,false);
+                        personalTaskAdapter.notifyItemChanged(position);
+
+                        ProgressDialog.cancle();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+
+                    }
+                });
     }
 
 
@@ -242,4 +273,38 @@ public class PersonalTaskFrgment extends BaseFragment {
             refreshPersonal.dispose();
         }
     }
+
+    // 创建菜单：
+    SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
+            int width = getResources().getDimensionPixelSize(R.dimen.dp_60);
+
+            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
+            // 2. 指定具体的高，比如80;
+            // 3. WRAP_CONTENT，自身高度，不推荐;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            SwipeMenuItem deleteItem1 = new SwipeMenuItem(getContext());
+            deleteItem1.setImage(R.mipmap.plan_delete);
+            deleteItem1.setWidth(width);
+            deleteItem1.setHeight(height);
+//            deleteItem1.setBackground(R.color.home_red);
+//            deleteItem1.setTextSize(15);
+//            deleteItem1.setTextColorResource(R.color.white);
+//            deleteItem1.setText("删除");
+            // 各种文字和图标属性设置。
+            rightMenu.addMenuItem(deleteItem1); // 在Item右侧添加一个菜单。
+            // 注意：哪边不想要菜单，那么不要添加即可。
+        }
+    };
+    OnItemMenuClickListener mItemMenuClickListener = new OnItemMenuClickListener() {
+        @Override
+        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
+            // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
+            menuBridge.closeMenu();
+            String allot_status = result.get(position).getAllot_status();
+                robBack(result.get(position).getId(), position);
+
+        }
+    };
 }

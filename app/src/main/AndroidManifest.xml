@@ -31,6 +31,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.MyInfoActivity"></activity>
         <activity android:name=".activity.CheckActivity" />
         <activity android:name=".activity.NextMonthPlanActivity" />
         <activity android:name=".activity.NextWeekPlanActivity" />
@@ -308,7 +309,7 @@
 
         <activity android:name=".training.NewTrainPlanActivity" />
         <activity android:name=".activity.LineCheckActivity" />
-        <activity android:name=".activity.LineCheckActivity2"></activity>
+        <activity android:name=".activity.LineCheckActivity2" />
         <activity android:name=".activity.TemporaryWeekActivity" />
         <activity android:name=".activity.TemporaryDayActivity" />
     </application>

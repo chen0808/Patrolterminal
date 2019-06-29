@@ -554,7 +554,7 @@ public class AddWeekPlanActivity extends BaseActivity {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_add_group_task, parent, false);
                 holder.itemTroubleName = (TextView) convertView.findViewById(R.id.add_group_task_name);
                 holder.taskType = (TextView) convertView.findViewById(R.id.add_group_task_type);
-                holder.itemTroubleCheck = (CheckBox) convertView.findViewById(R.id.add_group_task_check);
+                holder.itemTroubleCheck = (ImageView) convertView.findViewById(R.id.add_group_task_check);
                 holder.itemTaskCheck = (RadioButton) convertView.findViewById(R.id.add_group_task_rb);
                 holder.item = (RelativeLayout) convertView.findViewById(R.id.personal_task_item);
 
@@ -563,10 +563,10 @@ public class AddWeekPlanActivity extends BaseActivity {
             Tower listBean = lineTypeBeans.get(position);
             holder.itemTroubleName.setText(listBean.getName());
             boolean check = listBean.isCheck();
-            if (check == true) {
-                holder.itemTroubleCheck.setChecked(true);
-            } else {
-                holder.itemTroubleCheck.setChecked(false);
+            if (check==true){
+                holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
+            }else {
+                holder.itemTroubleCheck.setImageResource(R.mipmap.check_no);
             }
             holder.taskType.setVisibility(View.GONE);
             holder.item.setOnClickListener(new View.OnClickListener() {
@@ -581,7 +581,7 @@ public class AddWeekPlanActivity extends BaseActivity {
                         tower.setEnd_id(listBean.getEnd_id());
                         listBean.setCheck(true);
                         selectType.add(tower);
-                        holder.itemTroubleCheck.setChecked(true);
+                        holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
                     } else {
                         int isExit = 0;
                         for (int i = 0; i < selectType.size(); i++) {
@@ -589,7 +589,7 @@ public class AddWeekPlanActivity extends BaseActivity {
                             if (dayOfWeekBean.getTower_id().equals(listBean.getId())) {
                                 isExit = 1;
                                 selectType.remove(i);
-                                holder.itemTroubleCheck.setChecked(false);
+                                holder.itemTroubleCheck.setImageResource(R.mipmap.check_no);
                                 listBean.setCheck(false);
                                 return;
                             }
@@ -603,7 +603,7 @@ public class AddWeekPlanActivity extends BaseActivity {
                             tower.setEnd_id(listBean.getEnd_id());
                             selectType.add(tower);
                             listBean.setCheck(true);
-                            holder.itemTroubleCheck.setChecked(true);
+                            holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
                         }
                     }
                 }
@@ -622,7 +622,7 @@ public class AddWeekPlanActivity extends BaseActivity {
             private TextView itemTroubleName;
             private TextView taskType;
             private RelativeLayout item;
-            private CheckBox itemTroubleCheck;
+            private ImageView itemTroubleCheck;
             private RadioButton itemTaskCheck;
         }
     }

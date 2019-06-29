@@ -31,6 +31,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DayListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.utils.Utils;
@@ -63,7 +64,7 @@ public class DayPlanFrgment extends BaseFragment {
     @BindView(R.id.plan_submit)
     ImageView planSubmit;
     @BindView(R.id.add_plan_right)
-    ImageView addPlanRight;
+    TextView addPlanRight;
     @BindView(R.id.plan_point)
     View planPoint;
     @BindView(R.id.add_plan_name)
@@ -193,6 +194,7 @@ public class DayPlanFrgment extends BaseFragment {
                         done_num_total = 0;
                         all_num_total = 0;
                         results = t.getResults();
+                        RxRefreshEvent.publish("refreshDayNum@"+results.size());
                         dayPlanAdapter.setNewData(results);
                         for (int i = 0; i < results.size(); i++) {
                             DayListBean dayListBean = results.get(i);
@@ -240,6 +242,7 @@ public class DayPlanFrgment extends BaseFragment {
                     @Override
                     protected void onSuccees(BaseResult<List<DayListBean>> t) throws Exception {
                         nextDayList = t.getResults();
+
                         if (nextDayList != null && nextDayList.size() > 0) {
                             addPlanIv.setVisibility(View.GONE);
                             addPlanRight.setVisibility(View.VISIBLE);

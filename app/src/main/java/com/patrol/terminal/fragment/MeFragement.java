@@ -36,22 +36,18 @@ public class MeFragement extends BaseFragment {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
-    @BindView(R.id.rl_setting)
-    RelativeLayout rlSetting;
+    @BindView(R.id.rl_team_assessment)
+    RelativeLayout rlTeamAssessment;
+    @BindView(R.id.rl_my_performance)
+    RelativeLayout rlMyPerformance;
     @BindView(R.id.rl_send_car)
     RelativeLayout rlSendCar;
     @BindView(R.id.rl_send_car_temporary)
     RelativeLayout rlSendCarTemporary;
-    @BindView(R.id.rl_my_performance)
-    RelativeLayout rlMyPerformance;
-    @BindView(R.id.rl_team_assessment)
-    RelativeLayout rlTeamAssessment;
-    @BindView(R.id.my_name)
-    TextView myName;
-    @BindView(R.id.my_dep)
-    TextView myDep;
     @BindView(R.id.rl_my_position)
     RelativeLayout rlMyPosition;
+    @BindView(R.id.rl_setting)
+    RelativeLayout rlSetting;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,8 +59,7 @@ public class MeFragement extends BaseFragment {
     protected void initData() {
         titleBack.setVisibility(View.GONE);
         titleName.setText("我的");
-        myDep.setText(SPUtil.getDepName(getContext()));
-        myName.setText( SPUtil.getString(getContext(), Constant.USER, Constant.USERNAME,""));
+
     }
 
     @OnClick({R.id.rl_team_assessment, R.id.rl_my_performance, R.id.rl_send_car, R.id.rl_setting, R.id.rl_send_car_temporary, R.id.rl_my_position})

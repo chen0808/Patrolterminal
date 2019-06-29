@@ -92,7 +92,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
     private void initview() {
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
 
-        titleName.setText("斜杆塔倾斜测温");
+        titleName.setText("杆塔倾斜检测");
         line_id = getIntent().getStringExtra("line_id");
         line_name = getIntent().getStringExtra("line_name");
         tower_id = getIntent().getStringExtra("tower_id");

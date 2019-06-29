@@ -31,13 +31,32 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
         TextView type = viewHolder.getView(R.id.item_task_type);
         AdapterUtils.setText(type, StringUtil.getTypeSign(item.getType_sign()));
         String finish_status = item.getDone_status();
-
+        TextView tvAllorStatus = viewHolder.getView(R.id.item_line_state);
         if ("0".equals(finish_status)) {
-            TextView tvAllorStatus = viewHolder.getView(R.id.item_line_state);
-            AdapterUtils.setText(tvAllorStatus, "完成状态：未完成");
+            //任务来源
+            if ("1".equals(item.getIs_rob())) {
+
+                switch (item.getAudit_status()){
+                    case "0":
+                        AdapterUtils.setText(tvAllorStatus, "状态：抢单/未完成");
+                        break;
+                    case "1":
+                        AdapterUtils.setText(tvAllorStatus, "状态：抢单/退还审核中");
+                        break;
+                    case "3":
+                        AdapterUtils.setText(tvAllorStatus, "状态：抢单/退还不通过");
+                        break;
+                }
+            } else {
+                AdapterUtils.setText(tvAllorStatus, "状态：指派/未完成");
+            }
         } else {
-            TextView tvAllorStatus = viewHolder.getView(R.id.item_line_state);
-            AdapterUtils.setText(tvAllorStatus, "完成状态：已完成");
+            //任务来源
+            if ("1".equals(item.getIs_rob())) {
+                AdapterUtils.setText(tvAllorStatus, "状态：抢单/已完成");
+            } else {
+                AdapterUtils.setText(tvAllorStatus, "状态：指派/已完成");
+            }
         }
         viewHolder.setGone(R.id.plan_progressbar_ll, true);
         viewHolder.setText(R.id.plan_progressbar_tv, "任务进度(" + item.getDone_num() + "/" + item.getAll_num() + ")：")

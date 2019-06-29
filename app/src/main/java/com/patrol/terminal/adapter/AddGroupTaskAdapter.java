@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
@@ -55,18 +57,33 @@ public class AddGroupTaskAdapter extends BaseAdapter {
             holder.itemTroubleTower = (TextView) convertView.findViewById(R.id.add_group_task_tower);
             holder.itemTroubleName = (TextView) convertView.findViewById(R.id.add_group_task_name);
             holder.taskType = (TextView) convertView.findViewById(R.id.add_group_task_type);
-            holder.itemTroubleCheck = (CheckBox) convertView.findViewById(R.id.add_group_task_check);
+            holder.itemTroubleCheck = (ImageView) convertView.findViewById(R.id.add_group_task_check);
+            holder.item = (RelativeLayout) convertView.findViewById(R.id.personal_task_item);
+
             convertView.setTag(holder);
         }
         GroupOfDayBean listBean = lineTypeBeans.get(position);
 
-            holder.itemTroubleName.setText(listBean.getLine_name());
+        holder.itemTroubleName.setText(listBean.getLine_name());
         holder.itemTroubleTower.setText(listBean.getName());
         AdapterUtils.setText( holder.taskType,StringUtil.getTypeSign(listBean.getType_sign()));
-        holder.itemTroubleCheck.setOnClickListener(new View.OnClickListener() {
+        boolean check = listBean.isCheck();
+        if (check==true){
+            holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
+            }else {
+            holder.itemTroubleCheck.setImageResource(R.mipmap.check_no);
+        }
+        holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        RxRefreshEvent.publishGrooup(listBean);
+                if (!listBean.isCheck()){
+                    listBean.setCheck(true);
+                    holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
+                }else {
+                    listBean.setCheck(false);
+                    holder.itemTroubleCheck.setImageResource(R.mipmap.check_no);
+                }
+                 RxRefreshEvent.publishGrooup(listBean);
             }
         });
         return convertView;
@@ -82,7 +99,8 @@ public class AddGroupTaskAdapter extends BaseAdapter {
     static class ViewHolder {
       private   TextView itemTroubleName,itemTroubleTower;
         private   TextView taskType;
-        private  CheckBox itemTroubleCheck;
+        private  ImageView itemTroubleCheck;
+        private  RelativeLayout item;
 
     }
 

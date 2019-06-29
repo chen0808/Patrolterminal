@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
@@ -53,8 +55,10 @@ public class AddDayAdapter extends BaseAdapter {
             holder.tvTowerName = convertView.findViewById(R.id.tv_tower_name);
             holder.tvTowerDate = convertView.findViewById(R.id.tv_tower_date);
             holder.tvLineName = (TextView) convertView.findViewById(R.id.tv_line_name);
-            holder.towerCheck = (CheckBox) convertView.findViewById(R.id.item_add_tower_check);
+            holder.towerCheck = (ImageView) convertView.findViewById(R.id.item_add_tower_check);
             holder.towerType = (TextView) convertView.findViewById(R.id.item_add_tower_type);
+            holder.item = (RelativeLayout) convertView.findViewById(R.id.add_tower_item);
+
             convertView.setTag(holder);
         }
         DayOfWeekBean listBean = lineTypeBeans.get(position);
@@ -63,7 +67,6 @@ public class AddDayAdapter extends BaseAdapter {
         holder.tvTowerDate.setText(listBean.getStart_time()+"至"+listBean.getEnd_time());
         holder.tvTowerName.setText(listBean.getName());
         holder.towerType.setText(StringUtil.getTypeSign(listBean.getType_sign()));
-        holder.towerCheck.setChecked(false);
 
         TextView tvContent = holder.towerType;
         String text = tvContent.getText().toString();
@@ -71,19 +74,21 @@ public class AddDayAdapter extends BaseAdapter {
         tvContent.setText(Html.fromHtml(colorText));
         boolean ischeck = listBean.isIscheck();
         if (ischeck==true){
-            holder.towerCheck.setChecked(true);
+            holder.towerCheck.setImageResource(R.mipmap.check_yes);
         }else {
-            holder.towerCheck.setChecked(false);
+            holder.towerCheck.setImageResource(R.mipmap.check_no);
         }
-        holder.towerCheck.setOnClickListener(new View.OnClickListener() {
+        holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (holder.towerCheck.isChecked()) {
+                if (!listBean.isIscheck()) {
                     RxRefreshEvent.publishDay(listBean);
                     listBean.setIscheck(true);
+                    holder.towerCheck.setImageResource(R.mipmap.check_yes);
                 } else {
                     RxRefreshEvent.publishDay(listBean);
                     listBean.setIscheck(false);
+                    holder.towerCheck.setImageResource(R.mipmap.check_no);
                 }
 
             }
@@ -148,7 +153,8 @@ public class AddDayAdapter extends BaseAdapter {
 
     static class ViewHolder {
         private TextView tvLineName, tvTowerName, towerType,tvTowerDate;
-        private CheckBox towerCheck;
+        private ImageView towerCheck;
+        private RelativeLayout item;
 
     }
 }

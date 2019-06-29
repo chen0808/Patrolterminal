@@ -1,72 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/shape_corner"
-    android:layout_margin="@dimen/dp_10"
+    android:background="@color/white"
     android:orientation="vertical"
-  >
+    tools:context=".activity.CheckActivity">
 
-    <RadioGroup
-        android:id="@+id/yx__month_rg"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:background="@color/color_69"
-        android:visibility="gone"
-        android:orientation="horizontal"
-        >
-        <RadioButton
-            android:id="@+id/dxdj"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:gravity="center"
-            android:checked="true"
-            android:background="@drawable/selector_color66_bg"
-            android:textColor="@drawable/selector_text_white_color"
-            android:button="@null"
-            android:text="定巡定检"
-            />
-        <RadioButton
-            android:id="@+id/bdjh"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:background="@drawable/selector_color66_bg"
-            android:textColor="@drawable/selector_text_white_color"
-            android:gravity="center"
-            android:button="@null"
-            android:text="保电计划"
-            />
-        <RadioButton
-            android:id="@+id/ysjh"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:background="@drawable/selector_color66_bg"
-            android:textColor="@drawable/selector_text_white_color"
-            android:button="@null"
-            android:gravity="center"
-            android:text="验收计划"
-            />
-        <RadioButton
-            android:id="@+id/aqjh"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:background="@drawable/selector_color66_bg"
-            android:textColor="@drawable/selector_text_white_color"
-            android:gravity="center"
-            android:layout_marginRight="@dimen/dp_10"
-            android:button="@null"
-            android:text="安全计划"
-            />
-    </RadioGroup>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,7 +17,7 @@
             android:id="@+id/task_title"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:text="月计划列表"
+            android:text="分组"
             android:textStyle="bold"
             android:drawableLeft="@mipmap/plan_icon"
             android:gravity="center_vertical"
@@ -108,7 +49,7 @@
             android:visibility="gone"
             />
 
-       <TextView
+        <TextView
             android:id="@+id/plan_create"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
@@ -141,18 +82,4 @@
             android:scaleType="center"
             android:src="@mipmap/add_icon" />
     </RelativeLayout>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/plan_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.yanzhenjie.recyclerview.SwipeRecyclerView
-            android:id="@+id/plan_rv"
-            android:layout_width="match_parent"
-            android:overScrollMode="never"
-            android:paddingBottom="@dimen/dp_10"
-            android:layout_height="match_parent"></com.yanzhenjie.recyclerview.SwipeRecyclerView>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 </LinearLayout>

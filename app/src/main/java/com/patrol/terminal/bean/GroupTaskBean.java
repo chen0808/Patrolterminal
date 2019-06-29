@@ -73,6 +73,24 @@ public class GroupTaskBean implements Parcelable {
     private String from_user_name;
     private String start_id;
     private String end_id;
+    private String audit_status;
+  private  boolean check;
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
+
+    public String getAudit_status() {
+        return audit_status;
+    }
+
+    public void setAudit_status(String audit_status) {
+        this.audit_status = audit_status;
+    }
 
     public String getStart_id() {
         return start_id;

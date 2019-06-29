@@ -482,7 +482,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 holder.itemTroubleName = (TextView) convertView.findViewById(R.id.add_group_task_name);
                 holder.itemTroubleTower = (TextView) convertView.findViewById(R.id.add_group_task_tower);
                 holder.taskType = (TextView) convertView.findViewById(R.id.add_group_task_type);
-                holder.itemTroubleCheck = (CheckBox) convertView.findViewById(R.id.add_group_task_check);
+                holder.itemTroubleCheck = (ImageView) convertView.findViewById(R.id.add_group_task_check);
                 holder.itemTaskCheck = (RadioButton) convertView.findViewById(R.id.add_group_task_rb);
                 holder.item = (RelativeLayout) convertView.findViewById(R.id.personal_task_item);
 
@@ -493,6 +493,12 @@ public class AddPersonalTaskActivity extends BaseActivity {
             holder.itemTroubleName.setText(listBean.getLine_name());
             holder.itemTroubleTower.setText(listBean.getName());
             AdapterUtils.setText(holder.taskType, StringUtil.getTypeSign(listBean.getType_sign()));
+            boolean check = listBean.isCheck();
+            if (check==true){
+                holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
+            }else {
+                holder.itemTroubleCheck.setImageResource(R.mipmap.check_no);
+            }
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -502,7 +508,8 @@ public class AddPersonalTaskActivity extends BaseActivity {
 //                            listBean.setId(null);
 //                        }
                         selectBean.add(listBean);
-                        holder.itemTroubleCheck.setChecked(true);
+                        listBean.setCheck(true);
+                        holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
                     } else {
                         int isExit = 0;
                         for (int i = 0; i < selectBean.size(); i++) {
@@ -510,7 +517,8 @@ public class AddPersonalTaskActivity extends BaseActivity {
                             if (dayOfWeekBean.getId().equals(listBean.getId())) {
                                 isExit = 1;
                                 selectBean.remove(i);
-                                holder.itemTroubleCheck.setChecked(false);
+                                listBean.setCheck(false);
+                                holder.itemTroubleCheck.setImageResource(R.mipmap.check_no);
                                 break;
                             }
                         }
@@ -520,7 +528,8 @@ public class AddPersonalTaskActivity extends BaseActivity {
 //                                listBean.setId(null);
 //                            }
                             selectBean.add(listBean);
-                            holder.itemTroubleCheck.setChecked(true);
+                            listBean.setCheck(true);
+                            holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
                         }
                     }
                     selectAdapter.setData(selectBean);
@@ -541,7 +550,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
             private TextView itemTroubleName, itemTroubleTower;
             private TextView taskType;
             private RelativeLayout item;
-            private CheckBox itemTroubleCheck;
+            private ImageView itemTroubleCheck;
             private RadioButton itemTaskCheck;
         }
 

@@ -111,7 +111,7 @@ public interface ApiServise {
     //根据当前日期查询所属周下所有计划接口
     @GET("/plan/week/tower/weekGET")
     Observable<BaseResult<List<DayOfWeekBean>>> getDayPlan(@Query("year") String year, @Query("week") String week,
-                                                           @Query("dep_id") String dep_id, @Query("type_sign") String type_sign, @Query("line_id") String line_id, @Query("order") String order);
+                                                           @Query("dep_id") String dep_id, @Query("filter_sign") String type_sign, @Query("line_id") String line_id, @Query("order") String order);
 
     //添加日计划
     @POST("/plan/day/savePOST")
@@ -900,6 +900,11 @@ public interface ApiServise {
     //提交审核代办信息
     @POST("/task/personal/auditPOST ")
     Observable<BaseResult<TypeBean>> saveTodoAudit(@Body SaveTodoReqbean reqbean);
+
+
+    //抢单任务退还
+    @POST("/task/group/list/auditPOST")
+    Observable<BaseResult<TypeBean>> robBack(@Body SaveTodoReqbean reqbean);
 
     //上传个人位置信息
     @POST("task/gps/pda/updatePOST")

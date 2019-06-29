@@ -112,6 +112,12 @@ public class AdapterUtils {
         if (text.contains("审核不通过")) {
             text = text.replace("审核不通过", "<font color='#ff7272'>审核不通过</font>");
         }
+        if (text.contains("退还审核中")) {
+            text = text.replace("退还审核中", "<font color='#057dff'>退还审核中</font>");
+        }
+        if (text.contains("退还不通过")) {
+            text = text.replace("退还不通过", "<font color='#ff7272'>退还不通过</font>");
+        }
 
         if (text.contains("跨高速公路")) {
             text = text.replace("跨高速公路", "<font color='#007bff'>跨高速公路</font>");

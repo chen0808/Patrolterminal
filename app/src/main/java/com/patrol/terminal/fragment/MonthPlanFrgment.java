@@ -69,7 +69,7 @@ public class MonthPlanFrgment extends BaseFragment {
     @BindView(R.id.plan_submit_next)
     ImageView planSubmitNext;
     @BindView(R.id.add_plan_right)
-    ImageView addPlanRight;
+    TextView addPlanRight;
     @BindView(R.id.add_plan_name)
     TextView addPlanName;
     @BindView(R.id.add_plan_status)
@@ -329,6 +329,7 @@ public class MonthPlanFrgment extends BaseFragment {
                             kilo_35kv = 0;
                             MonthListBean results = t.getResults();
                             lineList = getData(results, 1);
+                            RxRefreshEvent.publish("refreshMonthNum@"+results.getPatrol().size());
                             monthPlanAdapter.setNewData(data);
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
                             monthLineTotal.setText("工作线路 : " + num_total + "条");

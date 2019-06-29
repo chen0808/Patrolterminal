@@ -5,6 +5,15 @@ public class SaveTodoReqbean {
     private String audit_status;
     private String from_user_id;
     private String type_sign;
+    private String from_user_name;
+
+    public String getFrom_user_name() {
+        return from_user_name;
+    }
+
+    public void setFrom_user_name(String from_user_name) {
+        this.from_user_name = from_user_name;
+    }
 
     public String getType_sign() {
         return type_sign;

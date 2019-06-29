@@ -22,6 +22,7 @@ import com.patrol.terminal.fragment.MonthPlanFrgment;
 import com.patrol.terminal.fragment.WeekPlanFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.NoScrollViewPager;
@@ -48,6 +49,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class NewPlanActivity extends BaseActivity {
@@ -90,6 +93,7 @@ public class NewPlanActivity extends BaseActivity {
     private int day;
     private int week;
     private String depId="";
+    private Disposable subscribe;
 
 
     @Override
@@ -130,6 +134,22 @@ public class NewPlanActivity extends BaseActivity {
         } else if ("todoWeek".equals(from)) {
             viewPager.setCurrentItem(1);
         }
+        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.startsWith("refreshMonthNum")) {
+                    String[] split = type.split("@");
+                    monthPlanNum.setText(split[1]);
+                } else if (type.startsWith("refreshWeekNum")) {
+                    String[] split = type.split("@");
+                    weekPlanNum.setText(split[1]);
+                } else if (type.startsWith("refreshDayNum")) {
+                    String[] split = type.split("@");
+                    dayPlanNum.setText(split[1]);
+                }
+            }
+        });
 
     }
 
@@ -219,5 +239,13 @@ public class NewPlanActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (subscribe!=null){
+            subscribe.dispose();
+        }
     }
 }

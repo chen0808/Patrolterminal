@@ -92,14 +92,11 @@ public class AddGroupTaskActivity extends BaseActivity {
     private GroupTaskSelectAdapter selectAdapter;
     private List<GroupOfDayBean> results=new ArrayList<>();
     private Disposable subscribe;
-    private List<DefectBean> list1 = new ArrayList<>();
-    private List<String> lineName = new ArrayList<>();
 
     private String year;
     private String month;
     private String week;
     private int type = 0;
-    private String lineId;
 
     private List<String> typeName = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
@@ -107,12 +104,10 @@ public class AddGroupTaskActivity extends BaseActivity {
     private List<String> userList = new ArrayList<>();
     private String time;
     private String day;
-    private String day_id;
     private List<DepUserBean> personalList;
     private List<AddGroupTaskReqBean.UsersBean> addPeoList = new ArrayList<>();
     private String duty_user_name;
     private String duty_user_id;
-    private List<GroupOfDayBean> patSelectList=new ArrayList<>();
     private AlertDialog personalDialog;
     private String[] personals;
     private  List<String> personalPosin=new ArrayList<>();
@@ -477,50 +472,7 @@ public class AddGroupTaskActivity extends BaseActivity {
                     }
                 });
     }
-//
-//    //获取缺陷库
-//    public void getDefect() {
-//        list1.clear();
-//        BaseRequest.getInstance().getService()
-//                .getDefect("", "0", "1")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-//                    @Override
-//                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-//                        List<DefectBean> results = t.getResults();
-//                        list1.addAll(results);
-//                        setVisibility(list1);
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//
-//                    }
-//                });
-//    }
 
-
-//    //获取已经添加的缺陷列表
-//    public void getHaveDefect() {
-//        BaseRequest.getInstance().getService()
-//                .getHaveDefect(month_id, week_id, day_id, group_id, task_id, "1", "1")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<List<DefectBean>>(this) {
-//                    @Override
-//                    protected void onSuccees(BaseResult<List<DefectBean>> t) throws Exception {
-//                        List<DefectBean> results = t.getResults();
-//                        selectType.addAll(results);
-//                        selectAdapter.setData(selectType);
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//
-//                    }
-//                });
-//    }
 
     //保存
     public void savaGroupTask() {

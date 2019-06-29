@@ -75,14 +75,23 @@
         android:layout_toRightOf="@id/item_task_date_ll"
         android:text="小组负责人：xx"
         android:textSize="@dimen/sp_13" />
-
+    <TextView
+        android:id="@+id/item_task_resource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_task_type"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_toRightOf="@id/item_task_personal"
+        android:text="任务来源：xx"
+        android:textSize="@dimen/sp_13" />
     <TextView
         android:id="@+id/item_line_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_task_personal"
         android:layout_toRightOf="@id/item_task_date_ll"
-        android:text="未完成"
+        android:text="状态：未完成"
         android:textSize="@dimen/sp_13" />
 
     <LinearLayout

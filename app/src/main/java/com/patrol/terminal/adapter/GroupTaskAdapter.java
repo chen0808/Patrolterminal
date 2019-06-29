@@ -48,12 +48,13 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
 
         TextView type = viewHolder.getView(R.id.item_task_type);
         AdapterUtils.setText(type, StringUtil.getTypeSign(item.getType_sign()));
-        if ("1".equals(item.getIs_rob())) {
-            viewHolder.setText(R.id.item_task_date_tv, "抢");
-            viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.group_red_bg);
-        }
+
         String allot_status = item.getAllot_status();
         if ("0".equals(allot_status)) {
+            if ("1".equals(item.getIs_rob())) {
+                viewHolder.setText(R.id.item_task_date_tv, "抢");
+                viewHolder.setBackgroundRes(R.id.item_task_date_tv, R.drawable.group_red_bg);
+            }
             TextView tvAllorStatus = viewHolder.getView(R.id.item_line_state);
             AdapterUtils.setText(tvAllorStatus, "分配状态：未分配");
             viewHolder.setGone(R.id.plan_progressbar_ll, false);

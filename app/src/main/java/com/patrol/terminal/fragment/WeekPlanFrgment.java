@@ -35,6 +35,7 @@ import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.WeekListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.utils.TimeUtil;
@@ -72,7 +73,7 @@ public class WeekPlanFrgment extends BaseFragment {
     @BindView(R.id.plan_submit_next)
     ImageView planSubmitNext;
     @BindView(R.id.add_plan_right)
-    ImageView addPlanRight;
+    TextView addPlanRight;
     @BindView(R.id.plan_point)
     View planPoint;
     @BindView(R.id.add_plan_name)
@@ -248,6 +249,7 @@ public class WeekPlanFrgment extends BaseFragment {
                         done_num_total = 0;
                         all_num_total = 0;
                         results = t.getResults();
+                        RxRefreshEvent.publish("refreshWeekNum@"+results.size());
                         weekPlanAdapter.setNewData(results);
                         for (int i = 0; i < results.size(); i++) {
                             WeekListBean weekListBean = results.get(i);

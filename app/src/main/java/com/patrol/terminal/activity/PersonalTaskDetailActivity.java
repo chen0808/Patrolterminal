@@ -10,9 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.PersonalTaskDetailAdapter;
@@ -34,6 +31,8 @@ import com.patrol.terminal.widget.ProgressDialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -61,14 +60,17 @@ public class PersonalTaskDetailActivity extends BaseActivity {
     TextView tvLineNo;
     @BindView(R.id.tv_line_date)
     TextView tvLineDate;
-    @BindView(R.id.tv_line_type)
-    TextView tvLineType;
+    @BindView(R.id.task_group_name)
+    TextView taskGroupName;
+    @BindView(R.id.task_work_name)
+    TextView taskWorkName;
     @BindView(R.id.tv_line_tower)
     TextView tvLineTower;
     @BindView(R.id.month_plan_detail_rc)
     RecyclerView monthPlanDetailRc;
     @BindView(R.id.task_submit)
     TextView taskSubmit;
+
     private int year, month, day;
     private List<PlanTypeBean> typeList = new ArrayList<>();
     private PersonalTaskDetailAdapter monthPlanDetailAdapter;
@@ -88,10 +90,10 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         initView();
         bean = getIntent().getParcelableExtra("bean");
         String from = getIntent().getStringExtra("from");
-        if ("todoPersonal".equals(from)){
+        if ("todoPersonal".equals(from)) {
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
-        }else {
+        } else {
             initdata();
         }
     }
@@ -99,23 +101,32 @@ public class PersonalTaskDetailActivity extends BaseActivity {
     private void initdata() {
 
         SPUtil.put(this, "ids", "task_id", bean.getId());
-        tvLineType.setVisibility(View.VISIBLE);
+        String work_user_name = bean.getWork_user_name();
+        if (work_user_name == null || "".equals(work_user_name)) {
+            taskWorkName.setText("执行人：未指定");
+        } else {
+            taskWorkName.setText("执行人：" + work_user_name);
+        }
+
+        if (bean.getDuty_user_name() == null || "".equals(bean.getDuty_user_name())) {
+            taskGroupName.setText("小组负责人：未指定");
+        } else {
+            taskGroupName.setText("小组负责人：" + bean.getDuty_user_name());
+        }
+
+        tvLineDate.setText("日期："+bean.getYear()+"年"+bean.getMonth()+"月"+bean.getDay()+"日");
 
         tvTableName.setText(bean.getName());
         tvLineName.setText("线路名称 : " + bean.getLine_name());
         tvLineNo.setText("班  组 : " + SPUtil.getDepName(PersonalTaskDetailActivity.this));
-        if ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign())) {
-            tvLineDate.setText("作业内容 : " + bean.getName());
-        } else {
-            tvLineDate.setText("杆塔名称 : " + bean.getName());
-        }
-        tvLineType.setText("执行人 : " + bean.getWork_user_name());
+
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign())) && bean.getWork_user_name() == null) {
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("指派");
-            tvLineType.setText("执行人 : 暂无");
             getPersonal();
+        }else {
+            titleSetting.setVisibility(View.GONE);
         }
         year = bean.getYear();
         month = bean.getMonth();
@@ -275,8 +286,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(PersonalTaskDetailActivity.this, "指派成功", Toast.LENGTH_SHORT).show();
                             titleSetting.setVisibility(View.GONE);
-                            tvLineType.setVisibility(View.VISIBLE);
-                            tvLineType.setText("执行人 : " + username);
+                            taskWorkName.setText("执行人 : " + username);
                             RxRefreshEvent.publish("refreshPersonal");
                             getPersonalList();
                             setResult(RESULT_OK);
@@ -321,7 +331,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 .subscribe(new BaseObserver<GroupTaskBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<GroupTaskBean> t) throws Exception {
-                        bean=t.getResults();
+                        bean = t.getResults();
                         initdata();
                     }
 

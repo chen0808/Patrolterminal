@@ -45,6 +45,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.TypedArrayUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -93,24 +94,18 @@ public class AddDayPlanActivity extends BaseActivity {
     TextView addWeekNumAll;
     @BindView(R.id.add_week_num_ll)
     LinearLayout addWeekNumLl;
-    private List<String> lineNameList = new ArrayList<>();
     private String year;
     private String month;
     private int type = 0;
     private List<DayOfWeekBean> selectType = new ArrayList<>();
     private AddDayAdapter adapter;
     private List<DayOfWeekBean> results;
+    private List<DayOfWeekBean> showList=new ArrayList<>();
     private List<DayOfWeekBean> linList = new ArrayList<>();
     private Disposable subscribe;
     private List<LineTypeBean> typeList = new ArrayList<>();
     private String day;
-    private List<DayOfWeekBean> lineList = new ArrayList<>();
-
     private String sign;
-
-    private List<Tower> selectBean = new ArrayList<>();
-    private LineCheckBean lineCheckBean;
-    private String line_id;
     private String week;
     private String[] types;
     private int selectNum = 0;
@@ -124,7 +119,6 @@ public class AddDayPlanActivity extends BaseActivity {
         initview();
 
         getLineType();
-//        getLine();
         getWeekPlan();
     }
 
@@ -236,70 +230,66 @@ public class AddDayPlanActivity extends BaseActivity {
         alertBuilder.setSingleChoiceItems(types, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int options1) {
+                showList.clear();
+                selectType.clear();
+                selectNum=0;
+                addWeekNumSelect.setText(selectNum+"");
                 monthPlanType.setText(types[options1]);
                 if ("全部".equals(types[options1])) {
                     sign = null;
-                    getWeekPlan();
+                    adapter.setData(results);
+                    if (results == null || results.size() == 0) {
+                        dayNoData.setVisibility(View.VISIBLE);
+                        addWeekNumLl.setVisibility(View.GONE);
+                    } else {
+                        dayNoData.setVisibility(View.GONE);
+                        addWeekNumLl.setVisibility(View.VISIBLE);
+                        allNum = results.size();
+                        addWeekNumAll.setText("/" + allNum + ")");
+                    }
                 } else {
+
+                    //根据工作名称获取工作类型
                     for (int i = 0; i < typeList.size(); i++) {
                         LineTypeBean lineTypeBean = typeList.get(i);
                         if (types[options1].contains(lineTypeBean.getName())) {
                             sign = lineTypeBean.getSign();
-                            getWeekPlan();
                         }
                     }
+                    //根据工作类型过滤
+                    for (int i = 0; i < results.size(); i++) {
+                        DayOfWeekBean dayOfWeekBean = results.get(i);
+                        dayOfWeekBean.setIscheck(false);
+                        String type_sign = dayOfWeekBean.getType_sign();
+                        String[] split = type_sign.split(",");
+                        for (int j = 0; j < split.length; j++) {
+                            if (sign.equals(split[j])){
+                                showList.add(dayOfWeekBean);
+                            }
+                        }
+                    }
+                    adapter.setData(showList);
+                    if (showList == null || showList.size() == 0) {
+                        dayNoData.setVisibility(View.VISIBLE);
+                        addWeekNumLl.setVisibility(View.GONE);
+                    } else {
+                        dayNoData.setVisibility(View.GONE);
+                        addWeekNumLl.setVisibility(View.VISIBLE);
+                        allNum = showList.size();
+                        addWeekNumAll.setText("/" + allNum + ")");
+                    }
                 }
+
                 dialog.dismiss();
             }
         });
 
         AlertDialog typeDialog = alertBuilder.create();
         typeDialog.show();
-//        //条件选择器
-//        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-//            @Override
-//            public void onOptionsSelect(int options1, int option2, int options3, View v) {
-//                typeName = typeSign.get(options1).get(option2);
-//                monthPlanType.setText(typeName);
-//                for (int i = 0; i < typeList.size(); i++) {
-//                    LineTypeBean lineTypeBean = typeList.get(i);
-//                    if (typeName.contains(lineTypeBean.getName())) {
-//                        sign = lineTypeBean.getSign();
-//                    }
-//                }
-//
-//            }
-//        }).build();
-//        pvOptions.setPicker(typeVal, typeSign);
-//        pvOptions.setSelectOptions(0, 0);
-//        pvOptions.show();
+
     }
 
-    //获取每个班组负责的线路
-    public void getLine() {
-        //获取月计划列表
-        BaseRequest.getInstance().getService()
-                .getDayPlan(year, month, SPUtil.getDepId(this))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
-                        lineList = t.getResults();
-                        for (int i = 0; i < lineList.size(); i++) {
-                            DayOfWeekBean bean = lineList.get(i);
-                            String line_name = bean.getLine_name();
-                            if (lineNameList.indexOf(line_name) == -1) {
-                                lineNameList.add(line_name);
-                            }
-                        }
-                    }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                    }
-                });
-    }
 
     //获取每个班组负责的线路
     public void getWeekPlan() {
@@ -312,9 +302,8 @@ public class AddDayPlanActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
-                        selectBean.clear();
-                        selectNum=0;
-                        addWeekNumSelect.setText(selectNum+"");
+
+
                         results = t.getResults();
                         adapter.setData(results);
                         if (results == null || results.size() == 0) {
@@ -415,172 +404,11 @@ public class AddDayPlanActivity extends BaseActivity {
 
     }
 
-    //获取线路杆塔
-    public void getTempTower() {
-        ProgressDialog.show(this, false, "正在加载。。。");
-        BaseRequest.getInstance().getService()
-                .getTempTower(line_id, "name")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<Tower>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<Tower>> t) throws Exception {
-                        ProgressDialog.cancle();
-                        TempTowerAdapter adapter = new TempTowerAdapter(AddDayPlanActivity.this, t.getResults());
-                        monthPlanTypeLv.setAdapter(adapter);
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                    }
-                });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 24 && resultCode == RESULT_OK) {
-            if (data != null) {
-                selectType.clear();
-                lineCheckBean = (LineCheckBean) data.getSerializableExtra("bean");
-                line_id = lineCheckBean.getId();
-                monthPlanLine.setText(lineCheckBean.getName());
-                getTempTower();
-            }
-        }
-    }
-//    public void initType(List<LineTypeBean> list) {
-//        List<String> list1 = new ArrayList<>();
-//        List<String> list2 = new ArrayList<>();
-//        List<String> list3 = new ArrayList<>();
-//        List<String> list4 = new ArrayList<>();
-//        typeVal.add("定巡");
-//        typeVal.add("定检");
-//        typeVal.add("缺陷");
-//        typeVal.add("隐患");
-//        for (int i = 0; i < list.size(); i++) {
-//            LineTypeBean lineTypeBean = list.get(i);
-//            if ("1".equals(lineTypeBean.getVal())) {
-//                list1.add(StringUtil.getTypeSign(lineTypeBean.getSign()));
-//            } else if ("2".equals(lineTypeBean.getVal())) {
-//                list2.add(StringUtil.getTypeSign(lineTypeBean.getSign()));
-//            }
-//        }
-//        list3.add("缺陷处理");
-//        list4.add("隐患消除");
-//        typeSign.add(list1);
-//        typeSign.add(list2);
-//        typeSign.add(list3);
-//        typeSign.add(list4);
-//    }
-
-    class TempTowerAdapter extends BaseAdapter {
-        private Context context;
-        private List<Tower> lineTypeBeans;
-        private int type = 0;
-
-        public TempTowerAdapter(Context context, List<Tower> traceList) {
-            this.context = context;
-            this.lineTypeBeans = traceList;
-        }
-
-        @Override
-        public int getCount() {
-
-            return lineTypeBeans.size();
-
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView != null) {
-                holder = (ViewHolder) convertView.getTag();
-            } else {
-                holder = new ViewHolder();
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_add_group_task, parent, false);
-                holder.itemTroubleName = (TextView) convertView.findViewById(R.id.add_group_task_name);
-                holder.taskType = (TextView) convertView.findViewById(R.id.add_group_task_type);
-                holder.itemTroubleCheck = (CheckBox) convertView.findViewById(R.id.add_group_task_check);
-                holder.itemTaskCheck = (RadioButton) convertView.findViewById(R.id.add_group_task_rb);
-                holder.item = (RelativeLayout) convertView.findViewById(R.id.personal_task_item);
-
-                convertView.setTag(holder);
-            }
-            Tower listBean = lineTypeBeans.get(position);
-            holder.itemTroubleName.setText(listBean.getName());
-            boolean check = listBean.isCheck();
-            if (check == true) {
-                holder.itemTroubleCheck.setChecked(true);
-            } else {
-                holder.itemTroubleCheck.setChecked(false);
-            }
-            holder.taskType.setVisibility(View.GONE);
-            holder.item.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (selectBean.size() == 0) {
-                        Tower tower = new Tower();
-                        tower.setTower_type("2");
-                        tower.setName(listBean.getName());
-                        tower.setTower_id(listBean.getId());
-                        selectBean.add(tower);
-                        listBean.setCheck(true);
-                        holder.itemTroubleCheck.setChecked(true);
-                    } else {
-                        int isExit = 0;
-                        for (int i = 0; i < selectBean.size(); i++) {
-                            Tower dayOfWeekBean = selectBean.get(i);
-                            if (dayOfWeekBean.getTower_id().equals(listBean.getId())) {
-                                isExit = 1;
-                                selectBean.remove(i);
-                                listBean.setCheck(false);
-                                holder.itemTroubleCheck.setChecked(false);
-                                return;
-                            }
-                        }
-                        if (isExit == 0) {
-                            Tower tower = new Tower();
-                            tower.setTower_type("2");
-                            tower.setTower_id(listBean.getId());
-                            tower.setName(listBean.getName());
-                            selectBean.add(tower);
-                            listBean.setCheck(true);
-                            holder.itemTroubleCheck.setChecked(true);
-                        }
-                    }
 
 
-                }
-            });
-            return convertView;
-        }
 
-        public void setData(List<Tower> typeBeanList) {
-            lineTypeBeans = typeBeanList;
-            notifyDataSetChanged();
 
-        }
 
-        class ViewHolder {
-            private TextView itemTroubleName;
-            private TextView taskType;
-            private RelativeLayout item;
-            private CheckBox itemTroubleCheck;
-            private RadioButton itemTaskCheck;
-        }
-    }
 
     public void showDay() {
         Calendar selectedDate = Calendar.getInstance();//系统当前时间

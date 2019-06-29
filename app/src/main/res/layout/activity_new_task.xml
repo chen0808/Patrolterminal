@@ -76,12 +76,34 @@
             >
 
             <TextView
+                android:id="@+id/group_num"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_30"
+                android:layout_weight="1"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginLeft="25dp"
+                android:gravity="center_horizontal|bottom"
+                android:textStyle="bold"
+                android:textColor="@color/line_point_1"
+                android:text="0"
+                />
+            <TextView
+                android:id="@+id/day_plan_num"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_30"
+                android:layout_weight="1"
+                android:textSize="@dimen/sp_16"
+                android:gravity="center_horizontal|bottom"
+                android:textStyle="bold"
+                android:textColor="@color/deffect_color"
+                android:text="0"
+                />
+            <TextView
                 android:id="@+id/group_task_num"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp_30"
                 android:layout_weight="1"
                 android:textSize="@dimen/sp_16"
-                android:layout_marginLeft="@dimen/dp_60"
                 android:gravity="center_horizontal|bottom"
                 android:textStyle="bold"
                 android:textColor="@color/week_plan_num"
@@ -93,7 +115,7 @@
                 android:layout_height="@dimen/dp_30"
                 android:layout_weight="1"
                 android:textSize="@dimen/sp_16"
-                android:layout_marginRight="@dimen/dp_60"
+                android:layout_marginRight="25dp"
                android:textStyle="bold"
                 android:gravity="center_horizontal|bottom"
                 android:textColor="@color/day_plan_num"
@@ -112,5 +134,6 @@
     <com.patrol.terminal.widget.NoScrollViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
+        android:padding="@dimen/dp_10"
         android:layout_height="match_parent" />
 </LinearLayout>

@@ -176,14 +176,18 @@
                         android:src="@mipmap/deal_icon"
                         android:visibility="gone" />
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/add_plan_right"
                         android:layout_width="@dimen/dp_40"
                         android:layout_height="@dimen/dp_40"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/dp_10"
-                        android:scaleType="center"
-                        android:src="@mipmap/add_icon" />
+                        android:textStyle="bold"
+                        android:text="临"
+                        android:gravity="center"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/sp_14"
+                        />
                 </RelativeLayout>
 
                 <RelativeLayout

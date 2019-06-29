@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
@@ -55,8 +57,9 @@ public class AddTowerAdapter extends BaseAdapter {
             holder.tvLineDate = convertView.findViewById(R.id.tv_tower_date);
 
             holder.tvTowerName = (TextView) convertView.findViewById(R.id.tv_tower_name);
-            holder.towerCheck = (CheckBox) convertView.findViewById(R.id.item_add_tower_check);
+            holder.towerCheck = (ImageView) convertView.findViewById(R.id.item_add_tower_check);
             holder.towerType = (TextView) convertView.findViewById(R.id.item_add_tower_type);
+            holder.item = (RelativeLayout) convertView.findViewById(R.id.add_tower_item);
             convertView.setTag(holder);
         }
 
@@ -73,15 +76,16 @@ public class AddTowerAdapter extends BaseAdapter {
         WeekOfMonthBean listBean = lineTypeBeans.get(position);
         boolean check = listBean.isCheck();
         if (check == true) {
-            holder.towerCheck.setChecked(true);
+            holder.towerCheck.setImageResource(R.mipmap.check_yes);
         } else {
-            holder.towerCheck.setChecked(false);
+            holder.towerCheck.setImageResource(R.mipmap.check_no);
         }
-        holder.towerCheck.setOnClickListener(new View.OnClickListener() {
+        holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (holder.towerCheck.isChecked()) {
+                if (!listBean.isCheck()) {
                     listBean.setCheck(true);
+                    holder.towerCheck.setImageResource(R.mipmap.check_yes);
                     String defectId = listBean.getDefect_id() == null ? "" : listBean.getDefect_id();
                     String towersId = listBean.getTowers_id() == null ? "" : listBean.getTowers_id();
                     RxRefreshEvent.publish("add@" + towersId + "@" +
@@ -94,6 +98,7 @@ public class AddTowerAdapter extends BaseAdapter {
 
                 } else {
                     listBean.setCheck(false);
+                    holder.towerCheck.setImageResource(R.mipmap.check_no);
                     RxRefreshEvent.publish("delete@" + listBean.getTowers_id());
 
                 }
@@ -161,8 +166,9 @@ public class AddTowerAdapter extends BaseAdapter {
     static class ViewHolder {
         private TextView tvLineName,tvLineDate;
         private TextView tvTowerName;
-        private CheckBox towerCheck;
+        private ImageView towerCheck;
         private TextView towerType;
+        private RelativeLayout item;
 
     }
 }

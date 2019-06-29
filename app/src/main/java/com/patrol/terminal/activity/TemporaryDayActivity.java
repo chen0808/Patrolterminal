@@ -337,7 +337,7 @@ public class TemporaryDayActivity extends BaseActivity {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_add_group_task, parent, false);
                 holder.itemTroubleName = (TextView) convertView.findViewById(R.id.add_group_task_name);
                 holder.taskType = (TextView) convertView.findViewById(R.id.add_group_task_type);
-                holder.itemTroubleCheck = (CheckBox) convertView.findViewById(R.id.add_group_task_check);
+                holder.itemTroubleCheck = (ImageView) convertView.findViewById(R.id.add_group_task_check);
                 holder.itemTaskCheck = (RadioButton) convertView.findViewById(R.id.add_group_task_rb);
                 holder.item = (RelativeLayout) convertView.findViewById(R.id.personal_task_item);
 
@@ -345,7 +345,12 @@ public class TemporaryDayActivity extends BaseActivity {
             }
             Tower listBean = lineTypeBeans.get(position);
             holder.itemTroubleName.setText(listBean.getName());
-            holder.itemTroubleCheck.setChecked(false);
+            boolean check = listBean.isCheck();
+            if (check==true){
+                holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
+            }else {
+                holder.itemTroubleCheck.setImageResource(R.mipmap.check_no);
+            }
             holder.taskType.setVisibility(View.GONE);
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -356,7 +361,8 @@ public class TemporaryDayActivity extends BaseActivity {
                         tower.setName(listBean.getName());
                         tower.setTower_id(listBean.getId());
                         selectBean.add(tower);
-                        holder.itemTroubleCheck.setChecked(true);
+                        listBean.setCheck(true);
+                        holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
                     }else {
                         int isExit=0;
                         for (int i = 0; i < selectBean.size(); i++) {
@@ -364,7 +370,8 @@ public class TemporaryDayActivity extends BaseActivity {
                             if (dayOfWeekBean.getTower_id().equals(listBean.getId())){
                                 isExit=1;
                                 selectBean.remove(i);
-                                holder.itemTroubleCheck.setChecked(false);
+                                listBean.setCheck(false);
+                                holder.itemTroubleCheck.setImageResource(R.mipmap.check_no);
                                 return;
                             }
                         }
@@ -374,7 +381,8 @@ public class TemporaryDayActivity extends BaseActivity {
                             tower.setTower_id(listBean.getId());
                             tower.setName(listBean.getName());
                             selectBean.add(tower);
-                            holder.itemTroubleCheck.setChecked(true);
+                            listBean.setCheck(true);
+                            holder.itemTroubleCheck.setImageResource(R.mipmap.check_yes);
                         }
                     }
 
@@ -393,7 +401,7 @@ public class TemporaryDayActivity extends BaseActivity {
             private   TextView itemTroubleName;
             private   TextView taskType;
             private   RelativeLayout item;
-            private CheckBox itemTroubleCheck;
+            private ImageView itemTroubleCheck;
             private RadioButton itemTaskCheck;
         }
     }

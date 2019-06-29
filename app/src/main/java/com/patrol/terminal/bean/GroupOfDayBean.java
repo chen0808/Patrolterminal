@@ -57,6 +57,15 @@ public class GroupOfDayBean {
     private String done_status;
     private String done_time;
     private String day_tower_id;
+    private boolean check;
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
 
     public String getStart_id() {
         return start_id;

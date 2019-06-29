@@ -114,7 +114,6 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<TowerListBean>>(mContext) {
 
-
                     @Override
                     protected void onSuccees(BaseResult<List<TowerListBean>> t) throws Exception {
                         ProgressDialog.cancle();

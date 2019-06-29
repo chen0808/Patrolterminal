@@ -16,9 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddGroupTaskActivity;
 import com.patrol.terminal.activity.GroupTaskDetailActivity;
-import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.adapter.GroupTaskAdapter;
-import com.patrol.terminal.adapter.TaskContentAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -26,7 +24,6 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.bean.TaskBean;
-import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.YXtoJXbean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 import com.patrol.terminal.utils.Constant;
@@ -41,7 +38,6 @@ import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,11 +48,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class GroupTaskFrgment extends BaseFragment {
+public class DayDisGroupFrgment extends BaseFragment {
 
 
     @BindView(R.id.task_title)

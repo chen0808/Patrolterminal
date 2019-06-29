@@ -108,11 +108,12 @@ public class NewTaskActivity extends BaseActivity {
             depId="";
         }
         initdate();
-        getTaskNum();
         String time = DateUatil.getTime(new Date(System.currentTimeMillis()));
         SPUtil.putString(this, "date", "time", time);
         String job = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         List<Fragment> fragmentList = new ArrayList<>();
+        fragmentList.add(new PersonalTaskFrgment());
+        fragmentList.add(new PersonalTaskFrgment());
         fragmentList.add(new GroupTaskFrgment());
         fragmentList.add(new PersonalTaskFrgment());
         taskPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
@@ -127,9 +128,7 @@ public class NewTaskActivity extends BaseActivity {
 
             @Override
             public void accept(String type) throws Exception {
-                if (type.equals("refreshNum")) {
-                    getTaskNum();
-                }else if (type.startsWith("refreshGroupNum")){
+                if (type.startsWith("refreshGroupNum")){
                     String[] split = type.split("@");
                     groupTaskNum.setText(split[1]);
                 }else if (type.startsWith("refreshPersonalNum")){
@@ -141,6 +140,8 @@ public class NewTaskActivity extends BaseActivity {
     }
 
     private void initMagicIndicator(String job) {
+        mDataList.add("今日分组");
+        mDataList.add("计划分配");
         mDataList.add("小组任务");
         mDataList.add("个人任务");
         CommonNavigator commonNavigator = new CommonNavigator(this);
@@ -182,7 +183,7 @@ public class NewTaskActivity extends BaseActivity {
         titleContainer.setDividerDrawable(new ColorDrawable() {
             @Override
             public int getIntrinsicWidth() {
-                return UIUtil.dip2px(NewTaskActivity.this, 60);
+                return UIUtil.dip2px(NewTaskActivity.this, 10);
             }
         });
         ViewPagerHelper.bind(magicIndicator4, viewPager);
@@ -220,30 +221,7 @@ public class NewTaskActivity extends BaseActivity {
         month = Integer.parseInt(years[1]);
         day = Integer.parseInt(years[2]);
     }
-    //获取任务个数
-    public void getTaskNum() {
 
-        BaseRequest.getInstance().getService()
-                .getTaskNum(depId, year, month, day, SPUtil.getUserId(this))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<PlanNumBean>(this) {
-
-                    @Override
-                    protected void onSuccees(BaseResult<PlanNumBean> t) throws Exception {
-                        if (t.getCode() == 1) {
-                            PlanNumBean results = t.getResults();
-                            groupTaskNum.setText(results.getCount1()+"");
-                            personalTaskNum.setText(results.getCount2()+"");
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
 
     @Override
     protected void onDestroy() {
