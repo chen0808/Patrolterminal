@@ -2,14 +2,22 @@ package com.patrol.terminal.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.BaseAdapter;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -30,10 +38,13 @@ import com.patrol.terminal.activity.DefectListActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.DefactTvModel;
 import com.patrol.terminal.bean.DefectTypeBean;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.bean.TowerListBean;
+import com.patrol.terminal.sqlite.DefactContentDBHelper;
+import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.PictureSelectorConfig;
@@ -239,7 +250,77 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                 RelativeLayout rlContent = helper.getView(R.id.rl_content);
                 LinearLayout llContent = helper.getView(R.id.ll_content);
                 TextView tvItemContent = helper.getView(R.id.tv_item_content);
-                EditText etContent = helper.getView(R.id.et_content);
+                AutoCompleteTextView tvDiverWay = helper.getView(R.id.tv_diver_way);
+
+                //String data[] = mContext.getResources().getStringArray(R.array.auto_textview_contents);
+                //ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_dropdown_item_1line, data);
+
+                DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(mContext);
+                Cursor cursor = defactContentDBHelper.queryAll();
+                Log.w("linmeng", "cursor.getCount():" + cursor.getCount());
+
+              /*  if (cursor != null && cursor.getCount() > 0) {
+                    String data[] = new String[cursor.getCount()];
+                    cursor.moveToFirst();
+                    for (int i = 0; i < data.length; i++) {
+                        int contentColumnIndex = cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT);
+                        String content = cursor.getString(contentColumnIndex);
+                        data[i] = content;
+                        cursor.moveToNext();
+                    }
+
+                    //ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_dropdown_item_1line, data);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.simple_defact_tv_content_item_layout, R.id.content_tv, data);
+                    //MyArrayAdapter arrayAdapter = new MyArrayAdapter(activity, R.layout.simple_defact_tv_content_item_layout, data);
+
+                    tvDiverWay.setAdapter(adapter);
+                    tvDiverWay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        }
+                    });
+                }*/
+
+
+              CursorAdapter cursorAdapter = new CursorAdapter(mContext, cursor) {
+
+                  @Override
+                  public View newView(Context context, Cursor cursor, ViewGroup parent) {
+                      return LayoutInflater.from(context).inflate(R.layout.simple_defact_tv_content_item_layout, parent,false);
+                  }
+
+                  @Override
+                  public void bindView(View view, Context context, Cursor cursor) {
+                      TextView contentTv =(TextView) view.findViewById(R.id.content_tv);
+                      int contentColumnIndex = cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT);
+                      String content = cursor.getString(contentColumnIndex);
+                      contentTv.setText(content);
+                  }
+
+                  @Override
+                  public String convertToString(Cursor cursor) {
+                      return cursor.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT));
+                  }
+
+                  @Override
+                  public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
+                      if (getFilterQueryProvider() != null) {
+                          return getFilterQueryProvider().runQuery(constraint);
+                      }
+
+                      DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(mContext);
+                      Cursor cursor = defactContentDBHelper.queryFliter(String.valueOf(constraint));
+                      Log.w("linmeng", "cursor.getCount() filter:" + cursor.getCount());
+                      return cursor;
+                  }
+              };
+
+                tvDiverWay.setAdapter(cursorAdapter);
+
+
+
+
                 TextView tvContentType = helper.getView(R.id.tv_content_type);
                 tvContentType.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -301,7 +382,7 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                 ivCommit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        uploadItem(item2, etContent.getText().toString(), tvTime.getText().toString(), rlContent, llContent, tvItemContent);
+                        uploadItem(item2, tvDiverWay.getText().toString(), tvTime.getText().toString(), rlContent, llContent, tvItemContent);
                     }
                 });
                 ImageView ivEdit = helper.getView(R.id.iv_edit);
