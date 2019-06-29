@@ -40,6 +40,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
+/*先从本地数据库取数据，再有网络情况下去服务器数据刷新*/
 public class PatrolContentFrgment extends BaseFragment {
     @BindView(R.id.rv_patrol_content)
     RecyclerView rvPatrolContent;
@@ -59,6 +60,9 @@ public class PatrolContentFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
+        //从本地数据库获取
+
+
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
@@ -83,6 +87,10 @@ public class PatrolContentFrgment extends BaseFragment {
                         rvPatrolContent.setLayoutManager(new LinearLayoutManager(getActivity()));
                         adapter = new PatrolContentAdapter(getData(results), getActivity(), line_id);
                         rvPatrolContent.setAdapter(adapter);
+
+                        //存入到本地数据库  TODO
+
+
                     }
 
                     @Override

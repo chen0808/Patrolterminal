@@ -37,6 +37,7 @@ import com.patrol.terminal.fragment.JXHomeFragment;
 import com.patrol.terminal.fragment.MeFragement;
 import com.patrol.terminal.fragment.TodosManageFragment;
 import com.patrol.terminal.fragment.YXTodosManageFragment;
+import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.training.TrainingHomeFragment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -179,6 +180,11 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         fragmentVp.addOnPageChangeListener(mPageChangeListener);
         llBottomTab.setOnCheckedChangeListener(mOnCheckedChangeListener);
         fragmentVp.setNoScroll(false);
+
+
+
+        DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(this);
+
     }
 
     @Override
