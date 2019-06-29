@@ -133,6 +133,7 @@
         android:paddingTop="@dimen/dp_10"
         android:paddingBottom="15dp"
         android:src="@mipmap/edit_icon"
+        android:visibility="gone"
         />
 
     <ImageView

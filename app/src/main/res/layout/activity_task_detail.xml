@@ -59,14 +59,22 @@
                     android:text="计划月份：2019-04" />
 
                 <TextView
-                    android:id="@+id/tv_line_type"
+                    android:id="@+id/task_group_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="4dp"
-                    android:text="工作类型：定期巡视"
-                    android:visibility="gone" />
+                    android:text="负责人：xxx"
+                   />
 
+                <TextView
+                    android:id="@+id/task_work_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:text="执行人：xxx"
+                    />
                 <TextView
                     android:id="@+id/tv_line_tower"
                     android:layout_width="wrap_content"

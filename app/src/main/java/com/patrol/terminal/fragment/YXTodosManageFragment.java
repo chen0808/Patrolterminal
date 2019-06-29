@@ -126,16 +126,6 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
         fragTodoRv.setLayoutManager(manager);
         toDoManageAdapter = new YXTodoManageAdapter(R.layout.fragment_yxtodo_item, results);
 
-        //  设置侧滑
-        // 设置监听器。
-        fragTodoRv.setSwipeMenuCreator(mSwipeMenuCreator);
-        fragTodoRv.setOnItemMenuClickListener(new OnItemMenuClickListener() {
-            @Override
-            public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
-                // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
-                menuBridge.closeMenu();
-            }
-        });
         fragTodoRv.setAdapter(toDoManageAdapter);
         fragTodoRef.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -210,28 +200,7 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
         }
     }
 
-    // 创建菜单：
-    SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
-        @Override
-        public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
-            int width = getResources().getDimensionPixelSize(R.dimen.dp_50);
-//
-            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
-            // 2. 指定具体的高，比如80;
-            // 3. WRAP_CONTENT，自身高度，不推荐;
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            SwipeMenuItem deleteItem1 = new SwipeMenuItem(getContext());
-            deleteItem1.setWidth(width);
-            deleteItem1.setHeight(height);
-            deleteItem1.setBackground(R.color.home_red);
-            deleteItem1.setTextSize(15);
-            deleteItem1.setTextColorResource(R.color.white);
-            deleteItem1.setText("删除");
-            rightMenu.addMenuItem(deleteItem1); // 在Item右侧添加一个菜单。
-            // 注意：哪边不想要菜单，那么不要添加即可。
-        }
-    };
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

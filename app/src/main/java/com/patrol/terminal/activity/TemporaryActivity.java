@@ -3,10 +3,13 @@ package com.patrol.terminal.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -39,6 +42,7 @@ import com.patrol.terminal.bean.SavaLineBean2;
 import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.TowerPart;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -52,6 +56,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class TemporaryActivity extends BaseActivity {
@@ -119,6 +125,7 @@ public class TemporaryActivity extends BaseActivity {
     private String endDay;
     private String day;
     private AlertDialog personalGroupDialog;
+    private Disposable subscribe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +136,6 @@ public class TemporaryActivity extends BaseActivity {
     }
 
     private void initview() {
-
 //        String time = DateUatil.getCurMonth();
 //        String[] years = time.split("年");
 //        String[] months = years[1].split("月");
@@ -162,6 +168,18 @@ public class TemporaryActivity extends BaseActivity {
             endDay = end[1];
         }
         getLineType();
+
+        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.equals("hide")) {
+                    hideBottomUIMenu();
+                } else if (type.equals("show")) {
+                    showBottomUIMenu();
+                }
+            }
+        });
     }
 
 
@@ -219,6 +237,7 @@ public class TemporaryActivity extends BaseActivity {
                     Toast.makeText(this, "请选择杆段", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                ProgressDialog.show(this, true, "正在保存。。。");
                 if (month == null) {
                     saveWeekPlan();
 
@@ -275,6 +294,14 @@ public class TemporaryActivity extends BaseActivity {
         }).build();
         pvOptions.setPicker(typeNameList);
         pvOptions.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (subscribe != null) {
+            subscribe.dispose();
+        }
     }
 
     public void initType(List<LineTypeBean> list) {
@@ -418,12 +445,14 @@ public class TemporaryActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(TemporaryActivity.this, "制定成功", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
+                            ProgressDialog.cancle();
                             finish();
                         }
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                     }
                 });
     }
@@ -457,12 +486,14 @@ public class TemporaryActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(TemporaryActivity.this, "制定成功", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
+                            ProgressDialog.cancle();
                             finish();
                         }
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                     }
                 });
     }
@@ -497,12 +528,14 @@ public class TemporaryActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             Toast.makeText(TemporaryActivity.this, "制定成功", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
+                            ProgressDialog.cancle();
                             finish();
                         }
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                     }
                 });
     }
@@ -684,5 +717,39 @@ public class TemporaryActivity extends BaseActivity {
             private CheckBox itemTroubleCheck;
             private RadioButton itemTaskCheck;
         }
+    }
+
+    protected void hideBottomUIMenu() {
+
+                int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        //布局位于状态栏下方
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                        //全屏
+//                        View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        //隐藏导航栏
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                if (Build.VERSION.SDK_INT >= 19) {
+                    uiOptions |= 0x00001000;
+                } else {
+                    uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+                }
+                getWindow().getDecorView().setSystemUiVisibility(uiOptions);
+
+    }
+
+    protected void showBottomUIMenu() {
+        //显示虚拟按键
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) {
+            //低版本sdk
+            View v = getWindow().getDecorView();
+            v.setSystemUiVisibility(View.VISIBLE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE ;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+
+
     }
 }

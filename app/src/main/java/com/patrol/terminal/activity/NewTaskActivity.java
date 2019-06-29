@@ -129,6 +129,12 @@ public class NewTaskActivity extends BaseActivity {
             public void accept(String type) throws Exception {
                 if (type.equals("refreshNum")) {
                     getTaskNum();
+                }else if (type.startsWith("refreshGroupNum")){
+                    String[] split = type.split("@");
+                    groupTaskNum.setText(split[1]);
+                }else if (type.startsWith("refreshPersonalNum")){
+                    String[] split = type.split("@");
+                    personalTaskNum.setText(split[1]);
                 }
             }
         });

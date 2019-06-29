@@ -17,10 +17,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="163dp"
-        android:text="可视化立体巡检"
+        android:layout_marginTop="143dp"
+        android:text="可 视 化 立 体 巡 检"
         android:textColor="@color/white"
-        android:textSize="25sp" />
+        android:textStyle="bold"
+        android:textSize="30sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

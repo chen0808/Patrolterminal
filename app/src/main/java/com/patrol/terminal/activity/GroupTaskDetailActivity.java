@@ -8,10 +8,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GroupTaskDetailAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -34,6 +30,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,8 +61,10 @@ public class GroupTaskDetailActivity extends BaseActivity {
     TextView tvLineNo;
     @BindView(R.id.tv_line_date)
     TextView tvLineDate;
-    @BindView(R.id.tv_line_type)
-    TextView tvLineType;
+    @BindView(R.id.task_group_name)
+    TextView taskGroupName;
+    @BindView(R.id.task_work_name)
+    TextView taskWorkName;
     @BindView(R.id.tv_line_tower)
     TextView tvLineTower;
     @BindView(R.id.month_plan_detail_rc)
@@ -89,10 +90,10 @@ public class GroupTaskDetailActivity extends BaseActivity {
         initView();
         bean = (GroupTaskBean) getIntent().getParcelableExtra("GroupTaskBean");
         String from = getIntent().getStringExtra("from");
-        if ("todoGroup".equals(from)){
+        if ("todoGroup".equals(from)) {
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
-        }else {
+        } else {
             getGroupList(bean.getId());
         }
 
@@ -118,11 +119,11 @@ public class GroupTaskDetailActivity extends BaseActivity {
     //获取月计划列表
     public void getGroupList() {
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-       if ((jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_LEADER))&& "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
+        if ((jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_LEADER)) && "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
             type = 1;
             taskSubmit.setVisibility(View.VISIBLE);
 
-            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                 titleSettingTv.setText("指派");
                 titleSetting.setVisibility(View.VISIBLE);
                 getPersonal();
@@ -136,33 +137,32 @@ public class GroupTaskDetailActivity extends BaseActivity {
             taskSubmit.setBackgroundColor(getResources().getColor(R.color.base_status_bar));
             tvTableName.setVisibility(View.VISIBLE);
             tvTableName.setText("关于" + bean.getLine_name() + bean.getName() + "的抢单任务");
-           if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)||jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
-               titleSettingTv.setText("撤销");
-               titleSetting.setVisibility(View.VISIBLE);
-           }else {
-               titleSetting.setVisibility(View.GONE);
-           }
-        }else {
-           tvTableName.setVisibility(View.GONE);
-           taskSubmit.setVisibility(View.GONE);
-           titleSetting.setVisibility(View.GONE);
-       }
-
-        if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
-            String work_user_name = bean.getWork_user_name();
-            tvLineType.setVisibility(View.VISIBLE);
-            if (work_user_name==null||"".equals(work_user_name)){
-                tvLineType.setText("执行人：未指定");
-            }else {
-                tvLineType.setText("执行人："+work_user_name);
+            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                titleSettingTv.setText("撤销");
+                titleSetting.setVisibility(View.VISIBLE);
+            } else {
+                titleSetting.setVisibility(View.GONE);
             }
-        }else {
-            if (bean.getDuty_user_name()==null||"".equals(bean.getDuty_user_name())){
-                tvLineDate.setText("小组负责人：未指定" );
-            }else {
-                tvLineDate.setText("小组负责人：" + bean.getDuty_user_name());
-            }
+        } else {
+            tvTableName.setVisibility(View.GONE);
+            taskSubmit.setVisibility(View.GONE);
+            titleSetting.setVisibility(View.GONE);
         }
+
+        tvLineDate.setText("日期："+bean.getYear()+"年"+bean.getMonth()+"月"+bean.getDay()+"日");
+            String work_user_name = bean.getWork_user_name();
+            if (work_user_name == null || "".equals(work_user_name)) {
+                taskWorkName.setText("执行人：未指定");
+            } else {
+                taskWorkName.setText("执行人：" + work_user_name);
+            }
+
+            if (bean.getDuty_user_name() == null || "".equals(bean.getDuty_user_name())) {
+                taskGroupName.setText("小组负责人：未指定");
+            } else {
+                taskGroupName.setText("小组负责人：" + bean.getDuty_user_name());
+            }
+
 
         tvLineName.setText("线路名称：" + bean.getLine_name());
         tvLineNo.setText("班  组：" + bean.getDep_name());
@@ -181,7 +181,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.title_back, R.id.task_submit,R.id.title_setting_tv})
+    @OnClick({R.id.title_back, R.id.task_submit, R.id.title_setting_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -191,7 +191,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                 String name = titleSettingTv.getText().toString();
                 if ("指派".equals(name)) {
                     showPersonalGroup();
-                }else if ("撤销".equals(name)){
+                } else if ("撤销".equals(name)) {
                     cancleRobTask();
                 }
 
@@ -210,7 +210,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
     //生成抢单任务
     public void createRobTask() {
         ProgressDialog.show(this, false, "正在加载。。。");
-        List<CreateRobTaskBean> list=new ArrayList();
+        List<CreateRobTaskBean> list = new ArrayList();
         CreateRobTaskBean createRobTaskBean = new CreateRobTaskBean();
         createRobTaskBean.setId(bean.getId());
         createRobTaskBean.setIs_rob("1");
@@ -220,9 +220,9 @@ public class GroupTaskDetailActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        createRobTaskBean.setYear(bean.getYear()+"");
-        createRobTaskBean.setMonth(bean.getMonth()+"");
-        createRobTaskBean.setDay(bean.getDay()+"");
+        createRobTaskBean.setYear(bean.getYear() + "");
+        createRobTaskBean.setMonth(bean.getMonth() + "");
+        createRobTaskBean.setDay(bean.getDay() + "");
         createRobTaskBean.setName(bean.getName());
         createRobTaskBean.setFrom_user_id(SPUtil.getUserId(this));
         createRobTaskBean.setFrom_user_name(SPUtil.getUserName(this));
@@ -258,18 +258,19 @@ public class GroupTaskDetailActivity extends BaseActivity {
                     }
                 });
     }
+
     //撤销抢单任务
     public void cancleRobTask() {
         ProgressDialog.show(this, false, "正在加载。。。");
-        List<CreateRobTaskBean> list=new ArrayList();
+        List<CreateRobTaskBean> list = new ArrayList();
         CreateRobTaskBean createRobTaskBean = new CreateRobTaskBean();
         createRobTaskBean.setId(bean.getId());
         createRobTaskBean.setIs_rob("0");
         createRobTaskBean.setGroup_id(bean.getGroup_id());
         createRobTaskBean.setLine_name(bean.getLine_name());
-        createRobTaskBean.setYear(bean.getYear()+"");
-        createRobTaskBean.setMonth(bean.getMonth()+"");
-        createRobTaskBean.setDay(bean.getDay()+"");
+        createRobTaskBean.setYear(bean.getYear() + "");
+        createRobTaskBean.setMonth(bean.getMonth() + "");
+        createRobTaskBean.setDay(bean.getDay() + "");
         createRobTaskBean.setName(bean.getName());
         createRobTaskBean.setFrom_user_id(SPUtil.getUserId(this));
         createRobTaskBean.setFrom_user_name(SPUtil.getUserName(this));
@@ -304,6 +305,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                     }
                 });
     }
+
     //抢单
     public void addPersonTask(String user_id, String username, int flag) {
         ProgressDialog.show(this, false, "正在抢单。。。");
@@ -319,17 +321,16 @@ public class GroupTaskDetailActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
-                            type = 0;
-                            taskSubmit.setVisibility(View.GONE);
-                            tvTableName.setVisibility(View.GONE);
-                            if (flag == 1) {
-                                Toast.makeText(GroupTaskDetailActivity.this, "抢单成功，请到您的个人任务列表中查看", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(GroupTaskDetailActivity.this, "指派成功", Toast.LENGTH_SHORT).show();
-                            }
-                            tvLineType.setVisibility(View.VISIBLE);
-                            tvLineType.setText("执行人 : " + username);
-                            RxRefreshEvent.publish("refreshPersonal");
+                        type = 0;
+                        taskSubmit.setVisibility(View.GONE);
+                        tvTableName.setVisibility(View.GONE);
+                        if (flag == 1) {
+                            Toast.makeText(GroupTaskDetailActivity.this, "抢单成功，请到您的个人任务列表中查看", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(GroupTaskDetailActivity.this, "指派成功", Toast.LENGTH_SHORT).show();
+                        }
+                        taskWorkName.setText("执行人 : " + username);
+                        RxRefreshEvent.publish("refreshPersonal");
                         RxRefreshEvent.publish("refreshTodo");
                         RxRefreshEvent.publish("refreshNum");
                         setResult(RESULT_OK);
@@ -361,7 +362,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                 .subscribe(new BaseObserver<GroupTaskBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<GroupTaskBean> t) throws Exception {
-                        bean=t.getResults();
+                        bean = t.getResults();
                         getGroupList();
                         ProgressDialog.cancle();
                     }
@@ -373,6 +374,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                         ProgressDialog.cancle();
 
                     }
+
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
@@ -380,6 +382,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                 });
 
     }
+
     //获取每个班组组员列表
     public void getPersonal() {
 
@@ -396,6 +399,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                             personals[i] = personalList.get(i).getUser_name();
                         }
                     }
+
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                     }
@@ -431,8 +435,8 @@ public class GroupTaskDetailActivity extends BaseActivity {
     }
 
     //保存
-    public void savaGroupTask(  DepUserBean depUserBean) {
-    List<GroupTaskBean> selectBean=new ArrayList<>();
+    public void savaGroupTask(DepUserBean depUserBean) {
+        List<GroupTaskBean> selectBean = new ArrayList<>();
         bean.setWork_user_id(depUserBean.getUser_id());
         bean.setWork_user_name(depUserBean.getUser_name());
         bean.setFrom_user_id(SPUtil.getUserId(this));

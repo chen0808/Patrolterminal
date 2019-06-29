@@ -159,7 +159,7 @@ public class PersonalTaskFrgment extends BaseFragment {
     //获取小组任务列表
     public void getGroupList() {
         BaseRequest.getInstance().getService()
-                .getPersonalOfGroup(year, month, day,null,null,"1",userid,"type_sign,line_id")
+                .getPersonalOfGroup(year, month, day,null,null,"1",userid,"line_id,name")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(getContext()) {
@@ -167,6 +167,7 @@ public class PersonalTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         personalTaskAdapter.setNewData(result);
+                        RxRefreshEvent.publish("refreshPersonalNum@"+result.size());
                         mRefrsh.setRefreshing(false);
                         ProgressDialog.cancle();
                     }

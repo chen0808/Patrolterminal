@@ -42,13 +42,12 @@ public class NextDayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHo
 //            viewHolder.setVisible(R.id.tv_time, true);
 //        }
 
-        //编辑
-        ImageView edit = viewHolder.getView(R.id.iv_edit);
-        AdapterUtils.setStatus(edit, item.getAudit_status());
+
 
         //审核状态
         HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
         horizontalLineView.setStatus(item.getAudit_status());
+
 
         //计划类型
         TextView tvContent = viewHolder.getView(R.id.tv_content);

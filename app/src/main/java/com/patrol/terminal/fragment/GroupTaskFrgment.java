@@ -74,6 +74,7 @@ public class GroupTaskFrgment extends BaseFragment {
     @BindView(R.id.plan_refresh)
     SwipeRefreshLayout mRefrsh;
 
+
     private GroupTaskAdapter groupTaskAdapter;
     private TimePickerView pvTime;
     private List<GroupTaskBean> result = new ArrayList<>();
@@ -84,7 +85,7 @@ public class GroupTaskFrgment extends BaseFragment {
     private String userId, duty_user_id;
     private String depId;
     private String jobType;
-    private Disposable refreshGroup;
+    private boolean isRefresh=true;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -125,15 +126,7 @@ public class GroupTaskFrgment extends BaseFragment {
                 startActivityForResult(intent, 11);
             }
         });
-        refreshGroup = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
-            @Override
-            public void accept(String type) throws Exception {
-                if (type.equals("refreshGroup")) {
-                    getData();
-                }
-            }
-        });
 
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -162,7 +155,8 @@ public class GroupTaskFrgment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getData();;
+        if (isRefresh){
+        getData();}
     }
 
     //获取小组任务列表
@@ -186,7 +180,9 @@ public class GroupTaskFrgment extends BaseFragment {
                                 planRv.setSwipeItemMenuEnabled(i,false);
                             }
                         }
+                        RxRefreshEvent.publish("refreshGroupNum@"+result.size());
                         mRefrsh.setRefreshing(false);
+                        isRefresh=true;
                         ProgressDialog .cancle();
                     }
 
@@ -217,12 +213,14 @@ public class GroupTaskFrgment extends BaseFragment {
                             planSubmit.setVisibility(View.GONE);
                         }
                         mRefrsh.setRefreshing(false);
+                        isRefresh=true;
                         ProgressDialog .cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         mRefrsh.setRefreshing(false);
+                        isRefresh=true;
                         ProgressDialog .cancle();
                     }
                 });
@@ -241,13 +239,16 @@ public class GroupTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         groupTaskAdapter.setNewData(result);
+                        RxRefreshEvent.publish("refreshGroupNum@"+result.size());
                         mRefrsh.setRefreshing(false);
+                        isRefresh=true;
                         ProgressDialog .cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         mRefrsh.setRefreshing(false);
+                        isRefresh=true;
                         ProgressDialog .cancle();
                     }
                 });
@@ -264,6 +265,7 @@ public class GroupTaskFrgment extends BaseFragment {
     }
 
     public void showDay() {
+        isRefresh=false;
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();
         startDate.set(2018, 1, 23);
@@ -278,8 +280,9 @@ public class GroupTaskFrgment extends BaseFragment {
                 time = DateUatil.getDay(date);
                 taskDate.setText(time);
                 RxRefreshEvent.publish("refreshNum");
+                ProgressDialog.show(getContext(),true,"正在加载。。。");
                 inteDate();
-                getGroupList();
+               getData();
             }
         })
                 .setDate(selectedDate)
@@ -316,28 +319,11 @@ public class GroupTaskFrgment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 11 && resultCode == -1) {
-            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                taskAdd.setVisibility(View.VISIBLE);
-                depId = SPUtil.getDepId(getContext());
-                getGroupList();
-            } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-                duty_user_id = SPUtil.getUserId(getContext());
-                getGroupList();
-            } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-                userId = SPUtil.getUserId(getContext());
-                getGroupListZy();
-            }
-            getRepairList();
+           getData();
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (refreshGroup != null) {
-            refreshGroup.dispose();
-        }
-    }
+
 
     //消除所有查看类型待办
     public void clearTodoAll() {

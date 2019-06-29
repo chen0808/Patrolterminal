@@ -9,6 +9,42 @@ public class TowerPart implements Serializable {
     private String start_id;
     private String end_id;
     private String tower_type;
+    private int start_sort;
+    private int end_sort;
+    private int start_index;
+    private int end_index;
+
+    public int getStart_index() {
+        return start_index;
+    }
+
+    public void setStart_index(int start_index) {
+        this.start_index = start_index;
+    }
+
+    public int getEnd_index() {
+        return end_index;
+    }
+
+    public void setEnd_index(int end_index) {
+        this.end_index = end_index;
+    }
+
+    public int getStart_sort() {
+        return start_sort;
+    }
+
+    public void setStart_sort(int start_sort) {
+        this.start_sort = start_sort;
+    }
+
+    public int getEnd_sort() {
+        return end_sort;
+    }
+
+    public void setEnd_sort(int end_sort) {
+        this.end_sort = end_sort;
+    }
 
     public TowerPart(String name, String start_id, String end_id, String tower_type) {
         this.name = name;
