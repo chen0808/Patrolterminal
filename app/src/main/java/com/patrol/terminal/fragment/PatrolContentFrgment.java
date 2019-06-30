@@ -98,7 +98,6 @@ public class PatrolContentFrgment extends BaseFragment {
 //        });
         //从本地数据库获取
 
-
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override

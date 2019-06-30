@@ -11,7 +11,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.patrol.terminal.R;
 import com.patrol.terminal.bean.DefactTvModel;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import jxl.Sheet;
 import jxl.Workbook;
 
 public class MyOpenhelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "patrol_db";
+    private static final String DB_NAME = "patrol_defect.db3";
     private static final int DB_VERSION = 1;
     private static final String TAG = "MyOpenhelper";
     private SQLiteDatabase mDb;
