@@ -1,15 +1,24 @@
 package com.patrol.terminal.adapter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,6 +27,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.PatrolContentBean;
+import com.patrol.terminal.sqlite.DefactContentDBHelper;
+import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.utils.Constant;
 
 import java.util.ArrayList;
@@ -45,6 +56,13 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
         RadioGroup rgTitle = helper.getView(R.id.rg_title);
         RadioButton defectFalse = (RadioButton) rgTitle.getChildAt(1);
         LinearLayout llCOntent = helper.getView(R.id.ll_content);
+        AutoCompleteTextView tvDiverWay = helper.getView(R.id.tv_diver_way);
+
+        RadioGroup rgContentType = helper.getView(R.id.rg_content_type);
+        RadioButton checkOneRb = (RadioButton) rgContentType.getChildAt(0);
+        RadioButton checkTwoRb = (RadioButton) rgContentType.getChildAt(1);
+        RadioButton checkThreeRb = (RadioButton) rgContentType.getChildAt(2);
+
         rgTitle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -67,6 +85,85 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
                 }
             }
         });
+
+        DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(mContext);
+        Cursor cursor = defactContentDBHelper.queryAll();
+
+        CursorAdapter cursorAdapter = new CursorAdapter(mContext, cursor) {
+
+            @Override
+            public View newView(Context context, Cursor cursor, ViewGroup parent) {
+                return LayoutInflater.from(context).inflate(R.layout.simple_defact_tv_content_item_layout, parent,false);
+            }
+
+            @Override
+            public void bindView(View view, Context context, Cursor cursor) {
+                TextView contentTv =(TextView) view.findViewById(R.id.content_tv);
+                int contentColumnIndex = cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT);
+                String content = cursor.getString(contentColumnIndex);
+                contentTv.setText(content);
+            }
+
+            @Override
+            public String convertToString(Cursor cursor) {
+                return cursor.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT));
+            }
+
+            @Override
+            public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
+                if (getFilterQueryProvider() != null) {
+                    return getFilterQueryProvider().runQuery(constraint);
+                }
+
+                DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(mContext);
+                Cursor cursor = defactContentDBHelper.queryFliter(String.valueOf(constraint));
+                Log.w("linmeng", "cursor.getCount() filter:" + cursor.getCount());
+                return cursor;
+            }
+        };
+
+        tvDiverWay.setAdapter(cursorAdapter);
+        tvDiverWay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor1 = cursorAdapter.getCursor();
+                if(cursor1 != null && cursor1.getCount() > 0) {
+                    boolean isExist = cursor1.moveToPosition(position);
+                    if (isExist) {
+                        String levelStr = cursor1.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.LEVEL));
+                        Log.w("linmeng", "levelStr:" + levelStr);   //这里获取的是缺陷等级，给陈飞用！  TODO
+                        if (TextUtils.isEmpty(levelStr)) {
+                            checkOneRb.setChecked(true);
+                            checkTwoRb.setChecked(false);
+                            checkThreeRb.setChecked(false);
+                        }else {
+                            if (levelStr.contains("危急")) {
+                                checkOneRb.setChecked(true);
+                                checkTwoRb.setChecked(false);
+                                checkThreeRb.setChecked(false);
+                            }else if (levelStr.contains("严重")) {
+                                checkOneRb.setChecked(false);
+                                checkTwoRb.setChecked(true);
+                                checkThreeRb.setChecked(false);
+                            }else if (levelStr.contains("一般")) {
+                                checkOneRb.setChecked(false);
+                                checkTwoRb.setChecked(false);
+                                checkThreeRb.setChecked(true);
+                            }else {   //默认为一般
+                                checkOneRb.setChecked(true);
+                                checkTwoRb.setChecked(false);
+                                checkThreeRb.setChecked(false);
+                            }
+                        }
+
+
+                    }
+                }
+            }
+        });
+
+
+
 //        if (item.getStatus().equals("0")) {
 //            helper.setImageResource(R.id.iv_check, R.mipmap.patrol_undefined);
 //        } else if (item.getStatus().equals("1")) {

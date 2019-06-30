@@ -33,6 +33,7 @@ import com.patrol.terminal.bean.PatrolContentBean;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -53,6 +54,7 @@ import java.util.List;
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /*先从本地数据库取数据，再有网络情况下去服务器数据刷新*/

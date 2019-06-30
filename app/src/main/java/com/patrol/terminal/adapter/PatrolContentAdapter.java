@@ -313,8 +313,8 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                   }
               };
 
-                tvDiverWay.setAdapter(cursorAdapter);
-                tvDiverWay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+              tvDiverWay.setAdapter(cursorAdapter);
+              tvDiverWay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Cursor cursor1 = cursorAdapter.getCursor();

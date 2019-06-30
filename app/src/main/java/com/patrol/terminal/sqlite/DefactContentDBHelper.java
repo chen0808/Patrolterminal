@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class DefactContentDBHelper {
 
-    private static final String TAG = "SMSDBHelper";
+    private static final String TAG = "DefactContentDBHelper";
     private SQLiteDatabase db;
     private MyOpenhelper openHelper;
 

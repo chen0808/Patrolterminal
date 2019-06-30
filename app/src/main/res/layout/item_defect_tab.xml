@@ -59,7 +59,7 @@
             android:layout_height="1dp"
             android:background="@color/bg_gray"></View>
 
-        <EditText
+       <!-- <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
@@ -68,7 +68,23 @@
             android:minHeight="80dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:textSize="14sp" />
+            android:textSize="14sp" />-->
+
+        <AutoCompleteTextView
+            android:id="@+id/tv_diver_way"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
+            android:completionHintView="@null"
+            android:gravity="top"
+            android:hint="填写缺陷内容"
+            android:completionThreshold="1"
+            android:dropDownHorizontalOffset="5dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="14sp"
+            android:background="@null"
+            android:popupBackground="@drawable/btn_white" />
 
         <GridView
             android:id="@+id/gridView"
