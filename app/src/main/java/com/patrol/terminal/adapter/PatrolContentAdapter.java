@@ -314,7 +314,19 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
               };
 
                 tvDiverWay.setAdapter(cursorAdapter);
-
+                tvDiverWay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Cursor cursor1 = cursorAdapter.getCursor();
+                        if(cursor1 != null && cursor1.getCount() > 0) {
+                            boolean isExist = cursor1.moveToPosition(position);
+                            if (isExist) {
+                                String levelStr = cursor1.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.LEVEL));
+                                Log.w("linmeng", "levelStr:" + levelStr);   //这里获取的是缺陷等级，给陈飞用！  TODO
+                            }
+                        }
+                    }
+                });
 
 
 
