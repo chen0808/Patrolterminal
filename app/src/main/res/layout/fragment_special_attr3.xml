@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,6 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:text="三跨"
+                    android:layout_centerVertical="true"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
 
@@ -45,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                >
 
                 <!--1.跨高速公路-->
                 <RelativeLayout
@@ -70,127 +73,16 @@
                         android:padding="6dp"
                         android:src="@mipmap/add_icon" />
                 </RelativeLayout>
-
-                <LinearLayout
-                    android:id="@+id/guagasugonglu_item_layout"
+                <!--三防 1.跨高速公路  编辑内容-->
+                <com.patrol.terminal.widget.SankuaEditView
+                    android:id="@+id/cus_sk_gggl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="60dp"
                     android:layout_marginTop="4dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    />
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
-                        android:background="@drawable/stoke_gray"
-                        android:padding="4dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="历史特殊属性" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="100dp"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="100dp"
-                            android:layout_marginTop="28dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="220dp"
-                            android:layout_marginTop="28dp" />
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
-                        android:background="@drawable/stoke_gray"
-                        android:orientation="horizontal"
-                        android:padding="4dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="填写隐患内容" />
-
-                        <AutoCompleteTextView
-                            android:id="@+id/tv_diver_way"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:completionHintView="@null"
-                            android:completionThreshold="1"
-                            android:dropDownHorizontalOffset="5dp"
-                            android:gravity="center_vertical"
-                            android:padding="8dp"
-                            android:textColor="@color/black" />
-                    </LinearLayout>
-
-                    <LinearLayout
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
-                        android:background="@drawable/stoke_gray"
-                        android:orientation="horizontal"
-                        android:padding="4dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="选择隐患等级" />
-
-                        <org.angmarch.views.NiceSpinner
-                            android:id="@+id/ns_content_type_guagasugonglu"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp" />
-                    </LinearLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
-                        android:layout_marginBottom="4dp"
-                        android:background="@drawable/stoke_gray">
-
-                        <GridView
-                            android:id="@+id/gridView_guagasugonglu"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:columnWidth="50dp"
-                            android:numColumns="auto_fit" />
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="8dp"
-                            android:padding="4dp"
-                            android:src="@mipmap/patrol_save" />
-                    </RelativeLayout>
-                </LinearLayout>
 
                 <!--2.跨高速铁路-->
                 <RelativeLayout
@@ -198,6 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
                     android:visibility="visible">
 
                     <TextView
@@ -222,69 +115,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:visibility="gone"
+                     >
 
-                    <RelativeLayout
+                    <AutoCompleteTextView
+                        android:id="@+id/tv_yh_ggtl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
-                        android:background="@drawable/stoke_gray"
-                        android:padding="4dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="历史特殊属性" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="100dp"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="100dp"
-                            android:layout_marginTop="28dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="220dp"
-                            android:layout_marginTop="28dp" />
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
-                        android:background="@drawable/stoke_gray"
-                        android:orientation="horizontal"
-                        android:padding="4dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="填写隐患内容" />
-
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp" />
-                    </LinearLayout>
+                        android:completionHintView="@null"
+                        android:completionThreshold="1"
+                        android:dropDownHorizontalOffset="5dp"
+                        android:gravity="center_vertical"
+                        android:hint="填写隐患内容"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:textColor="@color/black" />
 
                     <LinearLayout
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
                         android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
                         android:background="@drawable/stoke_gray"
                         android:orientation="horizontal"
                         android:padding="4dp">
@@ -294,19 +147,58 @@
                             android:layout_height="wrap_content"
                             android:text="选择隐患等级" />
 
-                        <org.angmarch.views.NiceSpinner
-                            android:id="@+id/ns_content_type_gaosutielu"
+                        <RadioGroup
+                            android:id="@+id/sk_ggtl"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp" />
+                            android:layout_height="@dimen/dp_48"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/base_navigation_bar"
+                            android:baselineAligned="true"
+                            android:paddingLeft="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/sk_ggtl_yb"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="一般"
+                                android:checked="true"
+                                android:drawableLeft="@drawable/selector_check"
+                                android:textSize="13sp" />
+
+                            <RadioButton
+                                android:id="@+id/sk_ggtl_zd"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="重大"
+                                android:drawableLeft="@drawable/selector_check"
+                                android:textSize="13sp" />
+
+                            <RadioButton
+                                android:id="@+id/sk_ggtl_jj"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="紧急"
+                                android:drawableLeft="@drawable/selector_check"
+                                android:textSize="13sp" />
+
+                        </RadioGroup>
                     </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
                         android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
                         android:layout_marginBottom="4dp"
                         android:background="@drawable/stoke_gray">
 
@@ -361,69 +253,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:visibility="gone"
+                     >
 
-                    <RelativeLayout
+                    <AutoCompleteTextView
+                        android:id="@+id/tv_yh_pttl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
-                        android:background="@drawable/stoke_gray"
-                        android:padding="4dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="历史特殊属性" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="100dp"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="100dp"
-                            android:layout_marginTop="28dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="220dp"
-                            android:layout_marginTop="28dp" />
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
-                        android:background="@drawable/stoke_gray"
-                        android:orientation="horizontal"
-                        android:padding="4dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="填写隐患内容" />
-
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp" />
-                    </LinearLayout>
+                        android:completionHintView="@null"
+                        android:completionThreshold="1"
+                        android:dropDownHorizontalOffset="5dp"
+                        android:gravity="center_vertical"
+                        android:hint="填写隐患内容"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:textColor="@color/black" />
 
                     <LinearLayout
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
                         android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
                         android:background="@drawable/stoke_gray"
                         android:orientation="horizontal"
                         android:padding="4dp">
@@ -433,19 +285,59 @@
                             android:layout_height="wrap_content"
                             android:text="选择隐患等级" />
 
-                        <org.angmarch.views.NiceSpinner
-                            android:id="@+id/ns_content_type_guaputongtielu"
+                        <RadioGroup
+                            android:id="@+id/sk_pttl"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp" />
+                            android:layout_height="@dimen/dp_48"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/base_navigation_bar"
+                            android:baselineAligned="true"
+                            android:paddingLeft="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/sk_pttl_yb"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="一般"
+                                android:checked="true"
+                                android:drawableLeft="@drawable/selector_check"
+                                android:textSize="13sp" />
+
+                            <RadioButton
+                                android:id="@+id/sk_pttl_zd"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="重大"
+                                android:drawableLeft="@drawable/selector_check"
+                                android:textSize="13sp" />
+
+                            <RadioButton
+                                android:id="@+id/sk_pttl_jj"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="紧急"
+                                android:drawableLeft="@drawable/selector_check"
+                                android:textSize="13sp" />
+
+                        </RadioGroup>
+
                     </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
                         android:layout_marginTop="4dp"
-                        android:layout_marginRight="40dp"
                         android:layout_marginBottom="4dp"
                         android:background="@drawable/stoke_gray">
 
@@ -480,6 +372,7 @@
 
             <!--二.六防-->
             <RelativeLayout
+                android:id="@+id/iv_expand_liufang"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="8dp">
@@ -489,11 +382,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:text="六防"
+                    android:layout_centerVertical="true"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
 
                 <ImageView
-                    android:id="@+id/iv_expand_liufang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -508,7 +401,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                 >
 
                 <!--1.防外破-->
                 <RelativeLayout

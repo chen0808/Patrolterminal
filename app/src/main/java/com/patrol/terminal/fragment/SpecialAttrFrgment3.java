@@ -14,6 +14,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
@@ -24,6 +25,7 @@ import com.patrol.terminal.adapter.GridViewAdapter2;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.PictureSelectorConfig;
+import com.patrol.terminal.widget.SankuaEditView;
 
 import org.angmarch.views.NiceSpinner;
 
@@ -32,8 +34,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.OnClick;
 
+/**
+ * 特殊属性
+ */
 public class SpecialAttrFrgment3 extends BaseFragment {
 
     @BindView(R.id.iv_expand_sankua)
@@ -44,18 +50,11 @@ public class SpecialAttrFrgment3 extends BaseFragment {
     ImageView gaosugongluIvAdd;
     @BindView(R.id.gaosugonglu_rl)
     RelativeLayout gaosugongluRl;
-    @BindView(R.id.ns_content_type_guagasugonglu)
-    NiceSpinner nsContentTypeGuagasugonglu;
-    @BindView(R.id.gridView_guagasugonglu)
-    GridView gridViewGuagasugonglu;
-    @BindView(R.id.guagasugonglu_item_layout)
-    LinearLayout guagasugongluItemLayout;
+
     @BindView(R.id.gaosutielu_iv_add)
     ImageView gaosutieluIvAdd;
     @BindView(R.id.gaosutielu_rl)
     RelativeLayout gaosutieluRl;
-    @BindView(R.id.ns_content_type_gaosutielu)
-    NiceSpinner nsContentTypeGaosutielu;
     @BindView(R.id.gridView_gaosutielu)
     GridView gridViewGaosutielu;
     @BindView(R.id.guagasutielu_item_layout)
@@ -64,16 +63,12 @@ public class SpecialAttrFrgment3 extends BaseFragment {
     ImageView putongtieluIvAdd;
     @BindView(R.id.putongtielu_rl)
     RelativeLayout putongtieluRl;
-    @BindView(R.id.ns_content_type_guaputongtielu)
-    NiceSpinner nsContentTypeGuaputongtielu;
     @BindView(R.id.gridView_guaputongtielu)
     GridView gridViewGuaputongtielu;
     @BindView(R.id.guaputongtielu_item_layout)
     LinearLayout guaputongtieluItemLayout;
     @BindView(R.id.sankua_all_info_ll)
     LinearLayout sankuaAllInfoLl;
-    @BindView(R.id.iv_expand_liufang)
-    ImageView ivExpandLiufang;
     @BindView(R.id.fagnwaipo_iv_add)
     ImageView fagnwaipoIvAdd;
     @BindView(R.id.fangwaipo_rl)
@@ -164,8 +159,15 @@ public class SpecialAttrFrgment3 extends BaseFragment {
     ImageView ivSave2Fangdizai;
     @BindView(R.id.fangdizai_item_ll)
     LinearLayout fangdizaiItemLl;
-    @BindView(R.id.tv_diver_way)
-    AutoCompleteTextView tvDiverWay;
+
+    @BindView(R.id.tv_yh_ggtl)
+    AutoCompleteTextView tvDiverWay_ggtl;
+    @BindView(R.id.tv_yh_pttl)
+    AutoCompleteTextView tvDiverWay_pttl;
+
+    @BindView(R.id.cus_sk_gggl)
+    SankuaEditView sk_gggl;
+
 
     private String[] nsType = {"一般（III类）", "重大（II类）", "紧急（I类）"};
     private GridViewAdapter2 mGridViewAddImgAdapter;
@@ -177,7 +179,7 @@ public class SpecialAttrFrgment3 extends BaseFragment {
 
     boolean isSankuaOpen = false;   //三跨
     boolean isLiufangOpen = false;  //六防
-    boolean isGsglOpen = false;     //跨高速公路
+//    boolean isGsglOpen = false;     //跨高速公路
     boolean isGsTlOpen = false;     //跨高速铁路
     boolean isPttlOpen = false;     //跨普通铁路
     boolean isFwpOpen = false;      //防外破
@@ -195,9 +197,6 @@ public class SpecialAttrFrgment3 extends BaseFragment {
 
     @Override
     protected void initData() {
-        nsContentTypeGuagasugonglu.attachDataSource(Arrays.asList(nsType));
-        nsContentTypeGaosutielu.attachDataSource(Arrays.asList(nsType));
-        nsContentTypeGuaputongtielu.attachDataSource(Arrays.asList(nsType));
         nsContentTypeFangwaipo.attachDataSource(Arrays.asList(nsType));
         nsContentType2Fagnshanhong.attachDataSource(Arrays.asList(nsType));
         nsContentType2Fagnniao.attachDataSource(Arrays.asList(nsType));
@@ -205,7 +204,7 @@ public class SpecialAttrFrgment3 extends BaseFragment {
         nsContentType2Fangfeng.attachDataSource(Arrays.asList(nsType));
         nsContentType2Fangdizai.attachDataSource(Arrays.asList(nsType));
 
-        initGridView(gridViewGuagasugonglu, 111);
+//        initGridView(gridViewGuagasugonglu, 111);
         initGridView(gridViewGaosutielu, 222);
         initGridView(gridViewGuaputongtielu, 333);
 
@@ -218,7 +217,10 @@ public class SpecialAttrFrgment3 extends BaseFragment {
 
         String data[] = getResources().getStringArray(R.array.auto_textview_contents);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, data);
-        tvDiverWay.setAdapter(adapter);
+//        tvDiverWay_gggl.setAdapter(adapter);
+        tvDiverWay_ggtl.setAdapter(adapter);
+        tvDiverWay_pttl.setAdapter(adapter);
+
     }
 
     @Override
@@ -302,10 +304,7 @@ public class SpecialAttrFrgment3 extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if (Constant.isContent) {
-//            rlItem1.setVisibility(View.VISIBLE);
-//            rl1.setVisibility(View.VISIBLE);
-//        }
+
         localMedia = ((PatrolRecordActivity) getActivity()).getPics();
         if (localMedia != null) {
             refreshAdapter(localMedia);
@@ -380,10 +379,10 @@ public class SpecialAttrFrgment3 extends BaseFragment {
     }*/
 
 
-    @OnClick({R.id.iv_expand_sankua, R.id.iv_expand_liufang, R.id.gaosugonglu_iv_add, R.id.gaosutielu_iv_add, R.id.putongtielu_iv_add, R.id.fagnwaipo_iv_add, R.id.fangshanhong_iv_add, R.id.fangniao_iv_add, R.id.fanglei_iv_add, R.id.fangfeng_iv_add, R.id.fangdizai_iv_add, R.id.btn_add})
+    @OnClick({R.id.rl_item1, R.id.iv_expand_liufang, R.id.gaosugonglu_iv_add, R.id.gaosutielu_iv_add, R.id.putongtielu_iv_add, R.id.fagnwaipo_iv_add, R.id.fangshanhong_iv_add, R.id.fangniao_iv_add, R.id.fanglei_iv_add, R.id.fangfeng_iv_add, R.id.fangdizai_iv_add, R.id.btn_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_expand_sankua:
+            case R.id.rl_item1:
                 if (!isSankuaOpen) {  //三跨按钮未打开
                     sankuaAllInfoLl.setVisibility(View.VISIBLE);
                     isSankuaOpen = true;
@@ -406,12 +405,10 @@ public class SpecialAttrFrgment3 extends BaseFragment {
                 break;
 
             case R.id.gaosugonglu_iv_add:
-                if (!isGsglOpen) {  //三跨下，跨高速公路
-                    guagasugongluItemLayout.setVisibility(View.VISIBLE);
-                    isGsglOpen = true;
+                if (!sk_gggl.getShowState()) {  //三跨下，跨高速公路
+                    sk_gggl.setViewVisibility(true);
                 } else {
-                    guagasugongluItemLayout.setVisibility(View.GONE);
-                    isGsglOpen = false;
+                    sk_gggl.setViewVisibility(false);
                 }
 
                 break;

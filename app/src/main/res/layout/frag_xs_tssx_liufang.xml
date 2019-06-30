@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--1.防外破-->
+        <RelativeLayout
+            android:id="@+id/fangwaipo_rl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/txxs_item_height"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_centerVertical="true"
+                android:text="1.防外破" />
+
+            <ImageView
+                android:id="@+id/fagnwaipo_iv_add"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:padding="6dp"
+                android:src="@mipmap/add_icon" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fangwaipo_item_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="历史特殊属性" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="安刘线 各类施工 8#—9# 线路下方有彩钢房3间1200平"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="35dp"
+                    android:text="发现时间：2012/7/12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="50dp"
+                    android:text="处理措施：送达隐患告知书；现场安装防护措施；人员动态巡视、现场监督检查" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="填写隐患内容" />
+
+                <EditText
+                    android:id="@+id/et_content_fangwaipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择隐患等级" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/ns_content_type_fangwaipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/stoke_gray">
+
+                <GridView
+                    android:id="@+id/gridView_fangwaipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:columnWidth="50dp"
+                    android:numColumns="auto_fit" />
+
+                <ImageView
+                    android:id="@+id/iv_save2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"
+                    android:src="@mipmap/patrol_save" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!--2.防山洪-->
+        <RelativeLayout
+            android:id="@+id/fangshanhong_rl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/txxs_item_height"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_centerVertical="true"
+                android:text="2.防山洪" />
+
+            <ImageView
+                android:id="@+id/fangshanhong_iv_add"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:padding="6dp"
+                android:src="@mipmap/add_icon" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fangshanhong_item_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="历史特殊属性" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="安刘线 各类施工 8#—9# 线路下方有彩钢房3间1200平"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="35dp"
+                    android:text="发现时间：2012/7/12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="50dp"
+                    android:text="处理措施：送达隐患告知书；现场安装防护措施；人员动态巡视、现场监督检查" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="填写隐患内容" />
+
+                <EditText
+                    android:id="@+id/et_content2_fangshanhong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择隐患等级" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/ns_content_type2_fagnshanhong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/stoke_gray">
+
+                <GridView
+                    android:id="@+id/gridView2_fagnshanhong"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:columnWidth="50dp"
+                    android:numColumns="auto_fit" />
+
+                <ImageView
+                    android:id="@+id/iv_save2_fagnshanhong"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"
+                    android:src="@mipmap/patrol_save" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!--3.防鸟-->
+        <RelativeLayout
+            android:id="@+id/fangniao_rl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/txxs_item_height"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_centerVertical="true"
+                android:text="3.防鸟" />
+
+            <ImageView
+                android:id="@+id/fangniao_iv_add"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:padding="6dp"
+                android:src="@mipmap/add_icon" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fangniao_item_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="历史特殊属性" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="安刘线 各类施工 8#—9# 线路下方有彩钢房3间1200平"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="35dp"
+                    android:text="发现时间：2012/7/12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="50dp"
+                    android:text="处理措施：送达隐患告知书；现场安装防护措施；人员动态巡视、现场监督检查" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="填写隐患内容" />
+
+                <EditText
+                    android:id="@+id/et_content2_fangniao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择隐患等级" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/ns_content_type2_fagnniao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/stoke_gray">
+
+                <GridView
+                    android:id="@+id/gridView2_fagnniao"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:columnWidth="50dp"
+                    android:numColumns="auto_fit" />
+
+                <ImageView
+                    android:id="@+id/iv_save2_fagnniao"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"
+                    android:src="@mipmap/patrol_save" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!--4.防雷-->
+        <RelativeLayout
+            android:id="@+id/fanglei_rl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/txxs_item_height"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_centerVertical="true"
+                android:text="4.防雷" />
+
+            <ImageView
+                android:id="@+id/fanglei_iv_add"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:padding="6dp"
+                android:src="@mipmap/add_icon" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fanglei_item_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="历史特殊属性" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="安刘线 各类施工 8#—9# 线路下方有彩钢房3间1200平"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="35dp"
+                    android:text="发现时间：2012/7/12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="50dp"
+                    android:text="处理措施：送达隐患告知书；现场安装防护措施；人员动态巡视、现场监督检查" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="填写隐患内容" />
+
+                <EditText
+                    android:id="@+id/et_content2_fanglei"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择隐患等级" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/ns_content_type2_fanglei"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/stoke_gray">
+
+                <GridView
+                    android:id="@+id/gridView2_fanglei"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:columnWidth="50dp"
+                    android:numColumns="auto_fit" />
+
+                <ImageView
+                    android:id="@+id/iv_save2_fanglei"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"
+                    android:src="@mipmap/patrol_save" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!--5.防风-->
+        <RelativeLayout
+            android:id="@+id/fangfeng_rl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/txxs_item_height"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="5.防风" />
+
+            <ImageView
+                android:id="@+id/fangfeng_iv_add"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:padding="6dp"
+                android:src="@mipmap/add_icon" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fangfeng_item_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="历史特殊属性" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="安刘线 各类施工 8#—9# 线路下方有彩钢房3间1200平"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="35dp"
+                    android:text="发现时间：2012/7/12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="50dp"
+                    android:text="处理措施：送达隐患告知书；现场安装防护措施；人员动态巡视、现场监督检查" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="填写隐患内容" />
+
+                <EditText
+                    android:id="@+id/et_content2_fangfeng"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择隐患等级" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/ns_content_type2_fangfeng"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/stoke_gray">
+
+                <GridView
+                    android:id="@+id/gridView2_fangfeng"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:columnWidth="50dp"
+                    android:numColumns="auto_fit" />
+
+                <ImageView
+                    android:id="@+id/iv_save2_fangfeng"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"
+                    android:src="@mipmap/patrol_save" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!--6.防地灾-->
+        <RelativeLayout
+            android:id="@+id/fangdizai_rl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/txxs_item_height"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_centerVertical="true"
+                android:text="6.防地灾" />
+
+            <ImageView
+                android:id="@+id/fangdizai_iv_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:padding="6dp"
+                android:src="@mipmap/add_icon" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fangdizai_item_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="历史特殊属性" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="安刘线 各类施工 8#—9# 线路下方有彩钢房3间1200平"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="35dp"
+                    android:text="发现时间：2012/7/12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="50dp"
+                    android:text="处理措施：送达隐患告知书；现场安装防护措施；人员动态巡视、现场监督检查" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="填写隐患内容" />
+
+                <EditText
+                    android:id="@+id/et_content2_fangdizai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/stoke_gray"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择隐患等级" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/ns_content_type2_fangdizai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/stoke_gray">
+
+                <GridView
+                    android:id="@+id/gridView2_fangdizai"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:columnWidth="50dp"
+                    android:numColumns="auto_fit" />
+
+                <ImageView
+                    android:id="@+id/iv_save2_fangdizai"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"
+                    android:src="@mipmap/patrol_save" />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

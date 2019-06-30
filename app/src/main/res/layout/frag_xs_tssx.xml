@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="8dp">
+
+        <Button
+            android:id="@+id/tssx_sankua"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="三跨"
+            android:textSize="@dimen/sp_14" />
+
+        <Button
+            android:id="@+id/tssx_liufang"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="六防"
+            android:textSize="@dimen/sp_14" />
+
+        <Button
+            android:id="@+id/tssx_qita"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="其他"
+            android:textSize="@dimen/sp_14" />
+
+        <ImageButton
+            android:id="@+id/tssx_add"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_icon" />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/xs_tssx_context"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.patrol.terminal.widget.NoScrollViewPager
+            android:id="@+id/xs_tssx_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/rl_add"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            >
+
+            <GridView
+                android:id="@+id/grid_addtssx"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="60dp"
+                android:horizontalSpacing="3dp"
+                android:numColumns="3"
+                android:verticalSpacing="3dp" />
+
+            <Button
+                android:id="@+id/grid_addbtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="8dp"
+                android:text="保存"
+                android:textSize="@dimen/sp_16"
+                />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

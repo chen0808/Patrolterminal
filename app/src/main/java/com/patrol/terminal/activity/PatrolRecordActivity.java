@@ -40,6 +40,7 @@ import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
 import com.patrol.terminal.fragment.SpecialAttrFrgment3;
+import com.patrol.terminal.fragment.SpecialTSSXFrgment;
 import com.patrol.terminal.fragment.TroubleFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
@@ -79,6 +80,9 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
+/**
+ * 巡视任务
+ */
 public class PatrolRecordActivity extends BaseActivity {
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -245,7 +249,8 @@ public class PatrolRecordActivity extends BaseActivity {
     private void initview() {
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new PatrolContentFrgment()); //常规巡视
-        fragmentList.add(new SpecialAttrFrgment3());  //特殊属性
+//        fragmentList.add(new SpecialAttrFrgment3());  //特殊属性
+        fragmentList.add(new SpecialTSSXFrgment());//特殊属性
         fragmentList.add(new DefectFrgment());        //缺陷
         fragmentList.add(new TroubleFrgment());       //隐患
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);

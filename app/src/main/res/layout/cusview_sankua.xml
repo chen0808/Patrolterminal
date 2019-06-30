@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    >
+
+    <TextView
+        android:id="@+id/item_tssx_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_16"
+        android:gravity="center_vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="14dp"
+        android:text="高速铁路"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical"
+
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/bg_gray"></View>
+
+        <AutoCompleteTextView
+            android:id="@+id/sankua_yhnr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:completionHintView="@null"
+            android:background="@null"
+            android:minHeight="80dp"
+            android:paddingTop="8dp"
+            android:gravity="top"
+            android:paddingBottom="8dp"
+            android:completionThreshold="1"
+            android:dropDownHorizontalOffset="5dp"
+            android:hint="填写隐患内容"
+            android:paddingLeft="4dp"
+            android:textSize="14sp"
+            android:paddingRight="4dp"  />
+
+        <GridView
+            android:id="@+id/sk_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:columnWidth="50dp"
+            android:numColumns="auto_fit" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="缺陷等级：" />
+
+            <RadioGroup
+                android:id="@+id/sankua_rad"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/sk_rad_yb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/selector_defect_level"
+                    android:text="危急"
+                    android:textColor="@color/black_gray" />
+
+
+                <RadioButton
+                    android:id="@+id/sk_rad_zd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/selector_defect_level"
+                    android:text="严重"
+                    android:textColor="@color/black_gray" />
+
+                <RadioButton
+                    android:id="@+id/sk_rad_jj"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/selector_defect_level"
+                    android:text="一般"
+                    android:textColor="@color/black_gray" />
+            </RadioGroup>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
