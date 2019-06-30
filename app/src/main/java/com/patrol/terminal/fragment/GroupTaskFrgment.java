@@ -161,8 +161,6 @@ public class GroupTaskFrgment extends BaseFragment {
 
     //获取小组任务列表
     public void getGroupList() {
-
-
         BaseRequest.getInstance().getService()
                 .getGroupList(year, month, day, depId, duty_user_id, userId, "duty_user_id,line_id,name", "1")
                 .subscribeOn(Schedulers.io())
@@ -184,6 +182,15 @@ public class GroupTaskFrgment extends BaseFragment {
                         mRefrsh.setRefreshing(false);
                         isRefresh=true;
                         ProgressDialog .cancle();
+
+
+                        //查询后存储到本地数据库  by linmeng
+                        if (result != null && result.size() > 0) {
+
+
+                        }
+
+
                     }
 
                     @Override

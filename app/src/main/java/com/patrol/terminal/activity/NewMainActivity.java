@@ -2,6 +2,7 @@ package com.patrol.terminal.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -185,6 +186,10 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 
 
         DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(this);
+        Cursor cursor = defactContentDBHelper.queryAll();
+        if (cursor == null || cursor.getCount() == 0) {
+            defactContentDBHelper.insertAll();
+        }
 
     }
 

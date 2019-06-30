@@ -22,7 +22,7 @@ public class MyOpenhelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "patrol_defect.db3";
     private static final int DB_VERSION = 1;
     private static final String TAG = "MyOpenhelper";
-    private SQLiteDatabase mDb;
+    //private SQLiteDatabase mDb;
 
 //    private static final String CREATE_AUTO_TV_TABLE =
 //            "CREATE TABLE " + TABLE.AUTO_TEXTVIEW_TABLE + "(" +
@@ -62,14 +62,14 @@ public class MyOpenhelper extends SQLiteOpenHelper {
         }
         Log.d(TAG, "table has been created");
 
-        initDataBase(db);
+        //initDataBase(db);
     }
 
-    private void initDataBase(SQLiteDatabase db) {
+   /* private void initDataBase(SQLiteDatabase db) {
         //从Excel取数据
         mDb = db;
         new ExcelDataLoader().execute("defact.xls");
-    }
+    }*/
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -81,6 +81,7 @@ public class MyOpenhelper extends SQLiteOpenHelper {
     public interface TABLE {
         //public static final String AUTO_TEXTVIEW_TABLE = "auto_textview_table";
         public static final String AUTO_DEFACT_TABLE = "auto_defact_table";
+        public static final String AUTO_PERSONAL_TASK_LIST_TABLE = "auto_personal_task_list_table";
     }
 
 //    // sms table columns
@@ -89,14 +90,13 @@ public class MyOpenhelper extends SQLiteOpenHelper {
 //        public static final String CONTENT = "content"; // 内容
 //    }
 
-    // sms table columns
     public interface DefactTvColumns extends BaseColumns {
         public static final String CONTENT = "content"; // 内容
         public static final String LEVEL = "level";
     }
 
 
-    //在异步方法中 调用
+    /*//在异步方法中 调用
     private class ExcelDataLoader extends AsyncTask<String, Void, ArrayList<DefactTvModel>> {
 
         @Override
@@ -127,12 +127,12 @@ public class MyOpenhelper extends SQLiteOpenHelper {
     }
 
 
-    /**
+    *//**
      * 获取 excel 表格中的数据,不能在主线程中调用
      *
      * @param xlsName excel 表格的名称
      * @param index   第几张表格中的数据
-     */
+     *//*
     private ArrayList<DefactTvModel> getXlsData(String xlsName, int index) {
         ArrayList<DefactTvModel> countryList = new ArrayList<DefactTvModel>();
         AssetManager assetManager = mContext.getAssets();
@@ -141,9 +141,9 @@ public class MyOpenhelper extends SQLiteOpenHelper {
             Workbook workbook = Workbook.getWorkbook(assetManager.open(xlsName));
             Sheet sheet = workbook.getSheet(index);
 
-            int sheetNum = workbook.getNumberOfSheets();
+            //int sheetNum = workbook.getNumberOfSheets();
             int sheetRows = sheet.getRows();
-            int sheetColumns = sheet.getColumns();
+            //int sheetColumns = sheet.getColumns();
 
             for (int i = 0; i < sheetRows; i++) {
                 DefactTvModel defactTvModel = new DefactTvModel();
@@ -159,7 +159,7 @@ public class MyOpenhelper extends SQLiteOpenHelper {
         }
 
         return countryList;
-    }
+    }*/
 
 
 }
