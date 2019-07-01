@@ -119,6 +119,26 @@ public class GroupTaskBean extends BaseModel implements Parcelable {
     private String audit_status;
     @Column
     private boolean check;
+    @Column
+    private String user_id;
+    @Column
+    private String safe;
+
+    public String getSafe() {
+        return safe;
+    }
+
+    public void setSafe(String safe) {
+        this.safe = safe;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
 
     public int getLocal_id() {
         return local_id;
@@ -511,4 +531,50 @@ public class GroupTaskBean extends BaseModel implements Parcelable {
             return new GroupTaskBean[size];
         }
     };
+
+
+    @Override
+    public String toString() {
+        return "GroupTaskBean{" +
+                "local_id=" + local_id +
+                ", id='" + id + '\'' +
+                ", day_tower_id='" + day_tower_id + '\'' +
+                ", group_id='" + group_id + '\'' +
+                ", type_id='" + type_id + '\'' +
+                ", type_sign='" + type_sign + '\'' +
+                ", type_name='" + type_name + '\'' +
+                ", plan_type='" + plan_type + '\'' +
+                ", line_id='" + line_id + '\'' +
+                ", line_name='" + line_name + '\'' +
+                ", dep_id='" + dep_id + '\'' +
+                ", dep_name='" + dep_name + '\'' +
+                ", year=" + year +
+                ", month=" + month +
+                ", week=" + week +
+                ", day=" + day +
+                ", name='" + name + '\'' +
+                ", tower_id='" + tower_id + '\'' +
+                ", towers_id='" + towers_id + '\'' +
+                ", tower_type='" + tower_type + '\'' +
+                ", duty_user_id='" + duty_user_id + '\'' +
+                ", duty_user_name='" + duty_user_name + '\'' +
+                ", work_user_id='" + work_user_id + '\'' +
+                ", work_user_name='" + work_user_name + '\'' +
+                ", allot_status='" + allot_status + '\'' +
+                ", done_status='" + done_status + '\'' +
+                ", done_time='" + done_time + '\'' +
+                ", is_rob='" + is_rob + '\'' +
+                ", done_num=" + done_num +
+                ", all_num=" + all_num +
+                ", done_rate='" + done_rate + '\'' +
+                ", from_user_id='" + from_user_id + '\'' +
+                ", from_user_name='" + from_user_name + '\'' +
+                ", start_id='" + start_id + '\'' +
+                ", end_id='" + end_id + '\'' +
+                ", audit_status='" + audit_status + '\'' +
+                ", check=" + check +
+                ", user_id='" + user_id + '\'' +
+                ", safe='" + safe + '\'' +
+                '}';
+    }
 }
