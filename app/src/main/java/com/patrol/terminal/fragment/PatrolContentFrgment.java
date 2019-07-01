@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -125,6 +124,7 @@ public class PatrolContentFrgment extends BaseFragment {
 //                        rvPatrolContent.setAdapter(adapter);
 
                         //存入到本地数据库  TODO
+
                         initTab(results);
                     }
 
@@ -233,7 +233,7 @@ public class PatrolContentFrgment extends BaseFragment {
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator linePagerIndicator = new LinePagerIndicator(context);
-                linePagerIndicator.setColors(Color.WHITE);
+                linePagerIndicator.setColors(getResources().getColor(R.color.orange_vip));
                 return linePagerIndicator;
             }
         });

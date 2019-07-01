@@ -2,19 +2,14 @@ package com.patrol.terminal.sqlite;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.patrol.terminal.bean.DefactTvModel;
 import com.patrol.terminal.utils.Utils;
 
 import java.util.ArrayList;
-
-import jxl.Sheet;
-import jxl.Workbook;
 
 public class DefactContentDBHelper {
 
@@ -102,8 +97,8 @@ public class DefactContentDBHelper {
     /**
      * 获取 excel 表格中的数据,不能在主线程中调用
      *
-     * @param xlsName excel 表格的名称
-     * @param index   第几张表格中的数据
+     * xlsName excel 表格的名称
+     *  index   第几张表格中的数据
      *//*
     private ArrayList<DefactTvModel> getXlsData(String xlsName, int index) {
         ArrayList<DefactTvModel> countryList = new ArrayList<DefactTvModel>();

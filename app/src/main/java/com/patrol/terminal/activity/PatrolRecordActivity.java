@@ -39,7 +39,6 @@ import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
-import com.patrol.terminal.fragment.SpecialAttrFrgment3;
 import com.patrol.terminal.fragment.SpecialTSSXFrgment;
 import com.patrol.terminal.fragment.TroubleFrgment;
 import com.patrol.terminal.utils.Constant;
@@ -287,7 +286,6 @@ public class PatrolRecordActivity extends BaseActivity {
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
-
                 SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
                 simplePagerTitleView.setNormalColor(getResources().getColor(R.color.color_33));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.base_status_bar));
@@ -316,7 +314,7 @@ public class PatrolRecordActivity extends BaseActivity {
         titleContainer.setDividerDrawable(new ColorDrawable() {
             @Override
             public int getIntrinsicWidth() {
-                return UIUtil.dip2px(PatrolRecordActivity.this, 60);
+                return UIUtil.dip2px(PatrolRecordActivity.this, 30);
             }
         });
         ViewPagerHelper.bind(magicIndicator, viewPager);

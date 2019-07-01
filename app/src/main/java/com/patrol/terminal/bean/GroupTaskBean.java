@@ -3,8 +3,14 @@ package com.patrol.terminal.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class GroupTaskBean implements Parcelable {
+import com.patrol.terminal.sqlite.AppDataBase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
+@Table(database = AppDataBase.class)
+public class GroupTaskBean extends BaseModel implements Parcelable {
 
     /**
      * id : E4BC8BBE76FD42C1AD93E879558C3BC7
@@ -39,42 +45,88 @@ public class GroupTaskBean implements Parcelable {
      * done_rate : 7.89
      */
 
+    @PrimaryKey(autoincrement = true)
+    private int local_id;
+    @Column
     private String id;
+    @Column
     private String day_tower_id;
+    @Column
     private String group_id;
+    @Column
     private String type_id;
+    @Column
     private String type_sign;
+    @Column
     private String type_name;
+    @Column
     private String plan_type;
+    @Column
     private String line_id;
+    @Column
     private String line_name;
+    @Column
     private String dep_id;
+    @Column
     private String dep_name;
+    @Column
     private int year;
+    @Column
     private int month;
+    @Column
     private int week;
+    @Column
     private int day;
+    @Column
     private String name;
+    @Column
     private String tower_id;
+    @Column
     private String towers_id;
+    @Column
     private String tower_type;
+    @Column
     private String duty_user_id;
+    @Column
     private String duty_user_name;
+    @Column
     private String work_user_id;
+    @Column
     private String work_user_name;
+    @Column
     private String allot_status;
+    @Column
     private String done_status;
+    @Column
     private String done_time;
+    @Column
     private String is_rob;
+    @Column
     private int done_num;
+    @Column
     private int all_num;
+    @Column
     private String done_rate;
+    @Column
     private String from_user_id;
+    @Column
     private String from_user_name;
+    @Column
     private String start_id;
+    @Column
     private String end_id;
+    @Column
     private String audit_status;
-  private  boolean check;
+    @Column
+    private boolean check;
+
+    public int getLocal_id() {
+        return local_id;
+    }
+
+    public void setLocal_id(int local_id) {
+        this.local_id = local_id;
+    }
 
     public boolean isCheck() {
         return check;

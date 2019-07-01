@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -16,9 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddGroupTaskActivity;
 import com.patrol.terminal.activity.GroupTaskDetailActivity;
-import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.adapter.GroupTaskAdapter;
-import com.patrol.terminal.adapter.TaskContentAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -26,7 +27,6 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.bean.TaskBean;
-import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.YXtoJXbean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 import com.patrol.terminal.utils.Constant;
@@ -34,6 +34,7 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -41,19 +42,14 @@ import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class GroupTaskFrgment extends BaseFragment {
@@ -127,6 +123,7 @@ public class GroupTaskFrgment extends BaseFragment {
             }
         });
 
+        getDataFromDatabase();
 
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -134,6 +131,27 @@ public class GroupTaskFrgment extends BaseFragment {
                 getData();
             }
         });
+    }
+
+    private void getDataFromDatabase() {
+        //从数据库查询出数据
+        result = SQLite.select().from(GroupTaskBean.class)
+                .queryList();
+        if (result != null && result.size() != 0) {
+            groupTaskAdapter.setNewData(result);
+            for (int i = 0; i < result.size(); i++) {
+                String allot_status = result.get(i).getAllot_status();
+                if ("0".equals(allot_status)) {
+                    planRv.setSwipeItemMenuEnabled(i, true);
+                } else {
+                    planRv.setSwipeItemMenuEnabled(i, false);
+                }
+            }
+            RxRefreshEvent.publish("refreshGroupNum@" + result.size());
+            mRefrsh.setRefreshing(false);
+            isRefresh = true;
+            ProgressDialog.cancle();
+        }
     }
 
     //根据职位获取页面数据
@@ -156,7 +174,9 @@ public class GroupTaskFrgment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (isRefresh){
-        getData();}
+            getDataFromDatabase();
+            getData();
+        }
     }
 
     //获取小组任务列表
@@ -177,20 +197,15 @@ public class GroupTaskFrgment extends BaseFragment {
                             }else {
                                 planRv.setSwipeItemMenuEnabled(i,false);
                             }
+
+                            //查询后存储到本地数据库  by linmeng
+                            GroupTaskBean groupTaskBean = result.get(i);
+                            groupTaskBean.save();
                         }
                         RxRefreshEvent.publish("refreshGroupNum@"+result.size());
                         mRefrsh.setRefreshing(false);
                         isRefresh=true;
                         ProgressDialog .cancle();
-
-
-                        //查询后存储到本地数据库  by linmeng
-                        if (result != null && result.size() > 0) {
-
-
-                        }
-
-
                     }
 
                     @Override
@@ -289,7 +304,8 @@ public class GroupTaskFrgment extends BaseFragment {
                 RxRefreshEvent.publish("refreshNum");
                 ProgressDialog.show(getContext(),true,"正在加载。。。");
                 inteDate();
-               getData();
+                getDataFromDatabase();
+                getData();
             }
         })
                 .setDate(selectedDate)
@@ -326,7 +342,8 @@ public class GroupTaskFrgment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 11 && resultCode == -1) {
-           getData();
+            getDataFromDatabase();
+            getData();
         }
     }
 
