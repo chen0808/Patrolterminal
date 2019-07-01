@@ -104,6 +104,7 @@
                 android:layout_marginBottom="60dp"
                 android:horizontalSpacing="3dp"
                 android:numColumns="3"
+                android:background="@color/white"
                 android:verticalSpacing="3dp" />
 
             <Button
