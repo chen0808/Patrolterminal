@@ -12,6 +12,8 @@ import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,6 +56,9 @@ public class SpecialTSSXFrgment extends BaseFragment {
     Button grid_addbtn;
     @BindView(R.id.xs_tssx_lv)
     ListView xs_tssx_lv;
+    @BindView(R.id.tssx_select_title)
+    RadioGroup sankua_rad;
+
 
 
     private MyFragmentPagerAdapter pagerAdapter;
@@ -105,6 +110,21 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
         xs_tssx_pager.setOffscreenPageLimit(1);
         xs_tssx_pager.setNoScroll(true);
+
+        sankua_rad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rb = (RadioButton)group.getChildAt(checkedId);
+                if(rb.getId() == R.id.tssx_sankua){
+
+                }else if(rb.getId() == R.id.tssx_liufang){
+
+                }else if(rb.getId() == R.id.tssx_qita){
+
+                }
+            }
+        });
+
 //        tssx_sankua.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

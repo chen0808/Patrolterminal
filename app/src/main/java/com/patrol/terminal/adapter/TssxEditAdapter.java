@@ -34,6 +34,13 @@ public class TssxEditAdapter extends BaseAdapter {
     private Context context;
     private List<TSSXBean> tssxList = new ArrayList<TSSXBean>();
     private ViewHolder holder;
+
+    //默认三跨
+    private  int type = 0;
+    private static int TYPE_SK = 0;
+    private static int TYPE_LF = 1;
+    private static int TYPE_QT = 2;
+
     public TssxEditAdapter(Context context) {
         this.context = context;
     }
@@ -46,7 +53,11 @@ public class TssxEditAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if(tssxList != null){
+
+
             return tssxList.size();
+
+
         }else{
             return 0;
         }
@@ -75,7 +86,15 @@ public class TssxEditAdapter extends BaseAdapter {
             convertView.setTag(holder);
         }
 
-        holder.tssx_edit.setItemTilte(tssxList.get(position).getValues());
+        if(type == TYPE_SK){
+
+        }else if(type == TYPE_LF){
+
+        }else if(type == TYPE_QT){
+
+        }
+
+
 
         return convertView;
     }
