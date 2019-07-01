@@ -1,10 +1,12 @@
 package com.patrol.terminal.fragment;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -40,7 +42,7 @@ public class SpecialTSSXSKFrgment extends BaseFragment {
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag_xs_tssx_sankua, null);
-        item_tssx_lv = view.findViewById(R.id.item_tssx_lv);
+
         return view;
     }
 
@@ -52,14 +54,15 @@ public class SpecialTSSXSKFrgment extends BaseFragment {
     }
 
 
-    public void setTssxAdapter(List<TSSXBean> list)
+    public void setTssxAdapter(List<TSSXBean> list, CursorAdapter cursorAdapter, Cursor cursor)
     {
         if(editAdapter == null){
+            item_tssx_lv = view.findViewById(R.id.item_tssx_lv);
             editAdapter =new TssxEditAdapter(getActivity());
             item_tssx_lv.setAdapter(editAdapter);
         }
 
-        editAdapter.setData(list);
+        editAdapter.setData(list, cursorAdapter, cursor);
 
     }
 
