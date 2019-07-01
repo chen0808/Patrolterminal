@@ -1,10 +1,12 @@
 package com.patrol.terminal.fragment;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -49,9 +51,9 @@ public class SpecialTSSXLFFrgment extends BaseFragment {
     }
 
 
-    public void setTssxAdapter(List<TSSXBean> list)
+    public void setTssxAdapter(List<TSSXBean> list, CursorAdapter cursorAdapter, Cursor cursor)
     {
-        editAdapter.setData(list);
+        editAdapter.setData(list, cursorAdapter, cursor);
     }
 
 }

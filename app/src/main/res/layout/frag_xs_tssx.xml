@@ -14,35 +14,61 @@
         android:paddingRight="10dp"
         android:paddingBottom="8dp">
 
-        <Button
-            android:id="@+id/tssx_sankua"
-            android:layout_width="match_parent"
+        <RadioGroup
+            android:id="@+id/sankua_rad"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
             android:layout_weight="1"
-            android:text="三跨"
-            android:textSize="@dimen/sp_14" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/tssx_liufang"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="六防"
-            android:textSize="@dimen/sp_14" />
+            <RadioButton
+                android:id="@+id/tssx_sankua"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tssx_title_left"
+                android:button="@null"
+                android:gravity="center"
+                android:text="三跨"
+                android:checked="true"
+                android:textColor="@drawable/selector_tssx_txt_color"
+                android:textSize="@dimen/sp_14" />
 
-        <Button
-            android:id="@+id/tssx_qita"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="其他"
-            android:textSize="@dimen/sp_14" />
+
+            <RadioButton
+                android:id="@+id/tssx_liufang"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tssx_color"
+                android:button="@null"
+                android:gravity="center"
+                android:text="六防"
+                android:textColor="@drawable/selector_tssx_txt_color"
+                android:textSize="@dimen/sp_14" />
+
+            <RadioButton
+                android:id="@+id/tssx_qita"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tssx_title_right"
+                android:button="@null"
+                android:gravity="center"
+                android:text="其他"
+                android:textColor="@drawable/selector_tssx_txt_color"
+                android:textSize="@dimen/sp_14" />
+        </RadioGroup>
+
 
         <ImageButton
             android:id="@+id/tssx_add"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/add_icon" />
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@mipmap/tssx_add" />
 
 
     </LinearLayout>
@@ -58,12 +84,18 @@
             android:layout_height="match_parent"
             android:visibility="gone" />
 
+        <ListView
+            android:id="@+id/xs_tssx_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone" />
+
         <RelativeLayout
             android:id="@+id/rl_add"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <GridView
                 android:id="@+id/grid_addtssx"
@@ -80,12 +112,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="18dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="8dp"
+                android:background="@color/base_status_bar"
+                android:textColor="@color/white"
                 android:text="保存"
-                android:textSize="@dimen/sp_16"
-                />
+                android:textSize="@dimen/sp_16" />
 
         </RelativeLayout>
 

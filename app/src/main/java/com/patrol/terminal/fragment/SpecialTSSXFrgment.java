@@ -1,22 +1,30 @@
 package com.patrol.terminal.fragment;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.adapter.TssxAddAdapter;
+import com.patrol.terminal.adapter.TssxEditAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.bean.TSSXBean;
+import com.patrol.terminal.sqlite.DefactContentDBHelper;
+import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -44,6 +52,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
     RelativeLayout rl_add;
     @BindView(R.id.grid_addbtn)
     Button grid_addbtn;
+    @BindView(R.id.xs_tssx_lv)
+    ListView xs_tssx_lv;
 
     private MyFragmentPagerAdapter pagerAdapter;
     private View view;
@@ -57,27 +67,35 @@ public class SpecialTSSXFrgment extends BaseFragment {
     private SpecialTSSXSKFrgment skFragment;
     private SpecialTSSXLFFrgment lfFragment;
 
+    private TssxEditAdapter skEditAdapter;
+    private TssxEditAdapter lfEditAdapter;
+
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag_xs_tssx, null);
+
         return view;
     }
 
     @Override
     protected void initData() {
+//        List<Fragment> fragmentList = new ArrayList<>();
+//        skFragment = new SpecialTSSXSKFrgment();
+//        lfFragment = new SpecialTSSXLFFrgment();
+//        fragmentList.add(skFragment); //三跨
+//        fragmentList.add(lfFragment);  //六防
+//        pagerAdapter = new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragmentList);
+//        xs_tssx_pager.setAdapter(pagerAdapter);
+//        xs_tssx_pager.setCurrentItem(0);
+
+        skEditAdapter = new TssxEditAdapter(getActivity());
+        lfEditAdapter = new TssxEditAdapter(getActivity());
+        xs_tssx_lv.setAdapter(skEditAdapter);
+
+
+
         intTSSX();
         initClick();
-
-        List<Fragment> fragmentList = new ArrayList<>();
-        skFragment = new SpecialTSSXSKFrgment();
-        lfFragment = new SpecialTSSXLFFrgment();
-        fragmentList.add(skFragment); //三跨
-        fragmentList.add(lfFragment);  //六防
-
-        pagerAdapter = new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragmentList);
-        xs_tssx_pager.setAdapter(pagerAdapter);
-        xs_tssx_pager.setCurrentItem(0);
-
 
     }
 
@@ -98,14 +116,17 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 xs_tssx_pager.setCurrentItem(1);
             }
         });
-
+        //属性选择
         tssx_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                if(rl_add.getVisibility() == View.VISIBLE){
+                    rl_add.setVisibility(View.GONE);
+                }else
                 rl_add.setVisibility(View.VISIBLE);
                 tssxAddAdapter.setData(tssxBeanList);
-                xs_tssx_pager.setVisibility(View.GONE);
+//                xs_tssx_pager.setVisibility(View.GONE);
             }
         });
         /**
@@ -120,10 +141,13 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 Log.e("保存按钮","添加条数"+addTssxList.size());
 
                 //刷新fragment 页面数据
-                skFragment.setTssxAdapter(addTssxList);
+//                skFragment.setTssxAdapter(addTssxList);
 //                lfFragment.setTssxAdapter(addTssxList);
 
-                xs_tssx_pager.setVisibility(View.VISIBLE);
+//                skEditAdapter.setData(addTssxList,cursorAdapter,cursor);
+                skEditAdapter.setData(addTssxList,null,null);
+                xs_tssx_lv.setAdapter(skEditAdapter);
+                xs_tssx_lv.setVisibility(View.VISIBLE);
             }
         });
 
@@ -200,6 +224,41 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
 
     }
+
+//    DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(getActivity());
+//    Cursor cursor = defactContentDBHelper.queryAll();
+//    CursorAdapter cursorAdapter = new CursorAdapter(getActivity(), cursor) {
+//
+//        @Override
+//        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+//            return LayoutInflater.from(context).inflate(R.layout.simple_defact_tv_content_item_layout, parent, false);
+//        }
+//
+//        @Override
+//        public void bindView(View view, Context context, Cursor cursor) {
+//            TextView contentTv = (TextView) view.findViewById(R.id.content_tv);
+//            int contentColumnIndex = cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT);
+//            String content = cursor.getString(contentColumnIndex);
+//            contentTv.setText(content);
+//        }
+//
+//        @Override
+//        public String convertToString(Cursor cursor) {
+//            return cursor.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT));
+//        }
+//
+//        @Override
+//        public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
+//            if (getFilterQueryProvider() != null) {
+//                return getFilterQueryProvider().runQuery(constraint);
+//            }
+//
+//            DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(getActivity());
+//            Cursor cursor = defactContentDBHelper.queryFliter(String.valueOf(constraint));
+//            Log.w("linmeng", "cursor.getCount() filter:" + cursor.getCount());
+//            return cursor;
+//        }
+//    };
 
 
 }

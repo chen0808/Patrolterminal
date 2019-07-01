@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.TSSXBean;
@@ -96,6 +97,6 @@ public class TssxAddAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        private CheckBox checkBox;
+        private RadioButton checkBox;
     }
 }

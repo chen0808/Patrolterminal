@@ -1,17 +1,21 @@
 package com.patrol.terminal.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CursorAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.TSSXBean;
+import com.patrol.terminal.sqlite.DefactContentDBHelper;
+import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.widget.SankuaEditView;
 
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ public class TssxEditAdapter extends BaseAdapter {
 
     private Context context;
     private List<TSSXBean> tssxList = new ArrayList<TSSXBean>();
-
+    private ViewHolder holder;
     public TssxEditAdapter(Context context) {
         this.context = context;
     }
@@ -61,7 +65,7 @@ public class TssxEditAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
         } else {
@@ -90,7 +94,7 @@ public class TssxEditAdapter extends BaseAdapter {
     }
 
 
-    public void setData(List<TSSXBean> typeBeanList) {
+    public void setData(List<TSSXBean> typeBeanList,CursorAdapter cursorAdapter,Cursor cursor) {
 
         if(typeBeanList != null){
             Log.e("getCheckList",tssxList.size()+"");
@@ -101,10 +105,15 @@ public class TssxEditAdapter extends BaseAdapter {
             Log.e("getCheckList","00000000000000");
         }
 
+//        holder.tssx_edit.setAutoAdapter(cursorAdapter,cursor);
+
     }
 
     class ViewHolder {
         private SankuaEditView tssx_edit;
 
     }
+
+
+
 }
