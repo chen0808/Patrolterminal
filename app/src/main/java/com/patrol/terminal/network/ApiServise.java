@@ -1017,7 +1017,8 @@ public interface ApiServise {
     @GET("task/defect/grade/allGET")
     Observable<BaseResult<List<DefectListBean>>> getDefectList(@Query("category") String category);
 
+    //上传巡视记录
     @Multipart
-    @POST("task/defect/patrol/recode/test")
+    @POST("task/defect/patrol/recode/savePOST")
     Observable<BaseResult> test(@PartMap Map<String, RequestBody> params);
 }

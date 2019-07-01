@@ -4,11 +4,9 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -48,16 +46,12 @@ import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -85,8 +79,6 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     TextView todoNum;
     @BindView(R.id.home_bottom)
     RelativeLayout homeBottom;
-    @BindView(R.id.test)
-    Button test;
 
     private List<Fragment> mFragments;
     private FragmentPagerAdapter mAdapter;
@@ -475,27 +467,6 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                     }
                 });
 
-    }
-
-    @OnClick(R.id.test)
-    public void onViewClicked() {
-        Map<String, RequestBody> params = new HashMap<>();
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_1.jpg"));
-        params.put("test", toRequestBody("aaa"));
-
-        BaseRequest.getInstance().getService().test(params).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver(this) {
-                    @Override
-                    protected void onSuccees(BaseResult t) throws Exception {
-
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
     }
 
     public RequestBody toRequestBody(String value) {

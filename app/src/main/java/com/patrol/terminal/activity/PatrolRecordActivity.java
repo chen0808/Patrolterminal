@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +33,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.LocalPatrolRecordBean;
+import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
@@ -46,11 +46,9 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.NoScrollViewPager;
 import com.patrol.terminal.widget.PinchImageView;
 import com.patrol.terminal.widget.ProgressDialog;
-import com.patrol.terminal.widget.SignDialog;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -132,7 +130,6 @@ public class PatrolRecordActivity extends BaseActivity {
     private String lineName;
     private LocalPatrolRecordBean localBean;
     private int picIndex = 0;
-    private String tower_id;
 
     public String getLineName() {
         return lineName;
@@ -147,7 +144,6 @@ public class PatrolRecordActivity extends BaseActivity {
 
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         task_id = getIntent().getStringExtra("task_id");
-        tower_id = getIntent().getStringExtra("tower_id");
         audit_status = getIntent().getStringExtra("audit_status");
         initview();
 //        getPartrolRecord();
@@ -158,10 +154,11 @@ public class PatrolRecordActivity extends BaseActivity {
 
     private void getDataFromDatabase() {
         //从数据库查询出数据
-        List<LocalPatrolRecordBean> list = SQLite.select().from(LocalPatrolRecordBean.class).queryList();
-        for (int i = 0; i < list.size(); i++) {
-            if (tower_id.equals(list.get(i).getTower_id())) ;
-
+        List<LocalPatrolRecordBean> list = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).queryList();
+        if (list.size() > 0) {
+            localBean.update();
+        } else {
+            localBean.save();
         }
     }
 
@@ -179,8 +176,6 @@ public class PatrolRecordActivity extends BaseActivity {
                         localBean.setTask_id(bean.getId());
                         localBean.setLine_id(bean.getLine_id());
                         localBean.setTower_id(bean.getTower_id());
-                        localBean.save();
-
                         getDataFromDatabase();
 
                         sign = bean.getType_sign();
@@ -205,7 +200,7 @@ public class PatrolRecordActivity extends BaseActivity {
             }
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-                titleSetting.setVisibility(View.GONE);
+                titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("提交");
             }
         } else {
@@ -414,7 +409,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-                if (audit_status.equals("0") || audit_status.equals("4")) {
+               /* if (audit_status.equals("0") || audit_status.equals("4")) {
                     saveTodoAudit("1");
                 } else {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
@@ -438,7 +433,34 @@ public class PatrolRecordActivity extends BaseActivity {
                         }
                     };
                     dialog.show();
-                }
+                }*/
+                Map<String, RequestBody> params = new HashMap<>();
+                params.put("task_id", toRequestBody(task_id));
+                RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_1.jpg"));
+                RequestBody requestFile2 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_2.jpg"));
+                RequestBody requestFile3 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_3.jpg"));
+                RequestBody requestFile4 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_4.jpg"));
+                RequestBody requestFile5 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_5.jpg"));
+                RequestBody requestFile6 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_6.jpg"));
+                params.put("patrolFile\"; filename=\"1.jpg", requestFile1);
+                params.put("patrolFile\"; filename=\"2.jpg", requestFile2);
+                params.put("patrolFile\"; filename=\"3.jpg", requestFile3);
+                params.put("patrolFile\"; filename=\"4.jpg", requestFile4);
+                params.put("patrolFile\"; filename=\"5.jpg", requestFile5);
+                params.put("patrolFile\"; filename=\"6.jpg", requestFile6);
+                BaseRequest.getInstance().getService().test(params).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new BaseObserver(this) {
+                            @Override
+                            protected void onSuccees(BaseResult t) throws Exception {
+
+                            }
+
+                            @Override
+                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                            }
+                        });
                 break;
             case R.id.iv_photo1:
               /*  if (audit_status.equals("0") || audit_status.equals("4")) {
@@ -447,7 +469,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 } else {
                     showBigImage(PHOTO1);
                 }*/
-
+                picIndex = 1;
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, Constant.PATROL_RECORD_REQUEST_CODE);
                 break;
@@ -579,7 +601,7 @@ public class PatrolRecordActivity extends BaseActivity {
                         Bundle bundle = data.getExtras();
                         Bitmap bitmap = (Bitmap) bundle.get("data");
                         String path = Environment.getExternalStorageDirectory().getPath()
-                                + "/MyPhoto/" + tower_id + "_" + picIndex + ".jpg";
+                                + "/MyPhoto/" + task_id + "_" + picIndex + ".jpg";
                         FileUtil.saveFile(bitmap, path);
                         switch (picIndex) {
                             case 1:
@@ -625,7 +647,7 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     private void upLoadPic(int sign, Bitmap bitmap) {
-        ProgressDialog.show(this, false, "正在上传图片");
+       /* ProgressDialog.show(this, false, "正在上传图片");
         Log.d("signsign", "sign:" + sign);
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), SignDialog.saveBitmapFile(bitmap, sign + ".jpg"));
         params.clear();
@@ -651,7 +673,7 @@ public class PatrolRecordActivity extends BaseActivity {
                         Toast.makeText(PatrolRecordActivity.this, "图片上传失败，请重新上传！", Toast.LENGTH_SHORT).show();
                     }
 
-                });
+                });*/
     }
 
     //保存待办信息

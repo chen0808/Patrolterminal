@@ -10,14 +10,12 @@ import java.io.Serializable;
 
 @Table(database = AppDataBase.class)
 public class LocalPatrolRecordBean extends BaseModel implements Serializable {
-    @PrimaryKey(autoincrement = true)
-    private int local_id;
+    @PrimaryKey()
+    private String tower_id;
     @Column
     private String task_id;
     @Column
     private String line_id;
-    @Column
-    private String tower_id;
     @Column
     private String pic1;
     @Column
@@ -34,14 +32,6 @@ public class LocalPatrolRecordBean extends BaseModel implements Serializable {
 //    private List<LocalPatrolDefectBean> defectBean;
 //    @Column
 //    private List<LocalPatrolTroubleBean> troubleBean;
-
-    public int getLocal_id() {
-        return local_id;
-    }
-
-    public void setLocal_id(int local_id) {
-        this.local_id = local_id;
-    }
 
     public String getTask_id() {
         return task_id;
