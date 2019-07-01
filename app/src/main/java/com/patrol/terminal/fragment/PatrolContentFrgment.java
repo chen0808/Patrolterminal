@@ -125,6 +125,7 @@ public class PatrolContentFrgment extends BaseFragment {
 
                         //存入到本地数据库  TODO
 
+
                         initTab(results);
                     }
 

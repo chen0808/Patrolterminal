@@ -1,17 +1,11 @@
 package com.patrol.terminal.bean;
 
-import com.patrol.terminal.sqlite.AppDataBase;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
-import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.io.Serializable;
 
-/**
- * 常规巡视本地数据库
- */
-@Table(database = AppDataBase.class)
-public class LocalPatrolDefectBean extends BaseModel implements Serializable {
+public class LocalPatrolTroubleBean extends BaseModel implements Serializable {
     @PrimaryKey(autoincrement = true)
     private int local_id;
 

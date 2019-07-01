@@ -10,5 +10,6 @@ public class MyApp extends Application {
         super.onCreate();
         //初始化DBFLOW
         FlowManager.init(this);
+
     }
 }

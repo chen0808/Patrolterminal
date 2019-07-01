@@ -33,6 +33,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
@@ -50,6 +51,7 @@ import com.patrol.terminal.widget.NoScrollViewPager;
 import com.patrol.terminal.widget.PinchImageView;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SignDialog;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -128,6 +130,9 @@ public class PatrolRecordActivity extends BaseActivity {
     private String sign;
     private String audit_status;
     private String lineName;
+    private LocalPatrolRecordBean localBean;
+    private int picIndex = 0;
+    private String tower_id;
 
     public String getLineName() {
         return lineName;
@@ -142,12 +147,22 @@ public class PatrolRecordActivity extends BaseActivity {
 
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         task_id = getIntent().getStringExtra("task_id");
+        tower_id = getIntent().getStringExtra("tower_id");
         audit_status = getIntent().getStringExtra("audit_status");
         initview();
 //        getPartrolRecord();
         getYXtodo();
-        initPic();
         getTask(task_id);
+//        initPic();
+    }
+
+    private void getDataFromDatabase() {
+        //从数据库查询出数据
+        List<LocalPatrolRecordBean> list = SQLite.select().from(LocalPatrolRecordBean.class).queryList();
+        for (int i = 0; i < list.size(); i++) {
+            if (tower_id.equals(list.get(i).getTower_id())) ;
+
+        }
     }
 
     private void getTask(String task_id) {
@@ -159,6 +174,15 @@ public class PatrolRecordActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
                         TaskBean bean = t.getResults();
+
+                        localBean = new LocalPatrolRecordBean();
+                        localBean.setTask_id(bean.getId());
+                        localBean.setLine_id(bean.getLine_id());
+                        localBean.setTower_id(bean.getTower_id());
+                        localBean.save();
+
+                        getDataFromDatabase();
+
                         sign = bean.getType_sign();
                         lineName = bean.getLine_name();
                     }
@@ -190,6 +214,8 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     private void initPic() {
+
+
         BaseRequest.getInstance().getService()
                 .getRecordPicList(task_id)
                 .subscribeOn(Schedulers.io())
@@ -415,12 +441,15 @@ public class PatrolRecordActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_photo1:
-                if (audit_status.equals("0") || audit_status.equals("4")) {
+              /*  if (audit_status.equals("0") || audit_status.equals("4")) {
                     photoUri1 = patrUri("record_1", PHOTO1);
                     startCamera(PHOTO1, photoUri1);
                 } else {
                     showBigImage(PHOTO1);
-                }
+                }*/
+
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, Constant.PATROL_RECORD_REQUEST_CODE);
                 break;
             case R.id.iv_photo2:
                 if (audit_status.equals("0") || audit_status.equals("4")) {
@@ -546,8 +575,33 @@ public class PatrolRecordActivity extends BaseActivity {
                         localMedia = PictureSelector.obtainMultipleResult(data);
                         Constant.picList = localMedia;
                         break;
-                    case Constant.DEFECT_REQUEST_CODE:
-
+                    case Constant.PATROL_RECORD_REQUEST_CODE:
+                        Bundle bundle = data.getExtras();
+                        Bitmap bitmap = (Bitmap) bundle.get("data");
+                        String path = Environment.getExternalStorageDirectory().getPath()
+                                + "/MyPhoto/" + tower_id + "_" + picIndex + ".jpg";
+                        FileUtil.saveFile(bitmap, path);
+                        switch (picIndex) {
+                            case 1:
+                                localBean.setPic1(path);
+                                break;
+                            case 2:
+                                localBean.setPic2(path);
+                                break;
+                            case 3:
+                                localBean.setPic3(path);
+                                break;
+                            case 4:
+                                localBean.setPic4(path);
+                                break;
+                            case 5:
+                                localBean.setPic5(path);
+                                break;
+                            case 6:
+                                localBean.setPic6(path);
+                                break;
+                        }
+                        localBean.save();
                         break;
                 }
                 if (ivPhoto1.getDrawable() != null && ivPhoto2.getDrawable() != null && ivPhoto3.getDrawable() != null
@@ -641,211 +695,4 @@ public class PatrolRecordActivity extends BaseActivity {
             subscribe.dispose();
         }
     }
-
-//    /**
-//     * 打开相册或者照相机选择凭证图片
-//     */
-//    private void selectPic() {
-//        PictureSelectorConfig.initSingleConfig(this);
-//    }
-//    // 处理选择的照片的地址
-//    private void refreshAdapter(List<LocalMedia> picList) {
-//        for (LocalMedia localMedia : picList) {
-//            //被压缩后的图片路径
-//            if (localMedia.isCompressed()) {
-//                String compressPath = localMedia.getCompressPath(); //压缩后的图片路径
-//                int index = (int) SPUtil.get(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 0);
-//                Map<String, File> fileMap = new HashMap<>();
-//                switch (index) {
-//                    case 1:
-//                        Glide.with(this).load(compressPath).into(ivPhoto1);
-//                        fileMap.put("1", new File(compressPath));
-//                        fileList.add(fileMap);
-//                        break;
-//                    case 2:
-//                        Glide.with(this).load(compressPath).into(ivPhoto2);
-//                        fileMap.put("2", new File(compressPath));
-//                        fileList.add(fileMap);
-//                        break;
-//                    case 3:
-//                        Glide.with(this).load(compressPath).into(ivPhoto3);
-//                        fileMap.put("3", new File(compressPath));
-//                        fileList.add(fileMap);
-//                        break;
-//                    case 4:
-//                        Glide.with(this).load(compressPath).into(ivPhoto4);
-//                        fileMap.put("4", new File(compressPath));
-//                        fileList.add(fileMap);
-//                        break;
-//                    case 5:
-//                        Glide.with(this).load(compressPath).into(ivPhoto5);
-//                        fileMap.put("5", new File(compressPath));
-//                        fileList.add(fileMap);
-//                        break;
-//                    case 6:
-//                        Glide.with(this).load(compressPath).into(ivPhoto6);
-//                        fileMap.put("6", new File(compressPath));
-//                        fileList.add(fileMap);
-//                        break;
-//                }
-//
-////                mPicList.add(compressPath); //把图片添加到将要上传的图片数组中
-////                mGridViewAddImgAdapter.notifyDataSetChanged();
-//            }
-//        }
-//    }
-//    //查询接电电阻
-//    public void getPartrolRecord() {
-//
-//        ProgressDialog.show(this, false, "正在加载。。。。");
-//        BaseRequest.getInstance().getService()
-//                .getPartrolRecord(task_id, "sign")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
-//
-//
-//                    @Override
-//                    protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
-//                        if (t.getCode() == 1) {
-//                            List<PatrolRecordPicBean> picBeanList = t.getResults();
-//                            picList.clear();
-//                            for (int i = 0; i < picBeanList.size(); i++) {
-//                                PatrolRecordPicBean overhaulFileBean = picBeanList.get(i);
-//
-//
-//                                String file_path = overhaulFileBean.getFile_path();
-//                                String compressPath = BaseUrl.BASE_URL + file_path.substring(1, file_path.length()) + overhaulFileBean.getFilename();
-//                                picList.add(compressPath);
-//                                switch (overhaulFileBean.getSign()) {
-//                                    case "1":
-//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto1);
-//                                        break;
-//                                    case "2":
-//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto2);
-//                                        break;
-//                                    case "3":
-//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto3);
-//                                        break;
-//                                    case "4":
-//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto4);
-//                                        break;
-//                                    case "5":
-//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto5);
-//                                        break;
-//                                    case "6":
-//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto6);
-//                                        break;
-//                                }
-//                            }
-//
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//
-//                    }
-//
-//                });
-//    }
-//    //t提交巡视记录
-//    private void commitPatrolRecord() {
-//        if (fileList.size() < 6) {
-//            Toast.makeText(PatrolRecordActivity.this, "请上传6张对应图片！", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        ProgressDialog.show(this, false, "正在上传。。。");
-//        for (int i = 0; i < fileList.size(); i++) {
-//            Map<String, File> stringFileMap = fileList.get(i);
-//            Set<String> strings = stringFileMap.keySet();
-//            for (String type : strings) {
-//                File file = stringFileMap.get(type);
-//                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//                params.put("file" + type
-//                        + "\"; filename=\"" + file.getName(), requestFile);
-//            }
-//
-//        }
-//        params.put("from_user_id", toRequestBody(SPUtil.getUserId(this)));
-//        params.put("user_id", toRequestBody(SPUtil.getUserId(this)));
-//        params.put("name", toRequestBody("关于" + line_name + tower_name + "的" + typename));
-//        params.put("type_sign", toRequestBody(sign));
-//        params.put("audit_id", toRequestBody(SPUtil.getDepId(this)));
-//        params.put("id", toRequestBody(task_id));
-//        BaseRequest.getInstance().getService().commitPatrolRecord(params).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver(this) {
-//                    @Override
-//                    protected void onSuccees(BaseResult t) throws Exception {
-//                        ProgressDialog.cancle();
-//
-//                        if (t.getCode() == 1) {
-//                            Toast.makeText(PatrolRecordActivity.this, "保存成功！", Toast.LENGTH_SHORT).show();
-//                            setResult(RESULT_OK);
-//
-//                            RxRefreshEvent.publish("refreshTodo");
-//                            RxRefreshEvent.publish("refreshGroup");
-//                            finish();
-//                        }
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                        ProgressDialog.cancle();
-//                        Log.i("11111", e.toString());
-//                        Toast.makeText(PatrolRecordActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
-//
-//    public void getYXtodo() {
-//
-//        if ("0".equals(audit_status)) {
-//            if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-//                titleSetting.setVisibility(View.VISIBLE);
-//                titleSettingTv.setText("上传图片");
-//            } else {
-//                titleSetting.setVisibility(View.GONE);
-//            }
-//        } else if ("1".equals(audit_status)) {
-//            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-//                titleSetting.setVisibility(View.VISIBLE);
-//                titleSettingTv.setText("审批");
-//            } else {
-//                titleSetting.setVisibility(View.GONE);
-//            }
-//        } else if ("2".equals(audit_status)) {
-//            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-//                titleSetting.setVisibility(View.VISIBLE);
-//                titleSettingTv.setText("审批");
-//            } else {
-//                titleSetting.setVisibility(View.GONE);
-//            }
-//        } else if ("4".equals(audit_status)) {
-//            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-//                titleSetting.setVisibility(View.GONE);
-//            } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-//                titleSetting.setVisibility(View.VISIBLE);
-//                titleSettingTv.setText("上传图片");
-//            } else {
-//                titleSetting.setVisibility(View.GONE);
-//            }
-//        } else {
-//            titleSetting.setVisibility(View.GONE);
-//        }
-////    } else   {
-////        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-////            titleSetting.setVisibility(View.GONE);
-////        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-////            titleSetting.setVisibility(View.VISIBLE);
-////            titleSettingTv.setText("上传图片");
-////        } else {
-////            titleSetting.setVisibility(View.GONE);
-////        }
-////
-////    }
-//    }
-//
 }
