@@ -128,6 +128,7 @@ public class GroupTaskFrgment extends BaseFragment {
         });
 
         getDataFromDatabase();
+        //getData();
 
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
