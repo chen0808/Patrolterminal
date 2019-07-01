@@ -623,6 +623,7 @@ public class PatrolRecordActivity extends BaseActivity {
                                 localBean.setPic6(path);
                                 break;
                         }
+//                        SQLite.select(LocalPatrolRecordBean.class).getQuery();
                         localBean.save();
                         break;
                 }
