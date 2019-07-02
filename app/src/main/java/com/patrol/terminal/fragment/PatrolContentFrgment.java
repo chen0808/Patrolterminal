@@ -11,16 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.adapter.DefectTabAdapter;
 import com.patrol.terminal.adapter.MyPagerAdapter;
 import com.patrol.terminal.adapter.PatrolContentAdapter;
@@ -28,12 +26,19 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.LocalPatrolDefectBean;
+import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.PatrolContentBean;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
+import com.patrol.terminal.sqlite.AppDataBase;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.RxRefreshEvent;
-import com.patrol.terminal.utils.SPUtil;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -77,6 +82,10 @@ public class PatrolContentFrgment extends BaseFragment {
     private DefectTabAdapter adapter1;
     private DefectTabAdapter adapter0;
     private List<PatrolContentBean> results;
+    private List<LocalPatrolDefectBean> localList;
+    private List<LocalPatrolDefectBean> localByPatrolId;
+    private LocalPatrolDefectBean localBean;
+    private List<LocalPatrolDefectBean> localByTaskId;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,17 +95,6 @@ public class PatrolContentFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-//        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
-//
-//            @Override
-//            public void accept(String s) throws Exception {
-//                if (s.startsWith("updateDefect")) {
-//                    getdata();
-//                }
-//            }
-//        });
-        //从本地数据库获取
-
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
@@ -106,8 +104,9 @@ public class PatrolContentFrgment extends BaseFragment {
                 }
             }
         });
-        task_id = (String) SPUtil.get(getActivity(), "ids", "task_id", "");
-        line_id = (String) SPUtil.get(getActivity(), "ids", "line_id", "");
+        task_id = getActivity().getIntent().getStringExtra("task_id");
+        line_id = getActivity().getIntent().getStringExtra("line_id");
+        query();
         getdata();
     }
 
@@ -119,34 +118,70 @@ public class PatrolContentFrgment extends BaseFragment {
                     @Override
                     protected void onSuccees(BaseResult<List<PatrolContentBean>> t) throws Exception {
                         results = t.getResults();
-//                        rvPatrolContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-//                        adapter = new PatrolContentAdapter(getData(results), getActivity(), line_id);
-//                        rvPatrolContent.setAdapter(adapter);
-
-                        //存入到本地数据库  TODO
-
-
-                        initTab(results);
+                        FlowManager.getDatabase(AppDataBase.class).beginTransactionAsync(new ITransaction() {
+                            @Override
+                            public void execute(DatabaseWrapper databaseWrapper) {
+                                localBean = SQLite.select().from(LocalPatrolDefectBean.class).querySingle();
+                                if (localBean == null) {
+                                    localBean = new LocalPatrolDefectBean();
+                                }
+                                for (int i = 0; i < results.size(); i++) {
+                                    for (int j = 0; j < results.get(i).getValue().size(); j++) {
+                                        localBean.setTask_id(task_id);
+                                        localBean.setTab_name(results.get(i).getName());
+                                        localBean.setPatrol_id(results.get(i).getValue().get(j).getPatrol_id());
+                                        localBean.setPatrol_name(results.get(i).getValue().get(j).getRemarks());
+                                        localBean.setStatus(results.get(i).getValue().get(j).getStatus());
+                                        localBean.setCategory_id(results.get(i).getValue().get(j).getCategory());
+                                        localBean.save();
+//                                        save(i,j);
+                                    }
+                                }
+                            }
+                        }).success(new Transaction.Success() {
+                            @Override
+                            public void onSuccess(@NonNull Transaction transaction) {
+                            }
+                        }).error(new Transaction.Error() {
+                            @Override
+                            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+                            }
+                        }).build().execute();
+                        query();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        Toast.makeText(getActivity(), "失败", Toast.LENGTH_SHORT).show();
+
                     }
                 });
-//        List<PatrolContentBean> results = (List<PatrolContentBean>) SPUtil.get(getActivity(), "list", "defectList", null);
-//        if (results != null) {
-//            rvPatrolContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            adapter = new PatrolContentAdapter(getData(results), getActivity(), line_id);
-//            rvPatrolContent.setAdapter(adapter);
-//        }
     }
 
-    private void initTab(List<PatrolContentBean> results) {
+    private void save(int i, int j) {
+        localByPatrolId = SQLite.select().from(LocalPatrolDefectBean.class)
+                .where(LocalPatrolDefectBean_Table.patrol_id.is(results.get(i).getValue().get(j).getPatrol_id()))
+                .and(LocalPatrolDefectBean_Table.task_id.is(task_id))
+                .queryList();
+        if (localByPatrolId != null && localByPatrolId.size() > 0) {
+            localBean.update();
+        } else {
+            localBean.save();
+        }
+    }
+
+    //查询本地数据
+    private void query() {
+        localByTaskId = SQLite.select().from(LocalPatrolDefectBean.class).where(LocalPatrolDefectBean_Table.task_id.is(task_id)).queryList();
+        if (localByTaskId != null && localByTaskId.size() != 0) {
+//            initTab(localByTaskId);
+        }
+    }
+
+    private void initTab(List<LocalPatrolDefectBean> localByTaskId) {
         tabName.clear();
         fragmentList.clear();
         for (int i = 0; i < results.size(); i++) {
-            tabName.add(results.get(i).getName());
+            tabName.add(localByTaskId.get(i).getTab_name());
         }
 
         View view0 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
@@ -272,10 +307,6 @@ public class PatrolContentFrgment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        List<LocalMedia> localMedia = ((PatrolRecordActivity) getActivity()).getPics();
-        if (localMedia != null) {
-            adapter.refreshAdapter(localMedia);
-        }
     }
 
     @Override
