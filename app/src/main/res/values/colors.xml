@@ -108,4 +108,6 @@
     <color name="line_point_3">#00bc9f</color>
 
     <color name="trouble_detail_tab">#6BA7D6</color>
+    <color name="progress_bar_background">#C1C1C1</color>
+    <color name="progress_bar_progress">#5EC746</color>
 </resources>

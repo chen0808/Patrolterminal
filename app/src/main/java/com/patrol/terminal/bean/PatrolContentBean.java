@@ -1,5 +1,7 @@
 package com.patrol.terminal.bean;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -49,6 +51,16 @@ public class PatrolContentBean implements Serializable {
         private String task_id;
         private String patrol_id;
         private String status;
+
+        private List<Bitmap> picList;
+
+        public List<Bitmap> getPicList() {
+            return picList;
+        }
+
+        public void setPicList(List<Bitmap> picList) {
+            this.picList = picList;
+        }
 
         public ValueBean(String id, String task_id, String patrol_id, String status) {
             this.id = id;

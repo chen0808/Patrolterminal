@@ -95,7 +95,8 @@ public class Constant {
     public static final int REQ_QR_CODE = 11002; // // 打开扫描界面请求码
 
     public static final String SORT_ASC = "sort asc";
-
+    public static final int PATROL_RECORD_REQUEST_CODE = 40;//巡视记录拍照
+    public static final int DEFECT_REQUEST_CODE = 50;//常规巡视拍照
     public static final String ADD_TRAINING_PLAN_ENTER_TYPE = "add_train_plan_enter_type";
     public static final int FROM_YEAR_TO_ENTER_TYPE = 0;
     public static final int FROM_MONTH_TO_ENTER_TYPE = 1;
@@ -115,4 +116,6 @@ public class Constant {
     public static boolean isContent = false;
     public static List<LocalMedia> picList = null;
     public static String defectType = "";
+    public static int defect_tab = -1;//巡视类别
+    public static int defect_index = -1;//巡视位置
 }
