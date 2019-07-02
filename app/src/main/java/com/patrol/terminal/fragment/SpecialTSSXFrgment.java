@@ -169,14 +169,14 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }
         });
 
-        skEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
+        lfEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
             @Override
             public void delObject(TSSXBean bean) {
                 tssxAddAdapter.removeStatus(bean);
             }
         });
 
-        skEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
+        qtEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
             @Override
             public void delObject(TSSXBean bean) {
                 tssxAddAdapter.removeStatus(bean);
