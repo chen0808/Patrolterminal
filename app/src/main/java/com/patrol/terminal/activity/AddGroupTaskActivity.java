@@ -473,57 +473,57 @@ public class AddGroupTaskActivity extends BaseActivity {
                 });
     }
 
-
-    //保存
-    public void savaGroupTask() {
-        if (duty_user_id.equals(SPUtil.getUserId(this))){
-            String string = SPUtil.getString(AddGroupTaskActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-            SPUtil.putString(AddGroupTaskActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER + "," + string);
-
-        }
-        AddGroupTaskReqBean.UsersBean usersBean=new AddGroupTaskReqBean.UsersBean();
-        usersBean.setSign("1");
-        usersBean.setUser_id(SPUtil.getUserId(this));
-        usersBean.setUser_name(SPUtil.getUserName(this));
-        addPeoList.add(usersBean);
-
-        AddGroupTaskReqBean bean = new AddGroupTaskReqBean();
-        bean.setDep_id(SPUtil.getDepId(this));
-        bean.setDay(day);
-        bean.setMonth(month);
-        bean.setYear(year);
-        bean.setWeek(TimeUtil.getWeekOfYear(new Date(System.currentTimeMillis()))+"");
-        bean.setFrom_user_id(SPUtil.getUserId(this));
-        bean.setFrom_user_name(SPUtil.getUserName(this));
-        bean.setDep_name(SPUtil.getDepName(this));
-        bean.setDuty_user_id(duty_user_id);
-        bean.setDuty_user_name(duty_user_name);
-        bean.setUsers(addPeoList);
-        bean.setLists(selectType);
-        BaseRequest.getInstance().getService()
-                .savaGroupTask(bean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DangerBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<DangerBean>> t) throws Exception {
-                        if (t.getCode() == 1) {
-                            RxRefreshEvent.publish("refreshNum");
-                            setResult(RESULT_OK);
-                            Toast.makeText(AddGroupTaskActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(AddGroupTaskActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
+//
+//    //保存
+//    public void savaGroupTask() {
+//        if (duty_user_id.equals(SPUtil.getUserId(this))){
+//            String string = SPUtil.getString(AddGroupTaskActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+//            SPUtil.putString(AddGroupTaskActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER + "," + string);
+//
+//        }
+//        AddGroupTaskReqBean.UsersBean usersBean=new AddGroupTaskReqBean.UsersBean();
+//        usersBean.setSign("1");
+//        usersBean.setUser_id(SPUtil.getUserId(this));
+//        usersBean.setUser_name(SPUtil.getUserName(this));
+//        addPeoList.add(usersBean);
+//
+//        AddGroupTaskReqBean bean = new AddGroupTaskReqBean();
+//        bean.setDep_id(SPUtil.getDepId(this));
+//        bean.setDay(day);
+//        bean.setMonth(month);
+//        bean.setYear(year);
+//        bean.setWeek(TimeUtil.getWeekOfYear(new Date(System.currentTimeMillis()))+"");
+//        bean.setFrom_user_id(SPUtil.getUserId(this));
+//        bean.setFrom_user_name(SPUtil.getUserName(this));
+//        bean.setDep_name(SPUtil.getDepName(this));
+//        bean.setDuty_user_id(duty_user_id);
+//        bean.setDuty_user_name(duty_user_name);
+//        bean.setUsers(addPeoList);
+//        bean.setLists(selectType);
+//        BaseRequest.getInstance().getService()
+//                .savaGroupTask(bean)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<List<DangerBean>>(this) {
+//                    @Override
+//                    protected void onSuccees(BaseResult<List<DangerBean>> t) throws Exception {
+//                        if (t.getCode() == 1) {
+//                            RxRefreshEvent.publish("refreshNum");
+//                            setResult(RESULT_OK);
+//                            Toast.makeText(AddGroupTaskActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+//                            finish();
+//                        } else {
+//                            Toast.makeText(AddGroupTaskActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//
+//                    }
+//                });
+//    }
 
 
     @Override
@@ -573,7 +573,7 @@ public class AddGroupTaskActivity extends BaseActivity {
 //                    return;
 //                }
 
-                savaGroupTask();
+//                savaGroupTask();
                 break;
         }
     }
