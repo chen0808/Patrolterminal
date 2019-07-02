@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -15,16 +14,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -35,9 +29,7 @@ import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
-import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
-import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
 import com.patrol.terminal.fragment.SpecialTSSXFrgment;
@@ -48,7 +40,6 @@ import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.NoScrollViewPager;
 import com.patrol.terminal.widget.PinchImageView;
-import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -115,25 +106,12 @@ public class PatrolRecordActivity extends BaseActivity {
     private MyFragmentPagerAdapter pagerAdapter;
     private Disposable subscribe;
     private Map<String, RequestBody> params = new HashMap<>();
-    public static final int PHOTO1 = 1;
-    public static final int PHOTO2 = 2;
-    public static final int PHOTO3 = 3;
-    public static final int PHOTO4 = 4;
-    public static final int PHOTO5 = 5;
-    public static final int PHOTO6 = 6;
-    private List<LocalMedia> localMedia;
-    private List<PatrolRecordPicBean> picBeanList;
     private String jobType;
     private String task_id;
-    private String sign;
     private String audit_status;
-    private String lineName;
     private LocalPatrolRecordBean localBean;
     private int picIndex = 0;
-
-    public String getLineName() {
-        return lineName;
-    }
+    private LocalPatrolRecordBean localByTaskId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,127 +123,14 @@ public class PatrolRecordActivity extends BaseActivity {
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         task_id = getIntent().getStringExtra("task_id");
         audit_status = getIntent().getStringExtra("audit_status");
-        initview();
-//        getPartrolRecord();
+
         getYXtodo();
+        initview();
+        query();
         getTask(task_id);
-//        initPic();
     }
 
-    private void getDataFromDatabase() {
-        //从数据库查询出数据
-        List<LocalPatrolRecordBean> list = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).queryList();
-        if (list.size() > 0) {
-            localBean.update();
-        } else {
-            localBean.save();
-        }
-    }
-
-    private void getTask(String task_id) {
-        BaseRequest.getInstance().getService()
-                .getTask(task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<TaskBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
-                        TaskBean bean = t.getResults();
-
-                        localBean = new LocalPatrolRecordBean();
-                        localBean.setTask_id(bean.getId());
-                        localBean.setLine_id(bean.getLine_id());
-                        localBean.setTower_id(bean.getTower_id());
-                        getDataFromDatabase();
-
-                        sign = bean.getType_sign();
-                        lineName = bean.getLine_name();
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
-
-    private void getYXtodo() {
-        if ("1".equals(audit_status)) {
-            titleSetting.setVisibility(View.VISIBLE);
-            titleSettingTv.setText("审批");
-        } else if ("2".equals(audit_status)) {
-            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                titleSetting.setVisibility(View.VISIBLE);
-                titleSettingTv.setText("审批");
-            }
-        } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
-            if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-                titleSetting.setVisibility(View.VISIBLE);
-                titleSettingTv.setText("提交");
-            }
-        } else {
-            titleSetting.setVisibility(View.GONE);
-        }
-    }
-
-    private void initPic() {
-
-
-        BaseRequest.getInstance().getService()
-                .getRecordPicList(task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
-
-
-                    @Override
-                    protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
-                        picBeanList = t.getResults();
-                        for (int i = 0; i < picBeanList.size(); i++) {
-                            showPic(picBeanList.get(i));
-                        }
-                        if (picBeanList.size() == 6) {
-                            titleSetting.setVisibility(View.VISIBLE);
-                            if (audit_status.equals("0") || audit_status.equals("4")) {
-                                titleSettingTv.setText("提交");
-                            } else {
-                                titleSettingTv.setText("审核");
-                            }
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-
-                });
-    }
-
-    private void showPic(PatrolRecordPicBean picBean) {
-        String path = BaseUrl.BASE_URL + picBean.getFile_path() + picBean.getFilename();
-        switch (picBean.getSign()) {
-            case "1":
-                Glide.with(this).load(path).into(ivPhoto1);
-                break;
-            case "2":
-                Glide.with(this).load(path).into(ivPhoto2);
-                break;
-            case "3":
-                Glide.with(this).load(path).into(ivPhoto3);
-                break;
-            case "4":
-                Glide.with(this).load(path).into(ivPhoto4);
-                break;
-            case "5":
-                Glide.with(this).load(path).into(ivPhoto5);
-                break;
-            case "6":
-                Glide.with(this).load(path).into(ivPhoto6);
-                break;
-        }
-    }
-
+    //初始化界面，创建fragment
     private void initview() {
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new PatrolContentFrgment()); //常规巡视
@@ -276,13 +141,9 @@ public class PatrolRecordActivity extends BaseActivity {
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(pagerAdapter);
         initMagicIndicator();
-
         viewPager.setNoScroll(true);
         viewPager.setOffscreenPageLimit(5);
-
-
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
-
             @Override
             public void accept(String s) throws Exception {
                 if (s.startsWith("update")) {
@@ -296,6 +157,7 @@ public class PatrolRecordActivity extends BaseActivity {
         magicIndicator.onPageSelected(0);
     }
 
+    //创建indicator
     private void initMagicIndicator() {
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {
@@ -341,66 +203,143 @@ public class PatrolRecordActivity extends BaseActivity {
         ViewPagerHelper.bind(magicIndicator, viewPager);
     }
 
-    /**
-     * 图片保存路径  这里是在SD卡目录下创建了MyPhoto文件夹
-     *
-     * @param fileName
-     * @return
-     */
-    private Uri patrUri(String fileName, int pos) {  //指定了图片的名字，可以使用时间来命名
-        // TODO Auto-generated method stub
-        String strPhotoName = fileName + ".jpg";
-        String savePath = Environment.getExternalStorageDirectory().getPath()
-                + "/MyPhoto/";
-        File dir = new File(savePath);
-        if (!dir.exists()) {
-            dir.mkdirs();
+    //获取当前任务完成状态
+    private void getYXtodo() {
+        if ("1".equals(audit_status)) {
+            titleSetting.setVisibility(View.VISIBLE);
+            titleSettingTv.setText("审批");
+        } else if ("2".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
+            }
+        } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("提交");
+            }
+        } else {
+            titleSetting.setVisibility(View.GONE);
         }
-
-        switch (pos) {
-            case PHOTO1:
-                filePath1 = savePath + strPhotoName;
-                break;
-
-            case PHOTO2:
-                filePath2 = savePath + strPhotoName;
-                break;
-
-            case PHOTO3:
-                filePath3 = savePath + strPhotoName;
-                break;
-
-            case PHOTO4:
-                filePath4 = savePath + strPhotoName;
-                break;
-
-            case PHOTO5:
-                filePath5 = savePath + strPhotoName;
-                break;
-
-            case PHOTO6:
-                filePath6 = savePath + strPhotoName;
-                break;
-        }
-
-        return FileProvider.getUriForFile(getApplicationContext(),
-                "com.patrol.terminal.fileprovider",
-                new File(dir, strPhotoName));
     }
 
-    //private String recordPath1;
-    Uri photoUri1;
-    String filePath1;
-    Uri photoUri2;
-    String filePath2;
-    Uri photoUri3;
-    String filePath3;
-    Uri photoUri4;
-    String filePath4;
-    Uri photoUri5;
-    String filePath5;
-    Uri photoUri6;
-    String filePath6;
+    //从后台获取数据
+    private void getTask(String task_id) {
+        BaseRequest.getInstance().getService()
+                .getTask(task_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<TaskBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
+                        TaskBean bean = t.getResults();
+                        localBean = SQLite.select().from(LocalPatrolRecordBean.class).querySingle();
+                        if (localBean == null) {
+                            localBean = new LocalPatrolRecordBean();
+                        }
+                        localBean.setTask_id(bean.getId());
+                        localBean.setLine_id(bean.getLine_id());
+                        localBean.setTower_id(bean.getTower_id());
+                        localBean.setLine_name(bean.getLine_name());
+                        save();
+                        query();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+    }
+
+    //查询当前task_id是否为空，如果为空，保存，否则，更新
+    private void save() {
+        localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
+        if (localByTaskId != null) {
+            localBean.update();
+        } else {
+            localBean.save();
+        }
+    }
+
+    //获取当前task_id对应的数据
+    private void query() {
+        localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
+//        initLocalData(localByTaskId);
+        initOnLineData();
+    }
+
+    //本地数据
+    private void initLocalData(LocalPatrolRecordBean localByTaskId) {
+        if (localByTaskId != null) {
+            if (localByTaskId.getPic1() != null) {
+                Glide.with(this).load(new File(localByTaskId.getPic1())).into(ivPhoto1);
+            }
+            if (localByTaskId.getPic2() != null) {
+                Glide.with(this).load(new File(localByTaskId.getPic2())).into(ivPhoto2);
+            }
+            if (localByTaskId.getPic3() != null) {
+                Glide.with(this).load(new File(localByTaskId.getPic3())).into(ivPhoto3);
+            }
+            if (localByTaskId.getPic4() != null) {
+                Glide.with(this).load(new File(localByTaskId.getPic4())).into(ivPhoto4);
+            }
+            if (localByTaskId.getPic5() != null) {
+                Glide.with(this).load(new File(localByTaskId.getPic5())).into(ivPhoto5);
+            }
+            if (localByTaskId.getPic6() != null) {
+                Glide.with(this).load(new File(localByTaskId.getPic6())).into(ivPhoto6);
+            }
+        }
+    }
+
+    private void initOnLineData() {
+        BaseRequest.getInstance().getService()
+                .getRecordPicList(task_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
+
+
+                    @Override
+                    protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
+                        List<PatrolRecordPicBean> picBeanList = t.getResults();
+                        for (int i = 0; i < picBeanList.size(); i++) {
+                            showPic(picBeanList.get(i));
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+
+                });
+    }
+
+    private void showPic(PatrolRecordPicBean picBean) {
+        String path = BaseUrl.BASE_URL + picBean.getFile_path() + picBean.getFilename();
+        switch (picBean.getSign()) {
+            case "1":
+                Glide.with(this).load(path).into(ivPhoto1);
+                break;
+            case "2":
+                Glide.with(this).load(path).into(ivPhoto2);
+                break;
+            case "3":
+                Glide.with(this).load(path).into(ivPhoto3);
+                break;
+            case "4":
+                Glide.with(this).load(path).into(ivPhoto4);
+                break;
+            case "5":
+                Glide.with(this).load(path).into(ivPhoto5);
+                break;
+            case "6":
+                Glide.with(this).load(path).into(ivPhoto6);
+                break;
+        }
+    }
 
     @OnClick({R.id.title_back, R.id.title_setting, R.id.iv_photo1, R.id.iv_photo2, R.id.iv_photo3, R.id.iv_photo4, R.id.iv_photo5, R.id.iv_photo6, R.id.fab})
     public void onViewClicked(View view) {
@@ -434,20 +373,33 @@ public class PatrolRecordActivity extends BaseActivity {
                     };
                     dialog.show();
                 }*/
-                Map<String, RequestBody> params = new HashMap<>();
                 params.put("task_id", toRequestBody(task_id));
-                RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_1.jpg"));
-                RequestBody requestFile2 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_2.jpg"));
-                RequestBody requestFile3 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_3.jpg"));
-                RequestBody requestFile4 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_4.jpg"));
-                RequestBody requestFile5 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_5.jpg"));
-                RequestBody requestFile6 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_6.jpg"));
-                params.put("patrolFile\"; filename=\"1.jpg", requestFile1);
-                params.put("patrolFile\"; filename=\"2.jpg", requestFile2);
-                params.put("patrolFile\"; filename=\"3.jpg", requestFile3);
-                params.put("patrolFile\"; filename=\"4.jpg", requestFile4);
-                params.put("patrolFile\"; filename=\"5.jpg", requestFile5);
-                params.put("patrolFile\"; filename=\"6.jpg", requestFile6);
+                if (localByTaskId != null) {
+                    if (localByTaskId.getPic1() != null) {
+                        RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic1()));
+                        params.put("patrolFile\"; filename=\"1.jpg", requestFile1);
+                    }
+                    if (localByTaskId.getPic2() != null) {
+                        RequestBody requestFile2 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic2()));
+                        params.put("patrolFile\"; filename=\"2.jpg", requestFile2);
+                    }
+                    if (localByTaskId.getPic3() != null) {
+                        RequestBody requestFile3 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic3()));
+                        params.put("patrolFile\"; filename=\"3.jpg", requestFile3);
+                    }
+                    if (localByTaskId.getPic4() != null) {
+                        RequestBody requestFile4 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic4()));
+                        params.put("patrolFile\"; filename=\"4.jpg", requestFile4);
+                    }
+                    if (localByTaskId.getPic5() != null) {
+                        RequestBody requestFile5 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic5()));
+                        params.put("patrolFile\"; filename=\"5.jpg", requestFile5);
+                    }
+                    if (localByTaskId.getPic6() != null) {
+                        RequestBody requestFile6 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic6()));
+                        params.put("patrolFile\"; filename=\"6.jpg", requestFile6);
+                    }
+                }
                 BaseRequest.getInstance().getService().test(params).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new BaseObserver(this) {
@@ -463,54 +415,51 @@ public class PatrolRecordActivity extends BaseActivity {
                         });
                 break;
             case R.id.iv_photo1:
-              /*  if (audit_status.equals("0") || audit_status.equals("4")) {
-                    photoUri1 = patrUri("record_1", PHOTO1);
-                    startCamera(PHOTO1, photoUri1);
-                } else {
-                    showBigImage(PHOTO1);
-                }*/
                 picIndex = 1;
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, Constant.PATROL_RECORD_REQUEST_CODE);
+                if (audit_status.equals("0") || audit_status.equals("4")) {
+                    startCamera();
+                } else {
+                    showBigImage();
+                }
                 break;
             case R.id.iv_photo2:
+                picIndex = 2;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    photoUri2 = patrUri("record_2", PHOTO2);
-                    startCamera(PHOTO2, photoUri2);
+                    startCamera();
                 } else {
-                    showBigImage(PHOTO2);
+                    showBigImage();
                 }
                 break;
             case R.id.iv_photo3:
+                picIndex = 3;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    photoUri3 = patrUri("record_3", PHOTO3);
-                    startCamera(PHOTO3, photoUri3);
+                    startCamera();
                 } else {
-                    showBigImage(PHOTO3);
+                    showBigImage();
                 }
                 break;
             case R.id.iv_photo4:
+                picIndex = 4;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    photoUri4 = patrUri("record_4", PHOTO4);
-                    startCamera(PHOTO4, photoUri4);
+                    startCamera();
                 } else {
-                    showBigImage(PHOTO4);
+                    showBigImage();
                 }
                 break;
             case R.id.iv_photo5:
+                picIndex = 5;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    photoUri5 = patrUri("record_5", PHOTO5);
-                    startCamera(PHOTO5, photoUri5);
+                    startCamera();
                 } else {
-                    showBigImage(PHOTO5);
+                    showBigImage();
                 }
                 break;
             case R.id.iv_photo6:
+                picIndex = 6;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    photoUri6 = patrUri("record_6", PHOTO6);
-                    startCamera(PHOTO6, photoUri6);
+                    startCamera();
                 } else {
-                    showBigImage(PHOTO6);
+                    showBigImage();
                 }
                 break;
             case R.id.fab:
@@ -520,24 +469,21 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     //打开相机
-    private void startCamera(int requestCode, Uri photoUri) {
-        // TODO Auto-generated method stub
+    private void startCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-        startActivityForResult(intent, requestCode);
+        startActivityForResult(intent, Constant.PATROL_RECORD_REQUEST_CODE);
     }
 
     //查看大图
-    private void showBigImage(int photo) {
+    private void showBigImage() {
         Dialog dialog = new Dialog(this);
-
         dialog.setContentView(R.layout.dialog_big_image);
         PinchImageView iv = dialog.findViewById(R.id.iv);
-        for (int i = 0; i < picBeanList.size(); i++) {
-            if (picBeanList.get(i).getSign() != null && picBeanList.get(i).getSign().equals(String.valueOf(photo))) {
+       /* for (int i = 0; i < picBeanList.size(); i++) {
+            if (picBeanList.get(i).getSign() != null && picBeanList.get(i).getSign().equals(String.valueOf(picIndex))) {
                 Glide.with(this).load(BaseUrl.BASE_URL + picBeanList.get(i).getFile_path() + picBeanList.get(i).getFilename()).into(iv);
             }
-        }
+        }*/
         dialog.show();
     }
 
@@ -557,46 +503,6 @@ public class PatrolRecordActivity extends BaseActivity {
         if (resultCode == Activity.RESULT_OK) {
             try {
                 switch (requestCode) {
-                    case PHOTO1:
-                        Bitmap bitmap1 = FileUtil.compressBySize(filePath1, 1080, 1920);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap1, filePath1);
-                        ivPhoto1.setImageBitmap(bitmap1);
-                        upLoadPic(PHOTO1, bitmap1);
-                        break;
-                    case PHOTO2:
-                        Bitmap bitmap2 = FileUtil.compressBySize(filePath2, 1080, 1920);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap2, filePath2);
-                        ivPhoto2.setImageBitmap(bitmap2);
-                        upLoadPic(PHOTO2, bitmap2);
-                        break;
-                    case PHOTO3:
-                        Bitmap bitmap3 = FileUtil.compressBySize(filePath3, 1080, 1920);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap3, filePath3);
-                        ivPhoto3.setImageBitmap(bitmap3);
-                        upLoadPic(PHOTO3, bitmap3);
-                        break;
-                    case PHOTO4:
-                        Bitmap bitmap4 = FileUtil.compressBySize(filePath4, 1080, 1920);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap4, filePath4);
-                        ivPhoto4.setImageBitmap(bitmap4);
-                        upLoadPic(PHOTO4, bitmap4);
-                        break;
-                    case PHOTO5:
-                        Bitmap bitmap5 = FileUtil.compressBySize(filePath5, 1080, 1920);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap5, filePath5);
-                        ivPhoto5.setImageBitmap(bitmap5);
-                        upLoadPic(PHOTO5, bitmap5);
-                        break;
-                    case PHOTO6:
-                        Bitmap bitmap6 = FileUtil.compressBySize(filePath6, 1080, 1920);  //设置压缩后图片的高度和宽度
-                        FileUtil.saveFile(bitmap6, filePath6);
-                        ivPhoto6.setImageBitmap(bitmap6);
-                        upLoadPic(PHOTO6, bitmap6);
-                        break;
-                    case PictureConfig.CHOOSE_REQUEST:
-                        localMedia = PictureSelector.obtainMultipleResult(data);
-                        Constant.picList = localMedia;
-                        break;
                     case Constant.PATROL_RECORD_REQUEST_CODE:
                         Bundle bundle = data.getExtras();
                         Bitmap bitmap = (Bitmap) bundle.get("data");
@@ -605,110 +511,37 @@ public class PatrolRecordActivity extends BaseActivity {
                         FileUtil.saveFile(bitmap, path);
                         switch (picIndex) {
                             case 1:
+                                ivPhoto1.setImageBitmap(bitmap);
                                 localBean.setPic1(path);
                                 break;
                             case 2:
+                                ivPhoto2.setImageBitmap(bitmap);
                                 localBean.setPic2(path);
                                 break;
                             case 3:
+                                ivPhoto3.setImageBitmap(bitmap);
                                 localBean.setPic3(path);
                                 break;
                             case 4:
+                                ivPhoto4.setImageBitmap(bitmap);
                                 localBean.setPic4(path);
                                 break;
                             case 5:
+                                ivPhoto5.setImageBitmap(bitmap);
                                 localBean.setPic5(path);
                                 break;
                             case 6:
+                                ivPhoto6.setImageBitmap(bitmap);
                                 localBean.setPic6(path);
                                 break;
                         }
-//                        SQLite.select(LocalPatrolRecordBean.class).getQuery();
-                        localBean.save();
+                        save();
                         break;
-                }
-                if (ivPhoto1.getDrawable() != null && ivPhoto2.getDrawable() != null && ivPhoto3.getDrawable() != null
-                        && ivPhoto4.getDrawable() != null && ivPhoto5.getDrawable() != null && ivPhoto6.getDrawable() != null) {
-                    titleSetting.setVisibility(View.VISIBLE);
-                    if (audit_status.equals("0") || audit_status.equals("4")) {
-                        titleSettingTv.setText("提交");
-                    } else {
-                        titleSettingTv.setText("审核");
-                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-
-    public List<LocalMedia> getPics() {
-        return localMedia;
-    }
-
-    private void upLoadPic(int sign, Bitmap bitmap) {
-       /* ProgressDialog.show(this, false, "正在上传图片");
-        Log.d("signsign", "sign:" + sign);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), SignDialog.saveBitmapFile(bitmap, sign + ".jpg"));
-        params.clear();
-        params.put("file" + "\"; filename=\"" + sign + ".jpg", requestFile);
-        params.put("id", toRequestBody(task_id));
-        params.put("sign", toRequestBody(String.valueOf(sign)));
-        BaseRequest.getInstance().getService()
-                .uploadRecordPic(params)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver(this) {
-
-
-                    @Override
-                    protected void onSuccees(BaseResult t) throws Exception {
-                        ProgressDialog.cancle();
-                        Toast.makeText(PatrolRecordActivity.this, "图片上传成功！", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                        Toast.makeText(PatrolRecordActivity.this, "图片上传失败，请重新上传！", Toast.LENGTH_SHORT).show();
-                    }
-
-                });*/
-    }
-
-    //保存待办信息
-    public void saveTodoAudit(String state) {
-
-        SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
-
-        saveTodoReqbean.setAudit_status(state);
-        saveTodoReqbean.setId(task_id);
-        saveTodoReqbean.setType_sign(sign);
-        saveTodoReqbean.setFrom_user_id(SPUtil.getUserId(this));
-        BaseRequest.getInstance().getService()
-                .saveTodoAudit(saveTodoReqbean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<TypeBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
-                        ProgressDialog.cancle();
-                        if (t.getCode() == 1) {
-                            Toast.makeText(PatrolRecordActivity.this, "成功", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK);
-                            RxRefreshEvent.publish("refreshGroup");
-                            RxRefreshEvent.publish("refreshTodo");
-                            finish();
-                        }
-
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
-                    }
-                });
     }
 
     @Override
