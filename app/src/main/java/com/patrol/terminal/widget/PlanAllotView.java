@@ -32,20 +32,27 @@ public class PlanAllotView extends LinearLayout {
         } else {
             dayPlanCheckIv.setImageResource(R.mipmap.circle_no);
         }
-
-        inflate.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bean.isCheck() == true) {
-                    bean.setCheck(false);
-                    dayPlanCheckIv.setImageResource(R.mipmap.circle_no);
-                } else {
-                    bean.setCheck(true);
-                    dayPlanCheckIv.setImageResource(R.mipmap.circle);
+        if ("1".equals(bean.getAllot_status())||"1".equals(bean.getIs_rob())){
+            dayPlanName.setTextColor(context.getResources().getColor(R.color.color_69));
+            dayPlanCheckIv.setVisibility(GONE);
+        }else {
+            dayPlanName.setTextColor(context.getResources().getColor(R.color.color_33));
+            dayPlanCheckIv.setVisibility(VISIBLE);
+            inflate.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (bean.isCheck() == true) {
+                        bean.setCheck(false);
+                        dayPlanCheckIv.setImageResource(R.mipmap.circle_no);
+                    } else {
+                        bean.setCheck(true);
+                        dayPlanCheckIv.setImageResource(R.mipmap.circle);
+                    }
+                    RxRefreshEvent.publishGrooup(bean);
                 }
-                RxRefreshEvent.publishGrooup(bean);
-            }
-        });
+            });
+        }
+
 
     }
 

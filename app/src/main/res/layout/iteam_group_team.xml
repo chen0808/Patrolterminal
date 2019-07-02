@@ -13,14 +13,15 @@
             android:id="@+id/iteam_group_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/dp_50"
-            android:gravity="center"
+            android:drawableLeft="@mipmap/personal_icon"
+            android:drawablePadding="@dimen/dp_5"
+            android:gravity="center_vertical"
             android:text="小组1"
             android:textColor="@color/color_33" />
 
         <ImageView
             android:id="@+id/item_group_delete"
-            android:layout_width="@dimen/dp_40"
+            android:layout_width="35dp"
             android:layout_height="@dimen/dp_40"
             android:layout_alignParentRight="true"
             android:scaleType="center"

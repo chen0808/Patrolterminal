@@ -155,9 +155,9 @@ public class NewTaskActivity extends BaseActivity {
             dayPlanNum.setVisibility(View.VISIBLE);
         } else {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 60), UIUtil.dip2px(this, 30));
-            layoutParams.setMargins(UIUtil.dip2px(this, 125), 0, UIUtil.dip2px(this, 30), 0);
+            layoutParams.setMargins(UIUtil.dip2px(this, 112), 0, UIUtil.dip2px(this, 30), 0);
             LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 60), UIUtil.dip2px(this, 30));
-            layoutParams1.setMargins(UIUtil.dip2px(this, 50), 0, UIUtil.dip2px(this, 60), 0);
+            layoutParams1.setMargins(UIUtil.dip2px(this, 43), 0, UIUtil.dip2px(this, 60), 0);
             groupTaskNum.setLayoutParams(layoutParams);
             personalTaskNum.setLayoutParams(layoutParams1);
             groupTaskNum.setGravity(Gravity.BOTTOM);

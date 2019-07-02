@@ -6,14 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.CursorAdapter;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.TSSXBean;
+import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.sqlite.MyOpenhelper;
-import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.SankuaEditView;
 
 import java.util.ArrayList;
@@ -32,7 +34,12 @@ public class TssxEditAdapter extends BaseAdapter {
     private Context context;
     private List<TSSXBean> tssxList = new ArrayList<TSSXBean>();
     private ViewHolder holder;
-    private onClickAdapter clickAdapter;
+
+    //默认三跨
+    private  int type = 0;
+    private static int TYPE_SK = 0;
+    private static int TYPE_LF = 1;
+    private static int TYPE_QT = 2;
 
     public TssxEditAdapter(Context context) {
         this.context = context;
@@ -46,10 +53,15 @@ public class TssxEditAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if(tssxList != null){
+
+
             return tssxList.size();
+
+
         }else{
             return 0;
         }
+
     }
 
     @Override
@@ -74,75 +86,46 @@ public class TssxEditAdapter extends BaseAdapter {
             convertView.setTag(holder);
         }
 
-        holder.tssx_edit.setOnItemClick(new SankuaEditView.onTssxClick() {
-            @Override
-            public void clickDel() {
+        if(type == TYPE_SK){
 
-                CancelOrOkDialog dialog = new CancelOrOkDialog(context, "是否删除？", "取消", "删除") {
-                    @Override
-                    public void ok() {
-                        super.ok();
-                        clickAdapter.delObject(tssxList.get(position));
-                        tssxList.remove(position);
-                        notifyDataSetChanged();
-                         dismiss();
-                    }
-                    @Override
-                    public void cancle() {
-                        super.cancle();
-                        dismiss();
-                    }
-                };
-                dialog.show();
-            }
+        }else if(type == TYPE_LF){
 
-            @Override
-            public void onAutoItemClick(AdapterView<?> parent, View view, int position, long id) {
+        }else if(type == TYPE_QT){
 
-                Cursor cursor1 = clickAdapter.getCursorAdapter().getCursor();
-                if (cursor1 != null && cursor1.getCount() > 0) {
-                    boolean isExist = cursor1.moveToPosition(position);
-                    if (isExist) {
-                        String levelStr = cursor1.getString(clickAdapter.getCursor().getColumnIndex(MyOpenhelper.DefactTvColumns.LEVEL));
-                        Log.w("linmeng", "levelStr:" + levelStr);   //这里获取的是缺陷等级，给陈飞用！  TODO
-                        holder.tssx_edit.setDjStatus(levelStr);
-                    }
-                }
-            }
-
-            @Override
-            public void addTextChangedListener(String txt) {
-                tssxList.get(position).setYhnr(txt);
-            }
-
-            @Override
-            public void getDj(String djStr) {
-                tssxList.get(position).setDj(djStr);
-            }
-
-        });
-
-        holder.tssx_edit.setAutoAdapter(clickAdapter.getCursorAdapter());
-
-        TSSXBean tssxBean = tssxList.get(position);
-        holder.tssx_edit.setItemTilte(tssxBean.getValues());
-        holder.tssx_edit.setItemYhnr(tssxBean.getYhnr());
-
-        Log.e("当前等级状态",tssxBean.getDj());
-        if(tssxBean.getDj().equals("一般")){
-            holder.tssx_edit.setDjStatus("一般");
-        }else{
-            holder.tssx_edit.setDjStatus(tssxBean.getDj());
         }
+
+
 
         return convertView;
     }
 
-    public void setData(List<TSSXBean> typeBeanList) {
+    /**
+     *返回选中项
+     * @return
+     */
+    public List<TSSXBean> getCheckList()
+    {
+        Log.e("getCheckList",tssxList.size()+"");
+//        if(tssxList == null)
+//            return null;
+//        else
+            return tssxList;
+    }
+
+
+    public void setData(List<TSSXBean> typeBeanList,CursorAdapter cursorAdapter,Cursor cursor) {
+
         if(typeBeanList != null){
-            tssxList = typeBeanList;
+            Log.e("getCheckList",tssxList.size()+"");
+            tssxList.clear();
+            tssxList.addAll(typeBeanList);
             notifyDataSetChanged();
+        }else{
+            Log.e("getCheckList","00000000000000");
         }
+
+//        holder.tssx_edit.setAutoAdapter(cursorAdapter,cursor);
+
     }
 
     class ViewHolder {
@@ -150,16 +133,6 @@ public class TssxEditAdapter extends BaseAdapter {
 
     }
 
-    public void setOnclickAdapter(onClickAdapter clickAdapter)
-    {
-        this.clickAdapter = clickAdapter;
-    }
 
-    public interface onClickAdapter
-    {
-        void delObject(TSSXBean bean);
-        AutoCursorAdapter getCursorAdapter();
-        Cursor getCursor();
-    }
 
 }

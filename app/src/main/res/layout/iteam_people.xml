@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/dp_10"
         android:textColor="@color/my_info"
-
+        android:drawablePadding="@dimen/dp_5"
+        android:drawableLeft="@mipmap/people_icon"
         android:textSize="@dimen/sp_15"
         android:text="刘海参"
         android:gravity="center"

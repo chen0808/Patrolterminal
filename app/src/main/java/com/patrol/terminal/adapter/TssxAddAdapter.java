@@ -6,18 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.TSSXBean;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 特殊属性 添加
@@ -25,9 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TssxAddAdapter extends BaseAdapter {
     private Context context;
     private List<TSSXBean> tssxList = new ArrayList<>();
-
-    ViewHolder holder=null;
-    private Map<Integer,String> map = new ConcurrentHashMap<>();
 
     public TssxAddAdapter(Context context, List<TSSXBean> list) {
         this.context = context;
@@ -51,38 +43,33 @@ public class TssxAddAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        if (convertView == null) {
+        ViewHolder holder;
+        if (convertView != null) {
+            holder = (ViewHolder) convertView.getTag();
+        } else {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_tssx_additem, parent, false);
             holder.checkBox = convertView.findViewById(R.id.tssx_checkbox);
             convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
         }
+
 
         holder.checkBox.setText(tssxList.get(position).getValues());
 
-
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onClick(View v) {
                 TSSXBean bean = tssxList.get(position);
-                if (b){
-                    map.put(position,bean.getValues());
-                    bean.setCheck(true);
-                }else{
-                    map.remove(position);
+                if(bean.isCheck()){
                     bean.setCheck(false);
+                    holder.checkBox.setChecked(false);
+                }else{
+                    bean.setCheck(true);
+                    holder.checkBox.setChecked(true);
                 }
+
             }
         });
-
-        if(map!=null && map.containsKey(position)){
-            holder.checkBox.setChecked(true);
-        }else{
-            holder.checkBox.setChecked(false);
-        }
 
         return convertView;
     }
@@ -109,24 +96,7 @@ public class TssxAddAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void removeStatus(TSSXBean bean) {
-        int index = tssxList.indexOf(bean);
-        tssxList.get(index).setCheck(false);
-
-        for (Map.Entry<Integer,String> entry : map.entrySet()) {
-            Integer key = (Integer) entry.getKey();
-            String values = (String)entry.getValue();
-            if(values.equals(bean.getValues()))
-            {
-                map.remove(key);
-                break;
-            }
-        }
-
-        notifyDataSetChanged();
-    }
-
     class ViewHolder {
-        private CheckBox checkBox;
+        private RadioButton checkBox;
     }
 }

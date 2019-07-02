@@ -204,7 +204,7 @@ public class NewPlanActivity extends BaseActivity {
         titleContainer.setDividerDrawable(new ColorDrawable() {
             @Override
             public int getIntrinsicWidth() {
-                return UIUtil.dip2px(NewPlanActivity.this, 15);
+                return UIUtil.dip2px(NewPlanActivity.this, 50);
             }
         });
         ViewPagerHelper.bind(magicIndicator, viewPager);

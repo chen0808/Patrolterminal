@@ -19,7 +19,7 @@
         />
     <ImageView
         android:id="@+id/day_plan_check_iv"
-        android:layout_width="@dimen/dp_30"
+        android:layout_width="@dimen/dp_50"
         android:layout_height="match_parent"
         android:src="@mipmap/circle_no"
         android:scaleType="center"

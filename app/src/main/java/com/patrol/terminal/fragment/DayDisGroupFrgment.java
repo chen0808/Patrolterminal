@@ -23,6 +23,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AddGroupTaskReqBean;
 import com.patrol.terminal.bean.DangerBean;
 import com.patrol.terminal.bean.DepUserBean;
+import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.GroupTeamBean;
 import com.patrol.terminal.bean.GroupTeamSaveBean;
 import com.patrol.terminal.utils.DateUatil;
@@ -364,7 +365,11 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                     protected void onSuccees(BaseResult<List<DepUserBean>> t) throws Exception {
                         personalsList = t.getResults();
                         groupPersonalAdapter.setNewData(personalsList);
-                        setVisiable();
+                        if (personalsList.size()==0){
+                            personalNoData.setVisibility(View.VISIBLE);
+                        }else {
+                            personalNoData.setVisibility(View.GONE);
+                        }
                     }
 
                     @Override
@@ -390,6 +395,10 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                             List<DepUserBean> personals = new ArrayList<>();
                             List<DepUserBean> teams = new ArrayList<>();
                             AddGroupTaskReqBean addGroupTaskReqBean = results.get(i);
+                            List<GroupOfDayBean> lists = addGroupTaskReqBean.getLists();
+                            if (lists.size()>0){
+//                                groupSave.setVisibility(View.GONE);
+                            }
                             List<AddGroupTaskReqBean.UsersBean> users = addGroupTaskReqBean.getUsers();
                             for (int j = 0; j < users.size(); j++) {
                                 AddGroupTaskReqBean.UsersBean usersBean = users.get(j);
@@ -407,7 +416,11 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                             teamList.add(groupTeamBean);
 
                         }
-                        setVisiable();
+                        if (teamList.size()==0){
+                            teamNoData.setVisibility(View.VISIBLE);
+                        }else {
+                            teamNoData.setVisibility(View.GONE);
+                        }
                         groupTeamAdapter.setNewData(teamList);
                     }
 
@@ -530,7 +543,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                     protected void onSuccees(BaseResult<List<DangerBean>> t) throws Exception {
                         if (t.getCode() == 1) {
                             RxRefreshEvent.publish("refreshGroupTeamNum@" + list.size());
-                            RxRefreshEvent.publishGrooup(null);
+                            RxRefreshEvent.publishGrooup(new GroupOfDayBean());
                             Toast.makeText(getContext(), "保存成功", Toast.LENGTH_SHORT).show();
                         }
                         ProgressDialog.cancle();

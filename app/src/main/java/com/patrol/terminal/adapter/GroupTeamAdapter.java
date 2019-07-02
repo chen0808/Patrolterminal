@@ -36,6 +36,7 @@ public class GroupTeamAdapter extends BaseQuickAdapter<GroupTeamBean, BaseViewHo
         }
          if (item.getPersonalsList()!=null){
              for (int i = 0; i < item.getPersonalsList().size(); i++) {
+
                  DepUserBean depUserBean = item.getPersonalsList().get(i);
                  GroupTeamView view=new GroupTeamView(mContext, depUserBean,2);
                  personal.addView(view);

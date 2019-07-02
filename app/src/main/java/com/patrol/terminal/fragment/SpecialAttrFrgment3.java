@@ -14,9 +14,11 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.PlusImageActivity;
 import com.patrol.terminal.activity.TestActivity;
 import com.patrol.terminal.adapter.GridViewAdapter2;
@@ -32,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.OnClick;
 
 /**
@@ -302,7 +305,7 @@ public class SpecialAttrFrgment3 extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-//        localMedia = ((PatrolRecordActivity) getActivity()).getPics();
+        localMedia = ((PatrolRecordActivity) getActivity()).getPics();
         if (localMedia != null) {
             refreshAdapter(localMedia);
         }
@@ -482,9 +485,9 @@ public class SpecialAttrFrgment3 extends BaseFragment {
                 }
                 break;
             case R.id.btn_add:
-//                String lineName = ((PatrolRecordActivity) getActivity()).getLineName();
+                String lineName = ((PatrolRecordActivity) getActivity()).getLineName();
                 Intent intent = new Intent(getActivity(), TestActivity.class);
-//                intent.putExtra("line_name", lineName);
+                intent.putExtra("line_name", lineName);
                 getActivity().startActivity(intent);
                 break;
         }

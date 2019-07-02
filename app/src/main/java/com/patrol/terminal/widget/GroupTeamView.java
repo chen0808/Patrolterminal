@@ -34,9 +34,9 @@ public class GroupTeamView extends LinearLayout {
         }
         viewPersonalName.setText(depUserBean.getName());
         if (type==1){
-            viewPersonIcon.setImageResource(R.mipmap.group_icon);
+            viewPersonIcon.setImageResource(R.mipmap.personal_team);
         }else{
-            viewPersonIcon.setImageResource(R.mipmap.personal_icon);
+            viewPersonIcon.setImageResource(R.mipmap.people_icon);
         }
         viewGroupTeam.setOnClickListener(new OnClickListener() {
             @Override

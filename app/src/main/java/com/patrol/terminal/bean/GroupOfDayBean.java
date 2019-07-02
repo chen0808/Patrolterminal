@@ -58,6 +58,15 @@ public class GroupOfDayBean {
     private String done_time;
     private String day_tower_id;
     private boolean check;
+    private String is_rob;
+
+    public String getIs_rob() {
+        return is_rob;
+    }
+
+    public void setIs_rob(String is_rob) {
+        this.is_rob = is_rob;
+    }
 
     public boolean isCheck() {
         return check;

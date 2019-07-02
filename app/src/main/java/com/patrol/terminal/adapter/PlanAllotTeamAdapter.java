@@ -23,6 +23,7 @@ public class PlanAllotTeamAdapter extends BaseQuickAdapter<TeamAndTaskBean, Base
 
     @Override
     protected void convert(BaseViewHolder viewHolder, TeamAndTaskBean item) {
+        viewHolder.addOnClickListener(R.id.iteam_group_team_name);
         List<GroupOfDayBean> dayPlanList = item.getLists();
         boolean check = item.isCheck();
         if (check==true){

@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.PlusImageActivity;
 import com.patrol.terminal.activity.TestActivity;
 import com.patrol.terminal.adapter.GridViewAdapter2;
@@ -134,7 +135,7 @@ public class SpecialAttrFrgment2 extends BaseFragment {
             rlItem1.setVisibility(View.VISIBLE);
             rl1.setVisibility(View.VISIBLE);
         }
-//        localMedia = ((PatrolRecordActivity) getActivity()).getPics();
+        localMedia = ((PatrolRecordActivity) getActivity()).getPics();
         if (localMedia != null) {
             refreshAdapter(localMedia);
         }
