@@ -1,6 +1,5 @@
 package com.patrol.terminal.fragment;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,25 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import androidx.fragment.app.Fragment;
 
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
+import com.patrol.terminal.adapter.AutoCursorAdapter;
 import com.patrol.terminal.adapter.TssxAddAdapter;
 import com.patrol.terminal.adapter.TssxEditAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.bean.TSSXBean;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
-import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -40,10 +34,6 @@ import butterknife.BindView;
 public class SpecialTSSXFrgment extends BaseFragment {
 
 
-//    @BindView(R.id.tssx_sankua)
-//    Button tssx_sankua;
-//    @BindView(R.id.tssx_liufang)
-//    Button tssx_liufang;
     @BindView(R.id.tssx_add)
     ImageButton tssx_add;
     @BindView(R.id.xs_tssx_pager)
@@ -58,23 +48,37 @@ public class SpecialTSSXFrgment extends BaseFragment {
     ListView xs_tssx_lv;
     @BindView(R.id.tssx_select_title)
     RadioGroup sankua_rad;
+    @BindView(R.id.tssx_sankua)
+    RadioButton tssx_sankua;
 
-
-
-    private MyFragmentPagerAdapter pagerAdapter;
     private View view;
     /**特殊属性列表*/
     private List<TSSXBean> tssxBeanList = new ArrayList<>();
     /**添加的特殊属性列表*/
     private List<TSSXBean> addTssxList = new ArrayList<>();
+
+
     /**添加特殊屬性adapter*/
     private TssxAddAdapter tssxAddAdapter;
 
     private SpecialTSSXSKFrgment skFragment;
     private SpecialTSSXLFFrgment lfFragment;
 
+
+    /**添加的特殊属性列表*/
+    private List<TSSXBean> skTssxList = new ArrayList<>();
+    private List<TSSXBean> lfTssxList = new ArrayList<>();
+    private List<TSSXBean> qtTssxList = new ArrayList<>();
+
     private TssxEditAdapter skEditAdapter;
     private TssxEditAdapter lfEditAdapter;
+    private TssxEditAdapter qtEditAdapter;
+
+    private String TYPE_SK = "9F2DF17853FC468884A3F37260FDFED6";
+    private String TYPE_LF = "98F764466504450DBC4C490F6DB512C2";
+    private String TYPE_QT = "B2E7DF49D7AB4B358D5DD4BF4DF639EC";
+    DefactContentDBHelper defactContentDBHelper;
+    Cursor cursor;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,59 +89,40 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-//        List<Fragment> fragmentList = new ArrayList<>();
-//        skFragment = new SpecialTSSXSKFrgment();
-//        lfFragment = new SpecialTSSXLFFrgment();
-//        fragmentList.add(skFragment); //三跨
-//        fragmentList.add(lfFragment);  //六防
-//        pagerAdapter = new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragmentList);
-//        xs_tssx_pager.setAdapter(pagerAdapter);
-//        xs_tssx_pager.setCurrentItem(0);
-
         skEditAdapter = new TssxEditAdapter(getActivity());
         lfEditAdapter = new TssxEditAdapter(getActivity());
-        xs_tssx_lv.setAdapter(skEditAdapter);
-
-
+        qtEditAdapter = new TssxEditAdapter(getActivity());
 
         intTSSX();
         initClick();
 
     }
 
-
     public void initClick() {
-
-        xs_tssx_pager.setOffscreenPageLimit(1);
-        xs_tssx_pager.setNoScroll(true);
+        defactContentDBHelper = new DefactContentDBHelper(getActivity());
+        cursor = defactContentDBHelper.queryAll();
+        AutoCursorAdapter cursorAdapter = new AutoCursorAdapter(getActivity(),cursor);
 
         sankua_rad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton rb = (RadioButton)group.getChildAt(checkedId);
-                if(rb.getId() == R.id.tssx_sankua){
+                switch (checkedId){
+                    case R.id.tssx_sankua:
+                        xs_tssx_lv.setAdapter(skEditAdapter);
+                        skEditAdapter.setData(skTssxList);
 
-                }else if(rb.getId() == R.id.tssx_liufang){
-
-                }else if(rb.getId() == R.id.tssx_qita){
-
+                        break;
+                    case R.id.tssx_liufang:
+                        xs_tssx_lv.setAdapter(lfEditAdapter);
+                        lfEditAdapter.setData(lfTssxList);
+                        break;
+                    case R.id.tssx_qita:
+                        xs_tssx_lv.setAdapter(qtEditAdapter);
+                        qtEditAdapter.setData(qtTssxList);
+                        break;
                 }
             }
         });
-
-//        tssx_sankua.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                xs_tssx_pager.setCurrentItem(0);
-//            }
-//        });
-//        tssx_liufang.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                xs_tssx_pager.setCurrentItem(1);
-//            }
-//        });
-
 
         //属性选择
         tssx_add.setOnClickListener(new View.OnClickListener() {
@@ -148,8 +133,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
                     rl_add.setVisibility(View.GONE);
                 }else
                 rl_add.setVisibility(View.VISIBLE);
+
+                xs_tssx_lv.setAdapter(skEditAdapter);
                 tssxAddAdapter.setData(tssxBeanList);
-//                xs_tssx_pager.setVisibility(View.GONE);
+
             }
         });
         /**
@@ -161,19 +148,87 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 rl_add.setVisibility(View.GONE);
                 addTssxList.clear();
                 addTssxList.addAll(tssxAddAdapter.getCheckList());
-                Log.e("保存按钮","添加条数"+addTssxList.size());
+                intiTssxData(addTssxList);
 
-                //刷新fragment 页面数据
-//                skFragment.setTssxAdapter(addTssxList);
-//                lfFragment.setTssxAdapter(addTssxList);
-
-//                skEditAdapter.setData(addTssxList,cursorAdapter,cursor);
-                skEditAdapter.setData(addTssxList,null,null);
+                sankua_rad.check(tssx_sankua.getId());
                 xs_tssx_lv.setAdapter(skEditAdapter);
+
+                skEditAdapter.setData(skTssxList);
+                lfEditAdapter.setData(lfTssxList);
+                qtEditAdapter.setData(qtTssxList);
+
                 xs_tssx_lv.setVisibility(View.VISIBLE);
             }
         });
 
+        skEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
+            @Override
+            public void delObject(TSSXBean bean) {
+                tssxAddAdapter.removeStatus(bean);
+            }
+
+            @Override
+            public AutoCursorAdapter getCursorAdapter() {
+                return cursorAdapter;
+            }
+
+            @Override
+            public Cursor getCursor() {
+                return cursor;
+            }
+        });
+
+        lfEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
+            @Override
+            public void delObject(TSSXBean bean) {
+                tssxAddAdapter.removeStatus(bean);
+            }
+
+            @Override
+            public AutoCursorAdapter getCursorAdapter() {
+                return cursorAdapter;
+            }
+
+            @Override
+            public Cursor getCursor() {
+                return cursor;
+            }
+        });
+
+        qtEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
+            @Override
+            public void delObject(TSSXBean bean) {
+                tssxAddAdapter.removeStatus(bean);
+            }
+
+            @Override
+            public AutoCursorAdapter getCursorAdapter() {
+                return cursorAdapter;
+            }
+
+            @Override
+            public Cursor getCursor() {
+                return cursor;
+            }
+        });
+    }
+
+    public void  intiTssxData(List<TSSXBean> typeBeanList)
+    {
+        skTssxList.clear();
+        lfTssxList.clear();
+        qtTssxList.clear();
+        int count = typeBeanList.size();
+        for (int i=0;i<count;i++){
+            TSSXBean bean = typeBeanList.get(i);
+            if(bean.getParKey() == TYPE_SK){
+                skTssxList.add(bean);
+            }else if(bean.getParKey() == TYPE_LF){
+                lfTssxList.add(bean);
+            }else if(bean.getParKey() == TYPE_QT){
+                qtTssxList.add(bean);
+            }
+        }
     }
 
 
@@ -192,7 +247,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
         tssxBeanList.add(new TSSXBean("2C9F831710564224BCB16CBCD86DE40E","9F2DF17853FC468884A3F37260FDFED6","成片林"));
         tssxBeanList.add(new TSSXBean("213C9D09E0E64CA4B0DCFA54595F5066","9F2DF17853FC468884A3F37260FDFED6","苗圃"));
         tssxBeanList.add(new TSSXBean("A0EB5B09737243E1841AA9E058CF02F1","9F2DF17853FC468884A3F37260FDFED6","零星树木"));
-        tssxBeanList.add(new TSSXBean("5E9C3B53A67C495DBAFC43ADB0FEE87A","9F2DF17853FC468884A3F37260FDFED6","0.4千伏电力线路"));
+        tssxBeanList.add(new TSSXBean("5E9C3B53A67C495DBAFC43ADB0FEE87A","9F2DF17853FC468884A3F37260FDFED6","0.4千伏电力"));//线路
         tssxBeanList.add(new TSSXBean("B4B0E1D6A6864E01A40B443E147D0B0F","9F2DF17853FC468884A3F37260FDFED6","220V电力线路"));
         tssxBeanList.add(new TSSXBean("2DF697AC80C94F11A922AB165B5284F8","9F2DF17853FC468884A3F37260FDFED6","380V电力线路"));
         tssxBeanList.add(new TSSXBean("B0F2F7B7AB0640ECA8C7C03D0BFA45FD","9F2DF17853FC468884A3F37260FDFED6","10kV线路"));
@@ -203,9 +258,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
         tssxBeanList.add(new TSSXBean("98386414B6F447AABA072D834B7BAD15","9F2DF17853FC468884A3F37260FDFED6","通讯线"));
         tssxBeanList.add(new TSSXBean("B8B48592F5FE465DA36E6A207904A327","9F2DF17853FC468884A3F37260FDFED6","通航河流"));
         tssxBeanList.add(new TSSXBean("2243F7A2B8074FBE80DEAE9CF7505B13","9F2DF17853FC468884A3F37260FDFED6","一般河流"));
-        //其他
-        tssxBeanList.add(new TSSXBean("FEFFD17137CA4E3891DCC3C28457FFA2","B2E7DF49D7AB4B358D5DD4BF4DF639EC","单线路路通道"));
-        tssxBeanList.add(new TSSXBean("460116CD2E3A42DDAC92D432033EDD4B","B2E7DF49D7AB4B358D5DD4BF4DF639EC","重要输电通道"));
+
         //八防
         tssxBeanList.add(new TSSXBean("CE0954EF596447CA9458CC230234E01A","98F764466504450DBC4C490F6DB512C2","防鸟害"));
         tssxBeanList.add(new TSSXBean("EC3507FA707F431EAB2829888F7E368F","98F764466504450DBC4C490F6DB512C2","公墓区"));
@@ -215,7 +268,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
         tssxBeanList.add(new TSSXBean("23EB52FFB8E648BD936CBA8CC1AEDE21","98F764466504450DBC4C490F6DB512C2","高大山区"));
         tssxBeanList.add(new TSSXBean("167110830E6F478AA8E9C6BA85EB6848","98F764466504450DBC4C490F6DB512C2","雷电密集区"));
         tssxBeanList.add(new TSSXBean("145EBA8EA8634AC1BE32D3201A0D6465","98F764466504450DBC4C490F6DB512C2","C1级以上雷区"));
-        tssxBeanList.add(new TSSXBean("78F6A3F642284FA2983FF3C42E2B7D8C","98F764466504450DBC4C490F6DB512C2","微地形、气象区"));
+        tssxBeanList.add(new TSSXBean("78F6A3F642284FA2983FF3C42E2B7D8C","98F764466504450DBC4C490F6DB512C2","微地形气象区"));
         tssxBeanList.add(new TSSXBean("CD1A12BA8DB3466980CA48CE7C33EA0B","98F764466504450DBC4C490F6DB512C2","大风口"));
         tssxBeanList.add(new TSSXBean("B35AFDECC6A444439E6E48BBCC467644","98F764466504450DBC4C490F6DB512C2","垭口"));
         tssxBeanList.add(new TSSXBean("539AAE2C366F43DB96C068BE555A01C0","98F764466504450DBC4C490F6DB512C2","风偏放电"));
@@ -227,53 +280,21 @@ public class SpecialTSSXFrgment extends BaseFragment {
         tssxBeanList.add(new TSSXBean("FB76395583E34DD5833E94FB75BD1DFF","98F764466504450DBC4C490F6DB512C2","高大机械施工"));
         tssxBeanList.add(new TSSXBean("785CC6BE3D8349A4BC4AC68F3F35439A","98F764466504450DBC4C490F6DB512C2","违章建筑"));
         tssxBeanList.add(new TSSXBean("81DD3E1DC5884FC3AA580DC93BA0F577","98F764466504450DBC4C490F6DB512C2","挖山取土区"));
-        tssxBeanList.add(new TSSXBean("D24DE68B16264B1E8247903EAC8CC25B","98F764466504450DBC4C490F6DB512C2","\"易飘物（彩钢板、防尘网及塑料膜等）"));
+        tssxBeanList.add(new TSSXBean("D24DE68B16264B1E8247903EAC8CC25B","98F764466504450DBC4C490F6DB512C2","易飘物"));//（彩钢板、防尘网及塑料膜等）
         tssxBeanList.add(new TSSXBean("386A4131AB594B999A68D4C6D767824F","98F764466504450DBC4C490F6DB512C2","风筝集中区"));
         tssxBeanList.add(new TSSXBean("5B3B30B300E6418BAB8E23CEEA446522","98F764466504450DBC4C490F6DB512C2","易燃易爆区"));
         tssxBeanList.add(new TSSXBean("3EC88457FA3041F596B86045BB66DF53","98F764466504450DBC4C490F6DB512C2","杂草焚烧"));
         tssxBeanList.add(new TSSXBean("197A79E3BA0A48C6AAECCEDFCEAA6C7C","98F764466504450DBC4C490F6DB512C2","加油站"));
         tssxBeanList.add(new TSSXBean("B2E24FE1927A4E189AF3A1C017B432B8","98F764466504450DBC4C490F6DB512C2","炼油厂"));
 
+        //其他
+        tssxBeanList.add(new TSSXBean("FEFFD17137CA4E3891DCC3C28457FFA2","B2E7DF49D7AB4B358D5DD4BF4DF639EC","单线路路通道"));
+        tssxBeanList.add(new TSSXBean("460116CD2E3A42DDAC92D432033EDD4B","B2E7DF49D7AB4B358D5DD4BF4DF639EC","重要输电通道"));
+
         tssxAddAdapter = new TssxAddAdapter(getActivity(), tssxBeanList);
         grid_addtssx.setAdapter(tssxAddAdapter);
 
 
     }
-
-//    DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(getActivity());
-//    Cursor cursor = defactContentDBHelper.queryAll();
-//    CursorAdapter cursorAdapter = new CursorAdapter(getActivity(), cursor) {
-//
-//        @Override
-//        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-//            return LayoutInflater.from(context).inflate(R.layout.simple_defact_tv_content_item_layout, parent, false);
-//        }
-//
-//        @Override
-//        public void bindView(View view, Context context, Cursor cursor) {
-//            TextView contentTv = (TextView) view.findViewById(R.id.content_tv);
-//            int contentColumnIndex = cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT);
-//            String content = cursor.getString(contentColumnIndex);
-//            contentTv.setText(content);
-//        }
-//
-//        @Override
-//        public String convertToString(Cursor cursor) {
-//            return cursor.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT));
-//        }
-//
-//        @Override
-//        public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
-//            if (getFilterQueryProvider() != null) {
-//                return getFilterQueryProvider().runQuery(constraint);
-//            }
-//
-//            DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(getActivity());
-//            Cursor cursor = defactContentDBHelper.queryFliter(String.valueOf(constraint));
-//            Log.w("linmeng", "cursor.getCount() filter:" + cursor.getCount());
-//            return cursor;
-//        }
-//    };
-
 
 }

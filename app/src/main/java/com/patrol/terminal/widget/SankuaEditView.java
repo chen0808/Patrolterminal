@@ -3,7 +3,9 @@ package com.patrol.terminal.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,12 +16,15 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.AutoCursorAdapter;
 import com.patrol.terminal.adapter.GridViewAdapter2;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.sqlite.MyOpenhelper;
@@ -40,18 +45,20 @@ public class SankuaEditView extends LinearLayout {
     private GridView sk_gridview;
     private TextView item_title;
     private LinearLayout item_context;
+    private RelativeLayout item_title_rl;
 
+    private ImageView item_tssx_del;
 
     private GridViewAdapter2 mGridViewAddImgAdapter;
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
 
     private String YHDJStr;
-    public static int YB = 0;
-    public static int ZD = 1;
-    public static int JJ = 2;
+    public static int DJ_YB = 0;
+    public static int DJ_ZD = 1;
+    public static int DJ_JJ = 2;
 
     private CursorAdapter cursorAdapter;
-    private Cursor cursor;
+    private onTssxClick mOnTssxClick;
 
 
     public SankuaEditView(Context context, AttributeSet attrs) {
@@ -63,9 +70,19 @@ public class SankuaEditView extends LinearLayout {
         sk_gridview = view.findViewById(R.id.sk_gridview);
         item_title = view.findViewById(R.id.item_tssx_title);
         item_context = view.findViewById(R.id.ll_content);
+        item_title_rl = view.findViewById(R.id.item_title_rl);
+        item_tssx_del = view.findViewById(R.id.item_tssx_del);
 
         initClick();
-        initData();
+//        initData();
+    }
+
+    public void setItemYhnr(String yhnr)
+    {
+        if(yhnr == null)
+            sankua_yhnr.setText("");
+        else
+            sankua_yhnr.setText(yhnr);
     }
 
     /**
@@ -128,33 +145,32 @@ public class SankuaEditView extends LinearLayout {
      * 设置隐患等级
      */
     public void setDjStatus(int dj) {
-
-        RadioButton rb;
-        int count = sankua_rad.getChildCount();
-        for (int i = 0; i < count; i++) {
-            rb = (RadioButton) sankua_rad.getChildAt(i);
-            if (dj == i) {
-                rb.setChecked(true);
-            } else {
-                rb.setChecked(false);
-            }
+        if(dj == DJ_YB){
+            YHDJStr = "一般";
+        }else if(dj == DJ_ZD){
+            YHDJStr = "严重";
+        }else if(dj == DJ_JJ){
+            YHDJStr = "危急";
         }
+        setDjStatus(YHDJStr);
     }
 
     public void setDjStatus(String dj) {
-        dj = dj.trim();
+
         RadioButton rb;
-        if(TextUtils.isEmpty(dj)) return;
+        if(dj == null|| TextUtils.isEmpty(dj))
+            YHDJStr = "一般";
+        else
+            YHDJStr = dj.trim();
 
         int count = sankua_rad.getChildCount();
         for (int i = 0; i < count; i++) {
             rb = (RadioButton) sankua_rad.getChildAt(i);
-            if (dj == rb.getText().toString().trim()) {
-                rb.setChecked(true);
-            } else {
-                rb.setChecked(false);
+            if (YHDJStr.equals(rb.getText().toString().trim())) {
+                sankua_rad.check(rb.getId());
             }
         }
+        mOnTssxClick.getDj(YHDJStr);
     }
 
 
@@ -164,10 +180,12 @@ public class SankuaEditView extends LinearLayout {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton rb = (RadioButton) findViewById(checkedId);
                 YHDJStr = rb.getText().toString().trim();
+                mOnTssxClick.getDj(YHDJStr);
+//                setDjStatus(YHDJStr);
             }
         });
 
-        item_title.setOnClickListener(new OnClickListener() {
+        item_title_rl.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (item_context.isShown()) {
@@ -182,74 +200,47 @@ public class SankuaEditView extends LinearLayout {
         sankua_yhnr.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor cursor1 = cursorAdapter.getCursor();
-                if (cursor1 != null && cursor1.getCount() > 0) {
-                    boolean isExist = cursor1.moveToPosition(position);
-                    if (isExist) {
-                        String levelStr = cursor1.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.LEVEL));
-                        Log.w("linmeng", "levelStr:" + levelStr);   //这里获取的是缺陷等级，给陈飞用！  TODO
-                        setDjStatus(levelStr);
-                    }
-                }
+                mOnTssxClick.onAutoItemClick(parent,view,position,id);
+            }
+        });
+
+        item_tssx_del.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnTssxClick.clickDel();
+            }
+        });
+
+        sankua_yhnr.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mOnTssxClick.addTextChangedListener(sankua_yhnr.getText().toString().trim());
+                sankua_yhnr.setSelection(editable.toString().length());
             }
         });
 
     }
 
-    public void setAutoAdapter(CursorAdapter cursorAdapter,Cursor cursor)
+    public void setOnItemClick(onTssxClick click){
+        this.mOnTssxClick = click;
+    }
+
+    public interface onTssxClick{
+        void clickDel();
+        void onAutoItemClick(AdapterView<?> parent, View view, int position, long id);
+        void addTextChangedListener(String txt);//文字变化监听
+        void getDj(String djStr);
+    }
+
+    public void setAutoAdapter(AutoCursorAdapter cursorAdapter)
     {
-        this.cursorAdapter = cursorAdapter;
-        this.cursor = cursor;
         sankua_yhnr.setAdapter(cursorAdapter);
     }
-
-    public void initData() {
-        String data[] = getResources().getStringArray(R.array.auto_textview_contents);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, data);
-        sankua_yhnr.setAdapter(adapter);
-    }
-
-
-    private void initGridView(GridView gridView) {
-        mGridViewAddImgAdapter = new GridViewAdapter2(context, mPicList);
-        gridView.setAdapter(mGridViewAddImgAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                if (position == parent.getChildCount() - 1) {
-                    //如果“增加按钮形状的”图片的位置是最后一张，且添加了的图片的数量不超过5张，才能点击
-                    if (mPicList.size() == Constant.MAX_SELECT_PIC_NUM) {
-                        //最多添加5张图片
-                        viewPluImg(position);
-                    } else {
-                        //添加凭证图片
-                        selectPic(Constant.MAX_SELECT_PIC_NUM - mPicList.size());
-                    }
-                } else {
-                    viewPluImg(position);
-                }
-            }
-        });
-    }
-
-    //查看大图
-    private void viewPluImg(int position) {
-//        Intent intent = new Intent(view.getContext(), PlusImageActivity.class);
-//        intent.putStringArrayListExtra(Constant.IMG_LIST, mPicList);
-//        intent.putExtra(Constant.POSITION, position);
-//        view.getContext().startActivityForResult(intent, code);
-    }
-
-    /**
-     * 打开相册或者照相机选择凭证图片，最多5张
-     *
-     * @param maxTotal 最多选择的图片的数量
-     */
-    private void selectPic(int maxTotal) {
-        PictureSelectorConfig.initMultiConfig((Activity) view.getContext(), maxTotal);
-    }
-
-
 
 }
