@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,12 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
     RelativeLayout changeGroupBackRl;
     @BindView(R.id.group_save)
     TextView groupSave;
+    @BindView(R.id.group_make)
+    RelativeLayout groupMake;
+    @BindView(R.id.personal_no_data)
+    ImageView personalNoData;
+    @BindView(R.id.team_no_data)
+    ImageView teamNoData;
     private int month, year, day;
     private String time;
     private List<GroupTeamBean> teamList = new ArrayList<>();
@@ -80,7 +87,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
     private GroupPersonalAdapter groupPersonalAdapter;
     private int type = 0; // 1 组长 2组员 3 撤回
     private Disposable subscribe;
-    private int selectPosition=-1;
+    private int selectPosition = -1;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,7 +114,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                     GroupTeamBean groupTeamBean = teamList.get(position);
                     List<DepUserBean> personals = groupTeamBean.getPersonalsList();
                     List<DepUserBean> teams = groupTeamBean.getTeamList();
-                    if (personals.size()!=0||teams.size()!=0){
+                    if (personals.size() != 0 || teams.size() != 0) {
                         for (int i = 0; i < personals.size(); i++) {
                             DepUserBean bean = personals.get(i);
                             bean.setCheck(false);
@@ -134,7 +141,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                 int isexit = 0;
                 for (int i = 0; i < backList.size(); i++) {
                     DepUserBean depUserBean = backList.get(i);
-                    if (type.getId().equals(depUserBean.getId()) ) {
+                    if (type.getId().equals(depUserBean.getId())) {
                         isexit = 1;
                         backList.remove(i);
                         break;
@@ -177,18 +184,18 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                     return;
                 }
                 List<GroupTeamBean> groupTeamBeanList1 = groupTeamAdapter.getData();
-                if (groupTeamBeanList1.size()==0){
+                if (groupTeamBeanList1.size() == 0) {
                     addTeamList();
-                }else {
+                } else {
                     GroupTeamBean groupTeamBean = null;
-                    if (selectPosition==-1){
-                         groupTeamBean = groupTeamBeanList1.get(groupTeamBeanList1.size() - 1);
-                    }else {
+                    if (selectPosition == -1) {
+                        groupTeamBean = groupTeamBeanList1.get(groupTeamBeanList1.size() - 1);
+                    } else {
                         groupTeamBean = groupTeamBeanList1.get(selectPosition);
                     }
 
                     List<DepUserBean> teams = groupTeamBean.getTeamList();
-                    if (teams.size()==0){
+                    if (teams.size() == 0) {
                         for (int i = 0; i < selectList.size(); i++) {
                             DepUserBean depUserBean = selectList.get(i);
                             depUserBean.setCheck(false);
@@ -196,10 +203,10 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                         teams.addAll(selectList);
                         personalsList.removeAll(selectList);
                         selectList.clear();
-                    }else {
-                        if (selectPosition==-1){
+                    } else {
+                        if (selectPosition == -1) {
                             addTeamList();
-                        }else {
+                        } else {
                             for (int i = 0; i < selectList.size(); i++) {
                                 DepUserBean depUserBean = selectList.get(i);
                                 depUserBean.setCheck(false);
@@ -217,21 +224,27 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                 groupTeamAdapter.setNewData(teamList);
                 groupPersonalAdapter.setNewData(personalsList);
                 type = 1;
+                if (personalsList.size()==0){
+                    personalNoData.setVisibility(View.VISIBLE);
+                }else {
+                    personalNoData.setVisibility(View.GONE);
+                }
                 break;
+
             case R.id.change_group_personal_rl:
                 if (selectList.size() == 0) {
                     Toast.makeText(getContext(), "请先选择人员", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 List<GroupTeamBean> groupTeamBeanList = groupTeamAdapter.getData();
-                if (groupTeamBeanList.size()==0){
+                if (groupTeamBeanList.size() == 0) {
                     addPeronalList();
-                }else {
-                    GroupTeamBean groupTeamBean =null;
+                } else {
+                    GroupTeamBean groupTeamBean = null;
                     //选中哪个小组
-                    if (selectPosition==-1){
-                         groupTeamBean = groupTeamBeanList.get(groupTeamBeanList.size() - 1);
-                    }else {
+                    if (selectPosition == -1) {
+                        groupTeamBean = groupTeamBeanList.get(groupTeamBeanList.size() - 1);
+                    } else {
                         groupTeamBean = groupTeamBeanList.get(selectPosition);
                     }
                     List<DepUserBean> personals = groupTeamBean.getPersonalsList();
@@ -248,6 +261,11 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                 groupPersonalAdapter.setNewData(personalsList);
                 type = 2;
                 changeGroupTeam.setTextColor(getResources().getColor(R.color.color_33));
+                if (personalsList.size()==0){
+                    personalNoData.setVisibility(View.VISIBLE);
+                }else {
+                    personalNoData.setVisibility(View.GONE);
+                }
                 break;
             case R.id.change_group_back_rl:
                 if (backList.size() == 0) {
@@ -262,12 +280,12 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                         List<DepUserBean> teamList = groupTeamBean3.getTeamList();
                         List<DepUserBean> personalsList = groupTeamBean3.getPersonalsList();
                         for (int j = 0; j < teamList.size(); j++) {
-                               if (depUserBean.getId().equals(teamList.get(j).getId())){
-                                   teamList.remove(j);
-                               }
+                            if (depUserBean.getId().equals(teamList.get(j).getId())) {
+                                teamList.remove(j);
+                            }
                         }
                         for (int j = 0; j < personalsList.size(); j++) {
-                            if (depUserBean.getId().equals(personalsList.get(j).getId())){
+                            if (depUserBean.getId().equals(personalsList.get(j).getId())) {
                                 personalsList.remove(j);
                             }
                         }
@@ -280,17 +298,22 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                 backList.clear();
                 groupPersonalAdapter.setNewData(personalsList);
                 groupTeamAdapter.notifyDataSetChanged();
+                if (teamList.size()==0){
+                    teamNoData.setVisibility(View.VISIBLE);
+                }else {
+                    teamNoData.setVisibility(View.GONE);
+                }
                 break;
         }
     }
 
     //添加组员
-    public void  addPeronalList(){
+    public void addPeronalList() {
         for (int i = 0; i < selectList.size(); i++) {
             DepUserBean depUserBean = selectList.get(i);
             depUserBean.setCheck(false);
         }
-        GroupTeamBean groupTeamBean=new GroupTeamBean();
+        GroupTeamBean groupTeamBean = new GroupTeamBean();
         groupTeamBean.setPersonalsList(new ArrayList<DepUserBean>());
         groupTeamBean.setTeamList(new ArrayList<DepUserBean>());
         List<DepUserBean> personalsList = groupTeamBean.getPersonalsList();
@@ -299,13 +322,14 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
         this.personalsList.removeAll(selectList);
         selectList.clear();
     }
-//添加组长
-    public void  addTeamList(){
+
+    //添加组长
+    public void addTeamList() {
         for (int i = 0; i < selectList.size(); i++) {
             DepUserBean depUserBean = selectList.get(i);
             depUserBean.setCheck(false);
         }
-        GroupTeamBean groupTeamBean=new GroupTeamBean();
+        GroupTeamBean groupTeamBean = new GroupTeamBean();
         groupTeamBean.setPersonalsList(new ArrayList<DepUserBean>());
         groupTeamBean.setTeamList(new ArrayList<DepUserBean>());
         List<DepUserBean> teamList = groupTeamBean.getTeamList();
@@ -315,7 +339,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
         selectList.clear();
     }
 
-//初始化日期
+    //初始化日期
     public void inteDate(String oldTime) {
 
         String[] years = oldTime.split("年");
@@ -339,7 +363,11 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                     protected void onSuccees(BaseResult<List<DepUserBean>> t) throws Exception {
                         personalsList = t.getResults();
                         groupPersonalAdapter.setNewData(personalsList);
-
+                      if (personalsList.size()==0){
+                          personalNoData.setVisibility(View.VISIBLE);
+                      }else {
+                          personalNoData.setVisibility(View.GONE);
+                      }
                     }
 
                     @Override
@@ -359,28 +387,33 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                     protected void onSuccees(BaseResult<List<AddGroupTaskReqBean>> t) throws Exception {
                         teamList.clear();
                         List<AddGroupTaskReqBean> results = t.getResults();
-                          RxRefreshEvent.publish("refreshGroupTeamNum@"+results.size());
-                            for (int i = 0; i < results.size(); i++) {
-                                GroupTeamBean groupTeamBean = new GroupTeamBean();
-                                List<DepUserBean> personals = new ArrayList<>();
-                                List<DepUserBean> teams = new ArrayList<>();
-                                AddGroupTaskReqBean addGroupTaskReqBean = results.get(i);
-                                List<AddGroupTaskReqBean.UsersBean> users = addGroupTaskReqBean.getUsers();
-                                for (int j = 0; j < users.size(); j++) {
-                                    AddGroupTaskReqBean.UsersBean usersBean = users.get(j);
-                                    DepUserBean bean=new DepUserBean();
-                                    bean.setId(usersBean.getUser_id());
-                                    bean.setName(usersBean.getUser_name());
-                                    if ("2".equals(usersBean.getSign())){
-                                        teams.add(bean);
-                                    }else if ("3".equals(usersBean.getSign())){
-                                        personals.add(bean);
-                                    }
+                        RxRefreshEvent.publish("refreshGroupTeamNum@" + results.size());
+                        for (int i = 0; i < results.size(); i++) {
+                            GroupTeamBean groupTeamBean = new GroupTeamBean();
+                            List<DepUserBean> personals = new ArrayList<>();
+                            List<DepUserBean> teams = new ArrayList<>();
+                            AddGroupTaskReqBean addGroupTaskReqBean = results.get(i);
+                            List<AddGroupTaskReqBean.UsersBean> users = addGroupTaskReqBean.getUsers();
+                            for (int j = 0; j < users.size(); j++) {
+                                AddGroupTaskReqBean.UsersBean usersBean = users.get(j);
+                                DepUserBean bean = new DepUserBean();
+                                bean.setId(usersBean.getUser_id());
+                                bean.setName(usersBean.getUser_name());
+                                if ("2".equals(usersBean.getSign())) {
+                                    teams.add(bean);
+                                } else if ("3".equals(usersBean.getSign())) {
+                                    personals.add(bean);
                                 }
-                                groupTeamBean.setTeamList(teams);
-                                groupTeamBean.setPersonalsList(personals);
-                                teamList.add(groupTeamBean);
+                            }
+                            groupTeamBean.setTeamList(teams);
+                            groupTeamBean.setPersonalsList(personals);
+                            teamList.add(groupTeamBean);
 
+                        }
+                        if (teamList.size()==0){
+                            teamNoData.setVisibility(View.VISIBLE);
+                        }else {
+                            teamNoData.setVisibility(View.GONE);
                         }
                         groupTeamAdapter.setNewData(teamList);
                     }
@@ -390,6 +423,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                     }
                 });
     }
+
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         //人员列表
@@ -400,7 +434,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
             for (int i = 0; i < selectList.size(); i++) {
                 DepUserBean depUserBean = selectList.get(i);
                 if (bean.getId().equals(depUserBean.getId())) {
-                    isexit=false;
+                    isexit = false;
                     bean.setCheck(false);
                     selectList.remove(i);
                     personalName.setTextColor(getResources().getColor(R.color.my_info));
@@ -417,12 +451,12 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
             GroupTeamBean groupTeamBean = teamList.get(position);
             boolean check = groupTeamBean.isCheck();
             TextView groupName = (TextView) adapter.getViewByPosition(selectGroupTeamRv, position, R.id.iteam_group_name);
-            if (check==true){
+            if (check == true) {
                 groupTeamBean.setCheck(false);
-                selectPosition=-1;
+                selectPosition = -1;
                 groupName.setTextColor(getResources().getColor(R.color.color_33));
-            }else {
-               groupTeamBean.setCheck(true);
+            } else {
+                groupTeamBean.setCheck(true);
                 groupName.setTextColor(getResources().getColor(R.color.blue));
                 selectPosition = position;
             }
@@ -431,34 +465,34 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
 
     //保存
     public void savaGroupTeam() {
-        GroupTeamSaveBean groupTeamSaveBean=new GroupTeamSaveBean();
-        List<AddGroupTaskReqBean> list=new ArrayList<>();
+        GroupTeamSaveBean groupTeamSaveBean = new GroupTeamSaveBean();
+        List<AddGroupTaskReqBean> list = new ArrayList<>();
         //获取小组列表数据
         List<GroupTeamBean> data = groupTeamAdapter.getData();
-        if ((data.size()==0)){
-            Toast.makeText(getContext(),"请先添加小组",Toast.LENGTH_SHORT).show();
+        if ((data.size() == 0)) {
+            Toast.makeText(getContext(), "请先添加小组", Toast.LENGTH_SHORT).show();
             return;
         }
         for (int i = 0; i < data.size(); i++) {
             GroupTeamBean groupTeamBean = data.get(i);
             List<DepUserBean> teams = groupTeamBean.getTeamList();
             List<DepUserBean> personals = groupTeamBean.getPersonalsList();
-            List<AddGroupTaskReqBean.UsersBean> addPeoList=new ArrayList<>();
-           String duty_user_id="";
-            String duty_user_name="";
-            if ((teams.size()==0&&personals.size()!=0)){
-                 Toast.makeText(getContext(),"有组员的小组必须指派负责人",Toast.LENGTH_SHORT).show();
-                 return;
+            List<AddGroupTaskReqBean.UsersBean> addPeoList = new ArrayList<>();
+            String duty_user_id = "";
+            String duty_user_name = "";
+            if ((teams.size() == 0 && personals.size() != 0)) {
+                Toast.makeText(getContext(), "有组员的小组必须指派负责人", Toast.LENGTH_SHORT).show();
+                return;
             }
-            if (teams.size()==0&&personals.size()==0){
+            if (teams.size() == 0 && personals.size() == 0) {
                 continue;
             }
             //获取小组负责人
-            for (int j = 0; j <teams.size() ; j++) {
+            for (int j = 0; j < teams.size(); j++) {
                 DepUserBean depUserBean = teams.get(j);
-                AddGroupTaskReqBean.UsersBean usersBean=new AddGroupTaskReqBean.UsersBean();
-                duty_user_id=depUserBean.getId();
-                duty_user_name=depUserBean.getName();
+                AddGroupTaskReqBean.UsersBean usersBean = new AddGroupTaskReqBean.UsersBean();
+                duty_user_id = depUserBean.getId();
+                duty_user_name = depUserBean.getName();
                 usersBean.setSign("2");
                 usersBean.setUser_id(depUserBean.getId());
                 usersBean.setUser_name(depUserBean.getName());
@@ -467,7 +501,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
             //获取组员
             for (int j = 0; j < personals.size(); j++) {
                 DepUserBean depUserBean = personals.get(j);
-                AddGroupTaskReqBean.UsersBean usersBean=new AddGroupTaskReqBean.UsersBean();
+                AddGroupTaskReqBean.UsersBean usersBean = new AddGroupTaskReqBean.UsersBean();
                 usersBean.setSign("3");
                 usersBean.setUser_id(depUserBean.getId());
                 usersBean.setUser_name(depUserBean.getName());
@@ -476,10 +510,10 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
 
             AddGroupTaskReqBean bean = new AddGroupTaskReqBean();
             bean.setDep_id(SPUtil.getDepId(getContext()));
-            bean.setDay(day+"");
-            bean.setMonth(month+"");
-            bean.setYear(year+"");
-            bean.setWeek(TimeUtil.getWeekOfYear(new Date(System.currentTimeMillis()))+"");
+            bean.setDay(day + "");
+            bean.setMonth(month + "");
+            bean.setYear(year + "");
+            bean.setWeek(TimeUtil.getWeekOfYear(new Date(System.currentTimeMillis())) + "");
             bean.setFrom_user_id(SPUtil.getUserId(getContext()));
             bean.setFrom_user_name(SPUtil.getUserName(getContext()));
             bean.setDep_name(SPUtil.getDepName(getContext()));
@@ -493,7 +527,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
         groupTeamSaveBean.setYear(year);
         groupTeamSaveBean.setDep_id(SPUtil.getDepId(getContext()));
         groupTeamSaveBean.setTaskGroupList(list);
-        ProgressDialog.show(getContext(),true,"正在保存。。。");
+        ProgressDialog.show(getContext(), true, "正在保存。。。");
         BaseRequest.getInstance().getService()
                 .savaGroupTeam(groupTeamSaveBean)
                 .subscribeOn(Schedulers.io())
@@ -502,9 +536,9 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                     @Override
                     protected void onSuccees(BaseResult<List<DangerBean>> t) throws Exception {
                         if (t.getCode() == 1) {
-                            RxRefreshEvent.publish("refreshGroupTeamNum@"+list.size());
+                            RxRefreshEvent.publish("refreshGroupTeamNum@" + list.size());
                             RxRefreshEvent.publishGrooup(null);
-                           Toast.makeText(getContext(),"保存成功",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "保存成功", Toast.LENGTH_SHORT).show();
                         }
                         ProgressDialog.cancle();
                     }
@@ -515,6 +549,7 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                     }
                 });
     }
+
     public void showDay() {
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();
@@ -527,15 +562,15 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
         TimePickerView pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
-              String  oldTime = DateUatil.getDay(date);
+                String oldTime = DateUatil.getDay(date);
                 inteDate(oldTime);
-                if (time.equals(oldTime)){
+                if (time.equals(oldTime)) {
                     groupSave.setVisibility(View.VISIBLE);
                     getPersonal();
-                }else {
+                } else {
                     groupSave.setVisibility(View.GONE);
                 }
-               getGroupTeam();
+                getGroupTeam();
 
             }
         })

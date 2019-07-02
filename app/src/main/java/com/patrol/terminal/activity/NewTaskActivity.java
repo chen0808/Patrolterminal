@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -147,12 +148,20 @@ public class NewTaskActivity extends BaseActivity {
 
     private void initMagicIndicator(String job) {
         if (job.contains(Constant.RUNNING_SQUAD_LEADER)) {
-            depId = SPUtil.getDepId(this);
             mDataList.add("今日分组");
             mDataList.add("计划分配");
+
             groupNum.setVisibility(View.VISIBLE);
             dayPlanNum.setVisibility(View.VISIBLE);
         } else {
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 60), UIUtil.dip2px(this, 30));
+            layoutParams.setMargins(UIUtil.dip2px(this, 125), 0, UIUtil.dip2px(this, 30), 0);
+            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 60), UIUtil.dip2px(this, 30));
+            layoutParams1.setMargins(UIUtil.dip2px(this, 45), 0, UIUtil.dip2px(this, 60), 0);
+            groupTaskNum.setLayoutParams(layoutParams);
+            personalTaskNum.setLayoutParams(layoutParams1);
+            groupTaskNum.setGravity(Gravity.BOTTOM);
+            personalTaskNum.setGravity(Gravity.BOTTOM);
             groupNum.setVisibility(View.GONE);
             dayPlanNum.setVisibility(View.GONE);
         }
@@ -198,7 +207,12 @@ public class NewTaskActivity extends BaseActivity {
         titleContainer.setDividerDrawable(new ColorDrawable() {
             @Override
             public int getIntrinsicWidth() {
-                return UIUtil.dip2px(NewTaskActivity.this, 10);
+                if (job.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                    return UIUtil.dip2px(NewTaskActivity.this, 10);
+                } else {
+                    return UIUtil.dip2px(NewTaskActivity.this, 60);
+                }
+
             }
         });
         ViewPagerHelper.bind(magicIndicator4, viewPager);
