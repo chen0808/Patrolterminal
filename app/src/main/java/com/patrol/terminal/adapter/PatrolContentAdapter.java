@@ -16,12 +16,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,7 +37,6 @@ import com.patrol.terminal.activity.DefectListActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.DefactTvModel;
 import com.patrol.terminal.bean.DefectTypeBean;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
@@ -315,8 +313,20 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                   }
               };
 
-                tvDiverWay.setAdapter(cursorAdapter);
-
+              tvDiverWay.setAdapter(cursorAdapter);
+              tvDiverWay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Cursor cursor1 = cursorAdapter.getCursor();
+                        if(cursor1 != null && cursor1.getCount() > 0) {
+                            boolean isExist = cursor1.moveToPosition(position);
+                            if (isExist) {
+                                String levelStr = cursor1.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.LEVEL));
+                                Log.w("linmeng", "levelStr:" + levelStr);   //这里获取的是缺陷等级，给陈飞用！  TODO
+                            }
+                        }
+                    }
+                });
 
 
 
@@ -333,7 +343,7 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                 Spinner spEnd = helper.getView(R.id.sp_end);
                 TextView tvTime = helper.getView(R.id.tv_time);
                 ImageView ivCommit = helper.getView(R.id.iv_commit);
-                Spinner spContentType = helper.getView(R.id.sp_content_type);
+               /* Spinner spContentType = helper.getView(R.id.sp_content_type);
                 spContentType.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, typeName));
                 spContentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -344,6 +354,20 @@ public class PatrolContentAdapter extends BaseMultiItemQuickAdapter<MultiItemEnt
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
 
+                    }
+                });*/
+                RadioGroup rgContentType = helper.getView(R.id.rg_content_type);
+
+                rgContentType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        if (checkedId == rgContentType.getChildAt(0).getId()) {
+                            grade_id = defectTypeBeans.get(0).getId();
+                        } else if (checkedId == rgContentType.getChildAt(1).getId()) {
+                            grade_id = defectTypeBeans.get(1).getId();
+                        } else if (checkedId == rgContentType.getChildAt(2).getId()) {
+                            grade_id = defectTypeBeans.get(2).getId();
+                        }
                     }
                 });
                 spStart.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_dropdown_item_1line, towerNameList));

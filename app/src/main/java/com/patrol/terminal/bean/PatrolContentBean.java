@@ -2,10 +2,12 @@ package com.patrol.terminal.bean;
 
 import android.graphics.Bitmap;
 
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 import java.io.Serializable;
 import java.util.List;
 
-public class PatrolContentBean implements Serializable {
+public class PatrolContentBean extends BaseModel implements Serializable {
 
     /**
      * name : 导线、地线
@@ -51,7 +53,6 @@ public class PatrolContentBean implements Serializable {
         private String task_id;
         private String patrol_id;
         private String status;
-
         private List<Bitmap> picList;
 
         public List<Bitmap> getPicList() {

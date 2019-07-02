@@ -18,6 +18,11 @@ public class NoScrollViewPager extends ViewPager {
         super(context);
     }
 
+    /**
+     * true为不可滑动
+     * false为可滑动
+     * @param noScroll
+     */
     public void setNoScroll(boolean noScroll) {
         this.noScroll = noScroll;
     }

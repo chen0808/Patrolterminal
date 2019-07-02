@@ -2,12 +2,16 @@ package com.patrol.terminal.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -16,17 +20,15 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddGroupTaskActivity;
 import com.patrol.terminal.activity.GroupTaskDetailActivity;
-import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.adapter.GroupTaskAdapter;
-import com.patrol.terminal.adapter.TaskContentAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GroupTaskBean;
+import com.patrol.terminal.bean.GroupTaskBean_Table;
 import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.bean.TaskBean;
-import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.YXtoJXbean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 import com.patrol.terminal.utils.Constant;
@@ -34,6 +36,9 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.raizlabs.android.dbflow.sql.language.NameAlias;
+import com.raizlabs.android.dbflow.sql.language.OrderBy;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -41,19 +46,14 @@ import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class GroupTaskFrgment extends BaseFragment {
@@ -127,6 +127,8 @@ public class GroupTaskFrgment extends BaseFragment {
             }
         });
 
+        getDataFromDatabase();
+        //getData();
 
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -134,6 +136,62 @@ public class GroupTaskFrgment extends BaseFragment {
                 getData();
             }
         });
+    }
+
+    private void getDataFromDatabase() {
+        //从数据库查询出数据
+        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            depId = SPUtil.getDepId(getContext());
+            getDbGroupList();
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+            duty_user_id = SPUtil.getUserId(getContext());
+            getDbGroupList();
+        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+            userId = SPUtil.getUserId(getContext());
+            getDbGroupListZy();
+        }
+    }
+
+    private void getDbGroupListZy() {
+        result = SQLite.select().from(GroupTaskBean.class)
+                .where(GroupTaskBean_Table.year.eq(Integer.valueOf(year)),GroupTaskBean_Table.month.eq(Integer.valueOf(month)),
+                        GroupTaskBean_Table.day.eq(Integer.valueOf(day)), GroupTaskBean_Table.user_id.eq(userId))
+                .queryList();
+
+        if (result != null) {
+            groupTaskAdapter.setNewData(result);
+            RxRefreshEvent.publish("refreshGroupNum@" + result.size());
+            mRefrsh.setRefreshing(false);
+            isRefresh = true;
+            ProgressDialog.cancle();
+
+        }
+    }
+
+    private void getDbGroupList() {
+        result = SQLite.select().from(GroupTaskBean.class)
+                .where(GroupTaskBean_Table.year.eq(Integer.valueOf(year)),GroupTaskBean_Table.month.eq(Integer.valueOf(month)),
+                        GroupTaskBean_Table.day.eq(Integer.valueOf(day)), GroupTaskBean_Table.dep_id.eq(depId),
+                        GroupTaskBean_Table.duty_user_id.eq(duty_user_id),GroupTaskBean_Table.user_id.eq(userId),
+                        GroupTaskBean_Table.safe.eq("1"))
+                //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
+                .queryList();
+
+        if (result != null && result.size() != 0) {
+            groupTaskAdapter.setNewData(result);
+            for (int i = 0; i < result.size(); i++) {
+                String allot_status = result.get(i).getAllot_status();
+                if ("0".equals(allot_status)) {
+                    planRv.setSwipeItemMenuEnabled(i, true);
+                } else {
+                    planRv.setSwipeItemMenuEnabled(i, false);
+                }
+            }
+            RxRefreshEvent.publish("refreshGroupNum@" + result.size());
+            mRefrsh.setRefreshing(false);
+            isRefresh = true;
+            ProgressDialog.cancle();
+        }
     }
 
     //根据职位获取页面数据
@@ -156,13 +214,13 @@ public class GroupTaskFrgment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (isRefresh){
-        getData();}
+            getDataFromDatabase();
+            getData();
+        }
     }
 
     //获取小组任务列表
     public void getGroupList() {
-
-
         BaseRequest.getInstance().getService()
                 .getGroupList(year, month, day, depId, duty_user_id, userId, "duty_user_id,line_id,name", "1")
                 .subscribeOn(Schedulers.io())
@@ -179,7 +237,11 @@ public class GroupTaskFrgment extends BaseFragment {
                             }else {
                                 planRv.setSwipeItemMenuEnabled(i,false);
                             }
+
+                            //查询后存储到本地数据库  by linmeng
+                            saveToDatebase(result.get(i), 0);
                         }
+
                         RxRefreshEvent.publish("refreshGroupNum@"+result.size());
                         mRefrsh.setRefreshing(false);
                         isRefresh=true;
@@ -192,6 +254,49 @@ public class GroupTaskFrgment extends BaseFragment {
                         ProgressDialog.cancle();
                     }
                 });
+
+    }
+
+    private void saveToDatebase(GroupTaskBean bean, int type) {
+        GroupTaskBean groupTaskBean = new GroupTaskBean();
+        groupTaskBean.setId(bean.getId());
+        groupTaskBean.setDay_tower_id(bean.getDay_tower_id());
+        groupTaskBean.setGroup_id(bean.getGroup_id());
+        groupTaskBean.setType_sign(bean.getType_sign());
+        groupTaskBean.setPlan_type(bean.getPlan_type());
+        groupTaskBean.setLine_id(bean.getLine_id());
+        groupTaskBean.setLine_name(bean.getLine_name());
+        groupTaskBean.setDep_id(bean.getDep_id());
+        groupTaskBean.setDep_name(bean.getDep_name());
+        groupTaskBean.setYear(bean.getYear());
+        groupTaskBean.setMonth(bean.getMonth());
+        groupTaskBean.setDay(bean.getDay());
+        groupTaskBean.setName(bean.getName());
+        groupTaskBean.setStart_id(bean.getStart_id());
+        groupTaskBean.setEnd_id(bean.getEnd_id());
+        groupTaskBean.setDuty_user_id(bean.getDuty_user_id());
+        groupTaskBean.setDuty_user_name(bean.getDuty_user_name());
+        groupTaskBean.setWork_user_id(bean.getWork_user_id());
+        groupTaskBean.setWork_user_name(bean.getWork_user_name());
+        groupTaskBean.setAllot_status(bean.getAllot_status());
+        groupTaskBean.setDone_status(bean.getDone_status());
+        groupTaskBean.setDone_time(bean.getDone_time());
+        groupTaskBean.setIs_rob(bean.getIs_rob());
+        groupTaskBean.setAudit_status(bean.getAudit_status());
+        groupTaskBean.setUser_id(SPUtil.getUserId(getContext()));
+        if (type == 0) {
+            groupTaskBean.setSafe("1");
+        }
+
+        List<GroupTaskBean> existBeans = SQLite.select().from(GroupTaskBean.class)
+                .where(GroupTaskBean_Table.id.eq(bean.getId()))
+                .queryList();
+
+        if (existBeans.size() > 0) {   //数据存在
+            groupTaskBean.update();
+        }else {
+            groupTaskBean.save();
+        }
 
     }
 
@@ -239,6 +344,12 @@ public class GroupTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         groupTaskAdapter.setNewData(result);
+
+                        for (int i = 0; i < result.size(); i++) {
+                            //查询后存储到本地数据库  by linmeng
+                            saveToDatebase(result.get(i),  1);
+                        }
+
                         RxRefreshEvent.publish("refreshGroupNum@"+result.size());
                         mRefrsh.setRefreshing(false);
                         isRefresh=true;
@@ -282,7 +393,8 @@ public class GroupTaskFrgment extends BaseFragment {
                 RxRefreshEvent.publish("refreshNum");
                 ProgressDialog.show(getContext(),true,"正在加载。。。");
                 inteDate();
-               getData();
+                getDataFromDatabase();
+                getData();
             }
         })
                 .setDate(selectedDate)
@@ -319,7 +431,8 @@ public class GroupTaskFrgment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 11 && resultCode == -1) {
-           getData();
+            getDataFromDatabase();
+            getData();
         }
     }
 

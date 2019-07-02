@@ -14,11 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
@@ -42,9 +40,7 @@ public class SankuaEditView extends LinearLayout {
     private GridView sk_gridview;
     private TextView item_title;
     private LinearLayout item_context;
-    private RelativeLayout item_title_rl;
 
-    private ImageView item_tssx_del;
 
     private GridViewAdapter2 mGridViewAddImgAdapter;
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
@@ -56,7 +52,6 @@ public class SankuaEditView extends LinearLayout {
 
     private CursorAdapter cursorAdapter;
     private Cursor cursor;
-    private onTssxClick mOnTssxClick;
 
 
     public SankuaEditView(Context context, AttributeSet attrs) {
@@ -68,11 +63,9 @@ public class SankuaEditView extends LinearLayout {
         sk_gridview = view.findViewById(R.id.sk_gridview);
         item_title = view.findViewById(R.id.item_tssx_title);
         item_context = view.findViewById(R.id.ll_content);
-        item_title_rl = view.findViewById(R.id.item_title_rl);
-        item_tssx_del = view.findViewById(R.id.item_tssx_del);
 
         initClick();
-//        initData();
+        initData();
     }
 
     /**
@@ -151,12 +144,12 @@ public class SankuaEditView extends LinearLayout {
     public void setDjStatus(String dj) {
         dj = dj.trim();
         RadioButton rb;
-        if(TextUtils.isEmpty(dj)) dj = "一般";
+        if(TextUtils.isEmpty(dj)) return;
 
         int count = sankua_rad.getChildCount();
         for (int i = 0; i < count; i++) {
             rb = (RadioButton) sankua_rad.getChildAt(i);
-            if (dj.equals(rb.getText().toString().trim())) {
+            if (dj == rb.getText().toString().trim()) {
                 rb.setChecked(true);
             } else {
                 rb.setChecked(false);
@@ -174,7 +167,7 @@ public class SankuaEditView extends LinearLayout {
             }
         });
 
-        item_title_rl.setOnClickListener(new OnClickListener() {
+        item_title.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (item_context.isShown()) {
@@ -201,23 +194,6 @@ public class SankuaEditView extends LinearLayout {
             }
         });
 
-        item_tssx_del.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnTssxClick.clickDel();
-
-            }
-        });
-
-    }
-
-    public void setOnItemClick(onTssxClick click){
-        this.mOnTssxClick = click;
-    }
-
-    public interface onTssxClick{
-        void clickDel();
-
     }
 
     public void setAutoAdapter(CursorAdapter cursorAdapter,Cursor cursor)
@@ -227,7 +203,52 @@ public class SankuaEditView extends LinearLayout {
         sankua_yhnr.setAdapter(cursorAdapter);
     }
 
+    public void initData() {
+        String data[] = getResources().getStringArray(R.array.auto_textview_contents);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, data);
+        sankua_yhnr.setAdapter(adapter);
+    }
 
+
+    private void initGridView(GridView gridView) {
+        mGridViewAddImgAdapter = new GridViewAdapter2(context, mPicList);
+        gridView.setAdapter(mGridViewAddImgAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                if (position == parent.getChildCount() - 1) {
+                    //如果“增加按钮形状的”图片的位置是最后一张，且添加了的图片的数量不超过5张，才能点击
+                    if (mPicList.size() == Constant.MAX_SELECT_PIC_NUM) {
+                        //最多添加5张图片
+                        viewPluImg(position);
+                    } else {
+                        //添加凭证图片
+                        selectPic(Constant.MAX_SELECT_PIC_NUM - mPicList.size());
+                    }
+                } else {
+                    viewPluImg(position);
+                }
+            }
+        });
+    }
+
+    //查看大图
+    private void viewPluImg(int position) {
+//        Intent intent = new Intent(view.getContext(), PlusImageActivity.class);
+//        intent.putStringArrayListExtra(Constant.IMG_LIST, mPicList);
+//        intent.putExtra(Constant.POSITION, position);
+//        view.getContext().startActivityForResult(intent, code);
+    }
+
+    /**
+     * 打开相册或者照相机选择凭证图片，最多5张
+     *
+     * @param maxTotal 最多选择的图片的数量
+     */
+    private void selectPic(int maxTotal) {
+        PictureSelectorConfig.initMultiConfig((Activity) view.getContext(), maxTotal);
+    }
 
 
 

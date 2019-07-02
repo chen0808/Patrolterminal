@@ -2,6 +2,7 @@ package com.patrol.terminal.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -93,7 +94,12 @@ public class GroupTaskDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
         bean = (GroupTaskBean) getIntent().getParcelableExtra("GroupTaskBean");
+        Log.w("linmeng", "bean.getType_sign():" + bean.getType_sign());
+
         from = getIntent().getStringExtra("from");
+        //无网络直接设置上去
+        getGroupList();
+
         if ("todoGroup".equals(from)) {
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
@@ -126,7 +132,6 @@ public class GroupTaskDetailActivity extends BaseActivity {
 
     }
 
-    //获取月计划列表
     public void getGroupList() {
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if ((jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_LEADER)) && "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
@@ -182,6 +187,9 @@ public class GroupTaskDetailActivity extends BaseActivity {
         tvLineTower.setText("杆  段：" + bean.getName());
         typeList.clear();
         String type_sign = bean.getType_sign();
+
+        Log.w("linmeng", "type_sign:" + type_sign);
+
         String[] split = type_sign.split(",");
         for (int i = 0; i < split.length; i++) {
             String type = split[i];
@@ -470,7 +478,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
     public void showPersonalGroup() {
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setTitle("指派");
+        alertBuilder.setTitle("选择负责人");
         /**
          *第一个参数:弹出框的消息集合，一般为字符串集合
          * 第二个参数：默认被选中的，布尔类数组

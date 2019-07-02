@@ -44,15 +44,6 @@ public class DepUserBean {
         private String sysJobList;
         private String sysDepList;
         private String sysRoleList;
-        private boolean check;
-
-    public boolean isCheck() {
-        return check;
-    }
-
-    public void setCheck(boolean check) {
-        this.check = check;
-    }
 
     public String getSign() {
         return sign;
