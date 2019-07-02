@@ -38,8 +38,6 @@ public class Constant {
     public static final int REQUEST_CODE_ADDRESS_BOOK4 = 15;//通讯录4
     public static final int REQUEST_CODE_SIGN = 20;//签名跳转
     public static final int SAFE_LIST = 30;//跳转到所有的注意事项
-    public static final int PATROL_RECORD_REQUEST_CODE = 40;//巡视记录拍照
-    public static final int DEFECT_REQUEST_CODE = 50;//常规巡视拍照
     public static final String PARTOL_RECORD_PIC_INDEX = "partolRecordPicIndex";
     public static String USERDEPNAME = "userdepname";
 
@@ -117,6 +115,4 @@ public class Constant {
     public static boolean isContent = false;
     public static List<LocalMedia> picList = null;
     public static String defectType = "";
-    public static int defect_tab = -1;//巡视类别
-    public static int defect_index = -1;//巡视位置
 }

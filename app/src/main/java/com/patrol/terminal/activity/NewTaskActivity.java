@@ -13,17 +13,14 @@ import android.widget.TextView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
-import com.patrol.terminal.base.BaseObserver;
-import com.patrol.terminal.base.BaseRequest;
-import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.PlanNumBean;
+import com.patrol.terminal.fragment.DayDisGroupFrgment;
+import com.patrol.terminal.fragment.DayPlanAllotFrgment;
 import com.patrol.terminal.fragment.GroupTaskFrgment;
 import com.patrol.terminal.fragment.PersonalTaskFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -46,10 +43,8 @@ import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class NewTaskActivity extends BaseActivity {
 
@@ -80,12 +75,16 @@ public class NewTaskActivity extends BaseActivity {
     TextView groupTaskNum;
     @BindView(R.id.personal_task_num)
     TextView personalTaskNum;
+    @BindView(R.id.group_num)
+    TextView groupNum;
+    @BindView(R.id.day_plan_num)
+    TextView dayPlanNum;
     private List<String> mDataList = new ArrayList<>();
     private MyFragmentPagerAdapter taskPagerAdapter;
     private int year;
     private int month;
     private int day;
-    private String depId="";
+    private String depId = "";
     private Disposable subscribe;
 
 
@@ -100,25 +99,25 @@ public class NewTaskActivity extends BaseActivity {
 
     private void initview() {
         titleName.setText("任务管理");
+        List<Fragment> fragmentList = new ArrayList<>();
 //        taskRg.setVisibility(View.VISIBLE);
         String mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             depId = SPUtil.getDepId(this);
-        }else {
-            depId="";
+            fragmentList.add(new DayDisGroupFrgment());
+            fragmentList.add(new DayPlanAllotFrgment());
+        } else {
+            depId = "";
         }
         initdate();
         String time = DateUatil.getTime(new Date(System.currentTimeMillis()));
         SPUtil.putString(this, "date", "time", time);
-        String job = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
-        List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new PersonalTaskFrgment());
-        fragmentList.add(new PersonalTaskFrgment());
+
         fragmentList.add(new GroupTaskFrgment());
         fragmentList.add(new PersonalTaskFrgment());
         taskPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(taskPagerAdapter);
-        initMagicIndicator(job);
+        initMagicIndicator(mJobType);
 //        viewPager.setNoScroll(true);
         viewPager.setOffscreenPageLimit(5);
         int index = getIntent().getIntExtra("index", 0);
@@ -128,20 +127,36 @@ public class NewTaskActivity extends BaseActivity {
 
             @Override
             public void accept(String type) throws Exception {
-                if (type.startsWith("refreshGroupNum")){
+                if (type.startsWith("refreshGroupNum")) {
                     String[] split = type.split("@");
                     groupTaskNum.setText(split[1]);
-                }else if (type.startsWith("refreshPersonalNum")){
+                } else if (type.startsWith("refreshPersonalNum")) {
                     String[] split = type.split("@");
                     personalTaskNum.setText(split[1]);
+                } else if (type.startsWith("refreshGroupTeamNum")) {
+                    String[] split = type.split("@");
+                    groupNum.setText(split[1]);
+                } else if (type.startsWith("refreshHaveTask")) {
+                    String[] split = type.split("@");
+                    dayPlanNum.setText(split[1]);
                 }
+
             }
         });
     }
 
     private void initMagicIndicator(String job) {
-        mDataList.add("今日分组");
-        mDataList.add("计划分配");
+        if (job.contains(Constant.RUNNING_SQUAD_LEADER)) {
+            depId = SPUtil.getDepId(this);
+            mDataList.add("今日分组");
+            mDataList.add("计划分配");
+            groupNum.setVisibility(View.VISIBLE);
+            dayPlanNum.setVisibility(View.VISIBLE);
+        } else {
+            groupNum.setVisibility(View.GONE);
+            dayPlanNum.setVisibility(View.GONE);
+        }
+
         mDataList.add("小组任务");
         mDataList.add("个人任务");
         CommonNavigator commonNavigator = new CommonNavigator(this);
@@ -226,7 +241,7 @@ public class NewTaskActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscribe!=null){
+        if (subscribe != null) {
             subscribe.dispose();
         }
     }

@@ -3,13 +3,12 @@ package com.patrol.terminal.activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.fragment.app.Fragment;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
@@ -45,6 +44,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -178,7 +178,7 @@ public class NewPlanActivity extends BaseActivity {
                 simplePagerTitleView.setNormalColor(getResources().getColor(R.color.black_gray));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
                 simplePagerTitleView.setText(mDataList.get(index));
-                simplePagerTitleView.setTextSize(13);
+                simplePagerTitleView.setTextSize(16);
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -204,7 +204,7 @@ public class NewPlanActivity extends BaseActivity {
         titleContainer.setDividerDrawable(new ColorDrawable() {
             @Override
             public int getIntrinsicWidth() {
-                return UIUtil.dip2px(NewPlanActivity.this, 15);
+                return UIUtil.dip2px(NewPlanActivity.this, 60);
             }
         });
         ViewPagerHelper.bind(magicIndicator, viewPager);

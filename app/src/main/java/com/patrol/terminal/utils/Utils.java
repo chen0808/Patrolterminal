@@ -2,8 +2,6 @@ package com.patrol.terminal.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.util.Log;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.CaptureActivity;
@@ -17,14 +15,9 @@ import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.PersonalTaskDetailActivity;
 import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
-import com.patrol.terminal.bean.DefactTvModel;
 import com.patrol.terminal.bean.TodoBean;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-
-import jxl.Sheet;
-import jxl.Workbook;
 
 public class Utils {
 
@@ -247,39 +240,5 @@ public class Utils {
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
         //默认保留两位会有错误，这里设置保留小数点后4位
         return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
-    }
-
-    /**
-     * 获取 excel 表格中的数据,不能在主线程中调用
-     *
-     * @param xlsName excel 表格的名称
-     * @param index   第几张表格中的数据
-     */
-    public static ArrayList<DefactTvModel> getXlsData(Context context, String xlsName, int index) {
-        ArrayList<DefactTvModel> countryList = new ArrayList<DefactTvModel>();
-        AssetManager assetManager = context.getAssets();
-
-        try {
-            Workbook workbook = Workbook.getWorkbook(assetManager.open(xlsName));
-            Sheet sheet = workbook.getSheet(index);
-
-            //int sheetNum = workbook.getNumberOfSheets();
-            int sheetRows = sheet.getRows();
-            //int sheetColumns = sheet.getColumns();
-
-            for (int i = 0; i < sheetRows; i++) {
-                DefactTvModel defactTvModel = new DefactTvModel();
-                defactTvModel.setContent(sheet.getCell(5, i).getContents());
-                defactTvModel.setLevel(sheet.getCell(6, i).getContents());
-                countryList.add(defactTvModel);
-            }
-
-            workbook.close();
-
-        } catch (Exception e) {
-            Log.e("xxx", "read error=" + e, e);
-        }
-
-        return countryList;
     }
 }

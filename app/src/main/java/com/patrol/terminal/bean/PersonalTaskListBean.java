@@ -3,14 +3,7 @@ package com.patrol.terminal.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.patrol.terminal.sqlite.AppDataBase;
-import com.raizlabs.android.dbflow.annotation.Column;
-import com.raizlabs.android.dbflow.annotation.PrimaryKey;
-import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.structure.BaseModel;
-
-@Table(database = AppDataBase.class)
-public class PersonalTaskListBean extends BaseModel implements Parcelable {
+public class PersonalTaskListBean implements Parcelable {
 
 
         /**
@@ -40,66 +33,31 @@ public class PersonalTaskListBean extends BaseModel implements Parcelable {
          * towers_id : null
          */
 
-    @PrimaryKey(autoincrement = true)
-    private int local_id;
-    @Column
-    private String id;
-    @Column
-    private String group_list_id;
-    @Column
-    private String name;
-    @Column
-    private String type_id;
-    @Column
-    private String type_sign;
-    @Column
-    private String type_name;
-    @Column
-    private String plan_type;
-    @Column
-    private String line_id;
-    @Column
-    private String line_name;
-    @Column
-    private String dep_id;
-    @Column
-    private String dep_name;
-    @Column
-    private String user_id;
-    @Column
-    private String user_name;
-    @Column
-    private String tower_id;
-    @Column
-    private String tower_name;
-    @Column
-    private int year;
-    @Column
-    private int month;
-    @Column
-    private int week;
-    @Column
-    private int day;
-    @Column
-    private String audit_status;
-    @Column
-    private String done_status;
-    @Column
-    private String done_time;
-    @Column
-    private String sub_time;
-    @Column
-    private String towers_id;
-    @Column
+        private String id;
+        private String group_list_id;
+        private String name;
+        private String type_id;
+        private String type_sign;
+        private String type_name;
+        private String plan_type;
+        private String line_id;
+        private String line_name;
+        private String dep_id;
+        private String dep_name;
+        private String user_id;
+        private String user_name;
+        private String tower_id;
+        private String tower_name;
+        private int year;
+        private int month;
+        private int week;
+        private int day;
+        private String audit_status;
+        private String done_status;
+        private String done_time;
+        private String sub_time;
+        private String towers_id;
     private String check_report;
-
-    public int getLocal_id() {
-        return local_id;
-    }
-
-    public void setLocal_id(int local_id) {
-        this.local_id = local_id;
-    }
 
     public String getCheck_report() {
         return check_report;

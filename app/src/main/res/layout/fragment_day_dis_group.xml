@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/shape_corner"
     android:orientation="vertical"
     tools:context=".activity.CheckActivity">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,9 +18,9 @@
             android:id="@+id/task_title"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:text="分组"
+            android:text="编辑小组"
             android:textStyle="bold"
-            android:drawableLeft="@mipmap/plan_icon"
+            android:drawableLeft="@mipmap/group_team_icon"
             android:gravity="center_vertical"
             android:drawablePadding="@dimen/dp_5"
             android:textSize="@dimen/sp_16"
@@ -33,53 +34,144 @@
             android:layout_marginLeft="14dp"
             android:layout_toRightOf="@id/task_title"
             android:gravity="center_vertical"
-            android:text="2019年4月" />
-        <TextView
-            android:id="@+id/plan_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:text="提交"
-            android:gravity="center_vertical"
-            android:background="@drawable/btn_white_bg"
-            android:paddingLeft="@dimen/dp_10"
-            android:layout_centerVertical="true"
-            android:paddingRight="@dimen/dp_10"
-            android:layout_toRightOf="@id/task_date"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:visibility="gone"
-            />
+            android:text="2019年7月1日" />
 
-        <TextView
-            android:id="@+id/plan_create"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_toLeftOf="@id/task_add"
-            android:background="@drawable/btn_white_bg"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10"
-            android:text="发布"
-            android:visibility="invisible" />
-        <ImageView
-            android:id="@+id/task_screen"
-            android:layout_width="@dimen/dp_50"
-            android:layout_height="@dimen/dp_40"
-            android:src="@mipmap/screen"
-            android:layout_marginRight="@dimen/dp_50"
-            android:visibility="gone"
-            android:scaleType="center"
-            android:layout_alignParentRight="true"
-            />
+    </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/task_add"
-            android:layout_width="@dimen/dp_50"
-            android:layout_height="@dimen/dp_40"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="0dp"
-            android:scaleType="center"
-            android:src="@mipmap/add_icon" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_10"
+        >
+        <RelativeLayout
+            android:id="@+id/group_make"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            >
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="match_parent"
+                android:background="@color/color_de"
+                />
+
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="match_parent"
+                android:background="@color/color_de"
+                android:layout_alignParentRight="true"
+                />
+            <RelativeLayout
+                android:id="@+id/change_group_team_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_100"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:src="@mipmap/right_go"
+                    android:scaleType="fitXY"
+                    />
+                <TextView
+                    android:id="@+id/change_group_team"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_33"
+                    android:gravity="center"
+                    android:text="组长"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/change_group_personal_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/change_group_team_rl"
+                android:layout_marginTop="@dimen/dp_20"
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                >
+                <ImageView
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:src="@mipmap/right_go"
+                    android:scaleType="fitXY"
+                    />
+                <TextView
+                    android:id="@+id/change_group_personal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_33"
+                    android:gravity="center"
+                    android:text="组员"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/change_group_back_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/change_group_personal_rl"
+                android:layout_marginTop="@dimen/dp_20"
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                >
+                <ImageView
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:src="@mipmap/left_go"
+                    android:scaleType="fitXY"
+                    />
+                <TextView
+                    android:id="@+id/change_group_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_33"
+                    android:gravity="center"
+                    android:text="重置"
+                    />
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/select_group_personal_rv"
+            android:layout_width="100dp"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_60"
+            android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/select_group_team_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_60"
+            android:layout_toRightOf="@id/group_make"></androidx.recyclerview.widget.RecyclerView>
+
+
+
+           <TextView
+               android:id="@+id/group_save"
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/dp_40"
+               android:background="@drawable/btn_bg"
+               android:layout_marginLeft="@dimen/dp_40"
+               android:layout_marginRight="@dimen/dp_40"
+               android:gravity="center"
+               android:layout_alignParentBottom="true"
+               android:textColor="@color/white"
+               android:text="保存"
+               />
+
     </RelativeLayout>
 </LinearLayout>

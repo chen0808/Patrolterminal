@@ -564,7 +564,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
     public void showPersonalGroup() {
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setTitle("选择负责人");
+        alertBuilder.setTitle("选择人员");
         /**
          *第一个参数:弹出框的消息集合，一般为字符串集合
          * 第二个参数：默认被选中的，布尔类数组

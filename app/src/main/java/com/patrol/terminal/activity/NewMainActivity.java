@@ -2,7 +2,6 @@ package com.patrol.terminal.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -56,8 +55,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 
 public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackListener*/ {
@@ -121,7 +118,6 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                 }
             }
         });
-//        getDefectList();
     }
 
     public void setFragment(int index) {
@@ -186,11 +182,8 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         fragmentVp.setNoScroll(false);
 
 
+
         DefactContentDBHelper defactContentDBHelper = new DefactContentDBHelper(this);
-        Cursor cursor = defactContentDBHelper.queryAll();
-        if (cursor == null || cursor.getCount() == 0) {
-            defactContentDBHelper.insertAll();
-        }
 
     }
 
@@ -261,7 +254,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                             if (results != null) {
                                 if ("2".contains(results.getSign())) {
                                     SPUtil.putString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER + "," + jobType);
-                                    jobType = jobType + "," + Constant.RUNNING_SQUAD_TEMA_LEADER;
+                                    jobType = jobType+","+Constant.RUNNING_SQUAD_TEMA_LEADER;
                                 }
                             }
                         }
@@ -469,16 +462,6 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 
     }
 
-    public RequestBody toRequestBody(String value) {
-        if (value != null) {
-            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
-            return requestBody;
-        } else {
-            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
-            return requestBody;
-        }
-    }
-
 //    Timer timer = new Timer();
 //    TimerTask timerTask = new TimerTask() {
 //        @Override
@@ -489,19 +472,5 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //        }
 //    };
 
-   /* public void getDefectList() {
-        BaseRequest.getInstance().getService().getPatrolContent().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<PatrolContentBean>>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<List<PatrolContentBean>> t) throws Exception {
-                        List<PatrolContentBean> results = t.getResults();
-                        SPUtil.put(NewMainActivity.this,"list","defectList",results);
-                    }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                    }
-                });
-    }*/
 }

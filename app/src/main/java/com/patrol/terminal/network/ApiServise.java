@@ -185,6 +185,15 @@ public interface ApiServise {
     @GET("/task/group/user/usersGET")
     Observable<BaseResult<List<DepUserBean>>> getPersonal(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
 
+    //获取小组列表
+    @GET("/task/group/usersGET")
+    Observable<BaseResult<List<AddGroupTaskReqBean>>> getGroupTeam(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
+
+    //获取小组列表
+    @GET("/task/group/dataGET")
+    Observable<BaseResult<List<TeamAndTaskBean>>> getTeamAndTask(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
+
+
     //组长获取组成员列表
     @GET("/task/group/user/teamGET")
     Observable<BaseResult<List<DepUserBean>>> getGroupPersonal(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("user_id") String user_id, @Query("sign") String sign);
@@ -221,7 +230,15 @@ public interface ApiServise {
 
     //添加小组任务
     @POST("/task/group/savePOST")
-    Observable<BaseResult<List<DangerBean>>> savaGroupTask(@Body AddGroupTaskReqBean bean);
+    Observable<BaseResult<List<DangerBean>>> savaGroupTask(@Body TeamAndTaskBean bean);
+
+    //删除小组任务
+    @POST("/task/group/revokePOST")
+    Observable<BaseResult<List<DangerBean>>> revokeGroupTask(@Body List<GroupOfDayBean> list);
+
+    //添加小组任务
+    @POST("/task/group/user/savePOST")
+    Observable<BaseResult<List<DangerBean>>> savaGroupTeam(@Body GroupTeamSaveBean bean);
 
     //周计划添加
     @POST("/plan/week/auditPOST")
@@ -1016,9 +1033,4 @@ public interface ApiServise {
     //缺陷列表
     @GET("task/defect/grade/allGET")
     Observable<BaseResult<List<DefectListBean>>> getDefectList(@Query("category") String category);
-
-    //上传巡视记录
-    @Multipart
-    @POST("task/defect/patrol/recode/savePOST")
-    Observable<BaseResult> test(@PartMap Map<String, RequestBody> params);
 }

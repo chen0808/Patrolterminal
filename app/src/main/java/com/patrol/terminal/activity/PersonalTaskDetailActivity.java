@@ -21,15 +21,12 @@ import com.patrol.terminal.bean.AddressBookLevel2;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupTaskBean;
-import com.patrol.terminal.bean.GroupTaskBean_Table;
 import com.patrol.terminal.bean.PersonalTaskListBean;
-import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.PlanTypeBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,10 +90,6 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         initView();
         bean = getIntent().getParcelableExtra("bean");
         String from = getIntent().getStringExtra("from");
-
-        //无网络直接设置上去
-        //initdata();
-
         if ("todoPersonal".equals(from)) {
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
@@ -138,8 +131,6 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         year = bean.getYear();
         month = bean.getMonth();
         day = bean.getDay();
-
-        getDbPersonalList();   //add by linmeng
         getPersonalList();
     }
 
@@ -206,21 +197,10 @@ public class PersonalTaskDetailActivity extends BaseActivity {
     }
 
 
-    public void getDbPersonalList() {
-        results = SQLite.select().from(PersonalTaskListBean.class)
-                .where(PersonalTaskListBean_Table.year.eq(Integer.valueOf(year)),PersonalTaskListBean_Table.month.eq(Integer.valueOf(month)),
-                        PersonalTaskListBean_Table.day.eq(Integer.valueOf(day)),PersonalTaskListBean_Table.group_list_id.eq(bean.getId()))
-                //.orderBy(OrderBy.fromNameAlias(NameAlias.of("line_id,name")))
-                .queryList();
-
-        if (results != null) {
-            monthPlanDetailAdapter.setNewData(results);
-        }
-
-    }
-
     //获取个人任务列表
     public void getPersonalList() {
+
+        ProgressDialog.show(this, false, "正在加载。。。");
         BaseRequest.getInstance().getService()
                 .getPersonalListOfGroup(year + "", month + "", day + "", bean.getId())
                 .subscribeOn(Schedulers.io())
@@ -231,60 +211,14 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                         results = t.getResults();
                         monthPlanDetailAdapter.setNewData(results);
 
-                        //存到数据库
-                        //查询后存储到本地数据库  by linmeng
-                        if (results != null && results.size() > 0) {
-                            for (int i = 0; i < results.size(); i++) {
-                                saveToDatebase(results.get(i));
-                            }
-                        }
-
+                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                     }
                 });
-
-    }
-
-    private void saveToDatebase(PersonalTaskListBean bean) {
-        PersonalTaskListBean personalTaskListBean = new PersonalTaskListBean();
-        personalTaskListBean.setId(bean.getId());
-        personalTaskListBean.setGroup_list_id(bean.getGroup_list_id());
-        personalTaskListBean.setName(bean.getName());
-        personalTaskListBean.setType_id(bean.getType_id());
-        personalTaskListBean.setType_sign(bean.getType_sign());
-        personalTaskListBean.setType_name(bean.getType_name());
-        personalTaskListBean.setPlan_type(bean.getPlan_type());
-        personalTaskListBean.setLine_id(bean.getLine_id());
-        personalTaskListBean.setLine_name(bean.getLine_name());
-        personalTaskListBean.setDep_id(bean.getDep_id());
-        personalTaskListBean.setDep_name(bean.getDep_name());
-        personalTaskListBean.setUser_id(bean.getUser_id());
-        personalTaskListBean.setUser_name(bean.getUser_name());
-        personalTaskListBean.setTower_id(bean.getTower_id());
-        personalTaskListBean.setTower_name(bean.getTower_name());
-        personalTaskListBean.setYear(bean.getYear());
-        personalTaskListBean.setMonth(bean.getMonth());
-        personalTaskListBean.setWeek(bean.getWeek());
-        personalTaskListBean.setDay(bean.getDay());
-        personalTaskListBean.setAudit_status(bean.getAudit_status());
-        personalTaskListBean.setDone_status(bean.getDone_status());
-        personalTaskListBean.setDone_time(bean.getDone_time());
-        personalTaskListBean.setSub_time(bean.getSub_time());
-        personalTaskListBean.setCheck_report(bean.getCheck_report());
-
-
-        List<PersonalTaskListBean> existBeans = SQLite.select().from(PersonalTaskListBean.class)
-                .where(PersonalTaskListBean_Table.id.eq(bean.getId()))
-                .queryList();
-
-        if (existBeans.size() > 0) {   //数据存在
-            personalTaskListBean.update();
-        }else {
-            personalTaskListBean.save();
-        }
 
     }
 
@@ -292,7 +226,6 @@ public class PersonalTaskDetailActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 25 && resultCode == RESULT_OK) {
-            getDbPersonalList();    //add by linmeng
             getPersonalList();
             RxRefreshEvent.publish("refreshPersonal");
         }
@@ -337,7 +270,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
 
     //指派个人任务
     public void addPersonTask(String user_id, String username, int flag) {
-        //ProgressDialog.show(this, false, "正在加载。。。");     //由于Dialog无网络时候消失不了，所以暂时注销
+        ProgressDialog.show(this, false, "正在加载。。。");
 //        bean.setGroup_list_id(bean.getId());
         bean.setWork_user_name(user_id);
         bean.setWork_user_id(username);
@@ -355,8 +288,6 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                             titleSetting.setVisibility(View.GONE);
                             taskWorkName.setText("执行人 : " + username);
                             RxRefreshEvent.publish("refreshPersonal");
-
-                            getDbPersonalList();   //add by linmeng
                             getPersonalList();
                             setResult(RESULT_OK);
                         } else {
@@ -392,7 +323,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
 
     //获取小组任务详情
     public void getGroupList(String id) {
-        ProgressDialog.show(this, false, "正在加载。。。");
+
         BaseRequest.getInstance().getService()
                 .getGroupDetail(id)
                 .subscribeOn(Schedulers.io())
@@ -402,12 +333,11 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<GroupTaskBean> t) throws Exception {
                         bean = t.getResults();
                         initdata();
-                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
+
                     }
                 });
 

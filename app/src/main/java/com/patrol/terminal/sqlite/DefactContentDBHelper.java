@@ -4,22 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
-
-import com.patrol.terminal.bean.DefactTvModel;
-import com.patrol.terminal.utils.Utils;
-
-import java.util.ArrayList;
 
 public class DefactContentDBHelper {
 
-    private static final String TAG = "DefactContentDBHelper";
+    private static final String TAG = "SMSDBHelper";
     private SQLiteDatabase db;
     private MyOpenhelper openHelper;
-    private Context mContext;
 
     public DefactContentDBHelper(Context context) {
-        mContext = context;
         openHelper = new MyOpenhelper(context);
         db = openHelper.getReadableDatabase();
     }
@@ -40,7 +32,7 @@ public class DefactContentDBHelper {
 
     public Cursor queryFliter(String constraint) {
         String sql = "select * from " + MyOpenhelper.TABLE.AUTO_DEFACT_TABLE + " where " + MyOpenhelper.DefactTvColumns.CONTENT + " like ?";
-        Cursor cursor = db.rawQuery(sql, new String[]{"%" + constraint+"%"});
+        Cursor cursor = db.rawQuery(sql, new String[]{constraint+"%"});
         return cursor;
     }
 
@@ -57,76 +49,6 @@ public class DefactContentDBHelper {
     public void insert(ContentValues values) {
         db.insert(MyOpenhelper.TABLE.AUTO_DEFACT_TABLE, null, values);
     }
-
-    public void insertAll() {
-        new ExcelDataLoader().execute("defact.xls");
-    }
-
-
-    //在异步方法中 调用
-    private class ExcelDataLoader extends AsyncTask<String, Void, ArrayList<DefactTvModel>> {
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected ArrayList<DefactTvModel> doInBackground(String... params) {
-            return Utils.getXlsData(mContext, params[0], 0);
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<DefactTvModel> defactTvModels) {
-            if(defactTvModels != null && defactTvModels.size() > 0){
-                //存在数据
-                ContentValues values;
-                for (int i = 0; i < defactTvModels.size(); i++) {
-                    values = new ContentValues();
-                    values.put(MyOpenhelper.DefactTvColumns.LEVEL, defactTvModels.get(i).getLevel());
-                    values.put(MyOpenhelper.DefactTvColumns.CONTENT, defactTvModels.get(i).getContent());
-                    db.insert(MyOpenhelper.TABLE.AUTO_DEFACT_TABLE, null, values);
-                }
-
-            }else {
-                //加载失败
-            }
-        }
-    }
-
-
-    /**
-     * 获取 excel 表格中的数据,不能在主线程中调用
-     *
-     * xlsName excel 表格的名称
-     *  index   第几张表格中的数据
-     *//*
-    private ArrayList<DefactTvModel> getXlsData(String xlsName, int index) {
-        ArrayList<DefactTvModel> countryList = new ArrayList<DefactTvModel>();
-        AssetManager assetManager = mContext.getAssets();
-
-        try {
-            Workbook workbook = Workbook.getWorkbook(assetManager.open(xlsName));
-            Sheet sheet = workbook.getSheet(index);
-
-            //int sheetNum = workbook.getNumberOfSheets();
-            int sheetRows = sheet.getRows();
-            //int sheetColumns = sheet.getColumns();
-
-            for (int i = 0; i < sheetRows; i++) {
-                DefactTvModel defactTvModel = new DefactTvModel();
-                defactTvModel.setContent(sheet.getCell(5, i).getContents());
-                defactTvModel.setLevel(sheet.getCell(6, i).getContents());
-                countryList.add(defactTvModel);
-            }
-
-            workbook.close();
-
-        } catch (Exception e) {
-            Log.e(TAG, "read error=" + e, e);
-        }
-
-        return countryList;
-    }*/
 
 //    /**
 //     * 分页查询

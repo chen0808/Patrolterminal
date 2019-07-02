@@ -5,11 +5,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,24 +34,23 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
-import com.patrol.terminal.bean.LocalPatrolRecordBean;
-import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
-import com.patrol.terminal.fragment.SpecialTSSXFrgment;
+import com.patrol.terminal.fragment.SpecialAttrFrgment3;
 import com.patrol.terminal.fragment.TroubleFrgment;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.NoScrollViewPager;
 import com.patrol.terminal.widget.PinchImageView;
 import com.patrol.terminal.widget.ProgressDialog;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.patrol.terminal.widget.SignDialog;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -79,9 +80,6 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-/**
- * 巡视任务
- */
 public class PatrolRecordActivity extends BaseActivity {
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -128,8 +126,6 @@ public class PatrolRecordActivity extends BaseActivity {
     private String sign;
     private String audit_status;
     private String lineName;
-    private LocalPatrolRecordBean localBean;
-    private int picIndex = 0;
 
     public String getLineName() {
         return lineName;
@@ -148,18 +144,8 @@ public class PatrolRecordActivity extends BaseActivity {
         initview();
 //        getPartrolRecord();
         getYXtodo();
+        initPic();
         getTask(task_id);
-//        initPic();
-    }
-
-    private void getDataFromDatabase() {
-        //从数据库查询出数据
-        List<LocalPatrolRecordBean> list = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).queryList();
-        if (list.size() > 0) {
-            localBean.update();
-        } else {
-            localBean.save();
-        }
     }
 
     private void getTask(String task_id) {
@@ -171,13 +157,6 @@ public class PatrolRecordActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
                         TaskBean bean = t.getResults();
-
-                        localBean = new LocalPatrolRecordBean();
-                        localBean.setTask_id(bean.getId());
-                        localBean.setLine_id(bean.getLine_id());
-                        localBean.setTower_id(bean.getTower_id());
-                        getDataFromDatabase();
-
                         sign = bean.getType_sign();
                         lineName = bean.getLine_name();
                     }
@@ -200,7 +179,7 @@ public class PatrolRecordActivity extends BaseActivity {
             }
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-                titleSetting.setVisibility(View.VISIBLE);
+                titleSetting.setVisibility(View.GONE);
                 titleSettingTv.setText("提交");
             }
         } else {
@@ -209,8 +188,6 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     private void initPic() {
-
-
         BaseRequest.getInstance().getService()
                 .getRecordPicList(task_id)
                 .subscribeOn(Schedulers.io())
@@ -269,8 +246,7 @@ public class PatrolRecordActivity extends BaseActivity {
     private void initview() {
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new PatrolContentFrgment()); //常规巡视
-//        fragmentList.add(new SpecialAttrFrgment3());  //特殊属性
-        fragmentList.add(new SpecialTSSXFrgment());//特殊属性
+        fragmentList.add(new SpecialAttrFrgment3());  //特殊属性
         fragmentList.add(new DefectFrgment());        //缺陷
         fragmentList.add(new TroubleFrgment());       //隐患
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
@@ -307,9 +283,10 @@ public class PatrolRecordActivity extends BaseActivity {
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
+
                 SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.color_33));
-                simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.base_status_bar));
+                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.white));
+                simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
                 simplePagerTitleView.setText(data[index]);
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -325,7 +302,7 @@ public class PatrolRecordActivity extends BaseActivity {
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator linePagerIndicator = new LinePagerIndicator(context);
-                linePagerIndicator.setColors(getResources().getColor(R.color.base_status_bar));
+                linePagerIndicator.setColors(Color.WHITE);
                 return linePagerIndicator;
             }
         });
@@ -335,7 +312,7 @@ public class PatrolRecordActivity extends BaseActivity {
         titleContainer.setDividerDrawable(new ColorDrawable() {
             @Override
             public int getIntrinsicWidth() {
-                return UIUtil.dip2px(PatrolRecordActivity.this, 30);
+                return UIUtil.dip2px(PatrolRecordActivity.this, 15);
             }
         });
         ViewPagerHelper.bind(magicIndicator, viewPager);
@@ -409,7 +386,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-               /* if (audit_status.equals("0") || audit_status.equals("4")) {
+                if (audit_status.equals("0") || audit_status.equals("4")) {
                     saveTodoAudit("1");
                 } else {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
@@ -433,45 +410,15 @@ public class PatrolRecordActivity extends BaseActivity {
                         }
                     };
                     dialog.show();
-                }*/
-                Map<String, RequestBody> params = new HashMap<>();
-                params.put("task_id", toRequestBody(task_id));
-                RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_1.jpg"));
-                RequestBody requestFile2 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_2.jpg"));
-                RequestBody requestFile3 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_3.jpg"));
-                RequestBody requestFile4 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_4.jpg"));
-                RequestBody requestFile5 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_5.jpg"));
-                RequestBody requestFile6 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + "record_6.jpg"));
-                params.put("patrolFile\"; filename=\"1.jpg", requestFile1);
-                params.put("patrolFile\"; filename=\"2.jpg", requestFile2);
-                params.put("patrolFile\"; filename=\"3.jpg", requestFile3);
-                params.put("patrolFile\"; filename=\"4.jpg", requestFile4);
-                params.put("patrolFile\"; filename=\"5.jpg", requestFile5);
-                params.put("patrolFile\"; filename=\"6.jpg", requestFile6);
-                BaseRequest.getInstance().getService().test(params).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new BaseObserver(this) {
-                            @Override
-                            protected void onSuccees(BaseResult t) throws Exception {
-
-                            }
-
-                            @Override
-                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                            }
-                        });
+                }
                 break;
             case R.id.iv_photo1:
-              /*  if (audit_status.equals("0") || audit_status.equals("4")) {
+                if (audit_status.equals("0") || audit_status.equals("4")) {
                     photoUri1 = patrUri("record_1", PHOTO1);
                     startCamera(PHOTO1, photoUri1);
                 } else {
                     showBigImage(PHOTO1);
-                }*/
-                picIndex = 1;
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, Constant.PATROL_RECORD_REQUEST_CODE);
+                }
                 break;
             case R.id.iv_photo2:
                 if (audit_status.equals("0") || audit_status.equals("4")) {
@@ -597,35 +544,6 @@ public class PatrolRecordActivity extends BaseActivity {
                         localMedia = PictureSelector.obtainMultipleResult(data);
                         Constant.picList = localMedia;
                         break;
-                    case Constant.PATROL_RECORD_REQUEST_CODE:
-                        Bundle bundle = data.getExtras();
-                        Bitmap bitmap = (Bitmap) bundle.get("data");
-                        String path = Environment.getExternalStorageDirectory().getPath()
-                                + "/MyPhoto/" + task_id + "_" + picIndex + ".jpg";
-                        FileUtil.saveFile(bitmap, path);
-                        switch (picIndex) {
-                            case 1:
-                                localBean.setPic1(path);
-                                break;
-                            case 2:
-                                localBean.setPic2(path);
-                                break;
-                            case 3:
-                                localBean.setPic3(path);
-                                break;
-                            case 4:
-                                localBean.setPic4(path);
-                                break;
-                            case 5:
-                                localBean.setPic5(path);
-                                break;
-                            case 6:
-                                localBean.setPic6(path);
-                                break;
-                        }
-//                        SQLite.select(LocalPatrolRecordBean.class).getQuery();
-                        localBean.save();
-                        break;
                 }
                 if (ivPhoto1.getDrawable() != null && ivPhoto2.getDrawable() != null && ivPhoto3.getDrawable() != null
                         && ivPhoto4.getDrawable() != null && ivPhoto5.getDrawable() != null && ivPhoto6.getDrawable() != null) {
@@ -648,7 +566,7 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     private void upLoadPic(int sign, Bitmap bitmap) {
-       /* ProgressDialog.show(this, false, "正在上传图片");
+        ProgressDialog.show(this, false, "正在上传图片");
         Log.d("signsign", "sign:" + sign);
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), SignDialog.saveBitmapFile(bitmap, sign + ".jpg"));
         params.clear();
@@ -674,7 +592,7 @@ public class PatrolRecordActivity extends BaseActivity {
                         Toast.makeText(PatrolRecordActivity.this, "图片上传失败，请重新上传！", Toast.LENGTH_SHORT).show();
                     }
 
-                });*/
+                });
     }
 
     //保存待办信息
@@ -718,4 +636,211 @@ public class PatrolRecordActivity extends BaseActivity {
             subscribe.dispose();
         }
     }
+
+//    /**
+//     * 打开相册或者照相机选择凭证图片
+//     */
+//    private void selectPic() {
+//        PictureSelectorConfig.initSingleConfig(this);
+//    }
+//    // 处理选择的照片的地址
+//    private void refreshAdapter(List<LocalMedia> picList) {
+//        for (LocalMedia localMedia : picList) {
+//            //被压缩后的图片路径
+//            if (localMedia.isCompressed()) {
+//                String compressPath = localMedia.getCompressPath(); //压缩后的图片路径
+//                int index = (int) SPUtil.get(this, Constant.PARTOL_RECORD_PIC_INDEX, "index", 0);
+//                Map<String, File> fileMap = new HashMap<>();
+//                switch (index) {
+//                    case 1:
+//                        Glide.with(this).load(compressPath).into(ivPhoto1);
+//                        fileMap.put("1", new File(compressPath));
+//                        fileList.add(fileMap);
+//                        break;
+//                    case 2:
+//                        Glide.with(this).load(compressPath).into(ivPhoto2);
+//                        fileMap.put("2", new File(compressPath));
+//                        fileList.add(fileMap);
+//                        break;
+//                    case 3:
+//                        Glide.with(this).load(compressPath).into(ivPhoto3);
+//                        fileMap.put("3", new File(compressPath));
+//                        fileList.add(fileMap);
+//                        break;
+//                    case 4:
+//                        Glide.with(this).load(compressPath).into(ivPhoto4);
+//                        fileMap.put("4", new File(compressPath));
+//                        fileList.add(fileMap);
+//                        break;
+//                    case 5:
+//                        Glide.with(this).load(compressPath).into(ivPhoto5);
+//                        fileMap.put("5", new File(compressPath));
+//                        fileList.add(fileMap);
+//                        break;
+//                    case 6:
+//                        Glide.with(this).load(compressPath).into(ivPhoto6);
+//                        fileMap.put("6", new File(compressPath));
+//                        fileList.add(fileMap);
+//                        break;
+//                }
+//
+////                mPicList.add(compressPath); //把图片添加到将要上传的图片数组中
+////                mGridViewAddImgAdapter.notifyDataSetChanged();
+//            }
+//        }
+//    }
+//    //查询接电电阻
+//    public void getPartrolRecord() {
+//
+//        ProgressDialog.show(this, false, "正在加载。。。。");
+//        BaseRequest.getInstance().getService()
+//                .getPartrolRecord(task_id, "sign")
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
+//
+//
+//                    @Override
+//                    protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
+//                        if (t.getCode() == 1) {
+//                            List<PatrolRecordPicBean> picBeanList = t.getResults();
+//                            picList.clear();
+//                            for (int i = 0; i < picBeanList.size(); i++) {
+//                                PatrolRecordPicBean overhaulFileBean = picBeanList.get(i);
+//
+//
+//                                String file_path = overhaulFileBean.getFile_path();
+//                                String compressPath = BaseUrl.BASE_URL + file_path.substring(1, file_path.length()) + overhaulFileBean.getFilename();
+//                                picList.add(compressPath);
+//                                switch (overhaulFileBean.getSign()) {
+//                                    case "1":
+//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto1);
+//                                        break;
+//                                    case "2":
+//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto2);
+//                                        break;
+//                                    case "3":
+//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto3);
+//                                        break;
+//                                    case "4":
+//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto4);
+//                                        break;
+//                                    case "5":
+//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto5);
+//                                        break;
+//                                    case "6":
+//                                        Glide.with(PatrolRecordActivity.this).load(compressPath).into(ivPhoto6);
+//                                        break;
+//                                }
+//                            }
+//
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//
+//                    }
+//
+//                });
+//    }
+//    //t提交巡视记录
+//    private void commitPatrolRecord() {
+//        if (fileList.size() < 6) {
+//            Toast.makeText(PatrolRecordActivity.this, "请上传6张对应图片！", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        ProgressDialog.show(this, false, "正在上传。。。");
+//        for (int i = 0; i < fileList.size(); i++) {
+//            Map<String, File> stringFileMap = fileList.get(i);
+//            Set<String> strings = stringFileMap.keySet();
+//            for (String type : strings) {
+//                File file = stringFileMap.get(type);
+//                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//                params.put("file" + type
+//                        + "\"; filename=\"" + file.getName(), requestFile);
+//            }
+//
+//        }
+//        params.put("from_user_id", toRequestBody(SPUtil.getUserId(this)));
+//        params.put("user_id", toRequestBody(SPUtil.getUserId(this)));
+//        params.put("name", toRequestBody("关于" + line_name + tower_name + "的" + typename));
+//        params.put("type_sign", toRequestBody(sign));
+//        params.put("audit_id", toRequestBody(SPUtil.getDepId(this)));
+//        params.put("id", toRequestBody(task_id));
+//        BaseRequest.getInstance().getService().commitPatrolRecord(params).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver(this) {
+//                    @Override
+//                    protected void onSuccees(BaseResult t) throws Exception {
+//                        ProgressDialog.cancle();
+//
+//                        if (t.getCode() == 1) {
+//                            Toast.makeText(PatrolRecordActivity.this, "保存成功！", Toast.LENGTH_SHORT).show();
+//                            setResult(RESULT_OK);
+//
+//                            RxRefreshEvent.publish("refreshTodo");
+//                            RxRefreshEvent.publish("refreshGroup");
+//                            finish();
+//                        }
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//                        ProgressDialog.cancle();
+//                        Log.i("11111", e.toString());
+//                        Toast.makeText(PatrolRecordActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
+//
+//    public void getYXtodo() {
+//
+//        if ("0".equals(audit_status)) {
+//            if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+//                titleSetting.setVisibility(View.VISIBLE);
+//                titleSettingTv.setText("上传图片");
+//            } else {
+//                titleSetting.setVisibility(View.GONE);
+//            }
+//        } else if ("1".equals(audit_status)) {
+//            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+//                titleSetting.setVisibility(View.VISIBLE);
+//                titleSettingTv.setText("审批");
+//            } else {
+//                titleSetting.setVisibility(View.GONE);
+//            }
+//        } else if ("2".equals(audit_status)) {
+//            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+//                titleSetting.setVisibility(View.VISIBLE);
+//                titleSettingTv.setText("审批");
+//            } else {
+//                titleSetting.setVisibility(View.GONE);
+//            }
+//        } else if ("4".equals(audit_status)) {
+//            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+//                titleSetting.setVisibility(View.GONE);
+//            } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+//                titleSetting.setVisibility(View.VISIBLE);
+//                titleSettingTv.setText("上传图片");
+//            } else {
+//                titleSetting.setVisibility(View.GONE);
+//            }
+//        } else {
+//            titleSetting.setVisibility(View.GONE);
+//        }
+////    } else   {
+////        if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+////            titleSetting.setVisibility(View.GONE);
+////        } else if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+////            titleSetting.setVisibility(View.VISIBLE);
+////            titleSettingTv.setText("上传图片");
+////        } else {
+////            titleSetting.setVisibility(View.GONE);
+////        }
+////
+////    }
+//    }
+//
 }

@@ -46,8 +46,4 @@
     <dimen name="margin_common">5dp</dimen>
     <dimen name="margin_large">10dp</dimen>
     <dimen name="margin_small">1dp</dimen>
-
-
-    <dimen name="txxs_item_height">32dp</dimen>
-
 </resources>

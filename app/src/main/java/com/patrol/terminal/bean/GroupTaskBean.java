@@ -3,14 +3,8 @@ package com.patrol.terminal.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.patrol.terminal.sqlite.AppDataBase;
-import com.raizlabs.android.dbflow.annotation.Column;
-import com.raizlabs.android.dbflow.annotation.PrimaryKey;
-import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.structure.BaseModel;
+public class GroupTaskBean implements Parcelable {
 
-@Table(database = AppDataBase.class)
-public class GroupTaskBean extends BaseModel implements Parcelable {
 
     /**
      * id : E4BC8BBE76FD42C1AD93E879558C3BC7
@@ -45,108 +39,42 @@ public class GroupTaskBean extends BaseModel implements Parcelable {
      * done_rate : 7.89
      */
 
-    @PrimaryKey(autoincrement = true)
-    private int local_id;
-    @Column
     private String id;
-    @Column
     private String day_tower_id;
-    @Column
     private String group_id;
-    @Column
     private String type_id;
-    @Column
     private String type_sign;
-    @Column
     private String type_name;
-    @Column
     private String plan_type;
-    @Column
     private String line_id;
-    @Column
     private String line_name;
-    @Column
     private String dep_id;
-    @Column
     private String dep_name;
-    @Column
     private int year;
-    @Column
     private int month;
-    @Column
     private int week;
-    @Column
     private int day;
-    @Column
     private String name;
-    @Column
     private String tower_id;
-    @Column
     private String towers_id;
-    @Column
     private String tower_type;
-    @Column
     private String duty_user_id;
-    @Column
     private String duty_user_name;
-    @Column
     private String work_user_id;
-    @Column
     private String work_user_name;
-    @Column
     private String allot_status;
-    @Column
     private String done_status;
-    @Column
     private String done_time;
-    @Column
     private String is_rob;
-    @Column
     private int done_num;
-    @Column
     private int all_num;
-    @Column
     private String done_rate;
-    @Column
     private String from_user_id;
-    @Column
     private String from_user_name;
-    @Column
     private String start_id;
-    @Column
     private String end_id;
-    @Column
     private String audit_status;
-    @Column
-    private boolean check;
-    @Column
-    private String user_id;
-    @Column
-    private String safe;
-
-    public String getSafe() {
-        return safe;
-    }
-
-    public void setSafe(String safe) {
-        this.safe = safe;
-    }
-
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
-
-    public int getLocal_id() {
-        return local_id;
-    }
-
-    public void setLocal_id(int local_id) {
-        this.local_id = local_id;
-    }
+  private  boolean check;
 
     public boolean isCheck() {
         return check;
@@ -531,50 +459,4 @@ public class GroupTaskBean extends BaseModel implements Parcelable {
             return new GroupTaskBean[size];
         }
     };
-
-
-    @Override
-    public String toString() {
-        return "GroupTaskBean{" +
-                "local_id=" + local_id +
-                ", id='" + id + '\'' +
-                ", day_tower_id='" + day_tower_id + '\'' +
-                ", group_id='" + group_id + '\'' +
-                ", type_id='" + type_id + '\'' +
-                ", type_sign='" + type_sign + '\'' +
-                ", type_name='" + type_name + '\'' +
-                ", plan_type='" + plan_type + '\'' +
-                ", line_id='" + line_id + '\'' +
-                ", line_name='" + line_name + '\'' +
-                ", dep_id='" + dep_id + '\'' +
-                ", dep_name='" + dep_name + '\'' +
-                ", year=" + year +
-                ", month=" + month +
-                ", week=" + week +
-                ", day=" + day +
-                ", name='" + name + '\'' +
-                ", tower_id='" + tower_id + '\'' +
-                ", towers_id='" + towers_id + '\'' +
-                ", tower_type='" + tower_type + '\'' +
-                ", duty_user_id='" + duty_user_id + '\'' +
-                ", duty_user_name='" + duty_user_name + '\'' +
-                ", work_user_id='" + work_user_id + '\'' +
-                ", work_user_name='" + work_user_name + '\'' +
-                ", allot_status='" + allot_status + '\'' +
-                ", done_status='" + done_status + '\'' +
-                ", done_time='" + done_time + '\'' +
-                ", is_rob='" + is_rob + '\'' +
-                ", done_num=" + done_num +
-                ", all_num=" + all_num +
-                ", done_rate='" + done_rate + '\'' +
-                ", from_user_id='" + from_user_id + '\'' +
-                ", from_user_name='" + from_user_name + '\'' +
-                ", start_id='" + start_id + '\'' +
-                ", end_id='" + end_id + '\'' +
-                ", audit_status='" + audit_status + '\'' +
-                ", check=" + check +
-                ", user_id='" + user_id + '\'' +
-                ", safe='" + safe + '\'' +
-                '}';
-    }
 }

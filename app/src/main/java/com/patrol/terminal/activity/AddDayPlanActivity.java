@@ -142,8 +142,14 @@ public class AddDayPlanActivity extends BaseActivity {
                     type.setWeek_tower_id(type.getId());
                     type.setMonth(Integer.parseInt(month));
                     if (month.length()==1) {
-                        type.setStart_time(year + "-0" + month + "-" + day);
-                        type.setEnd_time(year + "-0" + month + "-" + day);
+                        if (day.length()==1){
+                            type.setStart_time(year + "-0" + month + "-0" + day);
+                            type.setEnd_time(year + "-0" + month + "-0" + day);
+                        }else {
+                            type.setStart_time(year + "-0" + month + "-" + day);
+                            type.setEnd_time(year + "-0" + month + "-" + day);
+                        }
+
                     } else {
                         type.setStart_time(year + "-" + month + "-" + day);
                         type.setEnd_time(year + "-" + month + "-" + day);
