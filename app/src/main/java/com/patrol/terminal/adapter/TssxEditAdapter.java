@@ -16,6 +16,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.bean.TSSXBean;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.sqlite.MyOpenhelper;
+import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.SankuaEditView;
 
 import java.util.ArrayList;
@@ -34,12 +35,7 @@ public class TssxEditAdapter extends BaseAdapter {
     private Context context;
     private List<TSSXBean> tssxList = new ArrayList<TSSXBean>();
     private ViewHolder holder;
-
-    //默认三跨
-    private  int type = 0;
-    private static int TYPE_SK = 0;
-    private static int TYPE_LF = 1;
-    private static int TYPE_QT = 2;
+    private onClickAdapter clickAdapter;
 
     public TssxEditAdapter(Context context) {
         this.context = context;
@@ -53,15 +49,10 @@ public class TssxEditAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if(tssxList != null){
-
-
             return tssxList.size();
-
-
         }else{
             return 0;
         }
-
     }
 
     @Override
@@ -86,15 +77,30 @@ public class TssxEditAdapter extends BaseAdapter {
             convertView.setTag(holder);
         }
 
-        if(type == TYPE_SK){
+        holder.tssx_edit.setItemTilte(tssxList.get(position).getValues());
 
-        }else if(type == TYPE_LF){
+        holder.tssx_edit.setOnItemClick(new SankuaEditView.onTssxClick() {
+            @Override
+            public void clickDel() {
 
-        }else if(type == TYPE_QT){
-
-        }
-
-
+                CancelOrOkDialog dialog = new CancelOrOkDialog(context, "是否删除？", "取消", "删除") {
+                    @Override
+                    public void ok() {
+                        super.ok();
+                        tssxList.remove(position);
+                        clickAdapter.delObject(tssxList.get(position-1));
+                        notifyDataSetChanged();
+                         dismiss();
+                    }
+                    @Override
+                    public void cancle() {
+                        super.cancle();
+                        dismiss();
+                    }
+                };
+                dialog.show();
+            }
+        });
 
         return convertView;
     }
@@ -106,9 +112,6 @@ public class TssxEditAdapter extends BaseAdapter {
     public List<TSSXBean> getCheckList()
     {
         Log.e("getCheckList",tssxList.size()+"");
-//        if(tssxList == null)
-//            return null;
-//        else
             return tssxList;
     }
 
@@ -117,11 +120,8 @@ public class TssxEditAdapter extends BaseAdapter {
 
         if(typeBeanList != null){
             Log.e("getCheckList",tssxList.size()+"");
-            tssxList.clear();
-            tssxList.addAll(typeBeanList);
+            tssxList = typeBeanList;
             notifyDataSetChanged();
-        }else{
-            Log.e("getCheckList","00000000000000");
         }
 
 //        holder.tssx_edit.setAutoAdapter(cursorAdapter,cursor);
@@ -133,6 +133,14 @@ public class TssxEditAdapter extends BaseAdapter {
 
     }
 
+    public void setOnclickAdapter(onClickAdapter clickAdapter)
+    {
+        this.clickAdapter = clickAdapter;
+    }
 
+    public interface onClickAdapter
+    {
+        void delObject(TSSXBean bean);
+    }
 
 }
