@@ -61,10 +61,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
     /**添加特殊屬性adapter*/
     private TssxAddAdapter tssxAddAdapter;
 
-    private SpecialTSSXSKFrgment skFragment;
-    private SpecialTSSXLFFrgment lfFragment;
-
-
     /**添加的特殊属性列表*/
     private List<TSSXBean> skTssxList = new ArrayList<>();
     private List<TSSXBean> lfTssxList = new ArrayList<>();
