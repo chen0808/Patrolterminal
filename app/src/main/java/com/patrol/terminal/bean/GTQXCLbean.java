@@ -70,6 +70,16 @@ public class GTQXCLbean extends BaseModel {
  private String line_id;
     @Column
  private String user_id;
+    @Column
+    private String tower_model;
+
+    public String getTower_model() {
+        return tower_model;
+    }
+
+    public void setTower_model(String tower_model) {
+        this.tower_model = tower_model;
+    }
 
     public String getUser_id() {
         return user_id;

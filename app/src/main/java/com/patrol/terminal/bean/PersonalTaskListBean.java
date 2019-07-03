@@ -93,6 +93,16 @@ public class PersonalTaskListBean extends BaseModel implements Parcelable {
     @Column
     private String check_report;
     private boolean isCheck;
+    @Column
+    private String tower_model;
+
+    public String getTower_model() {
+        return tower_model;
+    }
+
+    public void setTower_model(String tower_model) {
+        this.tower_model = tower_model;
+    }
 
     public boolean isCheck() {
         return isCheck;
@@ -310,6 +320,9 @@ public class PersonalTaskListBean extends BaseModel implements Parcelable {
         }
 
 
+    public PersonalTaskListBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -317,6 +330,7 @@ public class PersonalTaskListBean extends BaseModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.local_id);
         dest.writeString(this.id);
         dest.writeString(this.group_list_id);
         dest.writeString(this.name);
@@ -342,12 +356,12 @@ public class PersonalTaskListBean extends BaseModel implements Parcelable {
         dest.writeString(this.sub_time);
         dest.writeString(this.towers_id);
         dest.writeString(this.check_report);
-    }
-
-    public PersonalTaskListBean() {
+        dest.writeByte(this.isCheck ? (byte) 1 : (byte) 0);
+        dest.writeString(this.tower_model);
     }
 
     protected PersonalTaskListBean(Parcel in) {
+        this.local_id = in.readInt();
         this.id = in.readString();
         this.group_list_id = in.readString();
         this.name = in.readString();
@@ -373,6 +387,8 @@ public class PersonalTaskListBean extends BaseModel implements Parcelable {
         this.sub_time = in.readString();
         this.towers_id = in.readString();
         this.check_report = in.readString();
+        this.isCheck = in.readByte() != 0;
+        this.tower_model = in.readString();
     }
 
     public static final Parcelable.Creator<PersonalTaskListBean> CREATOR = new Parcelable.Creator<PersonalTaskListBean>() {

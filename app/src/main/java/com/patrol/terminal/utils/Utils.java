@@ -144,15 +144,19 @@ public class Utils {
                 break;
             case "5":
                 intent.setClass(context, HongWaiCeWenActivity.class);
+                intent.putExtra("sign", "5");
                 break;
             case "6":
                 intent.setClass(context, JiediDianZuCeLiangActicivity.class);
+                intent.putExtra("sign", "3");
                 break;
             case "7":
                 intent.setClass(context, JueYuanZiLingZhiJianCeActivity.class);
+                intent.putExtra("sign", "10");
                 break;
             case "8":
                 intent.setClass(context, XieGanTaQingXieCeWenActivity.class);
+                intent.putExtra("sign","6" );
                 break;
             case "9":
                 intent.setClass(context, PatrolRecordActivity.class);

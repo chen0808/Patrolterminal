@@ -53,7 +53,7 @@ public class PersonalTaskDetailAdapter extends BaseQuickAdapter<PersonalTaskList
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!item.isCheck()&& item.getAudit_status().equals("待上传")){
+                if(!item.isCheck()&& "10".equals(item.getAudit_status())){
                         viewHolder.setImageResource(R.id.item_plan_offline,R.mipmap.check_yes);
                         item.setCheck(true);
                 }else{

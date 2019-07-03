@@ -229,6 +229,7 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.task_date:
+                showDay();
                 break;
             case R.id.plan_botton:
                 if (backList.size() == 0) {
@@ -349,7 +350,9 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
                 String oldTime = DateUatil.getDay(date);
                 inteDate(oldTime);
                 if (time.equals(oldTime)) {
-                    getGroupTeam();
+                    getDayList();
+                    planBotton.setVisibility(View.VISIBLE);
+                    planBotton.setVisibility(View.VISIBLE);
                 } else {
                     planBotton.setVisibility(View.INVISIBLE);
                     planBotton.setVisibility(View.INVISIBLE);

@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -106,6 +107,19 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
         etRemark.addTextChangedListener(this);
         etShopeRate.addTextChangedListener(this);
         etSideTilt.addTextChangedListener(this);
+        spVerdict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String[] array1 = getResources().getStringArray(R.array.verdict);
+                results.setResults(array1[position]);
+                results.update();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void initview() {
@@ -120,6 +134,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
         sign = getIntent().getStringExtra("sign");
         audit_status = getIntent().getStringExtra("audit_status");
         typename = getIntent().getStringExtra("typename");
+        tower_model= getIntent().getStringExtra("tower_model");
         getdata();
 
     }
@@ -136,6 +151,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
             results.setTask_id(task_id);
             results.setTower_id(tower_id);
             results.setTower_name(tower_name);
+            results.setTower_model(tower_model);
             results.setUser_id(SPUtil.getUserId(this));
             results.setLine_id(line_id);
             results.save();
@@ -144,56 +160,12 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
         }
         if (Utils.isNetworkConnected(this)){
             getGTQXCL();
-            getTask(task_id);
             getYXtodo();
         }
         showView();
     }
-    private void getTask(String task_id) {
-        BaseRequest.getInstance().getService()
-                .getTask(task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<TaskBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
-                        TaskBean bean = t.getResults();
-                        sign = bean.getType_sign();
-                        tvLineId.setText(bean.getLine_name());
-                        tvTowerId.setText(bean.getTower_name());
-                        getTowerModel(bean.getTower_id());
-                    }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
 
-                    }
-                });
-    }
-
-    private void getTowerModel(String tower_id) {
-        BaseRequest.getInstance().getService()
-                .getTowerModel("EQ_TOWER", "tower_model", tower_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<HwcwBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
-                        HwcwBean bean = t.getResults();
-                        if (bean != null) {
-                            tower_model = bean.getTower_model();
-                            tvTowerType.setText(tower_model);
-                        } else {
-                            tvTowerType.setText("无");
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
 
     public void getYXtodo() {
         if ("1".equals(audit_status)) {
@@ -202,25 +174,21 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
                 titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
         } else if ("2".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("提交");
             }
             mengban.setVisibility(View.GONE);
-            btnCommit.setVisibility(View.VISIBLE);
         } else {
             titleSetting.setVisibility(View.GONE);
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
         }
     }
 
@@ -330,7 +298,6 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
                             if (id == null) {
                                 id = "1111";
                             }
-                            setResult(RESULT_OK);
                             RxRefreshEvent.publish("refreshTodo");
                             RxRefreshEvent.publish("refreshGroup");
                             saveTodoAudit("1");
@@ -421,7 +388,12 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
         tower_id = results.getTower_id();
         tvLineId.setText(line_name);
         tvTowerId.setText(tower_name);
-        tvTowerType.setText(results.getTower_type());
+        if (results.getTower_model()==null||"".equals(results.getTower_model())){
+            tvTowerType.setText("无");
+        }else {
+            tvTowerType.setText(results.getTower_model());
+        }
+
         etFrontTilt.setText(results.getPositive_tilt() ==0?"":results.getPositive_tilt()+"");
         etSideTilt.setText(results.getFlank_tilt() ==0?"":results.getFlank_tilt()+"");
         etShopeRate.setText(results.getRate()==0?"":results.getRate()+"");

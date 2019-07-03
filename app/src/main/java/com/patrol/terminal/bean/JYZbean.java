@@ -64,6 +64,28 @@ public class JYZbean extends BaseModel implements Serializable {
     @Column
     private String agents_user_id;
 
+    @Column
+    private String user_id;
+
+    @Column
+    private String tower_model;
+
+    public String getTower_model() {
+        return tower_model;
+    }
+
+    public void setTower_model(String tower_model) {
+        this.tower_model = tower_model;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
     public String getId() {
         return id;
     }

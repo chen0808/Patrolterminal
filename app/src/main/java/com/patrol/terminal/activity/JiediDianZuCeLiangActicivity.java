@@ -1,9 +1,11 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,6 +22,8 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.HwcwBean;
 import com.patrol.terminal.bean.JDDZbean;
 import com.patrol.terminal.bean.JDDZbean_Table;
+import com.patrol.terminal.bean.PersonalTaskListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
@@ -85,6 +89,8 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
     private String tower_id;
     private String tower_name, task_id, sign, typename, id;
     private JDDZbean results;
+    private String tower_model;
+    private String line_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,42 +107,65 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
         etCResistor.addTextChangedListener(this);
         etDResistor.addTextChangedListener(this);
         etNote.addTextChangedListener(this);
+        spVerdict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String[] array1 = getResources().getStringArray(R.array.verdict);
+                results.setResults(array1[position]);
+                results.update();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void initview() {
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         titleName.setText("接地电阻测量");
+        results = new JDDZbean();
         line_name = getIntent().getStringExtra("line_name");
+        line_id = getIntent().getStringExtra("line_id");
         tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
         tower_name = getIntent().getStringExtra("tower_name");
         audit_status = getIntent().getStringExtra("audit_status");
         sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
-       getdata();
+        tower_model = getIntent().getStringExtra("tower_model");
+
+        getdata();
     }
-    public void getdata(){
+
+    public void getdata() {
         //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
         List<JDDZbean> jddZbeans = SQLite.select().from(JDDZbean.class)
                 .where(JDDZbean_Table.task_id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(this)))
                 //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
                 .queryList();
-        if (jddZbeans ==null|| jddZbeans.size()==0){
+        List<PersonalTaskListBean> personalTaskListBeans = SQLite.select().from(PersonalTaskListBean.class)
+                .where(PersonalTaskListBean_Table.id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(this)))
+                .queryList();
+        if (jddZbeans == null || jddZbeans.size() == 0) {
             results.setLine_name(line_name);
             results.setTask_id(task_id);
             results.setTower_id(tower_id);
             results.setTower_name(tower_name);
+            results.setTower_model(tower_model);
             results.setUser_id(SPUtil.getUserId(this));
             results.save();
-        }else {
-            results=jddZbeans.get(0);
+        } else {
+            results = jddZbeans.get(0);
         }
-        if (Utils.isNetworkConnected(this)){
+        if (Utils.isNetworkConnected(this)) {
             getJDDZ();
-            getTask(task_id);
             getYXtodo();
+        }else {
+            showView();
         }
-        showView();
+
     }
 
     private void showView() {
@@ -146,11 +175,16 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
         tower_id = results.getTower_id();
         tvLineId.setText(results.getLine_name());
         tvTowerName.setText(results.getTower_name());
-        tvTowerType.setText(results.getTower_model());
-        etAResistor.setText(results.getMeasure_a()==0?"":results.getMeasure_a()+"");
-        etBResistor.setText(results.getMeasure_b()==0?"":results.getMeasure_b()+"");
-        etCResistor.setText(results.getMeasure_c()==0?"":results.getMeasure_c()+"");
-        etDResistor.setText(results.getMeasure_d()==0?"":results.getMeasure_d()+"");
+        if (results.getTower_model()==null||"".equals(results.getTower_model())){
+            tvTowerType.setText("无");
+        }else {
+            tvTowerType.setText(results.getTower_model());
+        }
+
+        etAResistor.setText(results.getMeasure_a() == 0 ? "" : results.getMeasure_a() + "");
+        etBResistor.setText(results.getMeasure_b() == 0 ? "" : results.getMeasure_b() + "");
+        etCResistor.setText(results.getMeasure_c() == 0 ? "" : results.getMeasure_c() + "");
+        etDResistor.setText(results.getMeasure_d() == 0 ? "" : results.getMeasure_d() + "");
         String[] array = getResources().getStringArray(R.array.weather);
         for (int i = 0; i < array.length; i++) {
             if (array[i].equals(results.getWeather())) {
@@ -166,49 +200,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
         etNote.setText(results.getRemark());
     }
 
-    private void getTask(String task_id) {
-        BaseRequest.getInstance().getService()
-                .getTask(task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<TaskBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
-                        TaskBean bean = t.getResults();
-                        sign = bean.getType_sign();
 
-                        getTowerModel(bean.getTower_id());
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
-
-    private void getTowerModel(String tower_id) {
-        BaseRequest.getInstance().getService()
-                .getTowerModel("EQ_TOWER", "tower_model", tower_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<HwcwBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
-                        HwcwBean bean = t.getResults();
-                        if (bean != null) {
-                            tvTowerType.setText(bean.getTower_model());
-                        } else {
-                            tvTowerType.setText("无");
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
 
     @OnClick({R.id.title_back, R.id.btn_commit, R.id.title_setting})
     public void onViewClicked(View view) {
@@ -222,11 +214,13 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
                         Toast.makeText(this, "请填写电阻测量值", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (id==null) {
-                        Toast.makeText(this, "请先保存数据后再提交", Toast.LENGTH_SHORT).show();
-                        return;
+                    if (id == null || "".equals(id) || audit_status.equals("4")) {
+                        save();
+                    } else {
+                        saveTodoAudit("1");
                     }
-                    saveTodoAudit("1");
+
+
                 } else {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
                         @Override
@@ -252,7 +246,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
                 }
                 break;
             case R.id.btn_commit:
-                save();
+//                save();
                 break;
         }
     }
@@ -273,9 +267,12 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
             params.put("id", id);
         }
 //        params.put("line_name", line_name);
+        params.put("line_id", line_id);
         params.put("tower_id", tower_id);
         params.put("task_id", task_id);
         params.put("tower_type", towerType);
+        params.put("measure_a", aResistor);
+        params.put("line_name", line_name);
         params.put("measure_a", aResistor);
         params.put("measure_b", bResistor);
         params.put("measure_c", cResistor);
@@ -296,13 +293,12 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
                 .subscribe(new BaseObserver(this) {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
-                        ProgressDialog.cancle();
+
                         if (t.getCode() == 1) {
-                            if (id==null){
-                                id="111";
+                            if (id == null) {
+                                id = "111";
                             }
-                            Toast.makeText(JiediDianZuCeLiangActicivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK);
+                            saveTodoAudit("1");
                             RxRefreshEvent.publish("refreshTodo");
                             RxRefreshEvent.publish("refreshGroup");
                         } else {
@@ -369,35 +365,31 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
 
         if ("1".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-            titleSetting.setVisibility(View.VISIBLE);
-            titleSettingTv.setText("审批");
+                titleSetting.setVisibility(View.VISIBLE);
+                titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
         } else if ("2".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("提交");
             }
             mengban.setVisibility(View.GONE);
-            btnCommit.setVisibility(View.VISIBLE);
         } else {
             titleSetting.setVisibility(View.GONE);
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
         }
     }
 
     //保存待办信息
     public void saveTodoAudit(String state) {
-
+        ProgressDialog.show(this, false, "正在上传。。。。");
         SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
 
         saveTodoReqbean.setAudit_status(state);
@@ -447,12 +439,11 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
                             if (t.getResults() != null) {
                                 results = t.getResults();
                                 results.update();
-showView();
-
 //                                etTowerId.setText(results.getTower_type());
 //                                etLineId.setText(line_name);
 //                                etToweName.setText(tower_name);
                             }
+                            showView();
                         }
 
                     }
@@ -476,6 +467,46 @@ showView();
 
     @Override
     public void afterTextChanged(Editable s) {
+        if (delayRun != null) {
+            //每次editText有变化的时候，则移除上次发出的延迟线程
+            handler.removeCallbacks(delayRun);
+        }
 
+        handler.postDelayed(delayRun, 1000);
     }
+
+    private Handler handler = new Handler();
+
+    /**
+     * 延迟线程，看是否还有下一个字符输入
+     */
+    private Runnable delayRun = new Runnable() {
+
+        @Override
+        public void run() {
+            String towerType = tvTowerType.getText().toString();
+            String aResistor = etAResistor.getText().toString();
+            String bResistor = etBResistor.getText().toString();
+            String cResistor = etCResistor.getText().toString();
+            String dResistor = etDResistor.getText().toString();
+            String weather = spWeather.getSelectedItem().toString();
+            String verdict = spVerdict.getSelectedItem().toString();
+            String note = etNote.getText().toString();
+
+            Map<String, String> params = new HashMap<>();
+            if (id != null) {
+                params.put("id", id);
+            }
+            results.setTower_type(towerType);
+            results.setResults(verdict);
+            results.setWork_time(DateUatil.getCurrTime());
+            results.setRemark(note);
+            results.setMeasure_a("".endsWith(aResistor) ? 0 : Double.parseDouble(aResistor));
+            results.setMeasure_b("".endsWith(bResistor) ? 0 : Double.parseDouble(bResistor));
+            results.setMeasure_c("".endsWith(cResistor) ? 0 : Double.parseDouble(cResistor));
+            results.setMeasure_d("".endsWith(dResistor) ? 0 : Double.parseDouble(dResistor));
+            results.setWeather(weather);
+            results.update();
+        }
+    };
 }

@@ -302,6 +302,7 @@ public class GroupTaskFrgment extends BaseFragment {
         groupTaskBean.setIs_rob(bean.getIs_rob());
         groupTaskBean.setAudit_status(bean.getAudit_status());
         groupTaskBean.setUser_id(SPUtil.getUserId(getContext()));
+        groupTaskBean.setDone_rate(bean.getDone_rate());
         if (type == 0) {
             groupTaskBean.setSafe("1");
         }

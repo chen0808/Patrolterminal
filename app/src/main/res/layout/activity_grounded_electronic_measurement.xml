@@ -320,6 +320,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="40dp"
                 android:background="@drawable/btn_base_bg"
+                android:visibility="gone"
                 android:textColor="@color/white"
                 android:text="保  存" />
         </LinearLayout>

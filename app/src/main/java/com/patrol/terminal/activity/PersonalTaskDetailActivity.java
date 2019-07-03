@@ -28,6 +28,7 @@ import com.patrol.terminal.bean.PlanTypeBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -142,8 +143,13 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         month = bean.getMonth();
         day = bean.getDay();
 
-        getDbPersonalList();   //add by linmeng
-        getPersonalList();
+        if (Utils.isNetworkConnected(this)){
+            getPersonalList();
+        }else {
+            getDbPersonalList();   //add by linmeng
+        }
+
+
     }
 
 
@@ -163,6 +169,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 intent.putExtra("line_name", bean.getLine_name());
                 intent.putExtra("tower_id", bean.getTower_id());
                 intent.putExtra("tower_name", bean.getTower_name());
+                intent.putExtra("tower_model", bean.getTower_model());
                 intent.putExtra("task_id", bean.getId());
                 intent.putExtra("sign", bean.getType_sign());
                 intent.putExtra("audit_status", bean.getAudit_status());

@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,8 +19,11 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.GTQXCLbean;
+import com.patrol.terminal.bean.GTQXCLbean_Table;
 import com.patrol.terminal.bean.HwcwBean;
 import com.patrol.terminal.bean.JYZbean;
+import com.patrol.terminal.bean.JYZbean_Table;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
@@ -27,10 +31,13 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -42,7 +49,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 绝缘子零值检测
  */
-public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
+public class JueYuanZiLingZhiJianCeActivity extends BaseActivity implements TextWatcher {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -76,6 +83,8 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
     private String tower_id;
     private String tower_name, task_id, sign, typename, id, audit_status;
     private JYZbean jyzBean;
+    private String line_id;
+    private String tower_model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,46 +99,20 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
 
     public void initClick()
     {
-        etType.addTextChangedListener(new TextWatcher() {
+        etType.addTextChangedListener(this);
+        etPieces.addTextChangedListener(this);
+        etRemark.addTextChangedListener(this);
+        spVerdict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                jyzBean.setInsulator_type(editable.toString().trim().toString());
-                jyzBean.setResults(spVerdict.getSelectedItem().toString());
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String[] array1 = getResources().getStringArray(R.array.verdict);
+                jyzBean.setResults(array1[position]);
                 jyzBean.update();
             }
-        });
-        etPieces.addTextChangedListener(new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-        @Override
-        public void afterTextChanged(Editable editable) {
-            jyzBean.setPieces(Double.valueOf(editable.toString()));
-            jyzBean.setResults(spVerdict.getSelectedItem().toString());
-            jyzBean.update();
-        }
-    });
-        etRemark.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                jyzBean.setRemark(editable.toString().trim().toString());
-                jyzBean.setResults(spVerdict.getSelectedItem().toString());
-                jyzBean.update();
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
@@ -137,77 +120,68 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
     private void initData() {
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         titleName.setText("绝缘子零值检测");
+        line_id = getIntent().getStringExtra("line_id");
         line_name = getIntent().getStringExtra("line_name");
         tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
         tower_name = getIntent().getStringExtra("tower_name");
+        tower_model = getIntent().getStringExtra("tower_model");
         audit_status = getIntent().getStringExtra("audit_status");
-//        sign = getIntent().getStringExtra("sign");
+        sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
-        saveLineData();
+        jyzBean = new JYZbean();
+         getdata();
 
-        getJYZ();
-        getYXtodo();
-        getTask(task_id);
-    }
-
-    //保存本地本地数据
-    public void saveLineData()
-    {
-        JYZbean  jyzBean = new JYZbean();
-        jyzBean.setLine_name(line_name);
-        jyzBean.setTower_id(tower_id);
-        jyzBean.setTask_id(task_id);
-        jyzBean.setTower_name(tower_name);
-        jyzBean.setAudit_id(audit_status);
-        jyzBean.save();
 
     }
+    public void getdata(){
+        List<JYZbean> jyZbeans = SQLite.select().from(JYZbean.class)
+                .where(JYZbean_Table.task_id.eq(task_id), JYZbean_Table.user_id.eq(SPUtil.getUserId(this)))
+                //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
+                .queryList();
+        if (jyZbeans ==null|| jyZbeans.size()==0){
+            jyzBean.setLine_name(line_name);
+            jyzBean.setTower_id(tower_id);
+            jyzBean.setPlan_type_sign(sign);
+            jyzBean.setTask_id(task_id);
+            jyzBean.setTower_name(tower_name);
+            jyzBean.setAudit_id(audit_status);
+            jyzBean.setUser_id(SPUtil.getUserId(this));
+            jyzBean.save();
+        }else {
+            jyzBean=jyZbeans.get(0);
+        }
+        if (Utils.isNetworkConnected(this)){
+            getJYZ();
+            getYXtodo();
+        }else {
+            showView();
+        }
 
-    private void getTask(String task_id) {
-        BaseRequest.getInstance().getService()
-                .getTask(task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<TaskBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
-                        TaskBean bean = t.getResults();
-                        sign = bean.getType_sign();
-                        tvLineId.setText(bean.getLine_name());
-                        tvTowerId.setText(bean.getTower_name());
-                        getTowerModel(bean.getTower_id());
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
     }
 
-    private void getTowerModel(String tower_id) {
-        BaseRequest.getInstance().getService()
-                .getTowerModel("EQ_TOWER", "tower_model", tower_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<HwcwBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
-                        HwcwBean bean = t.getResults();
-                        if (bean != null) {
-                            tvTowerType.setText(bean.getTower_model());
-                        } else {
-                            tvTowerType.setText("无");
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
+    private void showView() {
+        line_name = jyzBean.getLine_name();
+        tower_name = jyzBean.getTower_name();
+        tower_id = jyzBean.getTower_id();
+        tvLineId.setText(line_name);
+        tvTowerId.setText(tower_name);
+        if (jyzBean.getTower_model()==null||"".equals(jyzBean.getTower_model())){
+            tvTowerType.setText("无");
+        }else {
+            tvTowerType.setText(jyzBean.getTower_model());
+        }
+        etType.setText(jyzBean.getInsulator_type());
+        etPieces.setText(jyzBean.getPieces()==0?"":jyzBean.getPieces()+"");
+        String[] array = getResources().getStringArray(R.array.verdict);
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(jyzBean.getResults())) {
+                spVerdict.setSelection(i);
+            }
+        }
+        etRemark.setText(jyzBean.getRemark());
     }
+
 
     @OnClick({R.id.title_back, R.id.btn_commit, R.id.title_setting})
     public void onViewClicked(View view) {
@@ -225,11 +199,12 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
                         Toast.makeText(this, "请填写绝缘子片数", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (id==null) {
-                        Toast.makeText(this, "请先保存数据后再提交", Toast.LENGTH_SHORT).show();
-                        return;
+                    if (id==null||"".equals(id) || audit_status.equals("4")){
+                        save();
+                    }else {
+                        saveTodoAudit("1");
                     }
-                    saveTodoAudit("1");
+
                 } else {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
                         @Override
@@ -255,7 +230,7 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_commit:
-                save();
+//                save();
                 break;
         }
     }
@@ -264,6 +239,7 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
      * 网络保存
      */
     private void save() {
+        ProgressDialog.show(this,true,"正在保存。。。");
         String tower_type = tvTowerType.getText().toString();
         String insulator_type = etType.getText().toString();
         String pieces = etPieces.getText().toString();
@@ -274,6 +250,7 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
         if (id != null) {
             params.put("id", id);
         }
+        params.put("line_id", line_id);
         params.put("pieces", pieces);
         params.put("task_id", task_id);
         params.put("tower_type", tower_type);
@@ -295,12 +272,12 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
                     protected void onSuccees(BaseResult t) throws Exception {
                         if (t.getCode() == 1) {
                             Toast.makeText(JueYuanZiLingZhiJianCeActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK);
                             RxRefreshEvent.publish("refreshTodo");
                             RxRefreshEvent.publish("refreshGroup");
                             if (id==null){
                                 id="1111";
                             }
+                            saveTodoAudit("1");
                         } else {
                             Toast.makeText(JueYuanZiLingZhiJianCeActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
@@ -309,6 +286,7 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         Toast.makeText(JueYuanZiLingZhiJianCeActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                        ProgressDialog.cancle();
                     }
                 });
     }
@@ -321,31 +299,27 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
             titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
         } else if ("2".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("提交");
             }
             mengban.setVisibility(View.GONE);
-            btnCommit.setVisibility(View.VISIBLE);
         } else {
             titleSetting.setVisibility(View.GONE);
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
         }
     }
 
     //保存待办信息
     public void saveTodoAudit(String state) {
-
+        ProgressDialog.show(this,true,"正在保存。。。");
         SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
 
         saveTodoReqbean.setAudit_status(state);
@@ -393,24 +367,15 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             JYZbean results = t.getResults();
                             if (results != null) {
-                                id = results.getId();
-//                                line_name = results.getLine_name();
-                                tower_name = results.getTower_name();
-                                tower_id = results.getTower_id();
+                                jyzBean=results;
+                                jyzBean.update();
 //                                tvLineId.setText(line_name);
 //                                tvTowerId.setText(tower_name);
 //                                tvTowerType.setText(results.getTower_type());
-                                etType.setText(results.getInsulator_type());
-                                etPieces.setText(results.getPieces() + "");
-                                String[] array = getResources().getStringArray(R.array.verdict);
-                                for (int i = 0; i < array.length; i++) {
-                                    if (array[i].equals(results.getResults())) {
-                                        spVerdict.setSelection(i);
-                                    }
-                                }
-                                etRemark.setText(results.getRemark());
+
 
                             }
+                            showView();
                         }
 
                     }
@@ -421,4 +386,48 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
                     }
                 });
     }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (delayRun != null) {
+            //每次editText有变化的时候，则移除上次发出的延迟线程
+            handler.removeCallbacks(delayRun);
+        }
+
+        handler.postDelayed(delayRun, 1000);
+    }
+
+    private Handler handler = new Handler();
+
+    /**
+     * 延迟线程，看是否还有下一个字符输入
+     */
+    private Runnable delayRun = new Runnable() {
+
+        @Override
+        public void run() {
+            String insulator_type = etType.getText().toString();
+            String pieces = etPieces.getText().toString();
+            String conclusion = spVerdict.getSelectedItem().toString();
+            String remark = etRemark.getText().toString();
+
+
+            jyzBean.setPieces("".equals(pieces)?0:Double.parseDouble(pieces));
+            jyzBean.setInsulator_type( insulator_type);
+            jyzBean.setResults(conclusion);
+            jyzBean.setRemark(remark);
+            jyzBean.setWork_time( DateUatil.getCurrTime());
+            jyzBean.update();
+        }
+    };
 }
