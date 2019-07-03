@@ -1,6 +1,9 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,15 +57,15 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
     @BindView(R.id.tv_tower_type)
     TextView tvTowerType;
     @BindView(R.id.et_pieces)
-    EditText etPieces;
+    EditText etPieces;//脉冲零值
     @BindView(R.id.et_remark)
-    EditText etRemark;
+    EditText etRemark;//备注
     @BindView(R.id.btn_commit)
     Button btnCommit;
     @BindView(R.id.mengban)
     RelativeLayout mengban;
     @BindView(R.id.et_type)
-    EditText etType;
+    EditText etType;//绝缘子型号
     @BindView(R.id.tv_line_id)
     TextView tvLineId;
     @BindView(R.id.tv_tower_id)
@@ -72,17 +75,66 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
     private String line_name, jobType;
     private String tower_id;
     private String tower_name, task_id, sign, typename, id, audit_status;
+    private JYZbean jyzBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zero_monitering);
         ButterKnife.bind(this);
-        initview();
+
+
+        initData();
+        initClick();
     }
 
+    public void initClick()
+    {
+        etType.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                jyzBean.setInsulator_type(editable.toString().trim());
+                jyzBean.setResults(spVerdict.getSelectedItem().toString());
+                jyzBean.update();
+            }
+        });
+        etPieces.addTextChangedListener(new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+        @Override
+        public void afterTextChanged(Editable editable) {
+            jyzBean.setPieces(Double.valueOf(editable.toString()));
+            jyzBean.setResults(spVerdict.getSelectedItem().toString());
+            jyzBean.update();
+        }
+    });
+        etRemark.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                jyzBean.setRemark(editable.toString().trim());
+                jyzBean.setResults(spVerdict.getSelectedItem().toString());
+                jyzBean.update();
+            }
+        });
+    }
 
-    private void initview() {
+    private void initData() {
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         titleName.setText("绝缘子零值检测");
         line_name = getIntent().getStringExtra("line_name");
@@ -92,10 +144,24 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
         audit_status = getIntent().getStringExtra("audit_status");
 //        sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
+        saveLineData();
 
         getJYZ();
         getYXtodo();
         getTask(task_id);
+    }
+
+    //保存本地本地数据
+    public void saveLineData()
+    {
+        JYZbean  jyzBean = new JYZbean();
+        jyzBean.setLine_name(line_name);
+        jyzBean.setTower_id(tower_id);
+        jyzBean.setTask_id(task_id);
+        jyzBean.setTower_name(tower_name);
+        jyzBean.setAudit_id(audit_status);
+        jyzBean.save();
+
     }
 
     private void getTask(String task_id) {
@@ -194,6 +260,9 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 网络保存
+     */
     private void save() {
         String tower_type = tvTowerType.getText().toString();
         String insulator_type = etType.getText().toString();

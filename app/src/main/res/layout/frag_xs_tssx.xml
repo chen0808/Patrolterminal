@@ -44,7 +44,7 @@
                 android:background="@drawable/selector_tssx_color"
                 android:button="@null"
                 android:gravity="center"
-                android:text="六防"
+                android:text="八防"
                 android:textColor="@drawable/selector_tssx_txt_color"
                 android:textSize="@dimen/sp_14" />
 

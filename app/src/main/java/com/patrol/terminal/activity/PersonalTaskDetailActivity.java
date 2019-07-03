@@ -42,6 +42,9 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * 个人任务详情
+ */
 public class PersonalTaskDetailActivity extends BaseActivity {
 
 
@@ -149,7 +152,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         titleName.setText("个人任务详情");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         monthPlanDetailRc.setLayoutManager(manager);
-        monthPlanDetailAdapter = new PersonalTaskDetailAdapter(R.layout.item_plan_detail, results);
+        monthPlanDetailAdapter = new PersonalTaskDetailAdapter(R.layout.item_plan_detail_offline, results,this);
         monthPlanDetailRc.setAdapter(monthPlanDetailAdapter);
         monthPlanDetailAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

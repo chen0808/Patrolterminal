@@ -4,19 +4,37 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
-
-    <TextView
-        android:id="@+id/item_tssx_title"
+    <RelativeLayout
+        android:id="@+id/item_title_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/sp_16"
-        android:gravity="center_vertical"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
-        android:paddingLeft="14dp"
-        android:text="高速铁路"
-        android:textColor="@color/black"
-        />
+        android:layout_gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/item_tssx_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_16"
+            android:gravity="center_vertical"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="14dp"
+            android:textColor="@color/black"
+            />
+
+        <ImageView
+            android:id="@+id/item_tssx_del"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:button="@null"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/defect_false_checked"/>
+
+    </RelativeLayout>
+
 
     <LinearLayout
         android:id="@+id/ll_content"

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="@dimen/dp_40"
+        android:orientation="horizontal"
+        >
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/image_overlay_false"
+            />
+        <TextView
+            android:id="@+id/item_plan_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:textSize="@dimen/sp_16"
+            android:text="计划名称"
+            android:textColor="@color/color_33"
+            />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/image_overlay_false"
+            />
+        <TextView
+            android:id="@+id/item_plan_time"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:textSize="@dimen/sp_14"
+            android:text="发现时间"
+            android:textColor="@color/color_33"
+            />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/image_overlay_false"
+            />
+
+        <ImageView
+            android:id="@+id/item_plan_offline"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/image_overlay_false"
+            />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/image_overlay_false"
+        />
+</RelativeLayout>
