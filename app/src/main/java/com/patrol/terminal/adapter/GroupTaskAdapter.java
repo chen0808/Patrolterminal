@@ -72,7 +72,7 @@ public class GroupTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewHo
             progressBar.setProgress(item.getDone_num());
             viewHolder.setGone(R.id.plan_progressbar_ll, true);
             viewHolder.setText(R.id.plan_progressbar_tv, "任务进度(" + item.getDone_num() + "/" + item.getAll_num() + ")：")
-                    .setText(R.id.plan_progressbar_num, item.getDone_rate() + "%");
+                    .setText(R.id.plan_progressbar_num, (item.getDone_rate()==null?0:item.getDone_rate()) + "%");
 
         }
 

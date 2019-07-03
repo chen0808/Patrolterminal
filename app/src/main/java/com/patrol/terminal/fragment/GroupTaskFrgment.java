@@ -162,6 +162,8 @@ public class GroupTaskFrgment extends BaseFragment {
             userId = SPUtil.getUserId(getContext());
             getDbGroupListZy();
         }
+        isRefresh = true;
+        mRefrsh.setRefreshing(false);
     }
 
     private void getDbGroupListZy() {
