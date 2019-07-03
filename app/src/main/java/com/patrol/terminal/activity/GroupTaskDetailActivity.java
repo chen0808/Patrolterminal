@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,6 +77,9 @@ public class GroupTaskDetailActivity extends BaseActivity {
     RecyclerView monthPlanDetailRc;
     @BindView(R.id.task_submit)
     TextView taskSubmit;
+    @BindView(R.id.task_select)
+    LinearLayout task_select;
+
     private List<DefectBean> typeList = new ArrayList<>();
     private String year, month, day, id;
     private GroupTaskDetailAdapter adapter;
@@ -118,6 +122,8 @@ public class GroupTaskDetailActivity extends BaseActivity {
 
 
     private void initView() {
+        task_select.setVisibility(View.GONE);
+
         titleName.setText("小组任务详情");
         String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         String[] years = time.split("年");
