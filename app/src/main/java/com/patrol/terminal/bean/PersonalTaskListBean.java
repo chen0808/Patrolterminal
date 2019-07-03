@@ -92,7 +92,15 @@ public class PersonalTaskListBean extends BaseModel implements Parcelable {
     private String towers_id;
     @Column
     private String check_report;
+    private boolean isCheck;
 
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
     public int getLocal_id() {
         return local_id;
     }
