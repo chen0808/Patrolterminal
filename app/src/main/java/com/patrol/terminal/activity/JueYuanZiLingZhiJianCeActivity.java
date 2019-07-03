@@ -22,8 +22,11 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GTQXCLbean;
 import com.patrol.terminal.bean.GTQXCLbean_Table;
 import com.patrol.terminal.bean.HwcwBean;
+import com.patrol.terminal.bean.JDDZbean_Table;
 import com.patrol.terminal.bean.JYZbean;
 import com.patrol.terminal.bean.JYZbean_Table;
+import com.patrol.terminal.bean.PersonalTaskListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
@@ -85,6 +88,8 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity implements Text
     private JYZbean jyzBean;
     private String line_id;
     private String tower_model;
+    private PersonalTaskListBean personalTaskListBean;
+    private  boolean isSave=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,15 +140,24 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity implements Text
 
     }
     public void getdata(){
+        //获取接电电阻本地信息
         List<JYZbean> jyZbeans = SQLite.select().from(JYZbean.class)
                 .where(JYZbean_Table.task_id.eq(task_id), JYZbean_Table.user_id.eq(SPUtil.getUserId(this)))
                 //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
                 .queryList();
+        //获取个人任务本地信息
+        List<PersonalTaskListBean> personalTaskListBeans = SQLite.select().from(PersonalTaskListBean.class)
+                .where(PersonalTaskListBean_Table.id.eq(task_id), PersonalTaskListBean_Table.user_id.eq(SPUtil.getUserId(this)))
+                .queryList();
+        if (personalTaskListBeans.size()>0){
+            personalTaskListBean = personalTaskListBeans.get(0);
+        }
         if (jyZbeans ==null|| jyZbeans.size()==0){
             jyzBean.setLine_name(line_name);
             jyzBean.setTower_id(tower_id);
             jyzBean.setPlan_type_sign(sign);
             jyzBean.setTask_id(task_id);
+            jyzBean.setTower_model(tower_model);
             jyzBean.setTower_name(tower_name);
             jyzBean.setAudit_id(audit_status);
             jyzBean.setUser_id(SPUtil.getUserId(this));
@@ -421,6 +435,12 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity implements Text
             String conclusion = spVerdict.getSelectedItem().toString();
             String remark = etRemark.getText().toString();
 
+            if (personalTaskListBean!=null&&!isSave){
+                isSave=true;
+                personalTaskListBean.setIs_save("0");
+                personalTaskListBean.update();
+                setResult(RESULT_OK);
+            }
 
             jyzBean.setPieces("".equals(pieces)?0:Double.parseDouble(pieces));
             jyzBean.setInsulator_type( insulator_type);

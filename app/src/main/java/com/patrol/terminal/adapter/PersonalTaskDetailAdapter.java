@@ -48,12 +48,19 @@ public class PersonalTaskDetailAdapter extends BaseQuickAdapter<PersonalTaskList
         }else{
             viewHolder.setImageResource(R.id.item_plan_offline,R.mipmap.check_no);
         }
-
+if ("0".equals(item.getAudit_status())&&"0".equals(item.getIs_save())){
+    viewHolder.setText(R.id.item_plan_time, "待上传");
+    viewHolder.setTextColor(R.id.item_plan_time,mContext.getResources().getColor(StringUtil.getPersonalColor("100")));
+}
         ImageView imgView = viewHolder.getView(R.id.item_plan_offline);
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!item.isCheck()&& "10".equals(item.getAudit_status())){
+                if(!"0".equals(item.getIs_save())){
+                    Toast.makeText(mContext,"'待上传'"+"才可选择",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!item.isCheck()&& "0".equals(item.getAudit_status())&&"0".equals(item.getIs_save())){
                         viewHolder.setImageResource(R.id.item_plan_offline,R.mipmap.check_yes);
                         item.setCheck(true);
                 }else{
@@ -61,9 +68,7 @@ public class PersonalTaskDetailAdapter extends BaseQuickAdapter<PersonalTaskList
                     viewHolder.setImageResource(R.id.item_plan_offline,R.mipmap.check_no);
                 }
 
-                if(!item.getAudit_status().equals("待上传")){
-                    Toast.makeText(mContext,"'待上传'"+"才可选择",Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
     }

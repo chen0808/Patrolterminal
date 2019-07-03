@@ -453,6 +453,21 @@ public interface ApiServise {
     @POST("task/temperature/pda/updatePOST")
     Observable<BaseResult<HwcwBean>> upLoadInfrared(@QueryMap Map<String, String> params);
 
+    //上传红外线测温
+    @POST("task/temperature/updatePOST")
+    Observable<BaseResult<HwcwBean>> upLoadInfrared(@Body HwcwBean params);
+    //上传斜杆塔倾斜测量
+    @POST("task/tilt/updatePOST")
+    Observable<BaseResult<HwcwBean>> upLoadTowerBias(@Body GTQXCLbean params);
+
+    //上传接地电阻
+    @POST("task/resistance/updatePOST")
+    Observable<BaseResult<HwcwBean>> upLoadResistance(@Body JDDZbean params);
+
+    //上传零值检测
+    @POST("task/insulator/updatePOST")
+    Observable<BaseResult<HwcwBean>> upLoadInsulator(@Body JYZbean params);
+
     //上传接地电阻
     @POST("task/resistance/pda/updatePOST")
     Observable<BaseResult> upLoadResistance(@QueryMap Map<String, String> params);

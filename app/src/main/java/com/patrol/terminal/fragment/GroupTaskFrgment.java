@@ -143,7 +143,6 @@ public class GroupTaskFrgment extends BaseFragment {
                 if (Utils.isNetworkConnected(getContext())){
                     getData();
                 }else {
-
                     getDataFromDatabase();
                 }
             }
@@ -168,7 +167,7 @@ public class GroupTaskFrgment extends BaseFragment {
     private void getDbGroupListZy() {
         result = SQLite.select().from(GroupTaskBean.class)
                 .where(GroupTaskBean_Table.year.eq(Integer.valueOf(year)),GroupTaskBean_Table.month.eq(Integer.valueOf(month)),
-                        GroupTaskBean_Table.day.eq(Integer.valueOf(day)), GroupTaskBean_Table.user_id.eq(userId))
+                        GroupTaskBean_Table.day.eq(Integer.valueOf(day)))
                 .queryList();
 
         if (result != null) {
@@ -257,7 +256,7 @@ public class GroupTaskFrgment extends BaseFragment {
                             }
 
                             //查询后存储到本地数据库  by linmeng
-                            saveToDatebase(result.get(i), 0);
+                            saveToDatebase(result.get(i));
                         }
 
                         RxRefreshEvent.publish("refreshGroupNum@"+result.size());
@@ -275,7 +274,7 @@ public class GroupTaskFrgment extends BaseFragment {
 
     }
 
-    private void saveToDatebase(GroupTaskBean bean, int type) {
+    private void saveToDatebase(GroupTaskBean bean) {
         GroupTaskBean groupTaskBean = new GroupTaskBean();
         groupTaskBean.setId(bean.getId());
         groupTaskBean.setDay_tower_id(bean.getDay_tower_id());
@@ -303,9 +302,7 @@ public class GroupTaskFrgment extends BaseFragment {
         groupTaskBean.setAudit_status(bean.getAudit_status());
         groupTaskBean.setUser_id(SPUtil.getUserId(getContext()));
         groupTaskBean.setDone_rate(bean.getDone_rate());
-        if (type == 0) {
             groupTaskBean.setSafe("1");
-        }
 
         List<GroupTaskBean> existBeans = SQLite.select().from(GroupTaskBean.class)
                 .where(GroupTaskBean_Table.id.eq(bean.getId()))
@@ -366,7 +363,7 @@ public class GroupTaskFrgment extends BaseFragment {
 
                         for (int i = 0; i < result.size(); i++) {
                             //查询后存储到本地数据库  by linmeng
-                            saveToDatebase(result.get(i),  1);
+                            saveToDatebase(result.get(i));
                         }
 
                         RxRefreshEvent.publish("refreshGroupNum@"+result.size());
@@ -377,7 +374,10 @@ public class GroupTaskFrgment extends BaseFragment {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        mRefrsh.setRefreshing(false);
+                        if (mRefrsh!=null){
+                            mRefrsh.setRefreshing(false);
+                        }
+
                         isRefresh=true;
                         ProgressDialog .cancle();
                     }

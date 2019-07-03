@@ -1,8 +1,10 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -20,6 +22,9 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.HwcwBean;
 import com.patrol.terminal.bean.HwcwBean_Table;
+import com.patrol.terminal.bean.JDDZbean_Table;
+import com.patrol.terminal.bean.PersonalTaskListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
@@ -27,11 +32,13 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -43,7 +50,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 红外测温
  */
-public class HongWaiCeWenActivity extends BaseActivity {
+public class HongWaiCeWenActivity extends BaseActivity implements TextWatcher {
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)
@@ -94,10 +101,11 @@ public class HongWaiCeWenActivity extends BaseActivity {
     private String id;
     private String allout_status = "0";
     private String jobType;
-    private HwcwBean localByTaskId;
     private HwcwBean localBean;
     private String[] array;
-
+    private PersonalTaskListBean personalTaskListBean;
+    private  boolean isSave=false;
+    private String tower_model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,17 +113,17 @@ public class HongWaiCeWenActivity extends BaseActivity {
         setContentView(R.layout.activity_infrared_thermometry);
         ButterKnife.bind(this);
         initview();
-
-
     }
 
     private void initview() {
         titleName.setText("红外测温");
         array = getResources().getStringArray(R.array.link_type);
+        line_id = getIntent().getStringExtra("line_id");
         line_name = getIntent().getStringExtra("line_name");
         tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
         tower_name = getIntent().getStringExtra("tower_name");
+        tower_model = getIntent().getStringExtra("tower_model");
         audit_status = getIntent().getStringExtra("audit_status");
         sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
@@ -126,7 +134,7 @@ public class HongWaiCeWenActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 localBean.setConnection_type(array[position]);
-                save();
+                localBean.update();
             }
 
             @Override
@@ -134,214 +142,69 @@ public class HongWaiCeWenActivity extends BaseActivity {
 
             }
         });
-        getYXtodo();
-        getHWCW();
-        query();
-        getTask(task_id);
+        getdata();
+
+    }
+
+    private void getdata() {
+        HwcwBean bean = SQLite.select().from(HwcwBean.class).where(HwcwBean_Table.task_id.is(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(this))).querySingle();
+           personalTaskListBean = SQLite.select().from(PersonalTaskListBean.class)
+                .where(PersonalTaskListBean_Table.id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(this)))
+                .querySingle();
+
+        if (bean==null){
+            localBean.setLine_name(line_name);
+            localBean.setTask_id(task_id);
+            localBean.setTower_id(tower_id);
+            localBean.setTower_name(tower_name);
+            localBean.setTower_model(tower_model);
+            localBean.setUser_id(SPUtil.getUserId(this));
+            localBean.save();
+        }else {
+            localBean  =bean;
+        }
+        if (Utils.isNetworkConnected(this)){
+            getYXtodo();
+            getHWCW();
+        }else {
+            initLocalData(localBean);
+        }
+
     }
 
     private void addTextChangeListener() {
-        etBUpTemperature.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().equals("")) {
-                    localBean.setUp_big(Double.valueOf(s.toString()));
-                    save();
-                }
-            }
-        });
-        etSUpTemperature.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().equals("")) {
-                    localBean.setUp_small(Double.valueOf(s.toString()));
-                    save();
-                }
-            }
-        });
-        etBMiddleTemperature.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().equals("")) {
-                    localBean.setMid_big(Double.valueOf(s.toString()));
-                    save();
-                }
-            }
-        });
-        etSMiddleTemperature.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().equals("")) {
-                    localBean.setMid_small(Double.valueOf(s.toString()));
-                    save();
-                }
-            }
-        });
-        etBDownTemperature.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().equals("")) {
-                    localBean.setDown_big(Double.valueOf(s.toString()));
-                    save();
-                }
-            }
-        });
-        etSDownTemperature.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().equals("")) {
-                    localBean.setDown_small(Double.valueOf(s.toString()));
-                    save();
-                }
-            }
-        });
-        etSansTemperature.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().equals("")) {
-                    localBean.setTemperature(Double.valueOf(s.toString()));
-                    save();
-                }
-            }
-        });
-        etCheckResult.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().equals("")) {
-                    localBean.setResults(Double.valueOf(s.toString()));
-                    save();
-                }
-            }
-        });
-        etRemarks.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().equals("")) {
-                    localBean.setRemark(s.toString());
-                    save();
-                }
-            }
-        });
+        etBUpTemperature.addTextChangedListener(this);
+        etSUpTemperature.addTextChangedListener(this);
+        etBMiddleTemperature.addTextChangedListener(this);
+        etSMiddleTemperature.addTextChangedListener(this);
+        etBDownTemperature.addTextChangedListener(this);
+        etSDownTemperature.addTextChangedListener(this);
+        etSansTemperature.addTextChangedListener(this);
+        etCheckResult.addTextChangedListener(this);
+        etRemarks.addTextChangedListener(this);
     }
 
-    private void query() {
-        localByTaskId = SQLite.select().from(HwcwBean.class).where(HwcwBean_Table.task_id.is(task_id)).querySingle();
-        initLocalData(localByTaskId);
-    }
 
-    private void save() {
-        localByTaskId = SQLite.select().from(HwcwBean.class).where(HwcwBean_Table.task_id.is(task_id)).querySingle();
-        if (localByTaskId != null) {
-            localBean.update();
-        } else {
-            localBean.save();
-        }
-    }
+
+
 
     private void initLocalData(HwcwBean localByTaskId) {
         if (localByTaskId != null) {
-            sign = localByTaskId.getSign();
             tvLineId.setText(localByTaskId.getLine_name());
             tvTowerId.setText(localByTaskId.getTower_name());
-            tvTowerType.setText(localByTaskId.getTower_model());
-            etBUpTemperature.setText(localByTaskId.getUp_big() + "");
-            etSUpTemperature.setText(localByTaskId.getUp_small() + "");
-            etBMiddleTemperature.setText(localByTaskId.getMid_big() + "");
-            etSMiddleTemperature.setText(localByTaskId.getMid_small() + "");
-            etBDownTemperature.setText(localByTaskId.getDown_big() + "");
-            etSDownTemperature.setText(localByTaskId.getDown_small() + "");
-            etSansTemperature.setText(localByTaskId.getTemperature() + "");
-            etCheckResult.setText(localByTaskId.getResults() + "");
+            if (localByTaskId.getTower_model()==null||"".equals(localByTaskId.getTower_model())){
+                tvTowerType.setText("无");
+            }else {
+                tvTowerType.setText(localByTaskId.getTower_model());
+            }
+            etBUpTemperature.setText(localByTaskId.getUp_big()==0?"":localByTaskId.getUp_big()+"");
+            etSUpTemperature.setText(localByTaskId.getUp_small()==0?"":localByTaskId.getUp_small()+"");
+            etBMiddleTemperature.setText(localByTaskId.getMid_big()==0?"":localByTaskId.getMid_big()+"");
+            etSMiddleTemperature.setText(localByTaskId.getMid_small() ==0?"":localByTaskId.getMid_small()+"");
+            etBDownTemperature.setText(localByTaskId.getDown_big()==0?"":localByTaskId.getDown_big()+"");
+            etSDownTemperature.setText(localByTaskId.getDown_small()==0?"":localByTaskId.getDown_small()+"");
+            etSansTemperature.setText(localByTaskId.getTemperature()==0?"":localByTaskId.getTemperature()+"");
+            etCheckResult.setText(localByTaskId.getResults() ==0?"":localByTaskId.getResults()+"");
             etRemarks.setText(localByTaskId.getRemark());
             String type = localByTaskId.getConnection_type();
             for (int i = 0; i < array.length; i++) {
@@ -354,49 +217,9 @@ public class HongWaiCeWenActivity extends BaseActivity {
         }
     }
 
-    private void getTask(String task_id) {
-        BaseRequest.getInstance().getService()
-                .getTask(task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<TaskBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
-                        TaskBean bean = t.getResults();
-                        localBean.setTask_id(task_id);
-                        localBean.setSign(bean.getType_sign());
-                        localBean.setLine_name(bean.getLine_name());
-                        localBean.setTower_name(bean.getTower_name());
-                        save();
-                        getTowerModel(bean.getTower_id());
-                    }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
 
-                    }
-                });
-    }
 
-    private void getTowerModel(String tower_id) {
-        BaseRequest.getInstance().getService()
-                .getTowerModel("EQ_TOWER", "tower_model", tower_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<HwcwBean>(this) {
-                    @Override
-                    protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
-                        HwcwBean bean = t.getResults();
-                        localBean.setTower_model(bean.getTower_model());
-                        save();
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-                });
-    }
 
     public void getYXtodo() {
         if ("1".equals(audit_status)) {
@@ -468,11 +291,11 @@ public class HongWaiCeWenActivity extends BaseActivity {
                         Toast.makeText(this, "请填写检查结果", Toast.LENGTH_SHORT).show();
                         return;
                     }
-//                    if (id == null) {
-//                        Toast.makeText(this, "请先保存数据后再提交", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-                    saveTodoAudit("1");
+                    if (id == null || "".equals(id) || audit_status.equals("4")) {
+                        saveData();
+                    } else {
+                        saveTodoAudit("1");
+                    }
                 } else {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
                         @Override
@@ -498,7 +321,7 @@ public class HongWaiCeWenActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_commit:
-                saveData();
+//                saveData();
                 break;
         }
     }
@@ -556,8 +379,7 @@ public class HongWaiCeWenActivity extends BaseActivity {
                             if (id == null) {
                                 id = "123321";
                             }
-                            Toast.makeText(HongWaiCeWenActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK);
+                            saveTodoAudit("1");   //同意
                             RxRefreshEvent.publish("refreshTodo");
                             RxRefreshEvent.publish("refreshGroup");
                         }
@@ -574,7 +396,7 @@ public class HongWaiCeWenActivity extends BaseActivity {
 
     //保存待办信息
     public void saveTodoAudit(String state) {
-
+        ProgressDialog.show(this, false, "正在加载。。。");
         SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
 
         saveTodoReqbean.setAudit_status(state);
@@ -621,16 +443,12 @@ public class HongWaiCeWenActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             HwcwBean results = t.getResults();
                             if (results != null) {
-                                id = results.getId();
-                                line_name = results.getLine_name();
-                                tower_name = results.getTower_name();
-                                tower_id = results.getTower_id();
-                                localBean.setConnection_type(results.getConnection_type());
-                                save();
-
+                                localBean=results;
+                                localBean.update();
 //                                tvLineId.setText(line_name);
 //                                tvTowerId.setText(tower_name);
                             }
+                            initLocalData(localBean);
                         }
                     }
 
@@ -641,4 +459,72 @@ public class HongWaiCeWenActivity extends BaseActivity {
                 });
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (delayRun != null) {
+            //每次editText有变化的时候，则移除上次发出的延迟线程
+            handler.removeCallbacks(delayRun);
+        }
+
+        handler.postDelayed(delayRun, 1000);
+    }
+
+    private Handler handler = new Handler();
+
+    /**
+     * 延迟线程，看是否还有下一个字符输入
+     */
+    private Runnable delayRun = new Runnable() {
+
+        @Override
+        public void run() {
+            String towerType = tvTowerType.getText().toString();
+            String linkType = spLinkType.getSelectedItem().toString();
+            String bUp = etBUpTemperature.getText().toString();
+            String sUp = etSUpTemperature.getText().toString();
+            String bMiddle = etBMiddleTemperature.getText().toString();
+            String sMiddle = etSMiddleTemperature.getText().toString();
+            String bDown = etBDownTemperature.getText().toString();
+            String sDown = etSDownTemperature.getText().toString();
+            String sans = etSansTemperature.getText().toString();
+            String checkResult = etCheckResult.getText().toString();
+            String remarks = etRemarks.getText().toString();
+
+//                if (lineId.isEmpty() || towerId.isEmpty()) {
+//                    Toast.makeText(HongWaiCeWenActivity.this, "请传入线路名称和杆塔号！（必填）", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+            if (personalTaskListBean!=null&&!isSave){
+                isSave=true;
+                personalTaskListBean.setIs_save("0");
+                personalTaskListBean.update();
+                setResult(RESULT_OK);
+            }
+
+            localBean.setConnection_type(linkType);
+            localBean.setUp_big("".equals(bUp)?0:Double.parseDouble(bUp));
+            localBean.setUp_small("".equals(sUp)?0:Double.parseDouble(sUp) );
+            localBean.setMid_big("".equals(bMiddle)?0:Double.parseDouble(bMiddle) );
+            localBean.setMid_small("".equals(sMiddle)?0:Double.parseDouble(sMiddle) );
+            localBean.setDown_big("".equals(bDown)?0:Double.parseDouble(bDown));
+            localBean.setDown_small("".equals(sDown)?0:Double.parseDouble(sDown));
+            localBean.setTemperature("".equals(sans)?0:Double.parseDouble(sans));
+            localBean.setResults("".equals(checkResult)?0:Double.parseDouble(checkResult));
+            localBean.setWork_time( DateUatil.getCurrTime());
+
+            localBean.setRemark(remarks);
+
+        }
+    };
 }

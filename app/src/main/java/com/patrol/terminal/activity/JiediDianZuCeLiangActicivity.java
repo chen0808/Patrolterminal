@@ -91,7 +91,8 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
     private JDDZbean results;
     private String tower_model;
     private String line_id;
-
+    private PersonalTaskListBean personalTaskListBean;
+   private  boolean isSave=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +149,9 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
         List<PersonalTaskListBean> personalTaskListBeans = SQLite.select().from(PersonalTaskListBean.class)
                 .where(PersonalTaskListBean_Table.id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(this)))
                 .queryList();
+        if (personalTaskListBeans.size()>0){
+            personalTaskListBean = personalTaskListBeans.get(0);
+        }
         if (jddZbeans == null || jddZbeans.size() == 0) {
             results.setLine_name(line_name);
             results.setTask_id(task_id);
@@ -493,9 +497,12 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
             String verdict = spVerdict.getSelectedItem().toString();
             String note = etNote.getText().toString();
 
-            Map<String, String> params = new HashMap<>();
-            if (id != null) {
-                params.put("id", id);
+
+            if (personalTaskListBean!=null&&!isSave){
+                isSave=true;
+                personalTaskListBean.setIs_save("0");
+                personalTaskListBean.update();
+                setResult(RESULT_OK);
             }
             results.setTower_type(towerType);
             results.setResults(verdict);

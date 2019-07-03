@@ -23,6 +23,8 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GTQXCLbean;
 import com.patrol.terminal.bean.GTQXCLbean_Table;
 import com.patrol.terminal.bean.HwcwBean;
+import com.patrol.terminal.bean.PersonalTaskListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
@@ -91,6 +93,8 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
     private GTQXCLbean results;
     private List<GTQXCLbean> gtqxcLbeans;
     private String tower_model;
+    private PersonalTaskListBean personalTaskListBean;
+    private  boolean isSave=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +149,14 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
                 .where(GTQXCLbean_Table.task_id.eq(task_id), GTQXCLbean_Table.user_id.eq(SPUtil.getUserId(this)))
                 //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
                 .queryList();
+
+        //获取个人任务本地信息
+        List<PersonalTaskListBean> personalTaskListBeans = SQLite.select().from(PersonalTaskListBean.class)
+                .where(PersonalTaskListBean_Table.id.eq(task_id), PersonalTaskListBean_Table.user_id.eq(SPUtil.getUserId(this)))
+                .queryList();
+        if (personalTaskListBeans.size()>0){
+            personalTaskListBean = personalTaskListBeans.get(0);
+        }
         if (gtqxcLbeans ==null|| gtqxcLbeans.size()==0){
 
             results.setLine_name(line_name);
@@ -444,6 +456,12 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
             String remark = etRemark.getText().toString();
 
 
+            if (personalTaskListBean!=null&&!isSave){
+                isSave=true;
+                personalTaskListBean.setIs_save("0");
+                personalTaskListBean.update();
+                setResult(RESULT_OK);
+            }
             results.setTower_type(towerType);
             results.setPositive_tilt("".equals(frontTilt) ? 0 : Double.parseDouble(frontTilt));
             results.setFlank_tilt("".equals(sideTilt) ? 0 : Double.parseDouble(sideTilt));

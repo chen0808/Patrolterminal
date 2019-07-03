@@ -9,8 +9,10 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.io.Serializable;
+
 @Table(database = AppDataBase.class)
-public class PersonalTaskListBean extends BaseModel implements Parcelable {
+public class PersonalTaskListBean extends BaseModel implements Serializable {
 
 
         /**
@@ -95,6 +97,16 @@ public class PersonalTaskListBean extends BaseModel implements Parcelable {
     private boolean isCheck;
     @Column
     private String tower_model;
+    @Column
+    private String is_save;
+
+    public String getIs_save() {
+        return is_save;
+    }
+
+    public void setIs_save(String is_save) {
+        this.is_save = is_save;
+    }
 
     public String getTower_model() {
         return tower_model;
@@ -320,86 +332,5 @@ public class PersonalTaskListBean extends BaseModel implements Parcelable {
         }
 
 
-    public PersonalTaskListBean() {
-    }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.local_id);
-        dest.writeString(this.id);
-        dest.writeString(this.group_list_id);
-        dest.writeString(this.name);
-        dest.writeString(this.type_id);
-        dest.writeString(this.type_sign);
-        dest.writeString(this.type_name);
-        dest.writeString(this.plan_type);
-        dest.writeString(this.line_id);
-        dest.writeString(this.line_name);
-        dest.writeString(this.dep_id);
-        dest.writeString(this.dep_name);
-        dest.writeString(this.user_id);
-        dest.writeString(this.user_name);
-        dest.writeString(this.tower_id);
-        dest.writeString(this.tower_name);
-        dest.writeInt(this.year);
-        dest.writeInt(this.month);
-        dest.writeInt(this.week);
-        dest.writeInt(this.day);
-        dest.writeString(this.audit_status);
-        dest.writeString(this.done_status);
-        dest.writeString(this.done_time);
-        dest.writeString(this.sub_time);
-        dest.writeString(this.towers_id);
-        dest.writeString(this.check_report);
-        dest.writeByte(this.isCheck ? (byte) 1 : (byte) 0);
-        dest.writeString(this.tower_model);
-    }
-
-    protected PersonalTaskListBean(Parcel in) {
-        this.local_id = in.readInt();
-        this.id = in.readString();
-        this.group_list_id = in.readString();
-        this.name = in.readString();
-        this.type_id = in.readString();
-        this.type_sign = in.readString();
-        this.type_name = in.readString();
-        this.plan_type = in.readString();
-        this.line_id = in.readString();
-        this.line_name = in.readString();
-        this.dep_id = in.readString();
-        this.dep_name = in.readString();
-        this.user_id = in.readString();
-        this.user_name = in.readString();
-        this.tower_id = in.readString();
-        this.tower_name = in.readString();
-        this.year = in.readInt();
-        this.month = in.readInt();
-        this.week = in.readInt();
-        this.day = in.readInt();
-        this.audit_status = in.readString();
-        this.done_status = in.readString();
-        this.done_time = in.readString();
-        this.sub_time = in.readString();
-        this.towers_id = in.readString();
-        this.check_report = in.readString();
-        this.isCheck = in.readByte() != 0;
-        this.tower_model = in.readString();
-    }
-
-    public static final Parcelable.Creator<PersonalTaskListBean> CREATOR = new Parcelable.Creator<PersonalTaskListBean>() {
-        @Override
-        public PersonalTaskListBean createFromParcel(Parcel source) {
-            return new PersonalTaskListBean(source);
-        }
-
-        @Override
-        public PersonalTaskListBean[] newArray(int size) {
-            return new PersonalTaskListBean[size];
-        }
-    };
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.PerformanceAdapter;
 import com.patrol.terminal.adapter.PersonalTaskDetailAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -20,11 +21,19 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AddressBookLevel2;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DepUserBean;
+import com.patrol.terminal.bean.GTQXCLbean;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.GroupTaskBean_Table;
+import com.patrol.terminal.bean.HwcwBean;
+import com.patrol.terminal.bean.HwcwBean_Table;
+import com.patrol.terminal.bean.JDDZbean;
+import com.patrol.terminal.bean.JDDZbean_Table;
+import com.patrol.terminal.bean.JYZbean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.PlanTypeBean;
+import com.patrol.terminal.bean.SaveTodoReqbean;
+import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
@@ -87,7 +96,9 @@ public class PersonalTaskDetailActivity extends BaseActivity {
     private List<DepUserBean> depUserBeanList;
     private String[] names;
     private List<GroupTaskBean> selectList = new ArrayList<>();
-
+    private String userId;
+    private List<PersonalTaskListBean> selectPersonal =new ArrayList<>();
+    private int saveNum=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +121,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
     }
 
     private void initdata() {
-
+        userId = SPUtil.getUserId(this);
         SPUtil.put(this, "ids", "task_id", bean.getId());
         String work_user_name = bean.getWork_user_name();
         if (work_user_name == null || "".equals(work_user_name)) {
@@ -132,21 +143,21 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         tvLineNo.setText("班  组 : " + SPUtil.getDepName(PersonalTaskDetailActivity.this));
 
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        titleSetting.setVisibility(View.VISIBLE);
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign())) && bean.getWork_user_name() == null) {
-            titleSetting.setVisibility(View.VISIBLE);
+
             titleSettingTv.setText("指派");
             getPersonal();
         }else {
-            titleSetting.setVisibility(View.GONE);
+
+            titleSettingTv.setText("提交");
         }
         year = bean.getYear();
         month = bean.getMonth();
         day = bean.getDay();
-
+        getDbPersonalList();   //add by linmeng
         if (Utils.isNetworkConnected(this)){
             getPersonalList();
-        }else {
-            getDbPersonalList();   //add by linmeng
         }
 
 
@@ -154,6 +165,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
 
 
     private void initView() {
+
         tvLineTower.setVisibility(View.GONE);
         titleName.setText("个人任务详情");
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -215,16 +227,17 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         });
     }
 
-
     public void getDbPersonalList() {
-        results = SQLite.select().from(PersonalTaskListBean.class)
-                .where(PersonalTaskListBean_Table.year.eq(Integer.valueOf(year)),PersonalTaskListBean_Table.month.eq(Integer.valueOf(month)),
-                        PersonalTaskListBean_Table.day.eq(Integer.valueOf(day)),PersonalTaskListBean_Table.group_list_id.eq(bean.getId()))
+        List<PersonalTaskListBean> personalTaskListBeanList = SQLite.select().from(PersonalTaskListBean.class)
+                .where(PersonalTaskListBean_Table.year.eq(Integer.valueOf(year)), PersonalTaskListBean_Table.month.eq(Integer.valueOf(month)),
+                        PersonalTaskListBean_Table.day.eq(Integer.valueOf(day)), PersonalTaskListBean_Table.group_list_id.eq(bean.getId()))
                 //.orderBy(OrderBy.fromNameAlias(NameAlias.of("line_id,name")))
                 .queryList();
 
-        if (results != null) {
-            monthPlanDetailAdapter.setNewData(results);
+        if (personalTaskListBeanList != null) {
+            results=personalTaskListBeanList;
+            if (!Utils.isNetworkConnected(this)){
+            monthPlanDetailAdapter.setNewData(results);}
         }
 
     }
@@ -238,21 +251,27 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<PersonalTaskListBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
-                        results = t.getResults();
-                        monthPlanDetailAdapter.setNewData(results);
-
-                        //存到数据库
-                        //查询后存储到本地数据库  by linmeng
-                        if (results != null && results.size() > 0) {
-                            for (int i = 0; i < results.size(); i++) {
-                                saveToDatebase(results.get(i));
+                        ProgressDialog.cancle();
+                        List<PersonalTaskListBean> personalTaskListBeanList = t.getResults();
+                        if (personalTaskListBeanList!=null||personalTaskListBeanList.size()>0){
+                            for (int i = 0; i < personalTaskListBeanList.size(); i++) {
+                                PersonalTaskListBean personalTaskListBean = personalTaskListBeanList.get(i);
+                                for (int j = 0; j < results.size(); j++) {
+                                    PersonalTaskListBean bean = results.get(j);
+                                    if (personalTaskListBean.getId().equals(bean.getId())&&"0".equals(personalTaskListBean.getAudit_status())){
+                                        personalTaskListBean.setIs_save(bean.getIs_save());
+                                    }
+                                }
+                                saveToDatebase(personalTaskListBean);
                             }
                         }
-
+                         results=personalTaskListBeanList;
+                        monthPlanDetailAdapter.setNewData(results);
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                     }
                 });
 
@@ -302,8 +321,10 @@ public class PersonalTaskDetailActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 25 && resultCode == RESULT_OK) {
-            getDbPersonalList();    //add by linmeng
-            getPersonalList();
+            getDbPersonalList();   //add by linmeng
+            if (Utils.isNetworkConnected(this)){
+                getPersonalList();
+            }
             RxRefreshEvent.publish("refreshPersonal");
         }
     }
@@ -371,10 +392,8 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                             setResult(RESULT_OK);
                         } else {
                             Toast.makeText(PersonalTaskDetailActivity.this, "网络连接失败，服务器异常", Toast.LENGTH_SHORT).show();
-
                         }
                         ProgressDialog.cancle();
-
                     }
 
                     @Override
@@ -391,11 +410,46 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-                if (names == null) {
-                    Toast.makeText(this, "暂未获取人员列表信息,请稍后再试", Toast.LENGTH_SHORT).show();
-                    return;
+                String s = titleSettingTv.getText().toString();
+                if ("指派".equals(s)){
+                    if (names == null) {
+                        Toast.makeText(this, "暂未获取人员列表信息,请稍后再试", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    showSingleChooseDialog(names);
+                }else {
+                    ProgressDialog.show(this, true, "正在加载。。。");
+                    List<PersonalTaskListBean> data = monthPlanDetailAdapter.getData();
+                    selectPersonal.clear();
+                    saveNum=0;
+                    for (int i = 0; i < data.size(); i++) {
+                        PersonalTaskListBean personalTaskListBean = data.get(i);
+                        if (personalTaskListBean.isCheck()){
+                            selectPersonal.add(personalTaskListBean);
+                            String type_sign = personalTaskListBean.getType_sign();
+                            String id = personalTaskListBean.getId();
+                            switch (type_sign){
+                                case "3": //提交接电电阻
+                                    saveJDDZ(id,type_sign);
+                                    break;
+                                case "5": //提交红外测温
+                                    saveHWCW(id,type_sign);
+                                    break;
+                                case "6": //提交杆塔倾斜
+                                    saveGTQXCL(id,type_sign);
+                                    break;
+                                case "10"://提交绝缘子
+                                    saveJYZ(id,type_sign);
+                                    break;
+                            }
+                        }
+                    }
+                    if (selectPersonal.size()==0){
+                        Toast.makeText(this,"请先选中待上传的任务",Toast.LENGTH_SHORT).show();
+                        ProgressDialog.cancle();
+                    }
                 }
-                showSingleChooseDialog(names);
+
                 break;
         }
     }
@@ -422,4 +476,111 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 });
 
     }
+    public void saveHWCW(String id,String sign){
+        HwcwBean bean = SQLite.select().from(HwcwBean.class).where(HwcwBean_Table.task_id.is(id), JDDZbean_Table.user_id.eq(userId)).querySingle();
+        BaseRequest.getInstance().getService().upLoadInfrared(bean).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<HwcwBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            saveTodoAudit(id,sign);   //同意
+                        }
+
+                    }
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+
+    }
+    public void saveJDDZ(String id,String sign){
+        JDDZbean bean = SQLite.select().from(JDDZbean.class).where(HwcwBean_Table.task_id.is(id), JDDZbean_Table.user_id.eq(userId)).querySingle();
+        BaseRequest.getInstance().getService().upLoadResistance(bean).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<HwcwBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            saveTodoAudit(id,sign);   //同意
+                        }
+
+                    }
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+
+    }
+    public void saveGTQXCL(String id,String sign){
+        GTQXCLbean bean = SQLite.select().from(GTQXCLbean.class).where(HwcwBean_Table.task_id.is(id), JDDZbean_Table.user_id.eq(userId)).querySingle();
+        BaseRequest.getInstance().getService().upLoadTowerBias(bean).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<HwcwBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            saveTodoAudit(id,sign);   //同意
+                        }
+
+                    }
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+
+    }
+    public void saveJYZ(String id,String sign){
+        JYZbean bean = SQLite.select().from(JYZbean.class).where(HwcwBean_Table.task_id.is(id), JDDZbean_Table.user_id.eq(userId)).querySingle();
+        BaseRequest.getInstance().getService().upLoadInsulator(bean).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<HwcwBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            saveTodoAudit(id,sign);   //同意
+                        }
+
+                    }
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+
+    }
+    //保存待办信息
+    public void saveTodoAudit(String id,String sign) {
+
+        SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
+        saveTodoReqbean.setAudit_status("1");
+        saveTodoReqbean.setId(id);
+        saveTodoReqbean.setType_sign(sign);
+        saveTodoReqbean.setFrom_user_id(SPUtil.getUserId(this));
+        BaseRequest.getInstance().getService()
+                .saveTodoAudit(saveTodoReqbean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<TypeBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
+                        saveNum++;
+                        if (saveNum==selectPersonal.size()){
+                            RxRefreshEvent.publish("refreshTodo");
+                            RxRefreshEvent.publish("refreshGroup");
+                            getPersonalList();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
+
 }

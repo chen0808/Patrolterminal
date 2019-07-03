@@ -31,7 +31,7 @@ public class StringUtil {
     public static String getPersonalState(String state) {
         switch (state) {
             case "0":
-                return "待提交";
+                return "待执行";
             case "1":
                 return "待负责人审核";
             case "2":
@@ -40,6 +40,8 @@ public class StringUtil {
                 return "已完成";
             case "4":
                 return "审核不通过";
+            case "100":
+                return "待上传";
         }
         return "";
     }
