@@ -60,7 +60,7 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
         }
         viewHolder.setGone(R.id.plan_progressbar_ll, true);
         viewHolder.setText(R.id.plan_progressbar_tv, "任务进度(" + item.getDone_num() + "/" + item.getAll_num() + ")：")
-                .setText(R.id.plan_progressbar_num, item.getDone_rate() + "%");
+                .setText(R.id.plan_progressbar_num, (item.getDone_rate()==null?0:item.getDone_rate()) + "%");
         ProgressBar progressBar = viewHolder.getView(R.id.plan_progressbar_probar);
         progressBar.setMax(item.getAll_num());
         progressBar.setProgress(item.getDone_num());
