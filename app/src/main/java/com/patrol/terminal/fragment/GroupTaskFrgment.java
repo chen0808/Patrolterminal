@@ -1,6 +1,9 @@
 package com.patrol.terminal.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -127,15 +130,21 @@ public class GroupTaskFrgment extends BaseFragment {
             }
         });
 
-        getDataFromDatabase();
+//        getDataFromDatabase();
         //getData();
 
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getData();
+
+                if (isNetworkConnected(getContext())){
+                    getDataFromDatabase();
+                }else {
+                    getData();
+                }
             }
         });
+
     }
 
     private void getDataFromDatabase() {
@@ -196,6 +205,7 @@ public class GroupTaskFrgment extends BaseFragment {
 
     //根据职位获取页面数据
     public void getData() {
+        isRefresh=false;
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             taskAdd.setVisibility(View.VISIBLE);
             depId = SPUtil.getDepId(getContext());
@@ -214,8 +224,13 @@ public class GroupTaskFrgment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (isRefresh){
-            getDataFromDatabase();
-            getData();
+            if (isNetworkConnected(getContext())){
+                getDataFromDatabase();
+            }else {
+                getData();
+            }
+
+
         }
     }
 
@@ -431,7 +446,7 @@ public class GroupTaskFrgment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 11 && resultCode == -1) {
-            getDataFromDatabase();
+//            getDataFromDatabase();
             getData();
         }
     }
@@ -528,5 +543,17 @@ public class GroupTaskFrgment extends BaseFragment {
                         ProgressDialog.cancle();
                     }
                 });
+    }
+
+    public boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
     }
 }

@@ -169,14 +169,6 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
 
                         if (selectPosition == -1) {
                             teamList = t.getResults();
-                            for (int i = 0; i < teamList.size(); i++) {
-                                List<GroupOfDayBean> lists = teamList.get(i).getLists();
-                                if (lists.size() > 0) {
-                                    allotNum++;
-                                }
-                            }
-                            RxRefreshEvent.publish("refreshGroupTeamNum@" + teamList.size());
-
                             planAllotTeamAdapter.setNewData(teamList);
                         } else {
                             List<TeamAndTaskBean> results = t.getResults();
@@ -188,7 +180,13 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
                             }
                             planAllotTeamAdapter.notifyItemChanged(selectPosition);
                         }
-
+                        for (int i = 0; i < teamList.size(); i++) {
+                            List<GroupOfDayBean> lists = teamList.get(i).getLists();
+                            if (lists.size() > 0) {
+                                allotNum++;
+                            }
+                        }
+                        RxRefreshEvent.publish("refreshHaveTask@" + allotNum);
                     }
 
                     @Override
@@ -308,7 +306,7 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
                 .subscribe(new BaseObserver<List<DangerBean>>(getContext()) {
                     @Override
                     protected void onSuccees(BaseResult<List<DangerBean>> t) throws Exception {
-
+                        allotNum=0;
                         for (int i = 0; i < teamList.size(); i++) {
                             List<GroupOfDayBean> lists = teamList.get(i).getLists();
                             for (int j = 0; j < backList.size(); j++) {
@@ -316,7 +314,11 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
                                 groupOfDayBean.setCheck(false);
                                 lists.remove(groupOfDayBean);
                             }
+                            if (lists.size() > 0) {
+                                allotNum++;
+                            }
                         }
+                        RxRefreshEvent.publish("refreshHaveTask@" + allotNum);
                         dayPlanlist.addAll(backList);
                         backList.clear();
 
