@@ -278,6 +278,7 @@
                 android:layout_margin="40dp"
                 android:background="@drawable/btn_base_bg"
                 android:textColor="@color/white"
+                android:visibility="gone"
                 android:text="保  存" />
         </LinearLayout>
     </ScrollView>

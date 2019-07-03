@@ -1,6 +1,10 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +20,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GTQXCLbean;
+import com.patrol.terminal.bean.GTQXCLbean_Table;
 import com.patrol.terminal.bean.HwcwBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
@@ -24,10 +29,13 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -39,7 +47,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 斜杆塔倾斜测温
  */
-public class XieGanTaQingXieCeWenActivity extends BaseActivity {
+public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWatcher {
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)
@@ -79,6 +87,9 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
     private String task_id, sign, typename;
     private String jobType;
     private String id;
+    private GTQXCLbean results;
+    private List<GTQXCLbean> gtqxcLbeans;
+    private String tower_model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +97,20 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
         setContentView(R.layout.activity_incline_thermometry);
         ButterKnife.bind(this);
         initview();
+        initedit();
+    }
 
+    private void initedit() {
+        etFrontTilt.addTextChangedListener(this);
+        etHeightDif.addTextChangedListener(this);
+        etRemark.addTextChangedListener(this);
+        etShopeRate.addTextChangedListener(this);
+        etSideTilt.addTextChangedListener(this);
     }
 
     private void initview() {
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
-
+        results = new GTQXCLbean();
         titleName.setText("杆塔倾斜检测");
         line_id = getIntent().getStringExtra("line_id");
         line_name = getIntent().getStringExtra("line_name");
@@ -101,11 +120,35 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
         sign = getIntent().getStringExtra("sign");
         audit_status = getIntent().getStringExtra("audit_status");
         typename = getIntent().getStringExtra("typename");
-        getYXtodo();
-        getGTQXCL();
-        getTask(task_id);
+        getdata();
+
     }
 
+    public void getdata(){
+        //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
+        gtqxcLbeans = SQLite.select().from(GTQXCLbean.class)
+                .where(GTQXCLbean_Table.task_id.eq(task_id), GTQXCLbean_Table.user_id.eq(SPUtil.getUserId(this)))
+                //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
+                .queryList();
+        if (gtqxcLbeans ==null|| gtqxcLbeans.size()==0){
+
+            results.setLine_name(line_name);
+            results.setTask_id(task_id);
+            results.setTower_id(tower_id);
+            results.setTower_name(tower_name);
+            results.setUser_id(SPUtil.getUserId(this));
+            results.setLine_id(line_id);
+            results.save();
+        }else {
+           results=gtqxcLbeans.get(0);
+        }
+        if (Utils.isNetworkConnected(this)){
+            getGTQXCL();
+            getTask(task_id);
+            getYXtodo();
+        }
+        showView();
+    }
     private void getTask(String task_id) {
         BaseRequest.getInstance().getService()
                 .getTask(task_id)
@@ -138,7 +181,8 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         HwcwBean bean = t.getResults();
                         if (bean != null) {
-                            tvTowerType.setText(bean.getTower_model());
+                            tower_model = bean.getTower_model();
+                            tvTowerType.setText(tower_model);
                         } else {
                             tvTowerType.setText("无");
                         }
@@ -204,11 +248,14 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                         Toast.makeText(this, "请填写横断两端高差", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (id == null) {
-                        Toast.makeText(this, "请先保存数据后再提交", Toast.LENGTH_SHORT).show();
-                        return;
+
+                    if (id==null||"".equals(id) || audit_status.equals("4")){
+                        save();
+                    }else {
+                        saveTodoAudit("1");
                     }
-                    saveTodoAudit("1");
+
+
                 } else {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
                         @Override
@@ -234,12 +281,13 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_commit:
-                save();
+//                save();
                 break;
         }
     }
 
     private void save() {
+        ProgressDialog.show(this,true,"正在保存。。。");
         String towerType = tvTowerType.getText().toString();
         String frontTilt = etFrontTilt.getText().toString();
         String sideTilt = etSideTilt.getText().toString();
@@ -282,12 +330,10 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                             if (id == null) {
                                 id = "1111";
                             }
-                            Toast.makeText(XieGanTaQingXieCeWenActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
-
                             RxRefreshEvent.publish("refreshTodo");
                             RxRefreshEvent.publish("refreshGroup");
-
+                            saveTodoAudit("1");
                         } else {
                             Toast.makeText(XieGanTaQingXieCeWenActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
@@ -297,13 +343,14 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         Toast.makeText(XieGanTaQingXieCeWenActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                        ProgressDialog.cancle();
                     }
                 });
     }
 
     //保存待办信息
     public void saveTodoAudit(String state) {
-
+        ProgressDialog.show(this,true,"正在保存。。。");
         SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
 
         saveTodoReqbean.setAudit_status(state);
@@ -347,23 +394,11 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<GTQXCLbean> t) throws Exception {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
-                            GTQXCLbean results = t.getResults();
-                            if (results != null) {
-                                id = results.getId();
-                                line_name = results.getLine_name();
-                                tower_name = results.getTower_name();
-                                tower_id = results.getTower_id();
-                                etFrontTilt.setText(results.getPositive_tilt() + "");
-                                etSideTilt.setText(results.getFlank_tilt() + "");
-                                etShopeRate.setText(results.getRate() + "");
-                                etHeightDif.setText(results.getHigh_difference() + "");
-                                String[] array = getResources().getStringArray(R.array.verdict);
-                                for (int i = 0; i < array.length; i++) {
-                                    if (array[i].equals(results.getResults())) {
-                                        spVerdict.setSelection(i);
-                                    }
-                                }
-                                etRemark.setText(results.getRemark());
+
+                            if (t.getResults() != null) {
+                                results=t.getResults();
+                                results.update();
+                                showView();
 //                                etTowerType.setText(results.getTower_type());
 //                                etLineId.setText(line_name);
 //                                etTowerId.setText(tower_name);
@@ -378,4 +413,74 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity {
                     }
                 });
     }
+
+    public void showView(){
+        id = results.getId();
+        line_name = results.getLine_name();
+        tower_name = results.getTower_name();
+        tower_id = results.getTower_id();
+        tvLineId.setText(line_name);
+        tvTowerId.setText(tower_name);
+        tvTowerType.setText(results.getTower_type());
+        etFrontTilt.setText(results.getPositive_tilt() ==0?"":results.getPositive_tilt()+"");
+        etSideTilt.setText(results.getFlank_tilt() ==0?"":results.getFlank_tilt()+"");
+        etShopeRate.setText(results.getRate()==0?"":results.getRate()+"");
+        etHeightDif.setText(results.getHigh_difference() ==0?"":results.getHigh_difference()+"");
+        String[] array = getResources().getStringArray(R.array.verdict);
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(results.getResults())) {
+                spVerdict.setSelection(i);
+            }
+        }
+        etRemark.setText(results.getRemark());
+    }
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (delayRun != null) {
+            //每次editText有变化的时候，则移除上次发出的延迟线程
+            handler.removeCallbacks(delayRun);
+        }
+
+        handler.postDelayed(delayRun, 1000);
+    }
+
+    private Handler handler = new Handler();
+
+    /**
+     * 延迟线程，看是否还有下一个字符输入
+     */
+    private Runnable delayRun = new Runnable() {
+
+        @Override
+        public void run() {
+            String towerType = tvTowerType.getText().toString();
+            String frontTilt = etFrontTilt.getText().toString();
+            String sideTilt = etSideTilt.getText().toString();
+            String heightDif = etHeightDif.getText().toString();
+            String rante = etShopeRate.getText().toString();
+            String conclusion = spVerdict.getSelectedItem().toString();
+            String remark = etRemark.getText().toString();
+
+
+            results.setTower_type(towerType);
+            results.setPositive_tilt("".equals(frontTilt) ? 0 : Double.parseDouble(frontTilt));
+            results.setFlank_tilt("".equals(sideTilt) ? 0 : Double.parseDouble(sideTilt));
+            results.setRate( "".equals(rante) ? 0 : Double.parseDouble(rante));
+            results.setHigh_difference( "".equals(heightDif) ? 0 :Double.parseDouble(heightDif) );
+            results.setResults( conclusion);
+            results.setWork_time(DateUatil.getCurrTime());
+            results.setRemark( remark);
+            results.update();
+        }
+    };
 }

@@ -30,6 +30,7 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.OrderBy;
@@ -124,13 +125,21 @@ public class PersonalTaskFrgment extends BaseFragment {
             }
         });
 
-        getDbGroupList();
-        getGroupList();
+        if (Utils.isNetworkConnected(getContext())){
+            getGroupList();
+        }else {
+            getDbGroupList();
+        }
+
+
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getDbGroupList();
-                getGroupList();
+                if (Utils.isNetworkConnected(getContext())){
+                    getGroupList();
+                }else {
+                    getDbGroupList();
+                }
             }
         });
         refreshPersonal = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
@@ -138,8 +147,11 @@ public class PersonalTaskFrgment extends BaseFragment {
             @Override
             public void accept(String type) throws Exception {
                 if (type.equals("refreshPersonal")) {
-                    getDbGroupList();
-                    getGroupList();
+                    if (Utils.isNetworkConnected(getContext())){
+                        getGroupList();
+                    }else {
+                        getDbGroupList();
+                    }
                 }
             }
         });

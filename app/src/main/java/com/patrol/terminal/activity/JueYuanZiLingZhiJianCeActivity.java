@@ -99,7 +99,7 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                jyzBean.setInsulator_type(editable.toString().trim());
+                jyzBean.setInsulator_type(editable.toString().trim().toString());
                 jyzBean.setResults(spVerdict.getSelectedItem().toString());
                 jyzBean.update();
             }
@@ -127,7 +127,7 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                jyzBean.setRemark(editable.toString().trim());
+                jyzBean.setRemark(editable.toString().trim().toString());
                 jyzBean.setResults(spVerdict.getSelectedItem().toString());
                 jyzBean.update();
             }

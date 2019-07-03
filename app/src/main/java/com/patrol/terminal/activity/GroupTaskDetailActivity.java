@@ -27,6 +27,7 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.StringUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -94,12 +95,12 @@ public class GroupTaskDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
         bean = (GroupTaskBean) getIntent().getParcelableExtra("GroupTaskBean");
-        Log.w("linmeng", "bean.getType_sign():" + bean.getType_sign());
 
         from = getIntent().getStringExtra("from");
         //无网络直接设置上去
+        if (!Utils.isNetworkConnected(this)&&bean!=null) {
         getGroupList();
-
+        }
         if ("todoGroup".equals(from)) {
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
