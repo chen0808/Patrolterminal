@@ -1,7 +1,6 @@
 package com.patrol.terminal.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,20 +8,29 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.patrol.terminal.R;
+import com.patrol.terminal.bean.LocalPatrolDefectBean;
+import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.utils.Constant;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.io.File;
 import java.util.List;
 
 public class GridViewAdapter3 extends android.widget.BaseAdapter {
 
     private Context mContext;
-    private List<Bitmap> mList;
+    private final LocalPatrolDefectBean bean;
     private LayoutInflater inflater;
+    private List<File> mList;
 
-    public GridViewAdapter3(Context mContext, List<Bitmap> mList) {
+    public GridViewAdapter3(Context mContext, List<File> mList, String task_id, String patrol_id) {
         this.mContext = mContext;
         this.mList = mList;
         inflater = LayoutInflater.from(mContext);
+        bean = SQLite.select().from(LocalPatrolDefectBean.class)
+                .where(LocalPatrolDefectBean_Table.patrol_id.is(patrol_id))
+                .and(LocalPatrolDefectBean_Table.task_id.is(task_id))
+                .querySingle();
     }
 
     @Override
@@ -63,6 +71,15 @@ public class GridViewAdapter3 extends android.widget.BaseAdapter {
             @Override
             public void onClick(View v) {
                 mList.remove(position);
+                String pics = bean.getPics();
+                String newPics = "";
+                String[] split = pics.split(";");
+                for (int i = 0; i < split.length; i++) {
+                    if (!split[i].equals(mList.get(position).getAbsolutePath())) {
+                        newPics += split[i] + ";";
+                    }
+                }
+                bean.setPics(newPics);
             }
         });
         return convertView;

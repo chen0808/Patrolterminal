@@ -11,11 +11,23 @@ import java.io.Serializable;
 @Table(database = AppDataBase.class)
 public class LocalPatrolRecordBean extends BaseModel implements Serializable {
     @PrimaryKey()
-    private String tower_id;
-    @Column
     private String task_id;
     @Column
+    private String tower_id;
+    @Column
+    private String tower_name;
+    @Column
     private String line_id;
+    @Column
+    private String line_name;
+    @Column
+    private String user_id;
+    @Column
+    private String user_name;
+    @Column
+    private String dep_id;
+    @Column
+    private String dep_name;
     @Column
     private String pic1;
     @Column
@@ -32,6 +44,54 @@ public class LocalPatrolRecordBean extends BaseModel implements Serializable {
 //    private List<LocalPatrolDefectBean> defectBean;
 //    @Column
 //    private List<LocalPatrolTroubleBean> troubleBean;
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getDep_id() {
+        return dep_id;
+    }
+
+    public void setDep_id(String dep_id) {
+        this.dep_id = dep_id;
+    }
+
+    public String getDep_name() {
+        return dep_name;
+    }
+
+    public void setDep_name(String dep_name) {
+        this.dep_name = dep_name;
+    }
+
+    public String getTower_name() {
+        return tower_name;
+    }
+
+    public void setTower_name(String tower_name) {
+        this.tower_name = tower_name;
+    }
+
+    public String getLine_name() {
+        return line_name;
+    }
+
+    public void setLine_name(String line_name) {
+        this.line_name = line_name;
+    }
 
     public String getTask_id() {
         return task_id;
