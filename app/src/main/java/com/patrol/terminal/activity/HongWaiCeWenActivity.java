@@ -1,7 +1,10 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +19,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.HwcwBean;
+import com.patrol.terminal.bean.HwcwBean_Table;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
@@ -25,6 +29,7 @@ import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -89,6 +94,9 @@ public class HongWaiCeWenActivity extends BaseActivity {
     private String id;
     private String allout_status = "0";
     private String jobType;
+    private HwcwBean localByTaskId;
+    private HwcwBean localBean;
+    private String[] array;
 
 
     @Override
@@ -103,6 +111,7 @@ public class HongWaiCeWenActivity extends BaseActivity {
 
     private void initview() {
         titleName.setText("红外测温");
+        array = getResources().getStringArray(R.array.link_type);
         line_name = getIntent().getStringExtra("line_name");
         tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
@@ -111,9 +120,238 @@ public class HongWaiCeWenActivity extends BaseActivity {
         sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
+        localBean = new HwcwBean();
+        addTextChangeListener();
+        spLinkType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                localBean.setConnection_type(array[position]);
+                save();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         getYXtodo();
         getHWCW();
+        query();
         getTask(task_id);
+    }
+
+    private void addTextChangeListener() {
+        etBUpTemperature.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    localBean.setUp_big(Double.valueOf(s.toString()));
+                    save();
+                }
+            }
+        });
+        etSUpTemperature.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    localBean.setUp_small(Double.valueOf(s.toString()));
+                    save();
+                }
+            }
+        });
+        etBMiddleTemperature.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    localBean.setMid_big(Double.valueOf(s.toString()));
+                    save();
+                }
+            }
+        });
+        etSMiddleTemperature.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    localBean.setMid_small(Double.valueOf(s.toString()));
+                    save();
+                }
+            }
+        });
+        etBDownTemperature.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    localBean.setDown_big(Double.valueOf(s.toString()));
+                    save();
+                }
+            }
+        });
+        etSDownTemperature.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    localBean.setDown_small(Double.valueOf(s.toString()));
+                    save();
+                }
+            }
+        });
+        etSansTemperature.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    localBean.setTemperature(Double.valueOf(s.toString()));
+                    save();
+                }
+            }
+        });
+        etCheckResult.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    localBean.setResults(Double.valueOf(s.toString()));
+                    save();
+                }
+            }
+        });
+        etRemarks.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    localBean.setRemark(s.toString());
+                    save();
+                }
+            }
+        });
+    }
+
+    private void query() {
+        localByTaskId = SQLite.select().from(HwcwBean.class).where(HwcwBean_Table.task_id.is(task_id)).querySingle();
+        initLocalData(localByTaskId);
+    }
+
+    private void save() {
+        localByTaskId = SQLite.select().from(HwcwBean.class).where(HwcwBean_Table.task_id.is(task_id)).querySingle();
+        if (localByTaskId != null) {
+            localBean.update();
+        } else {
+            localBean.save();
+        }
+    }
+
+    private void initLocalData(HwcwBean localByTaskId) {
+        if (localByTaskId != null) {
+            sign = localByTaskId.getSign();
+            tvLineId.setText(localByTaskId.getLine_name());
+            tvTowerId.setText(localByTaskId.getTower_name());
+            tvTowerType.setText(localByTaskId.getTower_model());
+            etBUpTemperature.setText(localByTaskId.getUp_big() + "");
+            etSUpTemperature.setText(localByTaskId.getUp_small() + "");
+            etBMiddleTemperature.setText(localByTaskId.getMid_big() + "");
+            etSMiddleTemperature.setText(localByTaskId.getMid_small() + "");
+            etBDownTemperature.setText(localByTaskId.getDown_big() + "");
+            etSDownTemperature.setText(localByTaskId.getDown_small() + "");
+            etSansTemperature.setText(localByTaskId.getTemperature() + "");
+            etCheckResult.setText(localByTaskId.getResults() + "");
+            etRemarks.setText(localByTaskId.getRemark());
+            String type = localByTaskId.getConnection_type();
+            for (int i = 0; i < array.length; i++) {
+                if (array[i].equals(type)) {
+                    spLinkType.setSelection(i);
+                }
+            }
+        } else {
+            tvTowerType.setText("无");
+        }
     }
 
     private void getTask(String task_id) {
@@ -125,9 +363,11 @@ public class HongWaiCeWenActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
                         TaskBean bean = t.getResults();
-                        sign = bean.getType_sign();
-                        tvLineId.setText(bean.getLine_name());
-                        tvTowerId.setText(bean.getTower_name());
+                        localBean.setTask_id(task_id);
+                        localBean.setSign(bean.getType_sign());
+                        localBean.setLine_name(bean.getLine_name());
+                        localBean.setTower_name(bean.getTower_name());
+                        save();
                         getTowerModel(bean.getTower_id());
                     }
 
@@ -147,11 +387,8 @@ public class HongWaiCeWenActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         HwcwBean bean = t.getResults();
-                        if (bean != null) {
-                            tvTowerType.setText(bean.getTower_model());
-                        } else {
-                            tvTowerType.setText("无");
-                        }
+                        localBean.setTower_model(bean.getTower_model());
+                        save();
                     }
 
                     @Override
@@ -168,25 +405,25 @@ public class HongWaiCeWenActivity extends BaseActivity {
                 titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
+//            btnCommit.setVisibility(View.GONE);
         } else if ("2".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("审批");
             }
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
+//            btnCommit.setVisibility(View.GONE);
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("提交");
             }
             mengban.setVisibility(View.GONE);
-            btnCommit.setVisibility(View.VISIBLE);
+//            btnCommit.setVisibility(View.VISIBLE);
         } else {
             titleSetting.setVisibility(View.GONE);
             mengban.setVisibility(View.VISIBLE);
-            btnCommit.setVisibility(View.GONE);
+//            btnCommit.setVisibility(View.GONE);
         }
 
     }
@@ -231,10 +468,10 @@ public class HongWaiCeWenActivity extends BaseActivity {
                         Toast.makeText(this, "请填写检查结果", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (id==null) {
-                        Toast.makeText(this, "请先保存数据后再提交", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+//                    if (id == null) {
+//                        Toast.makeText(this, "请先保存数据后再提交", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
                     saveTodoAudit("1");
                 } else {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否通过", "不通过", "通过") {
@@ -261,12 +498,12 @@ public class HongWaiCeWenActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_commit:
-                save();
+                saveData();
                 break;
         }
     }
 
-    private void save() {
+    private void saveData() {
         ProgressDialog.show(this, false, "正在加载。。。");
         String towerType = tvTowerType.getText().toString();
         String linkType = spLinkType.getSelectedItem().toString();
@@ -316,8 +553,8 @@ public class HongWaiCeWenActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         if (t.getCode() == 1) {
-                            if (id==null){
-                                id="123321";
+                            if (id == null) {
+                                id = "123321";
                             }
                             Toast.makeText(HongWaiCeWenActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
@@ -388,23 +625,9 @@ public class HongWaiCeWenActivity extends BaseActivity {
                                 line_name = results.getLine_name();
                                 tower_name = results.getTower_name();
                                 tower_id = results.getTower_id();
-//                                tvTowerType.setText(results.getTower_model());
-                                String type = results.getConnection_type();
-                                String[] array = getResources().getStringArray(R.array.link_type);
-                                for (int i = 0; i < array.length; i++) {
-                                    if (array[i].equals(type)) {
-                                        spLinkType.setSelection(i);
-                                    }
-                                }
-                                etBUpTemperature.setText(results.getUp_big() + "");
-                                etSUpTemperature.setText(results.getUp_small() + "");
-                                etBMiddleTemperature.setText(results.getMid_big() + "");
-                                etSMiddleTemperature.setText(results.getMid_small() + "");
-                                etBDownTemperature.setText(results.getDown_big() + "");
-                                etSDownTemperature.setText(results.getDown_small() + "");
-                                etSansTemperature.setText(results.getTemperature() + "");
-                                etCheckResult.setText(results.getResults() + "");
-                                etRemarks.setText(results.getRemark());
+                                localBean.setConnection_type(results.getConnection_type());
+                                save();
+
 //                                tvLineId.setText(line_name);
 //                                tvTowerId.setText(tower_name);
                             }

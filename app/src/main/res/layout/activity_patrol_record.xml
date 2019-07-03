@@ -16,8 +16,8 @@
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:progressDrawable="@drawable/patrol_record_progress"
-            android:progress="40" />
+            android:progress="40"
+            android:progressDrawable="@drawable/patrol_record_progress" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -207,8 +207,18 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/mengban"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="49dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="gone" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

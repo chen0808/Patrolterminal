@@ -1,6 +1,15 @@
 package com.patrol.terminal.bean;
 
-public class HwcwBean {
+import com.patrol.terminal.sqlite.AppDataBase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import java.io.Serializable;
+
+@Table(database = AppDataBase.class)
+public class HwcwBean extends BaseModel implements Serializable {
 
 
     /**
@@ -23,25 +32,52 @@ public class HwcwBean {
      * tower_name : #020
      */
 
-    private String id;
+    @PrimaryKey
     private String task_id;
+    @Column
+    private String id;
+    @Column
     private String tower_id;
+    @Column
+    private String sign;
+    @Column
     private double up_big;
+    @Column
     private double up_small;
+    @Column
     private double mid_big;
+    @Column
     private double mid_small;
+    @Column
     private double down_big;
+    @Column
     private double down_small;
+    @Column
     private double temperature;
+    @Column
     private double results;
+    @Column
     private String connection_type;
-
+    @Column
     private String remark;
+    @Column
     private String work_time;
+    @Column
     private String user_id;
+    @Column
     private String line_name;
+    @Column
     private String tower_name;
+    @Column
     private String tower_model;
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
 
     public String getConnection_type() {
         return connection_type;

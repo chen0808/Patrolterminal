@@ -103,12 +103,14 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             }
         }
 
-        if (item.getStatus().equals("0")) {
-            defectTrue.setChecked(true);
-            llCOntent.setVisibility(View.GONE);
-        } else if (item.getStatus().equals("1")) {
-            defectFalse.setChecked(true);
-            llCOntent.setVisibility(View.VISIBLE);
+        if (item.getStatus() != null) {
+            if (item.getStatus().equals("0")) {
+                defectTrue.setChecked(true);
+                llCOntent.setVisibility(View.GONE);
+            } else if (item.getStatus().equals("1")) {
+                defectFalse.setChecked(true);
+                llCOntent.setVisibility(View.VISIBLE);
+            }
         }
         rgTitle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

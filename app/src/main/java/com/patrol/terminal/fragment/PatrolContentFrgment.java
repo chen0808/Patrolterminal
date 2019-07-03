@@ -17,11 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DefectTabAdapter;
 import com.patrol.terminal.adapter.MyPagerAdapter;
-import com.patrol.terminal.adapter.PatrolContentAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -29,8 +27,6 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.PatrolContentBean;
-import com.patrol.terminal.bean.PatrolLevel1;
-import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.RxRefreshEvent;
@@ -66,11 +62,9 @@ public class PatrolContentFrgment extends BaseFragment {
     ViewPager viewPager;
     private Disposable subscribe;
     private String task_id;
-    private PatrolContentAdapter adapter;
-    private List<PatrolContentBean.ValueBean> valueBean = new ArrayList<>();
-    private String line_id;
     List<View> fragmentList = new ArrayList<>();
     private List<String> tabName = new ArrayList<>();
+    private DefectTabAdapter adapter7;
     private DefectTabAdapter adapter6;
     private DefectTabAdapter adapter5;
     private DefectTabAdapter adapter4;
@@ -101,14 +95,12 @@ public class PatrolContentFrgment extends BaseFragment {
             }
         });
         task_id = getActivity().getIntent().getStringExtra("task_id");
-        line_id = getActivity().getIntent().getStringExtra("line_id");
         query();
         getdata();
     }
 
     public void getdata() {
-        //这里在主页的时候就已经加载了，存在sp
-        BaseRequest.getInstance().getService().getPatrolContent(task_id).subscribeOn(Schedulers.io())
+        BaseRequest.getInstance().getService().getPatrolContent(task_id, "sort").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PatrolContentBean>>(getActivity()) {
                     @Override
@@ -119,16 +111,14 @@ public class PatrolContentFrgment extends BaseFragment {
 //
 //                        }
                         for (int i = 0; i < results.size(); i++) {
-                            for (int j = 0; j < results.get(i).getValue().size(); j++) {
-                                localBean = new LocalPatrolDefectBean();
-                                localBean.setTask_id(task_id);
-                                localBean.setTab_name(results.get(i).getName());
-                                localBean.setPatrol_id(results.get(i).getValue().get(j).getPatrol_id());
-                                localBean.setPatrol_name(results.get(i).getValue().get(j).getRemarks());
-                                localBean.setStatus(results.get(i).getValue().get(j).getStatus());
-                                localBean.setCategory_id(results.get(i).getValue().get(j).getCategory());
-                                save(results.get(i).getValue().get(j).getPatrol_id());
-                            }
+                            localBean = new LocalPatrolDefectBean();
+                            localBean.setTask_id(task_id);
+                            localBean.setTab_name(results.get(i).getName());
+                            localBean.setPatrol_id(results.get(i).getPatrol_id());
+                            localBean.setPatrol_name(results.get(i).getRemarks());
+                            localBean.setStatus(results.get(i).getStatus());
+                            localBean.setCategory_id(results.get(i).getCategory());
+                            save(results.get(i).getPatrol_id());
                         }
                         query();
                     }
@@ -170,34 +160,37 @@ public class PatrolContentFrgment extends BaseFragment {
         List<LocalPatrolDefectBean> list4 = new ArrayList<>();
         List<LocalPatrolDefectBean> list5 = new ArrayList<>();
         List<LocalPatrolDefectBean> list6 = new ArrayList<>();
+        List<LocalPatrolDefectBean> list7 = new ArrayList<>();
         for (int i = 0; i < localByTaskId.size(); i++) {
             if (!tabName.contains(localByTaskId.get(i).getTab_name())) {
                 tabName.add(localByTaskId.get(i).getTab_name());
             }
-            switch (localByTaskId.get(i).getTab_name()) {
-                case "沿线环境":
+            switch (localByTaskId.get(i).getCategory_id()) {
+                case "9DA16BC597404773AA97260131A7DEE9"://沿线环境
                     list0.add(localByTaskId.get(i));
                     break;
-                case "杆塔":
+                case "079A78FA7DAB4EE4AC72B680CEC09E8C"://拉线和基础
                     list1.add(localByTaskId.get(i));
                     break;
-                case "导线、地线":
+                case "C0636A87A49A4727ABC71C1A63525E98"://金具
                     list2.add(localByTaskId.get(i));
                     break;
-                case "绝缘子":
+                case "19D16418045B4802A3D1EE01157778BB"://防雷及接地装置
                     list3.add(localByTaskId.get(i));
                     break;
-                case "防雷及接地装置":
+                case "A407C0C626AF43B993CE6F289C01B791"://附件及其他措施
                     list4.add(localByTaskId.get(i));
                     break;
-                case "金具":
+                case "BED42123A79B4F46B4D9922C2ABF989D"://绝缘子
                     list5.add(localByTaskId.get(i));
                     break;
-                case "拉线和基础":
+                case "15C2D010A99D4D9485D9C5DD80F4831D"://导线，地线
                     list6.add(localByTaskId.get(i));
                     break;
+                case "F1B635B0B74245C8BED1E1038C429982"://杆塔
+                    list7.add(localByTaskId.get(i));
+                    break;
             }
-
         }
 
         View view0 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
@@ -249,6 +242,13 @@ public class PatrolContentFrgment extends BaseFragment {
         recyclerView6.setAdapter(adapter6);
         fragmentList.add(view6);
 
+        View view7 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
+        RecyclerView recyclerView7 = view7.findViewById(R.id.recycler_view);
+        recyclerView7.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter7 = new DefectTabAdapter(this, R.layout.item_defect_tab, list7, 7);
+        recyclerView7.setAdapter(adapter7);
+        fragmentList.add(view7);
+
         MyPagerAdapter pagerAdapter = new MyPagerAdapter(fragmentList);
         viewPager.setAdapter(pagerAdapter);
         initMagicIndicator(tabName);
@@ -299,25 +299,6 @@ public class PatrolContentFrgment extends BaseFragment {
             }
         });
         ViewPagerHelper.bind(magicIndicator, viewPager);
-    }
-
-    private List<MultiItemEntity> getData(List<PatrolContentBean> results) {
-        List<MultiItemEntity> list = new ArrayList<>();
-        for (int i = 0; i < results.size(); i++) {
-            PatrolLevel1 level1 = new PatrolLevel1(results.get(i).getName(), "0");
-            for (int j = 0; j < results.get(i).getValue().size(); j++) {
-                PatrolLevel2 level2 = new PatrolLevel2(results.get(i).getValue().get(j).getRemarks()
-                        , results.get(i).getValue().get(j).getStatus()
-                        , results.get(i).getValue().get(j).getCategory()
-                        , results.get(i).getValue().get(j).getName(),
-                        results.get(i).getValue().get(j).getId(),
-                        results.get(i).getValue().get(j).getTask_id(),
-                        results.get(i).getValue().get(j).getPatrol_id());
-                level1.addSubItem(j, level2);
-            }
-            list.add(level1);
-        }
-        return list;
     }
 
     @Override

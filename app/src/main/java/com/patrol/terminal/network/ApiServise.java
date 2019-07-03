@@ -467,7 +467,7 @@ public interface ApiServise {
 
     //缺陷巡视内容列表
     @GET("task/defect/patrol/recode/pda/listGET")
-    Observable<BaseResult<List<PatrolContentBean>>> getPatrolContent(@Query("task_id") String task_id);
+    Observable<BaseResult<List<PatrolContentBean>>> getPatrolContent(@Query("task_id") String task_id, @Query("order") String sort);
 
     //巡视之后的状态上传
     @POST("task/defect/patrol/recode/updateBatchPOST")

@@ -29,6 +29,8 @@ public class LocalPatrolRecordBean extends BaseModel implements Serializable {
     @Column
     private String dep_name;
     @Column
+    private String type_sign;
+    @Column
     private String pic1;
     @Column
     private String pic2;
@@ -44,6 +46,14 @@ public class LocalPatrolRecordBean extends BaseModel implements Serializable {
 //    private List<LocalPatrolDefectBean> defectBean;
 //    @Column
 //    private List<LocalPatrolTroubleBean> troubleBean;
+
+    public String getType_sign() {
+        return type_sign;
+    }
+
+    public void setType_sign(String type_sign) {
+        this.type_sign = type_sign;
+    }
 
     public String getUser_id() {
         return user_id;
