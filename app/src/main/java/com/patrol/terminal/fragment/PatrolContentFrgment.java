@@ -6,21 +6,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.luck.picture.lib.entity.LocalMedia;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.adapter.DefectTabAdapter;
 import com.patrol.terminal.adapter.MyPagerAdapter;
 import com.patrol.terminal.adapter.PatrolContentAdapter;
@@ -28,12 +26,15 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.LocalPatrolDefectBean;
+import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.PatrolContentBean;
 import com.patrol.terminal.bean.PatrolLevel1;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.RxRefreshEvent;
-import com.patrol.terminal.utils.SPUtil;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -47,6 +48,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.badge.BadgePagerTitleView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +78,10 @@ public class PatrolContentFrgment extends BaseFragment {
     private DefectTabAdapter adapter2;
     private DefectTabAdapter adapter1;
     private DefectTabAdapter adapter0;
-    private List<PatrolContentBean> results;
+    private List<LocalPatrolDefectBean> localList;
+    private List<LocalPatrolDefectBean> localByPatrolId;
+    private LocalPatrolDefectBean localBean;
+    private List<LocalPatrolDefectBean> localByTaskId;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,17 +91,6 @@ public class PatrolContentFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-//        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
-//
-//            @Override
-//            public void accept(String s) throws Exception {
-//                if (s.startsWith("updateDefect")) {
-//                    getdata();
-//                }
-//            }
-//        });
-        //从本地数据库获取
-
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
@@ -106,8 +100,9 @@ public class PatrolContentFrgment extends BaseFragment {
                 }
             }
         });
-        task_id = (String) SPUtil.get(getActivity(), "ids", "task_id", "");
-        line_id = (String) SPUtil.get(getActivity(), "ids", "line_id", "");
+        task_id = getActivity().getIntent().getStringExtra("task_id");
+        line_id = getActivity().getIntent().getStringExtra("line_id");
+        query();
         getdata();
     }
 
@@ -118,83 +113,139 @@ public class PatrolContentFrgment extends BaseFragment {
                 .subscribe(new BaseObserver<List<PatrolContentBean>>(getActivity()) {
                     @Override
                     protected void onSuccees(BaseResult<List<PatrolContentBean>> t) throws Exception {
-                        results = t.getResults();
-//                        rvPatrolContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-//                        adapter = new PatrolContentAdapter(getData(results), getActivity(), line_id);
-//                        rvPatrolContent.setAdapter(adapter);
-
-                        //存入到本地数据库  TODO
-
-
-                        initTab(results);
+                        List<PatrolContentBean> results = t.getResults();
+//                        localBean = SQLite.select().from(LocalPatrolDefectBean.class).querySingle();
+//                        if (localBean == null) {
+//
+//                        }
+                        for (int i = 0; i < results.size(); i++) {
+                            for (int j = 0; j < results.get(i).getValue().size(); j++) {
+                                localBean = new LocalPatrolDefectBean();
+                                localBean.setTask_id(task_id);
+                                localBean.setTab_name(results.get(i).getName());
+                                localBean.setPatrol_id(results.get(i).getValue().get(j).getPatrol_id());
+                                localBean.setPatrol_name(results.get(i).getValue().get(j).getRemarks());
+                                localBean.setStatus(results.get(i).getValue().get(j).getStatus());
+                                localBean.setCategory_id(results.get(i).getValue().get(j).getCategory());
+                                save(results.get(i).getValue().get(j).getPatrol_id());
+                            }
+                        }
+                        query();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        Toast.makeText(getActivity(), "失败", Toast.LENGTH_SHORT).show();
+
                     }
                 });
-//        List<PatrolContentBean> results = (List<PatrolContentBean>) SPUtil.get(getActivity(), "list", "defectList", null);
-//        if (results != null) {
-//            rvPatrolContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            adapter = new PatrolContentAdapter(getData(results), getActivity(), line_id);
-//            rvPatrolContent.setAdapter(adapter);
-//        }
     }
 
-    private void initTab(List<PatrolContentBean> results) {
+    private void save(String patrol_id) {
+        localByPatrolId = SQLite.select().from(LocalPatrolDefectBean.class)
+                .where(LocalPatrolDefectBean_Table.patrol_id.is(patrol_id))
+                .and(LocalPatrolDefectBean_Table.task_id.is(task_id))
+                .queryList();
+        if (localByPatrolId != null && localByPatrolId.size() > 0) {
+            localBean.update();
+        } else {
+            localBean.save();
+        }
+    }
+
+    //查询本地数据
+    private void query() {
+        localByTaskId = SQLite.select().from(LocalPatrolDefectBean.class).where(LocalPatrolDefectBean_Table.task_id.is(task_id)).queryList();
+        if (localByTaskId != null && localByTaskId.size() != 0) {
+            initTab(localByTaskId);
+        }
+    }
+
+    private void initTab(List<LocalPatrolDefectBean> localByTaskId) {
         tabName.clear();
         fragmentList.clear();
-        for (int i = 0; i < results.size(); i++) {
-            tabName.add(results.get(i).getName());
+        List<LocalPatrolDefectBean> list0 = new ArrayList<>();
+        List<LocalPatrolDefectBean> list1 = new ArrayList<>();
+        List<LocalPatrolDefectBean> list2 = new ArrayList<>();
+        List<LocalPatrolDefectBean> list3 = new ArrayList<>();
+        List<LocalPatrolDefectBean> list4 = new ArrayList<>();
+        List<LocalPatrolDefectBean> list5 = new ArrayList<>();
+        List<LocalPatrolDefectBean> list6 = new ArrayList<>();
+        for (int i = 0; i < localByTaskId.size(); i++) {
+            if (!tabName.contains(localByTaskId.get(i).getTab_name())) {
+                tabName.add(localByTaskId.get(i).getTab_name());
+            }
+            switch (localByTaskId.get(i).getTab_name()) {
+                case "沿线环境":
+                    list0.add(localByTaskId.get(i));
+                    break;
+                case "杆塔":
+                    list1.add(localByTaskId.get(i));
+                    break;
+                case "导线、地线":
+                    list2.add(localByTaskId.get(i));
+                    break;
+                case "绝缘子":
+                    list3.add(localByTaskId.get(i));
+                    break;
+                case "防雷及接地装置":
+                    list4.add(localByTaskId.get(i));
+                    break;
+                case "金具":
+                    list5.add(localByTaskId.get(i));
+                    break;
+                case "拉线和基础":
+                    list6.add(localByTaskId.get(i));
+                    break;
+            }
+
         }
 
         View view0 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView0 = view0.findViewById(R.id.recycler_view);
         recyclerView0.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter0 = new DefectTabAdapter(this, R.layout.item_defect_tab, results.get(0).getValue(), 0);
+        adapter0 = new DefectTabAdapter(this, R.layout.item_defect_tab, list0, 0);
         recyclerView0.setAdapter(adapter0);
         fragmentList.add(view0);
 
         View view1 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView1 = view1.findViewById(R.id.recycler_view);
         recyclerView1.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter1 = new DefectTabAdapter(this, R.layout.item_defect_tab, results.get(1).getValue(), 1);
+        adapter1 = new DefectTabAdapter(this, R.layout.item_defect_tab, list1, 1);
         recyclerView1.setAdapter(adapter1);
         fragmentList.add(view1);
 
         View view2 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView2 = view2.findViewById(R.id.recycler_view);
         recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter2 = new DefectTabAdapter(this, R.layout.item_defect_tab, results.get(2).getValue(), 2);
+        adapter2 = new DefectTabAdapter(this, R.layout.item_defect_tab, list2, 2);
         recyclerView2.setAdapter(adapter2);
         fragmentList.add(view2);
 
         View view3 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView3 = view3.findViewById(R.id.recycler_view);
         recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter3 = new DefectTabAdapter(this, R.layout.item_defect_tab, results.get(3).getValue(), 3);
+        adapter3 = new DefectTabAdapter(this, R.layout.item_defect_tab, list3, 3);
         recyclerView3.setAdapter(adapter3);
         fragmentList.add(view3);
 
         View view4 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView4 = view4.findViewById(R.id.recycler_view);
         recyclerView4.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter4 = new DefectTabAdapter(this, R.layout.item_defect_tab, results.get(4).getValue(), 4);
+        adapter4 = new DefectTabAdapter(this, R.layout.item_defect_tab, list4, 4);
         recyclerView4.setAdapter(adapter4);
         fragmentList.add(view4);
 
         View view5 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView5 = view5.findViewById(R.id.recycler_view);
         recyclerView5.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter5 = new DefectTabAdapter(this, R.layout.item_defect_tab, results.get(5).getValue(), 5);
+        adapter5 = new DefectTabAdapter(this, R.layout.item_defect_tab, list5, 5);
         recyclerView5.setAdapter(adapter5);
         fragmentList.add(view5);
 
         View view6 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView6 = view6.findViewById(R.id.recycler_view);
         recyclerView6.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter6 = new DefectTabAdapter(this, R.layout.item_defect_tab, results.get(6).getValue(), 6);
+        adapter6 = new DefectTabAdapter(this, R.layout.item_defect_tab, list6, 6);
         recyclerView6.setAdapter(adapter6);
         fragmentList.add(view6);
 
@@ -272,10 +323,6 @@ public class PatrolContentFrgment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        List<LocalMedia> localMedia = ((PatrolRecordActivity) getActivity()).getPics();
-        if (localMedia != null) {
-            adapter.refreshAdapter(localMedia);
-        }
     }
 
     @Override
@@ -295,36 +342,58 @@ public class PatrolContentFrgment extends BaseFragment {
                     Log.d("TAG", "success");
                     Bundle bundle = data.getExtras();
                     Bitmap bitmap = (Bitmap) bundle.get("data");
-                    if (Constant.defect_tab != -1 && Constant.defect_index != -1) {
-                        if (results.get(Constant.defect_tab).getValue().get(Constant.defect_index).getPicList() != null) {
+
+                    if (Constant.defect_patrol_id != "") {
+                       /* if (results.get(Constant.defect_tab).getValue().get(Constant.defect_index).getPicList() != null) {
                             results.get(Constant.defect_tab).getValue().get(Constant.defect_index).getPicList().add(bitmap);
                         } else {
                             List<Bitmap> list = new ArrayList<>();
                             list.add(bitmap);
                             results.get(Constant.defect_tab).getValue().get(Constant.defect_index).setPicList(list);
-                        }
-                        switch (Constant.defect_tab) {
-                            case 0:
-                                adapter0.notifyItemChanged(Constant.defect_index);
-                                break;
-                            case 1:
-                                adapter1.notifyItemChanged(Constant.defect_index);
-                                break;
-                            case 2:
-                                adapter2.notifyItemChanged(Constant.defect_index);
-                                break;
-                            case 3:
-                                adapter3.notifyItemChanged(Constant.defect_index);
-                                break;
-                            case 4:
-                                adapter4.notifyItemChanged(Constant.defect_index);
-                                break;
-                            case 5:
-                                adapter5.notifyItemChanged(Constant.defect_index);
-                                break;
-                            case 6:
-                                adapter6.notifyItemChanged(Constant.defect_index);
-                                break;
+                        }*/
+                        for (int i = 0; i < localByTaskId.size(); i++) {
+                            if (localByTaskId.get(i).getPatrol_id().equals(Constant.defect_patrol_id)) {
+                                String path = Environment.getExternalStorageDirectory().getPath()
+                                        + "/MyPhoto/" + Constant.defect_patrol_id + "_" + Constant.defect_patrol_index + ".jpg";
+                                try {
+                                    FileUtil.saveFile(bitmap, path);
+                                    if (localByTaskId.get(i).getPics() == null) {
+                                        localByTaskId.get(i).setPics(path + ";");
+                                    } else {
+                                        localByTaskId.get(i).setPics(localByTaskId.get(i).getPics() + path + ";");
+                                    }
+                                    localByTaskId.get(i).update();
+//                                    SQLite.update(LocalPatrolDefectBean.class)
+//                                            .set(LocalPatrolDefectBean_Table.pics.eq(localByTaskId.get(i).getPics() + path + ";"))
+//                                            .where(LocalPatrolDefectBean_Table.patrol_id.is(Constant.defect_patrol_id))
+//                                            .execute();
+                                    switch (Constant.defect_tab) {
+                                        case 0:
+                                            adapter0.notifyItemChanged(Constant.defect_index);
+                                            break;
+                                        case 1:
+                                            adapter1.notifyItemChanged(Constant.defect_index);
+                                            break;
+                                        case 2:
+                                            adapter2.notifyItemChanged(Constant.defect_index);
+                                            break;
+                                        case 3:
+                                            adapter3.notifyItemChanged(Constant.defect_index);
+                                            break;
+                                        case 4:
+                                            adapter4.notifyItemChanged(Constant.defect_index);
+                                            break;
+                                        case 5:
+                                            adapter5.notifyItemChanged(Constant.defect_index);
+                                            break;
+                                        case 6:
+                                            adapter6.notifyItemChanged(Constant.defect_index);
+                                            break;
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                     break;

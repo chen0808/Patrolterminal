@@ -3,9 +3,10 @@ package com.patrol.terminal.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,51 +27,100 @@ import androidx.fragment.app.Fragment;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.bean.PatrolContentBean;
+import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.utils.Constant;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBean, BaseViewHolder> {
+public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, BaseViewHolder> {
     private final Fragment fragment;
     private GridViewAdapter3 mGridViewAddImgAdapter;
     private int tab;
 
-    public DefectTabAdapter(Fragment fragment, int layoutResId, @Nullable List<PatrolContentBean.ValueBean> data, int tab) {
+    public DefectTabAdapter(Fragment fragment, int layoutResId, @Nullable List<LocalPatrolDefectBean> data, int tab) {
         super(layoutResId, data);
         this.fragment = fragment;
         this.tab = tab;
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, PatrolContentBean.ValueBean item) {
+    protected void convert(BaseViewHolder helper, LocalPatrolDefectBean item) {
+        /*LocalPatrolDefectBean bean = SQLite.select().from(LocalPatrolDefectBean.class)
+                .where(LocalPatrolDefectBean_Table.patrol_id.is(item.getPatrol_id()))
+                .and(LocalPatrolDefectBean_Table.task_id.is(item.getTask_id()))
+                .querySingle();*/
+
         GridView gridView = helper.getView(R.id.gridView);
-        helper.setText(R.id.tv_content, item.getRemarks());
+        helper.setText(R.id.tv_content, item.getPatrol_name());
         RelativeLayout rlTitle = helper.getView(R.id.rl_title);
         RadioGroup rgTitle = helper.getView(R.id.rg_title);
+        RadioButton defectTrue = (RadioButton) rgTitle.getChildAt(0);
         RadioButton defectFalse = (RadioButton) rgTitle.getChildAt(1);
         LinearLayout llCOntent = helper.getView(R.id.ll_content);
         AutoCompleteTextView tvDiverWay = helper.getView(R.id.tv_diver_way);
+        tvDiverWay.setText(item.getContent());
+        tvDiverWay.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                item.setContent(s.toString());
+                item.update();
+            }
+        });
 
         RadioGroup rgContentType = helper.getView(R.id.rg_content_type);
         RadioButton checkOneRb = (RadioButton) rgContentType.getChildAt(0);
         RadioButton checkTwoRb = (RadioButton) rgContentType.getChildAt(1);
         RadioButton checkThreeRb = (RadioButton) rgContentType.getChildAt(2);
 
+        if (item.getGrade_id() != null) {
+            switch (item.getGrade_id()) {
+                case "10C639F13341484997EE8D955322BE02"://危急
+                    checkOneRb.setChecked(true);
+                    break;
+                case "2CEB42DA67764AC0BF911B02FB579775"://严重
+                    checkTwoRb.setChecked(true);
+                    break;
+                case "37E5647975394B1E952DC5D2796C7D73"://一般
+                    checkThreeRb.setChecked(true);
+                    break;
+            }
+        }
+
+        if (item.getStatus().equals("0")) {
+            defectTrue.setChecked(true);
+            llCOntent.setVisibility(View.GONE);
+        } else if (item.getStatus().equals("1")) {
+            defectFalse.setChecked(true);
+            llCOntent.setVisibility(View.VISIBLE);
+        }
         rgTitle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == rgTitle.getChildAt(0).getId()) {
                     llCOntent.setVisibility(View.GONE);
+                    item.setStatus("0");
                 } else {
                     llCOntent.setVisibility(View.VISIBLE);
+                    item.setStatus("1");
                 }
+                item.update();
             }
         });
         rlTitle.setOnClickListener(new View.OnClickListener() {
@@ -78,11 +128,14 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
             public void onClick(View v) {
                 if (llCOntent.getVisibility() == View.VISIBLE) {
                     llCOntent.setVisibility(View.GONE);
+                    item.setStatus("0");
                 } else {
                     if (defectFalse.isChecked()) {
                         llCOntent.setVisibility(View.VISIBLE);
+                        item.setStatus("1");
                     }
                 }
+                item.update();
             }
         });
 
@@ -93,12 +146,12 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
 
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                return LayoutInflater.from(context).inflate(R.layout.simple_defact_tv_content_item_layout, parent,false);
+                return LayoutInflater.from(context).inflate(R.layout.simple_defact_tv_content_item_layout, parent, false);
             }
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-                TextView contentTv =(TextView) view.findViewById(R.id.content_tv);
+                TextView contentTv = (TextView) view.findViewById(R.id.content_tv);
                 int contentColumnIndex = cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.CONTENT);
                 String content = cursor.getString(contentColumnIndex);
                 contentTv.setText(content);
@@ -127,7 +180,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor1 = cursorAdapter.getCursor();
-                if(cursor1 != null && cursor1.getCount() > 0) {
+                if (cursor1 != null && cursor1.getCount() > 0) {
                     boolean isExist = cursor1.moveToPosition(position);
                     if (isExist) {
                         String levelStr = cursor1.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.LEVEL));
@@ -136,32 +189,37 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
                             checkOneRb.setChecked(true);
                             checkTwoRb.setChecked(false);
                             checkThreeRb.setChecked(false);
-                        }else {
+                            item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                        } else {
                             if (levelStr.contains("危急")) {
                                 checkOneRb.setChecked(true);
                                 checkTwoRb.setChecked(false);
                                 checkThreeRb.setChecked(false);
-                            }else if (levelStr.contains("严重")) {
+                                item.setGrade_id("10C639F13341484997EE8D955322BE02");
+                            } else if (levelStr.contains("严重")) {
                                 checkOneRb.setChecked(false);
                                 checkTwoRb.setChecked(true);
                                 checkThreeRb.setChecked(false);
-                            }else if (levelStr.contains("一般")) {
+                                item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
+                            } else if (levelStr.contains("一般")) {
                                 checkOneRb.setChecked(false);
                                 checkTwoRb.setChecked(false);
                                 checkThreeRb.setChecked(true);
-                            }else {   //默认为一般
+                                item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                            } else {   //默认为一般
                                 checkOneRb.setChecked(true);
                                 checkTwoRb.setChecked(false);
                                 checkThreeRb.setChecked(false);
+                                item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
                             }
                         }
-
-
+                        item.update();
                     }
                 }
             }
         });
 
+        initGridView(gridView, helper.getAdapterPosition(), item.getPics(), item.getTask_id(), item.getPatrol_id());
 
 
 //        if (item.getStatus().equals("0")) {
@@ -169,7 +227,6 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
 //        } else if (item.getStatus().equals("1")) {
 //            helper.setImageResource(R.id.iv_check, R.mipmap.patrol_false);
 //            helper.setGone(R.id.ll_content, true);
-        initGridView(gridView, helper.getAdapterPosition(), item.getPicList());
 //        } else {
 //            helper.setImageResource(R.id.iv_check, R.mipmap.patrol_true);
 //            helper.setGone(R.id.ll_content, false);
@@ -213,18 +270,18 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
 //        TextView tvTime = helper.getView(R.id.tv_time);
 //        ImageView ivCommit = helper.getView(R.id.iv_commit);
 //        RadioGroup rgContentType=helper.getView(R.id.rg_content_type);
-//        rgContentType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                if (checkedId==rgContentType.getChildAt(0).getId()){
-//                    grade_id = defectTypeBeans.get(0).getId();
-//                }else if (checkedId==rgContentType.getChildAt(1).getId()){
-//                    grade_id = defectTypeBeans.get(1).getId();
-//                }else if (checkedId==rgContentType.getChildAt(2).getId()){
-//                    grade_id = defectTypeBeans.get(2).getId();
-//                }
-//            }
-//        });
+        rgContentType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == rgContentType.getChildAt(0).getId()) {
+                    item.setGrade_id("10C639F13341484997EE8D955322BE02");
+                } else if (checkedId == rgContentType.getChildAt(1).getId()) {
+                    item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
+                } else if (checkedId == rgContentType.getChildAt(2).getId()) {
+                    item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                }
+            }
+        });
 //        ImageView ivEdit = helper.getView(R.id.iv_edit);
 //        ivEdit.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -235,15 +292,22 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
 //        });
     }
 
-    private void initGridView(GridView gridView, int pos, List<Bitmap> list) {
+    private void initGridView(GridView gridView, int pos, String pics, String task_id, String patrol_id) {
+        List<File> list = new ArrayList<>();
+        if (pics != null) {
+            String[] split = pics.split(";");
+            for (int i = 0; i < split.length; i++) {
+                list.add(new File(split[i]));
+            }
+        }
         if (list != null) {
-            mGridViewAddImgAdapter = new GridViewAdapter3(mContext, list);
+            mGridViewAddImgAdapter = new GridViewAdapter3(mContext, list, task_id, patrol_id);
         } else {
             list = new ArrayList<>();
-            mGridViewAddImgAdapter = new GridViewAdapter3(mContext, list);
+            mGridViewAddImgAdapter = new GridViewAdapter3(mContext, list, task_id, patrol_id);
         }
         gridView.setAdapter(mGridViewAddImgAdapter);
-        List<Bitmap> finalList = list;
+        List<File> finalList = list;
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -258,6 +322,8 @@ public class DefectTabAdapter extends BaseQuickAdapter<PatrolContentBean.ValueBe
                         startCamera();
                         Constant.defect_tab = tab;
                         Constant.defect_index = pos;
+                        Constant.defect_patrol_id = patrol_id;
+                        Constant.defect_patrol_index = position;
                     }
                 } else {
 //                    viewPluImg(position);

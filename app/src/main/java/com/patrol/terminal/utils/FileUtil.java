@@ -7,14 +7,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Base64;
 
 import androidx.core.content.FileProvider;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,9 +50,10 @@ public class FileUtil {
     //保存压缩后的图片
     public static void saveFile(Bitmap bitmap, String filePath2) throws IOException {
         // TODO Auto-generated method stub
-        File testFile = new File(filePath2);
-        if (testFile.exists()) {
-            testFile.delete();
+        File testFile = new File(Environment.getExternalStorageDirectory().getPath()
+                + "/MyPhoto");
+        if (!testFile.exists()) {
+            testFile.mkdir();
         }
 
         File myCaptureFile = new File(filePath2);

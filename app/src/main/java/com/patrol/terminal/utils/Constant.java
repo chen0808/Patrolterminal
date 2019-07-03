@@ -119,4 +119,6 @@ public class Constant {
     public static String defectType = "";
     public static int defect_tab = -1;//巡视类别
     public static int defect_index = -1;//巡视位置
+    public static String defect_patrol_id = "";//巡视内容id
+    public static int defect_patrol_index = -1;//图片位置
 }
