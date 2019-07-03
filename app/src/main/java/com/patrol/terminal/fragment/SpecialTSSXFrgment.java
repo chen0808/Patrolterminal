@@ -1,7 +1,11 @@
 package com.patrol.terminal.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +22,19 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.AutoCursorAdapter;
 import com.patrol.terminal.adapter.TssxAddAdapter;
 import com.patrol.terminal.adapter.TssxEditAdapter;
+import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.bean.TSSXBean;
+import com.patrol.terminal.bean.TSSXLocalBean;
+import com.patrol.terminal.bean.TSSXLocalBean_Table;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
+import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.widget.NoScrollViewPager;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +78,12 @@ public class SpecialTSSXFrgment extends BaseFragment {
     private List<TSSXBean> lfTssxList = new ArrayList<>();
     private List<TSSXBean> qtTssxList = new ArrayList<>();
 
+    /**添加的特殊属性列表*/
+    private List<TSSXLocalBean> skLocalList = new ArrayList<>();
+    private List<TSSXLocalBean> lfLocalList = new ArrayList<>();
+    private List<TSSXLocalBean> qtLocalList = new ArrayList<>();
+
+
     private TssxEditAdapter skEditAdapter;
     private TssxEditAdapter lfEditAdapter;
     private TssxEditAdapter qtEditAdapter;
@@ -73,8 +91,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
     private String TYPE_SK = "9F2DF17853FC468884A3F37260FDFED6";
     private String TYPE_LF = "98F764466504450DBC4C490F6DB512C2";
     private String TYPE_QT = "B2E7DF49D7AB4B358D5DD4BF4DF639EC";
-    DefactContentDBHelper defactContentDBHelper;
-    Cursor cursor;
+    private DefactContentDBHelper defactContentDBHelper;
+    private Cursor cursor;
+    private String task_id;
+    private String line_id;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,9 +105,12 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-        skEditAdapter = new TssxEditAdapter(getActivity());
-        lfEditAdapter = new TssxEditAdapter(getActivity());
-        qtEditAdapter = new TssxEditAdapter(getActivity());
+        skEditAdapter = new TssxEditAdapter(getActivity(),SpecialTSSXFrgment.this);
+        lfEditAdapter = new TssxEditAdapter(getActivity(),SpecialTSSXFrgment.this);
+        qtEditAdapter = new TssxEditAdapter(getActivity(),SpecialTSSXFrgment.this);
+
+        task_id = getActivity().getIntent().getStringExtra("task_id");
+        line_id = getActivity().getIntent().getStringExtra("line_id");
 
         intTSSX();
         initClick();
@@ -99,6 +122,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
         cursor = defactContentDBHelper.queryAll();
         AutoCursorAdapter cursorAdapter = new AutoCursorAdapter(getActivity(),cursor);
 
+
+
         sankua_rad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -106,7 +131,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
                     case R.id.tssx_sankua:
                         xs_tssx_lv.setAdapter(skEditAdapter);
                         skEditAdapter.setData(skTssxList);
-
                         break;
                     case R.id.tssx_liufang:
                         xs_tssx_lv.setAdapter(lfEditAdapter);
@@ -120,7 +144,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }
         });
 
-        //属性选择
+        //添加属性
         tssx_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +185,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
             @Override
             public void delObject(TSSXBean bean) {
                 tssxAddAdapter.removeStatus(bean);
+                delBean(bean.getKey());
             }
 
             @Override
@@ -172,12 +197,24 @@ public class SpecialTSSXFrgment extends BaseFragment {
             public Cursor getCursor() {
                 return cursor;
             }
+
+            @Override
+            public void updateYhnr(String task_key,String yhnr) {
+                updateYhnrBean(task_key,yhnr);
+            }
+
+            @Override
+            public void updateDJ(String task_key, String dj) {
+                updateDjBean(task_key,dj);
+            }
+
         });
 
         lfEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
             @Override
             public void delObject(TSSXBean bean) {
                 tssxAddAdapter.removeStatus(bean);
+                delBean(bean.getKey());
             }
 
             @Override
@@ -189,12 +226,24 @@ public class SpecialTSSXFrgment extends BaseFragment {
             public Cursor getCursor() {
                 return cursor;
             }
+
+            @Override
+            public void updateYhnr(String task_key,String yhnr) {
+                updateYhnrBean(task_key,yhnr);
+            }
+
+            @Override
+            public void updateDJ(String task_key, String dj) {
+                updateDjBean(task_key,dj);
+            }
+
         });
 
         qtEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
             @Override
             public void delObject(TSSXBean bean) {
                 tssxAddAdapter.removeStatus(bean);
+                delBean(bean.getKey());
             }
 
             @Override
@@ -206,7 +255,50 @@ public class SpecialTSSXFrgment extends BaseFragment {
             public Cursor getCursor() {
                 return cursor;
             }
+
+            @Override
+            public void updateYhnr(String task_key,String yhnr) {
+                updateYhnrBean(task_key,yhnr);
+            }
+
+            @Override
+            public void updateDJ(String task_key, String dj) {
+                updateDjBean(task_key,dj);
+            }
+
         });
+    }
+
+    public void updateDjBean(String key,String dj)
+    {
+        SQLite.update(TSSXLocalBean.class)
+                .set(TSSXLocalBean_Table.dj.eq(dj))
+                .where(TSSXLocalBean_Table.key.is(key))
+                .and(TSSXLocalBean_Table.task_id.is(task_id))
+                .execute();
+    }
+
+    public void updateYhnrBean(String key,String yhnr)
+    {
+        SQLite.update(TSSXLocalBean.class)
+                .set(TSSXLocalBean_Table.yhnr.eq(yhnr))
+                .where(TSSXLocalBean_Table.key.is(key))
+                .and(TSSXLocalBean_Table.task_id.is(task_id))
+                .execute();
+    }
+
+    public void delBean(String key)
+    {
+        TSSXLocalBean product = SQLite.select()
+                .from(TSSXLocalBean.class)
+                .where(TSSXLocalBean_Table.key.is(key))
+                .and(TSSXLocalBean_Table.task_id.is(task_id))
+                .querySingle();//查询单个
+        if (product != null) {
+            product.delete();
+            Log.d("zhh_db", "Delete: " + product.getKey());
+        }
+
     }
 
     public void  intiTssxData(List<TSSXBean> typeBeanList)
@@ -214,6 +306,9 @@ public class SpecialTSSXFrgment extends BaseFragment {
         skTssxList.clear();
         lfTssxList.clear();
         qtTssxList.clear();
+
+        String data = DateUatil.getCurMonth();
+
         int count = typeBeanList.size();
         for (int i=0;i<count;i++){
             TSSXBean bean = typeBeanList.get(i);
@@ -224,9 +319,55 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }else if(bean.getParKey() == TYPE_QT){
                 qtTssxList.add(bean);
             }
+
+            TSSXLocalBean localBean = new TSSXLocalBean();
+            localBean.setDj(bean.getDj());
+            localBean.setKey(bean.getKey());
+            localBean.setLine_id(line_id);
+            localBean.setTask_id(task_id);
+            localBean.setYear(DateUatil.getYear());
+            localBean.setMonth(DateUatil.getMonth());
+            localBean.setMonth(DateUatil.getDayStr());
+            localBean.save();
         }
+
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case Constant.DEFECT_REQUEST_CODE:
+                    Log.d("TAG", "success");
+                    Bundle bundle = data.getExtras();
+                    Bitmap bitmap = (Bitmap) bundle.get("data");
+                    String path = Environment.getExternalStorageDirectory().getPath()
+                            + "/MyPhoto/" + DateUatil.getCurrTime() + ".jpg";
+                    try {
+                        //保存本地成功 刷新刷新数据添加到页面
+                        FileUtil.saveFile(bitmap, path);
+
+                        switch (sankua_rad.getCheckedRadioButtonId()){
+                            case R.id.tssx_sankua:
+                                skEditAdapter.setPhotoData(path);
+                                break;
+                            case R.id.tssx_liufang:
+                                lfEditAdapter.setPhotoData(path);
+                                break;
+                            case R.id.tssx_qita:
+                                qtEditAdapter.setPhotoData(path);
+                                break;
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+            }
+        }
+    }
 
     public void intTSSX() {
         tssxBeanList = new ArrayList<TSSXBean>();

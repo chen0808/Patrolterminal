@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.AutoCursorAdapter;
 import com.patrol.terminal.adapter.GridViewAdapter2;
+import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.utils.Constant;
@@ -59,7 +60,7 @@ public class SankuaEditView extends LinearLayout {
 
     private CursorAdapter cursorAdapter;
     private onTssxClick mOnTssxClick;
-
+    TssxPhotoAdapter photoAdapter;
 
     public SankuaEditView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -74,7 +75,7 @@ public class SankuaEditView extends LinearLayout {
         item_tssx_del = view.findViewById(R.id.item_tssx_del);
 
         initClick();
-//        initData();
+
     }
 
     public void setItemYhnr(String yhnr)
@@ -175,13 +176,15 @@ public class SankuaEditView extends LinearLayout {
 
 
     public void initClick() {
+        TssxPhotoAdapter photoAdapter = new TssxPhotoAdapter(context);
+        sk_gridview.setAdapter(photoAdapter);
+
         sankua_rad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton rb = (RadioButton) findViewById(checkedId);
                 YHDJStr = rb.getText().toString().trim();
                 mOnTssxClick.getDj(YHDJStr);
-//                setDjStatus(YHDJStr);
             }
         });
 
@@ -225,6 +228,12 @@ public class SankuaEditView extends LinearLayout {
             }
         });
 
+        sk_gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mOnTssxClick.onItemClick(adapterView,view,i,l);
+            }
+        });
     }
 
     public void setOnItemClick(onTssxClick click){
@@ -236,11 +245,24 @@ public class SankuaEditView extends LinearLayout {
         void onAutoItemClick(AdapterView<?> parent, View view, int position, long id);
         void addTextChangedListener(String txt);//文字变化监听
         void getDj(String djStr);
+        void onItemClick(AdapterView<?> adapterView, View view, int i, long l);
     }
 
+    //文字提示
     public void setAutoAdapter(AutoCursorAdapter cursorAdapter)
     {
         sankua_yhnr.setAdapter(cursorAdapter);
+    }
+
+    //拍照
+    public void setPhotoAdapter(TssxPhotoAdapter photoAdapter)
+    {
+        this.photoAdapter = photoAdapter;
+        sk_gridview.setAdapter(photoAdapter);
+    }
+
+    public void setNotifyDataSetChanged(){
+        photoAdapter.notifyDataSetChanged();
     }
 
 }

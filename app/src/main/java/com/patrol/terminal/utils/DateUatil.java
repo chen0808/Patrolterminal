@@ -101,6 +101,25 @@ public class DateUatil {
         return format.format(date);
     }
 
+    public static String getYear()
+    {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
+        return format.format(date);
+    }
+
+    public static String getMonth()
+    {
+        Date date = new Date(System.currentTimeMillis());
+        return getMonth(date);
+    }
+
+    public static String getDayStr()
+    {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat format  = new SimpleDateFormat("dd");
+        return format.format(date);
+    }
 
     public static String getMonthAndDay(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format  = new SimpleDateFormat("MM月dd日");
