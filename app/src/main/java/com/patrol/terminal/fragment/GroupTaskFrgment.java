@@ -38,6 +38,7 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.OrderBy;
@@ -48,6 +49,8 @@ import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
+
+import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -137,10 +140,11 @@ public class GroupTaskFrgment extends BaseFragment {
             @Override
             public void onRefresh() {
 
-                if (isNetworkConnected(getContext())){
-                    getDataFromDatabase();
-                }else {
+                if (Utils.isNetworkConnected(getContext())){
                     getData();
+                }else {
+
+                    getDataFromDatabase();
                 }
             }
         });
@@ -173,7 +177,6 @@ public class GroupTaskFrgment extends BaseFragment {
             mRefrsh.setRefreshing(false);
             isRefresh = true;
             ProgressDialog.cancle();
-
         }
     }
 
@@ -224,10 +227,10 @@ public class GroupTaskFrgment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (isRefresh){
-            if (isNetworkConnected(getContext())){
-                getDataFromDatabase();
-            }else {
+            if (Utils.isNetworkConnected(getContext())){
                 getData();
+            }else {
+                getDataFromDatabase();
             }
 
 
@@ -545,15 +548,5 @@ public class GroupTaskFrgment extends BaseFragment {
                 });
     }
 
-    public boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
-    }
+
 }

@@ -1,6 +1,8 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +19,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.HwcwBean;
 import com.patrol.terminal.bean.JDDZbean;
+import com.patrol.terminal.bean.JDDZbean_Table;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
@@ -24,10 +27,13 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -39,7 +45,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 接地电阻测量
  */
-public class JiediDianZuCeLiangActicivity extends BaseActivity {
+public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWatcher {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -78,6 +84,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
     private String line_name, jobType, audit_status;
     private String tower_id;
     private String tower_name, task_id, sign, typename, id;
+    private JDDZbean results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +92,15 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
         setContentView(R.layout.activity_grounded_electronic_measurement);
         ButterKnife.bind(this);
         initview();
+        initedit();
+    }
 
+    private void initedit() {
+        etAResistor.addTextChangedListener(this);
+        etBResistor.addTextChangedListener(this);
+        etCResistor.addTextChangedListener(this);
+        etDResistor.addTextChangedListener(this);
+        etNote.addTextChangedListener(this);
     }
 
     private void initview() {
@@ -98,9 +113,57 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
         audit_status = getIntent().getStringExtra("audit_status");
         sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
-        getJDDZ();
-        getYXtodo();
-        getTask(task_id);
+       getdata();
+    }
+    public void getdata(){
+        //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
+        List<JDDZbean> jddZbeans = SQLite.select().from(JDDZbean.class)
+                .where(JDDZbean_Table.task_id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(this)))
+                //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
+                .queryList();
+        if (jddZbeans ==null|| jddZbeans.size()==0){
+            results.setLine_name(line_name);
+            results.setTask_id(task_id);
+            results.setTower_id(tower_id);
+            results.setTower_name(tower_name);
+            results.setUser_id(SPUtil.getUserId(this));
+            results.save();
+        }else {
+            results=jddZbeans.get(0);
+        }
+        if (Utils.isNetworkConnected(this)){
+            getJDDZ();
+            getTask(task_id);
+            getYXtodo();
+        }
+        showView();
+    }
+
+    private void showView() {
+        id = results.getId();
+        line_name = results.getLine_name();
+        tower_name = results.getTower_name();
+        tower_id = results.getTower_id();
+        tvLineId.setText(results.getLine_name());
+        tvTowerName.setText(results.getTower_name());
+        tvTowerType.setText(results.getTower_model());
+        etAResistor.setText(results.getMeasure_a()==0?"":results.getMeasure_a()+"");
+        etBResistor.setText(results.getMeasure_b()==0?"":results.getMeasure_b()+"");
+        etCResistor.setText(results.getMeasure_c()==0?"":results.getMeasure_c()+"");
+        etDResistor.setText(results.getMeasure_d()==0?"":results.getMeasure_d()+"");
+        String[] array = getResources().getStringArray(R.array.weather);
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(results.getWeather())) {
+                spWeather.setSelection(i);
+            }
+        }
+        String[] array1 = getResources().getStringArray(R.array.verdict);
+        for (int i = 0; i < array1.length; i++) {
+            if (array1[i].equals(results.getResults())) {
+                spVerdict.setSelection(i);
+            }
+        }
+        etNote.setText(results.getRemark());
     }
 
     private void getTask(String task_id) {
@@ -113,8 +176,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                     protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
                         TaskBean bean = t.getResults();
                         sign = bean.getType_sign();
-                        tvLineId.setText(bean.getLine_name());
-                        tvTowerName.setText(bean.getTower_name());
+
                         getTowerModel(bean.getTower_id());
                     }
 
@@ -381,29 +443,11 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                     protected void onSuccees(BaseResult<JDDZbean> t) throws Exception {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
-                            JDDZbean results = t.getResults();
-                            if (results != null) {
-                                id = results.getId();
-                                line_name = results.getLine_name();
-                                tower_name = results.getTower_name();
-                                tower_id = results.getTower_id();
-                                etAResistor.setText(results.getMeasure_a() + "");
-                                etBResistor.setText(results.getMeasure_b() + "");
-                                etCResistor.setText(results.getMeasure_c() + "");
-                                etDResistor.setText(results.getMeasure_d() + "");
-                                String[] array = getResources().getStringArray(R.array.weather);
-                                for (int i = 0; i < array.length; i++) {
-                                    if (array[i].equals(results.getWeather())) {
-                                        spWeather.setSelection(i);
-                                    }
-                                }
-                                String[] array1 = getResources().getStringArray(R.array.verdict);
-                                for (int i = 0; i < array1.length; i++) {
-                                    if (array1[i].equals(results.getResults())) {
-                                        spVerdict.setSelection(i);
-                                    }
-                                }
-                                etNote.setText(results.getRemark());
+
+                            if (t.getResults() != null) {
+                                results = t.getResults();
+                                results.update();
+showView();
 
 //                                etTowerId.setText(results.getTower_type());
 //                                etLineId.setText(line_name);
@@ -418,5 +462,20 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity {
                         ProgressDialog.cancle();
                     }
                 });
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }

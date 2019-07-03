@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.StringUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -75,6 +77,9 @@ public class GroupTaskDetailActivity extends BaseActivity {
     RecyclerView monthPlanDetailRc;
     @BindView(R.id.task_submit)
     TextView taskSubmit;
+    @BindView(R.id.task_select)
+    LinearLayout task_select;
+
     private List<DefectBean> typeList = new ArrayList<>();
     private String year, month, day, id;
     private GroupTaskDetailAdapter adapter;
@@ -94,12 +99,12 @@ public class GroupTaskDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
         bean = (GroupTaskBean) getIntent().getParcelableExtra("GroupTaskBean");
-        Log.w("linmeng", "bean.getType_sign():" + bean.getType_sign());
 
         from = getIntent().getStringExtra("from");
         //无网络直接设置上去
+        if (!Utils.isNetworkConnected(this)&&bean!=null) {
         getGroupList();
-
+        }
         if ("todoGroup".equals(from)) {
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
@@ -117,6 +122,8 @@ public class GroupTaskDetailActivity extends BaseActivity {
 
 
     private void initView() {
+        task_select.setVisibility(View.GONE);
+
         titleName.setText("小组任务详情");
         String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         String[] years = time.split("年");

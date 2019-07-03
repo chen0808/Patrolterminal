@@ -130,6 +130,24 @@
                 android:text="状态"
                 android:textColor="@color/color_33"
                 android:textSize="@dimen/sp_16" />
+
+            <LinearLayout
+                android:id="@+id/task_select"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/image_overlay_false" />
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="选择"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_16" />
+            </LinearLayout>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
