@@ -28,8 +28,9 @@ public class TSSXLocalBean extends BaseModel implements Serializable {
     @Column
     private String dj = "一般";//等级
 
-    private List<String> photoList = new ArrayList<>();//图片内容
-
+//    private List<String> photoList = new ArrayList<>();//图片内容
+    @Column
+    private String photoStr = "";//
     // 数据id
     @Column
     private String id;
@@ -74,6 +75,13 @@ public class TSSXLocalBean extends BaseModel implements Serializable {
     @Column
     private String day;
 
+    public String getPhotoStr() {
+        return photoStr;
+    }
+
+    public void setPhotoStr(String photoStr) {
+        this.photoStr = photoStr;
+    }
 
     public String getYear() {
         return year;
@@ -153,14 +161,6 @@ public class TSSXLocalBean extends BaseModel implements Serializable {
 
     public void setDj(String dj) {
         this.dj = dj;
-    }
-
-    public List<String> getPhotoList() {
-        return photoList;
-    }
-
-    public void setPhotoList(List<String> photoList) {
-        this.photoList = photoList;
     }
 
     public String getId() {

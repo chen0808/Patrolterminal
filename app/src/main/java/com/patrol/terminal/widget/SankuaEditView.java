@@ -33,6 +33,7 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.PictureSelectorConfig;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 三跨六防通用编辑框
@@ -261,8 +262,8 @@ public class SankuaEditView extends LinearLayout {
         sk_gridview.setAdapter(photoAdapter);
     }
 
-    public void setNotifyDataSetChanged(){
-        photoAdapter.notifyDataSetChanged();
+    public void setNotifyDataSetChanged(List<String> list){
+        photoAdapter.setNotifyDataSetChanged(list);
     }
 
 }
