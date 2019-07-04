@@ -52,10 +52,6 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 
     @Override
     protected void convert(BaseViewHolder helper, LocalPatrolDefectBean item) {
-        /*LocalPatrolDefectBean bean = SQLite.select().from(LocalPatrolDefectBean.class)
-                .where(LocalPatrolDefectBean_Table.patrol_id.is(item.getPatrol_id()))
-                .and(LocalPatrolDefectBean_Table.task_id.is(item.getTask_id()))
-                .querySingle();*/
 
         GridView gridView = helper.getView(R.id.gridView);
         helper.setText(R.id.tv_content, item.getPatrol_name());
@@ -220,10 +216,18 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 }
             }
         });
-
-        initGridView(gridView, helper.getAdapterPosition(), item.getPics(), item.getTask_id(), item.getPatrol_id());
-
-
+        rgContentType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == rgContentType.getChildAt(0).getId()) {
+                    item.setGrade_id("10C639F13341484997EE8D955322BE02");
+                } else if (checkedId == rgContentType.getChildAt(1).getId()) {
+                    item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
+                } else if (checkedId == rgContentType.getChildAt(2).getId()) {
+                    item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                }
+            }
+        });
 //        if (item.getStatus().equals("0")) {
 //            helper.setImageResource(R.id.iv_check, R.mipmap.patrol_undefined);
 //        } else if (item.getStatus().equals("1")) {
@@ -272,18 +276,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 //        TextView tvTime = helper.getView(R.id.tv_time);
 //        ImageView ivCommit = helper.getView(R.id.iv_commit);
 //        RadioGroup rgContentType=helper.getView(R.id.rg_content_type);
-        rgContentType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == rgContentType.getChildAt(0).getId()) {
-                    item.setGrade_id("10C639F13341484997EE8D955322BE02");
-                } else if (checkedId == rgContentType.getChildAt(1).getId()) {
-                    item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
-                } else if (checkedId == rgContentType.getChildAt(2).getId()) {
-                    item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
-                }
-            }
-        });
+
 //        ImageView ivEdit = helper.getView(R.id.iv_edit);
 //        ivEdit.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -292,6 +285,36 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 //                llContent.setVisibility(View.VISIBLE);
 //            }
 //        });
+
+        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2")) {
+            rlTitle.setEnabled(false);
+            tvDiverWay.setEnabled(false);
+            defectTrue.setEnabled(false);
+            defectFalse.setEnabled(false);
+            checkOneRb.setEnabled(false);
+            checkTwoRb.setEnabled(false);
+            checkThreeRb.setEnabled(false);
+            gridView.setEnabled(false);
+            initGridViewFromOnline(gridView, item.getOnline_pics());
+
+        } else {
+            initGridView(gridView, helper.getAdapterPosition(), item.getPics(), item.getTask_id(), item.getPatrol_id());
+        }
+    }
+
+    private void initGridViewFromOnline(GridView gridView, String pics) {
+        List<String> list = new ArrayList<>();
+        if (pics != null) {
+            String[] split = pics.split(";");
+            for (int i = 0; i < split.length; i++) {
+                list.add(split[i]);
+            }
+        }
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        GridViewAdapter4 adapter = new GridViewAdapter4(mContext, list);
+        gridView.setAdapter(adapter);
     }
 
     private void initGridView(GridView gridView, int pos, String pics, String task_id, String patrol_id) {

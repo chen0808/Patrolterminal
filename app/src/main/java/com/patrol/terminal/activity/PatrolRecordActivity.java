@@ -110,14 +110,12 @@ public class PatrolRecordActivity extends BaseActivity {
     NoScrollViewPager viewPager;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-    @BindView(R.id.mengban)
-    RelativeLayout mengban;
     private MyFragmentPagerAdapter pagerAdapter;
     private Disposable subscribe;
     private Map<String, RequestBody> params = new HashMap<>();
     private String jobType;
     private String task_id;
-    private String audit_status;
+    public String audit_status;
     private LocalPatrolRecordBean localBean;
     private int picIndex = 0;
     private LocalPatrolRecordBean localByTaskId;
@@ -132,7 +130,7 @@ public class PatrolRecordActivity extends BaseActivity {
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         task_id = getIntent().getStringExtra("task_id");
         audit_status = getIntent().getStringExtra("audit_status");
-
+        Constant.patrol_record_audit_status = audit_status;
         getYXtodo();
         initview();
         query();
@@ -214,46 +212,23 @@ public class PatrolRecordActivity extends BaseActivity {
 
     //获取当前任务完成状态
     private void getYXtodo() {
-    /*    if ("1".equals(audit_status)) {
-            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
-                titleSetting.setVisibility(View.VISIBLE);
-                titleSettingTv.setText("审批");
-            }
-        } else if ("2".equals(audit_status)) {
-            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                titleSetting.setVisibility(View.VISIBLE);
-                titleSettingTv.setText("审批");
-            }
-        } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
-            if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-                titleSetting.setVisibility(View.VISIBLE);
-                titleSettingTv.setText("提交");
-            }
-        } else {
-            titleSetting.setVisibility(View.GONE);
-        }*/
-
         if ("1".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("审批");
             }
-            mengban.setVisibility(View.VISIBLE);
         } else if ("2".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("审批");
             }
-            mengban.setVisibility(View.VISIBLE);
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
             if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("提交");
             }
-            mengban.setVisibility(View.GONE);
         } else {
             titleSetting.setVisibility(View.GONE);
-            mengban.setVisibility(View.VISIBLE);
         }
     }
 
@@ -300,13 +275,17 @@ public class PatrolRecordActivity extends BaseActivity {
         } else {
             localBean.save();
         }
+        localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
     }
 
     //获取当前task_id对应的数据
     private void query() {
         localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
-        initLocalData(localByTaskId);
-//        initOnLineData();
+        if (audit_status.equals("1") || audit_status.equals("2")) {
+            initOnLineData();
+        } else {
+            initLocalData(localByTaskId);
+        }
     }
 
     //本地数据
@@ -388,110 +367,14 @@ public class PatrolRecordActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-                params.clear();
-                params.put("task_id", toRequestBody(task_id));
-                if (localByTaskId != null) {
-                    if (localByTaskId.getPic1() != null) {
-                        RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic1()));
-                        params.put("patrolFile\"; filename=\"1.jpg", requestFile1);
-                    }
-                    if (localByTaskId.getPic2() != null) {
-                        RequestBody requestFile2 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic2()));
-                        params.put("patrolFile\"; filename=\"2.jpg", requestFile2);
-                    }
-                    if (localByTaskId.getPic3() != null) {
-                        RequestBody requestFile3 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic3()));
-                        params.put("patrolFile\"; filename=\"3.jpg", requestFile3);
-                    }
-                    if (localByTaskId.getPic4() != null) {
-                        RequestBody requestFile4 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic4()));
-                        params.put("patrolFile\"; filename=\"4.jpg", requestFile4);
-                    }
-                    if (localByTaskId.getPic5() != null) {
-                        RequestBody requestFile5 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic5()));
-                        params.put("patrolFile\"; filename=\"5.jpg", requestFile5);
-                    }
-                    if (localByTaskId.getPic6() != null) {
-                        RequestBody requestFile6 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic6()));
-                        params.put("patrolFile\"; filename=\"6.jpg", requestFile6);
-                    }
-                }
-
-                localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
-                List<LocalPatrolDefectBean> localDefectByTaskId = SQLite.select().from(LocalPatrolDefectBean.class).where(LocalPatrolDefectBean_Table.task_id.is(task_id)).queryList();
-                for (int i = 0; i < localDefectByTaskId.size(); i++) {
-                    params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(task_id));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].status", toRequestBody(localDefectByTaskId.get(i).getStatus()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.task_id", toRequestBody(task_id));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.category_id", toRequestBody(localDefectByTaskId.get(i).getCategory_id()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.grade_id", toRequestBody(localDefectByTaskId.get(i).getGrade_id()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.content", toRequestBody(localDefectByTaskId.get(i).getContent()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.line_id", toRequestBody(localByTaskId.getLine_id()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.line_name", toRequestBody(localByTaskId.getLine_name()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_id", toRequestBody(localByTaskId.getTower_id()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_id", toRequestBody(localByTaskId.getTower_id()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_name", toRequestBody(localByTaskId.getTower_name()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_name", toRequestBody(localByTaskId.getTower_name()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_id", toRequestBody(localByTaskId.getUser_id()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_name", toRequestBody(localByTaskId.getUser_name()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_id", toRequestBody(localByTaskId.getDep_id()));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_name", toRequestBody(localByTaskId.getDep_name()));
-
-                    String pics = localDefectByTaskId.get(i).getPics();
-                    if (pics != null) {
-                        String[] split = pics.split(";");
-                        for (int j = 0; j < split.length; j++) {
-                            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
-                            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.defect_file\"; filename=\"" + localDefectByTaskId.get(i).getPatrol_id() + "_" + j + ".jpg", requestFile);
-                        }
-                    }
-                }
-                BaseRequest.getInstance().getService().test(params).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new BaseObserver(this) {
-                            @Override
-                            protected void onSuccees(BaseResult t) throws Exception {
-                                if (audit_status.equals("0") || audit_status.equals("4")) {
-                                    saveTodoAudit("1");
-                                } else {
-                                    CancelOrOkDialog dialog = new CancelOrOkDialog(PatrolRecordActivity.this, "是否通过", "不通过", "通过") {
-                                        @Override
-                                        public void ok() {
-                                            super.ok();
-                                            if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                                                saveTodoAudit("3");   //同意
-                                            } else {
-                                                saveTodoAudit("2");   //同意
-                                            }
-
-                                            dismiss();
-                                        }
-
-                                        @Override
-                                        public void cancle() {
-                                            super.cancle();
-                                            saveTodoAudit("4");  //不同意
-                                            dismiss();
-                                        }
-                                    };
-                                    dialog.show();
-                                }
-                            }
-
-                            @Override
-                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                            }
-                        });
+                addTodo();
                 break;
             case R.id.iv_photo1:
                 picIndex = 1;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
                     startCamera();
                 } else {
-                    showBigImage();
+                    showBigImage(1);
                 }
                 break;
             case R.id.iv_photo2:
@@ -499,7 +382,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 if (audit_status.equals("0") || audit_status.equals("4")) {
                     startCamera();
                 } else {
-                    showBigImage();
+                    showBigImage(2);
                 }
                 break;
             case R.id.iv_photo3:
@@ -507,7 +390,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 if (audit_status.equals("0") || audit_status.equals("4")) {
                     startCamera();
                 } else {
-                    showBigImage();
+                    showBigImage(3);
                 }
                 break;
             case R.id.iv_photo4:
@@ -515,7 +398,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 if (audit_status.equals("0") || audit_status.equals("4")) {
                     startCamera();
                 } else {
-                    showBigImage();
+                    showBigImage(4);
                 }
                 break;
             case R.id.iv_photo5:
@@ -523,7 +406,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 if (audit_status.equals("0") || audit_status.equals("4")) {
                     startCamera();
                 } else {
-                    showBigImage();
+                    showBigImage(5);
                 }
                 break;
             case R.id.iv_photo6:
@@ -531,12 +414,119 @@ public class PatrolRecordActivity extends BaseActivity {
                 if (audit_status.equals("0") || audit_status.equals("4")) {
                     startCamera();
                 } else {
-                    showBigImage();
+                    showBigImage(6);
                 }
                 break;
             case R.id.fab:
                 startActivity(new Intent(this, MapActivity.class));
                 break;
+        }
+    }
+
+    private void addTodo() {
+        if (audit_status.equals("0") || audit_status.equals("4")) {
+            commit();
+        } else {
+            CancelOrOkDialog dialog = new CancelOrOkDialog(PatrolRecordActivity.this, "是否通过", "不通过", "通过") {
+                @Override
+                public void ok() {
+                    super.ok();
+                    if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                        saveTodoAudit("3");   //同意
+                    } else {
+                        saveTodoAudit("2");   //同意
+                    }
+
+                    dismiss();
+                }
+
+                @Override
+                public void cancle() {
+                    super.cancle();
+                    saveTodoAudit("4");  //不同意
+                    dismiss();
+                }
+            };
+            dialog.show();
+        }
+    }
+
+    private void commit() {
+        params.clear();
+        params.put("task_id", toRequestBody(task_id));
+        if (localByTaskId != null) {
+            if (localByTaskId.getPic1() != null) {
+                RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic1()));
+                params.put("patrolFile\"; filename=\"1.jpg", requestFile1);
+            }
+            if (localByTaskId.getPic2() != null) {
+                RequestBody requestFile2 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic2()));
+                params.put("patrolFile\"; filename=\"2.jpg", requestFile2);
+            }
+            if (localByTaskId.getPic3() != null) {
+                RequestBody requestFile3 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic3()));
+                params.put("patrolFile\"; filename=\"3.jpg", requestFile3);
+            }
+            if (localByTaskId.getPic4() != null) {
+                RequestBody requestFile4 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic4()));
+                params.put("patrolFile\"; filename=\"4.jpg", requestFile4);
+            }
+            if (localByTaskId.getPic5() != null) {
+                RequestBody requestFile5 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic5()));
+                params.put("patrolFile\"; filename=\"5.jpg", requestFile5);
+            }
+            if (localByTaskId.getPic6() != null) {
+                RequestBody requestFile6 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic6()));
+                params.put("patrolFile\"; filename=\"6.jpg", requestFile6);
+            }
+        }
+
+        localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
+        List<LocalPatrolDefectBean> localDefectByTaskId = SQLite.select().from(LocalPatrolDefectBean.class).where(LocalPatrolDefectBean_Table.task_id.is(task_id)).queryList();
+        for (int i = 0; i < localDefectByTaskId.size(); i++) {
+            params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(task_id));
+            params.put("taskDefectPatrolRecodeList[" + i + "].patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].status", toRequestBody(localDefectByTaskId.get(i).getStatus()));
+            if (localDefectByTaskId.get(i).getStatus() == null) {
+                Toast.makeText(PatrolRecordActivity.this, "常规巡视未填写完整", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.task_id", toRequestBody(task_id));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.category_id", toRequestBody(localDefectByTaskId.get(i).getCategory_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.grade_id", toRequestBody(localDefectByTaskId.get(i).getGrade_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.content", toRequestBody(localDefectByTaskId.get(i).getContent()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.line_id", toRequestBody(localByTaskId.getLine_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.line_name", toRequestBody(localByTaskId.getLine_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_id", toRequestBody(localByTaskId.getUser_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_name", toRequestBody(localByTaskId.getUser_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_id", toRequestBody(localByTaskId.getDep_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_name", toRequestBody(localByTaskId.getDep_name()));
+            String pics = localDefectByTaskId.get(i).getPics();
+            if (pics != null) {
+                String[] split = pics.split(";");
+                for (int j = 0; j < split.length; j++) {
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
+                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.defect_file\"; filename=\"" + localDefectByTaskId.get(i).getPatrol_id() + "_" + j + ".jpg", requestFile);
+                }
+            }
+            BaseRequest.getInstance().getService().test(params).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new BaseObserver(this) {
+                        @Override
+                        protected void onSuccees(BaseResult t) throws Exception {
+                            saveTodoAudit("1");
+                        }
+
+                        @Override
+                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                        }
+                    });
         }
     }
 
@@ -579,7 +569,7 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     //查看大图
-    private void showBigImage() {
+    private void showBigImage(int position) {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_big_image);
         PinchImageView iv = dialog.findViewById(R.id.iv);
@@ -588,6 +578,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 Glide.with(this).load(BaseUrl.BASE_URL + picBeanList.get(i).getFile_path() + picBeanList.get(i).getFilename()).into(iv);
             }
         }*/
+        Glide.with(this).load(new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + task_id + "_" + position + ".jpg")).into(iv);
         dialog.show();
     }
 

@@ -61,6 +61,16 @@ public class LocalPatrolDefectBean extends BaseModel implements Serializable {
     private String find_dep_name;
     @Column
     private String pics;
+    @Column
+    private String online_pics;
+
+    public String getOnline_pics() {
+        return online_pics;
+    }
+
+    public void setOnline_pics(String online_pics) {
+        this.online_pics = online_pics;
+    }
 
     public String getPics() {
         return pics;

@@ -24,6 +24,7 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.PatrolContentBean;
@@ -76,6 +77,7 @@ public class PatrolContentFrgment extends BaseFragment {
     private List<LocalPatrolDefectBean> localByPatrolId;
     private LocalPatrolDefectBean localBean;
     private List<LocalPatrolDefectBean> localByTaskId;
+    private List<PatrolContentBean> results;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,7 +107,7 @@ public class PatrolContentFrgment extends BaseFragment {
                 .subscribe(new BaseObserver<List<PatrolContentBean>>(getActivity()) {
                     @Override
                     protected void onSuccees(BaseResult<List<PatrolContentBean>> t) throws Exception {
-                        List<PatrolContentBean> results = t.getResults();
+                        results = t.getResults();
 //                        localBean = SQLite.select().from(LocalPatrolDefectBean.class).querySingle();
 //                        if (localBean == null) {
 //
@@ -117,7 +119,17 @@ public class PatrolContentFrgment extends BaseFragment {
                             localBean.setPatrol_id(results.get(i).getPatrol_id());
                             localBean.setPatrol_name(results.get(i).getRemarks());
                             localBean.setStatus(results.get(i).getStatus());
+                            if (results.get(i).getTaskDefect() != null) {
+                                if (results.get(i).getTaskDefect().getContent() != null) {
+                                    localBean.setContent(results.get(i).getTaskDefect().getContent());
+                                }
+                                if (results.get(i).getTaskDefect().getGrade_id() != null) {
+                                    localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
+                                }
+                            }
                             localBean.setCategory_id(results.get(i).getCategory());
+                            String onlinePics = getOnlinePics(i);
+                            localBean.setOnline_pics(onlinePics);
                             save(results.get(i).getPatrol_id());
                         }
                         query();
@@ -128,6 +140,20 @@ public class PatrolContentFrgment extends BaseFragment {
 
                     }
                 });
+    }
+
+    private String getOnlinePics(int i) {
+        String picsOnline = "";
+        if (results.get(i).getTaskDefect() != null) {
+            if (results.get(i).getTaskDefect().getFileList() != null && results.get(i).getTaskDefect().getFileList().size() > 0) {
+                for (int j = 0; j < results.get(i).getTaskDefect().getFileList().size(); j++) {
+                    String filePath = results.get(i).getTaskDefect().getFileList().get(j).getFile_path();
+                    String filename = results.get(i).getTaskDefect().getFileList().get(j).getFilename();
+                    picsOnline += BaseUrl.BASE_URL + filePath + filename + ";";
+                }
+            }
+        }
+        return picsOnline;
     }
 
     private void save(String patrol_id) {
@@ -146,11 +172,11 @@ public class PatrolContentFrgment extends BaseFragment {
     private void query() {
         localByTaskId = SQLite.select().from(LocalPatrolDefectBean.class).where(LocalPatrolDefectBean_Table.task_id.is(task_id)).queryList();
         if (localByTaskId != null && localByTaskId.size() != 0) {
-            initTab(localByTaskId);
+            initTabFromLocal(localByTaskId);
         }
     }
 
-    private void initTab(List<LocalPatrolDefectBean> localByTaskId) {
+    private void initTabFromLocal(List<LocalPatrolDefectBean> localByTaskId) {
         tabName.clear();
         fragmentList.clear();
         List<LocalPatrolDefectBean> list0 = new ArrayList<>();
