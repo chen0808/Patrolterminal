@@ -477,11 +477,18 @@ ll35kv.setVisibility(View.GONE);
                         if (t.getCode() == 1) {
                             num_total--;
                             kilo_total = kilo_total - list.get(position).getTowers_range();
-                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                            monthLineTotal.setText("杆段 : " + num_total + "条");
-                            monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + " km");
+                            if (lineNum.indexOf(list.get(position).getLine_id()) != -1) {
+                                lineNum.remove(position);
+                            }
                             list.remove(position);
+
+
                             monthPlanAdapter.notifyItemRemoved(position);
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            monthLineTotal.setText("工作线路 : " + lineNum.size() + "条");
+                            monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + "km");
+                            monthLine110kvNum.setText("工作杆段 : " + num_total + "段");
+                            monthLine110kvKilo.setText(decimalFormat.format(kilo_total) + "km");
                             if (list.size()==0){
                             setResult(RESULT_OK);}
                         } else {

@@ -250,11 +250,16 @@ public class NextDayPlanActivity extends BaseActivity {
                         if (t.getCode() == 1) {
                             num_total--;
                             kilo_total = kilo_total - list.get(position).getTowers_range();
-                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                            monthLineTotal.setText("杆段总数 : " + num_total + "条");
-                            monthLineKiloTotal.setText("总公里数 : " + decimalFormat.format(kilo_total) + "km");
+                            if (lineNum.indexOf(list.get(position).getLine_id()) != -1) {
+                                lineNum.remove(position);
+                            }
                             list.remove(position);
                             monthPlanAdapter.notifyItemRemoved(position);
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            monthLineTotal.setText("工作线路 : " + lineNum.size() + "条");
+                            monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + "km");
+                            monthLine110kvNum.setText("工作杆段 : " + num_total + "段");
+                            monthLine110kvKilo.setText(decimalFormat.format(kilo_total) + "km");
                         } else {
                             Toast.makeText(NextDayPlanActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }

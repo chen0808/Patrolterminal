@@ -170,7 +170,7 @@ public class PersonalTaskFrgment extends BaseFragment {
         result = SQLite.select().from(GroupTaskBean.class)
                 .where(GroupTaskBean_Table.year.eq(Integer.valueOf(year)),GroupTaskBean_Table.month.eq(Integer.valueOf(month)),
                         GroupTaskBean_Table.day.eq(Integer.valueOf(day)),GroupTaskBean_Table.allot_status.eq("1"),
-                        GroupTaskBean_Table.work_user_id.eq(userid))
+                        GroupTaskBean_Table.work_user_id.eq(userid),GroupTaskBean_Table.user_id.eq(userid))
                 //.orderBy(OrderBy.fromNameAlias(NameAlias.of("line_id,name")))
                 .queryList();
 
