@@ -557,20 +557,20 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                     params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.defect_file\"; filename=\"" + localDefectByTaskId.get(i).getPatrol_id() + "_" + j + ".jpg", requestFile);
                 }
             }
-            BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new BaseObserver(this) {
-                        @Override
-                        protected void onSuccees(BaseResult t) throws Exception {
-                            saveTodoAudit(id, type_sign);
-                        }
-
-                        @Override
-                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                        }
-                    });
         }
+        BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        saveTodoAudit(id, type_sign);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
     }
 
     public RequestBody toRequestBody(String value) {

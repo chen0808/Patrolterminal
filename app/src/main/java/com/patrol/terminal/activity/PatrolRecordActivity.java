@@ -514,20 +514,20 @@ public class PatrolRecordActivity extends BaseActivity {
                     params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.defect_file\"; filename=\"" + localDefectByTaskId.get(i).getPatrol_id() + "_" + j + ".jpg", requestFile);
                 }
             }
-            BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new BaseObserver(this) {
-                        @Override
-                        protected void onSuccees(BaseResult t) throws Exception {
-                            saveTodoAudit("1");
-                        }
-
-                        @Override
-                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                        }
-                    });
         }
+        BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        saveTodoAudit("1");
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
     }
 
     //保存待办信息

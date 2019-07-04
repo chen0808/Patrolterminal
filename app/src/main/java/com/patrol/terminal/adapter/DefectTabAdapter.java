@@ -75,8 +75,10 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 
             @Override
             public void afterTextChanged(Editable s) {
-                item.setContent(s.toString());
-                item.update();
+                if (s.toString() != null || !s.toString().equals("")) {
+                    item.setContent(s.toString());
+                    item.update();
+                }
             }
         });
 
@@ -114,27 +116,36 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 llCOntent.setVisibility(View.VISIBLE);
             }
         }
-        defectTrue.setOnClickListener(new View.OnClickListener() {
+
+        defectFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.getStatus().equals("0") || item.getStatus() == null) {
-                    defectTrue.setChecked(true);
+                if (item.getStatus() == null || item.getStatus().equals("0")) {
+                    defectFalse.setChecked(true);
+                    defectTrue.setChecked(false);
+                    llCOntent.setVisibility(View.VISIBLE);
                     item.setStatus("1");
                 } else if (item.getStatus().equals("1")) {
-                    defectTrue.setChecked(false);
+                    defectFalse.setChecked(false);
+                    defectTrue.setChecked(true);
+                    llCOntent.setVisibility(View.GONE);
                     item.setStatus("0");
                 }
                 item.update();
             }
         });
-        defectFalse.setOnClickListener(new View.OnClickListener() {
+        defectTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.getStatus().equals("1") || item.getStatus() == null) {
-                    defectFalse.setChecked(true);
+                if (item.getStatus() == null || item.getStatus().equals("1")) {
+                    defectTrue.setChecked(true);
+                    defectFalse.setChecked(false);
+                    llCOntent.setVisibility(View.GONE);
                     item.setStatus("0");
                 } else if (item.getStatus().equals("0")) {
-                    defectFalse.setChecked(false);
+                    defectTrue.setChecked(false);
+                    defectFalse.setChecked(true);
+                    llCOntent.setVisibility(View.VISIBLE);
                     item.setStatus("1");
                 }
                 item.update();
@@ -201,7 +212,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                     boolean isExist = cursor1.moveToPosition(position);
                     if (isExist) {
                         String levelStr = cursor1.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.LEVEL));
-                        Log.w("linmeng", "levelStr:" + levelStr);   //这里获取的是缺陷等级，给陈飞用！  TODO
+                        Log.w("linmeng", "levelStr:" + levelStr);
                         if (TextUtils.isEmpty(levelStr)) {
                             checkOneRb.setChecked(true);
                             checkTwoRb.setChecked(false);
@@ -315,7 +326,6 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             checkThreeRb.setEnabled(false);
             gridView.setEnabled(false);
             initGridViewFromOnline(gridView, item.getOnline_pics());
-
         } else {
             initGridView(gridView, helper.getAdapterPosition(), item.getPics(), item.getTask_id(), item.getPatrol_id());
         }
