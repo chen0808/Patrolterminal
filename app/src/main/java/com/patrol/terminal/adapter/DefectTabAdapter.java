@@ -75,8 +75,10 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 
             @Override
             public void afterTextChanged(Editable s) {
-                item.setContent(s.toString());
-                item.update();
+                if (s.toString() != null || !s.toString().equals("")) {
+                    item.setContent(s.toString());
+                    item.update();
+                }
             }
         });
 
@@ -89,11 +91,17 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             switch (item.getGrade_id()) {
                 case "10C639F13341484997EE8D955322BE02"://危急
                     checkOneRb.setChecked(true);
+                    checkTwoRb.setChecked(false);
+                    checkThreeRb.setChecked(false);
                     break;
                 case "2CEB42DA67764AC0BF911B02FB579775"://严重
+                    checkOneRb.setChecked(false);
                     checkTwoRb.setChecked(true);
+                    checkThreeRb.setChecked(false);
                     break;
                 case "37E5647975394B1E952DC5D2796C7D73"://一般
+                    checkOneRb.setChecked(false);
+                    checkTwoRb.setChecked(false);
                     checkThreeRb.setChecked(true);
                     break;
             }
@@ -108,13 +116,35 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 llCOntent.setVisibility(View.VISIBLE);
             }
         }
-        rgTitle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+        defectFalse.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == rgTitle.getChildAt(0).getId()) {
+            public void onClick(View v) {
+                if (item.getStatus() == null || item.getStatus().equals("0")) {
+                    defectFalse.setChecked(true);
+                    defectTrue.setChecked(false);
+                    llCOntent.setVisibility(View.VISIBLE);
+                    item.setStatus("1");
+                } else if (item.getStatus().equals("1")) {
+                    defectFalse.setChecked(false);
+                    defectTrue.setChecked(true);
                     llCOntent.setVisibility(View.GONE);
                     item.setStatus("0");
-                } else {
+                }
+                item.update();
+            }
+        });
+        defectTrue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (item.getStatus() == null || item.getStatus().equals("1")) {
+                    defectTrue.setChecked(true);
+                    defectFalse.setChecked(false);
+                    llCOntent.setVisibility(View.GONE);
+                    item.setStatus("0");
+                } else if (item.getStatus().equals("0")) {
+                    defectTrue.setChecked(false);
+                    defectFalse.setChecked(true);
                     llCOntent.setVisibility(View.VISIBLE);
                     item.setStatus("1");
                 }
@@ -182,7 +212,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                     boolean isExist = cursor1.moveToPosition(position);
                     if (isExist) {
                         String levelStr = cursor1.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.LEVEL));
-                        Log.w("linmeng", "levelStr:" + levelStr);   //这里获取的是缺陷等级，给陈飞用！  TODO
+                        Log.w("linmeng", "levelStr:" + levelStr);
                         if (TextUtils.isEmpty(levelStr)) {
                             checkOneRb.setChecked(true);
                             checkTwoRb.setChecked(false);
@@ -296,7 +326,6 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             checkThreeRb.setEnabled(false);
             gridView.setEnabled(false);
             initGridViewFromOnline(gridView, item.getOnline_pics());
-
         } else {
             initGridView(gridView, helper.getAdapterPosition(), item.getPics(), item.getTask_id(), item.getPatrol_id());
         }

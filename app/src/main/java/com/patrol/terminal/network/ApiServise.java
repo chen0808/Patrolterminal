@@ -1035,7 +1035,7 @@ public interface ApiServise {
     //上传巡视记录
     @Multipart
     @POST("task/defect/patrol/recode/savePOST")
-    Observable<BaseResult> test(@PartMap Map<String, RequestBody> params);
+    Observable<BaseResult> uploadPatrolRecord(@PartMap Map<String, RequestBody> params);
 
     //获取小组列表
     @GET("/task/group/dataGET")
