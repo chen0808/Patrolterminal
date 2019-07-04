@@ -115,6 +115,10 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 defectFalse.setChecked(true);
                 llCOntent.setVisibility(View.VISIBLE);
             }
+        } else {
+            defectTrue.setChecked(false);
+            defectFalse.setChecked(false);
+            llCOntent.setVisibility(View.GONE);
         }
 
         defectFalse.setOnClickListener(new View.OnClickListener() {
