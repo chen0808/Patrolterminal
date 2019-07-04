@@ -99,7 +99,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
         setContentView(R.layout.activity_grounded_electronic_measurement);
         ButterKnife.bind(this);
         initview();
-        initedit();
+
     }
 
     private void initedit() {
@@ -202,6 +202,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
             }
         }
         etNote.setText(results.getRemark());
+        initedit();
     }
 
 

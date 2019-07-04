@@ -643,11 +643,11 @@ public class AddWeekPlanActivity extends BaseActivity {
                 week = Integer.parseInt(date.split("周")[0].split("第")[1]);
                 titleName.setText(split[0] + "周计划制定" + split[1]);
                 //获取下周起始和终止日期
-                String beginDate = TimeUtil.getFirstDayOfWeek(year, week);
-                String end2Date = TimeUtil.getLastDayOfWeek(year, week);
+                 beginDate = TimeUtil.getFirstDayOfWeek(year, week);
+                 endDate = TimeUtil.getLastDayOfWeek(year, week);
                 String[] start = beginDate.split("-");
                 String startMonth = start[0];
-                String[] end = end2Date.split("-");
+                String[] end = endDate.split("-");
                 String endMonth = end[0];
                 if (startMonth.equals(endMonth)) {
                     month = Integer.valueOf(startMonth) + "";

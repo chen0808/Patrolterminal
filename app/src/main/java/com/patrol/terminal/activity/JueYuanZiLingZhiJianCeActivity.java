@@ -99,7 +99,7 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity implements Text
 
 
         initData();
-        initClick();
+
     }
 
     public void initClick()
@@ -194,6 +194,7 @@ public class JueYuanZiLingZhiJianCeActivity extends BaseActivity implements Text
             }
         }
         etRemark.setText(jyzBean.getRemark());
+        initClick();
     }
 
 
