@@ -124,34 +124,20 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         defectFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.getStatus() == null || item.getStatus().equals("0")) {
-                    defectFalse.setChecked(true);
-                    defectTrue.setChecked(false);
-                    llCOntent.setVisibility(View.VISIBLE);
-                    item.setStatus("1");
-                } else if (item.getStatus().equals("1")) {
-                    defectFalse.setChecked(false);
-                    defectTrue.setChecked(true);
-                    llCOntent.setVisibility(View.GONE);
-                    item.setStatus("0");
-                }
+                defectFalse.setChecked(true);
+                defectTrue.setChecked(false);
+                llCOntent.setVisibility(View.VISIBLE);
+                item.setStatus("1");
                 item.update();
             }
         });
         defectTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.getStatus() == null || item.getStatus().equals("1")) {
-                    defectTrue.setChecked(true);
-                    defectFalse.setChecked(false);
-                    llCOntent.setVisibility(View.GONE);
-                    item.setStatus("0");
-                } else if (item.getStatus().equals("0")) {
-                    defectTrue.setChecked(false);
-                    defectFalse.setChecked(true);
-                    llCOntent.setVisibility(View.VISIBLE);
-                    item.setStatus("1");
-                }
+                defectTrue.setChecked(true);
+                defectFalse.setChecked(false);
+                llCOntent.setVisibility(View.GONE);
+                item.setStatus("0");
                 item.update();
             }
         });
@@ -250,16 +236,34 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 }
             }
         });
-        rgContentType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        checkOneRb.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == rgContentType.getChildAt(0).getId()) {
-                    item.setGrade_id("10C639F13341484997EE8D955322BE02");
-                } else if (checkedId == rgContentType.getChildAt(1).getId()) {
-                    item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
-                } else if (checkedId == rgContentType.getChildAt(2).getId()) {
-                    item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
-                }
+            public void onClick(View v) {
+                checkOneRb.setChecked(true);
+                checkTwoRb.setChecked(false);
+                checkThreeRb.setChecked(false);
+                item.setGrade_id("10C639F13341484997EE8D955322BE02");
+                item.update();
+            }
+        });
+        checkTwoRb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkOneRb.setChecked(false);
+                checkTwoRb.setChecked(true);
+                checkThreeRb.setChecked(false);
+                item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
+                item.update();
+            }
+        });
+        checkThreeRb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkOneRb.setChecked(false);
+                checkTwoRb.setChecked(false);
+                checkThreeRb.setChecked(true);
+                item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                item.update();
             }
         });
 //        if (item.getStatus().equals("0")) {
