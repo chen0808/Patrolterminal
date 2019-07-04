@@ -454,6 +454,7 @@ public class PatrolRecordActivity extends BaseActivity {
     private void commit() {
         params.clear();
         params.put("task_id", toRequestBody(task_id));
+        localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
         if (localByTaskId != null) {
             if (localByTaskId.getPic1() != null) {
                 RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic1()));
@@ -481,7 +482,6 @@ public class PatrolRecordActivity extends BaseActivity {
             }
         }
 
-        localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
         List<LocalPatrolDefectBean> localDefectByTaskId = SQLite.select().from(LocalPatrolDefectBean.class).where(LocalPatrolDefectBean_Table.task_id.is(task_id)).queryList();
         for (int i = 0; i < localDefectByTaskId.size(); i++) {
             params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(task_id));
@@ -514,7 +514,7 @@ public class PatrolRecordActivity extends BaseActivity {
                     params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.defect_file\"; filename=\"" + localDefectByTaskId.get(i).getPatrol_id() + "_" + j + ".jpg", requestFile);
                 }
             }
-            BaseRequest.getInstance().getService().test(params).subscribeOn(Schedulers.io())
+            BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new BaseObserver(this) {
                         @Override

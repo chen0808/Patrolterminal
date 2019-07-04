@@ -10,9 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.PerformanceAdapter;
 import com.patrol.terminal.adapter.PersonalTaskDetailAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -22,13 +24,18 @@ import com.patrol.terminal.bean.AddressBookLevel2;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GTQXCLbean;
+import com.patrol.terminal.bean.GTQXCLbean_Table;
 import com.patrol.terminal.bean.GroupTaskBean;
-import com.patrol.terminal.bean.GroupTaskBean_Table;
 import com.patrol.terminal.bean.HwcwBean;
 import com.patrol.terminal.bean.HwcwBean_Table;
 import com.patrol.terminal.bean.JDDZbean;
 import com.patrol.terminal.bean.JDDZbean_Table;
 import com.patrol.terminal.bean.JYZbean;
+import com.patrol.terminal.bean.JYZbean_Table;
+import com.patrol.terminal.bean.LocalPatrolDefectBean;
+import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
+import com.patrol.terminal.bean.LocalPatrolRecordBean;
+import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.PlanTypeBean;
@@ -41,16 +48,19 @@ import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * 个人任务详情
@@ -97,8 +107,8 @@ public class PersonalTaskDetailActivity extends BaseActivity {
     private String[] names;
     private List<GroupTaskBean> selectList = new ArrayList<>();
     private String userId;
-    private List<PersonalTaskListBean> selectPersonal =new ArrayList<>();
-    private int saveNum=0;
+    private List<PersonalTaskListBean> selectPersonal = new ArrayList<>();
+    private int saveNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +146,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
             taskGroupName.setText("小组负责人：" + bean.getDuty_user_name());
         }
 
-        tvLineDate.setText("日期："+bean.getYear()+"年"+bean.getMonth()+"月"+bean.getDay()+"日");
+        tvLineDate.setText("日期：" + bean.getYear() + "年" + bean.getMonth() + "月" + bean.getDay() + "日");
 
         tvTableName.setText(bean.getName());
         tvLineName.setText("线路名称 : " + bean.getLine_name());
@@ -148,7 +158,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
 
             titleSettingTv.setText("指派");
             getPersonal();
-        }else {
+        } else {
 
             titleSettingTv.setText("提交");
         }
@@ -156,7 +166,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         month = bean.getMonth();
         day = bean.getDay();
         getDbPersonalList();   //add by linmeng
-        if (Utils.isNetworkConnected(this)){
+        if (Utils.isNetworkConnected(this)) {
             getPersonalList();
         }
 
@@ -170,7 +180,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         titleName.setText("个人任务详情");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         monthPlanDetailRc.setLayoutManager(manager);
-        monthPlanDetailAdapter = new PersonalTaskDetailAdapter(R.layout.item_plan_detail_offline, results,this);
+        monthPlanDetailAdapter = new PersonalTaskDetailAdapter(R.layout.item_plan_detail_offline, results, this);
         monthPlanDetailRc.setAdapter(monthPlanDetailAdapter);
         monthPlanDetailAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -235,9 +245,10 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 .queryList();
 
         if (personalTaskListBeanList != null) {
-            results=personalTaskListBeanList;
-            if (!Utils.isNetworkConnected(this)){
-            monthPlanDetailAdapter.setNewData(results);}
+            results = personalTaskListBeanList;
+            if (!Utils.isNetworkConnected(this)) {
+                monthPlanDetailAdapter.setNewData(results);
+            }
         }
 
     }
@@ -253,19 +264,19 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         ProgressDialog.cancle();
                         List<PersonalTaskListBean> personalTaskListBeanList = t.getResults();
-                        if (personalTaskListBeanList!=null||personalTaskListBeanList.size()>0){
+                        if (personalTaskListBeanList != null || personalTaskListBeanList.size() > 0) {
                             for (int i = 0; i < personalTaskListBeanList.size(); i++) {
                                 PersonalTaskListBean personalTaskListBean = personalTaskListBeanList.get(i);
                                 for (int j = 0; j < results.size(); j++) {
                                     PersonalTaskListBean bean = results.get(j);
-                                    if (personalTaskListBean.getId().equals(bean.getId())&&"0".equals(personalTaskListBean.getAudit_status())){
+                                    if (personalTaskListBean.getId().equals(bean.getId()) && "0".equals(personalTaskListBean.getAudit_status())) {
                                         personalTaskListBean.setIs_save(bean.getIs_save());
                                     }
                                 }
                                 saveToDatebase(personalTaskListBean);
                             }
                         }
-                         results=personalTaskListBeanList;
+                        results = personalTaskListBeanList;
                         monthPlanDetailAdapter.setNewData(results);
                     }
 
@@ -311,7 +322,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
 
         if (existBeans.size() > 0) {   //数据存在
             personalTaskListBean.update();
-        }else {
+        } else {
             personalTaskListBean.save();
         }
 
@@ -322,7 +333,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 25 && resultCode == RESULT_OK) {
             getDbPersonalList();   //add by linmeng
-            if (Utils.isNetworkConnected(this)){
+            if (Utils.isNetworkConnected(this)) {
                 getPersonalList();
             }
             RxRefreshEvent.publish("refreshPersonal");
@@ -411,41 +422,47 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 break;
             case R.id.title_setting:
                 String s = titleSettingTv.getText().toString();
-                if ("指派".equals(s)){
+                if ("指派".equals(s)) {
                     if (names == null) {
                         Toast.makeText(this, "暂未获取人员列表信息,请稍后再试", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     showSingleChooseDialog(names);
-                }else {
+                } else {
                     ProgressDialog.show(this, true, "正在加载。。。");
                     List<PersonalTaskListBean> data = monthPlanDetailAdapter.getData();
                     selectPersonal.clear();
-                    saveNum=0;
+                    saveNum = 0;
                     for (int i = 0; i < data.size(); i++) {
                         PersonalTaskListBean personalTaskListBean = data.get(i);
-                        if (personalTaskListBean.isCheck()){
+                        if (personalTaskListBean.isCheck()) {
                             selectPersonal.add(personalTaskListBean);
                             String type_sign = personalTaskListBean.getType_sign();
                             String id = personalTaskListBean.getId();
-                            switch (type_sign){
+                            switch (type_sign) {
+                                case "1":
+                                case "2":
+                                case "7":
+                                case "11":
+                                    savePatrolRecord(id, type_sign);
+                                    break;//巡视
                                 case "3": //提交接电电阻
-                                    saveJDDZ(id,type_sign);
+                                    saveJDDZ(id, type_sign);
                                     break;
                                 case "5": //提交红外测温
-                                    saveHWCW(id,type_sign);
+                                    saveHWCW(id, type_sign);
                                     break;
                                 case "6": //提交杆塔倾斜
-                                    saveGTQXCL(id,type_sign);
+                                    saveGTQXCL(id, type_sign);
                                     break;
                                 case "10"://提交绝缘子
-                                    saveJYZ(id,type_sign);
+                                    saveJYZ(id, type_sign);
                                     break;
                             }
                         }
                     }
-                    if (selectPersonal.size()==0){
-                        Toast.makeText(this,"请先选中待上传的任务",Toast.LENGTH_SHORT).show();
+                    if (selectPersonal.size() == 0) {
+                        Toast.makeText(this, "请先选中待上传的任务", Toast.LENGTH_SHORT).show();
                         ProgressDialog.cancle();
                     }
                 }
@@ -476,7 +493,97 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 });
 
     }
-    public void saveHWCW(String id,String sign){
+
+    private void savePatrolRecord(String id, String type_sign) {
+        Map<String, RequestBody> params = new HashMap<>();
+        params.put("task_id", toRequestBody(id));
+        LocalPatrolRecordBean localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(id)).querySingle();
+        if (localByTaskId != null) {
+            if (localByTaskId.getPic1() != null) {
+                RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic1()));
+                params.put("patrolFile\"; filename=\"1.jpg", requestFile1);
+            }
+            if (localByTaskId.getPic2() != null) {
+                RequestBody requestFile2 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic2()));
+                params.put("patrolFile\"; filename=\"2.jpg", requestFile2);
+            }
+            if (localByTaskId.getPic3() != null) {
+                RequestBody requestFile3 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic3()));
+                params.put("patrolFile\"; filename=\"3.jpg", requestFile3);
+            }
+            if (localByTaskId.getPic4() != null) {
+                RequestBody requestFile4 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic4()));
+                params.put("patrolFile\"; filename=\"4.jpg", requestFile4);
+            }
+            if (localByTaskId.getPic5() != null) {
+                RequestBody requestFile5 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic5()));
+                params.put("patrolFile\"; filename=\"5.jpg", requestFile5);
+            }
+            if (localByTaskId.getPic6() != null) {
+                RequestBody requestFile6 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic6()));
+                params.put("patrolFile\"; filename=\"6.jpg", requestFile6);
+            }
+        }
+
+        List<LocalPatrolDefectBean> localDefectByTaskId = SQLite.select().from(LocalPatrolDefectBean.class).where(LocalPatrolDefectBean_Table.task_id.is(id)).queryList();
+        for (int i = 0; i < localDefectByTaskId.size(); i++) {
+            params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(id));
+            params.put("taskDefectPatrolRecodeList[" + i + "].patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].status", toRequestBody(localDefectByTaskId.get(i).getStatus()));
+            if (localDefectByTaskId.get(i).getStatus() == null) {
+                Toast.makeText(PersonalTaskDetailActivity.this, "常规巡视未填写完整", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.task_id", toRequestBody(id));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.category_id", toRequestBody(localDefectByTaskId.get(i).getCategory_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.grade_id", toRequestBody(localDefectByTaskId.get(i).getGrade_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.content", toRequestBody(localDefectByTaskId.get(i).getContent()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.line_id", toRequestBody(localByTaskId.getLine_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.line_name", toRequestBody(localByTaskId.getLine_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_id", toRequestBody(localByTaskId.getUser_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_name", toRequestBody(localByTaskId.getUser_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_id", toRequestBody(localByTaskId.getDep_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_name", toRequestBody(localByTaskId.getDep_name()));
+            String pics = localDefectByTaskId.get(i).getPics();
+            if (pics != null) {
+                String[] split = pics.split(";");
+                for (int j = 0; j < split.length; j++) {
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
+                    params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.defect_file\"; filename=\"" + localDefectByTaskId.get(i).getPatrol_id() + "_" + j + ".jpg", requestFile);
+                }
+            }
+            BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new BaseObserver(this) {
+                        @Override
+                        protected void onSuccees(BaseResult t) throws Exception {
+                            saveTodoAudit(id, type_sign);
+                        }
+
+                        @Override
+                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                        }
+                    });
+        }
+    }
+
+    public RequestBody toRequestBody(String value) {
+        if (value != null) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            return requestBody;
+        } else {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            return requestBody;
+        }
+    }
+
+    public void saveHWCW(String id, String sign) {
         HwcwBean bean = SQLite.select().from(HwcwBean.class).where(HwcwBean_Table.task_id.is(id), JDDZbean_Table.user_id.eq(userId)).querySingle();
         BaseRequest.getInstance().getService().upLoadInfrared(bean).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -484,10 +591,11 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         if (t.getCode() == 1) {
-                            saveTodoAudit(id,sign);   //同意
+                            saveTodoAudit(id, sign);   //同意
                         }
 
                     }
+
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
@@ -495,18 +603,20 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 });
 
     }
-    public void saveJDDZ(String id,String sign){
-        JDDZbean bean = SQLite.select().from(JDDZbean.class).where(HwcwBean_Table.task_id.is(id), JDDZbean_Table.user_id.eq(userId)).querySingle();
+
+    public void saveJDDZ(String id, String sign) {
+        JDDZbean bean = SQLite.select().from(JDDZbean.class).where(JDDZbean_Table.task_id.is(id), JDDZbean_Table.user_id.eq(userId)).querySingle();
         BaseRequest.getInstance().getService().upLoadResistance(bean).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<HwcwBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         if (t.getCode() == 1) {
-                            saveTodoAudit(id,sign);   //同意
+                            saveTodoAudit(id, sign);   //同意
                         }
 
                     }
+
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
@@ -514,18 +624,20 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 });
 
     }
-    public void saveGTQXCL(String id,String sign){
-        GTQXCLbean bean = SQLite.select().from(GTQXCLbean.class).where(HwcwBean_Table.task_id.is(id), JDDZbean_Table.user_id.eq(userId)).querySingle();
+
+    public void saveGTQXCL(String id, String sign) {
+        GTQXCLbean bean = SQLite.select().from(GTQXCLbean.class).where(GTQXCLbean_Table.task_id.is(id), GTQXCLbean_Table.user_id.eq(userId)).querySingle();
         BaseRequest.getInstance().getService().upLoadTowerBias(bean).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<HwcwBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         if (t.getCode() == 1) {
-                            saveTodoAudit(id,sign);   //同意
+                            saveTodoAudit(id, sign);   //同意
                         }
 
                     }
+
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
@@ -533,18 +645,20 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 });
 
     }
-    public void saveJYZ(String id,String sign){
-        JYZbean bean = SQLite.select().from(JYZbean.class).where(HwcwBean_Table.task_id.is(id), JDDZbean_Table.user_id.eq(userId)).querySingle();
+
+    public void saveJYZ(String id, String sign) {
+        JYZbean bean = SQLite.select().from(JYZbean.class).where(JYZbean_Table.task_id.is(id), JYZbean_Table.user_id.eq(userId)).querySingle();
         BaseRequest.getInstance().getService().upLoadInsulator(bean).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<HwcwBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<HwcwBean> t) throws Exception {
                         if (t.getCode() == 1) {
-                            saveTodoAudit(id,sign);   //同意
+                            saveTodoAudit(id, sign);   //同意
                         }
 
                     }
+
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
@@ -552,8 +666,9 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 });
 
     }
+
     //保存待办信息
-    public void saveTodoAudit(String id,String sign) {
+    public void saveTodoAudit(String id, String sign) {
 
         SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
         saveTodoReqbean.setAudit_status("1");
@@ -568,7 +683,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
                         saveNum++;
-                        if (saveNum==selectPersonal.size()){
+                        if (saveNum == selectPersonal.size()) {
                             RxRefreshEvent.publish("refreshTodo");
                             RxRefreshEvent.publish("refreshGroup");
                             getPersonalList();

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -28,10 +29,15 @@ import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.PatrolContentBean;
+import com.patrol.terminal.sqlite.AppDataBase;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.RxRefreshEvent;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -78,6 +84,7 @@ public class PatrolContentFrgment extends BaseFragment {
     private LocalPatrolDefectBean localBean;
     private List<LocalPatrolDefectBean> localByTaskId;
     private List<PatrolContentBean> results;
+    private String TAG = "PatrolContentFrgment";
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,27 +119,8 @@ public class PatrolContentFrgment extends BaseFragment {
 //                        if (localBean == null) {
 //
 //                        }
-                        for (int i = 0; i < results.size(); i++) {
-                            localBean = new LocalPatrolDefectBean();
-                            localBean.setTask_id(task_id);
-                            localBean.setTab_name(results.get(i).getName());
-                            localBean.setPatrol_id(results.get(i).getPatrol_id());
-                            localBean.setPatrol_name(results.get(i).getRemarks());
-                            localBean.setStatus(results.get(i).getStatus());
-                            if (results.get(i).getTaskDefect() != null) {
-                                if (results.get(i).getTaskDefect().getContent() != null) {
-                                    localBean.setContent(results.get(i).getTaskDefect().getContent());
-                                }
-                                if (results.get(i).getTaskDefect().getGrade_id() != null) {
-                                    localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
-                                }
-                            }
-                            localBean.setCategory_id(results.get(i).getCategory());
-                            String onlinePics = getOnlinePics(i);
-                            localBean.setOnline_pics(onlinePics);
-                            save(results.get(i).getPatrol_id());
-                        }
-                        query();
+                        saveLocalAsync(results);
+
                     }
 
                     @Override
@@ -140,6 +128,60 @@ public class PatrolContentFrgment extends BaseFragment {
 
                     }
                 });
+    }
+
+    //异步存储到本地
+    private void saveLocalAsync(List<PatrolContentBean> results) {
+        FlowManager.getDatabase(AppDataBase.class).beginTransactionAsync(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                for (int i = 0; i < results.size(); i++) {
+                    localBean = new LocalPatrolDefectBean();
+                    localBean.setTask_id(task_id);
+                    localBean.setTab_name(results.get(i).getName());
+                    localBean.setPatrol_id(results.get(i).getPatrol_id());
+                    localBean.setStatus(results.get(i).getStatus());
+                    if (results.get(i).getRemarks() != null) {
+                        localBean.setPatrol_name(results.get(i).getRemarks());
+                    }
+                    if (results.get(i).getTaskDefect() != null) {
+                        if (results.get(i).getTaskDefect().getContent() != null) {
+                            localBean.setContent(results.get(i).getTaskDefect().getContent());
+                        }
+                        if (results.get(i).getTaskDefect().getGrade_id() != null) {
+                            localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
+                        }
+                    }
+                    localBean.setCategory_id(results.get(i).getCategory());
+                    String onlinePics = getOnlinePics(i);
+                    localBean.setOnline_pics(onlinePics);
+                    save(results.get(i).getPatrol_id());
+                }
+            }
+        }).success(new Transaction.Success() {
+            @Override
+            public void onSuccess(@NonNull Transaction transaction) {
+                Log.e(TAG, "onSuccess()");
+                query();
+            }
+        }).error(new Transaction.Error() {
+            @Override
+            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+                Log.e(TAG, "onError()");
+            }
+        }).build().execute();
+    }
+
+    private void save(String patrol_id) {
+        localByPatrolId = SQLite.select().from(LocalPatrolDefectBean.class)
+                .where(LocalPatrolDefectBean_Table.patrol_id.is(patrol_id))
+                .and(LocalPatrolDefectBean_Table.task_id.is(task_id))
+                .queryList();
+        if (localByPatrolId != null && localByPatrolId.size() > 0) {
+            localBean.update();
+        } else {
+            localBean.save();
+        }
     }
 
     private String getOnlinePics(int i) {
@@ -154,18 +196,6 @@ public class PatrolContentFrgment extends BaseFragment {
             }
         }
         return picsOnline;
-    }
-
-    private void save(String patrol_id) {
-        localByPatrolId = SQLite.select().from(LocalPatrolDefectBean.class)
-                .where(LocalPatrolDefectBean_Table.patrol_id.is(patrol_id))
-                .and(LocalPatrolDefectBean_Table.task_id.is(task_id))
-                .queryList();
-        if (localByPatrolId != null && localByPatrolId.size() > 0) {
-            localBean.update();
-        } else {
-            localBean.save();
-        }
     }
 
     //查询本地数据

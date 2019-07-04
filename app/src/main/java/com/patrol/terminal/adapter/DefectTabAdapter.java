@@ -89,11 +89,17 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             switch (item.getGrade_id()) {
                 case "10C639F13341484997EE8D955322BE02"://危急
                     checkOneRb.setChecked(true);
+                    checkTwoRb.setChecked(false);
+                    checkThreeRb.setChecked(false);
                     break;
                 case "2CEB42DA67764AC0BF911B02FB579775"://严重
+                    checkOneRb.setChecked(false);
                     checkTwoRb.setChecked(true);
+                    checkThreeRb.setChecked(false);
                     break;
                 case "37E5647975394B1E952DC5D2796C7D73"://一般
+                    checkOneRb.setChecked(false);
+                    checkTwoRb.setChecked(false);
                     checkThreeRb.setChecked(true);
                     break;
             }
@@ -108,14 +114,27 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 llCOntent.setVisibility(View.VISIBLE);
             }
         }
-        rgTitle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        defectTrue.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == rgTitle.getChildAt(0).getId()) {
-                    llCOntent.setVisibility(View.GONE);
+            public void onClick(View v) {
+                if (item.getStatus().equals("0") || item.getStatus() == null) {
+                    defectTrue.setChecked(true);
+                    item.setStatus("1");
+                } else if (item.getStatus().equals("1")) {
+                    defectTrue.setChecked(false);
                     item.setStatus("0");
-                } else {
-                    llCOntent.setVisibility(View.VISIBLE);
+                }
+                item.update();
+            }
+        });
+        defectFalse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (item.getStatus().equals("1") || item.getStatus() == null) {
+                    defectFalse.setChecked(true);
+                    item.setStatus("0");
+                } else if (item.getStatus().equals("0")) {
+                    defectFalse.setChecked(false);
                     item.setStatus("1");
                 }
                 item.update();
