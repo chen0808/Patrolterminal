@@ -211,7 +211,7 @@ public class GroupTaskFrgment extends BaseFragment {
     public void getData() {
         isRefresh=false;
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-            taskAdd.setVisibility(View.VISIBLE);
+//            taskAdd.setVisibility(View.VISIBLE);
             depId = SPUtil.getDepId(getContext());
             getGroupList();
         } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
