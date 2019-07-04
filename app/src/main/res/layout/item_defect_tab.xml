@@ -15,35 +15,30 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginRight="70dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:textColor="@color/black" />
 
-        <RadioGroup
-            android:id="@+id/rg_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/iv_defect_false"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:orientation="horizontal">
+            android:src="@mipmap/defect_false_unchecked" />
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:button="@null"
-                android:drawableLeft="@drawable/selector_true_check" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@null"
-                android:drawableLeft="@drawable/selector_false_check" />
-        </RadioGroup>
+        <ImageView
+            android:id="@+id/iv_defect_true"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@id/iv_defect_false"
+            android:src="@mipmap/defect_true_unchecked" />
     </RelativeLayout>
 
     <LinearLayout

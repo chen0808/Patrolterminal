@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
@@ -56,9 +58,8 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         GridView gridView = helper.getView(R.id.gridView);
         helper.setText(R.id.tv_content, item.getPatrol_name());
         RelativeLayout rlTitle = helper.getView(R.id.rl_title);
-        RadioGroup rgTitle = helper.getView(R.id.rg_title);
-        RadioButton defectTrue = (RadioButton) rgTitle.getChildAt(0);
-        RadioButton defectFalse = (RadioButton) rgTitle.getChildAt(1);
+        ImageView defectTrue = helper.getView(R.id.iv_defect_true);
+        ImageView defectFalse = helper.getView(R.id.iv_defect_false);
         LinearLayout llCOntent = helper.getView(R.id.ll_content);
         AutoCompleteTextView tvDiverWay = helper.getView(R.id.tv_diver_way);
         tvDiverWay.setText(item.getContent());
@@ -109,23 +110,23 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 
         if (item.getStatus() != null) {
             if (item.getStatus().equals("0")) {
-                defectTrue.setChecked(true);
+                Glide.with(mContext).load(R.mipmap.defect_true_checked).into(defectTrue);
                 llCOntent.setVisibility(View.GONE);
             } else if (item.getStatus().equals("1")) {
-                defectFalse.setChecked(true);
+                Glide.with(mContext).load(R.mipmap.defect_false_checked).into(defectFalse);
                 llCOntent.setVisibility(View.VISIBLE);
             }
         } else {
-            defectTrue.setChecked(false);
-            defectFalse.setChecked(false);
+            Glide.with(mContext).load(R.mipmap.defect_true_unchecked).into(defectTrue);
+            Glide.with(mContext).load(R.mipmap.defect_false_unchecked).into(defectFalse);
             llCOntent.setVisibility(View.GONE);
         }
 
         defectFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                defectFalse.setChecked(true);
-                defectTrue.setChecked(false);
+                Glide.with(mContext).load(R.mipmap.defect_true_unchecked).into(defectTrue);
+                Glide.with(mContext).load(R.mipmap.defect_false_checked).into(defectFalse);
                 llCOntent.setVisibility(View.VISIBLE);
                 item.setStatus("1");
                 item.update();
@@ -134,8 +135,8 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         defectTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                defectTrue.setChecked(true);
-                defectFalse.setChecked(false);
+                Glide.with(mContext).load(R.mipmap.defect_true_checked).into(defectTrue);
+                Glide.with(mContext).load(R.mipmap.defect_false_unchecked).into(defectFalse);
                 llCOntent.setVisibility(View.GONE);
                 item.setStatus("0");
                 item.update();
@@ -148,7 +149,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                     llCOntent.setVisibility(View.GONE);
                     item.setStatus("0");
                 } else {
-                    if (defectFalse.isChecked()) {
+                    if (item.getStatus() != null && item.getStatus().equals("0")) {
                         llCOntent.setVisibility(View.VISIBLE);
                         item.setStatus("1");
                     }

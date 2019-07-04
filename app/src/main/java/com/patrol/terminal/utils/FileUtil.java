@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
@@ -23,7 +24,7 @@ public class FileUtil {
 
     // 压缩图片尺寸
     public static Bitmap compressBySize(String pathName, int targetWidth,
-                                         int targetHeight) {
+                                        int targetHeight) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;// 不去真的解析图片，只是获取图片的头部信息，包含宽高等；
         Bitmap bitmap = BitmapFactory.decodeFile(pathName, opts);
@@ -49,6 +50,7 @@ public class FileUtil {
 
     //保存压缩后的图片
     public static void saveFile(Bitmap bitmap, String filePath2) throws IOException {
+        Log.d("aaaaaaa", bitmap.getByteCount() + "");
         // TODO Auto-generated method stub
         File testFile = new File(Environment.getExternalStorageDirectory().getPath()
                 + "/MyPhoto");
@@ -58,10 +60,9 @@ public class FileUtil {
 
         File myCaptureFile = new File(filePath2);
         System.out.println("------filePath2==" + filePath2);
-        BufferedOutputStream bos = new BufferedOutputStream(
-                new FileOutputStream(myCaptureFile));
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
         // 100表示不进行压缩，70表示压缩率为30%
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         bos.flush();
         bos.close();
     }

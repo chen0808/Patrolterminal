@@ -34,8 +34,6 @@ import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
-import com.patrol.terminal.bean.TSSXLocalBean;
-import com.patrol.terminal.bean.TSSXLocalBean_Table;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
@@ -556,7 +554,7 @@ public class PatrolRecordActivity extends BaseActivity {
         }
 
         //本地特殊屬性
-        List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(task_id)).queryList();
+     /*   List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(task_id)).queryList();
         for (int i = 0; i < localByTssx.size(); i++) {
 //            params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(task_id));
 //            params.put("taskDefectPatrolRecodeList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getTask_key()));
@@ -583,7 +581,7 @@ public class PatrolRecordActivity extends BaseActivity {
                     params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
                 }
             }
-        }
+        }*/
 
         BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
