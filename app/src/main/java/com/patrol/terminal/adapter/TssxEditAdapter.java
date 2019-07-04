@@ -128,8 +128,6 @@ public class TssxEditAdapter extends BaseAdapter {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Constant.defect_tssx_id = tssxList.get(position).getKey();
-                Constant.defect_tssx_index = position;
 //                clickAdapter.setDataPhoto(position);
 
                 if (position == parent.getChildCount() - 1) {
@@ -138,6 +136,7 @@ public class TssxEditAdapter extends BaseAdapter {
                         //查看大图
                     } else {
                         //添加凭证图片
+                        clickAdapter.updatePhoto(position);
                         startCamera();
                     }
                 }
@@ -169,9 +168,9 @@ public class TssxEditAdapter extends BaseAdapter {
      * 更新照片
      * @param photoStr
      */
-    public void setPhotoData(String photoStr)
+    public void setPhotoData(String photoStr,int position)
     {
-        tssxList.get(Constant.defect_tssx_index).getPhotoList().add(photoStr);
+        tssxList.get(position).getPhotoList().add(photoStr);
         holder.tssx_edit.setNotifyDataSetChanged();
     }
 
@@ -205,6 +204,7 @@ public class TssxEditAdapter extends BaseAdapter {
         Cursor getCursor();
         void updateYhnr(String task_key,String yhnr);//task_key  屬性key
         void updateDJ(String task_key,String dj);//task_key  屬性key
+        void updatePhoto(int position);//更新adapter position
     }
 
 }

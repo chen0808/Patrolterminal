@@ -78,11 +78,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
     private List<TSSXBean> lfTssxList = new ArrayList<>();
     private List<TSSXBean> qtTssxList = new ArrayList<>();
 
-    /**添加的特殊属性列表*/
-    private List<TSSXLocalBean> skLocalList = new ArrayList<>();
-    private List<TSSXLocalBean> lfLocalList = new ArrayList<>();
-    private List<TSSXLocalBean> qtLocalList = new ArrayList<>();
-
 
     private TssxEditAdapter skEditAdapter;
     private TssxEditAdapter lfEditAdapter;
@@ -95,6 +90,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
     private Cursor cursor;
     private String task_id;
     private String line_id;
+    private int indexPosition;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -208,6 +204,11 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 updateDjBean(task_key,dj);
             }
 
+            @Override
+            public void updatePhoto(int position) {
+                indexPosition = position;
+            }
+
         });
 
         lfEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
@@ -237,6 +238,11 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 updateDjBean(task_key,dj);
             }
 
+            @Override
+            public void updatePhoto(int position) {
+                indexPosition = position;
+            }
+
         });
 
         qtEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
@@ -264,6 +270,11 @@ public class SpecialTSSXFrgment extends BaseFragment {
             @Override
             public void updateDJ(String task_key, String dj) {
                 updateDjBean(task_key,dj);
+            }
+
+            @Override
+            public void updatePhoto(int position) {
+                indexPosition = position;
             }
 
         });
@@ -350,13 +361,13 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
                         switch (sankua_rad.getCheckedRadioButtonId()){
                             case R.id.tssx_sankua:
-                                skEditAdapter.setPhotoData(path);
+                                skEditAdapter.setPhotoData(path,indexPosition);
                                 break;
                             case R.id.tssx_liufang:
-                                lfEditAdapter.setPhotoData(path);
+                                lfEditAdapter.setPhotoData(path,indexPosition);
                                 break;
                             case R.id.tssx_qita:
-                                qtEditAdapter.setPhotoData(path);
+                                qtEditAdapter.setPhotoData(path,indexPosition);
                                 break;
                         }
 
