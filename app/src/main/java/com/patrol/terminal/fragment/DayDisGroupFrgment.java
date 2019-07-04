@@ -14,6 +14,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.NewMainActivity;
 import com.patrol.terminal.adapter.GroupPersonalAdapter;
 import com.patrol.terminal.adapter.GroupTeamAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -26,6 +27,7 @@ import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.GroupTeamBean;
 import com.patrol.terminal.bean.GroupTeamSaveBean;
+import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
@@ -46,6 +48,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+//今日分组
 public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter.OnItemClickListener {
 
 
@@ -499,6 +502,10 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                 AddGroupTaskReqBean.UsersBean usersBean = new AddGroupTaskReqBean.UsersBean();
                 duty_user_id = depUserBean.getId();
                 duty_user_name = depUserBean.getName();
+                if (duty_user_id.equals(SPUtil.getUserId(getContext()))){
+                  String  jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+                    SPUtil.putString(getContext(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_TEMA_LEADER + "," + jobType);
+                }
                 usersBean.setSign("2");
                 usersBean.setUser_id(depUserBean.getId());
                 usersBean.setUser_name(depUserBean.getName());
