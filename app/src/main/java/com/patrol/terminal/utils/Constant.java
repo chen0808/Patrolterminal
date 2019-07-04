@@ -121,4 +121,5 @@ public class Constant {
     public static int defect_index = -1;//巡视位置
     public static String defect_patrol_id = "";//巡视内容id
     public static int defect_patrol_index = -1;//图片位置
+    public static String patrol_record_audit_status = "";//巡视任务状态
 }
