@@ -96,6 +96,12 @@ public class DateUatil {
         SimpleDateFormat format = new SimpleDateFormat("dd日");
         return format.format(date);
     }
+
+    public static String getDateStr() {//可根据需要自行截取数据显示
+        Date date = new Date(System.currentTimeMillis());
+        return getDate(date);
+    }
+
     public static String getDate(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
