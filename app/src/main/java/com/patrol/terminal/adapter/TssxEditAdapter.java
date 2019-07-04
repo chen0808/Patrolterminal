@@ -128,19 +128,27 @@ public class TssxEditAdapter extends BaseAdapter {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Constant.defect_tssx_id = tssxList.get(position).getKey();
-//                Constant.defect_tssx_index = position;
-//                clickAdapter.setDataPhoto(position);
-
-                if (position == parent.getChildCount() - 1) {
+                Log.e("position getChildCount",position+"====="+parent.getChildCount()+"===="+i);//"position  parent getChildCount"
                     //如果“增加按钮形状的”图片的位置是最后一张，且添加了的图片的数量不超过5张，才能点击
                     if (tssxList.size() == Constant.MAX_SELECT_PIC_NUM) {
                         //查看大图
                     } else {
                         //添加凭证图片
+                        String oldphoto = "";
+                        Boolean isAdd = false;
+                        if(i == 0 && tssxList.get(position).getPhotoList().size() == 0){
+                            isAdd = true;
+                        }else{
+                            if (i == tssxList.get(position).getPhotoList().size()){
+                                isAdd = true;
+                            }else{
+                                isAdd = false;
+                                oldphoto = tssxList.get(position).getPhotoList().get(i);
+                            }
+                        }
+                        clickAdapter.updatePhoto(tssxList.get(position).getKey(),position,i,oldphoto,isAdd);
                         startCamera();
                     }
-                }
             }
         });
 
@@ -169,10 +177,16 @@ public class TssxEditAdapter extends BaseAdapter {
      * 更新照片
      * @param photoStr
      */
-    public void setPhotoData(String photoStr)
+    public void setPhotoData(String photoStr,int parIndex,int position)
     {
-//        tssxList.get(Constant.defect_tssx_index).getPhotoList().add(photoStr);
-        holder.tssx_edit.setNotifyDataSetChanged();
+        Log.e("setPhotoData",parIndex+"=="+position);
+        if(position == tssxList.get(parIndex).getPhotoList().size()){
+            tssxList.get(parIndex).getPhotoList().add(photoStr);
+        }else{
+            tssxList.get(parIndex).getPhotoList().set(position,photoStr);
+        }
+
+        holder.tssx_edit.setNotifyDataSetChanged(tssxList.get(parIndex).getPhotoList());
     }
 
     //打开相机
@@ -205,6 +219,7 @@ public class TssxEditAdapter extends BaseAdapter {
         Cursor getCursor();
         void updateYhnr(String task_key,String yhnr);//task_key  屬性key
         void updateDJ(String task_key,String dj);//task_key  屬性key
+        void updatePhoto(String task_key,int index,int position,String oldPhoto,boolean isAdd);//更新adapter index  item的position
     }
 
 }

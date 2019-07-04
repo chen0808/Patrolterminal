@@ -23,18 +23,14 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
     private ViewHolder holder;
     private int tssxId;
 
-    public TssxPhotoAdapter(Context mContext) {
-        this.mContext = mContext;
+    public TssxPhotoAdapter(Context context) {
+        this.mContext = context;
     }
 
-    public TssxPhotoAdapter(Context mContext, List<String> mList) {
-        this.mContext = mContext;
+    public TssxPhotoAdapter(Context context, List<String> mList) {
+        this.mContext = context;
         this.mList = mList;
-        inflater = LayoutInflater.from(mContext);
-//        bean = SQLite.select().from(LocalPatrolDefectBean.class)
-//                .where(LocalPatrolDefectBean_Table.patrol_id.is(patrol_id))
-//                .and(LocalPatrolDefectBean_Table.task_id.is(task_id))
-//                .querySingle();
+        inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -70,14 +66,15 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
             convertView.setTag(holder);
         }
 
-        if (position < mList.size()) {
-            //代表+号之前的需要正常显示图片
+        if (position == mList.size()) {//代表+号之前的需要正常显示图片
+            holder.iv.setImageResource(R.drawable.item_photo_add);//最后一个显示加号图片
+            holder.ivDelete.setVisibility(View.GONE);
+        } else {
             Glide.with(mContext).load(new File(mList.get(position))).into(holder.iv);
             holder.ivDelete.setVisibility(View.VISIBLE);
-        } else {
-            holder.iv.setImageResource(R.mipmap.zj);//最后一个显示加号图片
-            holder.ivDelete.setVisibility(View.GONE);
         }
+
+
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +91,12 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
             }
         });
         return convertView;
+    }
+
+    public void setNotifyDataSetChanged(List<String> list)
+    {
+        this.mList = list;
+        notifyDataSetChanged();
     }
 
     class ViewHolder {
