@@ -102,7 +102,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
         setContentView(R.layout.activity_incline_thermometry);
         ButterKnife.bind(this);
         initview();
-        initedit();
+
     }
 
     private void initedit() {
@@ -417,6 +417,7 @@ public class XieGanTaQingXieCeWenActivity extends BaseActivity implements TextWa
             }
         }
         etRemark.setText(results.getRemark());
+        initedit();
     }
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {

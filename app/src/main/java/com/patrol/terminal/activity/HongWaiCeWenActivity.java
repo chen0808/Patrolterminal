@@ -129,7 +129,7 @@ public class HongWaiCeWenActivity extends BaseActivity implements TextWatcher {
         typename = getIntent().getStringExtra("typename");
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         localBean = new HwcwBean();
-        addTextChangeListener();
+
         spLinkType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -212,9 +212,8 @@ public class HongWaiCeWenActivity extends BaseActivity implements TextWatcher {
                     spLinkType.setSelection(i);
                 }
             }
-        } else {
-            tvTowerType.setText("无");
         }
+        addTextChangeListener();
     }
 
 
