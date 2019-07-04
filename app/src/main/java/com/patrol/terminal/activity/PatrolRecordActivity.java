@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -41,6 +42,7 @@ import com.patrol.terminal.fragment.DefectFrgment;
 import com.patrol.terminal.fragment.PatrolContentFrgment;
 import com.patrol.terminal.fragment.SpecialTSSXFrgment;
 import com.patrol.terminal.fragment.TroubleFrgment;
+import com.patrol.terminal.sqlite.AppDataBase;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.RxRefreshEvent;
@@ -49,7 +51,11 @@ import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.NoScrollViewPager;
 import com.patrol.terminal.widget.PinchImageView;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -118,7 +124,6 @@ public class PatrolRecordActivity extends BaseActivity {
     private String jobType;
     private String task_id;
     public String audit_status;
-    private LocalPatrolRecordBean localBean;
     private int picIndex = 0;
     private LocalPatrolRecordBean localByTaskId;
 
@@ -244,21 +249,8 @@ public class PatrolRecordActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
                         TaskBean bean = t.getResults();
-                        localBean = SQLite.select().from(LocalPatrolRecordBean.class).querySingle();
-                        if (localBean == null) {
-                            localBean = new LocalPatrolRecordBean();
-                        }
-                        localBean.setTask_id(bean.getId());
-                        localBean.setLine_id(bean.getLine_id());
-                        localBean.setType_sign(bean.getType_sign());
-                        localBean.setLine_name(bean.getLine_name());
-                        localBean.setTower_id(bean.getTower_id());
-                        localBean.setTower_name(bean.getTower_name());
-                        localBean.setUser_id(bean.getUser_id());
-                        localBean.setUser_name(bean.getUser_name());
-                        localBean.setDep_id(bean.getDep_id());
-                        localBean.setDep_name(bean.getDep_name());
-                        save();
+                        saveLocalAsync(bean);
+//                        save(localBean);
                         query();
                     }
 
@@ -269,15 +261,60 @@ public class PatrolRecordActivity extends BaseActivity {
                 });
     }
 
+    //异步存储到本地
+    private void saveLocalAsync(TaskBean bean) {
+        FlowManager.getDatabase(AppDataBase.class).beginTransactionAsync(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                LocalPatrolRecordBean localBean = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
+                if (localBean == null) {
+                    localBean = new LocalPatrolRecordBean();
+                    localBean.setTask_id(bean.getId());
+                    localBean.setLine_id(bean.getLine_id());
+                    localBean.setType_sign(bean.getType_sign());
+                    localBean.setLine_name(bean.getLine_name());
+                    localBean.setTower_id(bean.getTower_id());
+                    localBean.setTower_name(bean.getTower_name());
+                    localBean.setUser_id(bean.getUser_id());
+                    localBean.setUser_name(bean.getUser_name());
+                    localBean.setDep_id(bean.getDep_id());
+                    localBean.setDep_name(bean.getDep_name());
+                    localBean.save();
+                } else {
+                    localBean.setTask_id(bean.getId());
+                    localBean.setLine_id(bean.getLine_id());
+                    localBean.setType_sign(bean.getType_sign());
+                    localBean.setLine_name(bean.getLine_name());
+                    localBean.setTower_id(bean.getTower_id());
+                    localBean.setTower_name(bean.getTower_name());
+                    localBean.setUser_id(bean.getUser_id());
+                    localBean.setUser_name(bean.getUser_name());
+                    localBean.setDep_id(bean.getDep_id());
+                    localBean.setDep_name(bean.getDep_name());
+                    localBean.update();
+                }
+            }
+        }).success(new Transaction.Success() {
+            @Override
+            public void onSuccess(@NonNull Transaction transaction) {
+                query();
+            }
+        }).error(new Transaction.Error() {
+            @Override
+            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+            }
+        }).build().execute();
+
+    }
+
     //查询当前task_id对应数据是否为空，如果为空，保存，否则，更新
-    private void save() {
+    private void save(LocalPatrolRecordBean localBean) {
         localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
         if (localByTaskId != null) {
             localBean.update();
         } else {
             localBean.save();
         }
-        localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
     }
 
     //获取当前task_id对应的数据
@@ -521,7 +558,7 @@ public class PatrolRecordActivity extends BaseActivity {
         //本地特殊屬性
         List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(task_id)).queryList();
         for (int i = 0; i < localByTssx.size(); i++) {
-//                    params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(task_id));
+//            params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(task_id));
 //            params.put("taskDefectPatrolRecodeList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getTask_key()));
 //            params.put("taskDefectPatrolRecodeList[" + i + "].line_id", toRequestBody(localByTssx.get(i).getLine_id()));//线路id
 //            params.put("taskDefectPatrolRecodeList[" + i + "].tower_id", toRequestBody(localByTaskId.getTower_id()));//杆塔id
@@ -641,30 +678,47 @@ public class PatrolRecordActivity extends BaseActivity {
                         switch (picIndex) {
                             case 1:
                                 ivPhoto1.setImageBitmap(bitmap);
-                                localBean.setPic1(path);
+                                SQLite.update(LocalPatrolRecordBean.class)
+                                        .set(LocalPatrolRecordBean_Table.pic1.eq(path))
+                                        .where(LocalPatrolRecordBean_Table.task_id.eq(task_id))
+                                        .execute();
                                 break;
                             case 2:
                                 ivPhoto2.setImageBitmap(bitmap);
-                                localBean.setPic2(path);
+                                SQLite.update(LocalPatrolRecordBean.class)
+                                        .set(LocalPatrolRecordBean_Table.pic2.eq(path))
+                                        .where(LocalPatrolRecordBean_Table.task_id.eq(task_id))
+                                        .execute();
                                 break;
                             case 3:
                                 ivPhoto3.setImageBitmap(bitmap);
-                                localBean.setPic3(path);
+                                SQLite.update(LocalPatrolRecordBean.class)
+                                        .set(LocalPatrolRecordBean_Table.pic3.eq(path))
+                                        .where(LocalPatrolRecordBean_Table.task_id.eq(task_id))
+                                        .execute();
                                 break;
                             case 4:
                                 ivPhoto4.setImageBitmap(bitmap);
-                                localBean.setPic4(path);
+                                SQLite.update(LocalPatrolRecordBean.class)
+                                        .set(LocalPatrolRecordBean_Table.pic4.eq(path))
+                                        .where(LocalPatrolRecordBean_Table.task_id.eq(task_id))
+                                        .execute();
                                 break;
                             case 5:
                                 ivPhoto5.setImageBitmap(bitmap);
-                                localBean.setPic5(path);
+                                SQLite.update(LocalPatrolRecordBean.class)
+                                        .set(LocalPatrolRecordBean_Table.pic5.eq(path))
+                                        .where(LocalPatrolRecordBean_Table.task_id.eq(task_id))
+                                        .execute();
                                 break;
                             case 6:
                                 ivPhoto6.setImageBitmap(bitmap);
-                                localBean.setPic6(path);
+                                SQLite.update(LocalPatrolRecordBean.class)
+                                        .set(LocalPatrolRecordBean_Table.pic6.eq(path))
+                                        .where(LocalPatrolRecordBean_Table.task_id.eq(task_id))
+                                        .execute();
                                 break;
                         }
-                        save();
                         break;
                 }
             } catch (Exception e) {
