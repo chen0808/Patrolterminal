@@ -30,6 +30,10 @@ public interface ApiServise {
     //网络请求超时时间 单位毫秒
     int DEFAULT_TIMEOUT = 20000;
 
+    //获取特殊屬性
+    @GET("/eq/tower/wares/pda/listGET")
+    Observable<BaseResult<List<TssxToEqTowerWares>>> getTssxList(@Query("tower_id") String tower_id,@Query("task_id") String task_id);
+
     //月计划列表
     @GET("/plan/month/planGET")
     Observable<BaseResult<List<MonthPlanBean>>> getMonthPlanList(@Query("year") int year, @Query("month") int month, @Query("dep_id") String dep_id);

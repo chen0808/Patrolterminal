@@ -109,9 +109,12 @@ public class TssxAddAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void removeStatus(TSSXBean bean) {
+    public void removeItem(TSSXBean bean) {
         int index = tssxList.indexOf(bean);
         tssxList.get(index).setCheck(false);
+        tssxList.get(index).setYhnr("");
+        tssxList.get(index).setDj("一般");
+        tssxList.get(index).setClearPhotoList();
 
         for (Map.Entry<Integer,String> entry : map.entrySet()) {
             Integer key = (Integer) entry.getKey();
@@ -119,7 +122,6 @@ public class TssxAddAdapter extends BaseAdapter {
             if(values.equals(bean.getValues()))
             {
                 map.remove(key);
-                break;
             }
         }
 

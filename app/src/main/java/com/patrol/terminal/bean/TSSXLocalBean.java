@@ -27,8 +27,10 @@ public class TSSXLocalBean extends BaseModel implements Serializable {
     private String yhnr ="";//隐患内容
     @Column
     private String dj = "一般";//等级
-
-//    private List<String> photoList = new ArrayList<>();//图片内容
+    @Column
+    private boolean isUpload = false;//是否上传
+    @Column
+    private boolean isDownload = false;//是否网络下载
     @Column
     private String photoStr = "";//
     // 数据id
@@ -74,6 +76,22 @@ public class TSSXLocalBean extends BaseModel implements Serializable {
     private String month;
     @Column
     private String day;
+
+    public boolean isDownload() {
+        return isDownload;
+    }
+
+    public void setDownload(boolean download) {
+        isDownload = download;
+    }
+
+    public boolean isUpload() {
+        return isUpload;
+    }
+
+    public void setUpload(boolean upload) {
+        isUpload = upload;
+    }
 
     public String getPhotoStr() {
         return photoStr;

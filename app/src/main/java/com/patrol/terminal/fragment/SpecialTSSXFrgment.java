@@ -19,20 +19,34 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
+import androidx.fragment.app.Fragment;
+
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.adapter.AutoCursorAdapter;
 import com.patrol.terminal.adapter.TssxAddAdapter;
 import com.patrol.terminal.adapter.TssxEditAdapter;
 import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.base.BaseFragment;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.LocalPatrolDefectBean;
+import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
+import com.patrol.terminal.bean.LocalPatrolRecordBean;
+import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.TSSXBean;
 import com.patrol.terminal.bean.TSSXLocalBean;
 import com.patrol.terminal.bean.TSSXLocalBean_Table;
+import com.patrol.terminal.bean.TssxToEqTowerWares;
+import com.patrol.terminal.bean.TssxToFile;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.widget.NoScrollViewPager;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.io.IOException;
@@ -40,6 +54,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 特殊属性
@@ -123,7 +139,18 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
         intTSSX();
         initClick();
+        loadLocalData();
+    }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            //相当于Fragment的onResume
+            saveTssx();
+        } else {
+            //相当于Fragment的onPause
+        }
     }
 
     public void initClick() {
@@ -176,23 +203,14 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 rl_add.setVisibility(View.GONE);
                 addTssxList.clear();
                 addTssxList.addAll(tssxAddAdapter.getCheckList());
-                intiTssxData(addTssxList);
-
-                sankua_rad.check(tssx_sankua.getId());
-                xs_tssx_lv.setAdapter(skEditAdapter);
-
-                skEditAdapter.setData(skTssxList);
-                lfEditAdapter.setData(lfTssxList);
-                qtEditAdapter.setData(qtTssxList);
-
-                xs_tssx_lv.setVisibility(View.VISIBLE);
+                refreshPage(addTssxList);
             }
         });
 
         skEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
             @Override
-            public void delObject(TSSXBean bean) {
-                tssxAddAdapter.removeStatus(bean);
+            public void delItemObject(TSSXBean bean) {
+                tssxAddAdapter.removeItem(bean);
                 delBean(bean.getKey());
             }
 
@@ -223,14 +241,19 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 indexKey = task_key;
                 oldPhotoStr = oldPhoto;
                 isAddPhtot = isAdd;
+            }
+
+            @Override
+            public void delTssxPhoto(String key,String photoStr) {
+                delDataPhoto(key,photoStr);
             }
 
         });
 
         lfEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
             @Override
-            public void delObject(TSSXBean bean) {
-                tssxAddAdapter.removeStatus(bean);
+            public void delItemObject(TSSXBean bean) {
+                tssxAddAdapter.removeItem(bean);
                 delBean(bean.getKey());
             }
 
@@ -261,14 +284,19 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 indexKey = task_key;
                 oldPhotoStr = oldPhoto;
                 isAddPhtot = isAdd;
+            }
+
+            @Override
+            public void delTssxPhoto(String key,String photoStr) {
+                delDataPhoto(key,photoStr);
             }
 
         });
 
         qtEditAdapter.setOnclickAdapter(new TssxEditAdapter.onClickAdapter() {
             @Override
-            public void delObject(TSSXBean bean) {
-                tssxAddAdapter.removeStatus(bean);
+            public void delItemObject(TSSXBean bean) {
+                tssxAddAdapter.removeItem(bean);
                 delBean(bean.getKey());
             }
 
@@ -301,9 +329,164 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 isAddPhtot = isAdd;
             }
 
+            @Override
+            public void delTssxPhoto(String key,String photoStr) {
+                delDataPhoto(key,photoStr);
+            }
+
         });
     }
 
+
+
+    //网络获取保存本地
+    public void saveTssx(){
+//        ProgressDialog.show(getContext(),false,"正在加载中...");
+        LocalPatrolRecordBean localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
+        BaseRequest.getInstance().getService()
+                .getTssxList(localByTaskId.getTower_id(),task_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<TssxToEqTowerWares>>(getContext()){
+                    @Override
+                    protected void onSuccees(BaseResult<List<TssxToEqTowerWares>> tssx) throws Exception {
+//                        ProgressDialog.cancle();
+                        List<TSSXBean> typeBeanList = new ArrayList<>();
+                         for(TssxToEqTowerWares bean:tssx.getResults())
+                         {
+                             TSSXBean tssxBean = new TSSXBean();
+                             tssxBean.setKey(bean.getWares_id());
+                             tssxBean.setValues(bean.getWares_name());
+                             tssxBean.setParKey(intToKey(bean.getPda_sign()));//特殊属性父id
+
+                             if(bean.getTaskTrouble() != null){
+                                 tssxBean.setYhnr(bean.getTaskTrouble().getContent());
+                                 tssxBean.setPhotoList(fileListToList(bean.getTaskTrouble().getFileList()));
+                             }
+
+                             typeBeanList.add(tssxBean);
+                         }
+                        refreshPage(typeBeanList);
+                        refreshAddTssxData(typeBeanList);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//                        ProgressDialog.cancle();
+//                        loadLocalData();
+
+                    }
+                });
+    }
+
+    //（1：三跨；2：八防：3：其他）
+    public String intToKey(String type)
+    {
+        if(type.equals("1"))
+            return TYPE_SK;
+        else if(type.equals("2"))
+            return TYPE_LF;
+        else if(type.equals("3"))
+            return TYPE_QT;
+        return "";
+    }
+
+    //网络获取失败加载本地的
+    public void loadLocalData()
+    {
+        List<TSSXLocalBean> tssxList = SQLite.select().from(TSSXLocalBean.class).queryList();
+        skTssxList.clear();
+        lfTssxList.clear();
+        qtTssxList.clear();
+
+        for (TSSXLocalBean bean:tssxList) {
+            TSSXBean tssxBean = new TSSXBean();
+            tssxBean.setKey(bean.getKey());
+            tssxBean.setParKey(bean.getParKey());
+            tssxBean.setValues(bean.getValues());
+            tssxBean.setYhnr(bean.getYhnr());
+            tssxBean.setDj(bean.getDj());
+
+            if (bean.getParKey() == TYPE_SK) {
+                skTssxList.add(tssxBean);
+            } else if (bean.getParKey() == TYPE_LF) {
+                lfTssxList.add(tssxBean);
+            } else if (bean.getParKey() == TYPE_QT) {
+                qtTssxList.add(tssxBean);
+            }
+        }
+
+        sankua_rad.check(tssx_sankua.getId());
+        xs_tssx_lv.setAdapter(skEditAdapter);
+
+        skEditAdapter.setData(skTssxList);
+        lfEditAdapter.setData(lfTssxList);
+        qtEditAdapter.setData(qtTssxList);
+
+        xs_tssx_lv.setVisibility(View.VISIBLE);
+
+        refreshAddTssxData(skTssxList);
+        refreshAddTssxData(lfTssxList);
+        refreshAddTssxData(qtTssxList);
+
+    }
+
+    //刷新页面数据
+    public void refreshPage(List<TSSXBean> typeBeanList)
+    {
+        intiTssxData(typeBeanList);
+
+        sankua_rad.check(tssx_sankua.getId());
+        xs_tssx_lv.setAdapter(skEditAdapter);
+
+        skEditAdapter.setData(skTssxList);
+        lfEditAdapter.setData(lfTssxList);
+        qtEditAdapter.setData(qtTssxList);
+
+        xs_tssx_lv.setVisibility(View.VISIBLE);
+    }
+
+    //回显特殊属性选择列表
+    public void refreshAddTssxData(List<TSSXBean> localList)
+    {
+        for (TSSXBean locaBean:localList) {
+            for (TSSXBean addBean:tssxBeanList) {
+                if(locaBean.getKey().equals(addBean.getKey())){
+                    addBean.setCheck(true);
+                }
+            }
+        }
+        tssxAddAdapter.setData(tssxBeanList);
+    }
+
+    public List<String> fileListToList(List<TssxToFile> fileList)
+    {
+        List<String> list = new ArrayList<>();
+        for (TssxToFile photo:fileList) {
+            list.add(BaseUrl.BASE_URL+photo.getFile_path()+photo.getFilename());
+        }
+        return list;
+    }
+
+    //删除本地照片数据
+    public void delDataPhoto(String key,String photoStr)
+    {
+        TSSXLocalBean product = SQLite.select()
+                .from(TSSXLocalBean.class)
+                .where(TSSXLocalBean_Table.key.is(key))
+                .and(TSSXLocalBean_Table.task_id.is(task_id))
+                .querySingle();
+        String[] photo = product.getPhotoStr().split(";");
+        List<String> photoList = new ArrayList<>();
+        for (int i=0;i<photo.length;i++){
+            if(!photo[i].equals(photoStr))
+                photoList.add(photo[i]);
+        }
+
+        product.setPhotoStr(photoListToStr(photoList));
+        product.update();
+    }
+    //更新等级
     public void updateDjBean(String key, String dj) {
         SQLite.update(TSSXLocalBean.class)
                 .set(TSSXLocalBean_Table.dj.eq(dj))
@@ -311,7 +494,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 .and(TSSXLocalBean_Table.task_id.is(task_id))
                 .execute();
     }
-
+    //更新隐患内容
     public void updateYhnrBean(String key, String yhnr) {
         SQLite.update(TSSXLocalBean.class)
                 .set(TSSXLocalBean_Table.yhnr.eq(yhnr))
@@ -320,26 +503,27 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 .execute();
     }
 
+    //刪除添加的属性
     public void delBean(String key) {
-        TSSXLocalBean product = SQLite.select()
+        List<TSSXLocalBean> product = SQLite.select()
                 .from(TSSXLocalBean.class)
                 .where(TSSXLocalBean_Table.key.is(key))
                 .and(TSSXLocalBean_Table.task_id.is(task_id))
-                .querySingle();//查询单个
-        if (product != null) {
-            product.delete();
-            Log.d("zhh_db", "Delete: " + product.getKey());
+                .queryList();//查询单个
+        if (product.size()>0) {
+            for (TSSXLocalBean bean: product) {
+                bean.delete();
+            }
         }
 
     }
-
+    //初始化数据保存本地
     public void intiTssxData(List<TSSXBean> typeBeanList) {
         skTssxList.clear();
         lfTssxList.clear();
         qtTssxList.clear();
 
         String[] data = DateUatil.getDateStr().split("-");
-        Log.e("数据库年月日", data[0] + "-" + data[1] + "-" + data[2]);
         int count = typeBeanList.size();
         for (int i = 0; i < count; i++) {
             TSSXBean bean = typeBeanList.get(i);
@@ -351,21 +535,54 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 qtTssxList.add(bean);
             }
 
+            TSSXLocalBean tssxLocalBean = SQLite.select().from(TSSXLocalBean.class)
+                    .where(TSSXLocalBean_Table.task_id.is(task_id))
+                    .and(TSSXLocalBean_Table.key.is(typeBeanList.get(i).getKey())).querySingle();
             TSSXLocalBean localBean = new TSSXLocalBean();
-            localBean.setDj(bean.getDj());
-            localBean.setKey(bean.getKey());
-            localBean.setLine_id(line_id);
-            localBean.setTask_id(task_id);
-            localBean.setYear(data[0]);
-            localBean.setMonth(data[1]);
-            localBean.setDay(data[2]);
-            localBean.save();
+            if(tssxLocalBean == null){
+                localBean.setDj(bean.getDj());
+                localBean.setKey(bean.getKey());
+                localBean.setValues(bean.getValues());
+                localBean.setLine_id(line_id);
+                localBean.setTask_id(task_id);
+                localBean.setYear(formatStr(data[0]));
+                localBean.setMonth(formatStr(data[1]));
+                localBean.setDay(formatStr(data[2]));
+                localBean.save();
+            }else{
+                localBean.setDj(tssxLocalBean.getDj());
+                localBean.setKey(tssxLocalBean.getKey());
+                localBean.setValues(tssxLocalBean.getValues());
+                localBean.setLine_id(line_id);
+                localBean.setTask_id(task_id);
+                localBean.setYear(tssxLocalBean.getYear());
+                localBean.setMonth(tssxLocalBean.getMonth());
+                localBean.setDay(tssxLocalBean.getDay());
+                localBean.update();
+            }
         }
+    }
 
+    public String formatStr(String data)
+    {
+        return Integer.valueOf(data).toString();
+    }
+
+
+    public String photoListToStr(List<String> list)
+    {
+        String photo2 = "";
+        for(int i=0;i<list.size();i++){
+            if(TextUtils.isEmpty(photo2))
+                photo2 = list.get(i);
+            else
+                photo2 =photo2 +";"+list.get(i);
+        }
+        return photo2;
     }
 
     /**
-     *
+     *添加和更新
      * @param task_key
      * @param photoPath
      */
@@ -381,7 +598,12 @@ public class SpecialTSSXFrgment extends BaseFragment {
         String[] photoStr = product.getPhotoStr().split(";");
 
         if(isAdd){
+
+            for(int i=0;i<photoStr.length;i++){
+                photoList.add(photoStr[i]);
+            }
             photoList.add(photoPath);
+
         }else{
 
             for(int i=0;i<photoStr.length;i++){
@@ -389,19 +611,12 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }
 
             int index = photoList.indexOf(oldPhoto);
-            if(index == -1) return ;
-            photoList.set(index,photoPath);
+            if(index != -1)
+                photoList.set(index,photoPath);
 
         }
 
-        for(int i=0;i<photoList.size();i++){
-            if(TextUtils.isEmpty(photo))
-                photo = photoList.get(i);
-            else
-                photo =photo +";"+photoList.get(i);
-        }
-
-        product.setPhotoStr(photo);
+        product.setPhotoStr(photoListToStr(photoList));
         product.update();
     }
 

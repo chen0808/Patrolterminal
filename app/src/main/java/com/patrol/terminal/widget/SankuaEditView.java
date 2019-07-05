@@ -61,7 +61,7 @@ public class SankuaEditView extends LinearLayout {
 
     private CursorAdapter cursorAdapter;
     private onTssxClick mOnTssxClick;
-    TssxPhotoAdapter photoAdapter;
+    private TssxPhotoAdapter photoAdapter;
 
     public SankuaEditView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -177,8 +177,6 @@ public class SankuaEditView extends LinearLayout {
 
 
     public void initClick() {
-        TssxPhotoAdapter photoAdapter = new TssxPhotoAdapter(context);
-        sk_gridview.setAdapter(photoAdapter);
 
         sankua_rad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -211,7 +209,7 @@ public class SankuaEditView extends LinearLayout {
         item_tssx_del.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnTssxClick.clickDel();
+                mOnTssxClick.clickTitleDel();
             }
         });
 
@@ -235,6 +233,26 @@ public class SankuaEditView extends LinearLayout {
                 mOnTssxClick.onItemClick(adapterView,view,i,l);
             }
         });
+
+
+    }
+
+    /**
+     * 禁用页面按钮
+     * @param disable
+     */
+    public void  disableView(boolean disable)
+    {
+        sk_gridview.setEnabled(disable);
+        sankua_yhnr.setEnabled(disable);
+        sankua_rad.setEnabled(disable);
+
+        if(disable){
+            item_tssx_del.setVisibility(GONE);
+        }else{
+            item_tssx_del.setVisibility(VISIBLE);
+        }
+
     }
 
     public void setOnItemClick(onTssxClick click){
@@ -242,11 +260,12 @@ public class SankuaEditView extends LinearLayout {
     }
 
     public interface onTssxClick{
-        void clickDel();
+        void clickTitleDel();
         void onAutoItemClick(AdapterView<?> parent, View view, int position, long id);
         void addTextChangedListener(String txt);//文字变化监听
         void getDj(String djStr);
         void onItemClick(AdapterView<?> adapterView, View view, int i, long l);
+        void delListPhoto(String photoStr);
     }
 
     //文字提示
@@ -260,10 +279,18 @@ public class SankuaEditView extends LinearLayout {
     {
         this.photoAdapter = photoAdapter;
         sk_gridview.setAdapter(photoAdapter);
+
+        this.photoAdapter.setDelItem(new TssxPhotoAdapter.onDelPhotoAdapter() {
+            @Override
+            public void onDelPhotoAdapterStr(String delPhotoStr) {
+                mOnTssxClick.delListPhoto(delPhotoStr);
+            }
+        });
     }
 
     public void setNotifyDataSetChanged(List<String> list){
         photoAdapter.setNotifyDataSetChanged(list);
+
     }
 
 }
