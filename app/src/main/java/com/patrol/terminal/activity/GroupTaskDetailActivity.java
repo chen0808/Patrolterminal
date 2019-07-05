@@ -272,6 +272,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                         }else {
                             Toast.makeText(GroupTaskDetailActivity.this,"审批不通过",Toast.LENGTH_SHORT).show();
                         }
+                        finish();
                         ProgressDialog.cancle();
                     }
 
@@ -388,6 +389,8 @@ public class GroupTaskDetailActivity extends BaseActivity {
 //        bean.setGroup_list_id(bean.getId());
         bean.setWork_user_id(user_id);
         bean.setWork_user_name(username);
+        bean.setFrom_user_id(SPUtil.getUserId(this));
+        bean.setFrom_user_name(SPUtil.getUserName(this));
         selectList.add(bean);
         //获取月计划列表
         BaseRequest.getInstance().getService()
@@ -485,7 +488,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
     public void showPersonalGroup() {
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setTitle("选择负责人");
+        alertBuilder.setTitle("选择人员");
         /**
          *第一个参数:弹出框的消息集合，一般为字符串集合
          * 第二个参数：默认被选中的，布尔类数组

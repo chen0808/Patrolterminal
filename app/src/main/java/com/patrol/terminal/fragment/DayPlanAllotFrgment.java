@@ -287,6 +287,7 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
                         ProgressDialog.cancle();
                         getGroupTeam();
                         dayPlanAllotAdapter.setNewData(dayPlanlist);
+                        RxRefreshEvent.publish("refreshGroupData");
                     }
 
                     @Override
@@ -320,6 +321,7 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
                             }
                         }
                         RxRefreshEvent.publish("refreshHaveTask@" + allotNum);
+                        RxRefreshEvent.publish("refreshGroupData");
                         dayPlanlist.addAll(backList);
                         backList.clear();
 

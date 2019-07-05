@@ -120,7 +120,7 @@ public class NewTaskActivity extends BaseActivity {
         viewPager.setAdapter(taskPagerAdapter);
         initMagicIndicator(mJobType);
 //        viewPager.setNoScroll(true);
-        viewPager.setOffscreenPageLimit(5);
+        viewPager.setOffscreenPageLimit(0);
         int index = getIntent().getIntExtra("index", 0);
         viewPager.setCurrentItem(index);
         viewPager.setNoScroll(true);

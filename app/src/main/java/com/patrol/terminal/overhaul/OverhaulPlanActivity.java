@@ -7,12 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.fragment.app.Fragment;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
@@ -39,6 +36,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -46,6 +44,9 @@ import butterknife.OnClick;
 //检修班计划管理界面
 public class OverhaulPlanActivity extends BaseActivity {
 
+
+    @BindView(R.id.title_back)
+    RelativeLayout titleBack;
     @BindView(R.id.title_name)
     TextView titleName;
     @BindView(R.id.title_setting_iv)
@@ -55,23 +56,12 @@ public class OverhaulPlanActivity extends BaseActivity {
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
     @BindView(R.id.magic_indicator4)
-    MagicIndicator magicIndicator;
+    MagicIndicator magicIndicator4;
     @BindView(R.id.view_pager)
     NoScrollViewPager viewPager;
-    @BindView(R.id.title_back)
-    RelativeLayout titleBack;
-    @BindView(R.id.task_rb1)
-    RadioButton taskRb1;
-    @BindView(R.id.task_rb2)
-    RadioButton taskRb2;
-    @BindView(R.id.task_rb3)
-    RadioButton taskRb3;
-    @BindView(R.id.task_rg)
-    RadioGroup taskRg;
-
     private List<String> mDataList = Arrays.asList(CHANNELS);
     private MyFragmentPagerAdapter taskPagerAdapter;
-    private static final String[] CHANNELS = new String[]{"年计划", "月计划","周计划","周任务"};
+    private static final String[] CHANNELS = new String[]{"年计划", "月计划", "周计划", "周任务"};
     private static final String[] CHANNELS_01 = new String[]{"周任务"};
     private static final String[] CHANNELS_02 = new String[]{"周计划"};
 
@@ -94,12 +84,12 @@ public class OverhaulPlanActivity extends BaseActivity {
             fragmentList.add(new OverhaulMonthPlanFrgment());
             fragmentList.add(new OverhaulWeekPlanFrgment());
             fragmentList.add(new OverhaulZzWeekTaskFrgment());
-        }else if (jobType.contains(Constant.REFURBISHMENT_LEADER)  || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)    //班长,负责人能看周任务
-                || jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)){
+        } else if (jobType.contains(Constant.REFURBISHMENT_LEADER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)    //班长,负责人能看周任务
+                || jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             mDataList = Arrays.asList(CHANNELS_01);
             fragmentList.add(new OverhaulWeekTaskFrgment());
-        }else if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)
-                || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)|| jobType.contains(Constant.SAFETY_SPECIALIZED)) {   //保电,验收,安全能查看周计划
+        } else if (jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)
+                || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED) || jobType.contains(Constant.SAFETY_SPECIALIZED)) {   //保电,验收,安全能查看周计划
             mDataList = Arrays.asList(CHANNELS_02);
             fragmentList.add(new OverhaulWeekPlanFrgment());
         }
@@ -113,12 +103,7 @@ public class OverhaulPlanActivity extends BaseActivity {
 
         viewPager.setNoScroll(true);
         viewPager.setOffscreenPageLimit(5);
-        taskRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-            }
-        });
     }
 
     private void initMagicIndicator() {
@@ -132,9 +117,8 @@ public class OverhaulPlanActivity extends BaseActivity {
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
-
                 SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.white));
+                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.black_gray));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
                 simplePagerTitleView.setText(mDataList.get(index));
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
@@ -151,11 +135,12 @@ public class OverhaulPlanActivity extends BaseActivity {
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator linePagerIndicator = new LinePagerIndicator(context);
-                linePagerIndicator.setColors(Color.WHITE);
+                linePagerIndicator.setColors(getResources().getColor(R.color.orange_vip));
+                linePagerIndicator.setLineHeight(5);
                 return linePagerIndicator;
             }
         });
-        magicIndicator.setNavigator(commonNavigator);
+        magicIndicator4.setNavigator(commonNavigator);
         LinearLayout titleContainer = commonNavigator.getTitleContainer(); // must after setNavigator
         titleContainer.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
         titleContainer.setDividerDrawable(new ColorDrawable() {
@@ -164,7 +149,7 @@ public class OverhaulPlanActivity extends BaseActivity {
                 return UIUtil.dip2px(OverhaulPlanActivity.this, 15);
             }
         });
-        ViewPagerHelper.bind(magicIndicator, viewPager);
+        ViewPagerHelper.bind(magicIndicator4, viewPager);
     }
 
     @OnClick(R.id.title_back)

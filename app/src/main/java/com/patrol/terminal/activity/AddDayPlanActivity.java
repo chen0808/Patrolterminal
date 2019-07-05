@@ -138,6 +138,7 @@ public class AddDayPlanActivity extends BaseActivity {
 
             @Override
             public void accept(DayOfWeekBean type) throws Exception {
+                type.setAudit_status("0");
                 if (selectType.size() == 0) {
                     type.setWeek_tower_id(type.getId());
                     type.setMonth(Integer.parseInt(month));
@@ -160,7 +161,6 @@ public class AddDayPlanActivity extends BaseActivity {
                             selectType.remove(i);
                             selectNum--;
                             break;
-
                         }
                     }
                     if (isExit == 0) {

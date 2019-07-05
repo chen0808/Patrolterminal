@@ -42,6 +42,8 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
                         break;
                     case "1":
                         AdapterUtils.setText(tvAllorStatus, "状态：抢单/退还审核中");
+                    case "2":
+                        AdapterUtils.setText(tvAllorStatus, "状态：抢单/退还审核中");
                         break;
                     case "3":
                         AdapterUtils.setText(tvAllorStatus, "状态：抢单/退还不通过");

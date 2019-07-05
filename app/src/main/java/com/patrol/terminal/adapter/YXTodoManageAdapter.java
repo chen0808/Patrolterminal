@@ -38,7 +38,13 @@ public class YXTodoManageAdapter extends BaseQuickAdapter<TodoBean, BaseViewHold
 
         viewHolder.setText(R.id.item_todo_title, item.getTitle());
         viewHolder.setText(R.id.item_todo_name, "提交人：" + item.getFrom_user_name());
-        viewHolder.setText(R.id.item_task_time, "任务日期：" + item.getYear()+"-"+item.getMonth()+"-"+item.getDay());
+        if (item.getWeek()!=0){
+            viewHolder.setText(R.id.item_task_time, "任务日期：" + item.getYear()+"年第"+item.getWeek()+"周");
+        }else if (item.getDay()!=0){
+            viewHolder.setText(R.id.item_task_time, "任务日期：" + item.getYear()+"年"+item.getMonth()+"月"+item.getDay()+"日");
+        }else {
+            viewHolder.setText(R.id.item_task_time, "任务日期：" + item.getYear()+"年"+item.getMonth()+"月");
+        }
         viewHolder.setText(R.id.item_todo_time, "提交时间：" + item.getCreate_time());
     }
 }

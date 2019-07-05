@@ -60,6 +60,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class GroupTaskFrgment extends BaseFragment {
@@ -92,6 +94,7 @@ public class GroupTaskFrgment extends BaseFragment {
     private String depId;
     private String jobType;
     private boolean isRefresh=true;
+    private Disposable subscribe;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -147,7 +150,29 @@ public class GroupTaskFrgment extends BaseFragment {
                 }
             }
         });
+        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.startsWith("refreshGroupData")) {
+                    getData();
+                }
+
+            }
+        });
+        if (Utils.isNetworkConnected(getContext())){
+            getData();
+        }else {
+            getDataFromDatabase();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (subscribe!=null){
+            subscribe.dispose();
+        }
     }
 
     private void getDataFromDatabase() {
@@ -169,7 +194,7 @@ public class GroupTaskFrgment extends BaseFragment {
     private void getDbGroupListZy() {
         result = SQLite.select().from(GroupTaskBean.class)
                 .where(GroupTaskBean_Table.year.eq(Integer.valueOf(year)),GroupTaskBean_Table.month.eq(Integer.valueOf(month)),
-                        GroupTaskBean_Table.day.eq(Integer.valueOf(day)))
+                        GroupTaskBean_Table.day.eq(Integer.valueOf(day)),GroupTaskBean_Table.user_id.eq(SPUtil.getUserId(getContext())))
                 .queryList();
 
         if (result != null) {
@@ -182,13 +207,25 @@ public class GroupTaskFrgment extends BaseFragment {
     }
 
     private void getDbGroupList() {
-        result = SQLite.select().from(GroupTaskBean.class)
-                .where(GroupTaskBean_Table.year.eq(Integer.valueOf(year)),GroupTaskBean_Table.month.eq(Integer.valueOf(month)),
-                        GroupTaskBean_Table.day.eq(Integer.valueOf(day)), GroupTaskBean_Table.dep_id.eq(depId),
-                        GroupTaskBean_Table.duty_user_id.eq(duty_user_id),GroupTaskBean_Table.user_id.eq(userId),
-                        GroupTaskBean_Table.safe.eq("1"))
-                //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
-                .queryList();
+        if (depId==null){
+            result = SQLite.select().from(GroupTaskBean.class)
+                    .where(GroupTaskBean_Table.year.eq(Integer.valueOf(year)),GroupTaskBean_Table.month.eq(Integer.valueOf(month)),
+                            GroupTaskBean_Table.day.eq(Integer.valueOf(day)),
+                            GroupTaskBean_Table.duty_user_id.eq(duty_user_id),GroupTaskBean_Table.user_id.eq(SPUtil.getUserId(getContext()))
+                            )
+                    //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
+                    .queryList();
+        }else {
+            result = SQLite.select().from(GroupTaskBean.class)
+                    .where(GroupTaskBean_Table.year.eq(Integer.valueOf(year)),GroupTaskBean_Table.month.eq(Integer.valueOf(month)),
+                            GroupTaskBean_Table.day.eq(Integer.valueOf(day)),
+                            GroupTaskBean_Table.duty_user_id.eq(duty_user_id),GroupTaskBean_Table.user_id.eq(SPUtil.getUserId(getContext()))
+                            )
+                    //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
+                    .queryList();
+
+        }
+
 
         if (result != null && result.size() != 0) {
             groupTaskAdapter.setNewData(result);
@@ -205,13 +242,14 @@ public class GroupTaskFrgment extends BaseFragment {
             isRefresh = true;
             ProgressDialog.cancle();
         }
+
     }
 
     //根据职位获取页面数据
     public void getData() {
         isRefresh=false;
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-            taskAdd.setVisibility(View.VISIBLE);
+//            taskAdd.setVisibility(View.VISIBLE);
             depId = SPUtil.getDepId(getContext());
             getGroupList();
         } else if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
@@ -224,19 +262,7 @@ public class GroupTaskFrgment extends BaseFragment {
         getRepairList();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (isRefresh){
-            if (Utils.isNetworkConnected(getContext())){
-                getData();
-            }else {
-                getDataFromDatabase();
-            }
 
-
-        }
-    }
 
     //获取小组任务列表
     public void getGroupList() {
@@ -277,42 +303,29 @@ public class GroupTaskFrgment extends BaseFragment {
     }
 
     private void saveToDatebase(GroupTaskBean bean) {
-        GroupTaskBean groupTaskBean = new GroupTaskBean();
-        groupTaskBean.setId(bean.getId());
-        groupTaskBean.setDay_tower_id(bean.getDay_tower_id());
-        groupTaskBean.setGroup_id(bean.getGroup_id());
-        groupTaskBean.setType_sign(bean.getType_sign());
-        groupTaskBean.setPlan_type(bean.getPlan_type());
-        groupTaskBean.setLine_id(bean.getLine_id());
-        groupTaskBean.setLine_name(bean.getLine_name());
-        groupTaskBean.setDep_id(bean.getDep_id());
-        groupTaskBean.setDep_name(bean.getDep_name());
-        groupTaskBean.setYear(bean.getYear());
-        groupTaskBean.setMonth(bean.getMonth());
-        groupTaskBean.setDay(bean.getDay());
-        groupTaskBean.setName(bean.getName());
-        groupTaskBean.setStart_id(bean.getStart_id());
-        groupTaskBean.setEnd_id(bean.getEnd_id());
-        groupTaskBean.setDuty_user_id(bean.getDuty_user_id());
-        groupTaskBean.setDuty_user_name(bean.getDuty_user_name());
-        groupTaskBean.setWork_user_id(bean.getWork_user_id());
-        groupTaskBean.setWork_user_name(bean.getWork_user_name());
-        groupTaskBean.setAllot_status(bean.getAllot_status());
-        groupTaskBean.setDone_status(bean.getDone_status());
-        groupTaskBean.setDone_time(bean.getDone_time());
-        groupTaskBean.setIs_rob(bean.getIs_rob());
-        groupTaskBean.setAudit_status(bean.getAudit_status());
-        groupTaskBean.setUser_id(SPUtil.getUserId(getContext()));
-        groupTaskBean.setDone_rate(bean.getDone_rate());
-            groupTaskBean.setSafe("1");
 
-        List<GroupTaskBean> existBeans = SQLite.select().from(GroupTaskBean.class)
+        bean.setUser_id(SPUtil.getUserId(getContext()));
+
+    GroupTaskBean existBeans = SQLite.select().from(GroupTaskBean.class)
                 .where(GroupTaskBean_Table.id.eq(bean.getId()))
-                .queryList();
+                .querySingle();
 
-        if (existBeans.size() > 0) {   //数据存在
-            groupTaskBean.update();
+        if (existBeans!=null) {   //数据存在
+            existBeans.setAllot_status(bean.getAllot_status());
+            existBeans.setAudit_status(bean.getAudit_status());
+            existBeans.setAll_num(bean.getAll_num());
+            existBeans.setDone_rate(bean.getDone_rate());
+            existBeans.setDone_num(bean.getDone_num());
+            existBeans.setWork_user_id(bean.getWork_user_id());
+            existBeans.setWork_user_name(bean.getWork_user_name());
+            existBeans.setDuty_user_id(bean.getDuty_user_id());
+            existBeans.setWork_user_name(bean.getDuty_user_name());
+            existBeans.setIs_rob(bean.getIs_rob());
+            existBeans.setDone_time(bean.getDone_time());
+            existBeans.update();
         }else {
+            GroupTaskBean   groupTaskBean=new GroupTaskBean();
+            groupTaskBean=bean;
             groupTaskBean.save();
         }
 
