@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +35,8 @@ import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
+import com.patrol.terminal.bean.TSSXLocalBean;
+import com.patrol.terminal.bean.TSSXLocalBean_Table;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
@@ -557,29 +560,35 @@ public class PatrolRecordActivity extends BaseActivity {
         //本地特殊屬性
      /*   List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(task_id)).queryList();
         for (int i = 0; i < localByTssx.size(); i++) {
-//            params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(task_id));
-//            params.put("taskDefectPatrolRecodeList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getTask_key()));
-//            params.put("taskDefectPatrolRecodeList[" + i + "].line_id", toRequestBody(localByTssx.get(i).getLine_id()));//线路id
-//            params.put("taskDefectPatrolRecodeList[" + i + "].tower_id", toRequestBody(localByTaskId.getTower_id()));//杆塔id
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.task_id", toRequestBody(task_id));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.line_id", toRequestBody(localByTssx.get(i).getLine_id()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.start_id", toRequestBody(localByTaskId.getTower_id()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.end_id", toRequestBody(localByTaskId.getTower_id()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.start_name", toRequestBody(localByTaskId.getTower_name()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.end_name", toRequestBody(localByTaskId.getTower_name()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.type_id", toRequestBody(localByTssx.get(i).getTask_key()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.year", toRequestBody(localByTssx.get(i).getYear()));//
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.month", toRequestBody(localByTssx.get(i).getMonth()));//
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.day", toRequestBody(localByTssx.get(i).getDay()));//
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.trouble_level", toRequestBody(localByTssx.get(i).getDj()));//隐患等级
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.content", toRequestBody(localByTssx.get(i).getYhnr()));//隐患内容
-
             String pics = localByTssx.get(i).getPhotoStr();
+            //数据为空提交时删除
+            if(TextUtils.isEmpty(localByTssx.get(i).getYhnr()) && TextUtils.isEmpty(pics)){
+                localByTssx.get(i).delete();
+            }
+
+            params.put("eqTowerWaresList[" + i + "].task_id", toRequestBody(task_id));
+            params.put("eqTowerWaresList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getKey()));
+            params.put("eqTowerWaresList[" + i + "].line_id", toRequestBody(localByTssx.get(i).getLine_id()));//线路id
+            params.put("eqTowerWaresList[" + i + "].tower_id", toRequestBody(localByTaskId.getTower_id()));//杆塔id
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.task_id", toRequestBody(task_id));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.line_id", toRequestBody(localByTssx.get(i).getLine_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.type_id", toRequestBody(localByTssx.get(i).getKey()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.year", toRequestBody(localByTssx.get(i).getYear()));//
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.month", toRequestBody(localByTssx.get(i).getMonth()));//
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.day", toRequestBody(localByTssx.get(i).getDay()));//
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_level", toRequestBody(localByTssx.get(i).getDj()));//隐患等级
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.content", toRequestBody(localByTssx.get(i).getYhnr()));//隐患内容
+
+
             if (pics != null) {
                 String[] split = pics.split(";");
                 for (int j = 0; j < split.length; j++) {
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
-                    params.put("taskDefectPatrolRecodeList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
+                    params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
                 }
             }
         }*/

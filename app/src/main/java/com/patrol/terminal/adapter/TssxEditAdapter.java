@@ -18,7 +18,6 @@ import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.SankuaEditView;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,13 +78,13 @@ public class TssxEditAdapter extends BaseAdapter {
 
         holder.tssx_edit.setOnItemClick(new SankuaEditView.onTssxClick() {
             @Override
-            public void clickDel() {
+            public void clickTitleDel() {
 
                 CancelOrOkDialog dialog = new CancelOrOkDialog(context, "是否删除？", "取消", "删除") {
                     @Override
                     public void ok() {
                         super.ok();
-                        clickAdapter.delObject(tssxList.get(position));
+                        clickAdapter.delItemObject(tssxList.get(position));
                         tssxList.remove(position);
                         notifyDataSetChanged();
                          dismiss();
@@ -150,6 +149,12 @@ public class TssxEditAdapter extends BaseAdapter {
                         startCamera();
                     }
             }
+
+            @Override
+            public void delListPhoto(String photoStr) {
+                clickAdapter.delTssxPhoto(tssxList.get(position).getKey(),photoStr);
+                notifyDataSetChanged();
+            }
         });
 
         holder.tssx_edit.setAutoAdapter(clickAdapter.getCursorAdapter());
@@ -167,7 +172,6 @@ public class TssxEditAdapter extends BaseAdapter {
 
         photoAdapter = new TssxPhotoAdapter(context,tssxBean.getPhotoList());
         holder.tssx_edit.setPhotoAdapter(photoAdapter);
-
 
         return convertView;
     }
@@ -187,6 +191,7 @@ public class TssxEditAdapter extends BaseAdapter {
         }
 
         holder.tssx_edit.setNotifyDataSetChanged(tssxList.get(parIndex).getPhotoList());
+        notifyDataSetChanged();
     }
 
     //打开相机
@@ -214,12 +219,13 @@ public class TssxEditAdapter extends BaseAdapter {
 
     public interface onClickAdapter
     {
-        void delObject(TSSXBean bean);
+        void delItemObject(TSSXBean bean);
         AutoCursorAdapter getCursorAdapter();
         Cursor getCursor();
         void updateYhnr(String task_key,String yhnr);//task_key  屬性key
         void updateDJ(String task_key,String dj);//task_key  屬性key
         void updatePhoto(String task_key,int index,int position,String oldPhoto,boolean isAdd);//更新adapter index  item的position
+        void delTssxPhoto(String key,String photoStr);
     }
 
 }

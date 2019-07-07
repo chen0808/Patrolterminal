@@ -2,6 +2,7 @@ package com.patrol.terminal;
 
 import android.app.Application;
 
+import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
 public class MyApp extends Application {
@@ -10,6 +11,7 @@ public class MyApp extends Application {
         super.onCreate();
         //初始化DBFLOW
         FlowManager.init(this);
+        FlowLog.setMinimumLoggingLevel(FlowLog.Level.V);//添加日志
     }
 }
 
