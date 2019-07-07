@@ -143,14 +143,23 @@ public class PatrolContentFrgment extends BaseFragment {
                     localBean.setStatus(results.get(i).getStatus());
                     if (results.get(i).getRemarks() != null) {
                         localBean.setPatrol_name(results.get(i).getRemarks());
+                    } else {
+                        localBean.setPatrol_name("");
                     }
                     if (results.get(i).getTaskDefect() != null) {
                         if (results.get(i).getTaskDefect().getContent() != null) {
                             localBean.setContent(results.get(i).getTaskDefect().getContent());
+                        } else {
+                            localBean.setContent("");
                         }
                         if (results.get(i).getTaskDefect().getGrade_id() != null) {
                             localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
+                        } else {
+                            localBean.setGrade_id("");
                         }
+                    } else {
+                        localBean.setContent("");
+                        localBean.setGrade_id("");
                     }
                     localBean.setCategory_id(results.get(i).getCategory());
                     String onlinePics = getOnlinePics(i);

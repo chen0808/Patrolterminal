@@ -489,6 +489,7 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     private void commit() {
+        ProgressDialog.show(this, true, "正在上传...");
         params.clear();
         params.put("task_id", toRequestBody(task_id));
         localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
@@ -588,12 +589,13 @@ public class PatrolRecordActivity extends BaseActivity {
                 .subscribe(new BaseObserver(this) {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
                         saveTodoAudit("1");
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
+                        ProgressDialog.cancle();
                     }
                 });
 

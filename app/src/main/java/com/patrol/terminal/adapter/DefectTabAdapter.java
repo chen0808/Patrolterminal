@@ -111,8 +111,10 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         if (item.getStatus() != null) {
             if (item.getStatus().equals("0")) {
                 Glide.with(mContext).load(R.mipmap.defect_true_checked).into(defectTrue);
+                Glide.with(mContext).load(R.mipmap.defect_false_unchecked).into(defectFalse);
                 llCOntent.setVisibility(View.GONE);
             } else if (item.getStatus().equals("1")) {
+                Glide.with(mContext).load(R.mipmap.defect_true_unchecked).into(defectTrue);
                 Glide.with(mContext).load(R.mipmap.defect_false_checked).into(defectFalse);
                 llCOntent.setVisibility(View.VISIBLE);
             }
@@ -125,17 +127,20 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         defectFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Glide.with(mContext).load(R.mipmap.defect_true_unchecked).into(defectTrue);
-                Glide.with(mContext).load(R.mipmap.defect_false_checked).into(defectFalse);
-                llCOntent.setVisibility(View.VISIBLE);
-                item.setStatus("1");
-                item.update();
+                if (item.getStatus() == null || item.getStatus().equals("0")) {
+                    Glide.with(mContext).load(R.mipmap.defect_true_unchecked).into(defectTrue);
+                    Glide.with(mContext).load(R.mipmap.defect_false_checked).into(defectFalse);
+                    llCOntent.setVisibility(View.VISIBLE);
+                    item.setStatus("1");
+                    item.update();
+                }
             }
         });
         defectTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Glide.with(mContext).load(R.mipmap.defect_true_checked).into(defectTrue);
+                if (item.getStatus() == null || item.getStatus().equals("1"))
+                    Glide.with(mContext).load(R.mipmap.defect_true_checked).into(defectTrue);
                 Glide.with(mContext).load(R.mipmap.defect_false_unchecked).into(defectFalse);
                 llCOntent.setVisibility(View.GONE);
                 item.setStatus("0");
@@ -203,6 +208,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                     boolean isExist = cursor1.moveToPosition(position);
                     if (isExist) {
                         String levelStr = cursor1.getString(cursor.getColumnIndex(MyOpenhelper.DefactTvColumns.LEVEL));
+                        item.setContent(tvDiverWay.getText().toString());
                         Log.w("linmeng", "levelStr:" + levelStr);
                         if (TextUtils.isEmpty(levelStr)) {
                             checkOneRb.setChecked(true);
@@ -326,6 +332,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 //        });
 
         if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2")) {
+            Log.d("audit_status", Constant.patrol_record_audit_status);
             rlTitle.setEnabled(false);
             tvDiverWay.setEnabled(false);
             defectTrue.setEnabled(false);
@@ -341,6 +348,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
     }
 
     private void initGridViewFromOnline(GridView gridView, String pics) {
+        Log.d("pics", pics + "---");
         List<String> list = new ArrayList<>();
         if (pics != null) {
             String[] split = pics.split(";");
