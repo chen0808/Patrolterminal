@@ -319,7 +319,8 @@ public class MonthPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onSuccees(BaseResult<MonthListBean> t) throws Exception {
-
+                        ProgressDialog.cancle();
+                        planRefresh.setRefreshing(false);
                         if (t.getCode() == 1) {
                             num_total = 0;
                             num_110kv = 0;
@@ -353,8 +354,6 @@ public class MonthPlanFrgment extends BaseFragment {
                         } else {
                             planSubmit.setVisibility(View.VISIBLE);
                         }
-                        ProgressDialog.cancle();
-                        planRefresh.setRefreshing(false);
                     }
 
                     @Override
