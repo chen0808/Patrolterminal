@@ -19,21 +19,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
-import androidx.fragment.app.Fragment;
-
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.adapter.AutoCursorAdapter;
 import com.patrol.terminal.adapter.TssxAddAdapter;
 import com.patrol.terminal.adapter.TssxEditAdapter;
-import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
-import com.patrol.terminal.bean.LocalPatrolDefectBean;
-import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.TSSXBean;
@@ -46,7 +40,6 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.widget.NoScrollViewPager;
-import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.io.IOException;
@@ -343,40 +336,43 @@ public class SpecialTSSXFrgment extends BaseFragment {
     public void saveTssx(){
 //        ProgressDialog.show(getContext(),false,"正在加载中...");
         LocalPatrolRecordBean localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
-        BaseRequest.getInstance().getService()
-                .getTssxList(localByTaskId.getTower_id(),task_id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TssxToEqTowerWares>>(getContext()){
-                    @Override
-                    protected void onSuccees(BaseResult<List<TssxToEqTowerWares>> tssx) throws Exception {
+        String tower_id = localByTaskId.getTower_id();
+        if (!TextUtils.isEmpty(tower_id)) {
+            BaseRequest.getInstance().getService()
+                    .getTssxList(tower_id, task_id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new BaseObserver<List<TssxToEqTowerWares>>(getContext()) {
+                        @Override
+                        protected void onSuccees(BaseResult<List<TssxToEqTowerWares>> tssx) throws Exception {
 //                        ProgressDialog.cancle();
-                        List<TSSXBean> typeBeanList = new ArrayList<>();
-                         for(TssxToEqTowerWares bean:tssx.getResults())
-                         {
-                             TSSXBean tssxBean = new TSSXBean();
-                             tssxBean.setKey(bean.getWares_id());
-                             tssxBean.setValues(bean.getWares_name());
-                             tssxBean.setParKey(intToKey(bean.getPda_sign()));//特殊属性父id
+                            List<TSSXBean> typeBeanList = new ArrayList<>();
+                            for (TssxToEqTowerWares bean : tssx.getResults()) {
+                                TSSXBean tssxBean = new TSSXBean();
+                                tssxBean.setKey(bean.getWares_id());
+                                tssxBean.setValues(bean.getWares_name());
+                                tssxBean.setParKey(intToKey(bean.getPda_sign()));//特殊属性父id
 
-                             if(bean.getTaskTrouble() != null){
-                                 tssxBean.setYhnr(bean.getTaskTrouble().getContent());
-                                 tssxBean.setPhotoList(fileListToList(bean.getTaskTrouble().getFileList()));
-                             }
+                                if (bean.getTaskTrouble() != null) {
+                                    tssxBean.setYhnr(bean.getTaskTrouble().getContent());
+                                    tssxBean.setPhotoList(fileListToList(bean.getTaskTrouble().getFileList()));
+                                }
 
-                             typeBeanList.add(tssxBean);
-                         }
-                        refreshPage(typeBeanList);
-                        refreshAddTssxData(typeBeanList);
-                    }
+                                typeBeanList.add(tssxBean);
+                            }
+                            refreshPage(typeBeanList);
+                            refreshAddTssxData(typeBeanList);
+                        }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        @Override
+                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
 //                        ProgressDialog.cancle();
 //                        loadLocalData();
 
-                    }
-                });
+                        }
+                    });
+        }
+
     }
 
     //（1：三跨；2：八防：3：其他）
