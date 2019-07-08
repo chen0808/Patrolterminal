@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,8 +34,6 @@ import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
-import com.patrol.terminal.bean.TSSXLocalBean;
-import com.patrol.terminal.bean.TSSXLocalBean_Table;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
@@ -492,7 +489,6 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     private void commit() {
-        ProgressDialog.show(this, true, "正在上传...");
         params.clear();
         params.put("task_id", toRequestBody(task_id));
         localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
@@ -593,6 +589,7 @@ public class PatrolRecordActivity extends BaseActivity {
             }
         }*/
 
+        ProgressDialog.show(this, true, "正在上传...");
         BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver(this) {

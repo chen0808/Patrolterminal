@@ -2,13 +2,14 @@ package com.patrol.terminal.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -32,8 +33,6 @@ import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
-import com.raizlabs.android.dbflow.sql.language.NameAlias;
-import com.raizlabs.android.dbflow.sql.language.OrderBy;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -47,14 +46,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.internal.operators.parallel.ParallelRunOn;
 import io.reactivex.schedulers.Schedulers;
 
 public class PersonalTaskFrgment extends BaseFragment {
@@ -187,7 +183,9 @@ public class PersonalTaskFrgment extends BaseFragment {
                 }
             }
             RxRefreshEvent.publish("refreshPersonalNum@"+result.size());
-            mRefrsh.setRefreshing(false);
+            if (mRefrsh != null) {
+                mRefrsh.setRefreshing(false);
+            }
             ProgressDialog.cancle();
         }
     }

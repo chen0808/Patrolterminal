@@ -13,6 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -21,7 +24,6 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddDayPlanActivity;
 import com.patrol.terminal.activity.DayPlanDetailActivity;
 import com.patrol.terminal.activity.NextDayPlanActivity;
-import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.activity.TemporaryActivity;
 import com.patrol.terminal.adapter.DayPlanAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -36,21 +38,15 @@ import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.utils.Utils;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
-import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
-import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -188,6 +184,7 @@ public class DayPlanFrgment extends BaseFragment {
 
                     @Override
                     protected void onSuccees(BaseResult<List<DayListBean>> t) throws Exception {
+                        planRefresh.setRefreshing(false);
                         lineNum.clear();
                         num_total = 0;
                         kilo_total = 0;
@@ -219,7 +216,6 @@ public class DayPlanFrgment extends BaseFragment {
                             double range = Utils.div(done_num_total, all_num_total, 4)*100;
                             donePlanRange.setText("计划进度 : " + range + "%");
                         }
-                        planRefresh.setRefreshing(false);
                     }
 
                     @Override
