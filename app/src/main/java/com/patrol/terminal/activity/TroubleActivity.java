@@ -85,8 +85,12 @@ public class TroubleActivity extends BaseActivity {
     }
 
     private void setDataToList(List<TroubleFragmentBean> beans) {
-        adapter = new TroubleAdapter(R.layout.fragment_defect_item, beans);
-        planRv.setAdapter(adapter);
+        if (adapter == null) {
+            adapter = new TroubleAdapter(R.layout.fragment_defect_item, beans);
+            planRv.setAdapter(adapter);
+        } else {
+            adapter.addData(page_num * page_size, beans);
+        }
     }
 
     private void search() {
@@ -144,13 +148,16 @@ public class TroubleActivity extends BaseActivity {
 //        }
     }
 
-    @OnClick({R.id.title_back, R.id.iv_search})
+    @OnClick({R.id.title_back, R.id.iv_search, R.id.search_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
             case R.id.iv_search:
+
+                break;
+            case R.id.search_delete:
                 searchDelete.setVisibility(View.GONE);
                 search = "";
                 tvContent.setText("");
@@ -172,7 +179,7 @@ public class TroubleActivity extends BaseActivity {
                             if (result != null && result.size() > 0) {
                                 planRv.loadMoreFinish(false, true);
                                 troubleList.addAll(result);
-                                setDataToList(troubleList);
+                                setDataToList(result);
                                 for (int i = 0; i < result.size(); i++) {
                                     lineList.add(result.get(i).getLine_name());
                                 }

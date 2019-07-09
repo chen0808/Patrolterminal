@@ -435,6 +435,9 @@ public class PatrolContentFrgment extends BaseFragment {
                                         case 6:
                                             adapter6.notifyItemChanged(Constant.defect_index);
                                             break;
+                                        case 7:
+                                            adapter7.notifyItemChanged(Constant.defect_index);
+                                            break;
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();

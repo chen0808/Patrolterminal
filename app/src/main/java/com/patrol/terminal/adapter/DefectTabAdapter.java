@@ -139,12 +139,13 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         defectTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.getStatus() == null || item.getStatus().equals("1"))
+                if (item.getStatus() == null || item.getStatus().equals("1")) {
                     Glide.with(mContext).load(R.mipmap.defect_true_checked).into(defectTrue);
-                Glide.with(mContext).load(R.mipmap.defect_false_unchecked).into(defectFalse);
-                llCOntent.setVisibility(View.GONE);
-                item.setStatus("0");
-                item.update();
+                    Glide.with(mContext).load(R.mipmap.defect_false_unchecked).into(defectFalse);
+                    llCOntent.setVisibility(View.GONE);
+                    item.setStatus("0");
+                    item.update();
+                }
             }
         });
         rlTitle.setOnClickListener(new View.OnClickListener() {
@@ -152,11 +153,11 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             public void onClick(View v) {
                 if (llCOntent.getVisibility() == View.VISIBLE) {
                     llCOntent.setVisibility(View.GONE);
-                    item.setStatus("0");
+                    item.setStatus("1");
                 } else {
-                    if (item.getStatus() != null && item.getStatus().equals("0")) {
+                    if (item.getStatus() != null && item.getStatus().equals("1")) {
                         llCOntent.setVisibility(View.VISIBLE);
-                        item.setStatus("1");
+                        item.setStatus("0");
                     }
                 }
                 item.update();
