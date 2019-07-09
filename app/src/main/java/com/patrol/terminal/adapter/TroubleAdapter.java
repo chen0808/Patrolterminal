@@ -21,6 +21,7 @@ public class TroubleAdapter extends BaseQuickAdapter<TroubleFragmentBean, BaseVi
         super(layoutResId, data);
     }
 
+
     @Override
     protected void convert(BaseViewHolder helper, TroubleFragmentBean item) {
         helper.itemView.setOnClickListener(new View.OnClickListener() {
@@ -34,8 +35,8 @@ public class TroubleAdapter extends BaseQuickAdapter<TroubleFragmentBean, BaseVi
             }
         });
         helper.setText(R.id.tv_name, "线路名称：" + item.getLine_name())
-                .setText(R.id.tv_time, "设备主人" + item.getOwner_name())
-                .setText(R.id.tv_detail, "线路等级：：" + item.getLine_level());
+                .setText(R.id.tv_time, "设备主人：" + item.getOwner_name())
+                .setText(R.id.tv_detail, "线路等级：" + item.getLine_level());
         TextView ivIcon = helper.getView(R.id.iv_icon);
         AdapterUtils.setIconText(ivIcon, item.getDep_name());
     }
