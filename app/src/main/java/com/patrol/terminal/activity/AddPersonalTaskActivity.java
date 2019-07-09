@@ -9,13 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
@@ -26,7 +27,6 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.AddGroupTaskReqBean;
 import com.patrol.terminal.bean.CreateRobTaskBean;
 import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DepUserBean;
@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -398,7 +397,7 @@ public class AddPersonalTaskActivity extends BaseActivity {
                 showType();
                 break;
             case R.id.group_task_group:
-                if (personals.length == 0) {
+                if (personals == null || personals.length == 0) {
                     Toast.makeText(this, "暂未获取到组员列表信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
