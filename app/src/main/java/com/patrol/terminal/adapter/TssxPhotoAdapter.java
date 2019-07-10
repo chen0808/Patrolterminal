@@ -69,7 +69,15 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
         }
 
         if (position != mList.size()) {//代表+号之前的需要正常显示图片
-            Glide.with(mContext).load(new File(mList.get(position))).into(holder.iv);
+            String path = mList.get(position);
+            if (path.contains("http")) {
+                Glide.with(mContext).load(path).into(holder.iv);
+            } else {
+                Glide.with(mContext).load(new File(path)).into(holder.iv);
+            }
+
+
+
             holder.ivDelete.setVisibility(View.VISIBLE);
         } else {
             holder.iv.setImageResource(R.drawable.item_photo_add);//最后一个显示加号图片
