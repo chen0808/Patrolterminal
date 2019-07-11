@@ -145,8 +145,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
         intTSSX();
         initClick();
-        loadLocalData();
-        saveTssx();
+//        loadLocalData();
+//        saveTssx();
 
         Log.e("网络状态", Utils.isNetworkConnected(getContext()) + "");
         if (Utils.isNetworkConnected(getContext())) {
@@ -441,32 +441,38 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
     //网络获取失败加载本地的
     public void loadLocalData() {
-        List<TSSXLocalBean> tssxList = SQLite.select().from(TSSXLocalBean.class).queryList();
+        List<TSSXLocalBean> tssxList = SQLite.select().from(TSSXLocalBean.class)
+                .where(TSSXLocalBean_Table.task_id.is(task_id))
+                .and(TSSXLocalBean_Table.tower_id.is(tower_id))
+                .queryList();
         Log.e("tssxList", tssxList.size() + "");
         skTssxList.clear();
         lfTssxList.clear();
         qtTssxList.clear();
 
-        for (TSSXLocalBean bean : tssxList) {
+        for (int i = 0; i < tssxList.size(); i++) {
             TSSXBean tssxBean = new TSSXBean();
-            tssxBean.setKey(bean.getKey());
-            tssxBean.setParKey(bean.getParKey());
-            tssxBean.setValues(bean.getValues());
-            tssxBean.setYhnr(bean.getYhnr());
-            tssxBean.setDj(bean.getDj());
+            tssxBean.setKey(tssxList.get(i).getKey());
+            tssxBean.setParKey(tssxList.get(i).getParKey());
+            tssxBean.setValues(tssxList.get(i).getValues());
+            tssxBean.setYhnr(tssxList.get(i).getYhnr());
+            tssxBean.setDj(tssxList.get(i).getDj());
 
-            if (bean.getParKey() == TYPE_SK) {
+            List<String> photoList = new ArrayList<>();
+            String[] photoStr = tssxList.get(i).getPhotoStr().split(";");
+            for (int d = 0; d < photoStr.length; d++) {
+                photoList.add(photoStr[d]);
+            }
+            tssxBean.setPhotoList(photoList);
+
+            if (tssxList.get(i).getParKey().equals(TYPE_SK)) {
                 skTssxList.add(tssxBean);
-            } else if (bean.getParKey() == TYPE_LF) {
+            } else if (tssxList.get(i).getParKey().equals(TYPE_LF)) {
                 lfTssxList.add(tssxBean);
-            } else if (bean.getParKey() == TYPE_QT) {
+            } else if (tssxList.get(i).getParKey().equals(TYPE_QT)) {
                 qtTssxList.add(tssxBean);
             }
         }
-
-        Log.e("skTssxList", skTssxList.size() + "");
-        Log.e("lfTssxList", lfTssxList.size() + "");
-        Log.e("qtTssxList", qtTssxList.size() + "");
 
         sankua_rad.check(tssx_sankua.getId());
         xs_tssx_lv.setAdapter(skEditAdapter);
@@ -594,9 +600,12 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 localBean.setValues(bean.getValues());
                 localBean.setLine_id(line_id);
                 localBean.setTask_id(task_id);
+                localBean.setTower_id(tower_id);
                 localBean.setYear(formatStr(data[0]));
                 localBean.setMonth(formatStr(data[1]));
                 localBean.setDay(formatStr(data[2]));
+                localBean.setPhotoStr(photoListToStr(bean.getPhotoList()));
+                Log.e("网络图片集合地址1", photoListToStr(bean.getPhotoList()));
                 localBean.save();
             } else {
                 localBean.setDj(tssxLocalBean.getDj());
@@ -605,9 +614,12 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 localBean.setValues(tssxLocalBean.getValues());
                 localBean.setLine_id(line_id);
                 localBean.setTask_id(task_id);
+                localBean.setTower_id(tower_id);
                 localBean.setYear(tssxLocalBean.getYear());
                 localBean.setMonth(tssxLocalBean.getMonth());
                 localBean.setDay(tssxLocalBean.getDay());
+                localBean.setPhotoStr(photoListToStr(bean.getPhotoList()));
+                Log.e("网络图片集合地址2", photoListToStr(bean.getPhotoList()));
                 localBean.update();
             }
         }
