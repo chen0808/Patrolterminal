@@ -29,8 +29,6 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.JDDZbean_Table;
-import com.patrol.terminal.bean.LocalPatrolRecordBean;
-import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.TSSXBean;
@@ -43,8 +41,8 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.NoScrollViewPager;
-import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.io.IOException;
@@ -108,10 +106,16 @@ public class SpecialTSSXFrgment extends BaseFragment {
     private String TYPE_SK = "9F2DF17853FC468884A3F37260FDFED6";
     private String TYPE_LF = "98F764466504450DBC4C490F6DB512C2";
     private String TYPE_QT = "B2E7DF49D7AB4B358D5DD4BF4DF639EC";
+
+    private String TYPE_SK_INT = "1";
+    private String TYPE_LF_INT = "2";
+    private String TYPE_QT_INT = "3";
+
     private DefactContentDBHelper defactContentDBHelper;
     private Cursor cursor;
     private String task_id;
     private String line_id;
+    private String tower_id;
     private int indexPosition;
     private int itemIndex;
     private String indexKey;
@@ -137,10 +141,19 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
         task_id = getActivity().getIntent().getStringExtra("task_id");
         line_id = getActivity().getIntent().getStringExtra("line_id");
+        tower_id = getActivity().getIntent().getStringExtra("tower_id");
 
         intTSSX();
         initClick();
         loadLocalData();
+        saveTssx();
+
+        Log.e("网络状态", Utils.isNetworkConnected(getContext()) + "");
+        if (Utils.isNetworkConnected(getContext())) {
+            saveTssx();
+        } else {
+            loadLocalData();
+        }
 
         personalTaskListBean = SQLite.select().from(PersonalTaskListBean.class)
                 .where(PersonalTaskListBean_Table.id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(getActivity())))
@@ -152,7 +165,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             //相当于Fragment的onResume
-            saveTssx();
+
         } else {
             //相当于Fragment的onPause
         }
@@ -362,8 +375,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
     //网络获取保存本地
     public void saveTssx() {
 //        ProgressDialog.show(getContext(),false,"正在加载中...");
-        LocalPatrolRecordBean localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
-        String tower_id = localByTaskId.getTower_id();
         if (!TextUtils.isEmpty(tower_id)) {
             BaseRequest.getInstance().getService()
                     .getTssxList(tower_id, task_id)
@@ -394,9 +405,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
                         @Override
                         protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                            ProgressDialog.cancle();
+//                            ProgressDialog.cancle();
                             loadLocalData();
-
                         }
                     });
         }
@@ -432,6 +442,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
     //网络获取失败加载本地的
     public void loadLocalData() {
         List<TSSXLocalBean> tssxList = SQLite.select().from(TSSXLocalBean.class).queryList();
+        Log.e("tssxList", tssxList.size() + "");
         skTssxList.clear();
         lfTssxList.clear();
         qtTssxList.clear();
@@ -452,6 +463,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 qtTssxList.add(tssxBean);
             }
         }
+
+        Log.e("skTssxList", skTssxList.size() + "");
+        Log.e("lfTssxList", lfTssxList.size() + "");
+        Log.e("qtTssxList", qtTssxList.size() + "");
 
         sankua_rad.check(tssx_sankua.getId());
         xs_tssx_lv.setAdapter(skEditAdapter);
@@ -575,6 +590,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
             if (tssxLocalBean == null) {
                 localBean.setDj(bean.getDj());
                 localBean.setKey(bean.getKey());
+                localBean.setParKey(bean.getParKey());
                 localBean.setValues(bean.getValues());
                 localBean.setLine_id(line_id);
                 localBean.setTask_id(task_id);
@@ -585,6 +601,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
             } else {
                 localBean.setDj(tssxLocalBean.getDj());
                 localBean.setKey(tssxLocalBean.getKey());
+                localBean.setParKey(bean.getParKey());
                 localBean.setValues(tssxLocalBean.getValues());
                 localBean.setLine_id(line_id);
                 localBean.setTask_id(task_id);
