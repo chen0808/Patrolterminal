@@ -145,14 +145,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
         intTSSX();
         initClick();
-//        loadLocalData();
-//        saveTssx();
+        loadLocalData();
 
-        Log.e("网络状态", Utils.isNetworkConnected(getContext()) + "");
         if (Utils.isNetworkConnected(getContext())) {
             saveTssx();
-        } else {
-            loadLocalData();
         }
 
         personalTaskListBean = SQLite.select().from(PersonalTaskListBean.class)
@@ -384,29 +380,42 @@ public class SpecialTSSXFrgment extends BaseFragment {
                         @Override
                         protected void onSuccees(BaseResult<List<TssxToEqTowerWares>> tssx) throws Exception {
 //                        ProgressDialog.cancle();
-                            List<TSSXBean> typeBeanList = new ArrayList<>();
-                            for (TssxToEqTowerWares bean : tssx.getResults()) {
-                                TSSXBean tssxBean = new TSSXBean();
-                                tssxBean.setKey(bean.getWares_id());
-                                tssxBean.setValues(bean.getWares_name());
-                                tssxBean.setDj(setDjIdStatus(bean.getTaskTrouble().getTrouble_level()));
-                                tssxBean.setParKey(intToKey(bean.getPda_sign()));//特殊属性父id
+                            if (tssx.getResults().size() > 0) {
+                                List<TSSXBean> typeBeanList = new ArrayList<>();
+                                for (TssxToEqTowerWares bean : tssx.getResults()) {
+                                    TSSXBean tssxBean = new TSSXBean();
+                                    tssxBean.setKey(bean.getWares_id());
+                                    tssxBean.setValues(bean.getWares_name());
+                                    tssxBean.setDj(setDjIdStatus(bean.getTaskTrouble().getTrouble_level()));
+                                    tssxBean.setParKey(intToKey(bean.getPda_sign()));//特殊属性父id
 
-                                if (bean.getTaskTrouble() != null) {
-                                    tssxBean.setYhnr(bean.getTaskTrouble().getContent());
-                                    tssxBean.setPhotoList(fileListToList(bean.getTaskTrouble().getFileList()));
+                                    if (bean.getTaskTrouble() != null) {
+                                        tssxBean.setYhnr(bean.getTaskTrouble().getContent());
+                                        tssxBean.setPhotoList(fileListToList(bean.getTaskTrouble().getFileList()));
+                                    }
+
+                                    typeBeanList.add(tssxBean);
+
+                                }
+                                //不可编辑时表示已上传 删除本地相关熟悉
+                                if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
+                                    List<TSSXLocalBean> tssxLocalBean = SQLite.select().from(TSSXLocalBean.class)
+                                            .where(TSSXLocalBean_Table.task_id.is(task_id))
+                                            .queryList();
+                                    for (int i = 0; i < tssxLocalBean.size(); i++) {
+                                        tssxLocalBean.get(i).delete();
+                                    }
                                 }
 
-                                typeBeanList.add(tssxBean);
+                                refreshPage(typeBeanList);
+                                refreshAddTssxData(typeBeanList);
                             }
-                            refreshPage(typeBeanList);
-                            refreshAddTssxData(typeBeanList);
                         }
 
                         @Override
                         protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
 //                            ProgressDialog.cancle();
-                            loadLocalData();
+//                            loadLocalData();
                         }
                     });
         }
@@ -460,8 +469,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
             List<String> photoList = new ArrayList<>();
             String[] photoStr = tssxList.get(i).getPhotoStr().split(";");
-            for (int d = 0; d < photoStr.length; d++) {
-                photoList.add(photoStr[d]);
+            if (photoStr.length > 0) {
+                for (int d = 0; d < photoStr.length; d++) {
+                    photoList.add(photoStr[d]);
+                }
             }
             tssxBean.setPhotoList(photoList);
 
@@ -517,8 +528,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
     public List<String> fileListToList(List<TssxToFile> fileList) {
         List<String> list = new ArrayList<>();
-        for (TssxToFile photo : fileList) {
-            list.add(BaseUrl.BASE_URL + photo.getFile_path() + photo.getFilename());
+        for (int i = 0; i < fileList.size(); i++) {
+            list.add(BaseUrl.BASE_URL + fileList.get(i).getFile_path() + fileList.get(i).getFilename());
         }
         return list;
     }
