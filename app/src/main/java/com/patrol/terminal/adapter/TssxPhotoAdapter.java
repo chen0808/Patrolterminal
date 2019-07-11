@@ -75,7 +75,11 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
             } else {
                 Glide.with(mContext).load(new File(path)).into(holder.iv);
             }
-            holder.ivDelete.setVisibility(View.VISIBLE);
+            if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
+                holder.ivDelete.setVisibility(View.GONE);
+            } else {
+                holder.ivDelete.setVisibility(View.VISIBLE);
+            }
         } else {
             holder.iv.setImageResource(R.drawable.item_photo_add);//最后一个显示加号图片
             holder.ivDelete.setVisibility(View.GONE);
@@ -91,12 +95,6 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
                 notifyDataSetChanged();
             }
         });
-
-        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
-            holder.ivDelete.setVisibility(View.GONE);
-        } else {
-            holder.ivDelete.setVisibility(View.VISIBLE);
-        }
 
         return convertView;
     }
