@@ -228,7 +228,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }
 
             @Override
-            public void updatePhoto(String task_key, int index, int position,String oldPhoto,boolean isAdd) {
+            public void updatePhoto(String task_key, int index, int position, String oldPhoto, boolean isAdd) {
                 indexPosition = index;
                 itemIndex = position;
                 indexKey = task_key;
@@ -237,8 +237,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }
 
             @Override
-            public void delTssxPhoto(String key,String photoStr) {
-                delDataPhoto(key,photoStr);
+            public void delTssxPhoto(String key, String photoStr) {
+                delDataPhoto(key, photoStr);
             }
 
         });
@@ -271,7 +271,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }
 
             @Override
-            public void updatePhoto(String task_key, int index, int position,String oldPhoto,boolean isAdd) {
+            public void updatePhoto(String task_key, int index, int position, String oldPhoto, boolean isAdd) {
                 indexPosition = index;
                 itemIndex = position;
                 indexKey = task_key;
@@ -280,8 +280,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }
 
             @Override
-            public void delTssxPhoto(String key,String photoStr) {
-                delDataPhoto(key,photoStr);
+            public void delTssxPhoto(String key, String photoStr) {
+                delDataPhoto(key, photoStr);
             }
 
         });
@@ -314,7 +314,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }
 
             @Override
-            public void updatePhoto(String task_key, int index, int position,String oldPhoto,boolean isAdd) {
+            public void updatePhoto(String task_key, int index, int position, String oldPhoto, boolean isAdd) {
                 indexPosition = index;
                 itemIndex = position;
                 indexKey = task_key;
@@ -323,17 +323,16 @@ public class SpecialTSSXFrgment extends BaseFragment {
             }
 
             @Override
-            public void delTssxPhoto(String key,String photoStr) {
-                delDataPhoto(key,photoStr);
+            public void delTssxPhoto(String key, String photoStr) {
+                delDataPhoto(key, photoStr);
             }
 
         });
     }
 
 
-
     //网络获取保存本地
-    public void saveTssx(){
+    public void saveTssx() {
 //        ProgressDialog.show(getContext(),false,"正在加载中...");
         LocalPatrolRecordBean localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
         String tower_id = localByTaskId.getTower_id();
@@ -376,26 +375,24 @@ public class SpecialTSSXFrgment extends BaseFragment {
     }
 
     //（1：三跨；2：八防：3：其他）
-    public String intToKey(String type)
-    {
-        if(type.equals("1"))
+    public String intToKey(String type) {
+        if (type.equals("1"))
             return TYPE_SK;
-        else if(type.equals("2"))
+        else if (type.equals("2"))
             return TYPE_LF;
-        else if(type.equals("3"))
+        else if (type.equals("3"))
             return TYPE_QT;
         return "";
     }
 
     //网络获取失败加载本地的
-    public void loadLocalData()
-    {
+    public void loadLocalData() {
         List<TSSXLocalBean> tssxList = SQLite.select().from(TSSXLocalBean.class).queryList();
         skTssxList.clear();
         lfTssxList.clear();
         qtTssxList.clear();
 
-        for (TSSXLocalBean bean:tssxList) {
+        for (TSSXLocalBean bean : tssxList) {
             TSSXBean tssxBean = new TSSXBean();
             tssxBean.setKey(bean.getKey());
             tssxBean.setParKey(bean.getParKey());
@@ -428,8 +425,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
     }
 
     //刷新页面数据
-    public void refreshPage(List<TSSXBean> typeBeanList)
-    {
+    public void refreshPage(List<TSSXBean> typeBeanList) {
         intiTssxData(typeBeanList);
 
         sankua_rad.check(tssx_sankua.getId());
@@ -443,11 +439,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
     }
 
     //回显特殊属性选择列表
-    public void refreshAddTssxData(List<TSSXBean> localList)
-    {
-        for (TSSXBean locaBean:localList) {
-            for (TSSXBean addBean:tssxBeanList) {
-                if(locaBean.getKey().equals(addBean.getKey())){
+    public void refreshAddTssxData(List<TSSXBean> localList) {
+        for (TSSXBean locaBean : localList) {
+            for (TSSXBean addBean : tssxBeanList) {
+                if (locaBean.getKey().equals(addBean.getKey())) {
                     addBean.setCheck(true);
                 }
             }
@@ -455,18 +450,16 @@ public class SpecialTSSXFrgment extends BaseFragment {
         tssxAddAdapter.setData(tssxBeanList);
     }
 
-    public List<String> fileListToList(List<TssxToFile> fileList)
-    {
+    public List<String> fileListToList(List<TssxToFile> fileList) {
         List<String> list = new ArrayList<>();
-        for (TssxToFile photo:fileList) {
-            list.add(BaseUrl.BASE_URL+photo.getFile_path()+photo.getFilename());
+        for (TssxToFile photo : fileList) {
+            list.add(BaseUrl.BASE_URL + photo.getFile_path() + photo.getFilename());
         }
         return list;
     }
 
     //删除本地照片数据
-    public void delDataPhoto(String key,String photoStr)
-    {
+    public void delDataPhoto(String key, String photoStr) {
         TSSXLocalBean product = SQLite.select()
                 .from(TSSXLocalBean.class)
                 .where(TSSXLocalBean_Table.key.is(key))
@@ -474,14 +467,15 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 .querySingle();
         String[] photo = product.getPhotoStr().split(";");
         List<String> photoList = new ArrayList<>();
-        for (int i=0;i<photo.length;i++){
-            if(!photo[i].equals(photoStr))
+        for (int i = 0; i < photo.length; i++) {
+            if (!photo[i].equals(photoStr))
                 photoList.add(photo[i]);
         }
 
         product.setPhotoStr(photoListToStr(photoList));
         product.update();
     }
+
     //更新等级
     public void updateDjBean(String key, String dj) {
         SQLite.update(TSSXLocalBean.class)
@@ -490,6 +484,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 .and(TSSXLocalBean_Table.task_id.is(task_id))
                 .execute();
     }
+
     //更新隐患内容
     public void updateYhnrBean(String key, String yhnr) {
         SQLite.update(TSSXLocalBean.class)
@@ -506,13 +501,14 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 .where(TSSXLocalBean_Table.key.is(key))
                 .and(TSSXLocalBean_Table.task_id.is(task_id))
                 .queryList();//查询单个
-        if (product.size()>0) {
-            for (TSSXLocalBean bean: product) {
+        if (product.size() > 0) {
+            for (TSSXLocalBean bean : product) {
                 bean.delete();
             }
         }
 
     }
+
     //初始化数据保存本地
     public void intiTssxData(List<TSSXBean> typeBeanList) {
         skTssxList.clear();
@@ -535,7 +531,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
                     .where(TSSXLocalBean_Table.task_id.is(task_id))
                     .and(TSSXLocalBean_Table.key.is(typeBeanList.get(i).getKey())).querySingle();
             TSSXLocalBean localBean = new TSSXLocalBean();
-            if(tssxLocalBean == null){
+            if (tssxLocalBean == null) {
                 localBean.setDj(bean.getDj());
                 localBean.setKey(bean.getKey());
                 localBean.setValues(bean.getValues());
@@ -545,7 +541,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 localBean.setMonth(formatStr(data[1]));
                 localBean.setDay(formatStr(data[2]));
                 localBean.save();
-            }else{
+            } else {
                 localBean.setDj(tssxLocalBean.getDj());
                 localBean.setKey(tssxLocalBean.getKey());
                 localBean.setValues(tssxLocalBean.getValues());
@@ -559,30 +555,29 @@ public class SpecialTSSXFrgment extends BaseFragment {
         }
     }
 
-    public String formatStr(String data)
-    {
+    public String formatStr(String data) {
         return Integer.valueOf(data).toString();
     }
 
 
-    public String photoListToStr(List<String> list)
-    {
+    public String photoListToStr(List<String> list) {
         String photo2 = "";
-        for(int i=0;i<list.size();i++){
-            if(TextUtils.isEmpty(photo2))
+        for (int i = 0; i < list.size(); i++) {
+            if (TextUtils.isEmpty(photo2))
                 photo2 = list.get(i);
             else
-                photo2 =photo2 +";"+list.get(i);
+                photo2 = photo2 + ";" + list.get(i);
         }
         return photo2;
     }
 
     /**
-     *添加和更新
+     * 添加和更新
+     *
      * @param task_key
      * @param photoPath
      */
-    public void updatePhoto(String task_key, String photoPath,String oldPhoto,boolean isAdd) {
+    public void updatePhoto(String task_key, String photoPath, String oldPhoto, boolean isAdd) {
         List<String> photoList = new ArrayList<>();
         String photo = "";
         TSSXLocalBean product = SQLite.select()
@@ -593,22 +588,22 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
         String[] photoStr = product.getPhotoStr().split(";");
 
-        if(isAdd){
+        if (isAdd) {
 
-            for(int i=0;i<photoStr.length;i++){
+            for (int i = 0; i < photoStr.length; i++) {
                 photoList.add(photoStr[i]);
             }
             photoList.add(photoPath);
 
-        }else{
+        } else {
 
-            for(int i=0;i<photoStr.length;i++){
+            for (int i = 0; i < photoStr.length; i++) {
                 photoList.add(photoStr[i]);
             }
 
             int index = photoList.indexOf(oldPhoto);
-            if(index != -1)
-                photoList.set(index,photoPath);
+            if (index != -1)
+                photoList.set(index, photoPath);
 
         }
 
@@ -634,15 +629,15 @@ public class SpecialTSSXFrgment extends BaseFragment {
                         switch (sankua_rad.getCheckedRadioButtonId()) {
                             case R.id.tssx_sankua:
                                 skEditAdapter.setPhotoData(path, indexPosition, itemIndex);
-                                updatePhoto(indexKey, path, oldPhotoStr,isAddPhtot);
+                                updatePhoto(indexKey, path, oldPhotoStr, isAddPhtot);
                                 break;
                             case R.id.tssx_liufang:
                                 lfEditAdapter.setPhotoData(path, indexPosition, itemIndex);
-                                updatePhoto(indexKey, path, oldPhotoStr,isAddPhtot);
+                                updatePhoto(indexKey, path, oldPhotoStr, isAddPhtot);
                                 break;
                             case R.id.tssx_qita:
                                 qtEditAdapter.setPhotoData(path, indexPosition, itemIndex);
-                                updatePhoto(indexKey, path, oldPhotoStr,isAddPhtot);
+                                updatePhoto(indexKey, path, oldPhotoStr, isAddPhtot);
                                 break;
                         }
 

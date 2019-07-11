@@ -141,6 +141,7 @@ public class PatrolRecordActivity extends BaseActivity {
         Constant.patrol_record_audit_status = audit_status;
         getYXtodo();
         initview();
+        saveLocalAsync(null);
         query();
         getTask(task_id);
     }
@@ -270,16 +271,29 @@ public class PatrolRecordActivity extends BaseActivity {
                 LocalPatrolRecordBean localBean = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
                 if (localBean == null) {
                     localBean = new LocalPatrolRecordBean();
-                    localBean.setTask_id(bean.getId());
-                    localBean.setLine_id(bean.getLine_id());
-                    localBean.setType_sign(bean.getType_sign());
-                    localBean.setLine_name(bean.getLine_name());
-                    localBean.setTower_id(bean.getTower_id());
-                    localBean.setTower_name(bean.getTower_name());
-                    localBean.setUser_id(bean.getUser_id());
-                    localBean.setUser_name(bean.getUser_name());
-                    localBean.setDep_id(bean.getDep_id());
-                    localBean.setDep_name(bean.getDep_name());
+                    if (bean == null) {
+                        localBean.setTask_id(task_id);
+                        localBean.setLine_id("");
+                        localBean.setType_sign("");
+                        localBean.setLine_name("");
+                        localBean.setTower_id("");
+                        localBean.setTower_name("");
+                        localBean.setUser_id("");
+                        localBean.setUser_name("");
+                        localBean.setDep_id("");
+                        localBean.setDep_name("");
+                    } else {
+                        localBean.setTask_id(bean.getId());
+                        localBean.setLine_id(bean.getLine_id());
+                        localBean.setType_sign(bean.getType_sign());
+                        localBean.setLine_name(bean.getLine_name());
+                        localBean.setTower_id(bean.getTower_id());
+                        localBean.setTower_name(bean.getTower_name());
+                        localBean.setUser_id(bean.getUser_id());
+                        localBean.setUser_name(bean.getUser_name());
+                        localBean.setDep_id(bean.getDep_id());
+                        localBean.setDep_name(bean.getDep_name());
+                    }
                     localBean.save();
                 } else {
                     localBean.setTask_id(bean.getId());
@@ -562,7 +576,7 @@ public class PatrolRecordActivity extends BaseActivity {
         for (int i = 0; i < localByTssx.size(); i++) {
             String pics = localByTssx.get(i).getPhotoStr();
             //数据为空提交时删除
-            if(TextUtils.isEmpty(localByTssx.get(i).getYhnr()) && TextUtils.isEmpty(pics)){
+            if (TextUtils.isEmpty(localByTssx.get(i).getYhnr()) && TextUtils.isEmpty(pics)) {
                 localByTssx.get(i).delete();
             }
 
