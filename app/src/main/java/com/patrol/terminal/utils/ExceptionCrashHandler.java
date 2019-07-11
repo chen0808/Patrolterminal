@@ -22,6 +22,8 @@ import java.util.Map;
  * 异常捕获
  * 在Application的onCreate()中配置一下
  * ExceptionCrashHandler.getInstance().init(this);
+ * 默认/data/data/com.patrol.terminal/files/crash/2019_07_11_08_42.txt
+ * mnt/sdcard/com.patrol.terminal/crash/2019_07_11_08_42.txt
  */
 public class ExceptionCrashHandler implements Thread.UncaughtExceptionHandler {
 
@@ -141,7 +143,9 @@ public class ExceptionCrashHandler implements Thread.UncaughtExceptionHandler {
 
         if (Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED)) {
-            File dir = new File(mContext.getFilesDir() + File.separator + "crash"
+//            mContext.getFilesDir();///data/data/com.patrol.terminal/files
+            String fileDir = Environment.getExternalStorageDirectory().getPath() + File.separator + mContext.getPackageName();
+            File dir = new File(fileDir + File.separator + "crash"
                     + File.separator);
 
             // 先删除之前的异常信息
@@ -151,12 +155,12 @@ public class ExceptionCrashHandler implements Thread.UncaughtExceptionHandler {
 
             // 再从新创建文件夹
             if (!dir.exists()) {
-                dir.mkdir();
+                dir.mkdirs();
             }
             try {
                 fileName = dir.toString()
                         + File.separator
-                        + getAssignTime("yyyy_MM_dd_HH_mm") + ".txt";
+                        + getAssignTime("yyyy_MM_dd_HH_mm_ssss") + ".txt";
                 FileOutputStream fos = new FileOutputStream(fileName);
                 fos.write(sb.toString().getBytes());
                 fos.flush();
