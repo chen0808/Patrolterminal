@@ -555,43 +555,51 @@ public class PatrolRecordActivity extends BaseActivity {
                 }
             }
         }
-
+        substepUpload(params);
+        Map<String, RequestBody> params1 = new HashMap<>();
         //本地特殊屬性
         List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(task_id)).queryList();
         for (int i = 0; i < localByTssx.size(); i++) {
             String pics = localByTssx.get(i).getPhotoStr();
             //数据为空提交时删除
-            if (TextUtils.isEmpty(localByTssx.get(i).getYhnr()) && TextUtils.isEmpty(pics)) {
+            if(TextUtils.isEmpty(localByTssx.get(i).getYhnr()) && TextUtils.isEmpty(pics)){
                 localByTssx.get(i).delete();
             }
 
-            params.put("eqTowerWaresList[" + i + "].task_id", toRequestBody(task_id));
-            params.put("eqTowerWaresList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getKey()));
-            params.put("eqTowerWaresList[" + i + "].line_id", toRequestBody(localByTssx.get(i).getLine_id()));//线路id
-            params.put("eqTowerWaresList[" + i + "].tower_id", toRequestBody(localByTaskId.getTower_id()));//杆塔id
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.task_id", toRequestBody(task_id));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.line_id", toRequestBody(localByTssx.get(i).getLine_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_id", toRequestBody(localByTaskId.getTower_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_id", toRequestBody(localByTaskId.getTower_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_name", toRequestBody(localByTaskId.getTower_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_name", toRequestBody(localByTaskId.getTower_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.type_id", toRequestBody(localByTssx.get(i).getKey()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.year", toRequestBody(localByTssx.get(i).getYear()));//
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.month", toRequestBody(localByTssx.get(i).getMonth()));//
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.day", toRequestBody(localByTssx.get(i).getDay()));//
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_level", toRequestBody(localByTssx.get(i).getDj()));//隐患等级
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.content", toRequestBody(localByTssx.get(i).getYhnr()));//隐患内容
+            params1.put("eqTowerWaresList[" + i + "].task_id", toRequestBody(task_id));
+            params1.put("eqTowerWaresList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getKey()));
+            params1.put("eqTowerWaresList[" + i + "].line_id", toRequestBody(localByTssx.get(i).getLine_id()));//线路id
+            params1.put("eqTowerWaresList[" + i + "].tower_id", toRequestBody(localByTaskId.getTower_id()));//杆塔id
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.task_id", toRequestBody(task_id));
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.line_id", toRequestBody(localByTssx.get(i).getLine_id()));
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.start_id", toRequestBody(localByTaskId.getTower_id()));
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.end_id", toRequestBody(localByTaskId.getTower_id()));
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.start_name", toRequestBody(localByTaskId.getTower_name()));
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.end_name", toRequestBody(localByTaskId.getTower_name()));
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.type_id", toRequestBody(localByTssx.get(i).getKey()));
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.year", toRequestBody(localByTssx.get(i).getYear()));//
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.month", toRequestBody(localByTssx.get(i).getMonth()));//
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.day", toRequestBody(localByTssx.get(i).getDay()));//
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_level", toRequestBody(localByTssx.get(i).getDj()));//隐患等级
+            params1.put("eqTowerWaresList[" + i + "].taskTrouble.content", toRequestBody(localByTssx.get(i).getYhnr()));//隐患内容
 
 
             if (pics != null) {
                 String[] split = pics.split(";");
                 for (int j = 0; j < split.length; j++) {
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
-                    params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
+                    params1.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
                 }
             }
         }
+        substepUpload(params1);
 
+    }
+
+    /**
+     * @param params
+     */
+    public void substepUpload(Map<String, RequestBody> params) {
         ProgressDialog.show(this, true, "正在上传...");
         BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -607,7 +615,6 @@ public class PatrolRecordActivity extends BaseActivity {
                         ProgressDialog.cancle();
                     }
                 });
-
     }
 
     //保存待办信息
