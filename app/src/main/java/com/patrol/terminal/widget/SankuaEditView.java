@@ -233,8 +233,7 @@ public class SankuaEditView extends LinearLayout {
     {
         sk_gridview.setEnabled(disable);
         sankua_yhnr.setEnabled(disable);
-        sankua_rad.setEnabled(disable);
-
+        disableRadioGroup(disable);
         if (!disable) {
             item_tssx_del.setVisibility(GONE);
         }else{
@@ -242,6 +241,19 @@ public class SankuaEditView extends LinearLayout {
         }
 
     }
+
+    /**
+     * 禁用RadioGroup
+     *
+     * @param isEnable false 禁用 true 可用
+     */
+    public void disableRadioGroup(Boolean isEnable) {
+        for (int i = 0; i < sankua_rad.getChildCount(); i++) {
+            sankua_rad.getChildAt(i).setEnabled(isEnable);
+        }
+
+    }
+
 
     public void setOnItemClick(onTssxClick click){
         this.mOnTssxClick = click;

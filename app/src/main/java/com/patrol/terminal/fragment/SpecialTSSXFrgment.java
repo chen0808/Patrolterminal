@@ -163,8 +163,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
         cursor = defactContentDBHelper.queryAll();
         AutoCursorAdapter cursorAdapter = new AutoCursorAdapter(getActivity(), cursor);
 
-        //是否可编辑状态  不可编辑
-        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2")) {
+        //是否可编辑状态  不可编辑  0,4可以编辑  123不能编辑
+        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
             tssx_add.setVisibility(View.GONE);
             xs_tssx_lv.setEnabled(false);
         } else {

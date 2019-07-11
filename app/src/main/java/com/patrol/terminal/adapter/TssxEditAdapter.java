@@ -174,7 +174,7 @@ public class TssxEditAdapter extends BaseAdapter {
         holder.tssx_edit.setPhotoAdapter(photoAdapter);
 
         //不可编辑
-        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2")) {
+        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
             holder.tssx_edit.disableView(false);
         } else {
             holder.tssx_edit.disableView(true);

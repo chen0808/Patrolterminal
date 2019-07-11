@@ -91,7 +91,18 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
                 notifyDataSetChanged();
             }
         });
+
+        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
+            holder.ivDelete.setVisibility(View.GONE);
+        } else {
+            holder.ivDelete.setVisibility(View.VISIBLE);
+        }
+
         return convertView;
+    }
+
+    public void showDelImg(Boolean isShow) {
+
     }
 
     public interface onDelPhotoAdapter{
