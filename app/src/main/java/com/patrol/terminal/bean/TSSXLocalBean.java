@@ -1,14 +1,13 @@
 package com.patrol.terminal.bean;
 
 import com.patrol.terminal.sqlite.AppDataBase;
+import com.patrol.terminal.utils.Constant;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Table(database = AppDataBase.class)
 public class TSSXLocalBean extends BaseModel implements Serializable {
@@ -26,7 +25,7 @@ public class TSSXLocalBean extends BaseModel implements Serializable {
     @Column
     private String yhnr ="";//隐患内容
     @Column
-    private String dj = "一般";//等级
+    private String dj = Constant.DJ_YB_STR;//等级
     @Column
     private boolean isUpload = false;//是否上传
     @Column

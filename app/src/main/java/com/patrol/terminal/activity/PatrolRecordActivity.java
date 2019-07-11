@@ -29,11 +29,14 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.JDDZbean_Table;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
+import com.patrol.terminal.bean.PersonalTaskListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TSSXLocalBean;
 import com.patrol.terminal.bean.TSSXLocalBean_Table;
@@ -127,6 +130,8 @@ public class PatrolRecordActivity extends BaseActivity {
     public String audit_status;
     private int picIndex = 0;
     private LocalPatrolRecordBean localByTaskId;
+    private PersonalTaskListBean personalTaskListBean;
+    private boolean isSave = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -334,6 +339,10 @@ public class PatrolRecordActivity extends BaseActivity {
 
     //获取当前task_id对应的数据
     private void query() {
+        personalTaskListBean = SQLite.select().from(PersonalTaskListBean.class)
+                .where(PersonalTaskListBean_Table.id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(this)))
+                .querySingle();
+
         localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
         if (audit_status.equals("1") || audit_status.equals("2")) {
             initOnLineData();
@@ -569,8 +578,8 @@ public class PatrolRecordActivity extends BaseActivity {
                 }
             }
         }
-        substepUpload(params);
-        Map<String, RequestBody> params1 = new HashMap<>();
+//        substepUpload(params);
+//        Map<String, RequestBody> params1 = new HashMap<>();
         //本地特殊屬性
         List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(task_id)).queryList();
         for (int i = 0; i < localByTssx.size(); i++) {
@@ -580,34 +589,52 @@ public class PatrolRecordActivity extends BaseActivity {
                 localByTssx.get(i).delete();
             }
 
-            params1.put("eqTowerWaresList[" + i + "].task_id", toRequestBody(task_id));
-            params1.put("eqTowerWaresList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getKey()));
-            params1.put("eqTowerWaresList[" + i + "].line_id", toRequestBody(localByTssx.get(i).getLine_id()));//线路id
-            params1.put("eqTowerWaresList[" + i + "].tower_id", toRequestBody(localByTaskId.getTower_id()));//杆塔id
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.task_id", toRequestBody(task_id));
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.line_id", toRequestBody(localByTssx.get(i).getLine_id()));
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.start_id", toRequestBody(localByTaskId.getTower_id()));
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.end_id", toRequestBody(localByTaskId.getTower_id()));
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.start_name", toRequestBody(localByTaskId.getTower_name()));
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.end_name", toRequestBody(localByTaskId.getTower_name()));
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.type_id", toRequestBody(localByTssx.get(i).getKey()));
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.year", toRequestBody(localByTssx.get(i).getYear()));//
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.month", toRequestBody(localByTssx.get(i).getMonth()));//
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.day", toRequestBody(localByTssx.get(i).getDay()));//
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_level", toRequestBody(localByTssx.get(i).getDj()));//隐患等级
-            params1.put("eqTowerWaresList[" + i + "].taskTrouble.content", toRequestBody(localByTssx.get(i).getYhnr()));//隐患内容
+            params.put("eqTowerWaresList[" + i + "].task_id", toRequestBody(task_id));
+            params.put("eqTowerWaresList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getKey()));
+            params.put("eqTowerWaresList[" + i + "].line_id", toRequestBody(localByTssx.get(i).getLine_id()));//线路id
+            params.put("eqTowerWaresList[" + i + "].tower_id", toRequestBody(localByTaskId.getTower_id()));//杆塔id
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.task_id", toRequestBody(task_id));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.line_id", toRequestBody(localByTssx.get(i).getLine_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.type_id", toRequestBody(localByTssx.get(i).getKey()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.year", toRequestBody(localByTssx.get(i).getYear()));//
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.month", toRequestBody(localByTssx.get(i).getMonth()));//
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.day", toRequestBody(localByTssx.get(i).getDay()));//
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_level", toRequestBody(setDjStrToKey(localByTssx.get(i).getDj())));//隐患等级
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.content", toRequestBody(localByTssx.get(i).getYhnr()));//隐患内容
 
 
             if (pics != null) {
                 String[] split = pics.split(";");
                 for (int j = 0; j < split.length; j++) {
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
-                    params1.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
+                    params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
                 }
             }
         }
-        substepUpload(params1);
+        substepUpload(params);
 
+    }
+
+    /**
+     * 特殊属性DJ转换Str to key
+     *
+     * @param djid
+     * @return
+     */
+    public String setDjStrToKey(String djid) {
+        String djKey = "";
+        if (djid.equals(Constant.DJ_YB_STR)) {
+            djKey = Constant.DJ_YB;
+        } else if (djid.equals(Constant.DJ_YZ_STR)) {
+            djKey = Constant.DJ_YZ;
+        } else if (djid.equals(Constant.DJ_WJ_STR)) {
+            djKey = Constant.DJ_WJ;
+        }
+        return djKey;
     }
 
     /**
@@ -697,6 +724,13 @@ public class PatrolRecordActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+
+            if (personalTaskListBean != null && !isSave) {
+                isSave = true;
+                personalTaskListBean.setIs_save("0");
+                personalTaskListBean.update();
+                setResult(RESULT_OK);
+            }
             try {
                 switch (requestCode) {
                     case Constant.PATROL_RECORD_REQUEST_CODE:
@@ -754,7 +788,9 @@ public class PatrolRecordActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
+
     }
 
     @Override

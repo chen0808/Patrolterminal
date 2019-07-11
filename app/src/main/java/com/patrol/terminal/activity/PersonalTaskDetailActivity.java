@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -40,6 +41,8 @@ import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.PlanTypeBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
+import com.patrol.terminal.bean.TSSXLocalBean;
+import com.patrol.terminal.bean.TSSXLocalBean_Table;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.RxRefreshEvent;
@@ -200,7 +203,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                     case "1":
                     case "2":
                     case "7":
-                    case "11":
+                    case "11"://定期任务巡视
                         intent.setClass(PersonalTaskDetailActivity.this, PatrolRecordActivity.class);
                         SPUtil.put(PersonalTaskDetailActivity.this, "ids", "tower_id", bean.getTower_id() == null ? "" : bean.getTower_id());
                         SPUtil.put(PersonalTaskDetailActivity.this, "ids", "line_id", bean.getLine_id() == null ? "" : bean.getLine_id());
@@ -209,19 +212,19 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                         SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_id", bean.getUser_id() == null ? "" : bean.getUser_id());
                         SPUtil.put(PersonalTaskDetailActivity.this, "ids", "find_user_name", bean.getUser_name() == null ? "" : bean.getUser_name());
                         break;
-                    case "5":
+                    case "5"://红外测温
                         intent.setClass(PersonalTaskDetailActivity.this, HongWaiCeWenActivity.class);
                         break;
-                    case "3":
+                    case "3"://接地电阻检测
                         intent.setClass(PersonalTaskDetailActivity.this, JiediDianZuCeLiangActicivity.class);
                         break;
-                    case "10":
+                    case "10"://绝缘子零值检测
                         intent.setClass(PersonalTaskDetailActivity.this, JueYuanZiLingZhiJianCeActivity.class);
                         break;
-                    case "6":
+                    case "6"://斜杆塔倾斜测温
                         intent.setClass(PersonalTaskDetailActivity.this, XieGanTaQingXieCeWenActivity.class);
                         break;
-                    case "12":
+                    case "12":/*质量监督记录表*/
                         intent.setClass(PersonalTaskDetailActivity.this, MonitoringRecordActivity.class);
                         intent.putExtra("bean", bean);
                         break;
@@ -443,9 +446,9 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                                 case "1":
                                 case "2":
                                 case "7":
-                                case "11":
+                                case "11"://巡视
                                     savePatrolRecord(id, type_sign);
-                                    break;//巡视
+                                    break;
                                 case "3": //提交接电电阻
                                     saveJDDZ(id, type_sign);
                                     break;
@@ -558,6 +561,42 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 }
             }
         }
+        //特殊属性
+        List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(id)).queryList();
+        for (int i = 0; i < localByTssx.size(); i++) {
+            String pics = localByTssx.get(i).getPhotoStr();
+            //数据为空提交时删除
+            if (TextUtils.isEmpty(localByTssx.get(i).getYhnr()) && TextUtils.isEmpty(pics)) {
+                localByTssx.get(i).delete();
+            }
+
+            params.put("eqTowerWaresList[" + i + "].task_id", toRequestBody(id));
+            params.put("eqTowerWaresList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getKey()));
+            params.put("eqTowerWaresList[" + i + "].line_id", toRequestBody(localByTssx.get(i).getLine_id()));//线路id
+            params.put("eqTowerWaresList[" + i + "].tower_id", toRequestBody(localByTaskId.getTower_id()));//杆塔id
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.task_id", toRequestBody(id));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.line_id", toRequestBody(localByTssx.get(i).getLine_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.type_id", toRequestBody(localByTssx.get(i).getKey()));
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.year", toRequestBody(localByTssx.get(i).getYear()));//
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.month", toRequestBody(localByTssx.get(i).getMonth()));//
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.day", toRequestBody(localByTssx.get(i).getDay()));//
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_level", toRequestBody(setDjStrToKey(localByTssx.get(i).getDj())));//隐患等级
+            params.put("eqTowerWaresList[" + i + "].taskTrouble.content", toRequestBody(localByTssx.get(i).getYhnr()));//隐患内容
+
+
+            if (pics != null) {
+                String[] split = pics.split(";");
+                for (int j = 0; j < split.length; j++) {
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
+                    params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
+                }
+            }
+        }
+
         BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver(this) {
@@ -571,6 +610,24 @@ public class PersonalTaskDetailActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+    /**
+     * 特殊属性DJ转换Str to key
+     *
+     * @param djid
+     * @return
+     */
+    public String setDjStrToKey(String djid) {
+        String djKey = "";
+        if (djid.equals(Constant.DJ_YB_STR)) {
+            djKey = Constant.DJ_YB;
+        } else if (djid.equals(Constant.DJ_YZ_STR)) {
+            djKey = Constant.DJ_YZ;
+        } else if (djid.equals(Constant.DJ_WJ_STR)) {
+            djKey = Constant.DJ_WJ;
+        }
+        return djKey;
     }
 
     public RequestBody toRequestBody(String value) {

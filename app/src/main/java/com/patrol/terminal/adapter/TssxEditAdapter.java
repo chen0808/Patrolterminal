@@ -173,9 +173,30 @@ public class TssxEditAdapter extends BaseAdapter {
         photoAdapter = new TssxPhotoAdapter(context,tssxBean.getPhotoList());
         holder.tssx_edit.setPhotoAdapter(photoAdapter);
 
+        //不可编辑
+        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2")) {
+            holder.tssx_edit.disableView(false);
+        } else {
+            holder.tssx_edit.disableView(true);
+        }
+
         return convertView;
     }
 
+    /**
+     * 设置隐患等级
+     */
+    public String setDjIdStatus(String djid) {
+        String YHDJStr = "";
+        if (djid.equals(Constant.DJ_YB)) {
+            YHDJStr = "一般";
+        } else if (djid.equals(Constant.DJ_YZ)) {
+            YHDJStr = "严重";
+        } else if (djid.equals(Constant.DJ_WJ)) {
+            YHDJStr = "危急";
+        }
+        return YHDJStr;
+    }
 
     /**
      * 更新照片

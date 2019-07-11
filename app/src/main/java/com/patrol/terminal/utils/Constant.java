@@ -122,4 +122,12 @@ public class Constant {
     public static String defect_patrol_id = "";//巡视内容id
     public static int defect_patrol_index = -1;//图片位置
     public static String patrol_record_audit_status = "";//巡视任务状态
+
+    public static String DJ_YB = "23BC6E4170E7499688225680391086F5";//隐患等级 一般
+    public static String DJ_YZ = "C98E48C4EA1A4E4CBB686735AC42CAE4";//严重
+    public static String DJ_WJ = "14E164AE79834B809AAEFA151658C97A";//危急
+
+    public static String DJ_YB_STR = "一般";
+    public static String DJ_YZ_STR = "严重";
+    public static String DJ_WJ_STR = "危急";
 }

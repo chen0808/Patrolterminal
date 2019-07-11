@@ -1,18 +1,13 @@
 package com.patrol.terminal.widget;
 
-import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
 import android.widget.GridView;
@@ -27,10 +22,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.AutoCursorAdapter;
 import com.patrol.terminal.adapter.GridViewAdapter2;
 import com.patrol.terminal.adapter.TssxPhotoAdapter;
-import com.patrol.terminal.sqlite.DefactContentDBHelper;
-import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.utils.Constant;
-import com.patrol.terminal.utils.PictureSelectorConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,9 +47,6 @@ public class SankuaEditView extends LinearLayout {
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
 
     private String YHDJStr;
-    public static int DJ_YB = 0;
-    public static int DJ_ZD = 1;
-    public static int DJ_JJ = 2;
 
     private CursorAdapter cursorAdapter;
     private onTssxClick mOnTssxClick;
@@ -143,18 +132,16 @@ public class SankuaEditView extends LinearLayout {
         return sankua_yhnr.getText().toString().trim();
     }
 
-    /**
-     * 设置隐患等级
-     */
-    public void setDjStatus(int dj) {
-        if(dj == DJ_YB){
-            YHDJStr = "一般";
-        }else if(dj == DJ_ZD){
-            YHDJStr = "严重";
-        }else if(dj == DJ_JJ){
-            YHDJStr = "危急";
+    public String setDjStrToKey(String djid) {
+        String djKey = "";
+        if (djid.equals("一般")) {
+            djKey = Constant.DJ_YB;
+        } else if (djid.equals("严重")) {
+            djKey = Constant.DJ_YZ;
+        } else if (djid.equals("危急")) {
+            djKey = Constant.DJ_WJ;
         }
-        setDjStatus(YHDJStr);
+        return djKey;
     }
 
     public void setDjStatus(String dj) {
@@ -183,7 +170,8 @@ public class SankuaEditView extends LinearLayout {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton rb = (RadioButton) findViewById(checkedId);
                 YHDJStr = rb.getText().toString().trim();
-                mOnTssxClick.getDj(YHDJStr);
+
+                mOnTssxClick.getDj(setDjStrToKey(YHDJStr));
             }
         });
 
@@ -247,7 +235,7 @@ public class SankuaEditView extends LinearLayout {
         sankua_yhnr.setEnabled(disable);
         sankua_rad.setEnabled(disable);
 
-        if(disable){
+        if (!disable) {
             item_tssx_del.setVisibility(GONE);
         }else{
             item_tssx_del.setVisibility(VISIBLE);

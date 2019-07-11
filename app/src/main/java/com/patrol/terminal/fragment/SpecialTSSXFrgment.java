@@ -28,8 +28,11 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.JDDZbean_Table;
 import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
+import com.patrol.terminal.bean.PersonalTaskListBean;
+import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.TSSXBean;
 import com.patrol.terminal.bean.TSSXLocalBean;
 import com.patrol.terminal.bean.TSSXLocalBean_Table;
@@ -39,7 +42,9 @@ import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.NoScrollViewPager;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.io.IOException;
@@ -49,6 +54,8 @@ import java.util.List;
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * 特殊属性
@@ -82,13 +89,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
      * 添加的特殊属性列表
      */
     private List<TSSXBean> addTssxList = new ArrayList<>();
-
-
     /**
      * 添加特殊屬性adapter
      */
     private TssxAddAdapter tssxAddAdapter;
-
     /**
      * 添加的特殊属性列表
      */
@@ -114,6 +118,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
     private String oldPhotoStr;
     private boolean isAddPhtot = false;
 
+    private PersonalTaskListBean personalTaskListBean;
+    private boolean isSave = false;
+
+
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag_xs_tssx, null);
@@ -133,6 +141,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
         intTSSX();
         initClick();
         loadLocalData();
+
+        personalTaskListBean = SQLite.select().from(PersonalTaskListBean.class)
+                .where(PersonalTaskListBean_Table.id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(getActivity())))
+                .querySingle();
     }
 
     @Override
@@ -151,6 +163,14 @@ public class SpecialTSSXFrgment extends BaseFragment {
         cursor = defactContentDBHelper.queryAll();
         AutoCursorAdapter cursorAdapter = new AutoCursorAdapter(getActivity(), cursor);
 
+        //是否可编辑状态  不可编辑
+        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2")) {
+            tssx_add.setVisibility(View.GONE);
+            xs_tssx_lv.setEnabled(false);
+        } else {
+            tssx_add.setVisibility(View.VISIBLE);
+            xs_tssx_lv.setEnabled(true);
+        }
 
         sankua_rad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -176,6 +196,13 @@ public class SpecialTSSXFrgment extends BaseFragment {
         tssx_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (personalTaskListBean != null && !isSave) {
+                    isSave = true;
+                    personalTaskListBean.setIs_save("0");
+                    personalTaskListBean.update();
+                    getActivity().setResult(RESULT_OK);
+                }
 
                 if (rl_add.getVisibility() == View.VISIBLE) {
                     rl_add.setVisibility(View.GONE);
@@ -331,6 +358,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
     }
 
 
+
     //网络获取保存本地
     public void saveTssx() {
 //        ProgressDialog.show(getContext(),false,"正在加载中...");
@@ -350,6 +378,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
                                 TSSXBean tssxBean = new TSSXBean();
                                 tssxBean.setKey(bean.getWares_id());
                                 tssxBean.setValues(bean.getWares_name());
+                                tssxBean.setDj(setDjIdStatus(bean.getTaskTrouble().getTrouble_level()));
                                 tssxBean.setParKey(intToKey(bean.getPda_sign()));//特殊属性父id
 
                                 if (bean.getTaskTrouble() != null) {
@@ -365,13 +394,28 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
                         @Override
                         protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                        ProgressDialog.cancle();
-//                        loadLocalData();
+                            ProgressDialog.cancle();
+                            loadLocalData();
 
                         }
                     });
         }
 
+    }
+
+    /**
+     * 设置隐患等级
+     */
+    public String setDjIdStatus(String djid) {
+        String YHDJStr = "";
+        if (djid.equals(Constant.DJ_YB)) {
+            YHDJStr = Constant.DJ_YB_STR;
+        } else if (djid.equals(Constant.DJ_YZ)) {
+            YHDJStr = Constant.DJ_YZ_STR;
+        } else if (djid.equals(Constant.DJ_WJ)) {
+            YHDJStr = Constant.DJ_WJ_STR;
+        }
+        return YHDJStr;
     }
 
     //（1：三跨；2：八防：3：其他）
@@ -382,7 +426,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
             return TYPE_LF;
         else if (type.equals("3"))
             return TYPE_QT;
-        return "";
+        return "3";
     }
 
     //网络获取失败加载本地的
@@ -475,7 +519,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
         product.setPhotoStr(photoListToStr(photoList));
         product.update();
     }
-
     //更新等级
     public void updateDjBean(String key, String dj) {
         SQLite.update(TSSXLocalBean.class)
@@ -484,7 +527,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 .and(TSSXLocalBean_Table.task_id.is(task_id))
                 .execute();
     }
-
     //更新隐患内容
     public void updateYhnrBean(String key, String yhnr) {
         SQLite.update(TSSXLocalBean.class)
@@ -508,7 +550,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
         }
 
     }
-
     //初始化数据保存本地
     public void intiTssxData(List<TSSXBean> typeBeanList) {
         skTssxList.clear();
@@ -572,8 +613,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
     }
 
     /**
-     * 添加和更新
-     *
+     *添加和更新
      * @param task_key
      * @param photoPath
      */
