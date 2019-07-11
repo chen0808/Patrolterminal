@@ -84,6 +84,7 @@
 
         </RadioGroup>
 
+
         <TextView
             android:id="@+id/todo_num"
             android:layout_width="16dp"
@@ -96,4 +97,12 @@
             android:textSize="@dimen/sp_11"
             android:visibility="gone" />
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="测试多图片上传"
+        android:visibility="gone" />
+
 </RelativeLayout>

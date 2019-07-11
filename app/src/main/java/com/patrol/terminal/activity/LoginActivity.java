@@ -1,6 +1,5 @@
 package com.patrol.terminal.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,7 +46,7 @@ public class LoginActivity extends BaseActivity {
             startActivity(new Intent(this, NewMainActivity.class));
             finish();
         }
-        longinName.setText("邓贵宝");
+        longinName.setText("");
         loginPsw.setText("123456");
     }
 

@@ -24,6 +24,26 @@ public class TssxToFile implements Serializable {
     private String repair_type;
     private String content;
     private String upload_time;
+    // 任务id
+    private String task_id;
+    // 隐患id
+    private String task_trouble_id;
+
+    public String getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(String task_id) {
+        this.task_id = task_id;
+    }
+
+    public String getTask_trouble_id() {
+        return task_trouble_id;
+    }
+
+    public void setTask_trouble_id(String task_trouble_id) {
+        this.task_trouble_id = task_trouble_id;
+    }
 
     public String getId() {
         return id;

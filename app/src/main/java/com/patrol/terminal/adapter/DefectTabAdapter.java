@@ -342,7 +342,11 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             checkTwoRb.setEnabled(false);
             checkThreeRb.setEnabled(false);
             gridView.setEnabled(false);
-            initGridViewFromOnline(gridView, item.getOnline_pics());
+            if (item.getPics() == null) {
+                initGridViewFromOnline(gridView, item.getOnline_pics());
+            } else {
+                initGridViewFromOnline(gridView, item.getPics());
+            }
         } else {
             initGridView(gridView, helper.getAdapterPosition(), item.getPics(), item.getTask_id(), item.getPatrol_id());
         }

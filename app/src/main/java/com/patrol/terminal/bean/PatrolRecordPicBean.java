@@ -1,68 +1,79 @@
 package com.patrol.terminal.bean;
 
 public class PatrolRecordPicBean {
+    // 主键id
+    private String id;
 
-        /**
-         * id : F811BF00FF844D4C8D7132474ABCF6F7
-         * task_id : 86CC2097F4F74B389087CFDC9C8FC502
-         * sign : 1
-         * upload_time : 2019-05-28T15:38:43.519
-         * filename : 9392e8b6-0f16-4a41-bb70-167ac4d13d21.jpg
-         * file_path : /upload.folder/
-         */
+    // 任务id
+    private String task_id;
 
-        private String id;
-        private String task_id;
-        private String sign;
-        private String upload_time;
-        private String filename;
-        private String file_path;
+    // 缺陷id
+    private String task_defect_id;
 
-        public String getId() {
-            return id;
-        }
+    // 上传时间
+    private String upload_time;
 
-        public void setId(String id) {
-            this.id = id;
-        }
+    // 文件名
+    private String filename;
 
-        public String getTask_id() {
-            return task_id;
-        }
+    // 文件路径
+    private String file_path;
 
-        public void setTask_id(String task_id) {
-            this.task_id = task_id;
-        }
+    private String sign;
 
-        public String getSign() {
-            return sign;
-        }
+    public String getSign() {
+        return sign;
+    }
 
-        public void setSign(String sign) {
-            this.sign = sign;
-        }
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
 
-        public String getUpload_time() {
-            return upload_time;
-        }
+    public String getId() {
+        return id;
+    }
 
-        public void setUpload_time(String upload_time) {
-            this.upload_time = upload_time;
-        }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-        public String getFilename() {
-            return filename;
-        }
+    public String getTask_id() {
+        return task_id;
+    }
 
-        public void setFilename(String filename) {
-            this.filename = filename;
-        }
+    public void setTask_id(String task_id) {
+        this.task_id = task_id;
+    }
 
-        public String getFile_path() {
-            return file_path;
-        }
+    public String getTask_defect_id() {
+        return task_defect_id;
+    }
 
-        public void setFile_path(String file_path) {
-            this.file_path = file_path;
-        }
+    public void setTask_defect_id(String task_defect_id) {
+        this.task_defect_id = task_defect_id;
+    }
+
+    public String getUpload_time() {
+        return upload_time;
+    }
+
+    public void setUpload_time(String upload_time) {
+        this.upload_time = upload_time;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getFile_path() {
+        return file_path;
+    }
+
+    public void setFile_path(String file_path) {
+        this.file_path = file_path;
+    }
 }

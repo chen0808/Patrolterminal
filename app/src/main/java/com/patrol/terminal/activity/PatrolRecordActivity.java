@@ -5,12 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -37,6 +35,8 @@ import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
+import com.patrol.terminal.bean.TSSXLocalBean;
+import com.patrol.terminal.bean.TSSXLocalBean_Table;
 import com.patrol.terminal.bean.TaskBean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.fragment.DefectFrgment;
@@ -45,6 +45,7 @@ import com.patrol.terminal.fragment.SpecialTSSXFrgment;
 import com.patrol.terminal.fragment.TroubleFrgment;
 import com.patrol.terminal.sqlite.AppDataBase;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.CancelOrOkDialog;
@@ -70,8 +71,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.badge.BadgePagerTitleView;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -413,7 +412,7 @@ public class PatrolRecordActivity extends BaseActivity {
             case R.id.iv_photo1:
                 picIndex = 1;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    startCamera(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + task_id + "_" + picIndex + ".jpg");
+                    startCamera();
                 } else {
                     showBigImage(1);
                 }
@@ -421,7 +420,7 @@ public class PatrolRecordActivity extends BaseActivity {
             case R.id.iv_photo2:
                 picIndex = 2;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    startCamera(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + task_id + "_" + picIndex + ".jpg");
+                    startCamera();
                 } else {
                     showBigImage(2);
                 }
@@ -429,7 +428,7 @@ public class PatrolRecordActivity extends BaseActivity {
             case R.id.iv_photo3:
                 picIndex = 3;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    startCamera(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + task_id + "_" + picIndex + ".jpg");
+                    startCamera();
                 } else {
                     showBigImage(3);
                 }
@@ -437,7 +436,7 @@ public class PatrolRecordActivity extends BaseActivity {
             case R.id.iv_photo4:
                 picIndex = 4;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    startCamera(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + task_id + "_" + picIndex + ".jpg");
+                    startCamera();
                 } else {
                     showBigImage(4);
                 }
@@ -445,7 +444,7 @@ public class PatrolRecordActivity extends BaseActivity {
             case R.id.iv_photo5:
                 picIndex = 5;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    startCamera(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + task_id + "_" + picIndex + ".jpg");
+                    startCamera();
                 } else {
                     showBigImage(5);
                 }
@@ -453,7 +452,7 @@ public class PatrolRecordActivity extends BaseActivity {
             case R.id.iv_photo6:
                 picIndex = 6;
                 if (audit_status.equals("0") || audit_status.equals("4")) {
-                    startCamera(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + task_id + "_" + picIndex + ".jpg");
+                    startCamera();
                 } else {
                     showBigImage(6);
                 }
@@ -558,11 +557,11 @@ public class PatrolRecordActivity extends BaseActivity {
         }
 
         //本地特殊屬性
-     /*   List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(task_id)).queryList();
+        List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(task_id)).queryList();
         for (int i = 0; i < localByTssx.size(); i++) {
             String pics = localByTssx.get(i).getPhotoStr();
             //数据为空提交时删除
-            if(TextUtils.isEmpty(localByTssx.get(i).getYhnr()) && TextUtils.isEmpty(pics)){
+            if (TextUtils.isEmpty(localByTssx.get(i).getYhnr()) && TextUtils.isEmpty(pics)) {
                 localByTssx.get(i).delete();
             }
 
@@ -591,7 +590,7 @@ public class PatrolRecordActivity extends BaseActivity {
                     params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
                 }
             }
-        }*/
+        }
 
         ProgressDialog.show(this, true, "正在上传...");
         BaseRequest.getInstance().getService().uploadPatrolRecord(params).subscribeOn(Schedulers.io())
@@ -644,21 +643,8 @@ public class PatrolRecordActivity extends BaseActivity {
     }
 
     //打开相机
-    private void startCamera(String path) {
-        File fileDir = new File(Environment.getExternalStorageDirectory().getPath()
-                + "/MyPhoto");
-        if (!fileDir.exists()) {
-            fileDir.mkdir();
-        }
-        // 指定拍照
+    private void startCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // 加载路径
-        Uri uri = FileProvider.getUriForFile(PatrolRecordActivity.this, getApplicationContext().getPackageName() + ".provider", new File(path));
-        // 指定存储路径，这样就可以保存原图了
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        // 拍照返回图片
         startActivityForResult(intent, Constant.PATROL_RECORD_REQUEST_CODE);
     }
 
@@ -690,15 +676,14 @@ public class PatrolRecordActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case Constant.PATROL_RECORD_REQUEST_CODE:
-                    try {
+            try {
+                switch (requestCode) {
+                    case Constant.PATROL_RECORD_REQUEST_CODE:
+                        Bundle bundle = data.getExtras();
+                        Bitmap bitmap = (Bitmap) bundle.get("data");
                         String path = Environment.getExternalStorageDirectory().getPath()
                                 + "/MyPhoto/" + task_id + "_" + picIndex + ".jpg";
-                        // 获取输入流
-                        FileInputStream is = new FileInputStream(path);
-                        // 把流解析成bitmap
-                        Bitmap bitmap = BitmapFactory.decodeStream(is);
+                        FileUtil.saveFile(bitmap, path);
                         switch (picIndex) {
                             case 1:
                                 ivPhoto1.setImageBitmap(bitmap);
@@ -743,10 +728,10 @@ public class PatrolRecordActivity extends BaseActivity {
                                         .execute();
                                 break;
                         }
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    break;
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
