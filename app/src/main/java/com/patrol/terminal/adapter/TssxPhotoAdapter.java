@@ -1,6 +1,7 @@
 package com.patrol.terminal.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,8 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
             if (path.contains("http")) {
                 Glide.with(mContext).load(path).into(holder.iv);
             } else {
-                Glide.with(mContext).load(new File(path)).into(holder.iv);
+                if (!TextUtils.isEmpty(path))
+                    Glide.with(mContext).load(new File(path)).into(holder.iv);
             }
             if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
                 holder.ivDelete.setVisibility(View.GONE);
