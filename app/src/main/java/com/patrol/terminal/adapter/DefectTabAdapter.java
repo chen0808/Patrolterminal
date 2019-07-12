@@ -45,6 +45,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
     private final Fragment fragment;
     private GridViewAdapter3 mGridViewAddImgAdapter;
     private int tab;
+    private boolean textChanged;
 
     public DefectTabAdapter(Fragment fragment, int layoutResId, @Nullable List<LocalPatrolDefectBean> data, int tab) {
         super(layoutResId, data);
@@ -62,7 +63,13 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         ImageView defectFalse = helper.getView(R.id.iv_defect_false);
         LinearLayout llCOntent = helper.getView(R.id.ll_content);
         AutoCompleteTextView tvDiverWay = helper.getView(R.id.tv_diver_way);
-        tvDiverWay.setText(item.getContent());
+        textChanged = true;
+        if (item.getContent() != null) {
+            tvDiverWay.setText(item.getContent());
+        } else {
+            tvDiverWay.setText("");
+        }
+        textChanged = false;
         tvDiverWay.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -76,13 +83,15 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString() != null || !s.toString().equals("")) {
-                    item.setContent(s.toString());
-                    item.update();
+                Log.d("afterTextChanged", "afterTextChanged");
+                if (!textChanged) {
+                    if (s.toString() != null || !s.toString().equals("")) {
+                        item.setContent(s.toString());
+                        item.update();
+                    }
                 }
             }
         });
-
         RadioGroup rgContentType = helper.getView(R.id.rg_content_type);
         RadioButton checkOneRb = (RadioButton) rgContentType.getChildAt(0);
         RadioButton checkTwoRb = (RadioButton) rgContentType.getChildAt(1);
@@ -108,7 +117,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             }
         }
 
-        if (item.getStatus() != null) {
+        if (!item.getStatus().equals("")) {
             if (item.getStatus().equals("0")) {
                 Glide.with(mContext).load(R.mipmap.defect_true_checked).into(defectTrue);
                 Glide.with(mContext).load(R.mipmap.defect_false_unchecked).into(defectFalse);
@@ -127,7 +136,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         defectFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.getStatus() == null || item.getStatus().equals("0")) {
+                if (item.getStatus().equals("") || item.getStatus().equals("0")) {
                     Glide.with(mContext).load(R.mipmap.defect_true_unchecked).into(defectTrue);
                     Glide.with(mContext).load(R.mipmap.defect_false_checked).into(defectFalse);
                     llCOntent.setVisibility(View.VISIBLE);
@@ -139,7 +148,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         defectTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.getStatus() == null || item.getStatus().equals("1")) {
+                if (item.getStatus().equals("") || item.getStatus().equals("1")) {
                     Glide.with(mContext).load(R.mipmap.defect_true_checked).into(defectTrue);
                     Glide.with(mContext).load(R.mipmap.defect_false_unchecked).into(defectFalse);
                     llCOntent.setVisibility(View.GONE);
@@ -155,7 +164,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                     llCOntent.setVisibility(View.GONE);
                     item.setStatus("1");
                 } else {
-                    if (item.getStatus() != null && item.getStatus().equals("1")) {
+                    if (!item.getStatus().equals("") && item.getStatus().equals("1")) {
                         llCOntent.setVisibility(View.VISIBLE);
                         item.setStatus("0");
                     }
@@ -332,7 +341,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 //            }
 //        });
 
-        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2")) {
+        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
             Log.d("audit_status", Constant.patrol_record_audit_status);
             rlTitle.setEnabled(false);
             tvDiverWay.setEnabled(false);
@@ -358,7 +367,9 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         if (pics != null) {
             String[] split = pics.split(";");
             for (int i = 0; i < split.length; i++) {
-                list.add(split[i]);
+                if (!split[i].equals("")) {
+                    list.add(split[i]);
+                }
             }
         }
         if (list == null) {
@@ -373,7 +384,9 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         if (pics != null) {
             String[] split = pics.split(";");
             for (int i = 0; i < split.length; i++) {
-                list.add(new File(split[i]));
+                if (!split[i].equals("")) {
+                    list.add(new File(split[i]));
+                }
             }
         }
         if (list != null) {

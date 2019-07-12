@@ -29,14 +29,11 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
-import com.patrol.terminal.bean.JDDZbean_Table;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.LocalPatrolRecordBean;
 import com.patrol.terminal.bean.LocalPatrolRecordBean_Table;
 import com.patrol.terminal.bean.PatrolRecordPicBean;
-import com.patrol.terminal.bean.PersonalTaskListBean;
-import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TSSXLocalBean;
 import com.patrol.terminal.bean.TSSXLocalBean_Table;
@@ -130,8 +127,14 @@ public class PatrolRecordActivity extends BaseActivity {
     public String audit_status;
     private int picIndex = 0;
     private LocalPatrolRecordBean localByTaskId;
-    private PersonalTaskListBean personalTaskListBean;
-    private boolean isSave = false;
+    private List<PatrolRecordPicBean> picBeanList;
+    private String line_id;
+    private String line_name;
+    private String tower_id;
+    private String tower_name;
+    private String tower_model;
+    private String sign;
+    private String typename;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,8 +144,15 @@ public class PatrolRecordActivity extends BaseActivity {
         titleName.setText("巡视记录");
 
         jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
+        line_id = getIntent().getStringExtra("line_id");
+        line_name = getIntent().getStringExtra("line_name");
+        tower_id = getIntent().getStringExtra("tower_id");
         task_id = getIntent().getStringExtra("task_id");
+        tower_name = getIntent().getStringExtra("tower_name");
+        tower_model = getIntent().getStringExtra("tower_model");
         audit_status = getIntent().getStringExtra("audit_status");
+        sign = getIntent().getStringExtra("sign");
+        typename = getIntent().getStringExtra("typename");
         Constant.patrol_record_audit_status = audit_status;
         getYXtodo();
         initview();
@@ -301,16 +311,29 @@ public class PatrolRecordActivity extends BaseActivity {
                     }
                     localBean.save();
                 } else {
-                    localBean.setTask_id(bean.getId());
-                    localBean.setLine_id(bean.getLine_id());
-                    localBean.setType_sign(bean.getType_sign());
-                    localBean.setLine_name(bean.getLine_name());
-                    localBean.setTower_id(bean.getTower_id());
-                    localBean.setTower_name(bean.getTower_name());
-                    localBean.setUser_id(bean.getUser_id());
-                    localBean.setUser_name(bean.getUser_name());
-                    localBean.setDep_id(bean.getDep_id());
-                    localBean.setDep_name(bean.getDep_name());
+                    if (bean == null) {
+                        localBean.setTask_id(task_id);
+                        localBean.setLine_id("");
+                        localBean.setType_sign("");
+                        localBean.setLine_name("");
+                        localBean.setTower_id("");
+                        localBean.setTower_name("");
+                        localBean.setUser_id("");
+                        localBean.setUser_name("");
+                        localBean.setDep_id("");
+                        localBean.setDep_name("");
+                    } else {
+                        localBean.setTask_id(bean.getId());
+                        localBean.setLine_id(bean.getLine_id());
+                        localBean.setType_sign(bean.getType_sign());
+                        localBean.setLine_name(bean.getLine_name());
+                        localBean.setTower_id(bean.getTower_id());
+                        localBean.setTower_name(bean.getTower_name());
+                        localBean.setUser_id(bean.getUser_id());
+                        localBean.setUser_name(bean.getUser_name());
+                        localBean.setDep_id(bean.getDep_id());
+                        localBean.setDep_name(bean.getDep_name());
+                    }
                     localBean.update();
                 }
             }
@@ -339,12 +362,8 @@ public class PatrolRecordActivity extends BaseActivity {
 
     //获取当前task_id对应的数据
     private void query() {
-        personalTaskListBean = SQLite.select().from(PersonalTaskListBean.class)
-                .where(PersonalTaskListBean_Table.id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(this)))
-                .querySingle();
-
         localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
-        if (audit_status.equals("1") || audit_status.equals("2")) {
+        if (audit_status.equals("1") || audit_status.equals("2") || audit_status.equals("3")) {
             initOnLineData();
         } else {
             initLocalData(localByTaskId);
@@ -385,7 +404,7 @@ public class PatrolRecordActivity extends BaseActivity {
 
                     @Override
                     protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
-                        List<PatrolRecordPicBean> picBeanList = t.getResults();
+                        picBeanList = t.getResults();
                         for (int i = 0; i < picBeanList.size(); i++) {
                             showPic(picBeanList.get(i));
                         }
@@ -519,6 +538,10 @@ public class PatrolRecordActivity extends BaseActivity {
         params.put("task_id", toRequestBody(task_id));
         localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
         if (localByTaskId != null) {
+            if (localByTaskId.getPic1() == null || localByTaskId.getPic2() == null || localByTaskId.getPic3() == null || localByTaskId.getPic4() == null || localByTaskId.getPic5() == null || localByTaskId.getPic6() == null) {
+                Toast.makeText(PatrolRecordActivity.this, "巡视图片不是6张", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (localByTaskId.getPic1() != null) {
                 RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic1()));
                 params.put("patrolFile\"; filename=\"1.jpg", requestFile1);
@@ -550,7 +573,7 @@ public class PatrolRecordActivity extends BaseActivity {
             params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(task_id));
             params.put("taskDefectPatrolRecodeList[" + i + "].patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].status", toRequestBody(localDefectByTaskId.get(i).getStatus()));
-            if (localDefectByTaskId.get(i).getStatus() == null) {
+            if (localDefectByTaskId.get(i).getStatus().equals("")) {
                 Toast.makeText(PatrolRecordActivity.this, "常规巡视未填写完整", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -701,12 +724,12 @@ public class PatrolRecordActivity extends BaseActivity {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_big_image);
         PinchImageView iv = dialog.findViewById(R.id.iv);
-       /* for (int i = 0; i < picBeanList.size(); i++) {
-            if (picBeanList.get(i).getSign() != null && picBeanList.get(i).getSign().equals(String.valueOf(picIndex))) {
-                Glide.with(this).load(BaseUrl.BASE_URL + picBeanList.get(i).getFile_path() + picBeanList.get(i).getFilename()).into(iv);
+        for (int i = 0; i < picBeanList.size(); i++) {
+            if (String.valueOf(position).equals(picBeanList.get(i).getSign())) {
+                String path = BaseUrl.BASE_URL + picBeanList.get(i).getFile_path() + picBeanList.get(i).getFilename();
+                Glide.with(this).load(path).into(iv);
             }
-        }*/
-        Glide.with(this).load(new File(Environment.getExternalStorageDirectory().getPath() + "/MyPhoto/" + task_id + "_" + position + ".jpg")).into(iv);
+        }
         dialog.show();
     }
 
@@ -724,13 +747,6 @@ public class PatrolRecordActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-
-            if (personalTaskListBean != null && !isSave) {
-                isSave = true;
-                personalTaskListBean.setIs_save("0");
-                personalTaskListBean.update();
-                setResult(RESULT_OK);
-            }
             try {
                 switch (requestCode) {
                     case Constant.PATROL_RECORD_REQUEST_CODE:

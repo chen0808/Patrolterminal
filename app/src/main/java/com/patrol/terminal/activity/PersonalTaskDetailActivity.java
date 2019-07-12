@@ -156,7 +156,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         tvLineNo.setText("班  组 : " + SPUtil.getDepName(PersonalTaskDetailActivity.this));
 
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        titleSetting.setVisibility(View.VISIBLE);
+//        titleSetting.setVisibility(View.VISIBLE);
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign())) && bean.getWork_user_name() == null) {
 
             titleSettingTv.setText("指派");
@@ -176,6 +176,11 @@ public class PersonalTaskDetailActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        monthPlanDetailAdapter.setNewData(results);
+    }
 
     private void initView() {
 
@@ -502,6 +507,10 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         params.put("task_id", toRequestBody(id));
         LocalPatrolRecordBean localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(id)).querySingle();
         if (localByTaskId != null) {
+            if (localByTaskId.getPic1() == null || localByTaskId.getPic2() == null || localByTaskId.getPic3() == null || localByTaskId.getPic4() == null || localByTaskId.getPic5() == null || localByTaskId.getPic6() == null) {
+                Toast.makeText(PersonalTaskDetailActivity.this, "巡视图片不是6张", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (localByTaskId.getPic1() != null) {
                 RequestBody requestFile1 = RequestBody.create(MediaType.parse("multipart/form-data"), new File(localByTaskId.getPic1()));
                 params.put("patrolFile\"; filename=\"1.jpg", requestFile1);
@@ -533,7 +542,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
             params.put("taskDefectPatrolRecodeList[" + i + "].task_id", toRequestBody(id));
             params.put("taskDefectPatrolRecodeList[" + i + "].patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].status", toRequestBody(localDefectByTaskId.get(i).getStatus()));
-            if (localDefectByTaskId.get(i).getStatus() == null) {
+            if (localDefectByTaskId.get(i).getStatus().equals("")) {
                 Toast.makeText(PersonalTaskDetailActivity.this, "常规巡视未填写完整", Toast.LENGTH_SHORT).show();
                 return;
             }
