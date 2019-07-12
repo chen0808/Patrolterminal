@@ -369,8 +369,14 @@ public class MonthPlanFrgment extends BaseFragment {
     public void submitMonthPlan(List<Tower> list, String status, int type) {
         ProgressDialog.show(getContext(), false, "正在加载中...");
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
-        bean.setYear(year);
-        bean.setMonth(month);
+        if (type==1){
+            bean.setYear(year);
+            bean.setMonth(month);
+        }else {
+            bean.setYear(nextYear+"");
+            bean.setMonth(nextMonth+"");
+        }
+
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(getContext()));
         bean.setLines(list);

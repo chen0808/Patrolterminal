@@ -462,8 +462,13 @@ public class WeekPlanFrgment extends BaseFragment {
     //提交周计划审核
     public void submitWeekPlan(List<Tower> list, String status, int type) {
         SubmitPlanReqBean bean = new SubmitPlanReqBean();
-        bean.setYear(year + "");
-        bean.setWeek(week + "");
+        if (type==1){
+            bean.setYear(year + "");
+            bean.setWeek(week + "");
+        }else {
+            bean.setYear(nextYear + "");
+            bean.setWeek(nextWeek + "");
+        }
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(getContext()));
         bean.setTowers(list);

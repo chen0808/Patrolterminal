@@ -492,8 +492,7 @@ ll35kv.setVisibility(View.GONE);
                             monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + "km");
                             monthLine110kvNum.setText("工作杆段 : " + num_total + "段");
                             monthLine110kvKilo.setText(decimalFormat.format(kilo_total) + "km");
-                            if (list.size()==0){
-                            setResult(RESULT_OK);}
+                            setResult(RESULT_OK);
                         } else {
                             Toast.makeText(NextWeekPlanActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
