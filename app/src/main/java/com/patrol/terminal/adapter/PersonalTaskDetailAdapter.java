@@ -2,7 +2,6 @@ package com.patrol.terminal.adapter;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +15,6 @@ import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.StringUtil;
 
-import java.sql.Struct;
 import java.util.List;
 
 public class PersonalTaskDetailAdapter extends BaseQuickAdapter<PersonalTaskListBean, BaseViewHolder> {
@@ -57,12 +55,12 @@ if ("0".equals(item.getAudit_status())&&"0".equals(item.getIs_save())){
             @Override
             public void onClick(View view) {
                 if(!"0".equals(item.getIs_save())){
-                    Toast.makeText(mContext,"'待上传'"+"才可选择",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "'待上传'" + "状态才可选择", Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(!item.isCheck()&& "0".equals(item.getAudit_status())&&"0".equals(item.getIs_save())){
-                        viewHolder.setImageResource(R.id.item_plan_offline,R.mipmap.check_yes);
-                        item.setCheck(true);
+                    viewHolder.setImageResource(R.id.item_plan_offline, R.mipmap.check_yes);
+                    item.setCheck(true);
                 }else{
                     item.setCheck(false);
                     viewHolder.setImageResource(R.id.item_plan_offline,R.mipmap.check_no);

@@ -171,7 +171,7 @@ public class SankuaEditView extends LinearLayout {
                 RadioButton rb = (RadioButton) findViewById(checkedId);
                 YHDJStr = rb.getText().toString().trim();
 
-                mOnTssxClick.getDj(setDjStrToKey(YHDJStr));
+                mOnTssxClick.getDj(YHDJStr);
             }
         });
 
