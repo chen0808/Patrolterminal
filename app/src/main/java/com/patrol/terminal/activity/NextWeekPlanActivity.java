@@ -477,20 +477,22 @@ ll35kv.setVisibility(View.GONE);
                         if (t.getCode() == 1) {
                             num_total--;
                             kilo_total = kilo_total - list.get(position).getTowers_range();
-                            if (lineNum.indexOf(list.get(position).getLine_id()) != -1) {
-                                lineNum.remove(position);
-                            }
+                            lineNum.clear();
                             list.remove(position);
-
-
+                            //删除数据后重新计算线路条数
+                            for (int i = 0; i < list.size(); i++) {
+                                WeekListBean weekListBean = list.get(i);
+                                if (lineNum.indexOf(weekListBean.getLine_id()) == -1) {
+                                    lineNum.add(weekListBean.getLine_id());
+                                }
+                            }
                             monthPlanAdapter.notifyItemRemoved(position);
                             DecimalFormat decimalFormat = new DecimalFormat("0.00");
                             monthLineTotal.setText("工作线路 : " + lineNum.size() + "条");
                             monthLineKiloTotal.setText(decimalFormat.format(kilo_total) + "km");
                             monthLine110kvNum.setText("工作杆段 : " + num_total + "段");
                             monthLine110kvKilo.setText(decimalFormat.format(kilo_total) + "km");
-                            if (list.size()==0){
-                            setResult(RESULT_OK);}
+                            setResult(RESULT_OK);
                         } else {
                             Toast.makeText(NextWeekPlanActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }

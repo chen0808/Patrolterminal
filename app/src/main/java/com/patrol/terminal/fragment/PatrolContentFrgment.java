@@ -107,7 +107,6 @@ public class PatrolContentFrgment extends BaseFragment {
             }
         });
         task_id = getActivity().getIntent().getStringExtra("task_id");
-        query();
         saveLocalAsync(null);
         getdata();
     }
@@ -154,7 +153,8 @@ public class PatrolContentFrgment extends BaseFragment {
         FlowManager.getDatabase(AppDataBase.class).beginTransactionAsync(new ITransaction() {
             @Override
             public void execute(DatabaseWrapper databaseWrapper) {
-                if (results == null) {
+                List<LocalPatrolDefectBean> localByTaskId = SQLite.select().from(LocalPatrolDefectBean.class).where(LocalPatrolDefectBean_Table.task_id.is(task_id)).queryList();
+                if (localByTaskId == null || localByTaskId.size() == 0) {
                     String assetsJson = getFromAssets("defect.json");
                     List<PatrolContentBean> assetsList = new Gson().fromJson(assetsJson, new TypeToken<ArrayList<PatrolContentBean>>() {
                     }.getType());
@@ -163,7 +163,7 @@ public class PatrolContentFrgment extends BaseFragment {
                         localBean.setTask_id(task_id);
                         localBean.setTab_name(assetsList.get(i).getName());
                         localBean.setPatrol_id(assetsList.get(i).getPatrol_id());
-                        localBean.setStatus(assetsList.get(i).getStatus());
+                        localBean.setStatus("");
                         if (assetsList.get(i).getRemarks() != null) {
                             localBean.setPatrol_name(assetsList.get(i).getRemarks());
                         } else {
@@ -191,45 +191,129 @@ public class PatrolContentFrgment extends BaseFragment {
                         } else {
                             localBean.setOnline_pics(onlinePics);
                         }
-                        save(assetsList.get(i).getPatrol_id());
+                        localBean.save();
                     }
                 } else {
-                    for (int i = 0; i < results.size(); i++) {
-                        localBean = new LocalPatrolDefectBean();
-                        localBean.setTask_id(task_id);
-                        localBean.setTab_name(results.get(i).getName());
-                        localBean.setPatrol_id(results.get(i).getPatrol_id());
-                        localBean.setStatus(results.get(i).getStatus());
-                        if (results.get(i).getRemarks() != null) {
-                            localBean.setPatrol_name(results.get(i).getRemarks());
-                        } else {
-                            localBean.setPatrol_name("");
-                        }
-                        if (results.get(i).getTaskDefect() != null) {
-                            if (results.get(i).getTaskDefect().getContent() != null) {
-                                localBean.setContent(results.get(i).getTaskDefect().getContent());
+                    if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
+                        for (int i = 0; i < results.size(); i++) {
+                            localBean = localByTaskId.get(i);
+                            localBean.setTask_id(task_id);
+                            localBean.setTab_name(results.get(i).getName());
+                            localBean.setPatrol_id(results.get(i).getPatrol_id());
+                            if (results.get(i).getStatus() != null) {
+                                localBean.setStatus(results.get(i).getStatus());
+                            } else {
+                                localBean.setStatus("");
+                            }
+                            if (results.get(i).getRemarks() != null) {
+                                localBean.setPatrol_name(results.get(i).getRemarks());
+                            } else {
+                                localBean.setPatrol_name("");
+                            }
+                            if (results.get(i).getTaskDefect() != null) {
+                                if (results.get(i).getTaskDefect().getContent() != null) {
+                                    localBean.setContent(results.get(i).getTaskDefect().getContent());
+                                } else {
+                                    localBean.setContent("");
+                                }
+                                if (results.get(i).getTaskDefect().getGrade_id() != null) {
+                                    localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
+                                } else {
+                                    localBean.setGrade_id("");
+                                }
                             } else {
                                 localBean.setContent("");
-                            }
-                            if (results.get(i).getTaskDefect().getGrade_id() != null) {
-                                localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
-                            } else {
                                 localBean.setGrade_id("");
                             }
-                        } else {
-                            localBean.setContent("");
-                            localBean.setGrade_id("");
+                            localBean.setCategory_id(results.get(i).getCategory());
+                            String onlinePics = getOnlinePics(results, i);
+                            if (onlinePics == null || onlinePics.equals("")) {
+                                localBean.setOnline_pics("");
+                            } else {
+                                localBean.setOnline_pics(onlinePics);
+                            }
+                            localBean.update();
                         }
-                        localBean.setCategory_id(results.get(i).getCategory());
-                        String onlinePics = getOnlinePics(results, i);
-                        if (onlinePics == null || onlinePics.equals("")) {
-                            localBean.setOnline_pics("");
-                        } else {
-                            localBean.setOnline_pics(onlinePics);
-                        }
-                        save(results.get(i).getPatrol_id());
                     }
                 }
+               /* else {
+                    if (results == null) {
+                        String assetsJson = getFromAssets("defect.json");
+                        List<PatrolContentBean> assetsList = new Gson().fromJson(assetsJson, new TypeToken<ArrayList<PatrolContentBean>>() {
+                        }.getType());
+                        for (int i = 0; i < assetsList.size(); i++) {
+                            localBean = localByTaskId.get(i);
+                            localBean.setTask_id(task_id);
+                            localBean.setTab_name(assetsList.get(i).getName());
+                            localBean.setPatrol_id(assetsList.get(i).getPatrol_id());
+                            localBean.setStatus("");
+                            if (assetsList.get(i).getRemarks() != null) {
+                                localBean.setPatrol_name(assetsList.get(i).getRemarks());
+                            } else {
+                                localBean.setPatrol_name("");
+                            }
+                            if (assetsList.get(i).getTaskDefect() != null) {
+                                if (assetsList.get(i).getTaskDefect().getContent() != null) {
+                                    localBean.setContent(assetsList.get(i).getTaskDefect().getContent());
+                                } else {
+                                    localBean.setContent("");
+                                }
+                                if (assetsList.get(i).getTaskDefect().getGrade_id() != null) {
+                                    localBean.setGrade_id(assetsList.get(i).getTaskDefect().getGrade_id());
+                                } else {
+                                    localBean.setGrade_id("");
+                                }
+                            } else {
+                                localBean.setContent("");
+                                localBean.setGrade_id("");
+                            }
+                            localBean.setCategory_id(assetsList.get(i).getCategory());
+                            String onlinePics = getOnlinePics(assetsList, i);
+                            if (onlinePics == null || onlinePics.equals("")) {
+                                localBean.setOnline_pics("");
+                            } else {
+                                localBean.setOnline_pics(onlinePics);
+                            }
+                            localBean.update();
+                        }
+                    } else {
+                        for (int i = 0; i < results.size(); i++) {
+                            localBean = localByTaskId.get(i);
+                            localBean.setTask_id(task_id);
+                            localBean.setTab_name(results.get(i).getName());
+                            localBean.setPatrol_id(results.get(i).getPatrol_id());
+                            localBean.setStatus(results.get(i).getStatus());
+                            if (results.get(i).getRemarks() != null) {
+                                localBean.setPatrol_name(results.get(i).getRemarks());
+                            } else {
+                                localBean.setPatrol_name("");
+                            }
+                            if (results.get(i).getTaskDefect() != null) {
+                                if (results.get(i).getTaskDefect().getContent() != null) {
+                                    localBean.setContent(results.get(i).getTaskDefect().getContent());
+                                } else {
+                                    localBean.setContent("");
+                                }
+                                if (results.get(i).getTaskDefect().getGrade_id() != null) {
+                                    localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
+                                } else {
+                                    localBean.setGrade_id("");
+                                }
+                            } else {
+                                localBean.setContent("");
+                                localBean.setGrade_id("");
+                            }
+                            localBean.setCategory_id(results.get(i).getCategory());
+                            String onlinePics = getOnlinePics(results, i);
+                            if (onlinePics == null || onlinePics.equals("")) {
+                                localBean.setOnline_pics("");
+                            } else {
+                                localBean.setOnline_pics(onlinePics);
+                            }
+                            localBean.update();
+                        }
+                    }
+                }*/
             }
         }).success(new Transaction.Success() {
             @Override

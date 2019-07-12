@@ -61,7 +61,9 @@ public class GridViewAdapter3 extends android.widget.BaseAdapter {
         ImageView ivDelete = (ImageView) convertView.findViewById(R.id.iv_delete);
         if (position < mList.size()) {
             //代表+号之前的需要正常显示图片
-            Glide.with(mContext).load(mList.get(position)).into(iv);
+            if (mList.get(position) != null && !mList.get(position).equals("")) {
+                Glide.with(mContext).load(mList.get(position)).into(iv);
+            }
             ivDelete.setVisibility(View.VISIBLE);
         } else {
             iv.setImageResource(R.mipmap.zj);//最后一个显示加号图片
@@ -70,16 +72,20 @@ public class GridViewAdapter3 extends android.widget.BaseAdapter {
         ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mList.remove(position);
                 String pics = bean.getPics();
                 String newPics = "";
                 String[] split = pics.split(";");
-                for (int i = 0; i < split.length; i++) {
-                    if (!split[i].equals(mList.get(position).getAbsolutePath())) {
-                        newPics += split[i] + ";";
+                if (mList.size() > 0) {
+                    for (int i = 0; i < split.length; i++) {
+                        if (!split[i].equals(mList.get(position).getAbsolutePath()) && !mList.get(position).equals("")) {
+                            newPics += split[i] + ";";
+                        }
                     }
                 }
                 bean.setPics(newPics);
+                bean.update();
+                mList.remove(position);
+                notifyDataSetChanged();
             }
         });
         return convertView;
