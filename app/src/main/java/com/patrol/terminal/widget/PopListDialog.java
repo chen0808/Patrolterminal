@@ -34,7 +34,7 @@ private Activity paramActivity;
             TextView textView=new TextView(paramActivity);
             ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Utils.dip2px(paramActivity, 40));
             textView.setLayoutParams(params);
-            textView.setTextColor(Color.WHITE);
+            textView.setTextColor(Color.BLACK);
             textView.setGravity(Gravity.CENTER);
             textView.setText(depBean.getName());
             textView.setOnClickListener(new View.OnClickListener() {
