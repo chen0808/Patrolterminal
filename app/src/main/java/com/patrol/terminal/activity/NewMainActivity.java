@@ -148,7 +148,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     @Override
     protected void onResume() {
         super.onResume();
-        if (jobType.equals(Constant.RUNNING_SQUAD_MEMBER)) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)&&!jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             getGroupName();
         }
     }
