@@ -10,6 +10,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GroupTaskDetailAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -36,9 +40,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -102,19 +103,19 @@ public class GroupTaskDetailActivity extends BaseActivity {
 
         from = getIntent().getStringExtra("from");
         //无网络直接设置上去
-        if (!Utils.isNetworkConnected(this)&&bean!=null) {
-        getGroupList();
+        if (!Utils.isNetworkConnected(this) && bean != null) {
+            getGroupList();
         }
         if ("todoGroup".equals(from)) {
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
-        } else if ("todoRob".equals(from)){
+        } else if ("todoRob".equals(from)) {
             titleName.setText("退还任务详情");
             titleSetting.setVisibility(View.VISIBLE);
             titleSettingTv.setText("审批");
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
-        }else {
+        } else {
             getGroupList(bean.getId());
         }
 
@@ -151,7 +152,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                 getPersonal();
             }
 
-        } else if ("1".equals(bean.getIs_rob())&& "0".equals(bean.getAllot_status())) {
+        } else if ("1".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
 
             type = 2;
             taskSubmit.setVisibility(View.VISIBLE);
@@ -168,25 +169,25 @@ public class GroupTaskDetailActivity extends BaseActivity {
         } else {
             tvTableName.setVisibility(View.GONE);
             taskSubmit.setVisibility(View.GONE);
-            if (!"todoRob".equals(from)){
+            if (!"todoRob".equals(from)) {
                 titleSetting.setVisibility(View.GONE);
             }
 
         }
 
-        tvLineDate.setText("日期："+bean.getYear()+"年"+bean.getMonth()+"月"+bean.getDay()+"日");
-            String work_user_name = bean.getWork_user_name();
-            if (work_user_name == null || "".equals(work_user_name)) {
-                taskWorkName.setText("执行人：未指定");
-            } else {
-                taskWorkName.setText("执行人：" + work_user_name);
-            }
+        tvLineDate.setText("日期：" + bean.getYear() + "年" + bean.getMonth() + "月" + bean.getDay() + "日");
+        String work_user_name = bean.getWork_user_name();
+        if (work_user_name == null || "".equals(work_user_name)) {
+            taskWorkName.setText("执行人：未指定");
+        } else {
+            taskWorkName.setText("执行人：" + work_user_name);
+        }
 
-            if (bean.getDuty_user_name() == null || "".equals(bean.getDuty_user_name())) {
-                taskGroupName.setText("小组负责人：未指定");
-            } else {
-                taskGroupName.setText("小组负责人：" + bean.getDuty_user_name());
-            }
+        if (bean.getDuty_user_name() == null || "".equals(bean.getDuty_user_name())) {
+            taskGroupName.setText("小组负责人：未指定");
+        } else {
+            taskGroupName.setText("小组负责人：" + bean.getDuty_user_name());
+        }
 
 
         tvLineName.setText("线路名称：" + bean.getLine_name());
@@ -221,7 +222,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                     showPersonalGroup();
                 } else if ("撤销".equals(name)) {
                     cancleRobTask();
-                }else if ("审批".equals(name)){
+                } else if ("审批".equals(name)) {
                     CancelOrOkDialog dialog = new CancelOrOkDialog(this, "是否同意", "不同意", "同意") {
                         @Override
                         public void ok() {
@@ -252,9 +253,9 @@ public class GroupTaskDetailActivity extends BaseActivity {
     }
 
     //抢单任务退还
-    public void robBack(String id,String  state) {
-        ProgressDialog.show(this,true,"正在加载。。。");
-        SaveTodoReqbean reqbean=new SaveTodoReqbean();
+    public void robBack(String id, String state) {
+        ProgressDialog.show(this, true, "正在加载。。。");
+        SaveTodoReqbean reqbean = new SaveTodoReqbean();
         reqbean.setAudit_status(state);
         reqbean.setFrom_user_id(SPUtil.getUserId(this));
         reqbean.setFrom_user_name(SPUtil.getUserName(this));
@@ -267,10 +268,10 @@ public class GroupTaskDetailActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
                         RxRefreshEvent.publish("refreshTodo");
-                        if ("2".equals(state)){
-                            Toast.makeText(GroupTaskDetailActivity.this,"审批通过",Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(GroupTaskDetailActivity.this,"审批不通过",Toast.LENGTH_SHORT).show();
+                        if ("2".equals(state)) {
+                            Toast.makeText(GroupTaskDetailActivity.this, "审批通过", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(GroupTaskDetailActivity.this, "审批不通过", Toast.LENGTH_SHORT).show();
                         }
                         finish();
                         ProgressDialog.cancle();
@@ -466,7 +467,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
     public void getPersonal() {
 
         BaseRequest.getInstance().getService()
-                .getGroupPersonal(year, month, day, SPUtil.getDepId(this), SPUtil.getUserId(this), "2")
+                .getGroupPersonal(year, month, day, SPUtil.getDepId(this), bean.getDuty_user_id(), "2")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DepUserBean>>(this) {

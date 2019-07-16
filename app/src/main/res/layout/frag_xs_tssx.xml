@@ -30,7 +30,7 @@
                 android:background="@drawable/selector_tssx_title_left"
                 android:button="@null"
                 android:gravity="center"
-                android:text="三跨"
+                android:text="交叉跨越"
                 android:checked="true"
                 android:textColor="@drawable/selector_tssx_txt_color"
                 android:textSize="@dimen/sp_14" />
