@@ -207,6 +207,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 switch (bean.getType_sign()) {
                     case "1":
                     case "2":
+                    case "4":
                     case "7":
                     case "11"://定期任务巡视
                         intent.setClass(PersonalTaskDetailActivity.this, PatrolRecordActivity.class);
