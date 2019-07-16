@@ -51,12 +51,13 @@ public class TroubleActivity extends BaseActivity {
     @BindView(R.id.search_delete)
     ImageView searchDelete;
     private TroubleAdapter adapter;
-    private int page_num = 0;
+    private int page_num = 1;
     private int page_size = 10;
     private List<TroubleFragmentBean> troubleList = new ArrayList<>();
     private List<TroubleFragmentBean> searchList = new ArrayList<>();
     private List<String> lineList = new ArrayList<>();
     private String search;
+    private List<TroubleFragmentBean> defectdata = new ArrayList<>();
     //private List<DefectDetailBean> result = new ArrayList<>();
     private Handler handler = new Handler();
     /**
@@ -68,7 +69,7 @@ public class TroubleActivity extends BaseActivity {
         public void run() {
             //在这里调用服务器的接口，获取数据
 //            getSearchResult(editString, "all", 1, "true");
-            page_num = 0;
+            page_num = 1;
             adapter.setNewData(troubleList);
             getAllTrouble();
         }
@@ -85,11 +86,10 @@ public class TroubleActivity extends BaseActivity {
     }
 
     private void setDataToList(List<TroubleFragmentBean> beans) {
-        if (adapter == null) {
-            adapter = new TroubleAdapter(R.layout.fragment_defect_item, beans);
-            planRv.setAdapter(adapter);
+        if (page_num == 1) {
+            adapter.setNewData(beans);
         } else {
-            adapter.addData(page_num * page_size, beans);
+            adapter.addData(beans);
         }
     }
 
@@ -174,6 +174,7 @@ public class TroubleActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<TroubleFragmentBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<TroubleFragmentBean>> t) throws Exception {
+                        ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             List<TroubleFragmentBean> result = t.getResults();
                             if (result != null && result.size() > 0) {
@@ -201,6 +202,9 @@ public class TroubleActivity extends BaseActivity {
         titleName.setText("隐患查询");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         planRv.setLayoutManager(manager);
+        adapter = new TroubleAdapter(R.layout.fragment_defect_item, defectdata);
+        planRv.setAdapter(adapter);
+        planRv.useDefaultLoadMore();
         planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
             @Override
             public void onLoadMore() {

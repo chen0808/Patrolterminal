@@ -83,7 +83,7 @@ public class TroubleDetailActivity extends BaseActivity implements RadioGroup.On
                 }
             }
         }
-        getBird();
+        getAcross();
         rgTab.setOnCheckedChangeListener(this);
     }
 
