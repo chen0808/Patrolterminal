@@ -17,7 +17,7 @@ public class AcrossAdapter extends BaseQuickAdapter<TroubleDetailBean, BaseViewH
     @Override
     protected void convert(BaseViewHolder helper, TroubleDetailBean item) {
         helper.setText(R.id.tv_type_name, item.getType_name())
-                .setText(R.id.tv_towers, item.getTowers())
+                .setText(R.id.tv_dep_name, item.getDep_name() == null ? "" : item.getDep_name())
                 .setText(R.id.tv_across_name, item.getAcross_name())
                 .setText(R.id.tv_small_tower_name, item.getSmall_tower_name())
                 .setText(R.id.tv_big_tower_name, item.getBig_tower_name())

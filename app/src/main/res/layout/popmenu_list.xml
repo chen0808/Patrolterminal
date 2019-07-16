@@ -5,7 +5,8 @@
     android:layout_height="100dp"
     android:paddingLeft="@dimen/dp_10"
     android:paddingRight="@dimen/dp_10"
-    android:background="@drawable/srcon_bg"
+    android:paddingTop="@dimen/dp_10"
+    android:background="@mipmap/dep_pop_bg"
     android:orientation="vertical">
 
 </LinearLayout>

@@ -89,6 +89,7 @@
                 android:textColor="@drawable/selector_trouble_text_color" />
 
             <RadioButton
+                android:visibility="gone"
                 android:id="@+id/btn_flood"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

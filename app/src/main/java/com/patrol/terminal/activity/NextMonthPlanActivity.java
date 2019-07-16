@@ -354,7 +354,7 @@ public class NextMonthPlanActivity extends BaseActivity {
                 //设置默认获取焦点
                 popWinShare.setFocusable(true);
                 //以某个控件的x和y的偏移量位置开始显示窗口
-                popWinShare.showAsDropDown(taskScreen, -180, 0);
+                popWinShare.showAsDropDown(taskScreen, -150, 0);
                 //如果窗口存在，则更新
                 popWinShare.update();
                 break;

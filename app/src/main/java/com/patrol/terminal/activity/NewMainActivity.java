@@ -102,9 +102,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         jobType = SPUtil.getString(NewMainActivity.this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         FileDownloader.init(this);
         checkPremission();
-        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
-            getGroupName();
-        }
+
         initView();
         //RFIDManager.getRFIDInstance().init(this, "001583EA5423", "", this);
         //初始化定位
@@ -144,6 +142,14 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.READ_PHONE_STATE},
                     REQUEST_TAKE_PHOTO_PERMISSION);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)&&!jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+            getGroupName();
         }
     }
 

@@ -1,0 +1,362 @@
+[
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "6E57D7EBDA464CEA8DB3CA2D1806C2EB",
+    "status": null,
+    "name": "导线、地线",
+    "category": "15C2D010A99D4D9485D9C5DD80F4831D",
+    "remarks": "（1）导线、地线锈蚀、断股、损伤或闪络烧伤",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "7AC64E2FC84342B891F4E642BE9ED2A9",
+    "status": null,
+    "name": "导线、地线",
+    "category": "15C2D010A99D4D9485D9C5DD80F4831D",
+    "remarks": "（2）导线、地线弧垂变化；导线、地线上扬、振动、舞动、脱冰跳跃",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "09AC684BA72C411C83DC517AAF4998EE",
+    "status": null,
+    "name": "导线、地线",
+    "category": "15C2D010A99D4D9485D9C5DD80F4831D",
+    "remarks": "（3）导线、地线接续金具过热、变色、变形、滑移；导线在线夹内滑动",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "8F0E5F4430A74238BACFC912386D64A3",
+    "status": null,
+    "name": "导线、地线",
+    "category": "15C2D010A99D4D9485D9C5DD80F4831D",
+    "remarks": "（4）跳线断股、歪扭变形，跳线与杆塔空气间隙变化，跳线间扭绞；跳线舞动、摆动过大",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "EF16752C059F44B7B38237CD91C4C73A",
+    "status": null,
+    "name": "导线、地线",
+    "category": "15C2D010A99D4D9485D9C5DD80F4831D",
+    "remarks": "（5）导线对地、对交叉跨越设施及对其他物体距离变化；导线、地线上悬挂有异物",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "7FF085D13DB94276BD7D91EF769636BD",
+    "status": null,
+    "name": "防雷及接地装置",
+    "category": "19D16418045B4802A3D1EE01157778BB",
+    "remarks": "（1）避雷器、避雷针等防雷装置和其他设备的连接、固定情况",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "B0F6E241433B4B5997669E8CAF02388A",
+    "status": null,
+    "name": "防雷及接地装置",
+    "category": "19D16418045B4802A3D1EE01157778BB",
+    "remarks": "（2）地线、接地引下线、接地装置、连续接地线间的连接、固定以及锈蚀情况",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "C0497AFD2F174BA195E93D7163F4C2FB",
+    "status": null,
+    "name": "附件及其他设施",
+    "category": "3734AF649F3543D0B87F9EE10F961456",
+    "remarks": "（1）)防振锤移位、脱落、偏斜、钢丝断股，阻尼线变形、烧伤，绑线松动",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "9B4345A920674AF4BD07895F0E580A95",
+    "status": null,
+    "name": "附件及其他设施",
+    "category": "3734AF649F3543D0B87F9EE10F961456",
+    "remarks": "（2）相位、警告、指示及防护等标志缺损、丢失，线路名称、杆塔编号字迹不清",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "4DB3CDCC16764D4A818DCDF860463F33",
+    "status": null,
+    "name": "杆塔",
+    "category": "F1B635B0B74245C8BED1E1038C429982",
+    "remarks": "（1）塔倾斜、横担歪扭及杆塔部件锈蚀变形、缺损",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "66E88CBF2D154323BD045C4855A144C3",
+    "status": null,
+    "name": "杆塔",
+    "category": "F1B635B0B74245C8BED1E1038C429982",
+    "remarks": "（2）杆塔部件固定螺栓松动、缺螺栓或螺帽，螺栓丝扣长度不够，铆焊处裂纹、开焊、绑线断裂或松动",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "85BDC94E9DE44ECB89EA0128DB7B2327",
+    "status": null,
+    "name": "杆塔",
+    "category": "F1B635B0B74245C8BED1E1038C429982",
+    "remarks": "（3）混凝土杆出现裂纹或裂纹扩展，混凝土脱落、钢筋外露，脚钉缺损",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "DF4B9FE45CC7406CB3F13EF416B85172",
+    "status": null,
+    "name": "杆塔",
+    "category": "F1B635B0B74245C8BED1E1038C429982",
+    "remarks": "（4）拉线及部件锈蚀、松弛、断股抽筋、张力分配不均，缺螺栓、螺帽等，部件丢失和被破坏等现象",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "9895ACC90FDD4C26B2D350DDCE50DD90",
+    "status": null,
+    "name": "杆塔",
+    "category": "F1B635B0B74245C8BED1E1038C429982",
+    "remarks": "（5）杆塔及拉线的基础变异，周围土壤突起或沉陷，基础裂纹、损坏、下沉或上拔，护基沉塌或被冲刷",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "5F2C20798E1A4F1E85E4A0787B0B52C2",
+    "status": null,
+    "name": "杆塔",
+    "category": "F1B635B0B74245C8BED1E1038C429982",
+    "remarks": "（6）基础保护帽上部塔材被埋入土或废弃物堆中，塔材锈蚀",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "67BF247669A54E3986341AEAED7A7515",
+    "status": null,
+    "name": "金具",
+    "category": "C0636A87A49A4727ABC71C1A63525E98",
+    "remarks": "（1）瓷质裂纹、破碎，钢化玻璃绝缘子爆裂， 钢脚弯曲，合成绝缘子伞裙破裂",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "AAC2CCE965D54FB2A8589969B4837FA3",
+    "status": null,
+    "name": "金具",
+    "category": "C0636A87A49A4727ABC71C1A63525E98",
+    "remarks": "（2）绝缘子串偏斜，金具、均压环变形、扭曲，开口销及弹簧销缺损或脱出",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "BD0C4E0709A644B3BDCD9F3863210300",
+    "status": null,
+    "name": "绝缘子",
+    "category": "BED42123A79B4F46B4D9922C2ABF989D",
+    "remarks": "（1）瓷质裂纹、破碎，钢化玻璃绝缘子爆裂， 钢脚弯曲，合成绝缘子伞裙破裂",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "32185ED7248F4D52B668F36161B45712",
+    "status": null,
+    "name": "绝缘子",
+    "category": "BED42123A79B4F46B4D9922C2ABF989D",
+    "remarks": "（2）绝缘子串偏斜，金具、均压环变形、扭曲，开口销及弹簧销缺损或脱出",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "EF4370C002C046439CB3C3125735CC1B",
+    "status": null,
+    "name": "拉线和基础",
+    "category": "079A78FA7DAB4EE4AC72B680CEC09E8C",
+    "remarks": "（1）塔倾斜、横担歪扭及杆塔部件锈蚀变形、缺损",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "6A0E8A6AF12645E0B2AEF99677815036",
+    "status": null,
+    "name": "拉线和基础",
+    "category": "079A78FA7DAB4EE4AC72B680CEC09E8C",
+    "remarks": "（2）杆塔部件固定螺栓松动、缺螺栓或螺帽，螺栓丝扣长度不够，铆焊处裂纹、开焊、绑线断裂或松动",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "0A6D41C62B2C4A239416B20BD5C08F66",
+    "status": null,
+    "name": "拉线和基础",
+    "category": "079A78FA7DAB4EE4AC72B680CEC09E8C",
+    "remarks": "（3）混凝土杆出现裂纹或裂纹扩展，混凝土脱落、钢筋外露，脚钉缺损",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "752DAA53D7EB4A73A5711CC1F58EECB0",
+    "status": null,
+    "name": "拉线和基础",
+    "category": "079A78FA7DAB4EE4AC72B680CEC09E8C",
+    "remarks": "（4）拉线及部件锈蚀、松弛、断股抽筋、张力分配不均，缺螺栓、螺帽等，部件丢失和被破坏等现象",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "2ECA928E545448EB87F86C9A9554EC31",
+    "status": null,
+    "name": "拉线和基础",
+    "category": "079A78FA7DAB4EE4AC72B680CEC09E8C",
+    "remarks": "（5）杆塔及拉线的基础变异，周围土壤突起或沉陷，基础裂纹、损坏、下沉或上拔，护基沉塌或被冲刷",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "434DFCE0AB114B8BAAD45740C69FABEC",
+    "status": null,
+    "name": "拉线和基础",
+    "category": "079A78FA7DAB4EE4AC72B680CEC09E8C",
+    "remarks": "（6）基础保护帽上部塔材被埋入土或废弃物堆中，塔材锈蚀",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "596AB41C09E24C4F975F5D129D009789",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（1）向线路设施射击、抛掷物体",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "9E873F7D694D4806B7934C7016E314FB",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（2）攀登杆塔或在杆塔上架设电力线、通信线、广播线，以及安装广播喇叭",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "55E4B07C0057415BACF3769C3B4AB82E",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（3）利用杆塔拉线作起重牵引地锚，在杆塔拉线上栓牲畜，悬挂物件",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "2D97D7120DA348F381FC368D987EEA5B",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（4）在杆塔内(不含杆塔与杆塔之间)或杆塔与拉线之间修建车道",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "0D76F22393EC4DA188D8E22427B48415",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（5）在杆塔拉线基础周围取土、打桩、钻探、开挖或倾倒酸、碱、盐及其他有害化学物品",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "2B9B90BCC227430C81A725B651F83065",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（6）在线路保护区内兴建建筑物、烧窑、烧荒或堆放谷物、草料、垃圾、矿渣、易燃物、易爆物及其他影响供电安全的物品",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "58B4295843B147CCB983AD69A6A98319",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（7）在线路保护区内种植有可能影响线路安全运行的树木和植物",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "F69C778130A4463C9A468D978223BEDC",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（8）在线路保护区内进行农田水利基本建设及打桩、钻探、开挖、地下采掘等作业",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "E58A6C29231647BA8C5AC5EB848B772A",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（9）在线路保护区内有进入或穿越保护区的超高机械",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "8FA67EA8DF6F42BD83337007C801DF4A",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（10）在线路附近有危及线路安全及线路导线风偏摆动时，可能引起放电的树木或其他设施",
+    "taskDefect": null
+  },
+  {
+    "id": null,
+    "task_id": null,
+    "patrol_id": "B6FB0C019402478FAD554E00E9E6998B",
+    "status": null,
+    "name": "沿线环境",
+    "category": "9DA16BC597404773AA97260131A7DEE9",
+    "remarks": "（11）在线路附近(约300m区域内)施工爆破、开山采石、放风筝",
+    "taskDefect": null
+  }
+]
