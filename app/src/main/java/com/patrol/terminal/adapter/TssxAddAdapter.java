@@ -1,6 +1,7 @@
 package com.patrol.terminal.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,11 @@ public class TssxAddAdapter extends BaseAdapter {
                 }
             }
         });
+        Log.e("回显条目对应关系",tssxList.get(position).getValues()+"=="+position);
+        //离线数据加载回显map中没有position无法显示状态
+//        if(tssxList.get(position).isCheck() && !map.containsKey(position)){
+//            map.put(position,tssxList.get(position).getValues());
+//        }
 
         if(map!=null && map.containsKey(position)){
             holder.checkBox.setChecked(true);
@@ -106,26 +112,35 @@ public class TssxAddAdapter extends BaseAdapter {
 
     public void setData(List<TSSXBean> typeBeanList) {
         tssxList = typeBeanList;
-        notifyDataSetChanged();
-    }
-
-    public void removeItem(TSSXBean bean) {
-        int index = tssxList.indexOf(bean);
-        tssxList.get(index).setCheck(false);
-        tssxList.get(index).setYhnr("");
-        tssxList.get(index).setDj("一般");
-        tssxList.get(index).setClearPhotoList();
-
-        for (Map.Entry<Integer,String> entry : map.entrySet()) {
-            Integer key = (Integer) entry.getKey();
-            String values = (String)entry.getValue();
-            if(values.equals(bean.getValues()))
-            {
-                map.remove(key);
+        int count  = typeBeanList.size();
+        for (int i = 0;i<count;i++){
+            TSSXBean bean = tssxList.get(i);
+            if(bean.isCheck()){
+                map.put(i,bean.getValues());
             }
         }
 
         notifyDataSetChanged();
+    }
+
+    /**
+     * 删除选中状态
+     * @param bean
+     */
+    public void removeItem(TSSXBean bean) {
+            for (Map.Entry<Integer,String> entry : map.entrySet()) {
+                Integer key = (Integer) entry.getKey();
+                String values = (String)entry.getValue();
+                if(values.equals(bean.getValues()))
+                {
+                    tssxList.get(key).setCheck(false);
+                    tssxList.get(key).setYhnr("");
+                    tssxList.get(key).setDj("一般");
+                    tssxList.get(key).setClearPhotoList();
+                    map.remove(key);
+                }
+            }
+            notifyDataSetChanged();
     }
 
     class ViewHolder {
