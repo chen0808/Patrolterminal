@@ -37,6 +37,8 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
+            +
+
             <TextView
                 android:id="@+id/one_line"
                 android:layout_width="wrap_content"
@@ -104,8 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                   />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -129,16 +130,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:drawableTop="@mipmap/home_task"
                     android:layout_marginBottom="10dp"
+                    android:drawableTop="@mipmap/home_task"
                     android:text="任务"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
@@ -155,16 +155,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                     />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:drawableTop="@mipmap/home_defect"
                     android:layout_marginBottom="10dp"
+                    android:drawableTop="@mipmap/home_defect"
                     android:text="缺陷"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
@@ -180,8 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                   />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -219,28 +217,29 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:gravity="center">
 
             <ImageView
+                android:id="@+id/img_db"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_centerInParent="true"
                 android:src="@mipmap/todo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="50dp"
+                android:layout_below="@id/img_db"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
                 android:text="待办"
                 android:textSize="20sp" />
         </RelativeLayout>
 
         <View
             android:layout_width="10dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <RelativeLayout
             android:id="@+id/rl_task_now"
@@ -248,23 +247,25 @@
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:gravity="center">
 
             <ImageView
+                android:id="@+id/img_dqrw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_centerInParent="true"
                 android:src="@mipmap/task_now" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="50dp"
+                android:layout_below="@id/img_dqrw"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
                 android:text="当前任务"
                 android:textSize="20sp" />
+
         </RelativeLayout>
 
 
@@ -272,7 +273,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="10dp"></View>
+        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -286,23 +287,25 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:gravity="center">
 
             <ImageView
+                android:id="@+id/img_lsrw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_centerInParent="true"
                 android:src="@mipmap/task_history" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="50dp"
+                android:layout_below="@id/img_lsrw"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
                 android:text="历史任务"
                 android:textSize="20sp" />
+
         </RelativeLayout>
 
         <View
@@ -315,28 +318,28 @@
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:gravity="center">
 
             <ImageView
+                android:id="@+id/img_rjhwc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_centerInParent="true"
                 android:src="@mipmap/day_plan_finish" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="50dp"
+                android:layout_below="@id/img_rjhwc"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
                 android:text="日计划完成"
                 android:textSize="20sp" />
         </RelativeLayout>
 
 
     </LinearLayout>
-
 
 
     <View
