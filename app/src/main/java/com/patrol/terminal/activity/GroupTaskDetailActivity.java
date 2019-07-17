@@ -145,7 +145,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
             type = 1;
             taskSubmit.setVisibility(View.VISIBLE);
 
-            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+            if (jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)&&SPUtil.getUserId(this).equals(bean.getDuty_user_id())) {
                 titleSettingTv.setText("指派");
                 titleSetting.setVisibility(View.VISIBLE);
                 getPersonal();
