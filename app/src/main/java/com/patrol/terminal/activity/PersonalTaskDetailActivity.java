@@ -158,11 +158,9 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
 //        titleSetting.setVisibility(View.VISIBLE);
         if (jobType.contains(Constant.RUNNING_SQUAD_LEADER) && ("12".equals(bean.getType_sign()) || "13".equals(bean.getType_sign())) && bean.getWork_user_name() == null) {
-
             titleSettingTv.setText("指派");
             getPersonal();
         } else {
-
             titleSettingTv.setText("提交");
         }
         year = bean.getYear();
@@ -510,6 +508,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         if (localByTaskId != null) {
             if (localByTaskId.getPic1() == null || localByTaskId.getPic2() == null || localByTaskId.getPic3() == null || localByTaskId.getPic4() == null || localByTaskId.getPic5() == null || localByTaskId.getPic6() == null) {
                 Toast.makeText(PersonalTaskDetailActivity.this, "巡视图片不是6张", Toast.LENGTH_SHORT).show();
+                ProgressDialog.cancle();
                 return;
             }
             if (localByTaskId.getPic1() != null) {

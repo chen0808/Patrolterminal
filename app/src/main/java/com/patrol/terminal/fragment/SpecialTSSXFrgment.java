@@ -205,7 +205,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
         tssx_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//                标记离线操作
                 if (personalTaskListBean != null && !isSave) {
                     isSave = true;
                     personalTaskListBean.setIs_save("0");
@@ -471,7 +471,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
             String[] photoStr = tssxList.get(i).getPhotoStr().split(";");
             if (photoStr.length > 0) {
                 for (int d = 0; d < photoStr.length; d++) {
-                    photoList.add(photoStr[d]);
+                    if(!TextUtils.isEmpty(photoStr[d]))
+                        photoList.add(photoStr[d]);
                 }
             }
             tssxBean.setPhotoList(photoList);
@@ -502,7 +503,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
     //刷新页面数据
     public void refreshPage(List<TSSXBean> typeBeanList) {
-        intiTssxData(typeBeanList);
+        initTssxData(typeBeanList);
 
         sankua_rad.check(tssx_sankua.getId());
         xs_tssx_lv.setAdapter(skEditAdapter);
@@ -518,7 +519,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
     public void refreshAddTssxData(List<TSSXBean> localList) {
         for (TSSXBean locaBean : localList) {
             for (TSSXBean addBean : tssxBeanList) {
-                if (locaBean.getKey().equals(addBean.getKey())) {
+                if (addBean.getKey().equals(locaBean.getKey())) {
                     addBean.setCheck(true);
                 }
             }
@@ -568,7 +569,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 .execute();
     }
 
-    //刪除添加的属性
+    //刪除数据库 添加的属性
     public void delBean(String key) {
         List<TSSXLocalBean> product = SQLite.select()
                 .from(TSSXLocalBean.class)
@@ -583,7 +584,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
 
     }
     //初始化数据保存本地
-    public void intiTssxData(List<TSSXBean> typeBeanList) {
+    public void initTssxData(List<TSSXBean> typeBeanList) {
         skTssxList.clear();
         lfTssxList.clear();
         qtTssxList.clear();
@@ -592,11 +593,11 @@ public class SpecialTSSXFrgment extends BaseFragment {
         int count = typeBeanList.size();
         for (int i = 0; i < count; i++) {
             TSSXBean bean = typeBeanList.get(i);
-            if (bean.getParKey() == TYPE_SK) {
+            if (bean.getParKey().equals(TYPE_SK)) {
                 skTssxList.add(bean);
-            } else if (bean.getParKey() == TYPE_LF) {
+            } else if (bean.getParKey().equals(TYPE_LF)) {
                 lfTssxList.add(bean);
-            } else if (bean.getParKey() == TYPE_QT) {
+            } else if (bean.getParKey().equals(TYPE_QT)) {
                 qtTssxList.add(bean);
             }
 
@@ -786,8 +787,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
         tssxBeanList.add(new TSSXBean("B2E24FE1927A4E189AF3A1C017B432B8", "98F764466504450DBC4C490F6DB512C2", "炼油厂"));
 
         //其他
-        tssxBeanList.add(new TSSXBean("FEFFD17137CA4E3891DCC3C28457FFA2", "B2E7DF49D7AB4B358D5DD4BF4DF639EC", "单线路路通道"));
-        tssxBeanList.add(new TSSXBean("460116CD2E3A42DDAC92D432033EDD4B", "B2E7DF49D7AB4B358D5DD4BF4DF639EC", "重要输电通道"));
+        tssxBeanList.add(new TSSXBean("FEFFD17137CA4E3891DCC3C28457FFA2", "B2E7DF49D7AB4B358D5DD4BF4DF639EC", "单线输路通道"));
+//        tssxBeanList.add(new TSSXBean("460116CD2E3A42DDAC92D432033EDD4B", "B2E7DF49D7AB4B358D5DD4BF4DF639EC", "重要输电通道"));
 
         tssxAddAdapter = new TssxAddAdapter(getActivity(), tssxBeanList);
         grid_addtssx.setAdapter(tssxAddAdapter);
