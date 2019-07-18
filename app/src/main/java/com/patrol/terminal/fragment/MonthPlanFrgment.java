@@ -1,11 +1,14 @@
 package com.patrol.terminal.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,6 +60,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.internal.Util;
 
 /*月计划*/
 public class MonthPlanFrgment extends BaseFragment {
@@ -448,9 +452,9 @@ public class MonthPlanFrgment extends BaseFragment {
                 .setType(new boolean[]{true, true, false, false, false, false})
                 .setLabel("年", "月", "日", "时", "分", "秒")
                 .build();
+        Utils.hideClickStatus(getActivity());
         pvTime.show();
     }
-
 
     @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit, R.id.task_screen, R.id.add_plan_ll, R.id.plan_submit_next})
     public void onViewClicked(View view) {
