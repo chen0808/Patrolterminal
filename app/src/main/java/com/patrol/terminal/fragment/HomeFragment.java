@@ -21,11 +21,13 @@ import com.patrol.terminal.activity.DefectActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
 import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
 import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
+import com.patrol.terminal.activity.LoginActivity;
 import com.patrol.terminal.activity.MonitoringRecordActivity;
 import com.patrol.terminal.activity.NewMainActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
+import com.patrol.terminal.activity.SettingActivity;
 import com.patrol.terminal.activity.TroubleActivity;
 import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
 import com.patrol.terminal.adapter.BackLogTaskAdapter;
@@ -211,6 +213,18 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         getPersonalList();
         getLastTask();
 
+
+        //退出系统快捷方式
+        ivHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SPUtil.clear(getActivity(), Constant.USER);
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                getActivity().setResult(RESULT_OK);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
     }
 
     @Override
