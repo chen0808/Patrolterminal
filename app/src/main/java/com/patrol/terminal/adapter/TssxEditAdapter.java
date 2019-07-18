@@ -87,7 +87,7 @@ public class TssxEditAdapter extends BaseAdapter {
                         clickAdapter.delItemObject(tssxList.get(position));
                         tssxList.remove(position);
                         notifyDataSetChanged();
-                         dismiss();
+                        dismiss();
                     }
                     @Override
                     public void cancle() {
