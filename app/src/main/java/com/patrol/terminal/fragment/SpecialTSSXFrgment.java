@@ -42,6 +42,7 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.NoScrollViewPager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -72,7 +73,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
     @BindView(R.id.grid_addbtn)
     Button grid_addbtn;
     @BindView(R.id.xs_tssx_lv)
-    ListView xs_tssx_lv;
+    NoScrollListView xs_tssx_lv;
     @BindView(R.id.tssx_select_title)
     RadioGroup sankua_rad;
     @BindView(R.id.tssx_sankua)
