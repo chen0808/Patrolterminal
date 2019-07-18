@@ -125,8 +125,11 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     protected void initData() {
         String time = SPUtil.getString(getContext(), "date", "overhaulTime", DateUatil.getTime(new Date(System.currentTimeMillis())));
         String[] years = time.split("年");
-        String[] months = years[1].split("月");
-        month = Integer.parseInt(months[0]) + "";
+        if(years[1].contains("月")){
+            String[] months = years[1].split("月");
+            month = Integer.parseInt(months[0]) + "";
+        }
+
         year = years[0];
         week = DateUatil.getWeekNum()+"";
 
