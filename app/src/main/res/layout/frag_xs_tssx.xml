@@ -84,7 +84,7 @@
             android:layout_height="match_parent"
             android:visibility="gone" />
 
-        <com.patrol.terminal.widget.NoScrollListView
+        <ListView
             android:id="@+id/xs_tssx_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
