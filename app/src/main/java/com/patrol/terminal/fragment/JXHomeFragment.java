@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DefectActivity;
+import com.patrol.terminal.activity.LoginActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.TroubleActivity;
@@ -119,6 +120,16 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         progressDialog = new ProgressDialog();
         return view;
+    }
+
+    @OnClick(R.id.iv_header)
+    void headerClick()
+    {
+        SPUtil.clear(getActivity(), Constant.USER);
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        getActivity().setResult(RESULT_OK);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @Override
