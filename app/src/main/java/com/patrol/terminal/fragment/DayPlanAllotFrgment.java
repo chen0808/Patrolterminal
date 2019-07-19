@@ -43,7 +43,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
 
-
     @BindView(R.id.task_title)
     TextView taskTitle;
     @BindView(R.id.task_date)
@@ -56,6 +55,7 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
     ImageView planTop;
     @BindView(R.id.select_day_plan_rv)
     RecyclerView selectDayPlanRv;
+
     private int month, year, day;
     private String time;
     private List<TeamAndTaskBean> teamList = new ArrayList<>();
@@ -125,7 +125,6 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
     }
 
     public void inteDate(String time) {
-        time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         String[] years = time.split("年");
         String[] months = years[1].split("月");
         String[] days = months[1].split("日");
@@ -137,7 +136,6 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
 
     //获取日计划列表
     public void getDayList() {
-
         BaseRequest.getInstance().getService()
                 .getDayofGroup(year + "", month + "", day + "", SPUtil.getDepId(getContext()), null)
                 .subscribeOn(Schedulers.io())
@@ -148,6 +146,7 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
                     protected void onSuccees(BaseResult<List<GroupOfDayBean>> t) throws Exception {
                         dayPlanlist = t.getResults();
                         dayPlanAllotAdapter.setNewData(dayPlanlist);
+                        dayPlanAllotAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -180,6 +179,7 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
                             }
                             planAllotTeamAdapter.notifyItemChanged(selectPosition);
                         }
+
                         for (int i = 0; i < teamList.size(); i++) {
                             List<GroupOfDayBean> lists = teamList.get(i).getLists();
                             if (lists.size() > 0) {
@@ -205,11 +205,11 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
             if (check == true) {
                 groupOfDayBean.setCheck(false);
                 imageView.setImageResource(R.mipmap.circle_no);
-
             } else {
                 groupOfDayBean.setCheck(true);
                 imageView.setImageResource(R.mipmap.circle);
             }
+
             boolean isexit = true;
             for (int i = 0; i < selectList.size(); i++) {
                 GroupOfDayBean groupOfDayBean1 = selectList.get(i);
@@ -219,6 +219,7 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
                     break;
                 }
             }
+
             if (isexit) {
                 selectList.add(groupOfDayBean);
             }
@@ -254,7 +255,6 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
 
     //保存
     public void savaGroupTask() {
-
         ProgressDialog.show(getContext(), true, "正在保存");
         TeamAndTaskBean teamAndTaskBean =new TeamAndTaskBean();
         TeamAndTaskBean teamAndTaskBean1 = teamList.get(selectPosition);
@@ -345,22 +345,14 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
         endDate.set(2028, 2, 28);
         //时间选择器 ，自定义布局
         //选中事件回调
-//是否只显示中间选中项的label文字，false则每项item全部都带有label。
+        //是否只显示中间选中项的label文字，false则每项item全部都带有label。
         TimePickerView pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
-                String oldTime = DateUatil.getDay(date);
-                inteDate(oldTime);
-                if (time.equals(oldTime)) {
-                    getDayList();
-                    planBotton.setVisibility(View.VISIBLE);
-                    planBotton.setVisibility(View.VISIBLE);
-                } else {
-                    planBotton.setVisibility(View.INVISIBLE);
-                    planBotton.setVisibility(View.INVISIBLE);
-                }
+                time = DateUatil.getDay(date);
+                inteDate(time);
+                getDayList();
                 getGroupTeam();
-
             }
         })
                 .setDate(selectedDate)

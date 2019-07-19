@@ -2,6 +2,7 @@ package com.patrol.terminal.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -49,7 +50,6 @@ import io.reactivex.schedulers.Schedulers;
 //小组任务详情
 public class GroupTaskDetailActivity extends BaseActivity {
 
-
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)
@@ -91,6 +91,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
     private String[] personals;
     private AlertDialog personalDialog;
     private String from;
+    private String time;
 
 
     @Override
@@ -98,14 +99,18 @@ public class GroupTaskDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
         ButterKnife.bind(this);
-        initView();
-        bean = (GroupTaskBean) getIntent().getParcelableExtra("GroupTaskBean");
 
+        bean = (GroupTaskBean) getIntent().getParcelableExtra("GroupTaskBean");
+        time = getIntent().getStringExtra("GroupTaskTime");
         from = getIntent().getStringExtra("from");
+
+        initView();
+
         //无网络直接设置上去
         if (!Utils.isNetworkConnected(this) && bean != null) {
             getGroupList();
         }
+
         if ("todoGroup".equals(from)) {
             String task_id = getIntent().getStringExtra("task_id");
             getGroupList(task_id);
@@ -118,7 +123,6 @@ public class GroupTaskDetailActivity extends BaseActivity {
         } else {
             getGroupList(bean.getId());
         }
-
     }
 
 
@@ -126,13 +130,17 @@ public class GroupTaskDetailActivity extends BaseActivity {
         task_select.setVisibility(View.GONE);
 
         titleName.setText("小组任务详情");
-        String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+
+        if(TextUtils.isEmpty(time)){
+            time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+        }
         String[] years = time.split("年");
         String[] months = years[1].split("月");
         String[] days = months[1].split("日");
         month = Integer.parseInt(months[0]) + "";
         year = years[0];
         day = Integer.parseInt(days[0]) + "";
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         monthPlanDetailRc.setLayoutManager(manager);
         adapter = new GroupTaskDetailAdapter(R.layout.item_plan_detail, typeList);
