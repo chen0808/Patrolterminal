@@ -432,7 +432,9 @@ ll35kv.setVisibility(View.GONE);
         bean.setWeek(week + "");
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(NextWeekPlanActivity.this));
-        bean.setDep_id(SPUtil.getDepId(NextWeekPlanActivity.this));
+        if(status.equals("1")){
+            bean.setDep_id(SPUtil.getDepId(NextWeekPlanActivity.this));
+        }
         bean.setTowers(list);
         BaseRequest.getInstance().getService()
                 .submitWeekPlan(bean)

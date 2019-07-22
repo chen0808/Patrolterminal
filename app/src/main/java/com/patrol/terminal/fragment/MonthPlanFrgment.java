@@ -383,7 +383,9 @@ public class MonthPlanFrgment extends BaseFragment {
 
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(getContext()));
-        bean.setDep_id(SPUtil.getDepId(getContext()));
+        if(status.equals("1")){
+            bean.setDep_id(SPUtil.getDepId(getContext()));
+        }
         bean.setLines(list);
         BaseRequest.getInstance().getService()
                 .submitMonthPlan(bean)

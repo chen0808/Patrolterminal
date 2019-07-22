@@ -442,7 +442,9 @@ public class NextMonthPlanActivity extends BaseActivity {
         bean.setMonth(nextMonth + "");
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(NextMonthPlanActivity.this));
-        bean.setDep_id(SPUtil.getDepId(NextMonthPlanActivity.this));
+        if(status.equals("1")){
+            bean.setDep_id(SPUtil.getDepId(NextMonthPlanActivity.this));
+        }
         bean.setLines(list);
         BaseRequest.getInstance().getService()
                 .submitMonthPlan(bean)

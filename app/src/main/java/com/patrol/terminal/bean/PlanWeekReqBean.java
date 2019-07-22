@@ -21,6 +21,7 @@ public class PlanWeekReqBean {
     private PlanWeekLineBean planDayLine;
     private String  planTime;
     private List<DayPlanReqBean>  weekPlanIds;
+    private String dep_id;
 
 
 
@@ -153,4 +154,11 @@ public class PlanWeekReqBean {
     }
 
 
+    public String getDep_id() {
+        return dep_id;
+    }
+
+    public void setDep_id(String dep_id) {
+        this.dep_id = dep_id;
+    }
 }

@@ -407,6 +407,7 @@ public class AddWeekPlanActivity extends BaseActivity {
         bean.setBegin_time(year + "-" + beginDate);
         bean.setEnd_time(year + "-" + endDate);
         bean.setTowers(selectType);
+        bean.setDep_id(SPUtil.getDepId(AddWeekPlanActivity.this));
 
         BaseRequest.getInstance().getService()
                 .saveWeek(bean)
