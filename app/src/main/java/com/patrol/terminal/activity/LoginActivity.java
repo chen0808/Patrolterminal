@@ -52,6 +52,12 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.btn_login)
     public void onViewClicked() {
+
+        if (!Utils.isNetworkConnected(this)) {
+            Toast.makeText(this, "请检查网络", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String name = longinName.getText().toString();
         String password = loginPsw.getText().toString();
         if (name.isEmpty()) {
