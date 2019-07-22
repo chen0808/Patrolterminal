@@ -403,6 +403,12 @@ public class AddDayPlanActivity extends BaseActivity {
         int curMonth = Integer.parseInt(months[0]);
         int curYear = Integer.parseInt(years[0]);
         int curDay = Integer.parseInt(days[0]);
+        if(curMonth == 1){
+            curMonth = 12;
+            curYear = curYear - 1;
+        } else {
+            curMonth = curMonth - 1;
+        }
 
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();
