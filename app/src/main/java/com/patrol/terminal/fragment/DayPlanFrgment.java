@@ -54,7 +54,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DayPlanFrgment extends BaseFragment {
 
-
     @BindView(R.id.add_next_plan)
     TextView addNextPlan;
     @BindView(R.id.plan_submit)
@@ -139,7 +138,7 @@ public class DayPlanFrgment extends BaseFragment {
     protected void initData() {
         ll35kv.setVisibility(View.GONE);
         addPlanStatus.setVisibility(View.GONE);
-        addNextPlan.setText("明日计划制定");
+        addNextPlan.setText("日计划制定");
         planTotalTitle.setText("今日工作计划汇总");
         mJobType = SPUtil.getString(getActivity(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
@@ -297,9 +296,9 @@ public class DayPlanFrgment extends BaseFragment {
                     Intent intent = new Intent(getContext(), AddDayPlanActivity.class);
                     intent.putExtra("year", String.valueOf(nextyear));
                     intent.putExtra("month", String.valueOf(nextmonth));
-                    intent.putExtra("day", String.valueOf(nextDay));
+                    intent.putExtra("day", String.valueOf(day));
                     intent.putExtra("from", "DayPlanFrgment");
-                    startActivityForResult(intent, 10);;
+                    startActivityForResult(intent, 10);
                 } else {
                     Toast.makeText(getContext(), "您没有权限", Toast.LENGTH_SHORT).show();
                 }
@@ -330,7 +329,7 @@ public class DayPlanFrgment extends BaseFragment {
         endDate.set(2028, 2, 28);
         //时间选择器 ，自定义布局
         //选中事件回调
-//是否只显示中间选中项的label文字，false则每项item全部都带有label。
+        //是否只显示中间选中项的label文字，false则每项item全部都带有label。
         pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
