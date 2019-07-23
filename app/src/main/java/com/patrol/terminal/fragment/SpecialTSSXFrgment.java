@@ -471,7 +471,8 @@ public class SpecialTSSXFrgment extends BaseFragment {
             String[] photoStr = tssxList.get(i).getPhotoStr().split(";");
             if (photoStr.length > 0) {
                 for (int d = 0; d < photoStr.length; d++) {
-                    photoList.add(photoStr[d]);
+                    if(!TextUtils.isEmpty(photoStr[d]))
+                        photoList.add(photoStr[d]);
                 }
             }
             tssxBean.setPhotoList(photoList);

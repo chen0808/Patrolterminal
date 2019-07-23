@@ -132,7 +132,6 @@ public class MonthPlanFrgment extends BaseFragment {
     private double kilo_110kv = 0;
     private double kilo_35kv = 0;
 
-
     private int done_num_total = 0;
     private int all_num_total = 0;
     private MonthPlanBean monthPlanBean;
@@ -271,11 +270,14 @@ public class MonthPlanFrgment extends BaseFragment {
                                 addPlanName.setText(nextYear + "年" + nextMonth + "月工作计划");
                                 monthPlanBean = nextPatrolList.get(0);
                                 addPlanStatus.setVisibility(View.VISIBLE);
+                                if(monthPlanBean.getAudit_status().equals("3")){
+                                    addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
+                                    addPlanStatus.setTextColor(mContext.getResources().getColor(R.color.green));
+                                } else {
+                                    addPlanStatus.setBackgroundResource(R.drawable.state_red_bg);
+                                    addPlanStatus.setTextColor(mContext.getResources().getColor(R.color.write_red));
+                                }
                                 addPlanStatus.setText(StringUtil.getYXBstate(monthPlanBean.getAudit_status()));
-//                                if ("3".equals(monthPlanBean.getAudit_status())) {
-//                                    addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
-//                                    addPlanStatus.setText(getResources().getColor(R.color.green));
-//                                }
 //                                if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())) {
 //                                    addPlanRight.setVisibility(View.VISIBLE);
 //                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
@@ -379,6 +381,9 @@ public class MonthPlanFrgment extends BaseFragment {
 
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(getContext()));
+        if(status.equals("1")){
+            bean.setDep_id(SPUtil.getDepId(getContext()));
+        }
         bean.setLines(list);
         BaseRequest.getInstance().getService()
                 .submitMonthPlan(bean)
@@ -405,7 +410,6 @@ public class MonthPlanFrgment extends BaseFragment {
                         } else {
                             Toast.makeText(getContext(), t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
                     @Override
@@ -448,9 +452,9 @@ public class MonthPlanFrgment extends BaseFragment {
                 .setType(new boolean[]{true, true, false, false, false, false})
                 .setLabel("年", "月", "日", "时", "分", "秒")
                 .build();
+        Utils.hideClickStatus(getActivity());
         pvTime.show();
     }
-
 
     @OnClick({R.id.task_date, R.id.add_plan_right, R.id.add_plan_iv, R.id.plan_submit, R.id.task_screen, R.id.add_plan_ll, R.id.plan_submit_next})
     public void onViewClicked(View view) {
@@ -650,6 +654,4 @@ public class MonthPlanFrgment extends BaseFragment {
         }
         return lineList;
     }
-
-
 }

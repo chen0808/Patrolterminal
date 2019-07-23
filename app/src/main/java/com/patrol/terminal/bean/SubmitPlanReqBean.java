@@ -12,6 +12,7 @@ public class SubmitPlanReqBean {
     private List<Tower> lineIds;
     private List<Tower> weekIds;
     private String from_user_id;
+    private String dep_id;
 
     public String getFrom_user_id() {
         return from_user_id;
@@ -83,5 +84,13 @@ public class SubmitPlanReqBean {
 
     public void setLineIds(List<Tower> lineIds) {
         this.lineIds = lineIds;
+    }
+
+    public String getDep_id() {
+        return dep_id;
+    }
+
+    public void setDep_id(String dep_id) {
+        this.dep_id = dep_id;
     }
 }

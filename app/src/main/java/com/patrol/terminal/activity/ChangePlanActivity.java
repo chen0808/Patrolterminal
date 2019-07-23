@@ -27,6 +27,7 @@ import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.bean.WeekOfMonthBean;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
+import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -286,6 +287,7 @@ public class ChangePlanActivity extends BaseActivity {
         bean.setType_id(type_id);
         bean.setType_val(type_val);
         bean.setPlanWeekTowerList(selectType);
+        bean.setDep_id(SPUtil.getDepId(ChangePlanActivity.this));
         BaseRequest.getInstance().getService()
                 .saveWeek(bean)
                 .subscribeOn(Schedulers.io())

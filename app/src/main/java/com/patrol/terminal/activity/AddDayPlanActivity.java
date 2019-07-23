@@ -1,18 +1,12 @@
 package com.patrol.terminal.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,9 +21,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DayOfWeekBean;
-import com.patrol.terminal.bean.LineCheckBean;
 import com.patrol.terminal.bean.LineTypeBean;
-import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
@@ -43,9 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.res.TypedArrayUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -55,7 +45,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class AddDayPlanActivity extends BaseActivity {
-
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -68,6 +57,10 @@ public class AddDayPlanActivity extends BaseActivity {
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
 
+    @BindView(R.id.month_plan_layout)
+    LinearLayout monthPlanLayout;
+    @BindView(R.id.month_plan_time)
+    TextView monthPlanTime;
     @BindView(R.id.month_plan_type)
     TextView monthPlanType;
     @BindView(R.id.month_plan_month)
@@ -94,6 +87,7 @@ public class AddDayPlanActivity extends BaseActivity {
     TextView addWeekNumAll;
     @BindView(R.id.add_week_num_ll)
     LinearLayout addWeekNumLl;
+
     private String year;
     private String month;
     private int type = 0;
@@ -122,15 +116,17 @@ public class AddDayPlanActivity extends BaseActivity {
         getWeekPlan();
     }
 
-
     private void initview() {
         titleName.setClickable(false);
         String from = getIntent().getStringExtra("from");
         if ("DayPlanFrgment".equals(from)) {
-            titleName.setClickable(true);
+            monthPlanLayout.setVisibility(View.VISIBLE);
+        } else {
+            monthPlanLayout.setVisibility(View.GONE);
         }
         inteDate();
-        titleName.setText(year + "年" + month + "月" + day + "日计划制定");
+        titleName.setText("日计划制定");
+        monthPlanTime.setText(year + "年" + month + "月" + day + "日计划制定");
         adapter = new AddDayAdapter(this, linList);
         monthPlanTypeLv.setAdapter(adapter);
 
@@ -189,13 +185,13 @@ public class AddDayPlanActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.title_back, R.id.month_plan_line, R.id.month_plan_type, R.id.month_yes, R.id.trouble_more, R.id.title_name})
+    @OnClick({R.id.title_back, R.id.month_plan_line, R.id.month_plan_type, R.id.month_yes, R.id.trouble_more, R.id.title_name, R.id.month_plan_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
-            case R.id.title_name:
+            case R.id.month_plan_time:
                 showDay();
                 break;
             case R.id.month_plan_line:
@@ -209,7 +205,6 @@ public class AddDayPlanActivity extends BaseActivity {
             case R.id.month_yes:
                 saveDay();
                 break;
-
             case R.id.trouble_more:
                 if (type == 0) {
                     type = 1;
@@ -292,10 +287,7 @@ public class AddDayPlanActivity extends BaseActivity {
 
         AlertDialog typeDialog = alertBuilder.create();
         typeDialog.show();
-
     }
-
-
 
     //获取每个班组负责的线路
     public void getWeekPlan() {
@@ -308,8 +300,6 @@ public class AddDayPlanActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<DayOfWeekBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<DayOfWeekBean>> t) throws Exception {
-
-
                         results = t.getResults();
                         adapter.setData(results);
                         if (results == null || results.size() == 0) {
@@ -354,10 +344,8 @@ public class AddDayPlanActivity extends BaseActivity {
                 });
     }
 
-
     //保存
     public void saveDay() {
-
         if (selectType.size() == 0) {
             Toast.makeText(this, "请添加计划", Toast.LENGTH_SHORT).show();
             return;
@@ -376,7 +364,6 @@ public class AddDayPlanActivity extends BaseActivity {
                         } else {
                             Toast.makeText(AddDayPlanActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
                     @Override
@@ -385,7 +372,6 @@ public class AddDayPlanActivity extends BaseActivity {
                     }
                 });
     }
-
 
     @Override
     protected void onDestroy() {
@@ -407,29 +393,36 @@ public class AddDayPlanActivity extends BaseActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
 
-
-
-
-
-
-
     public void showDay() {
+        String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        String[] days = months[1].split("日");
+        int curMonth = Integer.parseInt(months[0]);
+        int curYear = Integer.parseInt(years[0]);
+        int curDay = Integer.parseInt(days[0]);
+        if(curMonth == 1){
+            curMonth = 12;
+            curYear = curYear - 1;
+        } else {
+            curMonth = curMonth - 1;
+        }
+
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2018, 1, 23);
+        startDate.set(curYear, curMonth, curDay);
         Calendar endDate = Calendar.getInstance();
         endDate.set(2028, 2, 28);
         //时间选择器 ，自定义布局
         //选中事件回调
-//是否只显示中间选中项的label文字，false则每项item全部都带有label。
+        //是否只显示中间选中项的label文字，false则每项item全部都带有label。
         TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 String time = DateUatil.getDay(date);
-                titleName.setText(time + "计划制定");
+                monthPlanTime.setText(time + "计划制定");
                 String[] times = time.split("年");
                 String[] months = times[1].split("月");
                 year = times[0];

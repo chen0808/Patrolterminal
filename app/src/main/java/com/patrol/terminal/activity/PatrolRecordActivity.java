@@ -574,8 +574,17 @@ public class PatrolRecordActivity extends BaseActivity {
             params.put("taskDefectPatrolRecodeList[" + i + "].patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].status", toRequestBody(localDefectByTaskId.get(i).getStatus()));
             if (localDefectByTaskId.get(i).getStatus().equals("")) {
-                Toast.makeText(PatrolRecordActivity.this, "常规巡视未填写完整", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PatrolRecordActivity.this, "常规巡视未全部勾选", Toast.LENGTH_SHORT).show();
                 return;
+            } else if (localDefectByTaskId.get(i).getStatus().equals("1")) {
+                if (localDefectByTaskId.get(i).getContent() == null || localDefectByTaskId.get(i).getContent().equals("")) {
+                    Toast.makeText(PatrolRecordActivity.this, "请填写缺陷内容", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (localDefectByTaskId.get(i).getGrade_id() == null || localDefectByTaskId.get(i).getGrade_id().equals("")) {
+                    Toast.makeText(PatrolRecordActivity.this, "请勾选缺陷等级", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.task_id", toRequestBody(task_id));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.category_id", toRequestBody(localDefectByTaskId.get(i).getCategory_id()));

@@ -1,11 +1,7 @@
 package com.patrol.terminal.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +36,6 @@ import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
-import com.raizlabs.android.dbflow.sql.language.NameAlias;
-import com.raizlabs.android.dbflow.sql.language.OrderBy;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -49,8 +43,6 @@ import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
-
-import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,8 +56,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+//小组任务
 public class GroupTaskFrgment extends BaseFragment {
-
 
     @BindView(R.id.task_title)
     TextView taskTitle;
@@ -82,7 +74,6 @@ public class GroupTaskFrgment extends BaseFragment {
     @BindView(R.id.plan_refresh)
     SwipeRefreshLayout mRefrsh;
 
-
     private GroupTaskAdapter groupTaskAdapter;
     private TimePickerView pvTime;
     private List<GroupTaskBean> result = new ArrayList<>();
@@ -93,7 +84,7 @@ public class GroupTaskFrgment extends BaseFragment {
     private String userId, duty_user_id;
     private String depId;
     private String jobType;
-    private boolean isRefresh=true;
+    private boolean isRefresh = true;
     private Disposable subscribe;
 
     @Override
@@ -131,18 +122,15 @@ public class GroupTaskFrgment extends BaseFragment {
                 intent.setClass(getContext(), GroupTaskDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("GroupTaskBean", bean);
+                bundle.putString("GroupTaskTime", time);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 11);
             }
         });
 
-//        getDataFromDatabase();
-        //getData();
-
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 if (Utils.isNetworkConnected(getContext())){
                     getData();
                 }else {
@@ -150,8 +138,8 @@ public class GroupTaskFrgment extends BaseFragment {
                 }
             }
         });
-        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
+        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
             @Override
             public void accept(String type) throws Exception {
                 if (type.startsWith("refreshGroupData")) {
@@ -160,9 +148,10 @@ public class GroupTaskFrgment extends BaseFragment {
 
             }
         });
+
         if (Utils.isNetworkConnected(getContext())){
             getData();
-        }else {
+        } else {
             getDataFromDatabase();
         }
     }
@@ -215,7 +204,7 @@ public class GroupTaskFrgment extends BaseFragment {
                             )
                     //.orderBy(OrderBy.fromNameAlias(NameAlias.of("duty_user_id,line_id,name")))
                     .queryList();
-        }else {
+        } else {
             result = SQLite.select().from(GroupTaskBean.class)
                     .where(GroupTaskBean_Table.year.eq(Integer.valueOf(year)),GroupTaskBean_Table.month.eq(Integer.valueOf(month)),
                             GroupTaskBean_Table.day.eq(Integer.valueOf(day)),
@@ -225,7 +214,6 @@ public class GroupTaskFrgment extends BaseFragment {
                     .queryList();
 
         }
-
 
         if (result != null && result.size() != 0) {
             groupTaskAdapter.setNewData(result);
@@ -303,12 +291,11 @@ public class GroupTaskFrgment extends BaseFragment {
     }
 
     private void saveToDatebase(GroupTaskBean bean) {
-
         bean.setUser_id(SPUtil.getUserId(getContext()));
 
-    GroupTaskBean existBeans = SQLite.select().from(GroupTaskBean.class)
-                .where(GroupTaskBean_Table.id.eq(bean.getId()))
-                .querySingle();
+        GroupTaskBean existBeans = SQLite.select().from(GroupTaskBean.class)
+                    .where(GroupTaskBean_Table.id.eq(bean.getId()))
+                    .querySingle();
 
         if (existBeans!=null) {   //数据存在
             existBeans.setAllot_status(bean.getAllot_status());
@@ -323,8 +310,8 @@ public class GroupTaskFrgment extends BaseFragment {
             existBeans.setIs_rob(bean.getIs_rob());
             existBeans.setDone_time(bean.getDone_time());
             existBeans.update();
-        }else {
-            GroupTaskBean   groupTaskBean=new GroupTaskBean();
+        } else {
+            GroupTaskBean   groupTaskBean = new GroupTaskBean();
             groupTaskBean=bean;
             groupTaskBean.save();
         }
@@ -333,7 +320,6 @@ public class GroupTaskFrgment extends BaseFragment {
 
     //获取小组负责人的检修任务
     public void getRepairList() {
-
         BaseRequest.getInstance().getService()
                 .getRepairList(year, month, day, SPUtil.getUserId(getContext()), "4")
                 .subscribeOn(Schedulers.io())
@@ -360,12 +346,10 @@ public class GroupTaskFrgment extends BaseFragment {
                         ProgressDialog .cancle();
                     }
                 });
-
     }
 
     //获取小组任务列表
     public void getGroupListZy() {
-
         BaseRequest.getInstance().getService()
                 .getGroupList(year, month, day, userId)
                 .subscribeOn(Schedulers.io())
@@ -416,9 +400,10 @@ public class GroupTaskFrgment extends BaseFragment {
         startDate.set(2018, 1, 23);
         Calendar endDate = Calendar.getInstance();
         endDate.set(2028, 2, 28);
+
         //时间选择器 ，自定义布局
         //选中事件回调
-//是否只显示中间选中项的label文字，false则每项item全部都带有label。
+        //是否只显示中间选中项的label文字，false则每项item全部都带有label。
         pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
@@ -474,7 +459,6 @@ public class GroupTaskFrgment extends BaseFragment {
 
     //消除所有查看类型待办
     public void clearTodoAll() {
-
         BaseRequest.getInstance().getService()
                 .clearTodo(SPUtil.getUserId(getContext()), "3")
                 .subscribeOn(Schedulers.io())
@@ -563,6 +547,4 @@ public class GroupTaskFrgment extends BaseFragment {
                     }
                 });
     }
-
-
 }

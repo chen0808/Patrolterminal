@@ -58,63 +58,66 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/base_status_bar"></View>
+        android:background="@color/base_status_bar"
+          />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginTop="-27dp"
-        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginTop="-23dp"
+        android:orientation="vertical"
         android:background="@drawable/shape_white_bg"
-        >
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_horizontal">
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:id="@+id/ly_plent"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_height="18dp"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/month_plan_num"
-                android:layout_width="67dp"
-                android:layout_height="@dimen/dp_30"
-                android:layout_marginLeft="55dp"
-                android:textSize="@dimen/sp_16"
-                android:textStyle="bold"
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
                 android:gravity="center_horizontal|bottom"
-                android:textColor="@color/blue"
                 android:text="0"
-                />
+                android:textColor="@color/blue"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginRight="3dp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/week_plan_num"
-                android:layout_width="67dp"
-                android:layout_height="@dimen/dp_30"
-                android:textSize="@dimen/sp_16"
-                android:layout_marginLeft="@dimen/dp_40"
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
                 android:gravity="center_horizontal|bottom"
-                android:textStyle="bold"
-                android:textColor="@color/week_plan_num"
                 android:text="0"
-                />
+                android:textColor="@color/week_plan_num"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginRight="5dp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/day_plan_num"
-                android:layout_width="67dp"
-                android:layout_height="@dimen/dp_30"
-                android:layout_marginLeft="@dimen/dp_40"
-                android:textSize="@dimen/sp_16"
-                android:textStyle="bold"
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
                 android:gravity="center_horizontal|bottom"
-                android:textColor="@color/day_plan_num"
                 android:text="0"
-                />
+                android:layout_marginRight="7dp"
+                android:textColor="@color/day_plan_num"
+                android:textSize="@dimen/sp_16"
+                android:textStyle="bold" />
         </LinearLayout>
+
         <net.lucode.hackware.magicindicator.MagicIndicator
             android:id="@+id/magic_indicator4"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_height="35dp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_width="280dp"
+            android:layout_height="20dp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <com.patrol.terminal.widget.NoScrollViewPager
         android:id="@+id/view_pager"

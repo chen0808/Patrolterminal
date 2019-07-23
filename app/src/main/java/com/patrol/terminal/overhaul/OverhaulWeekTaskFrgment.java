@@ -34,7 +34,6 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -66,7 +65,6 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
     private List<List<String>> months = new ArrayList<>();
     private List<List<String>> weeks = new ArrayList<>();
 
-    //private TimePickerView pvTime;
     private String year, month/*,day*/;
     private int week;
     private String userId;
@@ -83,10 +81,9 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-        //time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         //初始化年月周数据
         initWeek();
-        //time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -108,26 +105,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
             sign = "2";
         }
 
-
-//        if (jobType.contains(Constant.REFURBISHMENT_LEADER)|| jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED)
-//                || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)|| jobType.contains(Constant.SAFETY_SPECIALIZED)) { //班长发布周检修工作
-////            userId = SPUtil.getUserId(getContext());
-//            status="1,2,3";
-//
-//        } else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {   //专责发布周检修工作
-//
-//        } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {  //班员接受周检修工作   TODO  班员里面分负责人和普通班员
-//            userId = SPUtil.getUserId(getContext());
-//            status="2,3";
-//        }
-
-//        String[] years = time.split("年");
-//        String[] months = years[1].split("月");
-//        month = Integer.parseInt(months[0]) + "";
-//        year = years[0];
-//        week = DateUatil.getWeekNum() + "";
         taskTitle.setText("周任务列表");
-//        // taskDate.setText(time + "第" + week + "周");
 
         String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis()));
         String endDate = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis()));
@@ -135,6 +113,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
 
         // 设置监听器。
         planRv.setSwipeMenuCreator(mSwipeMenuCreator);
+
         // 菜单点击监听。
         planRv.setOnItemMenuClickListener(mItemMenuClickListener);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -154,8 +133,9 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
                 startActivityForResult(intent, 1001);
             }
         });
-        //getDayList();
+
         getWeekList();
+
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
 
             @Override
@@ -182,6 +162,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         year = years[0];
         week = TimeUtil.getCurrWeek();
     }
+
     //初始化周数据
     public void initdate() {
         for (int i = 2019; i < 2100; i++) {
@@ -196,7 +177,6 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
             }
             weeks.add(options3Items_01);
         }
-
     }
 
 
@@ -241,6 +221,9 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
                                             Log.e("fff", e.toString());
                                         }
                                     });
+                        } else {
+                            results.clear();
+                            weekTaskAdapter.notifyDataSetChanged();
                         }
 
                     }
@@ -250,8 +233,6 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
                         planRefresh.setRefreshing(false);
                     }
                 });
-
-
     }
 
 
@@ -263,6 +244,7 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
 
             // 左侧还是右侧菜单：
             int direction = menuBridge.getDirection();
+
             // 菜单在Item中的Position：
             int menuPosition = menuBridge.getPosition();
         }
@@ -295,25 +277,16 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
         OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-
-                //返回的分别是三个级别的选中位置
                 //返回的分别是三个级别的选中位置
                 String time = years.get(options1) + weeks.get(options1).get(option2);
                 year = years.get(options1).split("年")[0];
                 String date = weeks.get(options1).get(option2);
                 week = Integer.parseInt(date.split("周")[0].split("第")[1]);
                 taskDate.setText(time);
-                //taskDate.setText(time);
-
-                Map<String, Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), week);
-                String beginDate = (String) taskDateStr.get("beginDate");
-                String endDate = (String) taskDateStr.get("endDate");
-                taskDate.setText(beginDate + "至" + endDate + "（" + "第" + week + "周" + "）");
 
                 getWeekList();
 
                 SPUtil.putString(getContext(), "date", "overhaulTime", time);
-
             }
         }).build();
         pvOptions.setPicker(years, weeks);

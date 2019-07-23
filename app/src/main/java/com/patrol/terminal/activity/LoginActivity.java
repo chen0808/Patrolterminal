@@ -52,6 +52,12 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.btn_login)
     public void onViewClicked() {
+
+        if (!Utils.isNetworkConnected(this)) {
+            Toast.makeText(this, "请检查网络", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String name = longinName.getText().toString();
         String password = loginPsw.getText().toString();
         if (name.isEmpty()) {
@@ -85,6 +91,11 @@ public class LoginActivity extends BaseActivity {
                                 String firstJob = "";
                                 String jobName = "";
                                 int size = results.getSysJobList().size();
+                                if(size == 0){
+                                    Toast.makeText(LoginActivity.this, "该用户没有设置职务,登陆失败", Toast.LENGTH_SHORT).show();
+                                    ProgressDialog.cancle();
+                                    return;
+                                }
                                 for (int i = 0; i <size; i++) {
                                     LoginReqBean.SysJobListBean sysJobListBean = results.getSysJobList().get(i);
                                     String sign = sysJobListBean.getSign();

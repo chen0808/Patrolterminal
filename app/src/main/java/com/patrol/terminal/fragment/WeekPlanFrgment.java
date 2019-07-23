@@ -471,6 +471,9 @@ public class WeekPlanFrgment extends BaseFragment {
         }
         bean.setAudit_status(status);
         bean.setFrom_user_id(SPUtil.getUserId(getContext()));
+        if(status.equals("1")){
+            bean.setDep_id(SPUtil.getDepId(getContext()));
+        }
         bean.setTowers(list);
         BaseRequest.getInstance().getService()
                 .submitWeekPlan(bean)

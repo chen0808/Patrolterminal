@@ -112,7 +112,7 @@ public class PatrolContentFrgment extends BaseFragment {
     }
 
     public void getdata() {
-        BaseRequest.getInstance().getService().getPatrolContent(task_id, "sort").subscribeOn(Schedulers.io())
+        BaseRequest.getInstance().getService().getPatrolContent(task_id, "name,sort").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PatrolContentBean>>(getActivity()) {
                     @Override
@@ -379,28 +379,28 @@ public class PatrolContentFrgment extends BaseFragment {
                 tabName.add(localByTaskId.get(i).getTab_name());
             }
             switch (localByTaskId.get(i).getCategory_id()) {
-                case "9DA16BC597404773AA97260131A7DEE9"://沿线环境
+                case "15C2D010A99D4D9485D9C5DD80F4831D"://导线，地线
                     list0.add(localByTaskId.get(i));
                     break;
-                case "079A78FA7DAB4EE4AC72B680CEC09E8C"://拉线和基础
+                case "19D16418045B4802A3D1EE01157778BB"://防雷及接地装置
                     list1.add(localByTaskId.get(i));
                     break;
-                case "C0636A87A49A4727ABC71C1A63525E98"://金具
+                case "3734AF649F3543D0B87F9EE10F961456"://附件及其他措施
                     list2.add(localByTaskId.get(i));
                     break;
-                case "19D16418045B4802A3D1EE01157778BB"://防雷及接地装置
+                case "F1B635B0B74245C8BED1E1038C429982"://杆塔
                     list3.add(localByTaskId.get(i));
                     break;
-                case "A407C0C626AF43B993CE6F289C01B791"://附件及其他措施
+                case "C0636A87A49A4727ABC71C1A63525E98"://金具
                     list4.add(localByTaskId.get(i));
                     break;
                 case "BED42123A79B4F46B4D9922C2ABF989D"://绝缘子
                     list5.add(localByTaskId.get(i));
                     break;
-                case "15C2D010A99D4D9485D9C5DD80F4831D"://导线，地线
+                case "079A78FA7DAB4EE4AC72B680CEC09E8C"://拉线和基础
                     list6.add(localByTaskId.get(i));
                     break;
-                case "F1B635B0B74245C8BED1E1038C429982"://杆塔
+                case "9DA16BC597404773AA97260131A7DEE9"://沿线环境
                     list7.add(localByTaskId.get(i));
                     break;
             }

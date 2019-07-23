@@ -65,6 +65,22 @@
             <!--android:text="巡检一班" />-->
             <!--</LinearLayout>-->
 
+            <LinearLayout
+                android:id="@+id/month_plan_layout"
+                style="@style/plan_ll_styl"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:text="计划时间" />
+
+                <TextView
+                    android:id="@+id/month_plan_time"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:text="" />
+            </LinearLayout>
+
             <View style="@style/line_styl" />
 
             <LinearLayout style="@style/plan_ll_styl">
