@@ -1,5 +1,7 @@
 package com.patrol.terminal.adapter;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -38,6 +40,7 @@ public class YXTodoManageAdapter extends BaseQuickAdapter<TodoBean, BaseViewHold
 
         viewHolder.setText(R.id.item_todo_title, item.getTitle());
         viewHolder.setText(R.id.item_todo_name, "提交人：" + item.getFrom_user_name());
+        Log.e("任务日期：", item.getYear() + "--" + item.getMonth() + "--" + item.getDay());
         if (item.getWeek()!=0){
             viewHolder.setText(R.id.item_task_time, "任务日期：" + item.getYear()+"年第"+item.getWeek()+"周");
         }else if (item.getDay()!=0){

@@ -6,40 +6,45 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.DefectBanjiAdapter;
+import com.patrol.terminal.adapter.DefectBanjiXLAdapter;
 import com.patrol.terminal.adapter.DefectIngAdapter;
-import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.BanjiBean;
+import com.patrol.terminal.bean.BanjiXLBean;
 import com.patrol.terminal.bean.DefectFragmentBean;
 import com.patrol.terminal.utils.Constant;
-import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * 缺陷查询
+ */
 public class DefectActivity extends BaseActivity {
     @BindView(R.id.title_name)
     TextView titleName;
@@ -55,19 +60,45 @@ public class DefectActivity extends BaseActivity {
     ImageView ivSearch;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
-    @BindView(R.id.tv_content)
+    @BindView(R.id.tv_qx_content)
     AutoCompleteTextView tvContent;
     @BindView(R.id.search_delete)
     ImageView searchDelete;
-    private MyFragmentPagerAdapter taskPagerAdapter;
+
+    @BindView(R.id.btn_sx)
+    Button btn_sx;
+    @BindView(R.id.qx_sx_save)
+    Button qx_sx_save;
+    @BindView(R.id.select_banji)
+    ListView lv_banji;
+    @BindView(R.id.select_xianlu)
+    ListView lv_xianlu;
+    @BindView(R.id.ly_sx)
+    RelativeLayout ry_sx;
+
     private DefectIngAdapter groupTaskAdapter;
+    private DefectBanjiAdapter banjiAdapter;
+    private DefectBanjiXLAdapter banjixlAdapter;
     private String jobType;
     private int pageNum = 1;
     private int count = 10;
-    private String search = "";
-  private List<DefectFragmentBean> defectdata=new ArrayList<>();
+    private String search_name = "";
+    private String line_name = "";
+    private List<DefectFragmentBean> defectList = new ArrayList<>();
+    private List<DefectFragmentBean> searchList = new ArrayList<>();
     private String dep_id;
-    //private List<DefectDetailBean> mDefectDetailList = new ArrayList<>();
+    private List<BanjiBean> banjiList = new ArrayList<>();
+    private List<BanjiXLBean> banjixlList = new ArrayList<>();
+    /**
+     * 延迟线程，看是否还有下一个字符输入
+     */
+    private Runnable delayRun = new Runnable() {
+        @Override
+        public void run() {
+            pageNum = 1;
+            getBanjiXLQx(search_name, line_name);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,51 +111,88 @@ public class DefectActivity extends BaseActivity {
             dep_id = null;
         }
         initview();
-        getAllDef();
+        getBanjiXLQx(search_name, line_name);
+        getAllBanji();
     }
 
-    private void getAllDef() {
+    /**
+     * 获取班级列表
+     */
+    public void getAllBanji() {
+        //班长和班员传参数
+        String depId = "";
+        String mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        if (mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) || mJobType.contains(Constant.REFURBISHMENT_TEMA_LEADER) ||
+                mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || mJobType.contains(Constant.REFURBISHMENT_SPECIALIZED) ||
+                mJobType.contains(Constant.DISTRICT_MANAGERD) || mJobType.contains(Constant.RUN_SUPERVISOR) ||
+                mJobType.contains(Constant.MAINTENANCE_SUPERVISOR) || mJobType.contains(Constant.ACHIEVEMENTS_SPECIALIZED) ||
+                mJobType.contains(Constant.TRAINING_SPECIALIZED) || mJobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) ||
+                mJobType.contains(Constant.SAFETY_SPECIALIZED) || mJobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
 
-        ProgressDialog.show(DefectActivity.this, false, "正在加载中。。。。");
+        } else {
+            depId = SPUtil.getDepId(this);
+        }
+
         BaseRequest.getInstance().getService()
-                .getAllDefact(pageNum, count, search, "find_time desc,start_name")
+                .getAllBanji("SYS_DEP", "ID,name", "1", depId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<DefectFragmentBean>>(this) {
+                .subscribe(new BaseObserver<List<BanjiBean>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<DefectFragmentBean>> t) throws Exception {
-                        ProgressDialog.cancle();
-
-                        if (t.getCode() == 1) {
-                            List<DefectFragmentBean> result = t.getResults();
+                    protected void onSuccees(BaseResult<List<BanjiBean>> t) throws Exception {
+                        if (t.isSuccess()) {
+                            List<BanjiBean> result = t.getResults();
                             if (result != null && result.size() > 0) {
-                                planRv.loadMoreFinish(false, true);
-                                setDataToList(result);
-                            }else {
-                                planRv.loadMoreFinish(true, false);
+                                banjiList.clear();
+                                banjiList.addAll(result);
+                                if (banjiList.size() > 0) {
+                                    //默认加载第一条数据
+                                    String depid = banjiList.get(0).getId();
+                                    btn_sx.setText(banjiList.get(0).getName().substring(0, 2));
+                                    getAllBanjiXL(depid);
+                                    banjiAdapter.setIndexPosition(0);
+                                } else
+                                    banjiAdapter.notifyDataSetChanged();
                             }
                         }
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ProgressDialog.cancle();
                     }
                 });
     }
 
+    /**
+     * 获取班级线路
+     */
+    public void getAllBanjiXL(String depid) {
+        BaseRequest.getInstance().getService()
+                .getAllBanjiXL("EQ_LINE", "id,name,dep_id", depid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<BanjiXLBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<BanjiXLBean>> t) throws Exception {
+                        if (t.isSuccess()) {
+                            List<BanjiXLBean> result = t.getResults();
+                            banjixlList.clear();
+                            banjixlList.addAll(result);
+                            banjixlAdapter.notifyDataSetChanged();
+                        }
+                    }
 
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Toast.makeText(DefectActivity.this, "获取线路失败请稍后再试", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 
     private void setDataToList(List<DefectFragmentBean> beans) {
-
-//        for (int i = 0; i < 10; i++) {
-//            result.add(i, new DefectDetailBean("461faasdgarea466", "巡视" + i + "号杆塔", String.valueOf(i % 2), "巡视类型", "2019-04-15",
-//                    "备注:备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注",
-//                    "检测人", "工作负责人", "工作班组", "是否确认", "确认审核员id", "杆塔名"));
-//        }
-        if (pageNum==1){
+        if (pageNum == 1) {
             groupTaskAdapter.setNewData(beans);
-        }else {
+        } else {
             groupTaskAdapter.addData(beans);
         }
 
@@ -134,20 +202,26 @@ public class DefectActivity extends BaseActivity {
         titleName.setText("缺陷查询");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         planRv.setLayoutManager(manager);
-        groupTaskAdapter = new DefectIngAdapter(R.layout.fragment_defect_item, defectdata, 0);
+        //班级
+        banjiAdapter = new DefectBanjiAdapter(this, banjiList);
+        lv_banji.setAdapter(banjiAdapter);
+        banjixlAdapter = new DefectBanjiXLAdapter(this, banjixlList);
+        lv_xianlu.setAdapter(banjixlAdapter);
+
+        groupTaskAdapter = new DefectIngAdapter(R.layout.fragment_defect_item, 0);
         planRv.setAdapter(groupTaskAdapter);
         planRv.useDefaultLoadMore();
         planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
             @Override
             public void onLoadMore() {
                 pageNum++;
-                getAllDef();
+                getBanjiXLQx(search_name, line_name);
             }
         });
-        String data[] = getResources().getStringArray(R.array.auto_textview_contents);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(DefectActivity.
-                this, android.R.layout.simple_dropdown_item_1line, data);
-        tvContent.setAdapter(adapter);
+//        String data[] = getResources().getStringArray(R.array.auto_textview_contents);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(DefectActivity.
+//                this, android.R.layout.simple_dropdown_item_1line, data);
+//        tvContent.setAdapter(adapter);
         tvContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -156,28 +230,66 @@ public class DefectActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                search = s.toString();
+                search_name = s.toString();
                 if (s.length() == 0) {
                     searchDelete.setVisibility(View.GONE);
                 } else {
                     searchDelete.setVisibility(View.VISIBLE);
                 }
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                search=tvContent.getText().toString();
-                if (delayRun != null) {
-                    //每次editText有变化的时候，则移除上次发出的延迟线程
-                    handler.removeCallbacks(delayRun);
+                search_name = tvContent.getText().toString();
+                if (TextUtils.isEmpty(search_name)) {
+                    groupTaskAdapter.setNewData(defectList);
+                } else {
+                    searchList.clear();
+                    for (int i = 0; i < defectList.size(); i++) {
+                        if (defectList.get(i).getLine_name().contains(search_name) ||
+                                defectList.get(i).getStart_name().contains(search_name)) {
+                            searchList.add(defectList.get(i));
+                        }
+                    }
+                    groupTaskAdapter.setNewData(searchList);
                 }
-
-                handler.postDelayed(delayRun, 1000);
-
             }
-
         });
+
+        lv_banji.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                banjiAdapter.setIndexPosition(position);
+                btn_sx.setText(banjiList.get(position).getName().substring(0, 2));
+                String depid = banjiList.get(position).getId();
+                getAllBanjiXL(depid);
+            }
+        });
+
+
+    }
+
+    //筛选线路查询
+    @OnClick(R.id.qx_sx_save)
+    void queryXLDefect() {
+        ry_sx.setVisibility(View.GONE);
+        tvContent.setText("");
+        search_name = "";
+        pageNum = 1;
+        line_name = banjixlAdapter.getSelectLine();
+        defectList.clear();
+//        if(!TextUtils.isEmpty(line_name))
+        getBanjiXLQx(search_name, line_name);
+    }
+
+    //缺陷筛选
+    @OnClick(R.id.btn_sx)
+    public void qxSelet() {
+        if (ry_sx.getVisibility() == View.VISIBLE) {
+            ry_sx.setVisibility(View.GONE);
+        } else {
+            ry_sx.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -188,6 +300,38 @@ public class DefectActivity extends BaseActivity {
 //        }
     }
 
+    //班级线路缺陷
+    public void getBanjiXLQx(String search_name, String line_id) {
+        ProgressDialog.show(DefectActivity.this, false, "正在加载中。。。。");
+        BaseRequest.getInstance().getService()
+                .getXLDefact(pageNum, count, line_id, search_name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DefectFragmentBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<DefectFragmentBean>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.isSuccess()) {
+                            List<DefectFragmentBean> result = t.getResults();
+                            if (result != null && result.size() > 0 && result.size() == 10) {
+                                planRv.loadMoreFinish(false, true);
+                            } else {
+                                planRv.loadMoreFinish(true, false);
+                            }
+                            defectList.addAll(result);
+                            setDataToList(result);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
+
+    private Handler handler = new Handler();
+
     @OnClick({R.id.title_back, R.id.search_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -196,28 +340,11 @@ public class DefectActivity extends BaseActivity {
                 break;
             case R.id.search_delete:
                 searchDelete.setVisibility(View.GONE);
-                search = "";
+                search_name = "";
                 tvContent.setText("");
                 break;
         }
     }
-
-    private Handler handler = new Handler();
-
-    /**
-     * 延迟线程，看是否还有下一个字符输入
-     */
-    private Runnable delayRun = new Runnable() {
-
-        @Override
-        public void run() {
-            //在这里调用服务器的接口，获取数据
-//            getSearchResult(editString, "all", 1, "true");
-               pageNum=1;
-            groupTaskAdapter.setNewData(defectdata);
-               getAllDef();
-        }
-    };
 
 
 }

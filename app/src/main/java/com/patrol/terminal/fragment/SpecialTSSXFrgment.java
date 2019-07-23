@@ -617,7 +617,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 localBean.setMonth(formatStr(data[1]));
                 localBean.setDay(formatStr(data[2]));
                 localBean.setPhotoStr(photoListToStr(bean.getPhotoList()));
-                Log.e("网络图片集合地址1", photoListToStr(bean.getPhotoList()));
                 localBean.save();
             } else {
                 localBean.setDj(tssxLocalBean.getDj());
@@ -631,7 +630,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
                 localBean.setMonth(tssxLocalBean.getMonth());
                 localBean.setDay(tssxLocalBean.getDay());
                 localBean.setPhotoStr(photoListToStr(bean.getPhotoList()));
-                Log.e("网络图片集合地址2", photoListToStr(bean.getPhotoList()));
                 localBean.update();
             }
         }

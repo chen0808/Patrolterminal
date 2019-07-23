@@ -575,15 +575,33 @@ public interface ApiServise {
     @GET("task/trouble/listGET")
     Observable<BaseResult<List<TroubleBean>>> getTroubleFragment2(@Query("line_id") String line_id);
 
+    //获取班级列表
+    @GET("common/listGET")
+    Observable<BaseResult<List<BanjiBean>>> getAllBanji(@Query("table") String table, @Query("column") String column, @Query("is_work") String is_work, @Query("id") String dep_id);
+
+    //获取班级列表线路
+    @GET("common/listGET")
+    Observable<BaseResult<List<BanjiXLBean>>> getAllBanjiXL(@Query("table") String table, @Query("column") String column, @Query("dep_id") String dep_id);
+
+
     //获取所有缺陷库
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
+//    @GET("/task/defect/pdaPageGET")
+//    Observable<BaseResult<List<DefectFragmentBean>>> getAllDefact(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("search") String search, @Query("order") String order);
+
+    //根据线路获取所有缺陷库
+    //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
     @GET("/task/defect/pdaPageGET")
-    Observable<BaseResult<List<DefectFragmentBean>>> getAllDefact(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("search") String search, @Query("order") String order);
+    Observable<BaseResult<List<DefectFragmentBean>>> getXLDefact(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("line_id") String line_id, @Query("line_name") String line_name);
+
 
     //获取所有隐患库task/defect/saveDefect
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
+//    @GET("task/trouble/pdaPageGET")
+//    Observable<BaseResult<List<TroubleFragmentBean>>> getAllDanger(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("search") String search);
+    //根据条件获取隐患
     @GET("task/trouble/pdaPageGET")
-    Observable<BaseResult<List<TroubleFragmentBean>>> getAllDanger(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("search") String search);
+    Observable<BaseResult<List<TroubleFragmentBean>>> getSelectDanger(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("line_id") String line_id, @Query("line_name") String line_name);
 
     //防鸟患
     @GET("task/trouble/bird/listGET")

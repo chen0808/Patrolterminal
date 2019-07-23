@@ -53,6 +53,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * home计划
+ */
 public class NewPlanActivity extends BaseActivity {
 
 
@@ -116,9 +119,9 @@ public class NewPlanActivity extends BaseActivity {
         String time = DateUatil.getTime(new Date(System.currentTimeMillis()));
         SPUtil.putString(this, "date", "time", time);
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new MonthPlanFrgment());
-        fragmentList.add(new WeekPlanFrgment());
-        fragmentList.add(new DayPlanFrgment());
+        fragmentList.add(new MonthPlanFrgment());//月计划
+        fragmentList.add(new WeekPlanFrgment());//周计划
+        fragmentList.add(new DayPlanFrgment()); //日计划
 
         taskPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(taskPagerAdapter);

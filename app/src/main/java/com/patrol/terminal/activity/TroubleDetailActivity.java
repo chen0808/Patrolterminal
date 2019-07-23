@@ -34,6 +34,9 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * 隐患详情
+ */
 public class TroubleDetailActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
     @BindView(R.id.title_back)

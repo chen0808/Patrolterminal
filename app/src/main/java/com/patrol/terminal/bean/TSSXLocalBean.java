@@ -76,6 +76,35 @@ public class TSSXLocalBean extends BaseModel implements Serializable {
     @Column
     private String day;
 
+    @Override
+    public String toString() {
+        return "TSSXLocalBean{" +
+                "local_id=" + local_id +
+                ", key='" + key + '\'' +
+                ", parKey='" + parKey + '\'' +
+                ", values='" + values + '\'' +
+                ", isCheck=" + isCheck +
+                ", yhnr='" + yhnr + '\'' +
+                ", dj='" + dj + '\'' +
+                ", isUpload=" + isUpload +
+                ", isDownload=" + isDownload +
+                ", photoStr='" + photoStr + '\'' +
+                ", id='" + id + '\'' +
+                ", task_id='" + task_id + '\'' +
+                ", line_id='" + line_id + '\'' +
+                ", task_key='" + task_key + '\'' +
+                ", tower_id='" + tower_id + '\'' +
+                ", start_id='" + start_id + '\'' +
+                ", end_id='" + end_id + '\'' +
+                ", start_name='" + start_name + '\'' +
+                ", end_name='" + end_name + '\'' +
+                ", tower_number=" + tower_number +
+                ", year='" + year + '\'' +
+                ", month='" + month + '\'' +
+                ", day='" + day + '\'' +
+                '}';
+    }
+
     public boolean isDownload() {
         return isDownload;
     }

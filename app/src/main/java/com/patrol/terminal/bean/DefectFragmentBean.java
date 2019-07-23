@@ -1,8 +1,5 @@
 package com.patrol.terminal.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 public class DefectFragmentBean implements Serializable {
@@ -19,7 +16,7 @@ public class DefectFragmentBean implements Serializable {
          * patrol_id : null
          * content : 大号侧50米处右导线外侧7米处有一双杆。  (原盐民线2#）
          * line_id : 186370129FD34D459FACEDF7C2447763
-         * start_name : 60#
+         * start_name : #004
          * end_name : 60#
          * find_time : 2018/11/14
          * deal_notes : 拆除
@@ -39,33 +36,33 @@ public class DefectFragmentBean implements Serializable {
          */
 
         private String id;
-        private String month_line_id;
-        private String week_id;
-        private String day_id;
-        private String group_id;
-        private String task_id;
-        private String category_id;
-        private String grade_id;
-        private String patrol_id;
-        private String content;
-        private String line_id;
-        private String start_name;
-        private String end_name;
-        private String find_time;
-        private String deal_notes;
-        private String status;
-        private String deal_dep_name;
-        private String deal_time;
-        private String auditor;
-        private String audit_status;
-        private String week_line_id;
-        private String day_line_id;
-        private String month_id;
-        private String group_list_id;
-        private String deal_dep_id;
-        private String start_id;
-        private String end_id;
-        private String line_name;
+    private String month_line_id;
+    private String week_id;
+    private String day_id;
+    private String group_id;
+    private String task_id;
+    private String category_id;
+    private String grade_id;
+    private String patrol_id;
+    private String content;
+    private String line_id;
+    private String start_name;
+    private String end_name;
+    private String find_time;
+    private String deal_notes;
+    private String status;
+    private String deal_dep_name;
+    private String deal_time;
+    private String auditor;
+    private String audit_status;
+    private String week_line_id;
+    private String day_line_id;
+    private String month_id;
+    private String group_list_id;
+    private String deal_dep_id;
+    private String start_id;
+    private String end_id;
+    private String line_name;
     private String  find_user_name;
     private String  deal_user_name;
     private String  grade_name;

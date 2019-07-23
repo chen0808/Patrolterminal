@@ -4,21 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.Nullable;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DefectIngDetailActivity;
 import com.patrol.terminal.bean.DefectFragmentBean;
 
-import java.util.List;
-
 public class DefectIngAdapter extends BaseQuickAdapter<DefectFragmentBean, BaseViewHolder> {
     private int mType;
 
-    public DefectIngAdapter(int layoutResId, @Nullable List<DefectFragmentBean> data, int type) {
-        super(layoutResId, data);
+    public DefectIngAdapter(int layoutResId, int type) {
+        super(layoutResId);
         this.mType = type;
     }
 

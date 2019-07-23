@@ -2,7 +2,6 @@ package com.patrol.terminal.widget;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,13 +9,23 @@ import com.patrol.terminal.R;
 
 /**
  * 取消或者确认类型的Dialog
- * <p>
- * 作者： 周旭 on 2017/5/27/0027.
- * 邮箱：374952705@qq.com
- * 博客：http://www.jianshu.com/u/56db5d78044d
+ * CancelOrOkDialog.setOnDialogclick(DefectActivity.this, "请再次确认操作", "取消", "确认", new CancelOrOkDialog.onDialogClick() {
+ *                         @Override
+ *                         public void ok() {
+ *
+ *                         }
+ *
+ *                         @Override
+ *                         public void cancel() {
+ *
+ *                         }
+ *                     });
  */
-
 public class CancelOrOkDialog extends Dialog {
+
+    private static onDialogClick click;
+    private static CancelOrOkDialog dialog;
+
 
     public CancelOrOkDialog(Context context, String title, String cancleStr, String okStr) {
         //使用自定义Dialog样式
@@ -41,6 +50,8 @@ public class CancelOrOkDialog extends Dialog {
                 if (paramView.getId()==R.id.cancel_tv){
                 //取消
                     cancle();
+                    click.cancel();
+                    dialog.dismiss();
                 }
             }
         });
@@ -49,7 +60,10 @@ public class CancelOrOkDialog extends Dialog {
             @Override
             public void onClick(View paramView) {
                 if (paramView.getId()==R.id.ok_tv){
-                ok();}
+                    ok();
+                    click.ok();
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -60,7 +74,20 @@ public class CancelOrOkDialog extends Dialog {
    protected    void ok() {
     }
 
+    public static void setOnDialogclick(Context context, String title, String cancleStr, String okStr, onDialogClick onDialogClick) {
+        dialog = new CancelOrOkDialog(context, title, cancleStr, okStr);
+        click = onDialogClick;
+        dialog.show();
+    }
+
     protected  void cancle() {
 
+    }
+
+
+    public interface onDialogClick {
+        void ok();
+
+        void cancel();
     }
 }

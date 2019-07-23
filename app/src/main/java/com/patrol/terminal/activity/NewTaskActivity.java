@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -40,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -227,11 +228,11 @@ public class NewTaskActivity extends BaseActivity {
             case R.id.title_back:
                 finish();
                 break;
-            case R.id.task_def:
+            case R.id.task_def://缺陷
                 intent.setClass(this, DefectActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.task_dan:
+            case R.id.task_dan://隐患
                 intent.setClass(this, TroubleActivity.class);
                 startActivity(intent);
                 break;

@@ -162,7 +162,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         //分配每个职位进来的首页
         if (jobType.contains(Constant.TRAINING_SPECIALIZED)) {     //培训专责
             mFragments.add(new TrainingHomeFragment());
-        } else if (jobType.contains("yx")) {
+        } else if (jobType.contains("yx")) {//运行专责
             mFragments.add(new HomeFragment());
         } else {
             mFragments.add(new JXHomeFragment());
