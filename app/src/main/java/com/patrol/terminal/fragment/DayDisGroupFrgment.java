@@ -579,10 +579,10 @@ public class DayDisGroupFrgment extends BaseFragment implements BaseQuickAdapter
                 inteDate(oldTime);
                 if (time.equals(oldTime)) {
                     groupSave.setVisibility(View.VISIBLE);
-                    getPersonal();
                 } else {
                     groupSave.setVisibility(View.GONE);
                 }
+                getPersonal();
                 getGroupTeam();
 
             }
