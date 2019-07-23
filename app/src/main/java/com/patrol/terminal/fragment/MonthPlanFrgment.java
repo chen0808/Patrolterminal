@@ -1,14 +1,11 @@
 package com.patrol.terminal.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,7 +57,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.internal.Util;
 
 /*月计划*/
 public class MonthPlanFrgment extends BaseFragment {
@@ -135,7 +131,6 @@ public class MonthPlanFrgment extends BaseFragment {
     private double kilo_total = 0;
     private double kilo_110kv = 0;
     private double kilo_35kv = 0;
-
 
     private int done_num_total = 0;
     private int all_num_total = 0;
@@ -275,11 +270,14 @@ public class MonthPlanFrgment extends BaseFragment {
                                 addPlanName.setText(nextYear + "年" + nextMonth + "月工作计划");
                                 monthPlanBean = nextPatrolList.get(0);
                                 addPlanStatus.setVisibility(View.VISIBLE);
+                                if(monthPlanBean.getAudit_status().equals("3")){
+                                    addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
+                                    addPlanStatus.setTextColor(mContext.getResources().getColor(R.color.green));
+                                } else {
+                                    addPlanStatus.setBackgroundResource(R.drawable.state_red_bg);
+                                    addPlanStatus.setTextColor(mContext.getResources().getColor(R.color.write_red));
+                                }
                                 addPlanStatus.setText(StringUtil.getYXBstate(monthPlanBean.getAudit_status()));
-//                                if ("3".equals(monthPlanBean.getAudit_status())) {
-//                                    addPlanStatus.setBackgroundResource(R.drawable.state_green_bg);
-//                                    addPlanStatus.setText(getResources().getColor(R.color.green));
-//                                }
 //                                if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && "0".equals(monthPlanBean.getAudit_status())) {
 //                                    addPlanRight.setVisibility(View.VISIBLE);
 //                                } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(monthPlanBean.getAudit_status())) {
@@ -412,7 +410,6 @@ public class MonthPlanFrgment extends BaseFragment {
                         } else {
                             Toast.makeText(getContext(), t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
                     @Override
@@ -657,6 +654,4 @@ public class MonthPlanFrgment extends BaseFragment {
         }
         return lineList;
     }
-
-
 }
