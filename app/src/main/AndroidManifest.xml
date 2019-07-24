@@ -201,6 +201,9 @@
             android:name=".activity.DefectIngDetailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.DefectIngAuditActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.TroubleActivity"
             android:screenOrientation="portrait" />
         <activity

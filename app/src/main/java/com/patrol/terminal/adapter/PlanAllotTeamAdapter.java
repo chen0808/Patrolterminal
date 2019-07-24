@@ -14,32 +14,34 @@ import java.util.List;
 import androidx.annotation.Nullable;
 
 public class PlanAllotTeamAdapter extends BaseQuickAdapter<TeamAndTaskBean, BaseViewHolder> {
-    private int type = 1;
+    private boolean isShowLine;
 
-    public PlanAllotTeamAdapter(int layoutResId, @Nullable List<TeamAndTaskBean> data) {
+    public PlanAllotTeamAdapter(int layoutResId, @Nullable List<TeamAndTaskBean> data, boolean isShowLine) {
         super(layoutResId, data);
+        this.isShowLine = isShowLine;
     }
-
 
     @Override
     protected void convert(BaseViewHolder viewHolder, TeamAndTaskBean item) {
         viewHolder.addOnClickListener(R.id.iteam_group_team_name);
         List<GroupOfDayBean> dayPlanList = item.getLists();
         boolean check = item.isCheck();
-        if (check==true){
+        if (check){
             viewHolder.setTextColor(R.id.iteam_group_team_name,mContext.getResources().getColor(R.color.green));
-        }else {
+        } else {
             viewHolder.setTextColor(R.id.iteam_group_team_name,mContext.getResources().getColor(R.color.color_33));
         }
-        LinearLayout personal = viewHolder.getView(R.id.item_plan_allot_ll);
-        personal.removeAllViews();
+
         viewHolder.setText(R.id.iteam_group_team_name, item.getDuty_user_name() + "的小组");
-        for (int i = 0; i < dayPlanList.size(); i++) {
-            GroupOfDayBean groupOfDayBean = dayPlanList.get(i);
-            PlanAllotView view = new PlanAllotView(mContext, groupOfDayBean);
-            personal.addView(view);
+
+        if(isShowLine){
+            LinearLayout personal = viewHolder.getView(R.id.item_plan_allot_ll);
+            personal.removeAllViews();
+            for (int i = 0; i < dayPlanList.size(); i++) {
+                GroupOfDayBean groupOfDayBean = dayPlanList.get(i);
+                PlanAllotView view = new PlanAllotView(mContext, groupOfDayBean);
+                personal.addView(view);
+            }
         }
-
-
     }
 }

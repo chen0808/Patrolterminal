@@ -71,7 +71,6 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
     private List<TeamAndTaskBean> teamList = new ArrayList<>();
     private List<TeamAndVehicleBean> dayVehiclelist = new ArrayList<>();
     private List<TeamAndVehicleBean> selectList = new ArrayList<>();
-    private List<TeamAndVehicleBean> backList = new ArrayList<>();
     private List<DriverBean> driverList = new ArrayList<>();
     private List<EqVehicleBean> carList = new ArrayList<>();
     private PlanAllotTeamAdapter planAllotTeamAdapter;
@@ -101,7 +100,7 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
         selectDayPlanRv.setLayoutManager(manager1);
         selectGroupPersonalRv.setLayoutManager(manager2);
         carTeamRv.setLayoutManager(manager3);
-        planAllotTeamAdapter = new PlanAllotTeamAdapter(R.layout.iteam_plan_allot_team, teamList);
+        planAllotTeamAdapter = new PlanAllotTeamAdapter(R.layout.iteam_plan_allot_team, teamList, false);
         groupTeamRv.setAdapter(planAllotTeamAdapter);
         taskGroupVehicleAdapter = new TaskGroupVehicleAdapter(R.layout.iteam_task_group_vehicle, dayVehiclelist);
         selectDayPlanRv.setAdapter(taskGroupVehicleAdapter);

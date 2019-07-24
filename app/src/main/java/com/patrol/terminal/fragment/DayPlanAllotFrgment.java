@@ -82,7 +82,7 @@ public class DayPlanAllotFrgment extends BaseFragment implements BaseQuickAdapte
         LinearLayoutManager manager1 = new LinearLayoutManager(getContext());
         groupTeamRv.setLayoutManager(manager);
         selectDayPlanRv.setLayoutManager(manager1);
-        planAllotTeamAdapter = new PlanAllotTeamAdapter(R.layout.iteam_plan_allot_team, teamList);
+        planAllotTeamAdapter = new PlanAllotTeamAdapter(R.layout.iteam_plan_allot_team, teamList, true);
         groupTeamRv.setAdapter(planAllotTeamAdapter);
         dayPlanAllotAdapter = new DayPlanAllotAdapter(R.layout.iteam_day_plan_allot, dayPlanlist);
         selectDayPlanRv.setAdapter(dayPlanAllotAdapter);
