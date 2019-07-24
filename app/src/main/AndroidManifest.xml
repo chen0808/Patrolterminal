@@ -40,6 +40,7 @@
         <activity android:name=".activity.ShowImageActivity" />
         <activity android:name=".activity.YXCheckActivity" />
         <activity android:name=".activity.TemporaryActivity" />
+        <activity android:name=".activity.ReviewTaskActivity" />
         <activity android:name=".activity.MakeDutyActivity" />
         <activity android:name=".activity.ChangePlanActivity" />
         <activity android:name=".overhaul.OverhaulWeekPlanActivity" />

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".activity.WeekPlanMakeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_title" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/plan_ll_styl"
+                >
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:layout_width="@dimen/dp_100"
+                    android:text="工作时间" />
+
+                <TextView
+                    android:id="@+id/day_plan_time"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:drawableRight="@mipmap/down_arrow"
+                    android:text="" />
+            </LinearLayout>
+
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/plan_ll_styl">
+
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:layout_width="@dimen/dp_100"
+                    android:text="负责班组" />
+
+                <TextView
+                    android:id="@+id/month_plan_type"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:text="暂无" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout style="@style/plan_ll_styl">
+
+                <TextView
+                    android:id="@+id/month_plan_month"
+                    style="@style/plan_tv_styl"
+                    android:layout_width="@dimen/dp_100"
+                    android:text="工作类型" />
+
+                <TextView
+                    android:id="@+id/month_plan_line"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:text="暂无" />
+            </LinearLayout>
+
+            <View style="@style/line_styl" />
+
+            <LinearLayout
+                android:id="@+id/ll_start_time"
+                style="@style/plan_ll_styl">
+
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:layout_width="@dimen/dp_100"
+                    android:text="工作路线" />
+
+                <TextView
+                    android:id="@+id/month_plan_start"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:text="暂无" />
+            </LinearLayout>
+
+            <View  android:id="@+id/line4" style="@style/line_styl" />
+
+            <LinearLayout
+                android:id="@+id/ll_end_time"
+                style="@style/plan_ll_styl">
+
+                <TextView
+                    style="@style/plan_tv_styl"
+                    android:layout_width="@dimen/dp_100"
+                    android:text="工作杆塔" />
+
+                <TextView
+                    android:id="@+id/month_plan_end"
+                    style="@style/plan_et_styl"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:text="暂无" />
+            </LinearLayout>
+
+            <View android:id="@+id/line5" style="@style/line_styl" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/month_yes"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_margin="@dimen/dp_40"
+            android:layout_weight="2"
+            android:background="@color/base_status_bar"
+            android:gravity="center"
+            android:text="转自己"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <TextView
+            android:id="@+id/create_group_task"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_margin="@dimen/dp_40"
+            android:layout_weight="2"
+            android:background="@color/base_status_bar"
+            android:gravity="center"
+            android:text="转班组"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            />
+    </LinearLayout>
+</RelativeLayout>

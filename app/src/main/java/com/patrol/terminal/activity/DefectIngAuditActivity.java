@@ -239,7 +239,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.title_back, R.id.defect_deadline})
+    @OnClick({R.id.title_back, R.id.defect_deadline, R.id.review})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -247,6 +247,10 @@ public class DefectIngAuditActivity extends BaseActivity {
                 break;
             case R.id.defect_deadline:
                 showDay();
+                break;
+            case R.id.review:
+                Intent intent2 = new Intent(this, ReviewTaskActivity.class);
+                startActivityForResult(intent2, 10);
                 break;
         }
     }
@@ -258,7 +262,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
-                    
+
                     @Override
                     protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
                         if (t.getCode() == 1) {
