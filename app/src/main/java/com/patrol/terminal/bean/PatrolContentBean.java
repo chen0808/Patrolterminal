@@ -141,10 +141,17 @@ public class PatrolContentBean implements Serializable {
         private Object group_id;
         private String task_id;
         private String category_id;
+        private String category_name;// 缺陷类别  导线，地线
         private String grade_id;
+        private String grade_name;// 缺陷级别   危急，严重，一般
         private String patrol_id;
-        private String content;
-        private String line_id;
+        private String patrol_name;// 缺陷巡视内容   （1）导线，地线腐蚀
+        private String content; // 缺陷内容   手输入内容
+        private String line_id;// 线路id
+        private String line_name;// 线路名称
+        // 杆塔id
+        private String tower_id;
+        private String tower_name;// 杆塔名称
         private String start_name;
         private String end_name;
         private Object find_time;
@@ -161,20 +168,41 @@ public class PatrolContentBean implements Serializable {
         private Object deal_dep_id;
         private String start_id;
         private String end_id;
-        private String line_name;
         private String find_user_id;
-        private String find_user_name;
+        private String find_user_name;// 发现人姓名   登录人名字
         private Object deal_user_id;
         private Object deal_user_name;
         private Object remark;
-        private String find_dep_id;
-        private String find_dep_name;
-        private String category_name;
-        private String grade_name;
+        private String find_dep_id; // 发现人部门id  登录人部门id
+        private String find_dep_name;// 发现人部门名称
         private String user_name;
         private String dep_name;
         private Object defect_file;
         private List<FileListBean> fileList;
+
+        public String getPatrol_name() {
+            return patrol_name;
+        }
+
+        public void setPatrol_name(String patrol_name) {
+            this.patrol_name = patrol_name;
+        }
+
+        public String getTower_id() {
+            return tower_id;
+        }
+
+        public void setTower_id(String tower_id) {
+            this.tower_id = tower_id;
+        }
+
+        public String getTower_name() {
+            return tower_name;
+        }
+
+        public void setTower_name(String tower_name) {
+            this.tower_name = tower_name;
+        }
 
         public String getId() {
             return id;

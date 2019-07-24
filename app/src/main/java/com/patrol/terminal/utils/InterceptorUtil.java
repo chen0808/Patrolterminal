@@ -1,9 +1,9 @@
 package com.patrol.terminal.utils;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.orhanobut.logger.Logger;
+import com.patrol.terminal.BuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +13,7 @@ import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.internal.platform.Platform;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 
@@ -53,6 +54,15 @@ public class InterceptorUtil {
             }
         };
     }
+
+    public static com.ihsanbal.logging.LoggingInterceptor interceptor = new com.ihsanbal.logging.LoggingInterceptor.Builder()
+            .loggable(BuildConfig.DEBUG)
+            .setLevel(com.ihsanbal.logging.Level.BASIC)
+            .log(Platform.INFO)
+            .request("request")
+            .response("response")
+            .build();
+
 
     /**
      * 判断是否是json结构

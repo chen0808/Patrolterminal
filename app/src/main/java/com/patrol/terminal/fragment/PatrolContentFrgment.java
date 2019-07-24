@@ -28,6 +28,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.CLCSTypeBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.PatrolContentBean;
@@ -83,11 +84,12 @@ public class PatrolContentFrgment extends BaseFragment {
     private DefectTabAdapter adapter2;
     private DefectTabAdapter adapter1;
     private DefectTabAdapter adapter0;
-    private List<LocalPatrolDefectBean> localList;
     private List<LocalPatrolDefectBean> localByPatrolId;
     private LocalPatrolDefectBean localBean;
     private List<LocalPatrolDefectBean> localByTaskId;
     private String TAG = "PatrolContentFrgment";
+    private List<CLCSTypeBean> clcsTypeList;//处理措施方法
+
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,6 +111,19 @@ public class PatrolContentFrgment extends BaseFragment {
         task_id = getActivity().getIntent().getStringExtra("task_id");
         saveLocalAsync(null);
         getdata();
+        getClcsData();
+    }
+
+    public void getClcsData() {
+
+        clcsTypeList = SQLite.select().from(CLCSTypeBean.class).queryList();
+        if (clcsTypeList == null || clcsTypeList.size() == 0) {
+            String assetsJson = getFromAssets("clcs.json");
+            List<CLCSTypeBean> clcsList = new Gson().fromJson(assetsJson, new TypeToken<ArrayList<CLCSTypeBean>>() {
+            }.getType());
+            clcsTypeList.addAll(clcsList);
+        }
+
     }
 
     public void getdata() {
@@ -162,14 +177,13 @@ public class PatrolContentFrgment extends BaseFragment {
                         localBean = new LocalPatrolDefectBean();
                         localBean.setTask_id(task_id);
                         localBean.setTab_name(assetsList.get(i).getName());
+                        localBean.setCategory_id(assetsList.get(i).getCategory());//
+                        localBean.setCategory_name(assetsList.get(i).getName());//
                         localBean.setPatrol_id(assetsList.get(i).getPatrol_id());
+                        localBean.setPatrol_name(assetsList.get(i).getRemarks());
                         localBean.setStatus("");
-                        if (assetsList.get(i).getRemarks() != null) {
-                            localBean.setPatrol_name(assetsList.get(i).getRemarks());
-                        } else {
-                            localBean.setPatrol_name("");
-                        }
                         if (assetsList.get(i).getTaskDefect() != null) {
+
                             if (assetsList.get(i).getTaskDefect().getContent() != null) {
                                 localBean.setContent(assetsList.get(i).getTaskDefect().getContent());
                             } else {
@@ -177,14 +191,18 @@ public class PatrolContentFrgment extends BaseFragment {
                             }
                             if (assetsList.get(i).getTaskDefect().getGrade_id() != null) {
                                 localBean.setGrade_id(assetsList.get(i).getTaskDefect().getGrade_id());
+                                localBean.setGrade_name(assetsList.get(i).getTaskDefect().getGrade_name());
                             } else {
                                 localBean.setGrade_id("");
+                                localBean.setGrade_name("");
                             }
+
                         } else {
                             localBean.setContent("");
                             localBean.setGrade_id("");
+                            localBean.setGrade_name("");
                         }
-                        localBean.setCategory_id(assetsList.get(i).getCategory());
+
                         String onlinePics = getOnlinePics(assetsList, i);
                         if (onlinePics == null || onlinePics.equals("")) {
                             localBean.setOnline_pics("");
@@ -199,17 +217,24 @@ public class PatrolContentFrgment extends BaseFragment {
                             localBean = localByTaskId.get(i);
                             localBean.setTask_id(task_id);
                             localBean.setTab_name(results.get(i).getName());
+                            localBean.setCategory_id(results.get(i).getCategory());
+                            localBean.setCategory_name(results.get(i).getName());//缺陷类别
                             localBean.setPatrol_id(results.get(i).getPatrol_id());
+                            localBean.setPatrol_name(results.get(i).getRemarks());
+
+//                            if (results.get(i).getRemarks() != null) {
+////                                localBean.setPatrol_name(results.get(i).getRemarks());
+//                                localBean.setPatrol_name(results.get(i).getTaskDefect().getPatrol_name());
+//                            } else {
+//                                localBean.setPatrol_name("");
+//                            }
+
                             if (results.get(i).getStatus() != null) {
                                 localBean.setStatus(results.get(i).getStatus());
                             } else {
                                 localBean.setStatus("");
                             }
-                            if (results.get(i).getRemarks() != null) {
-                                localBean.setPatrol_name(results.get(i).getRemarks());
-                            } else {
-                                localBean.setPatrol_name("");
-                            }
+
                             if (results.get(i).getTaskDefect() != null) {
                                 if (results.get(i).getTaskDefect().getContent() != null) {
                                     localBean.setContent(results.get(i).getTaskDefect().getContent());
@@ -218,14 +243,28 @@ public class PatrolContentFrgment extends BaseFragment {
                                 }
                                 if (results.get(i).getTaskDefect().getGrade_id() != null) {
                                     localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
+                                    localBean.setGrade_name(results.get(i).getTaskDefect().getGrade_name());
                                 } else {
                                     localBean.setGrade_id("");
+                                    localBean.setGrade_name("");
                                 }
+
+//                                if(TextUtils.isEmpty(results.get(i).getTaskDefect().getCategory_name())){
+//                                    localBean.setCategory_id(results.get(i).getTaskDefect().getCategory_id());
+//                                    localBean.setCategory_name(results.get(i).getTaskDefect().getCategory_name());
+//                                }else{
+//                                    localBean.setCategory_id(results.get(i).getCategory());
+//                                    localBean.setCategory_name("");
+//                                }
+
                             } else {
                                 localBean.setContent("");
                                 localBean.setGrade_id("");
+                                localBean.setGrade_name("");
                             }
-                            localBean.setCategory_id(results.get(i).getCategory());
+//                            localBean.setCategory_id(results.get(i).getCategory());
+
+
                             String onlinePics = getOnlinePics(results, i);
                             if (onlinePics == null || onlinePics.equals("")) {
                                 localBean.setOnline_pics("");
@@ -409,56 +448,56 @@ public class PatrolContentFrgment extends BaseFragment {
         View view0 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView0 = view0.findViewById(R.id.recycler_view);
         recyclerView0.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter0 = new DefectTabAdapter(this, R.layout.item_defect_tab, list0, 0);
+        adapter0 = new DefectTabAdapter(this, R.layout.item_defect_tab, list0, 0, clcsTypeList);
         recyclerView0.setAdapter(adapter0);
         fragmentList.add(view0);
 
         View view1 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView1 = view1.findViewById(R.id.recycler_view);
         recyclerView1.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter1 = new DefectTabAdapter(this, R.layout.item_defect_tab, list1, 1);
+        adapter1 = new DefectTabAdapter(this, R.layout.item_defect_tab, list1, 1, clcsTypeList);
         recyclerView1.setAdapter(adapter1);
         fragmentList.add(view1);
 
         View view2 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView2 = view2.findViewById(R.id.recycler_view);
         recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter2 = new DefectTabAdapter(this, R.layout.item_defect_tab, list2, 2);
+        adapter2 = new DefectTabAdapter(this, R.layout.item_defect_tab, list2, 2, clcsTypeList);
         recyclerView2.setAdapter(adapter2);
         fragmentList.add(view2);
 
         View view3 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView3 = view3.findViewById(R.id.recycler_view);
         recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter3 = new DefectTabAdapter(this, R.layout.item_defect_tab, list3, 3);
+        adapter3 = new DefectTabAdapter(this, R.layout.item_defect_tab, list3, 3, clcsTypeList);
         recyclerView3.setAdapter(adapter3);
         fragmentList.add(view3);
 
         View view4 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView4 = view4.findViewById(R.id.recycler_view);
         recyclerView4.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter4 = new DefectTabAdapter(this, R.layout.item_defect_tab, list4, 4);
+        adapter4 = new DefectTabAdapter(this, R.layout.item_defect_tab, list4, 4, clcsTypeList);
         recyclerView4.setAdapter(adapter4);
         fragmentList.add(view4);
 
         View view5 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView5 = view5.findViewById(R.id.recycler_view);
         recyclerView5.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter5 = new DefectTabAdapter(this, R.layout.item_defect_tab, list5, 5);
+        adapter5 = new DefectTabAdapter(this, R.layout.item_defect_tab, list5, 5, clcsTypeList);
         recyclerView5.setAdapter(adapter5);
         fragmentList.add(view5);
 
         View view6 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView6 = view6.findViewById(R.id.recycler_view);
         recyclerView6.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter6 = new DefectTabAdapter(this, R.layout.item_defect_tab, list6, 6);
+        adapter6 = new DefectTabAdapter(this, R.layout.item_defect_tab, list6, 6, clcsTypeList);
         recyclerView6.setAdapter(adapter6);
         fragmentList.add(view6);
 
         View view7 = View.inflate(getActivity(), R.layout.fragment_defect_tab, null);
         RecyclerView recyclerView7 = view7.findViewById(R.id.recycler_view);
         recyclerView7.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter7 = new DefectTabAdapter(this, R.layout.item_defect_tab, list7, 7);
+        adapter7 = new DefectTabAdapter(this, R.layout.item_defect_tab, list7, 7, clcsTypeList);
         recyclerView7.setAdapter(adapter7);
         fragmentList.add(view7);
 

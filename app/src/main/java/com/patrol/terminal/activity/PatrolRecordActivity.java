@@ -29,6 +29,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.CLCSTypeBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.LocalPatrolRecordBean;
@@ -159,6 +160,7 @@ public class PatrolRecordActivity extends BaseActivity {
         saveLocalAsync(null);
         query();
         getTask(task_id);
+        getSpinnerCLCS();
     }
 
     //初始化界面，创建fragment
@@ -254,6 +256,47 @@ public class PatrolRecordActivity extends BaseActivity {
         } else {
             titleSetting.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * 获取处理措施方法
+     */
+    public void getSpinnerCLCS() {
+        BaseRequest.getInstance().getService()
+                .getCLCSType("qxclcs")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<CLCSTypeBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<CLCSTypeBean>> t) throws Exception {
+                        if (t.isSuccess()) {
+                            if (t.getResults().size() > 0) {
+                                SQLite.delete(CLCSTypeBean.class).execute();
+                                for (int i = 0; i < t.getResults().size(); i++) {
+                                    CLCSTypeBean defectTypeBean = new CLCSTypeBean();
+                                    defectTypeBean.setId(t.getResults().get(i).getId());
+//                                    defectTypeBean.setCode(t.getResults().get(i).getCode());
+                                    defectTypeBean.setName(t.getResults().get(i).getName());
+                                    defectTypeBean.setP_id(t.getResults().get(i).getP_id());
+//                                    defectTypeBean.setSort(t.getResults().get(i).getSort());
+//                                    defectTypeBean.setDetail(t.getResults().get(i).getDetail());
+//                                    defectTypeBean.setP_code(t.getResults().get(i).getP_code());
+                                    defectTypeBean.setP_name(t.getResults().get(i).getP_name());
+                                    defectTypeBean.setFull_name(t.getResults().get(i).getFull_name());
+//                                    defectTypeBean.setLeaf(t.getResults().get(i).getLeaf());
+//                                    defectTypeBean.setLeaf_total(t.getResults().get(i).getLeaf_total());
+                                    defectTypeBean.save();
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+
     }
 
     //从后台获取数据
@@ -400,8 +443,6 @@ public class PatrolRecordActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
-
-
                     @Override
                     protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
                         picBeanList = t.getResults();
@@ -412,7 +453,6 @@ public class PatrolRecordActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
                     }
 
                 });
@@ -535,8 +575,12 @@ public class PatrolRecordActivity extends BaseActivity {
 
     private void commit() {
         params.clear();
-        params.put("task_id", toRequestBody(task_id));
         localByTaskId = SQLite.select().from(LocalPatrolRecordBean.class).where(LocalPatrolRecordBean_Table.task_id.is(task_id)).querySingle();
+
+        params.put("task_id", toRequestBody(task_id));
+        params.put("line_id", toRequestBody(localByTaskId.getLine_id()));
+        params.put("tower_id", toRequestBody(localByTaskId.getTower_id()));
+
         if (localByTaskId != null) {
             if (localByTaskId.getPic1() == null || localByTaskId.getPic2() == null || localByTaskId.getPic3() == null || localByTaskId.getPic4() == null || localByTaskId.getPic5() == null || localByTaskId.getPic6() == null) {
                 Toast.makeText(PatrolRecordActivity.this, "巡视图片不是6张", Toast.LENGTH_SHORT).show();
@@ -587,20 +631,27 @@ public class PatrolRecordActivity extends BaseActivity {
                 }
             }
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.task_id", toRequestBody(task_id));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.category_id", toRequestBody(localDefectByTaskId.get(i).getCategory_id()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.grade_id", toRequestBody(localDefectByTaskId.get(i).getGrade_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.in_status", toRequestBody("1"));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.category_name", toRequestBody(localDefectByTaskId.get(i).getCategory_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.grade_name", toRequestBody(localDefectByTaskId.get(i).getGrade_name()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.patrol_id", toRequestBody(localDefectByTaskId.get(i).getPatrol_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.patrol_name", toRequestBody(localDefectByTaskId.get(i).getPatrol_name()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.content", toRequestBody(localDefectByTaskId.get(i).getContent()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.line_id", toRequestBody(localByTaskId.getLine_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.line_name", toRequestBody(localByTaskId.getLine_name()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_id", toRequestBody(localByTaskId.getTower_id()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_id", toRequestBody(localByTaskId.getTower_id()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_name", toRequestBody(localByTaskId.getTower_name()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_name", toRequestBody(localByTaskId.getTower_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.tower_id", toRequestBody(localByTaskId.getTower_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.tower_name", toRequestBody(localByTaskId.getTower_name()));
+//            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_name", toRequestBody(localByTaskId.getTower_name()));
+//            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_name", toRequestBody(localByTaskId.getTower_name()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_id", toRequestBody(localByTaskId.getUser_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_name", toRequestBody(localByTaskId.getUser_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.from_user_id", toRequestBody(localByTaskId.getUser_id()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.from_user_name", toRequestBody(localByTaskId.getUser_name()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_id", toRequestBody(localByTaskId.getDep_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_name", toRequestBody(localByTaskId.getDep_name()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.deal_id", toRequestBody(localDefectByTaskId.get(i).getClcsId()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.deal_notes", toRequestBody(localDefectByTaskId.get(i).getClcsName()));
+
             String pics = localDefectByTaskId.get(i).getPics();
             if (pics != null) {
                 String[] split = pics.split(";");

@@ -26,23 +26,31 @@ public class LocalPatrolDefectBean extends BaseModel implements Serializable {
     @Column
     private String patrol_id;
     @Column
-    private String patrol_name;
+    private String patrol_name;//缺陷巡视内容   （1）导线，地线腐蚀、断股
     @Column
     private String task_id;
     @Column
-    private String tab_name;
+    private String tab_name;//缺陷类别
     @Column
     private String status;
     @Column
     private String category_id;
     @Column
+    private String category_name;// 缺陷类别  导线，地线
+    @Column
     private String grade_id;
+    @Column
+    private String grade_name;// 缺陷级别   危急，严重，一般
     @Column
     private String content;
     @Column
     private String line_id;
     @Column
     private String line_name;
+    @Column
+    private String tower_id;
+    @Column
+    private String tower_name;
     @Column
     private String start_id;
     @Column
@@ -63,6 +71,58 @@ public class LocalPatrolDefectBean extends BaseModel implements Serializable {
     private String pics;
     @Column
     private String online_pics;
+    @Column
+    private String clcsName;//处理措施
+    @Column
+    private String clcsId;
+
+    public String getTower_id() {
+        return tower_id;
+    }
+
+    public void setTower_id(String tower_id) {
+        this.tower_id = tower_id;
+    }
+
+    public String getTower_name() {
+        return tower_name;
+    }
+
+    public void setTower_name(String tower_name) {
+        this.tower_name = tower_name;
+    }
+
+    public String getGrade_name() {
+        return grade_name;
+    }
+
+    public void setGrade_name(String grade_name) {
+        this.grade_name = grade_name;
+    }
+
+    public String getCategory_name() {
+        return category_name;
+    }
+
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
+    }
+
+    public String getClcsName() {
+        return clcsName;
+    }
+
+    public void setClcsName(String clcsName) {
+        this.clcsName = clcsName;
+    }
+
+    public String getClcsId() {
+        return clcsId;
+    }
+
+    public void setClcsId(String clcsId) {
+        this.clcsId = clcsId;
+    }
 
     public String getOnline_pics() {
         return online_pics;

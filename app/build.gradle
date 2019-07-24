@@ -27,6 +27,7 @@ configurations.all {
 }
 
 dependencies {
+    implementation files('libs/jxl.jar')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -74,9 +75,13 @@ dependencies {
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:4.2.4"
     implementation "com.github.Raizlabs.DBFlow:dbflow-core:4.2.4"
     implementation "com.github.Raizlabs.DBFlow:dbflow:4.2.4"
-//    // sql-cipher database encyrption (optional)
+    // sql-cipher database encyrption (optional)
     implementation "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:4.2.4"
-
+    //logger
     implementation 'com.orhanobut:logger:2.2.0'
-    implementation files('libs/jxl.jar')
+    //第三方日志拦截器
+    implementation('com.github.ihsanbal:LoggingInterceptor:3.0.0') {
+        exclude group: 'org.json', module: 'json'
+    }
+
 }

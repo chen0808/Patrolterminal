@@ -1066,6 +1066,10 @@ public interface ApiServise {
     @GET("admin/dict/listGET")
     Observable<BaseResult<List<DefectTypeBean>>> getDefectType(@Query("p_code") String p_code);
 
+    //隐患 处理措施类型
+    @GET("admin/dict/listGET")
+    Observable<BaseResult<List<CLCSTypeBean>>> getCLCSType(@Query("p_code") String p_code);
+
     //缺陷列表
     @GET("task/defect/grade/allGET")
     Observable<BaseResult<List<DefectListBean>>> getDefectList(@Query("category") String category);

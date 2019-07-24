@@ -1,0 +1,93 @@
+[
+  {
+    "id": "0990A97678FB45A4A8B1F8385B831B73",
+    "code": "bz",
+    "name": "补装",
+    "p_id": "5E3EFF3F41D2459D9868596181074C17",
+    "sort": 0,
+    "detail": null,
+    "p_code": "qxclcs",
+    "p_name": "缺陷处理措施",
+    "full_name": "\\缺陷处理措施\\补装",
+    "leaf": 1,
+    "leaf_total": 0
+  },
+  {
+    "id": "60244732AE7147C0AE0627BEFE7EBFCE",
+    "code": "ht",
+    "name": "回填",
+    "p_id": "5E3EFF3F41D2459D9868596181074C17",
+    "sort": 1,
+    "detail": null,
+    "p_code": "qxclcs",
+    "p_name": "缺陷处理措施",
+    "full_name": "\\缺陷处理措施\\回填",
+    "leaf": 1,
+    "leaf_total": 0
+  },
+  {
+    "id": "124B5468535A42CAB73C924F7B5C300C",
+    "code": "pt",
+    "name": "喷涂",
+    "p_id": "5E3EFF3F41D2459D9868596181074C17",
+    "sort": 2,
+    "detail": null,
+    "p_code": "qxclcs",
+    "p_name": "缺陷处理措施",
+    "full_name": "\\缺陷处理措施\\喷涂",
+    "leaf": 1,
+    "leaf_total": 0
+  },
+  {
+    "id": "EA2177F07D814A6AB739285F96107D02",
+    "code": "bzpt",
+    "name": "补装喷涂",
+    "p_id": "5E3EFF3F41D2459D9868596181074C17",
+    "sort": 3,
+    "detail": null,
+    "p_code": "qxclcs",
+    "p_name": "缺陷处理措施",
+    "full_name": "\\缺陷处理措施\\补装喷涂",
+    "leaf": 1,
+    "leaf_total": 0
+  },
+  {
+    "id": "E894498EA4C84210A19841993AABC684",
+    "code": "wk",
+    "name": "挖开",
+    "p_id": "5E3EFF3F41D2459D9868596181074C17",
+    "sort": 4,
+    "detail": null,
+    "p_code": "qxclcs",
+    "p_name": "缺陷处理措施",
+    "full_name": "\\缺陷处理措施\\挖开",
+    "leaf": 1,
+    "leaf_total": 0
+  },
+  {
+    "id": "760BC6E43C044268A24A174D3EF6BEFC",
+    "code": "gh",
+    "name": "更换",
+    "p_id": "5E3EFF3F41D2459D9868596181074C17",
+    "sort": 5,
+    "detail": null,
+    "p_code": "qxclcs",
+    "p_name": "缺陷处理措施",
+    "full_name": "\\缺陷处理措施\\更换",
+    "leaf": 1,
+    "leaf_total": 0
+  },
+  {
+    "id": "852BA09617BB424BA2CF50626B59245F",
+    "code": "lj",
+    "name": "连接",
+    "p_id": "5E3EFF3F41D2459D9868596181074C17",
+    "sort": 6,
+    "detail": null,
+    "p_code": "qxclcs",
+    "p_name": "缺陷处理措施",
+    "full_name": "\\缺陷处理措施\\连接",
+    "leaf": 1,
+    "leaf_total": 0
+  }
+]

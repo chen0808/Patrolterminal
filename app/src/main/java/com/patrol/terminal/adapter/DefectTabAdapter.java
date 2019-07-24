@@ -29,10 +29,14 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
+import com.patrol.terminal.bean.CLCSTypeBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.utils.Constant;
+
+import org.angmarch.views.NiceSpinner;
+import org.angmarch.views.OnSpinnerItemSelectedListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,11 +50,19 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
     private GridViewAdapter3 mGridViewAddImgAdapter;
     private int tab;
     private boolean textChanged;
+    private List<CLCSTypeBean> clcsList;
+    private List<String> clcsListStr;
 
-    public DefectTabAdapter(Fragment fragment, int layoutResId, @Nullable List<LocalPatrolDefectBean> data, int tab) {
+    public DefectTabAdapter(Fragment fragment, int layoutResId, @Nullable List<LocalPatrolDefectBean> data, int tab, List<CLCSTypeBean> clcsList) {
         super(layoutResId, data);
         this.fragment = fragment;
         this.tab = tab;
+        this.clcsList = clcsList;
+
+        clcsListStr = new ArrayList<>();
+        for (int i = 0; i < clcsList.size(); i++) {
+            clcsListStr.add(clcsList.get(i).getName());
+        }
     }
 
     @Override
@@ -63,6 +75,19 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         ImageView defectFalse = helper.getView(R.id.iv_defect_false);
         LinearLayout llCOntent = helper.getView(R.id.ll_content);
         AutoCompleteTextView tvDiverWay = helper.getView(R.id.tv_diver_way);
+        NiceSpinner defectSpinner = helper.getView(R.id.defect_spinner);
+        defectSpinner.setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
+        defectSpinner.attachDataSource(clcsListStr);
+
+        if (!TextUtils.isEmpty(item.getClcsName()))
+            defectSpinner.setSelectedIndex(clcsListStr.indexOf(item.getClcsName()));
+        else {
+            defectSpinner.setSelectedIndex(0);
+            item.setClcsName(clcsList.get(0).getName());
+            item.setClcsId(clcsList.get(0).getId());
+            item.update();
+        }
+
         textChanged = true;
         if (item.getContent() != null) {
             tvDiverWay.setText(item.getContent());
@@ -83,12 +108,16 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d("afterTextChanged", "afterTextChanged");
+
                 if (!textChanged) {
-                    if (s.toString() != null || !s.toString().equals("")) {
-                        item.setContent(s.toString());
-                        item.update();
-                    }
+                    String context = tvDiverWay.getText().toString();
+                    Log.e("afterTextChanged", context);
+                    item.setContent(context);
+                    item.update();
+
+//                    if (s.toString() != null || !s.toString().equals("")) {
+//
+//                    }
                 }
             }
         });
@@ -124,7 +153,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 llCOntent.setVisibility(View.GONE);
             } else if (item.getStatus().equals("1")) {
                 Glide.with(mContext).load(R.mipmap.defect_true_unchecked).into(defectTrue);
-                Glide.with(mContext).load(R.mipmap.defect_false_checked).into(defectFalse);
+                Glide.with(mContext).load(R.mipmap.defect_false_red_checked).into(defectFalse);
                 llCOntent.setVisibility(View.VISIBLE);
             }
         } else {
@@ -133,12 +162,22 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             llCOntent.setVisibility(View.GONE);
         }
 
+        defectSpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
+            @Override
+            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
+                CLCSTypeBean typeBean = clcsList.get(position);
+                item.setClcsName(typeBean.getName());
+                item.setClcsId(typeBean.getId());
+                item.update();
+            }
+        });
+
         defectFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (item.getStatus().equals("") || item.getStatus().equals("0")) {
                     Glide.with(mContext).load(R.mipmap.defect_true_unchecked).into(defectTrue);
-                    Glide.with(mContext).load(R.mipmap.defect_false_checked).into(defectFalse);
+                    Glide.with(mContext).load(R.mipmap.defect_false_red_checked).into(defectFalse);
                     llCOntent.setVisibility(View.VISIBLE);
                     item.setStatus("1");
                     item.update();
@@ -225,27 +264,32 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                             checkTwoRb.setChecked(false);
                             checkThreeRb.setChecked(false);
                             item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                            item.setGrade_name("一般");
                         } else {
                             if (levelStr.contains("危急")) {
                                 checkOneRb.setChecked(true);
                                 checkTwoRb.setChecked(false);
                                 checkThreeRb.setChecked(false);
                                 item.setGrade_id("10C639F13341484997EE8D955322BE02");
+                                item.setGrade_name("危急");
                             } else if (levelStr.contains("严重")) {
                                 checkOneRb.setChecked(false);
                                 checkTwoRb.setChecked(true);
                                 checkThreeRb.setChecked(false);
                                 item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
+                                item.setGrade_name("严重");
                             } else if (levelStr.contains("一般")) {
                                 checkOneRb.setChecked(false);
                                 checkTwoRb.setChecked(false);
                                 checkThreeRb.setChecked(true);
                                 item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                                item.setGrade_name("一般");
                             } else {   //默认为一般
                                 checkOneRb.setChecked(true);
                                 checkTwoRb.setChecked(false);
                                 checkThreeRb.setChecked(false);
                                 item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                                item.setGrade_name("一般");
                             }
                         }
                         item.update();
@@ -260,6 +304,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 checkTwoRb.setChecked(false);
                 checkThreeRb.setChecked(false);
                 item.setGrade_id("10C639F13341484997EE8D955322BE02");
+                item.setGrade_name("危急");
                 item.update();
             }
         });
@@ -270,6 +315,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 checkTwoRb.setChecked(true);
                 checkThreeRb.setChecked(false);
                 item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
+                item.setGrade_name("严重");
                 item.update();
             }
         });
@@ -280,6 +326,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 checkTwoRb.setChecked(false);
                 checkThreeRb.setChecked(true);
                 item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                item.setGrade_name("一般");
                 item.update();
             }
         });

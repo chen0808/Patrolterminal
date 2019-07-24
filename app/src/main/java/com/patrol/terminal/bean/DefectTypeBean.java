@@ -2,6 +2,9 @@ package com.patrol.terminal.bean;
 
 import java.io.Serializable;
 
+/**
+ * 隐患 处理措施
+ */
 public class DefectTypeBean implements Serializable {
 
     /**

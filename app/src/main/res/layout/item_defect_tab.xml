@@ -103,6 +103,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:text="处理措施：" />
+
+            <org.angmarch.views.NiceSpinner
+                android:id="@+id/defect_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:padding="3dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="缺陷等级：" />
 
             <RadioGroup
