@@ -526,19 +526,28 @@
         android:numColumns="auto_fit"
         android:verticalSpacing="10dp" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/reject"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="@dimen/dp_35"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/white"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:text="驳回"
+            />
         <TextView
             android:id="@+id/stock_in"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_80"
             android:layout_height="@dimen/dp_35"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
             android:background="@drawable/btn_bg"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:layout_marginRight="@dimen/dp_70"
+            android:layout_marginLeft="@dimen/dp_10"
             android:gravity="center"
             android:textSize="@dimen/sp_16"
             android:layout_alignParentBottom="true"
@@ -548,35 +557,28 @@
             />
         <TextView
             android:id="@+id/review"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_80"
             android:layout_height="@dimen/dp_35"
-            android:layout_centerInParent="true"
             android:background="@drawable/btn_bg"
-            android:layout_marginLeft="@dimen/dp_70"
-            android:layout_marginRight="@dimen/dp_70"
+            android:layout_marginLeft="@dimen/dp_10"
             android:gravity="center"
             android:textSize="@dimen/sp_16"
-            android:layout_alignParentBottom="true"
             android:textColor="@color/white"
             android:layout_marginBottom="@dimen/dp_10"
             android:text="复核"
             />
         <TextView
             android:id="@+id/turn_to_repair"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_80"
             android:layout_height="@dimen/dp_35"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:background="@drawable/btn_bg"
-            android:layout_marginLeft="@dimen/dp_70"
-            android:layout_marginRight="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_10"
             android:gravity="center"
             android:textSize="@dimen/sp_16"
-            android:layout_alignParentBottom="true"
             android:textColor="@color/white"
             android:layout_marginBottom="@dimen/dp_10"
             android:text="转检修"
             />
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
