@@ -62,7 +62,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class TemporaryActivity extends BaseActivity {
 
-
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)
@@ -99,6 +98,11 @@ public class TemporaryActivity extends BaseActivity {
     View line4;
     @BindView(R.id.line5)
     View line5;
+    @BindView(R.id.day_plan_layout)
+    LinearLayout dayPlanLayout;
+    @BindView(R.id.day_plan_time)
+    TextView dayPlanTime;
+
     private List<String> typeNameList = new ArrayList<>();
     private List<LineTypeBean> typeList = new ArrayList<>();
     private List<String> typeVal = new ArrayList<>();
@@ -136,11 +140,6 @@ public class TemporaryActivity extends BaseActivity {
     }
 
     private void initview() {
-//        String time = DateUatil.getCurMonth();
-//        String[] years = time.split("年");
-//        String[] months = years[1].split("月");
-//        year = years[0];
-//        month = Integer.parseInt(months[0]) + 1 + "";
         year = getIntent().getStringExtra("year");
         month = getIntent().getStringExtra("month");
         week = getIntent().getStringExtra("week");
@@ -149,7 +148,9 @@ public class TemporaryActivity extends BaseActivity {
             if (day == null) {
                 titleName.setText("制定" + month + "月临时计划");
             } else {
-                titleName.setText("制定" + year + "年" + month + "月" + day + "日临时计划");
+                titleName.setText("临时计划制定");
+                dayPlanLayout.setVisibility(View.VISIBLE);
+                dayPlanTime.setText(year + "年" + month + "月" + day + "日临时计划制定");
                 llStartTime.setVisibility(View.GONE);
                 llEndTime.setVisibility(View.GONE);
                 line4.setVisibility(View.GONE);
@@ -157,6 +158,7 @@ public class TemporaryActivity extends BaseActivity {
             }
         } else if (week != null) {
             titleName.setText("制定" + week + "周临时计划");
+
             //获取当前周起始和终止日期
             String beginDate = TimeUtil.getFirstDayOfWeek(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
             String end2Date = TimeUtil.getLastDayOfWeek(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
@@ -170,7 +172,6 @@ public class TemporaryActivity extends BaseActivity {
         getLineType();
 
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
-
             @Override
             public void accept(String type) throws Exception {
                 if (type.equals("hide")) {
@@ -183,11 +184,14 @@ public class TemporaryActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.title_back, R.id.month_plan_type, R.id.month_plan_line, R.id.month_yes, R.id.month_plan_start, R.id.month_plan_end})
+    @OnClick({R.id.title_back, R.id.month_plan_type, R.id.month_plan_line, R.id.month_yes, R.id.month_plan_start, R.id.month_plan_end, R.id.day_plan_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
+                break;
+            case R.id.day_plan_time:
+                showDay();
                 break;
             case R.id.month_plan_start:
                 showDay(1);
@@ -225,10 +229,6 @@ public class TemporaryActivity extends BaseActivity {
                     Toast.makeText(this, "请选择一条线路", Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                if (type_id == null) {
-//                    Toast.makeText(this, "请选择工作类型", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
                 if (start > end && start != 0 && end != -1 && day == null) {
                     Toast.makeText(this, "请选择起始结束时间，且起始时间不能大于结束时间", Toast.LENGTH_SHORT).show();
                     return;
@@ -237,16 +237,16 @@ public class TemporaryActivity extends BaseActivity {
                     Toast.makeText(this, "请选择杆段", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 ProgressDialog.show(this, true, "正在保存。。。");
+
                 if (month == null) {
                     saveWeekPlan();
-
                 } else if (day != null) {
                     saveDayPlan();
                 } else {
                     saveMonthPlan();
                 }
-
                 break;
         }
     }
@@ -540,6 +540,54 @@ public class TemporaryActivity extends BaseActivity {
                 });
     }
 
+    public void showDay() {
+        String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        String[] days = months[1].split("日");
+        int curMonth = Integer.parseInt(months[0]);
+        int curYear = Integer.parseInt(years[0]);
+        int curDay = Integer.parseInt(days[0]);
+        if(curMonth == 1){
+            curMonth = 12;
+            curYear = curYear - 1;
+        } else {
+            curMonth = curMonth - 1;
+        }
+
+        Calendar selectedDate = Calendar.getInstance();//系统当前时间
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(curYear, curMonth, curDay);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2028, 2, 28);
+        //时间选择器 ，自定义布局
+        //选中事件回调
+        //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+        TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                String time = DateUatil.getDay(date);
+                dayPlanTime.setText(time + "临时计划制定");
+                String[] times = time.split("年");
+                String[] months = times[1].split("月");
+                year = times[0];
+                month = months[0];
+                day = months[1].split("日")[0];
+            }
+        })
+                .setDate(selectedDate)
+                .setRangDate(startDate, endDate)
+                .setContentTextSize(18)
+                .setLineSpacingMultiplier(1.2f)
+                .setTextXOffset(0, 0, 0, 40, 0, -40)
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setDividerColor(0xFF24AD9D)
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .setLabel("年", "月", "日", "时", "分", "秒")
+                .build();
+        pvTime.show();
+    }
+
     public void showDay(int type) {
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();
@@ -553,7 +601,7 @@ public class TemporaryActivity extends BaseActivity {
         }
         //时间选择器 ，自定义布局
         //选中事件回调
-//是否只显示中间选中项的label文字，false则每项item全部都带有label。
+        //是否只显示中间选中项的label文字，false则每项item全部都带有label。
         TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调

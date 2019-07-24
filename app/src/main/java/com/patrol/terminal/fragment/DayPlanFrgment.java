@@ -172,7 +172,6 @@ public class DayPlanFrgment extends BaseFragment {
         getNextDayList();
     }
 
-
     //获取日计划列表
     public void getDayList() {
         BaseRequest.getInstance().getService()
@@ -227,7 +226,6 @@ public class DayPlanFrgment extends BaseFragment {
 
     //获取明日计划列表
     public void getNextDayList() {
-
         BaseRequest.getInstance().getService()
                 .getDayList(nextyear + "", nextmonth + "", nextDay + "", SPUtil.getDepId(getContext()), "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
@@ -259,13 +257,11 @@ public class DayPlanFrgment extends BaseFragment {
                 });
     }
 
-
     OnItemMenuClickListener mItemMenuClickListener = new OnItemMenuClickListener() {
         @Override
         public void onItemClick(SwipeMenuBridge menuBridge, int position) {
             // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
             menuBridge.closeMenu();
-
             // 左侧还是右侧菜单：
             int direction = menuBridge.getDirection();
             // 菜单在Item中的Position：
@@ -282,11 +278,11 @@ public class DayPlanFrgment extends BaseFragment {
                 break;
             case R.id.add_plan_right:
                 if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                Intent intent2 = new Intent(getContext(), TemporaryActivity.class);
-                intent2.putExtra("year", String.valueOf(nextyear));
-                intent2.putExtra("month", String.valueOf(nextmonth));
-                intent2.putExtra("day", String.valueOf(nextDay));
-                startActivityForResult(intent2, 10);
+                    Intent intent2 = new Intent(getContext(), TemporaryActivity.class);
+                    intent2.putExtra("year", String.valueOf(nextyear));
+                    intent2.putExtra("month", String.valueOf(nextmonth));
+                    intent2.putExtra("day", String.valueOf(day));
+                    startActivityForResult(intent2, 10);
                 } else {
                     Toast.makeText(getContext(), "您没有权限", Toast.LENGTH_SHORT).show();
                 }
@@ -302,7 +298,6 @@ public class DayPlanFrgment extends BaseFragment {
                 } else {
                     Toast.makeText(getContext(), "您没有权限", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
             case R.id.add_plan_ll:
                 Intent intent1 = new Intent(getContext(), NextDayPlanActivity.class);
@@ -372,7 +367,6 @@ public class DayPlanFrgment extends BaseFragment {
                 nextyear = Integer.parseInt(year) + 1;
             }
         }
-
     }
 
     @Override
