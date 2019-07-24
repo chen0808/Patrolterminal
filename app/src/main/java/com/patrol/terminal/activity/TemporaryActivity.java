@@ -150,7 +150,7 @@ public class TemporaryActivity extends BaseActivity {
             } else {
                 titleName.setText("临时计划制定");
                 dayPlanLayout.setVisibility(View.VISIBLE);
-                dayPlanTime.setText(year + "年" + month + "月" + day + "日临时计划制定");
+                dayPlanTime.setText(year + "年" + month + "月" + day + "日");
                 llStartTime.setVisibility(View.GONE);
                 llEndTime.setVisibility(View.GONE);
                 line4.setVisibility(View.GONE);
@@ -567,7 +567,7 @@ public class TemporaryActivity extends BaseActivity {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 String time = DateUatil.getDay(date);
-                dayPlanTime.setText(time + "临时计划制定");
+                dayPlanTime.setText(time);
                 String[] times = time.split("年");
                 String[] months = times[1].split("月");
                 year = times[0];

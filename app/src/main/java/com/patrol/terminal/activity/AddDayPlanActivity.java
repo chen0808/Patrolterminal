@@ -126,7 +126,7 @@ public class AddDayPlanActivity extends BaseActivity {
         }
         inteDate();
         titleName.setText("日计划制定");
-        monthPlanTime.setText(year + "年" + month + "月" + day + "日计划制定");
+        monthPlanTime.setText(year + "年" + month + "月" + day + "日");
         adapter = new AddDayAdapter(this, linList);
         monthPlanTypeLv.setAdapter(adapter);
 
@@ -422,7 +422,7 @@ public class AddDayPlanActivity extends BaseActivity {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 String time = DateUatil.getDay(date);
-                monthPlanTime.setText(time + "计划制定");
+                monthPlanTime.setText(time);
                 String[] times = time.split("年");
                 String[] months = times[1].split("月");
                 year = times[0];
