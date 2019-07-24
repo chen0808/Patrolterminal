@@ -4,6 +4,7 @@ import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupOfDayBean;
 import com.patrol.terminal.bean.PlanTypeBean;
+import com.patrol.terminal.bean.TeamAndVehicleBean;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
@@ -40,6 +41,14 @@ public class RxRefreshEvent {
     }
     public static void publishGrooup(GroupOfDayBean bean) {
         groupobservable.onNext(bean);
+    }
+
+    private static PublishSubject<TeamAndVehicleBean> vehicleobservable = PublishSubject.create();
+    public static PublishSubject<TeamAndVehicleBean> getVehicleobservable() {
+        return vehicleobservable;
+    }
+    public static void publishVehicle(TeamAndVehicleBean bean) {
+        vehicleobservable.onNext(bean);
     }
 
     public static PublishSubject<PlanTypeBean> getTypeObservable() {

@@ -18,7 +18,7 @@
             android:id="@+id/task_title"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:text="编辑小组"
+            android:text="今日分组"
             android:textStyle="bold"
             android:drawableLeft="@mipmap/group_team_icon"
             android:gravity="center_vertical"

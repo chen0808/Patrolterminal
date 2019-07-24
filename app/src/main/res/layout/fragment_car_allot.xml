@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.CheckActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@drawable/shape_corner"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20">
+
+            <TextView
+                android:id="@+id/task_title"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_40"
+                android:drawableLeft="@mipmap/car"
+                android:drawablePadding="@dimen/dp_5"
+                android:gravity="center_vertical"
+                android:text="车辆分配"
+                android:textColor="@color/color_33"
+                android:textSize="@dimen/sp_16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/task_date"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginLeft="14dp"
+                android:layout_toRightOf="@id/task_title"
+                android:gravity="center_vertical"
+                android:text="2019年7月1日" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_10">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/car_team_rv"
+                android:layout_width="100dp"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_60"
+                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+
+            <RelativeLayout
+                android:id="@+id/group_make"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                >
+                <View
+                    android:layout_width="@dimen/dp_1"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_de"
+                    android:layout_marginBottom="@dimen/dp_60"
+                    />
+
+                <View
+                    android:layout_width="@dimen/dp_1"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_de"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="@dimen/dp_60"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/select_group_personal_rv"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_60"
+                    ></androidx.recyclerview.widget.RecyclerView>
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/group_team_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_60"
+                android:layout_toRightOf="@id/group_make"></androidx.recyclerview.widget.RecyclerView>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/plan_botton"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@mipmap/bottom_icon" />
+
+        <ImageView
+            android:id="@+id/plan_top"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:scaleType="center"
+            android:src="@mipmap/top_icon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape_corner"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/select_day_plan_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"></androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/group_save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_70"
+        android:layout_marginRight="@dimen/dp_70"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:background="@drawable/btn_bg"
+        android:gravity="center"
+        android:text="保     存"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16" />
+</LinearLayout>

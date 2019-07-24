@@ -189,6 +189,14 @@ public interface ApiServise {
     @GET("/task/group/user/usersGET")
     Observable<BaseResult<List<DepUserBean>>> getPersonal(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
 
+    //获取车辆列表
+    @GET("/eq/vehicle/pda/listGET")
+    Observable<BaseResult<List<EqVehicleBean>>> getVehicle(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
+
+    //获取司机列表
+    @GET("/sys/user/driverGET")
+    Observable<BaseResult<List<DriverBean>>> getDriver(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
+
     //组长获取组成员列表
     @GET("/task/group/user/teamGET")
     Observable<BaseResult<List<DepUserBean>>> getGroupPersonal(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("user_id") String user_id, @Query("sign") String sign);
@@ -226,6 +234,10 @@ public interface ApiServise {
     //添加小组任务
     @POST("/task/group/savePOST")
     Observable<BaseResult<List<DangerBean>>> savaGroupTask(@Body TeamAndTaskBean bean);
+
+    //添加车辆
+    @POST("/task/group/vehicle/updatePOST")
+    Observable<BaseResult<List<TeamAndVehicleBean>>> savaGroupVehicleTask(@Body TeamAndVehicleBean bean);
 
     //周计划添加
     @POST("/plan/week/auditPOST")
@@ -305,6 +317,10 @@ public interface ApiServise {
     //根据当前日期查询所属周下所有计划接口
     @GET("plan/day/tower/dayGET")
     Observable<BaseResult<List<GroupOfDayBean>>> getDayofGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("type_id") String type_id);
+
+    //根据当前日期查询下所有车辆分配接口
+    @GET("task/group/vehicle/listGET")
+    Observable<BaseResult<List<TeamAndVehicleBean>>> getVehicleofGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
 
     //组任务列表
     @GET("/task/group/list/listGET")
@@ -1066,6 +1082,10 @@ public interface ApiServise {
     //删除小组任务
     @POST("/task/group/revokePOST")
     Observable<BaseResult<List<DangerBean>>> revokeGroupTask(@Body List<GroupOfDayBean> list);
+
+    //删除车辆分配
+    @POST("/task/group/vehicle/pda/deletePOST")
+    Observable<BaseResult<List<TeamAndVehicleBean>>> deleteVehicleGroup(@Query("ids") String ids);
 
     //获取小组列表
     @GET("/task/group/usersGET")

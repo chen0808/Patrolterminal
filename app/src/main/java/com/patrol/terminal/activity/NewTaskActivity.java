@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.fragment.CarAllotFrgment;
 import com.patrol.terminal.fragment.DayDisGroupFrgment;
 import com.patrol.terminal.fragment.DayPlanAllotFrgment;
 import com.patrol.terminal.fragment.GroupTaskFrgment;
@@ -42,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -81,6 +84,9 @@ public class NewTaskActivity extends BaseActivity {
     TextView groupNum;
     @BindView(R.id.day_plan_num)
     TextView dayPlanNum;
+    @BindView(R.id.car_num)
+    TextView carNum;
+
     private List<String> mDataList = new ArrayList<>();
     private MyFragmentPagerAdapter taskPagerAdapter;
     private int year;
@@ -107,6 +113,7 @@ public class NewTaskActivity extends BaseActivity {
         if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             depId = SPUtil.getDepId(this);
             fragmentList.add(new DayDisGroupFrgment());
+            fragmentList.add(new CarAllotFrgment());
             fragmentList.add(new DayPlanAllotFrgment());
         } else {
             depId = "";
@@ -141,18 +148,22 @@ public class NewTaskActivity extends BaseActivity {
                 } else if (type.startsWith("refreshHaveTask")) {
                     String[] split = type.split("@");
                     dayPlanNum.setText(split[1]);
+                } else if (type.startsWith("refreshVehicleNum")) {
+                    String[] split = type.split("@");
+                    carNum.setText(split[1]);
                 }
-
             }
         });
     }
 
     private void initMagicIndicator(String job) {
         if (job.contains(Constant.RUNNING_SQUAD_LEADER)) {
-            mDataList.add("今日分组");
-            mDataList.add("计划分配");
+            mDataList.add("分组");
+            mDataList.add("车辆");
+            mDataList.add("计划");
 
             groupNum.setVisibility(View.VISIBLE);
+            carNum.setVisibility(View.VISIBLE);
             dayPlanNum.setVisibility(View.VISIBLE);
         } else {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 60), UIUtil.dip2px(this, 30));
@@ -164,11 +175,12 @@ public class NewTaskActivity extends BaseActivity {
             groupTaskNum.setGravity(Gravity.BOTTOM);
             personalTaskNum.setGravity(Gravity.BOTTOM);
             groupNum.setVisibility(View.GONE);
+            carNum.setVisibility(View.GONE);
             dayPlanNum.setVisibility(View.GONE);
         }
 
-        mDataList.add("小组任务");
-        mDataList.add("个人任务");
+        mDataList.add("小组");
+        mDataList.add("个人");
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {
             @Override
@@ -211,7 +223,7 @@ public class NewTaskActivity extends BaseActivity {
                 if (job.contains(Constant.RUNNING_SQUAD_LEADER)) {
                     return UIUtil.dip2px(NewTaskActivity.this, 10);
                 } else {
-                    return UIUtil.dip2px(NewTaskActivity.this, 60);
+                    return UIUtil.dip2px(NewTaskActivity.this, 85);
                 }
 
             }
@@ -228,11 +240,11 @@ public class NewTaskActivity extends BaseActivity {
             case R.id.title_back:
                 finish();
                 break;
-            case R.id.task_def://缺陷
+            case R.id.task_def:
                 intent.setClass(this, DefectActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.task_dan://隐患
+            case R.id.task_dan:
                 intent.setClass(this, TroubleActivity.class);
                 startActivity(intent);
                 break;
