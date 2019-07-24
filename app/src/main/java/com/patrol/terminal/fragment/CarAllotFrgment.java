@@ -16,7 +16,6 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.DayPlanAllotAdapter;
 import com.patrol.terminal.adapter.DriverAdapter;
 import com.patrol.terminal.adapter.EqVehicleAdapter;
 import com.patrol.terminal.adapter.PlanAllotTeamAdapter;
@@ -25,7 +24,6 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.DangerBean;
 import com.patrol.terminal.bean.DriverBean;
 import com.patrol.terminal.bean.EqVehicleBean;
 import com.patrol.terminal.bean.GroupOfDayBean;
@@ -434,16 +432,18 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
     public void revokeGroupTask() {
         ProgressDialog.show(getContext(), true, "正在保存");
 
-        String ids = "";
+        String ids;
         if(selectList.size() == 1){
             ids = selectList.get(0).getId();
         } else {
+            StringBuilder tempString = new StringBuilder();
             for(int i=0;i<selectList.size();i++){
-                ids += selectList.get(i);
+                tempString.append(selectList.get(i).getId());
                 if(i < selectList.size()-1){
-                    ids += ",";
+                    tempString.append(",");
                 }
             }
+            ids = tempString.toString();
         }
 
         BaseRequest.getInstance().getService()
