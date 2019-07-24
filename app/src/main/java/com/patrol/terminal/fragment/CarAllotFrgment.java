@@ -82,7 +82,6 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
     private int selectDriverPosition = -1;
     private int selectCarPosition = -1;
     private Disposable subscribe;
-    private int allotNum = 0;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -115,29 +114,16 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
         driverAdapter.setOnItemClickListener(this);
         eqVehicleAdapter.setOnItemClickListener(this);
 
-        subscribe = RxRefreshEvent.getVehicleobservable().subscribe(new Consumer<TeamAndVehicleBean>() {
+        subscribe = RxRefreshEvent.getGroopuObservable().subscribe(new Consumer<GroupOfDayBean>() {
 
             @Override
-            public void accept(TeamAndVehicleBean type) throws Exception {
+            public void accept(GroupOfDayBean type) throws Exception {
                 if (type.getId() == null) {
                     getGroupTeam();
-                } else {
-                    boolean isexit = true;
-                    for (int i = 0; i < backList.size(); i++) {
-                        TeamAndVehicleBean teamAndVehicleBean = backList.get(i);
-                        if (type.getId().equals(teamAndVehicleBean.getId())) {
-                            isexit = false;
-                            backList.remove(i);
-                            break;
-                        }
-                    }
-                    if (isexit) {
-                        backList.add(type);
-                    }
                 }
-
             }
         });
+
         getVehicle();
         getDriver();
         getDayList();
@@ -186,7 +172,7 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
     //获取司机列表
     public void getDriver() {
         BaseRequest.getInstance().getService()
-                .getDriver(year + "", month + "", day + "", "39420EBCC73C4977B01BADCEABB4A157")
+                .getDriver(year + "", month + "", day + "", SPUtil.getDepId(getContext()),"39420EBCC73C4977B01BADCEABB4A157")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DriverBean>>(getContext()) {
@@ -216,6 +202,7 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
                         dayVehiclelist = t.getResults();
                         taskGroupVehicleAdapter.setNewData(dayVehiclelist);
                         taskGroupVehicleAdapter.notifyDataSetChanged();
+                        RxRefreshEvent.publish("refreshVehicleNum@" + dayVehiclelist.size());
                     }
 
                     @Override
@@ -248,14 +235,6 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
                             }
                             planAllotTeamAdapter.notifyItemChanged(selectPosition);
                         }
-
-                        for (int i = 0; i < teamList.size(); i++) {
-                            List<GroupOfDayBean> lists = teamList.get(i).getLists();
-                            if (lists.size() > 0) {
-                                allotNum++;
-                            }
-                        }
-                        RxRefreshEvent.publish("refreshVehicleNum@" + allotNum);
                     }
 
                     @Override
@@ -383,13 +362,6 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
     public void savaGroupTask() {
         ProgressDialog.show(getContext(), true, "正在保存");
         TeamAndVehicleBean teamAndVehicleBean = new TeamAndVehicleBean();
-//        TeamAndVehicleBean teamAndTaskBean1 = teamList.get(selectPosition);
-//        for (int i = 0; i < selectList.size(); i++) {
-//            GroupOfDayBean groupOfDayBean = selectList.get(i);
-//            if (groupOfDayBean.getDay_tower_id() == null) {
-//                groupOfDayBean.setDay_tower_id(groupOfDayBean.getId());
-//            }
-//        }
         teamAndVehicleBean.setGroup_id(teamList.get(selectPosition).getId());
         teamAndVehicleBean.setDep_id(SPUtil.getDepId(getContext()));
         teamAndVehicleBean.setVehicle_id(carList.get(selectCarPosition).getId());
@@ -417,8 +389,6 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
                         getDriver();
                         getGroupTeam();
                         getDayList();
-//                        taskGroupVehicleAdapter.setNewData(dayVehiclelist);
-                        RxRefreshEvent.publish("refreshGroupData");
                     }
 
                     @Override
@@ -453,27 +423,6 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
                 .subscribe(new BaseObserver<List<TeamAndVehicleBean>>(getContext()) {
                     @Override
                     protected void onSuccees(BaseResult<List<TeamAndVehicleBean>> t) throws Exception {
-//                        allotNum=0;
-//                        for (int i = 0; i < teamList.size(); i++) {
-//                            List<GroupOfDayBean> lists = teamList.get(i).getLists();
-//                            for (int j = 0; j < backList.size(); j++) {
-//                                GroupOfDayBean groupOfDayBean = backList.get(j);
-//                                groupOfDayBean.setCheck(false);
-//                                lists.remove(groupOfDayBean);
-//                            }
-//                            if (lists.size() > 0) {
-//                                allotNum++;
-//                            }
-//                        }
-//                        RxRefreshEvent.publish("refreshVehicleNum@" + allotNum);
-//                        RxRefreshEvent.publish("refreshGroupData");
-//                        dayVehiclelist.addAll(backList);
-//                        backList.clear();
-
-//                        ProgressDialog.cancle();
-//                        planAllotTeamAdapter.setNewData(teamList);
-//                        taskGroupVehicleAdapter.setNewData(dayVehiclelist);
-
                         dayVehiclelist.removeAll(selectList);
                         selectList.clear();
 
@@ -481,8 +430,7 @@ public class CarAllotFrgment extends BaseFragment implements BaseQuickAdapter.On
                         getVehicle();
                         getDriver();
                         getGroupTeam();
-                        taskGroupVehicleAdapter.setNewData(dayVehiclelist);
-                        RxRefreshEvent.publish("refreshGroupData");
+                        getDayList();
                     }
 
                     @Override

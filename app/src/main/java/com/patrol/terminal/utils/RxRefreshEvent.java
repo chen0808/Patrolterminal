@@ -43,14 +43,6 @@ public class RxRefreshEvent {
         groupobservable.onNext(bean);
     }
 
-    private static PublishSubject<TeamAndVehicleBean> vehicleobservable = PublishSubject.create();
-    public static PublishSubject<TeamAndVehicleBean> getVehicleobservable() {
-        return vehicleobservable;
-    }
-    public static void publishVehicle(TeamAndVehicleBean bean) {
-        vehicleobservable.onNext(bean);
-    }
-
     public static PublishSubject<PlanTypeBean> getTypeObservable() {
         return typeObservable;
     }

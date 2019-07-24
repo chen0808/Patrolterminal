@@ -195,7 +195,7 @@ public interface ApiServise {
 
     //获取司机列表
     @GET("/sys/user/driverGET")
-    Observable<BaseResult<List<DriverBean>>> getDriver(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
+    Observable<BaseResult<List<DriverBean>>> getDriver(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("driver_dep_id") String driver_dep_id);
 
     //组长获取组成员列表
     @GET("/task/group/user/teamGET")
