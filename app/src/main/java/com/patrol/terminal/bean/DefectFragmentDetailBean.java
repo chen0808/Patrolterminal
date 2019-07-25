@@ -6,26 +6,60 @@ import java.util.List;
 public class DefectFragmentDetailBean implements Serializable {
 
     /**
-     * content : AB塔腿1米处有一长3米，宽0.4米，深1.5米的坑。
-     * start_name : #016
-     * end_name : #016
-     * find_time : 2015-03-03
-     * deal_notes : 回填
-     * status : 0
-     * deal_dep_name : 和华运维班
-     * deal_time : null
-     * auditor : null
-     * audit_status : 1
-     * line_name : 1120新金二线
-     * find_user_name : null
-     * deal_user_name : null
-     * remark : null
-     * find_dep_name : null
-     * category_name : 杆塔基础
-     * grade_name : 一般
-     * fileList : []
-     * user_name : null
-     * dep_name : null
+     *      "task_id": "16286DA283B744988A806B22DAE5C779",
+     *      "category_id": null,
+     *      "category_name": "导线、地线",
+     *      "grade_id": "10C639F13341484997EE8D955322BE02",
+     *      "grade_name": "危急",
+     *      "patrol_id": "7AC64E2FC84342B891F4E642BE9ED2A9",
+     *      "patrol_name": "（2）导线、地线弧垂变化；导线、地线上扬、振动、舞动、脱冰跳跃",
+     *      "content": "fhjjbvccghjj",
+     *      "close_time": null,
+     *      "line_id": "3B14083B22604672B96A907699F28FE2",
+     *      "line_name": "3513华阿一线",
+     *      "tower_id": "48F03C8EE7434CF880B0C36E6D047629",
+     *      "tower_name": "#032",
+     *      "find_time": "2019-07-25",
+     *      "find_user_id": "9C9164DB3CFA4AACB4DE8D54BE198541",
+     *      "find_user_name": "马宝龙",
+     *      "find_dep_id": "024CD2E91A8447A799335E21B0FDADB6",
+     *      "find_dep_name": "榆中运维班",
+     *      "deal_notes": "补装",
+     *      "deal_user_id": null,
+     *      "deal_user_name": null,
+     *      "deal_dep_id": null,
+     *      "deal_dep_name": null,
+     *      "deal_time": null,
+     *      "done_status": "0",
+     *      "in_status": "1",
+     *      "remark": null,
+     *      "defect_file": null,
+     *      "fileList": [
+     *        {
+     *          "id": "F8DF7819B20440EE844935A8CCFE53C6",
+     *          "task_id": "16286DA283B744988A806B22DAE5C779",
+     *          "task_defect_id": "D3A95871BB514DCFA7906A3BD641D623",
+     *          "upload_time": "2019-07-25 15:40:13",
+     *          "filename": "70df2c70-0066-418e-b467-39a1a3868976.jpg",
+     *          "file_path": "\/upload.folder\/"
+     *        },
+     *        {
+     *          "id": "8B4BDE89688442AC94F69E5F2C4B6473",
+     *           "task_id": "16286DA283B744988A806B22DAE5C779",
+     *           "task_defect_id": "D3A95871BB514DCFA7906A3BD641D623",
+     *           "upload_time": "2019-07-25 15:40:13",
+     *           "filename": "0c880da6-ed43-4208-8875-b7467805a376.jpg",
+     *           "file_path": "\/upload.folder\/"
+     *         },
+     *         {
+     *           "id": "3715BFBFEB9448DDBCF0EB5AE84D8E13",
+     *           "task_id": "16286DA283B744988A806B22DAE5C779",
+     *           "task_defect_id": "D3A95871BB514DCFA7906A3BD641D623",
+     *           "upload_time": "2019-07-25 15:40:13",
+     *           "filename": "851169ae-7bef-4bcf-83f8-cc592c0f4b2d.jpg",
+     *           "file_path": "\/upload.folder\/"
+     *         }
+     *       ]
      */
 
     private String id;
@@ -36,17 +70,22 @@ public class DefectFragmentDetailBean implements Serializable {
     private Object task_id;
     private String category_id;
     private String grade_id;
+    private String grade_name;// 缺陷级别   危急，严重，一般
     private Object patrol_id;
-    private String patrol_name;
-    private String content;
-    private String line_id;
+    private String patrol_name;// 缺陷巡视内容   1导线，地线腐蚀
+    private String content;// 缺陷内容   手输入内容
+    private String line_id;// 线路id
+    private String line_name;// 线路名称
+    private String close_time;// 缺陷截止时间
+    private String tower_id;// 杆塔id
+    private String tower_name;// 杆塔名称
     private String start_name;
     private String end_name;
-    private String find_time;
-    private String deal_notes;
+    private String find_time; // 发现时间
+    private String deal_notes;// 处理措施
     private String status;
-    private String deal_dep_name;
-    private String deal_time;
+    private String deal_dep_name;// 消缺班组名称
+    private String deal_time;// 消除时间
     private String auditor;
     private String audit_status;
     private Object week_line_id;
@@ -56,21 +95,45 @@ public class DefectFragmentDetailBean implements Serializable {
     private Object deal_dep_id;
     private String start_id;
     private String end_id;
-    private String line_name;
+    // 缺陷完成状态   不管  （0：待处理，1：月计划分配，2：周计划分配，3：日计划分配，4：进行中，5：已完成，6：未完成）
+    private String done_status;
     private Object find_user_id;
-    private String find_user_name;
+    private String find_user_name;// 发现人姓名
     private Object deal_user_id;
-    private String deal_user_name;
-    private String remark;
-    private Object find_dep_id;
-    private String find_dep_name;
-    private String category_name;
-    private String grade_name;
+    private String deal_user_name;// 处理人姓名
+    private String remark;// 工作备注
+    private Object find_dep_id;// 发现人部门id  登录人部门id
+    private String find_dep_name;// 发现人部门名称
+    private String category_name;// 缺陷类别  导线，地线
     private Object user_name;
     private Object dep_name;
+    // 缺陷入库状态     不管  （0：编制，1：待班长审核，2：待专责审核，3：复核中，4：审核通过，5：审核不通过）
     private String in_status;
-    private String tower_name;
     private List<FileBean> fileList;
+
+    public String getClose_time() {
+        return close_time;
+    }
+
+    public void setClose_time(String close_time) {
+        this.close_time = close_time;
+    }
+
+    public String getTower_id() {
+        return tower_id;
+    }
+
+    public void setTower_id(String tower_id) {
+        this.tower_id = tower_id;
+    }
+
+    public String getDone_status() {
+        return done_status;
+    }
+
+    public void setDone_status(String done_status) {
+        this.done_status = done_status;
+    }
 
     public String getId() {
         return id;

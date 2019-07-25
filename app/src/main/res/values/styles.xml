@@ -27,10 +27,10 @@
     </style>
 
     <!--控制头部据appbar的样式-->
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <!--用于控制toolbar溢出菜单的样式-->
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="plan_tv_styl">
         <item name="android:layout_width">@dimen/dp_80</item>
@@ -49,6 +49,7 @@
         <item name="android:textColor">@color/color_33</item>
         <item name="android:textSize">@dimen/sp_13</item>
     </style>
+
     <style name="overhaul_tv_styl">
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -57,6 +58,7 @@
         <item name="android:textColor">@color/color_33</item>
         <item name="android:textSize">@dimen/sp_14</item>
     </style>
+
     <style name="plan_et_styl">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -73,6 +75,7 @@
         <item name="android:textColor">@color/color_33</item>
         <item name="android:textSize">@dimen/sp_14</item>
     </style>
+
     <style name="custom_dialog" parent="@android:style/Theme.Dialog">
         <!-- 边框 -->
         <item name="android:windowFrame">@null</item>
@@ -90,6 +93,7 @@
         <!-- 遮罩层 -->
         <item name="android:backgroundDimAmount">0.5</item>
     </style>
+
     <style name="task_et_styl">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -113,12 +117,14 @@
         <item name="android:layout_marginLeft">@dimen/dp_10</item>
         <item name="android:layout_marginRight">@dimen/dp_10</item>
     </style>
+
     <style name="plan_ll_styl">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:background">@color/white</item>
         <item name="android:orientation">horizontal</item>
     </style>
+
     <style name="overhaul_ll_styl">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/dp_40</item>
@@ -172,10 +178,12 @@
         <item name="android:textColor">@color/main_blue</item>
         <item name="android:textSize">@dimen/sp_14</item>
     </style>
+
     <style name="AnimTools" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/push_in</item>
         <item name="android:windowExitAnimation">@anim/push_out</item>
     </style>
+
     <style name="Theme_Dialog_Progress" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -185,4 +193,42 @@
         <item name="android:windowBackground">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
+    <style name="line_gray">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/image_overlay_false</item>
+    </style>
+    <!--缺陷详情-->
+    <style name="defect_detail_item_ly">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/dp_item_minHeight</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="defect_detail_item_left">
+        <item name="android:layout_width">@dimen/dp_110</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/dp_item_minHeight</item>
+        <item name="android:gravity">center_vertical|right</item>
+        <item name="android:textColor">@color/color_33</item>
+        <item name="android:textSize">@dimen/sp_15</item>
+        <item name="android:layout_marginLeft">@dimen/dp_10</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="defect_detail_item_right">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/dp_item_minHeight</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:textColor">@color/color_33</item>
+        <item name="android:textSize">@dimen/sp_15</item>
+        <item name="android:paddingRight">@dimen/dp_10</item>
+    </style>
+
+
 </resources>

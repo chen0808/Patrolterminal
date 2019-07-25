@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DefectPicAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -30,6 +31,9 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * 缺陷详情
+ */
 public class DefectIngDetailActivity extends BaseActivity {
 
 
@@ -43,40 +47,43 @@ public class DefectIngDetailActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
+
     @BindView(R.id.defect_line_name)
-    TextView defectLineName;
-    @BindView(R.id.defect_start_name)
-    TextView defectStartName;
-    @BindView(R.id.defect_end_name)
-    TextView defectEndName;
+    TextView defect_line_name;
+    @BindView(R.id.defect_ganta)
+    TextView defect_ganta;
     @BindView(R.id.defect_content)
-    TextView defectContent;
-    @BindView(R.id.defect_category_name)
-    TextView defectCategoryName;
-    @BindView(R.id.defect_grade_name)
-    TextView defectGradeName;
-    @BindView(R.id.defect_find_time)
-    TextView defectFindTime;
-    @BindView(R.id.defect_deal_notes)
-    TextView defectDealNotes;
-    @BindView(R.id.defect_deal_dep_name)
-    TextView defectDealDepName;
-    @BindView(R.id.defect_deal_time)
-    TextView defectDealTime;
-    @BindView(R.id.defect_auditor)
-    TextView defectAuditor;
-    @BindView(R.id.defect_audit_status)
-    TextView defectAuditStatus;
-    @BindView(R.id.defect_status)
-    TextView defectStatus;
-    @BindView(R.id.defect_deal_user_name)
-    TextView defectDealUserName;
-    @BindView(R.id.defect_find_user_name)
-    TextView defectFindUserName;
-    @BindView(R.id.defect_find_dep_name)
-    TextView defectFindDepName;
-    @BindView(R.id.defect_remark)
-    TextView defectRemark;
+    TextView defect_content;
+    @BindView(R.id.defect_qxrkzt)
+    TextView defect_qxrkzt;
+    @BindView(R.id.defect_xsnr)
+    TextView defect_xsnr;
+    @BindView(R.id.defect_qxlb)
+    TextView defect_qxlb;
+    @BindView(R.id.defect_qxjb)
+    TextView defect_qxjb;
+    @BindView(R.id.defect_fxsj)
+    TextView defect_fxsj;
+    @BindView(R.id.defect_clcs)
+    TextView defect_clcs;
+    @BindView(R.id.defect_xqbz)
+    TextView defect_xqbz;
+    @BindView(R.id.defect_xqsj)
+    TextView defect_xqsj;
+    @BindView(R.id.defect_clr)
+    TextView defect_clr;
+    @BindView(R.id.defect_fxr)
+    TextView defect_fxr;
+    @BindView(R.id.defect_fxrbm)
+    TextView defect_fxrbm;
+    //    @BindView(R.id.defect_wcqq)
+//    TextView defect_wcqq;
+//    @BindView(R.id.defect_ggbz)
+//    TextView defect_ggbz;
+    @BindView(R.id.defect_wczt)
+    TextView defect_wczt;
+
+
     @BindView(R.id.deffect_img)
     TextView deffectImg;
     @BindView(R.id.defect_gridView)
@@ -97,6 +104,7 @@ public class DefectIngDetailActivity extends BaseActivity {
 
     private void initview(String id) {
         titleName.setText("缺陷详情");
+        ProgressDialog.show(this, false, "正在加载中...");
         BaseRequest.getInstance().getService().getDefectDetail(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -104,84 +112,91 @@ public class DefectIngDetailActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
                         DefectFragmentDetailBean bean = t.getResults();
-                        defectContent.setText(bean.getContent());
-                        defectStartName.setText(bean.getStart_name());
-                        defectEndName.setText(bean.getEnd_name());
-                        defectFindTime.setText(bean.getFind_time());
-//                        缺陷状态（0：编制，1：月计划分配，2：周计划分配，3：日计划分配，4：进行中，5：已完成，6：未完成）
-                        switch (bean.getStatus()) {
+                        defect_line_name.setText(bean.getLine_name());
+                        defect_ganta.setText(bean.getTower_name());
+                        defect_content.setText(bean.getContent());
+                        defect_xsnr.setText(bean.getPatrol_name());
+                        defect_qxlb.setText(bean.getCategory_name());
+
+                        String grade_name = bean.getGrade_name();
+                        if (grade_name.equals("一般")) {
+                            defect_qxjb.setTextColor(getResources().getColor(R.color.blue));
+                        } else if (grade_name.equals("严重")) {
+                            defect_qxjb.setTextColor(getResources().getColor(R.color.line_point_1));
+                        } else if (grade_name.equals("危急")) {
+                            defect_qxjb.setTextColor(getResources().getColor(R.color.line_point_0));
+                        }
+                        defect_qxjb.setText(bean.getGrade_name());
+
+                        defect_fxsj.setText(bean.getFind_time());
+                        defect_clcs.setText(bean.getDeal_notes());
+                        defect_xqbz.setText(bean.getDeal_dep_name());
+                        defect_xqsj.setText(bean.getDeal_time());
+
+                        switch (bean.getIn_status()) {
                             case "0":
-                                defectStatus.setText("编制");
+                                defect_qxrkzt.setText("编制");
+                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.blue));
                                 break;
                             case "1":
-                                defectStatus.setText("月计划分配");
+                                defect_qxrkzt.setText("待班长审核");
+                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.line_point_1));
                                 break;
                             case "2":
-                                defectStatus.setText("周计划分配");
+                                defect_qxrkzt.setText("待专责审核");
+                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.line_point_0));
                                 break;
                             case "3":
-                                defectStatus.setText("日计划分配");
+                                defect_qxrkzt.setText("复核中");
+                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.line_point_3));
                                 break;
                             case "4":
-                                defectStatus.setText("进行中");
+                                defect_qxrkzt.setText("审核通过");
+                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.green));
                                 break;
                             case "5":
-                                defectStatus.setText("已完成");
+                                defect_qxrkzt.setText("审核不通过");
+                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.green));
+                                break;
+                        }
+
+                        defect_clr.setText(bean.getDeal_user_name());
+                        defect_fxr.setText(bean.getFind_user_name());
+                        defect_fxrbm.setText(bean.getFind_dep_name());
+
+                        switch (bean.getDone_status()) {
+                            case "0":
+                                defect_wczt.setText("待处理");
+                                break;
+                            case "1":
+                                defect_wczt.setText("月计划分配");
+                                break;
+                            case "2":
+                                defect_wczt.setText("周计划分配");
+                                break;
+                            case "3":
+                                defect_wczt.setText("日计划分配");
+                                break;
+                            case "4":
+                                defect_wczt.setText("进行中");
+                                break;
+                            case "5":
+                                defect_wczt.setText("已完成");
                                 break;
                             case "6":
-                                defectStatus.setText("未完成");
+                                defect_wczt.setText("未完成");
                                 break;
                         }
-                        if (bean.getDeal_dep_name() != null) {
-                            defectDealDepName.setText(bean.getDeal_dep_name());
-                        }
-                        if (bean.getDeal_time() != null) {
-                            defectDealTime.setText(bean.getDeal_time());
-                        }
-                        if (bean.getAuditor() != null) {
-                            defectAuditor.setText(bean.getAuditor());
-                        }
-                        defectLineName.setText(bean.getLine_name());
-                        defectFindUserName.setText(bean.getFind_user_name());
-                        if (bean.getRemark() != null) {
-                            defectRemark.setText(bean.getRemark());
-                        }
-                        if (bean.getFind_dep_name() != null) {
-                            defectFindDepName.setText(bean.getFind_dep_name());
-                        }
-                        defectCategoryName.setText(bean.getCategory_name());
-                        defectGradeName.setText(bean.getGrade_name());
+//                        defect_ggbz.setText(bean.getRemark());
 
-                        if (bean.getDeal_user_name() != null) {
-                            defectDealUserName.setText(bean.getDeal_user_name());
-                        }
-
-                        if ("0".equals(bean.getAudit_status())) {
-                            defectAuditStatus.setText("审核中");
-                        } else if ("1".equals(bean.getAudit_status())) {
-                            defectAuditStatus.setText("已审核");
-                        }
-
-                        if ("一般".equals(bean.getGrade_name())) {
-                            defectGradeName.setTextColor(getResources().getColor(R.color.blue));
-                        } else if ("严重".equals(bean.getGrade_name())) {
-                            defectGradeName.setTextColor(getResources().getColor(R.color.line_point_1));
-                        } else if ("危急".equals(bean.getGrade_name())) {
-                            defectGradeName.setTextColor(getResources().getColor(R.color.line_point_0));
-                        }
-                        defectGradeName.setText(bean.getGrade_name());
-                        if (bean.getDeal_notes() != null) {
-                            defectDealNotes.setText(bean.getDeal_notes());
-                        }
-
-
-//        defectDepName.setText("工作班组：" + bean.getDeal_dep_name());
 //                        getPartrolRecord(bean.getId());
                         if (bean.getFileList() != null && bean.getFileList().size() > 0) {
                             deffectImg.setVisibility(View.VISIBLE);
                             mPicList.clear();
                             for (int i = 0; i < bean.getFileList().size(); i++) {
-                                mPicList.add(BaseUrl.BASE_URL + bean.getFileList().get(i).getFile_path() + bean.getFileList().get(i).getFilename());
+                                String path = BaseUrl.BASE_URL + bean.getFileList().get(i).getFile_path() + bean.getFileList().get(i).getFilename();
+                                Logger.d(path);
+                                mPicList.add(path);
                             }
                             mGridViewAddImgAdapter = new DefectPicAdapter(DefectIngDetailActivity.this, mPicList);
                             defectGridView.setAdapter(mGridViewAddImgAdapter);
@@ -190,15 +205,15 @@ public class DefectIngDetailActivity extends BaseActivity {
                                 public void onItemClick(AdapterView<?> parent, View view,
                                                         int position, long id) {
                                     viewPluImg(position);
-
                                 }
                             });
                         }
+                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
+                        ProgressDialog.cancle();
                     }
                 });
     }
