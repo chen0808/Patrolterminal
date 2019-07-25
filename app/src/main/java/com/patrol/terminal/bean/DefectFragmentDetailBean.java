@@ -67,6 +67,7 @@ public class DefectFragmentDetailBean implements Serializable {
     private String grade_name;
     private Object user_name;
     private Object dep_name;
+    private String in_status;
     private List<FileBean> fileList;
 
     public String getId() {
@@ -387,5 +388,13 @@ public class DefectFragmentDetailBean implements Serializable {
 
     public void setFileList(List<FileBean> fileList) {
         this.fileList = fileList;
+    }
+
+    public String getIn_status() {
+        return in_status;
+    }
+
+    public void setIn_status(String in_status) {
+        this.in_status = in_status;
     }
 }

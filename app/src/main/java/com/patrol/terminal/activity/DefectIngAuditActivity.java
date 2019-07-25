@@ -13,6 +13,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.DefectAuditPicAdapter;
 import com.patrol.terminal.adapter.DefectPicAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -93,7 +94,7 @@ public class DefectIngAuditActivity extends BaseActivity {
     TextView turnToRepair;
 
 
-    private DefectPicAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
+    private DefectAuditPicAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
     private String year;
     private String month;
@@ -102,7 +103,7 @@ public class DefectIngAuditActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String id = getIntent().getStringExtra("id");
+        String id = getIntent().getStringExtra("data_id");
         setContentView(R.layout.activity_defect_audit);
         ButterKnife.bind(this);
         initview(id);
@@ -134,7 +135,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                         defectFindTime.setText(bean.getFind_time());
 
                         //缺陷状态（0：编制，1：月计划分配，2：周计划分配，3：日计划分配，4：进行中，5：已完成，6：未完成）
-                        switch (bean.getStatus()) {
+                        switch (bean.getIn_status()) {
                             case "0":
                                 defectStatus.setText("编制");
                                 break;
@@ -219,7 +220,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                             for (int i = 0; i < bean.getFileList().size(); i++) {
                                 mPicList.add(BaseUrl.BASE_URL + bean.getFileList().get(i).getFile_path() + bean.getFileList().get(i).getFilename());
                             }
-                            mGridViewAddImgAdapter = new DefectPicAdapter(DefectIngAuditActivity.this, mPicList);
+                            mGridViewAddImgAdapter = new DefectAuditPicAdapter(DefectIngAuditActivity.this, mPicList);
                             defectGridView.setAdapter(mGridViewAddImgAdapter);
                             defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
