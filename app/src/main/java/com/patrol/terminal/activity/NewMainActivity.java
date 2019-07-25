@@ -179,11 +179,8 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //        } else {                                                    //有待办的角色
         mainExameRb.setVisibility(View.VISIBLE);
 
-        if (jobType.contains("yx")) {   //运行待办
             mFragments.add(new YXTodosManageFragment());
-        } else {   //其他角色待办
-            mFragments.add(new TodosManageFragment());
-        }
+
 //        }
 
         mFragments.add(new AnylyzeFrgment());

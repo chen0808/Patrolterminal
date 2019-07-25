@@ -8,6 +8,7 @@ import com.patrol.terminal.overhaul.OverhaulFileBean;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -325,6 +326,9 @@ public interface ApiServise {
     //组任务列表
     @GET("/task/group/list/listGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("work_user_id") String work_user_id, @Query("order") String order, @Query("safe") String safe);
+    //组任务列表
+    @GET("/task/group/list/listGET")
+    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id,  @Query("order") String order, @Query("safe") String safe);
 
     //组任务详情
     @GET("/task/group/list/byIdGET")
@@ -336,6 +340,7 @@ public interface ApiServise {
 
     @GET("/task/group/user/groupGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id);
+
 
     @GET("/task/repair/user/taskGET")
     Observable<BaseResult<List<YXtoJXbean>>> getRepairList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id, @Query("sign") String sign);

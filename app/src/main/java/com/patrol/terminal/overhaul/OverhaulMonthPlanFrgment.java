@@ -192,6 +192,8 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                                     OverPlanReqBean bean = new OverPlanReqBean();
                                     bean.setId(overhaulYearBean.getId());
                                     bean.setMonth_audit_status("1");
+                                    bean.setFrom_user_id(SPUtil.getUserId(getContext()));
+                                    bean.setLine_name(overhaulYearBean.getLine_name());
                                     list1.add(bean);
                                     planSubmit.setVisibility(View.VISIBLE);
                                 }
@@ -205,6 +207,8 @@ public class OverhaulMonthPlanFrgment extends BaseFragment {
                                     OverPlanReqBean bean = new OverPlanReqBean();
                                     bean.setId(overhaulYearBean.getId());
                                     bean.setMonth_audit_status("2");
+                                    bean.setFrom_user_id(SPUtil.getUserId(getContext()));
+                                    bean.setLine_name(overhaulYearBean.getLine_name());
                                     bean.setWeek_audit_status("1");
                                     list3.add(bean);
                                     planSubmit.setVisibility(View.VISIBLE);

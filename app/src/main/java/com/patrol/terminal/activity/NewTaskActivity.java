@@ -20,6 +20,7 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.fragment.CarAllotFrgment;
 import com.patrol.terminal.fragment.DayDisGroupFrgment;
 import com.patrol.terminal.fragment.DayPlanAllotFrgment;
+import com.patrol.terminal.fragment.DepTaskFrgment;
 import com.patrol.terminal.fragment.GroupTaskFrgment;
 import com.patrol.terminal.fragment.PersonalTaskFrgment;
 import com.patrol.terminal.utils.Constant;
@@ -121,8 +122,12 @@ public class NewTaskActivity extends BaseActivity {
         initdate();
         String time = DateUatil.getTime(new Date(System.currentTimeMillis()));
         SPUtil.putString(this, "date", "time", time);
+        if (mJobType.contains("yx_")) {
+            fragmentList.add(new DepTaskFrgment());
+        }else {
+            fragmentList.add(new GroupTaskFrgment());
+        }
 
-        fragmentList.add(new GroupTaskFrgment());
         fragmentList.add(new PersonalTaskFrgment());
         taskPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(taskPagerAdapter);
@@ -167,9 +172,9 @@ public class NewTaskActivity extends BaseActivity {
             dayPlanNum.setVisibility(View.VISIBLE);
         } else {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 60), UIUtil.dip2px(this, 30));
-            layoutParams.setMargins(UIUtil.dip2px(this, 112), 0, UIUtil.dip2px(this, 30), 0);
+            layoutParams.setMargins(UIUtil.dip2px(this, UIUtil.dip2px(this, 42)), 0, UIUtil.dip2px(this, 30), 0);
             LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 60), UIUtil.dip2px(this, 30));
-            layoutParams1.setMargins(UIUtil.dip2px(this, 43), 0, UIUtil.dip2px(this, 60), 0);
+            layoutParams1.setMargins(UIUtil.dip2px(this, UIUtil.dip2px(this, 8)), 0, UIUtil.dip2px(this, 60), 0);
             groupTaskNum.setLayoutParams(layoutParams);
             personalTaskNum.setLayoutParams(layoutParams1);
             groupTaskNum.setGravity(Gravity.BOTTOM);
@@ -178,8 +183,12 @@ public class NewTaskActivity extends BaseActivity {
             carNum.setVisibility(View.GONE);
             dayPlanNum.setVisibility(View.GONE);
         }
+        if (job.contains("yx_")) {
+            mDataList.add("班组");
+        }else {
+            mDataList.add("小组");
+        }
 
-        mDataList.add("小组");
         mDataList.add("个人");
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {
@@ -223,7 +232,7 @@ public class NewTaskActivity extends BaseActivity {
                 if (job.contains(Constant.RUNNING_SQUAD_LEADER)) {
                     return UIUtil.dip2px(NewTaskActivity.this, 10);
                 } else {
-                    return UIUtil.dip2px(NewTaskActivity.this, 85);
+                    return UIUtil.dip2px(NewTaskActivity.this, 64);
                 }
 
             }

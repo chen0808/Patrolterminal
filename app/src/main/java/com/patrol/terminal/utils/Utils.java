@@ -25,6 +25,7 @@ import com.patrol.terminal.activity.PersonalTaskDetailActivity;
 import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
 import com.patrol.terminal.bean.DefactTvModel;
 import com.patrol.terminal.bean.TodoBean;
+import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -174,6 +175,8 @@ public class Utils {
             case "12":
                 break;
             case "13":
+                intent.setClass(context, OverhaulPlanActivity.class);
+                intent.putExtra("index", 1);
                 break;
             case "22":
                 intent.setClass(context, GroupTaskDetailActivity.class);

@@ -96,11 +96,11 @@ public class OverhaulPlanActivity extends BaseActivity {
 
         String time = DateUatil.getTime(new Date(System.currentTimeMillis()));
         SPUtil.putString(this, "date", "overhaulTime", time);
-
+        int index = getIntent().getIntExtra("index", 0);
         taskPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(taskPagerAdapter);
         initMagicIndicator();
-
+        viewPager.setCurrentItem(index);
         viewPager.setNoScroll(true);
         viewPager.setOffscreenPageLimit(5);
 
