@@ -7,6 +7,7 @@ public class InAuditPostBean {
     private String from_user_name;
     private String line_name;
     private String tower_name;
+    private String close_time;
 
     public String getId() {
         return id;
@@ -54,5 +55,13 @@ public class InAuditPostBean {
 
     public void setTower_name(String tower_name) {
         this.tower_name = tower_name;
+    }
+
+    public String getClose_time() {
+        return close_time;
+    }
+
+    public void setClose_time(String close_time) {
+        this.close_time = close_time;
     }
 }

@@ -2,7 +2,6 @@ package com.patrol.terminal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -26,7 +25,7 @@ import com.patrol.terminal.bean.InAuditPostBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.CancelOrOkDialog;
+import com.patrol.terminal.widget.CancelOrOkDialogNew;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.text.SimpleDateFormat;
@@ -115,11 +114,11 @@ public class DefectIngAuditActivity extends BaseActivity {
 
     private void initview(String id) {
         mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (mJobType.contains("_zz")) {
+        if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
             stockIn.setText("入库");
             review.setVisibility(View.VISIBLE);
             turnToRepair.setVisibility(View.VISIBLE);
-        } else if (mJobType.contains("_bz")) {
+        } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
             stockIn.setText("通过");
             review.setVisibility(View.GONE);
             turnToRepair.setVisibility(View.GONE);
@@ -132,6 +131,7 @@ public class DefectIngAuditActivity extends BaseActivity {
 
         String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         defectDeadline.setText(time);
+        initdate(time);
 
         titleName.setText("缺陷审核");
         BaseRequest.getInstance().getService().getDefectDetail(id)
@@ -141,10 +141,6 @@ public class DefectIngAuditActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
                         bean = t.getResults();
-                        defectContent.setText(bean.getContent());
-                        towerName.setText(bean.getTower_name());
-                        patrolName.setText(bean.getPatrol_name());
-                        defectFindTime.setText(bean.getFind_time());
 
                         //缺陷入库状态（0：编制，1：待班长审核，2：待专责审核，3：审核通过，4：审核不通过）
                         switch (bean.getIn_status()) {
@@ -169,6 +165,19 @@ public class DefectIngAuditActivity extends BaseActivity {
                                 defectStatus.setTextColor(getResources().getColor(R.color.green));
                                 break;
                         }
+
+                        if(bean.getContent() != null){
+                            defectContent.setText(bean.getContent());
+                        }
+                        if(bean.getTower_name() != null){
+                            towerName.setText(bean.getTower_name());
+                        }
+                        if(bean.getPatrol_name() != null){
+                            patrolName.setText(bean.getPatrol_name());
+                        }
+                        if(bean.getFind_time() != null){
+                            defectFindTime.setText(bean.getFind_time());
+                        }
                         if (bean.getDeal_user_name() != null) {
                             dealUserName.setText(bean.getDeal_user_name());
                         }
@@ -178,13 +187,21 @@ public class DefectIngAuditActivity extends BaseActivity {
                         if (bean.getDeal_time() != null) {
                             dealTime.setText(bean.getDeal_time());
                         }
-                        defectLineName.setText(bean.getLine_name());
-                        defectFindUserName.setText(bean.getFind_user_name());
+                        if(bean.getLine_name() != null){
+                            defectLineName.setText(bean.getLine_name());
+                        }
+                        if(bean.getFind_user_name() != null){
+                            defectFindUserName.setText(bean.getFind_user_name());
+                        }
                         if (bean.getFind_dep_name() != null) {
                             defectFindDepName.setText(bean.getFind_dep_name());
                         }
-                        defectCategoryName.setText(bean.getCategory_name());
-                        defectGradeName.setText(bean.getGrade_name());
+                        if(bean.getCategory_name() != null){
+                            defectCategoryName.setText(bean.getCategory_name());
+                        }
+                        if(bean.getGrade_name() != null){
+                            defectGradeName.setText(bean.getGrade_name());
+                        }
 
                         if ("一般".equals(bean.getGrade_name())) {
                             defectGradeName.setTextColor(getResources().getColor(R.color.blue));
@@ -195,6 +212,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                             c.setTime(date);//设置日历时间
                             c.add(Calendar.MONTH,1);//在日历的月份上增加6个月
                             defectDeadline.setText(sdf.format(c.getTime()));
+                            initdate(sdf.format(c.getTime()));
                         } else if ("严重".equals(bean.getGrade_name())) {
                             defectGradeName.setTextColor(getResources().getColor(R.color.line_point_1));
 
@@ -204,6 +222,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                             c.setTime(date);
                             c.add(Calendar.DATE,7);
                             defectDeadline.setText(sdf.format(c.getTime()));
+                            initdate(sdf.format(c.getTime()));
                         } else if ("危急".equals(bean.getGrade_name())) {
                             defectGradeName.setTextColor(getResources().getColor(R.color.line_point_0));
 
@@ -213,8 +232,9 @@ public class DefectIngAuditActivity extends BaseActivity {
                             c.setTime(date);
                             c.add(Calendar.DATE,1);
                             defectDeadline.setText(sdf.format(c.getTime()));
+                            initdate(sdf.format(c.getTime()));
                         }
-                        defectGradeName.setText(bean.getGrade_name());
+
                         if (bean.getDeal_notes() != null) {
                             defectDealNotes.setText(bean.getDeal_notes());
                         }
@@ -232,7 +252,6 @@ public class DefectIngAuditActivity extends BaseActivity {
                                 public void onItemClick(AdapterView<?> parent, View view,
                                                         int position, long id) {
                                     viewPluImg(position);
-
                                 }
                             });
                         }
@@ -258,7 +277,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                 submit("4");
                 break;
             case R.id.stock_in:
-                if (mJobType.contains("_zz")) {
+                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
                     submit("3");
                 } else {
                     submit("2");
@@ -282,6 +301,9 @@ public class DefectIngAuditActivity extends BaseActivity {
         inAuditPostBean.setFrom_user_name(SPUtil.getUserName(this));
         inAuditPostBean.setLine_name(bean.getLine_name());
         inAuditPostBean.setTower_name(bean.getTower_name());
+        if(in_status.equals("3")){
+            inAuditPostBean.setClose_time(year + "-" + month + "-" + day);
+        }
         BaseRequest.getInstance().getService()
                 .inAuditPOST(inAuditPostBean)
                 .subscribeOn(Schedulers.io())
@@ -291,8 +313,8 @@ public class DefectIngAuditActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
-                        Toast.makeText(DefectIngAuditActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         if(t.getCode() == 1){
+                            Toast.makeText(DefectIngAuditActivity.this,"处理完成",Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }
@@ -313,6 +335,15 @@ public class DefectIngAuditActivity extends BaseActivity {
         intent.putExtra("isDelPic", "0");
         intent.putExtra(Constant.POSITION, position);
         startActivityForResult(intent, Constant.REQUEST_CODE_MAIN);
+    }
+
+    //初始化日期
+    public void initdate(String time) {
+        String[] times = time.split("年");
+        String[] months = times[1].split("月");
+        year = times[0];
+        month = months[0];
+        day = months[1].split("日")[0];
     }
 
     public void showDay() {
@@ -343,11 +374,7 @@ public class DefectIngAuditActivity extends BaseActivity {
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 String time = DateUatil.getDay(date);
                 defectDeadline.setText(time);
-                String[] times = time.split("年");
-                String[] months = times[1].split("月");
-                year = times[0];
-                month = months[0];
-                day = months[1].split("日")[0];
+                initdate(time);
             }
         })
                 .setDate(selectedDate)
@@ -366,51 +393,45 @@ public class DefectIngAuditActivity extends BaseActivity {
     //提交缺陷审核
     public void submit(String in_status) {
         if(in_status.equals("4")){
-            CancelOrOkDialog dialog = new CancelOrOkDialog(this, "驳回", "取消", "确定") {
+            CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(DefectIngAuditActivity.this, "驳回", "取消", "确定") {
                 @Override
                 public void ok() {
                     super.ok();
-                    dismiss();
                     inAuditPOST("4");
                 }
 
                 @Override
                 public void cancle() {
                     super.cancle();
-                    dismiss();
                 }
             };
             dialog.show();
         } else {
-            if (mJobType.contains("_zz")) {
-                CancelOrOkDialog dialog = new CancelOrOkDialog(this, "入库", "取消", "确定") {
+            if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+                CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(this, "入库", "取消", "确定") {
                     @Override
                     public void ok() {
                         super.ok();
-                        dismiss();
                         inAuditPOST("3");
                     }
 
                     @Override
                     public void cancle() {
                         super.cancle();
-                        dismiss();
                     }
                 };
                 dialog.show();
             } else {
-                CancelOrOkDialog dialog = new CancelOrOkDialog(this, "通过", "取消", "确定") {
+                CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(this, "通过", "取消", "确定") {
                     @Override
                     public void ok() {
                         super.ok();
-                        dismiss();
                         inAuditPOST("2");
                     }
 
                     @Override
                     public void cancle() {
                         super.cancle();
-                        dismiss();
                     }
                 };
                 dialog.show();
