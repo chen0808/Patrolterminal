@@ -64,7 +64,8 @@ public class DefectFrgment extends BaseFragment {
     }
 
     public void getdata() {
-        BaseRequest.getInstance().getService().getDefectFragment("TASK_DEFECT a,SYS_DICT b", "a.id,a.content,a.line_name,a.start_name,a.end_name,a.find_time,b.name category_name", "a.category_id=b.id", line_id).subscribeOn(Schedulers.io())
+        BaseRequest.getInstance().getService()
+                .getDefectFragment(line_id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean2>>(getActivity()) {
                     @Override

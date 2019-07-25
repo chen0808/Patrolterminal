@@ -87,6 +87,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_20"
             android:scaleType="center"
+            android:visibility="gone"
             android:src="@mipmap/icon_go" />
     </RelativeLayout>
 </RelativeLayout>

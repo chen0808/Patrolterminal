@@ -572,8 +572,11 @@ public interface ApiServise {
     Observable<BaseResult<ControlToolBeanList>> postControlTool(@Body List<ControlToolBean> beans);
 
     //巡视记录缺陷列表
-    @GET("common/listGET")
-    Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("table") String table, @Query("column") String column, @Query("where") String where, @Query("line_id") String line_id);
+//    @GET("common/listGET")
+//    Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("table") String table, @Query("column") String column, @Query("where") String where, @Query("line_id") String line_id);
+    //巡视记录缺陷列表
+    @GET("task/defect/listGET")
+    Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("line_id") String line_id);
 
     //巡视记录缺陷详情
     @GET("task/defect/byIdGET")

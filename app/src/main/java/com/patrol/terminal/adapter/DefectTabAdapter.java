@@ -127,23 +127,39 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         RadioButton checkThreeRb = (RadioButton) rgContentType.getChildAt(2);
 
         if (item.getGrade_id() != null) {
-            switch (item.getGrade_id()) {
-                case "10C639F13341484997EE8D955322BE02"://危急
-                    checkOneRb.setChecked(true);
-                    checkTwoRb.setChecked(false);
-                    checkThreeRb.setChecked(false);
-                    break;
-                case "2CEB42DA67764AC0BF911B02FB579775"://严重
-                    checkOneRb.setChecked(false);
-                    checkTwoRb.setChecked(true);
-                    checkThreeRb.setChecked(false);
-                    break;
-                case "37E5647975394B1E952DC5D2796C7D73"://一般
-                    checkOneRb.setChecked(false);
-                    checkTwoRb.setChecked(false);
-                    checkThreeRb.setChecked(true);
-                    break;
+
+            String grade_id = item.getGrade_id();
+            String grade_name = item.getGrade_name();
+            if (grade_id.equals("10C639F13341484997EE8D955322BE02") || grade_name.equals("危急")) {//危急
+                checkOneRb.setChecked(true);
+                checkTwoRb.setChecked(false);
+                checkThreeRb.setChecked(false);
+            } else if (grade_id.equals("2CEB42DA67764AC0BF911B02FB579775") || grade_name.equals("严重")) {//严重
+                checkOneRb.setChecked(false);
+                checkTwoRb.setChecked(true);
+                checkThreeRb.setChecked(false);
+            } else if (grade_id.equals("37E5647975394B1E952DC5D2796C7D73") || grade_name.equals("一般")) {//一般
+                checkOneRb.setChecked(false);
+                checkTwoRb.setChecked(false);
+                checkThreeRb.setChecked(true);
             }
+//            switch (item.getGrade_id()) {
+//                case "10C639F13341484997EE8D955322BE02"://危急
+//                    checkOneRb.setChecked(true);
+//                    checkTwoRb.setChecked(false);
+//                    checkThreeRb.setChecked(false);
+//                    break;
+//                case "2CEB42DA67764AC0BF911B02FB579775"://严重
+//                    checkOneRb.setChecked(false);
+//                    checkTwoRb.setChecked(true);
+//                    checkThreeRb.setChecked(false);
+//                    break;
+//                case "37E5647975394B1E952DC5D2796C7D73"://一般
+//                    checkOneRb.setChecked(false);
+//                    checkTwoRb.setChecked(false);
+//                    checkThreeRb.setChecked(true);
+//                    break;
+//            }
         }
 
         if (!item.getStatus().equals("")) {

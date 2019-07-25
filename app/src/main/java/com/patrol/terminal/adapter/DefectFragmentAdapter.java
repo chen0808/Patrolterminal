@@ -44,7 +44,7 @@ public class DefectFragmentAdapter extends BaseQuickAdapter<DefectFragmentBean2,
         } else if ("1".equals(item.getAudit_status())) {
             viewHolder.setText(R.id.tv_detail, "审核情况：已审核");
         }*/
-        viewHolder.setText(R.id.tv_name, "线路名称：" + item.getLine_name() + " " + item.getStart_name() + "-" + item.getEnd_name() + "\n" + "缺陷内容：" + item.getContent())
+        viewHolder.setText(R.id.tv_name, "线路名称：" + item.getLine_name() + " " + item.getTower_name() + "\n" + "缺陷内容：" + item.getContent())
                 .setText(R.id.tv_time, "缺陷类型：" + item.getCategory_name())
                 .setText(R.id.tv_detail, "发现时间：" + item.getFind_time())
                 .setText(R.id.iv_icon, "缺陷");
