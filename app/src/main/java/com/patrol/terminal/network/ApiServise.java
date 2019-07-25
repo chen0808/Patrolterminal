@@ -1100,4 +1100,8 @@ public interface ApiServise {
     //添加小组任务
     @POST("/task/group/user/savePOST")
     Observable<BaseResult<List<DangerBean>>> savaGroupTeam(@Body GroupTeamSaveBean bean);
+
+    //缺陷审核
+    @POST("/task/defect/inAuditPOST")
+    Observable<BaseResult> inAuditPOST(@Body InAuditPostBean bean);
 }
