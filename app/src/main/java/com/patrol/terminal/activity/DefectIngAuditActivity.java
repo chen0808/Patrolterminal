@@ -2,6 +2,7 @@ package com.patrol.terminal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -22,7 +23,6 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.DefectFragmentDetailBean;
 import com.patrol.terminal.bean.InAuditPostBean;
-import com.patrol.terminal.bean.Tower;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
@@ -310,6 +310,7 @@ public class DefectIngAuditActivity extends BaseActivity {
     private void viewPluImg(int position) {
         Intent intent = new Intent(this, PlusImageActivity.class);
         intent.putStringArrayListExtra(Constant.IMG_LIST, mPicList);
+        intent.putExtra("isDelPic", "0");
         intent.putExtra(Constant.POSITION, position);
         startActivityForResult(intent, Constant.REQUEST_CODE_MAIN);
     }
@@ -369,8 +370,8 @@ public class DefectIngAuditActivity extends BaseActivity {
                 @Override
                 public void ok() {
                     super.ok();
-                    inAuditPOST("4");
                     dismiss();
+                    inAuditPOST("4");
                 }
 
                 @Override
@@ -386,8 +387,8 @@ public class DefectIngAuditActivity extends BaseActivity {
                     @Override
                     public void ok() {
                         super.ok();
-                        inAuditPOST("3");
                         dismiss();
+                        inAuditPOST("3");
                     }
 
                     @Override
@@ -402,8 +403,8 @@ public class DefectIngAuditActivity extends BaseActivity {
                     @Override
                     public void ok() {
                         super.ok();
-                        inAuditPOST("2");
                         dismiss();
+                        inAuditPOST("2");
                     }
 
                     @Override
