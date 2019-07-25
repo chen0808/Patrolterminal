@@ -37,7 +37,6 @@
                     android:text="" />
             </LinearLayout>
 
-
             <View style="@style/line_styl" />
 
             <LinearLayout style="@style/plan_ll_styl">
@@ -48,24 +47,7 @@
                     android:text="负责班组" />
 
                 <TextView
-                    android:id="@+id/month_plan_type"
-                    style="@style/plan_et_styl"
-                    android:layout_marginRight="@dimen/dp_20"
-                    android:text="暂无" />
-            </LinearLayout>
-
-            <View style="@style/line_styl" />
-
-            <LinearLayout style="@style/plan_ll_styl">
-
-                <TextView
-                    android:id="@+id/month_plan_month"
-                    style="@style/plan_tv_styl"
-                    android:layout_width="@dimen/dp_100"
-                    android:text="工作类型" />
-
-                <TextView
-                    android:id="@+id/month_plan_line"
+                    android:id="@+id/defect_find_dep_name"
                     style="@style/plan_et_styl"
                     android:layout_marginRight="@dimen/dp_20"
                     android:text="暂无" />
@@ -74,7 +56,6 @@
             <View style="@style/line_styl" />
 
             <LinearLayout
-                android:id="@+id/ll_start_time"
                 style="@style/plan_ll_styl">
 
                 <TextView
@@ -83,16 +64,15 @@
                     android:text="工作路线" />
 
                 <TextView
-                    android:id="@+id/month_plan_start"
+                    android:id="@+id/defect_line_name"
                     style="@style/plan_et_styl"
                     android:layout_marginRight="@dimen/dp_20"
                     android:text="暂无" />
             </LinearLayout>
 
-            <View  android:id="@+id/line4" style="@style/line_styl" />
+            <View style="@style/line_styl" />
 
             <LinearLayout
-                android:id="@+id/ll_end_time"
                 style="@style/plan_ll_styl">
 
                 <TextView
@@ -101,13 +81,13 @@
                     android:text="工作杆塔" />
 
                 <TextView
-                    android:id="@+id/month_plan_end"
+                    android:id="@+id/tower_name"
                     style="@style/plan_et_styl"
                     android:layout_marginRight="@dimen/dp_20"
                     android:text="暂无" />
             </LinearLayout>
 
-            <View android:id="@+id/line5" style="@style/line_styl" />
+            <View style="@style/line_styl" />
 
         </LinearLayout>
     </LinearLayout>
@@ -119,7 +99,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/month_yes"
+            android:id="@+id/give_mine"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_40"
             android:layout_margin="@dimen/dp_40"
@@ -131,7 +111,7 @@
             android:textSize="@dimen/sp_16" />
 
         <TextView
-            android:id="@+id/create_group_task"
+            android:id="@+id/give_group"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_40"
             android:layout_margin="@dimen/dp_40"

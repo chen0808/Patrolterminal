@@ -8,7 +8,6 @@ import com.patrol.terminal.overhaul.OverhaulFileBean;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -340,7 +339,6 @@ public interface ApiServise {
 
     @GET("/task/group/user/groupGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id);
-
 
     @GET("/task/repair/user/taskGET")
     Observable<BaseResult<List<YXtoJXbean>>> getRepairList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("user_id") String user_id, @Query("sign") String sign);
@@ -1109,4 +1107,12 @@ public interface ApiServise {
     //缺陷审核
     @POST("/task/defect/inAuditPOST")
     Observable<BaseResult> inAuditPOST(@Body InAuditPostBean bean);
+
+    //缺陷再复核-转班组
+    @POST("/plan/day/defectCheckPOST")
+    Observable<BaseResult> defectCheckPOSTGroup(@Body InAuditPostBean bean);
+
+    //缺陷再复核-转班组
+    @POST("/task/personal/defectCheckPOST")
+    Observable<BaseResult> defectCheckPOSTMine(@Body InAuditPostBean bean);
 }

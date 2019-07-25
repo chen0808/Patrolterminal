@@ -5,9 +5,16 @@ public class InAuditPostBean {
     private String in_status;
     private String from_user_id;
     private String from_user_name;
+    private String line_id;
     private String line_name;
+    private String tower_id;
     private String tower_name;
     private String close_time;
+    private String find_dep_id;
+    private String find_dep_name;
+    private String year;
+    private String month;
+    private String day;
 
     public String getId() {
         return id;
@@ -63,5 +70,61 @@ public class InAuditPostBean {
 
     public void setClose_time(String close_time) {
         this.close_time = close_time;
+    }
+
+    public String getLine_id() {
+        return line_id;
+    }
+
+    public void setLine_id(String line_id) {
+        this.line_id = line_id;
+    }
+
+    public String getTower_id() {
+        return tower_id;
+    }
+
+    public void setTower_id(String tower_id) {
+        this.tower_id = tower_id;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getFind_dep_id() {
+        return find_dep_id;
+    }
+
+    public void setFind_dep_id(String find_dep_id) {
+        this.find_dep_id = find_dep_id;
+    }
+
+    public String getFind_dep_name() {
+        return find_dep_name;
+    }
+
+    public void setFind_dep_name(String find_dep_name) {
+        this.find_dep_name = find_dep_name;
     }
 }

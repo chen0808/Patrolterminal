@@ -142,7 +142,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
                         bean = t.getResults();
 
-                        //缺陷入库状态（0：编制，1：待班长审核，2：待专责审核，3：审核通过，4：审核不通过）
+                        //缺陷入库状态（0：编制，1：待班长审核，2：待专责审核，3：审核通过，4：审核不通过, 5: 待复核）
                         switch (bean.getIn_status()) {
                             case "0":
                                 defectStatus.setText("编制");
@@ -162,7 +162,11 @@ public class DefectIngAuditActivity extends BaseActivity {
                                 break;
                             case "4":
                                 defectStatus.setText("审核不通过");
-                                defectStatus.setTextColor(getResources().getColor(R.color.green));
+                                defectStatus.setTextColor(getResources().getColor(R.color.write_red));
+                                break;
+                            case "5":
+                                defectStatus.setText("待复核");
+                                defectStatus.setTextColor(getResources().getColor(R.color.orange));
                                 break;
                         }
 
@@ -285,6 +289,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                 break;
             case R.id.review:
                 Intent intent2 = new Intent(this, ReviewTaskActivity.class);
+                intent2.putExtra("DefectFragmentDetailBean", bean);
                 startActivityForResult(intent2, 10);
                 break;
             case R.id.turn_to_repair:
