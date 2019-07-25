@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
@@ -16,13 +18,18 @@ import java.util.ArrayList;
 
 import androidx.viewpager.widget.ViewPager;
 
+import butterknife.BindView;
+
 public class PlusImageActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+    @BindView(R.id.delete_iv)
+    ImageView deleteIv;
 
     private ViewPager viewPager; //展示图片的ViewPager
     private TextView positionTv; //图片的位置，第几张图片
     private ArrayList<String> imgList; //图片的数据源
     private int mPosition; //第几张图片
     private ViewPagerAdapter mAdapter;
+    private String isDelPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +38,21 @@ public class PlusImageActivity extends BaseActivity implements ViewPager.OnPageC
 
         imgList = getIntent().getStringArrayListExtra(Constant.IMG_LIST);
         mPosition = getIntent().getIntExtra(Constant.POSITION, 0);
+        isDelPic = getIntent().getStringExtra("isDelPic");
         initView();
     }
 
     private void initView() {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         positionTv = (TextView) findViewById(R.id.position_tv);
+        deleteIv = (ImageView) findViewById(R.id.delete_iv);
+
+        if(isDelPic != null && isDelPic.equals("0")){
+            deleteIv.setVisibility(View.GONE);
+        }
+
         findViewById(R.id.back_iv).setOnClickListener(this);
-        findViewById(R.id.delete_iv).setOnClickListener(this);
+        deleteIv.setOnClickListener(this);
         viewPager.addOnPageChangeListener(this);
 
         mAdapter = new ViewPagerAdapter(this, imgList);

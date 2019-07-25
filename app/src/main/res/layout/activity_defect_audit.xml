@@ -586,9 +586,8 @@
                     android:id="@+id/defect_gridView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:layout_marginBottom="20dp"
-                    android:columnWidth="120dp"
+                    android:gravity="center"
+                    android:columnWidth="60dp"
                     android:horizontalSpacing="10dp"
                     android:numColumns="auto_fit"
                     android:verticalSpacing="10dp" />
