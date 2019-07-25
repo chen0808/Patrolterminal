@@ -37,6 +37,7 @@ public class DefectFragmentDetailBean implements Serializable {
     private String category_id;
     private String grade_id;
     private Object patrol_id;
+    private String patrol_name;
     private String content;
     private String line_id;
     private String start_name;
@@ -68,6 +69,7 @@ public class DefectFragmentDetailBean implements Serializable {
     private Object user_name;
     private Object dep_name;
     private String in_status;
+    private String tower_name;
     private List<FileBean> fileList;
 
     public String getId() {
@@ -396,5 +398,21 @@ public class DefectFragmentDetailBean implements Serializable {
 
     public void setIn_status(String in_status) {
         this.in_status = in_status;
+    }
+
+    public String getTower_name() {
+        return tower_name;
+    }
+
+    public void setTower_name(String tower_name) {
+        this.tower_name = tower_name;
+    }
+
+    public String getPatrol_name() {
+        return patrol_name;
+    }
+
+    public void setPatrol_name(String patrol_name) {
+        this.patrol_name = patrol_name;
     }
 }
