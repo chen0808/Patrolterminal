@@ -269,28 +269,32 @@ public class PatrolRecordActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<CLCSTypeBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<CLCSTypeBean>> t) throws Exception {
-                        if (t.isSuccess()) {
-                            if (t.getResults().size() > 0) {
-                                SQLite.delete(CLCSTypeBean.class).execute();
-                                for (int i = 0; i < t.getResults().size(); i++) {
-                                    CLCSTypeBean defectTypeBean = new CLCSTypeBean();
-                                    defectTypeBean.setId(t.getResults().get(i).getId());
+                        Transaction transaction = FlowManager.getDatabase(AppDataBase.class).
+                                beginTransactionAsync(new ITransaction() {
+                                    @Override
+                                    public void execute(DatabaseWrapper databaseWrapper) {
+                                        if (t.isSuccess() && t.getResults().size() > 0) {
+                                            SQLite.delete(CLCSTypeBean.class).execute();
+                                            for (int i = 0; i < t.getResults().size(); i++) {
+                                                CLCSTypeBean defectTypeBean = new CLCSTypeBean();
+                                                defectTypeBean.setId(t.getResults().get(i).getId());
 //                                    defectTypeBean.setCode(t.getResults().get(i).getCode());
-                                    defectTypeBean.setName(t.getResults().get(i).getName());
-                                    defectTypeBean.setP_id(t.getResults().get(i).getP_id());
+                                                defectTypeBean.setName(t.getResults().get(i).getName());
+                                                defectTypeBean.setP_id(t.getResults().get(i).getP_id());
 //                                    defectTypeBean.setSort(t.getResults().get(i).getSort());
 //                                    defectTypeBean.setDetail(t.getResults().get(i).getDetail());
 //                                    defectTypeBean.setP_code(t.getResults().get(i).getP_code());
-                                    defectTypeBean.setP_name(t.getResults().get(i).getP_name());
-                                    defectTypeBean.setFull_name(t.getResults().get(i).getFull_name());
+                                                defectTypeBean.setP_name(t.getResults().get(i).getP_name());
+                                                defectTypeBean.setFull_name(t.getResults().get(i).getFull_name());
 //                                    defectTypeBean.setLeaf(t.getResults().get(i).getLeaf());
 //                                    defectTypeBean.setLeaf_total(t.getResults().get(i).getLeaf_total());
-                                    defectTypeBean.save();
-                                }
-                            }
-                        }
+                                                defectTypeBean.save();
+                                            }
+                                        }
+                                    }
+                                }).build();
+                        transaction.executeSync();
                     }
-
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
 

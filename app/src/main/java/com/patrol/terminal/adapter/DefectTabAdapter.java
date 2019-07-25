@@ -398,6 +398,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             checkTwoRb.setEnabled(false);
             checkThreeRb.setEnabled(false);
             gridView.setEnabled(false);
+            defectSpinner.setEnabled(false);
             if (item.getPics() == null) {
                 initGridViewFromOnline(gridView, item.getOnline_pics());
             } else {

@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -196,11 +197,21 @@ public class PatrolContentFrgment extends BaseFragment {
                                 localBean.setGrade_id("");
                                 localBean.setGrade_name("");
                             }
+                            if (TextUtils.isEmpty(String.valueOf(assetsList.get(i).getTaskDefect().getDeal_notes()))) {
+//                                localBean.setClcsId("");
+                                localBean.setClcsName(String.valueOf(assetsList.get(i).getTaskDefect().getDeal_notes()));
+                            } else {
+                                localBean.setClcsId("");
+                                localBean.setClcsName("");
+                            }
 
                         } else {
                             localBean.setContent("");
                             localBean.setGrade_id("");
                             localBean.setGrade_name("");
+                            localBean.setClcsId("");
+                            localBean.setClcsName("");
+
                         }
 
                         String onlinePics = getOnlinePics(assetsList, i);
@@ -213,15 +224,15 @@ public class PatrolContentFrgment extends BaseFragment {
                     }
                 } else {
                     if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
-                        for (int i = 0; i < results.size(); i++) {
-                            localBean = localByTaskId.get(i);
-                            localBean.setTask_id(task_id);
-                            localBean.setTab_name(results.get(i).getName());
-                            localBean.setCategory_id(results.get(i).getCategory());
-                            localBean.setCategory_name(results.get(i).getName());//缺陷类别
-                            localBean.setPatrol_id(results.get(i).getPatrol_id());
-                            localBean.setPatrol_name(results.get(i).getRemarks());
-
+                        if (results != null) {
+                            for (int i = 0; i < results.size(); i++) {
+                                localBean = localByTaskId.get(i);
+                                localBean.setTask_id(task_id);
+                                localBean.setTab_name(results.get(i).getName());
+                                localBean.setCategory_id(results.get(i).getCategory());
+                                localBean.setCategory_name(results.get(i).getName());//缺陷类别
+                                localBean.setPatrol_id(results.get(i).getPatrol_id());
+                                localBean.setPatrol_name(results.get(i).getRemarks());
 //                            if (results.get(i).getRemarks() != null) {
 ////                                localBean.setPatrol_name(results.get(i).getRemarks());
 //                                localBean.setPatrol_name(results.get(i).getTaskDefect().getPatrol_name());
@@ -229,25 +240,27 @@ public class PatrolContentFrgment extends BaseFragment {
 //                                localBean.setPatrol_name("");
 //                            }
 
-                            if (results.get(i).getStatus() != null) {
-                                localBean.setStatus(results.get(i).getStatus());
-                            } else {
-                                localBean.setStatus("");
-                            }
+                                if (results.get(i).getStatus() != null) {
+                                    localBean.setStatus(results.get(i).getStatus());
+                                } else {
+                                    localBean.setStatus("");
+                                }
 
-                            if (results.get(i).getTaskDefect() != null) {
-                                if (results.get(i).getTaskDefect().getContent() != null) {
-                                    localBean.setContent(results.get(i).getTaskDefect().getContent());
-                                } else {
-                                    localBean.setContent("");
-                                }
-                                if (results.get(i).getTaskDefect().getGrade_id() != null) {
-                                    localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
-                                    localBean.setGrade_name(results.get(i).getTaskDefect().getGrade_name());
-                                } else {
-                                    localBean.setGrade_id("");
-                                    localBean.setGrade_name("");
-                                }
+                                if (results.get(i).getTaskDefect() != null) {
+                                    localBean.setClcsName(String.valueOf(results.get(i).getTaskDefect().getDeal_notes()));//处理措施
+
+                                    if (results.get(i).getTaskDefect().getContent() != null) {
+                                        localBean.setContent(results.get(i).getTaskDefect().getContent());
+                                    } else {
+                                        localBean.setContent("");
+                                    }
+                                    if (results.get(i).getTaskDefect().getGrade_id() != null) {
+                                        localBean.setGrade_id(results.get(i).getTaskDefect().getGrade_id());
+                                        localBean.setGrade_name(results.get(i).getTaskDefect().getGrade_name());
+                                    } else {
+                                        localBean.setGrade_id("");
+                                        localBean.setGrade_name("");
+                                    }
 
 //                                if(TextUtils.isEmpty(results.get(i).getTaskDefect().getCategory_name())){
 //                                    localBean.setCategory_id(results.get(i).getTaskDefect().getCategory_id());
@@ -257,21 +270,23 @@ public class PatrolContentFrgment extends BaseFragment {
 //                                    localBean.setCategory_name("");
 //                                }
 
-                            } else {
-                                localBean.setContent("");
-                                localBean.setGrade_id("");
-                                localBean.setGrade_name("");
-                            }
+                                } else {
+                                    localBean.setContent("");
+                                    localBean.setGrade_id("");
+                                    localBean.setGrade_name("");
+                                    localBean.setClcsName("");//默认第一条
+                                }
 //                            localBean.setCategory_id(results.get(i).getCategory());
 
 
-                            String onlinePics = getOnlinePics(results, i);
-                            if (onlinePics == null || onlinePics.equals("")) {
-                                localBean.setOnline_pics("");
-                            } else {
-                                localBean.setOnline_pics(onlinePics);
+                                String onlinePics = getOnlinePics(results, i);
+                                if (onlinePics == null || onlinePics.equals("")) {
+                                    localBean.setOnline_pics("");
+                                } else {
+                                    localBean.setOnline_pics(onlinePics);
+                                }
+                                localBean.update();
                             }
-                            localBean.update();
                         }
                     }
                 }

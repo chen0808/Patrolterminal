@@ -155,7 +155,7 @@ public class PatrolContentBean implements Serializable {
         private String start_name;
         private String end_name;
         private Object find_time;
-        private Object deal_notes;
+        private Object deal_notes;//处理措施
         private String status;
         private Object deal_dep_name;
         private Object deal_time;
