@@ -12,7 +12,7 @@
         android:paddingLeft="@dimen/dp_10"
         android:textColor="@color/my_info"
         android:drawablePadding="@dimen/dp_5"
-        android:drawableLeft="@mipmap/car_no"
+        android:drawableLeft="@mipmap/pika"
         android:textSize="@dimen/sp_12"
         android:text="甘AE1234"
         android:gravity="center"

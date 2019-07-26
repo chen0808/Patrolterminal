@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GroupTaskDetailAdapter;
+import com.patrol.terminal.adapter.GroupTaskPersonalAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -26,6 +27,7 @@ import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DefectBean;
 import com.patrol.terminal.bean.DepUserBean;
 import com.patrol.terminal.bean.GroupTaskBean;
+import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.SaveTodoReqbean;
 import com.patrol.terminal.bean.TypeBean;
 import com.patrol.terminal.utils.Constant;
@@ -122,7 +124,9 @@ public class GroupTaskDetailActivity extends BaseActivity {
             getGroupList(task_id);
         } else {
             getGroupList(bean.getId());
+
         }
+
     }
 
 
@@ -143,12 +147,31 @@ public class GroupTaskDetailActivity extends BaseActivity {
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         monthPlanDetailRc.setLayoutManager(manager);
-        adapter = new GroupTaskDetailAdapter(R.layout.item_plan_detail, typeList);
-        monthPlanDetailRc.setAdapter(adapter);
+
 
     }
 
     public void getGroupList() {
+        //判断分配状态，已分配展示个人任务列表
+        if ("0".equals(bean.getAllot_status())){
+            typeList.clear();
+            String type_sign = bean.getType_sign();
+
+            Log.w("linmeng", "type_sign:" + type_sign);
+
+            String[] split = type_sign.split(",");
+            for (int i = 0; i < split.length; i++) {
+                String type = split[i];
+                DefectBean planTypeBean = new DefectBean();
+                planTypeBean.setContent(StringUtil.typeSigns[Integer.valueOf(type) - 1] + "任务");
+                planTypeBean.setType(Integer.parseInt(bean.getAllot_status()));
+                typeList.add(planTypeBean);
+            }
+            adapter = new GroupTaskDetailAdapter(R.layout.item_plan_detail, typeList);
+            monthPlanDetailRc.setAdapter(adapter);
+        }else {
+            getPersonalList();
+        }
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if ((jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) || jobType.contains(Constant.RUNNING_SQUAD_LEADER)) && "0".equals(bean.getIs_rob()) && "0".equals(bean.getAllot_status())) {
             type = 1;
@@ -197,24 +220,10 @@ public class GroupTaskDetailActivity extends BaseActivity {
             taskGroupName.setText("小组负责人：" + bean.getDuty_user_name());
         }
 
-
         tvLineName.setText("线路名称：" + bean.getLine_name());
         tvLineNo.setText("班  组：" + bean.getDep_name());
         tvLineTower.setText("杆  段：" + bean.getName());
-        typeList.clear();
-        String type_sign = bean.getType_sign();
 
-        Log.w("linmeng", "type_sign:" + type_sign);
-
-        String[] split = type_sign.split(",");
-        for (int i = 0; i < split.length; i++) {
-            String type = split[i];
-            DefectBean planTypeBean = new DefectBean();
-            planTypeBean.setContent(StringUtil.typeSigns[Integer.valueOf(type) - 1] + "任务");
-            planTypeBean.setType(Integer.parseInt(bean.getAllot_status()));
-            typeList.add(planTypeBean);
-        }
-        adapter.setNewData(typeList);
     }
 
 
@@ -555,5 +564,28 @@ public class GroupTaskDetailActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+    //获取个人任务列表
+    public void getPersonalList() {
+        BaseRequest.getInstance().getService()
+                .getPersonalListOfGroup(year + "", month + "", day + "", bean.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        List<PersonalTaskListBean> results = t.getResults();
+                        GroupTaskPersonalAdapter personalAdapter=new GroupTaskPersonalAdapter(R.layout.item_plan_detail,results);
+                        monthPlanDetailRc.setAdapter(personalAdapter);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+
     }
 }

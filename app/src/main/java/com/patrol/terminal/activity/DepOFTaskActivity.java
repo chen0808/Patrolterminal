@@ -7,11 +7,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DepOfGroupAdapter;
-import com.patrol.terminal.adapter.GroupTaskAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -27,11 +25,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class DepOFTaskActivity extends BaseActivity {
+
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -45,8 +44,6 @@ public class DepOFTaskActivity extends BaseActivity {
     RelativeLayout titleSetting;
     @BindView(R.id.dep_of_task_rv)
     RecyclerView depOfTaskRv;
-
-
     private DepOfGroupAdapter groupTaskAdapter;
     private List<GroupTaskBean> result = new ArrayList<>();
     private String year;
@@ -66,6 +63,9 @@ public class DepOFTaskActivity extends BaseActivity {
 
     private void initview() {
         titleName.setText("任务列表");
+        time = getIntent().getStringExtra("time");
+        depId = getIntent().getStringExtra("depid");
+        inteDate();
         LinearLayoutManager manager = new LinearLayoutManager(this);
         depOfTaskRv.setLayoutManager(manager);
         groupTaskAdapter = new DepOfGroupAdapter(R.layout.fragment_task_item, result);
@@ -86,10 +86,20 @@ public class DepOFTaskActivity extends BaseActivity {
         getGroupList();
     }
 
+    public void inteDate() {
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        String[] days = months[1].split("日");
+        month = Integer.parseInt(months[0]) + "";
+        year = years[0];
+        day = Integer.parseInt(days[0]) + "";
+    }
+
     //获取小组任务列表
     public void getGroupList() {
+        ProgressDialog.show(this, true, "正在加载。。。。");
         BaseRequest.getInstance().getService()
-                .getGroupList(year, month, day, depId,"duty_user_id,line_id,name", "1")
+                .getGroupList(year, month, day, depId, "duty_user_id,line_id,name", "1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(this) {
@@ -97,8 +107,8 @@ public class DepOFTaskActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         groupTaskAdapter.setNewData(result);
-                        RxRefreshEvent.publish("refreshGroupNum@"+result.size());
-                        isRefresh=true;
+                        RxRefreshEvent.publish("refreshGroupNum@" + result.size());
+                        isRefresh = true;
                         ProgressDialog.cancle();
                     }
 
@@ -107,6 +117,10 @@ public class DepOFTaskActivity extends BaseActivity {
                         ProgressDialog.cancle();
                     }
                 });
+    }
 
+    @OnClick(R.id.title_back)
+    public void onViewClicked() {
+        finish();
     }
 }

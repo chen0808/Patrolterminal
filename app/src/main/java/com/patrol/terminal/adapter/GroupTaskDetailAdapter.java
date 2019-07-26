@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.DefectBean;
+import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.StringUtil;
 

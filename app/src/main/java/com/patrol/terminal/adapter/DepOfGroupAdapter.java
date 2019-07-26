@@ -32,8 +32,12 @@ public class DepOfGroupAdapter extends BaseQuickAdapter<GroupTaskBean, BaseViewH
             } else {
                 viewHolder.setText(R.id.item_task_personal, "任务执行人：" + item.getWork_user_name());
             }
-
-
+        if (item.getDuty_user_name() == null) {
+            viewHolder.setText(R.id.item_task_resource, "负责人：未指定");
+        } else {
+            viewHolder.setText(R.id.item_task_resource, "负责人：" + item.getDuty_user_name());
+        }
+        viewHolder.setVisible(R.id.item_task_resource,true);
         viewHolder.setText(R.id.item_task_name, item.getLine_name() + item.getName() + "任务");
 
         TextView type = viewHolder.getView(R.id.item_task_type);

@@ -36,7 +36,7 @@ public class ProgressDialog {
     public static void cancle() {
         if (progressDialog == null)
             return;
-        if (progressDialog.isShowing())
+//        if (progressDialog.isShowing())
             progressDialog.cancel();
     }
 

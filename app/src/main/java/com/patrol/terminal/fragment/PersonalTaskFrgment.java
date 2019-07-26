@@ -186,7 +186,6 @@ public class PersonalTaskFrgment extends BaseFragment {
             if (mRefrsh != null) {
                 mRefrsh.setRefreshing(false);
             }
-            ProgressDialog.cancle();
         }
     }
 
@@ -217,14 +216,11 @@ public class PersonalTaskFrgment extends BaseFragment {
                         }
                         RxRefreshEvent.publish("refreshPersonalNum@"+result.size());
                         mRefrsh.setRefreshing(false);
-                        ProgressDialog.cancle();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         mRefrsh.setRefreshing(false);
-                        ProgressDialog.cancle();
-
                     }
                 });
     }

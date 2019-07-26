@@ -15,6 +15,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddGroupTaskActivity;
+import com.patrol.terminal.activity.DepOFTaskActivity;
 import com.patrol.terminal.activity.GroupTaskDetailActivity;
 import com.patrol.terminal.adapter.DepTaskAdapter;
 import com.patrol.terminal.adapter.GroupTaskAdapter;
@@ -22,6 +23,7 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.DepInfoBean;
 import com.patrol.terminal.bean.GroupTaskBean;
 import com.patrol.terminal.bean.GroupTaskBean_Table;
 import com.patrol.terminal.bean.MonthPlanBean;
@@ -75,7 +77,7 @@ public class DepTaskFrgment extends BaseFragment {
     SwipeRefreshLayout mRefrsh;
 
     private TimePickerView pvTime;
-    private List<GroupTaskBean> result = new ArrayList<>();
+    private List<DepInfoBean> result = new ArrayList<>();
     private String time;
     private String year;
     private String month;
@@ -98,45 +100,74 @@ public class DepTaskFrgment extends BaseFragment {
         ProgressDialog.show(getContext(),true,"正在加载。。。");
         planCreate.setVisibility(View.GONE);
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+        inteDate();
         taskDate.setText(time);
         taskTitle.setText("班组列表");
         taskAdd.setVisibility(View.GONE);
         jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);
-        for (int i = 0; i < 10; i++) {
-            GroupTaskBean bean=new GroupTaskBean();
-            result.add(bean);
-        }
-        depTaskAdapter = new DepTaskAdapter(R.layout.fragment_dep_item, result);
+        depTaskAdapter = new DepTaskAdapter(R.layout.fragment_dep_item, result,time);
         planRv.setAdapter(depTaskAdapter);
         depTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
                 Intent intent = new Intent();
-                GroupTaskBean bean = result.get(position);
-                intent.setClass(getContext(), GroupTaskDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("GroupTaskBean", bean);
-                bundle.putString("GroupTaskTime", time);
-                intent.putExtras(bundle);
-                startActivityForResult(intent, 11);
+                DepInfoBean bean = result.get(position);
+                intent.setClass(getContext(), DepOFTaskActivity.class);
+                intent.putExtra("time", time);
+                intent.putExtra("depid", bean.getDep_id());
+                startActivity(intent);
             }
         });
 
         mRefrsh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                getDepInfo();
             }
         });
 
-
+        getDepInfo();
     }
 
 
+    public void inteDate() {
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        String[] days = months[1].split("日");
+        month = Integer.parseInt(months[0]) + "";
+        year = years[0];
+        day = Integer.parseInt(days[0]) + "";
+    }
 
+    //获取班组信息
+    public void getDepInfo() {
+        ProgressDialog.show(getContext(),true,"正在加载中。。。。");
+        BaseRequest.getInstance().getService()
+                .getDepInfo(year,month,day)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DepInfoBean>>(getContext()) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<DepInfoBean>> t) throws Exception {
 
+                        result = t.getResults();
+
+                        RxRefreshEvent.publish("refreshGroupNum@"+result.size());
+                        depTaskAdapter.setNewData(result);
+                        ProgressDialog.cancle();
+                        mRefrsh.setRefreshing(false);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        mRefrsh.setRefreshing(false);
+                    }
+                });
+    }
 
 
 
