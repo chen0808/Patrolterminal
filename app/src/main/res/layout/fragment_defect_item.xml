@@ -3,9 +3,7 @@
     android:id="@+id/rl_defect_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/dp_20"
-    android:layout_marginRight="@dimen/dp_20"
-    android:layout_marginBottom="@dimen/dp_5"
+    android:layout_marginTop="@dimen/dp_10"
     android:background="@drawable/stoke_home_list">
 
     <RelativeLayout
@@ -65,7 +63,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="巡视时间" />
-
+            <TextView
+                android:id="@+id/item_defect_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="状态：" />
             <TextView
                 android:id="@+id/tv_detail"
                 android:layout_width="wrap_content"

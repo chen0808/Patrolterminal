@@ -202,6 +202,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                 intent.putExtra("sign", bean.getType_sign());
                 intent.putExtra("audit_status", bean.getAudit_status());
                 intent.putExtra("typename", bean.getType_name());
+                intent.putExtra("user_id", bean.getUser_id());
                 switch (bean.getType_sign()) {
                     case "1":
                     case "2":

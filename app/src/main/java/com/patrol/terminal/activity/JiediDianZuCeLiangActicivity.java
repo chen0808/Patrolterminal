@@ -93,6 +93,8 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
     private String line_id;
     private PersonalTaskListBean personalTaskListBean;
    private  boolean isSave=false;
+    private String user_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +135,7 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
         task_id = getIntent().getStringExtra("task_id");
         tower_name = getIntent().getStringExtra("tower_name");
         audit_status = getIntent().getStringExtra("audit_status");
+        user_id = getIntent().getStringExtra("user_id");
         sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
         tower_model = getIntent().getStringExtra("tower_model");
@@ -381,11 +384,15 @@ public class JiediDianZuCeLiangActicivity extends BaseActivity implements TextWa
             }
             mengban.setVisibility(View.VISIBLE);
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
-            if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+            if (user_id.equals(SPUtil.getUserId(this))) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("提交");
+                mengban.setVisibility(View.GONE);
+            }else {
+                titleSetting.setVisibility(View.GONE);
+                mengban.setVisibility(View.VISIBLE);
             }
-            mengban.setVisibility(View.GONE);
+
         } else {
             titleSetting.setVisibility(View.GONE);
             mengban.setVisibility(View.VISIBLE);

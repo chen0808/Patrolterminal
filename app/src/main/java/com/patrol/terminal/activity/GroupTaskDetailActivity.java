@@ -584,7 +584,11 @@ public class GroupTaskDetailActivity extends BaseActivity {
                         personalAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
                                 PersonalTaskListBean bean = results.get(position);
+                                if ("0".equals(bean.getAudit_status())&&!bean.getUser_id().equals(SPUtil.getUserId(GroupTaskDetailActivity.this))){
+                                    Toast.makeText(GroupTaskDetailActivity.this,"未提交",Toast.LENGTH_SHORT).show();
+                                }else {
                                 Intent intent = new Intent();
                                 intent.putExtra("line_id", bean.getLine_id());
                                 intent.putExtra("line_name", bean.getLine_name());
@@ -595,6 +599,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
                                 intent.putExtra("sign", bean.getType_sign());
                                 intent.putExtra("audit_status", bean.getAudit_status());
                                 intent.putExtra("typename", bean.getType_name());
+                                intent.putExtra("user_id", bean.getUser_id());
                                 switch (bean.getType_sign()) {
                                     case "1":
                                     case "2":
@@ -632,7 +637,7 @@ public class GroupTaskDetailActivity extends BaseActivity {
 
 
                                 }
-                                startActivityForResult(intent, 25);
+                                startActivityForResult(intent, 25);}
                             }
                         });
                     }

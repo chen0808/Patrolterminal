@@ -44,9 +44,9 @@ public class NextDayPlanAdapter extends BaseQuickAdapter<DayListBean, BaseViewHo
 
 
 
-        //审核状态
-        HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
-        horizontalLineView.setStatus(item.getAudit_status());
+//        //审核状态
+//        HorizontalLineView horizontalLineView = viewHolder.getView(R.id.hlv_plan_state);
+//        horizontalLineView.setStatus(item.getAudit_status());
 
 
         //计划类型

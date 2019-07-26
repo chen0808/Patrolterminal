@@ -17,9 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.patrol.terminal.R;
@@ -77,6 +74,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -120,6 +119,8 @@ public class PatrolRecordActivity extends BaseActivity {
     NoScrollViewPager viewPager;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.menban)
+    TextView menban;
     private MyFragmentPagerAdapter pagerAdapter;
     private Disposable subscribe;
     private Map<String, RequestBody> params = new HashMap<>();
@@ -136,6 +137,7 @@ public class PatrolRecordActivity extends BaseActivity {
     private String tower_model;
     private String sign;
     private String typename;
+    private String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +154,7 @@ public class PatrolRecordActivity extends BaseActivity {
         tower_name = getIntent().getStringExtra("tower_name");
         tower_model = getIntent().getStringExtra("tower_model");
         audit_status = getIntent().getStringExtra("audit_status");
+        user_id = getIntent().getStringExtra("user_id");
         sign = getIntent().getStringExtra("sign");
         typename = getIntent().getStringExtra("typename");
         Constant.patrol_record_audit_status = audit_status;
@@ -249,10 +252,15 @@ public class PatrolRecordActivity extends BaseActivity {
                 titleSettingTv.setText("审批");
             }
         } else if ("0".equals(audit_status) || "4".equals(audit_status)) {
-            if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)) {
+            if (user_id.equals(SPUtil.getUserId(this))) {
                 titleSetting.setVisibility(View.VISIBLE);
                 titleSettingTv.setText("提交");
+                menban.setVisibility(View.GONE);
+            } else {
+                titleSetting.setVisibility(View.GONE);
+                menban.setVisibility(View.VISIBLE);
             }
+
         } else {
             titleSetting.setVisibility(View.GONE);
         }
@@ -295,6 +303,7 @@ public class PatrolRecordActivity extends BaseActivity {
                                 }).build();
                         transaction.executeSync();
                     }
+
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
 

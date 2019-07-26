@@ -44,20 +44,20 @@ public class DepTaskAdapter extends BaseQuickAdapter<DepInfoBean, BaseViewHolder
         viewHolder.setText(R.id.item_task_name, item.getName() + time + "计划")
                 .setText(R.id.item_110kv_tv, "110kv："+item.getBig_count() + "段/" + Math.round(item.getBig_length() / 10d) / 100d + "km")
                 .setText(R.id.item_35kv_tv, "35kv："+item.getSmall_count() + "段/" + Math.round(item.getSmall_length() / 10d) / 100d + "km")
-                .setText(R.id.plan_progressbar_tv, "计划进度(" + item.getFinish() + "/" + item.getFinish() + ")：");
+                .setText(R.id.plan_progressbar_tv, "计划进度(" + item.getDone_num() + "/" + item.getAll_num() + ")：");
         if ("".equals(dutyName)){
             viewHolder.setText(R.id.item_task_group_team,"负责人：无" );
         }else {
             viewHolder.setText(R.id.item_task_group_team,"负责人：" +dutyName);
         }
 
-        if (item.getFinish() == 0) {
+        if (item.getDone_num() == 0) {
             viewHolder.setText(R.id.plan_progressbar_num, "0%");
         } else {
             //默认保留两位会有错误，这里设置保留小数点后4位
             double range = 0;
             try {
-                range = Utils.div(item.getFinish(), item.getFinish(), 4) * 100;
+                range = Utils.div(item.getDone_num(), item.getAll_num(), 4) * 100;
                 viewHolder.setText(R.id.plan_progressbar_num, range + "%");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -65,7 +65,7 @@ public class DepTaskAdapter extends BaseQuickAdapter<DepInfoBean, BaseViewHolder
 
         }
         ProgressBar progressBar = viewHolder.getView(R.id.plan_progressbar_probar);
-        progressBar.setMax(item.getFinish());
-        progressBar.setProgress(item.getFinish());
+        progressBar.setMax(item.getDone_num());
+        progressBar.setProgress(item.getAll_num());
     }
 }

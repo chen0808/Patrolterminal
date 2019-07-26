@@ -192,7 +192,7 @@ public class DefectActivity extends BaseActivity {
     }
 
     private void initview() {
-        titleName.setText("缺陷查询");
+        titleName.setText("缺陷库");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         planRv.setLayoutManager(manager);
         //班级
@@ -200,7 +200,6 @@ public class DefectActivity extends BaseActivity {
         lv_banji.setAdapter(banjiAdapter);
         banjixlAdapter = new DefectBanjiXLAdapter(this, banjixlList);
         lv_xianlu.setAdapter(banjixlAdapter);
-
         groupTaskAdapter = new DefectIngAdapter(R.layout.fragment_defect_item, 0);
         planRv.setAdapter(groupTaskAdapter);
         planRv.useDefaultLoadMore();

@@ -97,7 +97,6 @@ public class DepTaskFrgment extends BaseFragment {
 
     @Override
     protected void initData() {
-        ProgressDialog.show(getContext(),true,"正在加载。。。");
         planCreate.setVisibility(View.GONE);
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         inteDate();
@@ -117,7 +116,7 @@ public class DepTaskFrgment extends BaseFragment {
                 DepInfoBean bean = result.get(position);
                 intent.setClass(getContext(), DepOFTaskActivity.class);
                 intent.putExtra("time", time);
-                intent.putExtra("depid", bean.getDep_id());
+                intent.putExtra("depid", bean.getId());
                 startActivity(intent);
             }
         });
