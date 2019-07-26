@@ -17,6 +17,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddPersonalTaskActivity;
+import com.patrol.terminal.activity.DefectIngAuditActivity;
 import com.patrol.terminal.activity.PersonalTaskDetailActivity;
 import com.patrol.terminal.adapter.PersonalTaskAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -112,12 +113,18 @@ public class PersonalTaskFrgment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GroupTaskBean bean = result.get(position);
-                Intent intent=new Intent();
-                intent.setClass(getContext(), PersonalTaskDetailActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putParcelable("bean",bean);
-                intent.putExtras(bundle);
-                startActivityForResult(intent,12);
+                if(bean.getType_sign().equals("14")){
+                    Intent intent2 = new Intent(getContext(), DefectIngAuditActivity.class);
+                    intent2.putExtra("bean", bean);
+                    startActivityForResult(intent2, 10);
+                } else {
+                    Intent intent=new Intent();
+                    intent.setClass(getContext(), PersonalTaskDetailActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putParcelable("bean",bean);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent,12);
+                }
             }
         });
 
@@ -389,7 +396,7 @@ public class PersonalTaskFrgment extends BaseFragment {
             // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
             menuBridge.closeMenu();
             String allot_status = result.get(position).getAllot_status();
-                robBack(result.get(position).getId(), position);
+            robBack(result.get(position).getId(), position);
 
         }
     };

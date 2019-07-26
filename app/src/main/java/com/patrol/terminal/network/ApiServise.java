@@ -324,7 +324,7 @@ public interface ApiServise {
 
     //组任务列表
     @GET("/task/group/list/listGET")
-    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("work_user_id") String work_user_id, @Query("order") String order, @Query("safe") String safe);
+    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("work_user_id") String work_user_id, @Query("order") String order);
     //组任务列表
     @GET("/task/group/list/listGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id,  @Query("order") String order, @Query("safe") String safe);
@@ -334,7 +334,7 @@ public interface ApiServise {
     Observable<BaseResult<GroupTaskBean>> getGroupDetail(@Query("id") String id);
 
     //个人任务列表获取小组任务
-    @GET("/task/group/list/listGET")
+    @GET("/task/group/list/personalGET")
     Observable<BaseResult<List<GroupTaskBean>>> getPersonalOfGroup(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("allot_status") String allot_status, @Query("work_user_id") String work_user_id, @Query("order") String order);
 
     @GET("/task/group/user/groupGET")
@@ -1112,12 +1112,12 @@ public interface ApiServise {
     @POST("/plan/day/defectCheckPOST")
     Observable<BaseResult> defectCheckPOSTGroup(@Body InAuditPostBean bean);
 
-    //缺陷再复核-转班组
+    //缺陷再复核-转个人
     @POST("/task/personal/defectCheckPOST")
     Observable<BaseResult> defectCheckPOSTMine(@Body InAuditPostBean bean);
 
     //获取班组信息
-    @GET("admin/dict/listGET")
+    @GET("/task/group/list/allGET")
     Observable<BaseResult<List<DepInfoBean>>> getDepInfo(@Query("year") String year,@Query("month") String month,@Query("day") String day);
 
 }

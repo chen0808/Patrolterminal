@@ -506,7 +506,7 @@ public class NextMonthPlanActivity extends BaseActivity {
         data2.clear();
         ProgressDialog.show(this, false, "正在加载中");
         BaseRequest.getInstance().getService()
-                .getMonthPlan(year, month, depId, state, "create_time desc,type_sign,line_id")
+                .getMonthPlan(year, month, depId, state2, "create_time desc,type_sign,line_id")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<MonthListBean>(this) {
