@@ -241,7 +241,7 @@ public class ReviewTaskActivity extends BaseActivity {
             };
             dialog.show();
         } else if(type == 1){
-            CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(ReviewTaskActivity.this, "转自己", "取消", "确定") {
+            CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(ReviewTaskActivity.this, "转班组", "取消", "确定") {
                 @Override
                 public void ok() {
                     super.ok();

@@ -291,6 +291,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                 Intent intent2 = new Intent(this, ReviewTaskActivity.class);
                 intent2.putExtra("DefectFragmentDetailBean", bean);
                 startActivityForResult(intent2, 10);
+                finish();
                 break;
             case R.id.turn_to_repair:
                 break;
