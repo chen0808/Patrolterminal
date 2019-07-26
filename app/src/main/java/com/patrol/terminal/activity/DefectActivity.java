@@ -119,17 +119,10 @@ public class DefectActivity extends BaseActivity {
      * 获取班级列表
      */
     public void getAllBanji() {
-        //班长和班员传参数
+        //班长和班员传参数  不传查所有的
         String depId = "";
         String mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER) || mJobType.contains(Constant.REFURBISHMENT_TEMA_LEADER) ||
-                mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) || mJobType.contains(Constant.REFURBISHMENT_SPECIALIZED) ||
-                mJobType.contains(Constant.DISTRICT_MANAGERD) || mJobType.contains(Constant.RUN_SUPERVISOR) ||
-                mJobType.contains(Constant.MAINTENANCE_SUPERVISOR) || mJobType.contains(Constant.ACHIEVEMENTS_SPECIALIZED) ||
-                mJobType.contains(Constant.TRAINING_SPECIALIZED) || mJobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) ||
-                mJobType.contains(Constant.SAFETY_SPECIALIZED) || mJobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
-
-        } else {
+        if (mJobType.contains("xb_")) {
             depId = SPUtil.getDepId(this);
         }
 
