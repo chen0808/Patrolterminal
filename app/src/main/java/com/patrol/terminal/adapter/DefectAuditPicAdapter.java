@@ -43,7 +43,7 @@ public class DefectAuditPicAdapter extends android.widget.BaseAdapter {
         convertView = inflater.inflate(R.layout.defect_audit_grid_item, parent,false);
         ImageView iv = (ImageView) convertView.findViewById(R.id.pic_iv);
 
-            Glide.with(mContext).load(mList.get(position)).into(iv);
+        Glide.with(mContext).load(mList.get(position)).into(iv);
         return convertView;
     }
 }

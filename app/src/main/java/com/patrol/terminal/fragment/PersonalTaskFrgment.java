@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.AddPersonalTaskActivity;
 import com.patrol.terminal.activity.DefectIngAuditActivity;
+import com.patrol.terminal.activity.DefectIngAuditEditActivity;
 import com.patrol.terminal.activity.PersonalTaskDetailActivity;
 import com.patrol.terminal.adapter.PersonalTaskAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -114,8 +115,8 @@ public class PersonalTaskFrgment extends BaseFragment {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GroupTaskBean bean = result.get(position);
                 if(bean.getType_sign().equals("14")){
-                    Intent intent2 = new Intent(getContext(), DefectIngAuditActivity.class);
-                    intent2.putExtra("bean", bean);
+                    Intent intent2 = new Intent(getContext(), DefectIngAuditEditActivity.class);
+                    intent2.putExtra("data_id", bean.getDefect_id());
                     startActivityForResult(intent2, 10);
                 } else {
                     Intent intent=new Intent();

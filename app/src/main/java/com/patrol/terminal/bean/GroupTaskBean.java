@@ -123,6 +123,8 @@ public class GroupTaskBean extends BaseModel implements Parcelable {
     private String user_id;
     @Column
     private String safe;
+    @Column
+    private String defect_id;
 
     public String getSafe() {
         return safe;
@@ -576,5 +578,13 @@ public class GroupTaskBean extends BaseModel implements Parcelable {
                 ", user_id='" + user_id + '\'' +
                 ", safe='" + safe + '\'' +
                 '}';
+    }
+
+    public String getDefect_id() {
+        return defect_id;
+    }
+
+    public void setDefect_id(String defect_id) {
+        this.defect_id = defect_id;
     }
 }

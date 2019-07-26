@@ -1,38 +1,57 @@
 package com.patrol.terminal.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.DefectAuditPicAdapter;
+import com.patrol.terminal.adapter.DefectAuditPicEditAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.CLCSTypeBean;
 import com.patrol.terminal.bean.DefectFragmentDetailBean;
 import com.patrol.terminal.bean.InAuditPostBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.CancelOrOkDialogNew;
 import com.patrol.terminal.widget.ProgressDialog;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import org.angmarch.views.NiceSpinner;
+import org.angmarch.views.OnSpinnerItemSelectedListener;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,8 +59,8 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-//缺陷审核
-public class DefectIngAuditActivity extends BaseActivity {
+//缺陷审核编辑
+public class DefectIngAuditEditActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -63,8 +82,6 @@ public class DefectIngAuditActivity extends BaseActivity {
     TextView patrolName;
     @BindView(R.id.defect_category_name)
     TextView defectCategoryName;
-    @BindView(R.id.defect_grade_name)
-    TextView defectGradeName;
     @BindView(R.id.defect_find_time)
     TextView defectFindTime;
     @BindView(R.id.defect_deal_notes)
@@ -87,56 +104,63 @@ public class DefectIngAuditActivity extends BaseActivity {
     TextView deffectImg;
     @BindView(R.id.defect_gridView)
     GridView defectGridView;
-    @BindView(R.id.reject)
-    TextView reject;
     @BindView(R.id.stock_in)
     TextView stockIn;
-    @BindView(R.id.review)
-    TextView review;
     @BindView(R.id.turn_to_repair)
     TextView turnToRepair;
     @BindView(R.id.layout_bottom)
     LinearLayout layoutBottom;
+    @BindView(R.id.rg_content_type)
+    RadioGroup rgContentType;
+    @BindView(R.id.defect_spinner)
+    NiceSpinner defectSpinner;
 
-    private DefectAuditPicAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
+    private DefectAuditPicEditAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
     private DefectFragmentDetailBean bean;
     private String mJobType;
     private String year;
     private String month;
     private String day;
+    private List<CLCSTypeBean> clcsTypeList;//处理措施方法
+    private List<String> clcsListStr;
+    private String id;
+    private int picIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String id = getIntent().getStringExtra("data_id");
-        setContentView(R.layout.activity_defect_audit);
+        id = getIntent().getStringExtra("data_id");
+        setContentView(R.layout.activity_defect_audit_edit);
         ButterKnife.bind(this);
         initview(id);
     }
 
     private void initview(String id) {
-        mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
-            stockIn.setText("入库");
-            review.setVisibility(View.VISIBLE);
-            turnToRepair.setVisibility(View.VISIBLE);
-        } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
-            stockIn.setText("通过");
-            review.setVisibility(View.GONE);
-            turnToRepair.setVisibility(View.GONE);
-        } else {
-            reject.setVisibility(View.GONE);
-            stockIn.setVisibility(View.GONE);
-            review.setVisibility(View.GONE);
-            turnToRepair.setVisibility(View.GONE);
-        }
-
         String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         defectDeadline.setText(time);
         initdate(time);
 
-        titleName.setText("缺陷审核");
+        getClcsData();
+        clcsListStr = new ArrayList<>();
+        for (int i = 0; i < clcsTypeList.size(); i++) {
+            clcsListStr.add(clcsTypeList.get(i).getName());
+        }
+
+        defectSpinner.setBackgroundColor(getResources().getColor(R.color.transparent));
+        defectSpinner.attachDataSource(clcsListStr);
+
+        defectSpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
+            @Override
+            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
+                CLCSTypeBean typeBean = clcsTypeList.get(position);
+//                item.setClcsName(typeBean.getName());
+//                item.setClcsId(typeBean.getId());
+//                item.update();
+            }
+        });
+
+        titleName.setText("缺陷复核");
         BaseRequest.getInstance().getService().getDefectDetail(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -208,12 +232,15 @@ public class DefectIngAuditActivity extends BaseActivity {
                         if(bean.getCategory_name() != null){
                             defectCategoryName.setText(bean.getCategory_name());
                         }
-                        if(bean.getGrade_name() != null){
-                            defectGradeName.setText(bean.getGrade_name());
-                        }
+
+                        RadioButton checkOneRb = (RadioButton) rgContentType.getChildAt(0);
+                        RadioButton checkTwoRb = (RadioButton) rgContentType.getChildAt(1);
+                        RadioButton checkThreeRb = (RadioButton) rgContentType.getChildAt(2);
 
                         if ("一般".equals(bean.getGrade_name())) {
-                            defectGradeName.setTextColor(getResources().getColor(R.color.blue));
+                            checkOneRb.setChecked(false);
+                            checkTwoRb.setChecked(false);
+                            checkThreeRb.setChecked(true);
 
                             Calendar c = Calendar.getInstance();//获得一个日历的实例
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
@@ -223,7 +250,9 @@ public class DefectIngAuditActivity extends BaseActivity {
                             defectDeadline.setText(sdf.format(c.getTime()));
                             initdate(sdf.format(c.getTime()));
                         } else if ("严重".equals(bean.getGrade_name())) {
-                            defectGradeName.setTextColor(getResources().getColor(R.color.line_point_1));
+                            checkOneRb.setChecked(false);
+                            checkTwoRb.setChecked(true);
+                            checkThreeRb.setChecked(false);
 
                             Calendar c = Calendar.getInstance();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
@@ -233,7 +262,9 @@ public class DefectIngAuditActivity extends BaseActivity {
                             defectDeadline.setText(sdf.format(c.getTime()));
                             initdate(sdf.format(c.getTime()));
                         } else if ("危急".equals(bean.getGrade_name())) {
-                            defectGradeName.setTextColor(getResources().getColor(R.color.line_point_0));
+                            checkOneRb.setChecked(true);
+                            checkTwoRb.setChecked(false);
+                            checkThreeRb.setChecked(false);
 
                             Calendar c = Calendar.getInstance();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
@@ -245,7 +276,14 @@ public class DefectIngAuditActivity extends BaseActivity {
                         }
 
                         if (bean.getDeal_notes() != null) {
-                            defectDealNotes.setText(bean.getDeal_notes());
+                            if(clcsListStr != null){
+                                for(int i=0;i<clcsListStr.size();i++){
+                                    if(clcsListStr.get(i).contains(bean.getDeal_notes())){
+                                        defectSpinner.setSelectedIndex(i);
+                                        break;
+                                    }
+                                }
+                            }
                         }
 
                         if (bean.getFileList() != null && bean.getFileList().size() > 0) {
@@ -254,13 +292,21 @@ public class DefectIngAuditActivity extends BaseActivity {
                             for (int i = 0; i < bean.getFileList().size(); i++) {
                                 mPicList.add(BaseUrl.BASE_URL + bean.getFileList().get(i).getFile_path() + bean.getFileList().get(i).getFilename());
                             }
-                            mGridViewAddImgAdapter = new DefectAuditPicAdapter(DefectIngAuditActivity.this, mPicList);
+                            if(bean.getFileList().size() < 5){
+                                mPicList.add("");
+                            }
+                            mGridViewAddImgAdapter = new DefectAuditPicEditAdapter(DefectIngAuditEditActivity.this, mPicList);
                             defectGridView.setAdapter(mGridViewAddImgAdapter);
                             defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view,
                                                         int position, long id) {
-                                    viewPluImg(position);
+                                    picIndex = position;
+                                    if (position == parent.getChildCount() - 1) {
+                                        startCamera();
+                                    } else {
+                                        viewPluImg(position);
+                                    }
                                 }
                             });
                         }
@@ -273,7 +319,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.title_back, R.id.defect_deadline, R.id.reject, R.id.stock_in, R.id.review, R.id.turn_to_repair})
+    @OnClick({R.id.title_back, R.id.defect_deadline, R.id.stock_in, R.id.turn_to_repair})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -282,21 +328,12 @@ public class DefectIngAuditActivity extends BaseActivity {
             case R.id.defect_deadline:
                 showDay();
                 break;
-            case R.id.reject:
-                submit("4");
-                break;
             case R.id.stock_in:
                 if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
                     submit("3");
                 } else {
                     submit("2");
                 }
-                break;
-            case R.id.review:
-                Intent intent2 = new Intent(this, ReviewTaskActivity.class);
-                intent2.putExtra("DefectFragmentDetailBean", bean);
-                startActivityForResult(intent2, 10);
-                finish();
                 break;
             case R.id.turn_to_repair:
                 break;
@@ -325,7 +362,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
                         if(t.getCode() == 1){
-                            Toast.makeText(DefectIngAuditActivity.this,"处理完成",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DefectIngAuditEditActivity.this,"处理完成",Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }
@@ -333,7 +370,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
-                        Toast.makeText(DefectIngAuditActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DefectIngAuditEditActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 });
@@ -344,8 +381,13 @@ public class DefectIngAuditActivity extends BaseActivity {
         Intent intent = new Intent(this, PlusImageActivity.class);
         intent.putStringArrayListExtra(Constant.IMG_LIST, mPicList);
         intent.putExtra("isDelPic", "0");
-        intent.putExtra(Constant.POSITION, position);
         startActivityForResult(intent, Constant.REQUEST_CODE_MAIN);
+    }
+
+    //打开相机
+    private void startCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, Constant.DEFECT_AUDIT_EDIT_REQUEST_CODE);
     }
 
     //初始化日期
@@ -404,7 +446,7 @@ public class DefectIngAuditActivity extends BaseActivity {
     //提交缺陷审核
     public void submit(String in_status) {
         if(in_status.equals("4")){
-            CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(DefectIngAuditActivity.this, "驳回", "取消", "确定") {
+            CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(DefectIngAuditEditActivity.this, "驳回", "取消", "确定") {
                 @Override
                 public void ok() {
                     super.ok();
@@ -447,6 +489,57 @@ public class DefectIngAuditActivity extends BaseActivity {
                 };
                 dialog.show();
             }
+        }
+    }
+
+    public void getClcsData() {
+        clcsTypeList = SQLite.select().from(CLCSTypeBean.class).queryList();
+        if (clcsTypeList == null || clcsTypeList.size() == 0) {
+            String assetsJson = getFromAssets("clcs.json");
+            List<CLCSTypeBean> clcsList = new Gson().fromJson(assetsJson, new TypeToken<ArrayList<CLCSTypeBean>>() {
+            }.getType());
+            clcsTypeList.addAll(clcsList);
+        }
+    }
+
+    //从asset获取json
+    public String getFromAssets(String fileName) {
+        String line = "";
+        String result = "";
+        try {
+            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open(fileName));
+            BufferedReader bufReader = new BufferedReader(inputReader);
+            while ((line = bufReader.readLine()) != null)
+                result += line;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            try {
+                switch (requestCode) {
+                    case Constant.DEFECT_AUDIT_EDIT_REQUEST_CODE:
+                        Bundle bundle = data.getExtras();
+                        Bitmap bitmap = (Bitmap) bundle.get("data");
+                        String path = Environment.getExternalStorageDirectory().getPath()
+                                + "/MyPhoto/" + id + "_" + picIndex + ".jpg";
+                        FileUtil.saveFile(bitmap, path);
+                        mPicList.set(picIndex, path);
+                        if(mPicList.size() < 5){
+                            mPicList.add("");
+                        }
+                        mGridViewAddImgAdapter.notifyDataSetChanged();
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }
