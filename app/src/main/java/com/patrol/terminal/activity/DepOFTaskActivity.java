@@ -99,7 +99,7 @@ public class DepOFTaskActivity extends BaseActivity {
     public void getGroupList() {
         ProgressDialog.show(this, true, "正在加载。。。。");
         BaseRequest.getInstance().getService()
-                .getGroupList(year, month, day, depId, "duty_user_id,line_id,name", "1")
+                .getGroupList(year, month, day, depId, "duty_user_id,line_id,name")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GroupTaskBean>>(this) {

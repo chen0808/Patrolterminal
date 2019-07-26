@@ -1,6 +1,7 @@
 package com.patrol.terminal.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GroupTaskDetailAdapter;
 import com.patrol.terminal.adapter.GroupTaskPersonalAdapter;
@@ -579,6 +581,60 @@ public class GroupTaskDetailActivity extends BaseActivity {
                         List<PersonalTaskListBean> results = t.getResults();
                         GroupTaskPersonalAdapter personalAdapter=new GroupTaskPersonalAdapter(R.layout.item_plan_detail,results);
                         monthPlanDetailRc.setAdapter(personalAdapter);
+                        personalAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                                PersonalTaskListBean bean = results.get(position);
+                                Intent intent = new Intent();
+                                intent.putExtra("line_id", bean.getLine_id());
+                                intent.putExtra("line_name", bean.getLine_name());
+                                intent.putExtra("tower_id", bean.getTower_id());
+                                intent.putExtra("tower_name", bean.getTower_name());
+                                intent.putExtra("tower_model", bean.getTower_model());
+                                intent.putExtra("task_id", bean.getId());
+                                intent.putExtra("sign", bean.getType_sign());
+                                intent.putExtra("audit_status", bean.getAudit_status());
+                                intent.putExtra("typename", bean.getType_name());
+                                switch (bean.getType_sign()) {
+                                    case "1":
+                                    case "2":
+                                    case "4":
+                                    case "7":
+                                    case "11"://定期任务巡视
+                                        intent.setClass(GroupTaskDetailActivity.this, PatrolRecordActivity.class);
+                                        SPUtil.put(GroupTaskDetailActivity.this, "ids", "tower_id", bean.getTower_id() == null ? "" : bean.getTower_id());
+                                        SPUtil.put(GroupTaskDetailActivity.this, "ids", "line_id", bean.getLine_id() == null ? "" : bean.getLine_id());
+                                        SPUtil.put(GroupTaskDetailActivity.this, "ids", "line_name", bean.getLine_name() == null ? "" : bean.getLine_name());
+                                        SPUtil.put(GroupTaskDetailActivity.this, "ids", "tower_name", bean.getTower_name() == null ? "" : bean.getTower_name());
+                                        SPUtil.put(GroupTaskDetailActivity.this, "ids", "find_user_id", bean.getUser_id() == null ? "" : bean.getUser_id());
+                                        SPUtil.put(GroupTaskDetailActivity.this, "ids", "find_user_name", bean.getUser_name() == null ? "" : bean.getUser_name());
+                                        break;
+                                    case "5"://红外测温
+                                        intent.setClass(GroupTaskDetailActivity.this, HongWaiCeWenActivity.class);
+                                        break;
+                                    case "3"://接地电阻检测
+                                        intent.setClass(GroupTaskDetailActivity.this, JiediDianZuCeLiangActicivity.class);
+                                        break;
+                                    case "10"://绝缘子零值检测
+                                        intent.setClass(GroupTaskDetailActivity.this, JueYuanZiLingZhiJianCeActivity.class);
+                                        break;
+                                    case "6"://斜杆塔倾斜测温
+                                        intent.setClass(GroupTaskDetailActivity.this, XieGanTaQingXieCeWenActivity.class);
+                                        break;
+                                    case "12":/*质量监督记录表*/
+                                        intent.setClass(GroupTaskDetailActivity.this, MonitoringRecordActivity.class);
+                                        intent.putExtra("bean", bean);
+                                        break;
+                                    case "13":
+                                        intent.setClass(GroupTaskDetailActivity.this, CheckActivity.class);
+                                        intent.putExtra("content", bean.getCheck_report());
+                                        break;
+
+
+                                }
+                                startActivityForResult(intent, 25);
+                            }
+                        });
                     }
 
                     @Override

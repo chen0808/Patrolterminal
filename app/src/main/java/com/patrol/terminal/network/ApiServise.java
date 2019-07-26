@@ -327,7 +327,7 @@ public interface ApiServise {
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("work_user_id") String work_user_id, @Query("order") String order);
     //组任务列表
     @GET("/task/group/list/listGET")
-    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id,  @Query("order") String order, @Query("safe") String safe);
+    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id,  @Query("order") String order);
 
     //组任务详情
     @GET("/task/group/list/byIdGET")
@@ -614,7 +614,7 @@ public interface ApiServise {
     //根据线路获取所有缺陷库
     //http://172.16.15.151:9096/task/defect/allGET?line_id=F3BA53A0C28E4EEC9D6DB821CDAAA6EC&month_id=F8118212B09A487D945EAACBD0B2A5AC&week_id=7F181C9BD52E4DBF881E6A6A763BDA6D&STATUS=1&AUDIT_STATUS=1
     @GET("/task/defect/pdaPageGET")
-    Observable<BaseResult<List<DefectFragmentBean>>> getXLDefact(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("line_id") String line_id, @Query("line_name") String line_name);
+    Observable<BaseResult<List<DefectFragmentBean>>> getXLDefact(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("line_id") String line_id, @Query("line_name") String line_name, @Query("order") String order);
 
 
     //获取所有隐患库task/defect/saveDefect

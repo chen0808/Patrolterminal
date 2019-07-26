@@ -240,7 +240,7 @@ public class DefectActivity extends BaseActivity {
                     searchList.clear();
                     for (int i = 0; i < defectList.size(); i++) {
                         if (defectList.get(i).getLine_name().contains(search_name) ||
-                                defectList.get(i).getStart_name().contains(search_name)) {
+                                defectList.get(i).getTower_name().contains(search_name)) {
                             searchList.add(defectList.get(i));
                         }
                     }
@@ -297,7 +297,7 @@ public class DefectActivity extends BaseActivity {
     public void getBanjiXLQx(String search_name, String line_id) {
         ProgressDialog.show(DefectActivity.this, false, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getXLDefact(pageNum, count, line_id, search_name)
+                .getXLDefact(pageNum, count, line_id, search_name,"grade_sign desc,find_time desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(this) {

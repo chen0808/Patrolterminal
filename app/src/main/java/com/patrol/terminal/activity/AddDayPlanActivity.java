@@ -428,6 +428,13 @@ public class AddDayPlanActivity extends BaseActivity {
                 year = times[0];
                 month = months[0];
                 day = months[1].split("日")[0];
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date parse = format.parse(year + "-" + month + "-" + day);
+                    week = TimeUtil.getWeekOfDate(parse.getTime()) + "";
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 getWeekPlan();
             }
         })

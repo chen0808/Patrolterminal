@@ -30,7 +30,7 @@ public class GroupTaskPersonalAdapter extends BaseQuickAdapter<PersonalTaskListB
             AdapterUtils.setText(tvContent, StringUtil.getTypeSign(item.getType_sign()) + "任务");
         }
 
-        viewHolder.setText(R.id.item_plan_time, StringUtil.getGroupState("1"));
-        viewHolder.setTextColor(R.id.item_plan_time,mContext.getResources().getColor(StringUtil.getPersonalColor("1")));
+        viewHolder.setText(R.id.item_plan_time, StringUtil.getPersonalState(item.getAudit_status()));
+        viewHolder.setTextColor(R.id.item_plan_time, mContext.getResources().getColor(StringUtil.getPersonalColor(item.getAudit_status())));
     }
 }

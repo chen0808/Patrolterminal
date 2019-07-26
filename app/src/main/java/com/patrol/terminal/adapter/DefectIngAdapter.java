@@ -31,7 +31,7 @@ public class DefectIngAdapter extends BaseQuickAdapter<DefectFragmentBean, BaseV
                 mContext.startActivity(intent);
             }
         });
-        if ("0".equals(item.getAudit_status())) {
+        if ("0".equals(item.getDone_status())) {
             viewHolder.setText(R.id.item_line_state, "未完成");
             viewHolder.setTextColor(R.id.item_line_state, mContext.getResources().getColor(R.color.write_red));
             viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_red_bg);
@@ -41,20 +41,23 @@ public class DefectIngAdapter extends BaseQuickAdapter<DefectFragmentBean, BaseV
             viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_green_bg);
         }
         viewHolder.setText(R.id.tv_name, "内容：" + item.getContent())
-                .setText(R.id.tv_time, "线路杆塔：" + item.getLine_name()+item.getStart_name())
+                .setText(R.id.tv_time, "线路杆塔：" + item.getLine_name()+item.getTower_name())
                 .setText(R.id.tv_detail, "发现时间：" + item.getFind_time());
 
         if (mType == 0) {
-            viewHolder.setText(R.id.iv_icon,item.getGrade_name());
+            viewHolder.setGone(R.id.iv_icon,false);
+            viewHolder.setGone(R.id.iv_icon_iv,true);
             if ("一般".equals(item.getGrade_name())){
 
-                viewHolder.setBackgroundRes(R.id.iv_icon,R.drawable.plan_week_bg);
+                viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.yiban);
             }else if ("严重".equals(item.getGrade_name())){
-                viewHolder.setBackgroundRes(R.id.iv_icon,R.drawable.plan_yellow_bg);
+                viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.yanzhong);
             }else if ("危急".equals(item.getGrade_name())){
-                viewHolder.setBackgroundRes(R.id.iv_icon,R.drawable.plan_red_bg);
+                viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.weiji);
             }
         }else if (mType == 1) {
+            viewHolder.setGone(R.id.iv_icon,true);
+            viewHolder.setGone(R.id.iv_icon_iv,false);
             viewHolder.setText(R.id.iv_icon, "隐患");
         }
     }

@@ -2,6 +2,7 @@ package com.patrol.terminal.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -429,12 +430,21 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             case R.id.rl_task_now:
             case R.id.rl_task_history:
                 Intent intent = new Intent(getActivity(), NewTaskActivity.class);
-                intent.putExtra("index", 1);
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                    intent.putExtra("index", 4);
+                }else {
+                    intent.putExtra("index", 1);
+                }
+
                 getActivity().startActivity(intent);
                 break;
             case R.id.rl_day_plan_finish:
                 Intent intent1 = new Intent(getActivity(), NewPlanActivity.class);
-                intent1.putExtra("index", 2);
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                    intent1.putExtra("index", 5);
+                }else {
+                    intent1.putExtra("index", 2);
+                }
                 getActivity().startActivity(intent1);
                 break;
         }
