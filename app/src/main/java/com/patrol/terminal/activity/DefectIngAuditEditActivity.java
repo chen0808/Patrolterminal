@@ -1,5 +1,6 @@
 package com.patrol.terminal.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -143,6 +144,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
     private String day;
     private List<CLCSTypeBean> clcsTypeList;//处理措施方法
     private List<String> clcsListStr;
+    private String mJobType;
     private String id;
     private int picIndex = 0;
     private Map<String, RequestBody> params = new HashMap<>();
@@ -157,6 +159,13 @@ public class DefectIngAuditEditActivity extends BaseActivity {
     }
 
     private void initview(String id) {
+        mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+            stockIn.setText("入库");
+        } else {
+            stockIn.setText("提交");
+            turnToRepair.setVisibility(View.GONE);
+        }
         String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         defectDeadline.setText(time);
         initdate(time);
@@ -219,6 +228,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<DefectFragmentDetailBean>() {
+                    @SuppressLint("NewApi")
                     @Override
                     protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
                         bean = t.getResults();
@@ -232,6 +242,17 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                             case "1":
                                 defectStatus.setText("待班长审核");
                                 defectStatus.setTextColor(getResources().getColor(R.color.line_point_1));
+                                if (!mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+                                    defectGradeName.setVisibility(View.VISIBLE);
+                                    rgContentType.setVisibility(View.GONE);
+                                    layoutBottom.setVisibility(View.GONE);
+                                    defectDealNotes.setVisibility(View.VISIBLE);
+                                    defectSpinner.setVisibility(View.GONE);
+                                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
+                                    layoutParams.bottomMargin = 0;
+                                    scrollView.setLayoutParams(layoutParams);
+                                    titleName.setText("缺陷记录");
+                                }
                                 break;
                             case "2":
                                 defectStatus.setText("待专责审核");
@@ -257,8 +278,8 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                             case "5":
                                 defectStatus.setText("待复核");
                                 defectStatus.setTextColor(getResources().getColor(R.color.orange));
-                                layoutBottom.setVisibility(View.GONE);
-                                titleName.setText("缺陷记录");
+//                                layoutBottom.setVisibility(View.GONE);
+//                                titleName.setText("缺陷记录");
                                 break;
                         }
 
@@ -299,6 +320,8 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                         defectGradeName.setText(bean.getGrade_name());
 
                         if ("一般".equals(bean.getGrade_name())) {
+                            defectGradeName.setTextColor(getResources().getColor(R.color.blue));
+
                             checkOneRb.setChecked(false);
                             checkTwoRb.setChecked(false);
                             checkThreeRb.setChecked(true);
@@ -311,6 +334,8 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                             defectDeadline.setText(sdf.format(c.getTime()));
                             initdate(sdf.format(c.getTime()));
                         } else if ("严重".equals(bean.getGrade_name())) {
+                            defectGradeName.setTextColor(getResources().getColor(R.color.line_point_1));
+
                             checkOneRb.setChecked(false);
                             checkTwoRb.setChecked(true);
                             checkThreeRb.setChecked(false);
@@ -323,6 +348,8 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                             defectDeadline.setText(sdf.format(c.getTime()));
                             initdate(sdf.format(c.getTime()));
                         } else if ("危急".equals(bean.getGrade_name())) {
+                            defectGradeName.setTextColor(getResources().getColor(R.color.line_point_0));
+
                             checkOneRb.setChecked(true);
                             checkTwoRb.setChecked(false);
                             checkThreeRb.setChecked(false);
@@ -334,6 +361,15 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                             c.add(Calendar.DATE,1);
                             defectDeadline.setText(sdf.format(c.getTime()));
                             initdate(sdf.format(c.getTime()));
+                        }
+
+                        if((bean.getIn_status().equals("3") || bean.getIn_status().equals("1")) && bean.getClose_time() != null){
+                            String[] times = bean.getClose_time().split("-");
+                            year = times[0];
+                            month = times[1];
+                            day = times[2];
+                            defectDeadline.setText(year + "年" + month + "月" + day + "日");
+                            defectDeadline.setCompoundDrawablesRelative(null, null, null, null);
                         }
 
                         if (bean.getDeal_notes() != null) {
@@ -372,7 +408,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                                 });
                             }
 
-                            if(!bean.getIn_status().equals("3") && bean.getFileList().size() < 5){
+                            if(!bean.getIn_status().equals("3") && !bean.getIn_status().equals("1") && bean.getFileList().size() < 5){
                                 mPicList.add("");
                             }
 
@@ -382,11 +418,15 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view,
                                                         int position, long id) {
-                                    picIndex = position;
-                                    if (position == parent.getChildCount() - 1) {
-                                        startCamera();
-                                    } else {
+                                    if(bean.getIn_status().equals("3")){
                                         viewPluImg(position);
+                                    } else {
+                                        picIndex = position;
+                                        if (position == parent.getChildCount() - 1) {
+                                            startCamera();
+                                        } else {
+                                            viewPluImg(position);
+                                        }
                                     }
                                 }
                             });
@@ -408,12 +448,16 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.defect_deadline:
-                if(!bean.getIn_status().equals("3")){
+                if(!bean.getIn_status().equals("3") && !bean.getIn_status().equals("1")){
                     showDay();
                 }
                 break;
             case R.id.stock_in:
-                submit("3");
+                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+                    submit("3");
+                } else {
+                    submit("1");
+                }
                 break;
             case R.id.turn_to_repair:
                 break;
@@ -424,6 +468,8 @@ public class DefectIngAuditEditActivity extends BaseActivity {
         ProgressDialog.show(this, false, "正在加载。。。。");
         params.clear();
         params.put("id", toRequestBody(bean.getId()));
+        params.put("find_user_id", toRequestBody(bean.getFind_user_id() + ""));
+        params.put("find_dep_id", toRequestBody(bean.getFind_dep_id() + ""));
         params.put("task_check_id", toRequestBody(bean.getTask_check_id()));
         params.put("in_status", toRequestBody(in_status));
         params.put("from_user_id", toRequestBody(SPUtil.getUserId(this)));
@@ -535,7 +581,14 @@ public class DefectIngAuditEditActivity extends BaseActivity {
 
     //提交缺陷审核
     public void submit(String in_status) {
-        CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(this, "入库", "取消", "确定") {
+        String title;
+        if(in_status.equals("3")){
+            title = "入库";
+        } else {
+            title = "提交";
+        }
+
+        CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(this, title, "取消", "确定") {
             @Override
             public void ok() {
                 super.ok();

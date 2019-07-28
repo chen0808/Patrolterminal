@@ -64,7 +64,7 @@ public class DefectAuditPicEditAdapter extends android.widget.BaseAdapter {
             ivDelete.setVisibility(View.GONE);
         }
 
-        if(in_status.equals("3")){
+        if(in_status.equals("3") || in_status.equals("1")){
             ivDelete.setVisibility(View.GONE);
         }
 
