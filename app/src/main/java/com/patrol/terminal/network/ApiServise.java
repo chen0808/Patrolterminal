@@ -31,8 +31,8 @@ public interface ApiServise {
     int DEFAULT_TIMEOUT = 20000;
 
     //获取特殊屬性
-    @GET("/eq/tower/wares/pda/listGET")
-    Observable<BaseResult<List<TssxToEqTowerWares>>> getTssxList(@Query("tower_id") String tower_id,@Query("task_id") String task_id);
+    @GET("/eq/tower/wares/listGET")
+    Observable<BaseResult<List<TssxToEqTowerWares>>> getTssxList(@Query("tower_id") String tower_id);
 
     //月计划列表
     @GET("/plan/month/planGET")
@@ -595,7 +595,7 @@ public interface ApiServise {
 
     //巡视记录缺陷列表
     @GET("task/trouble/listGET")
-    Observable<BaseResult<List<TroubleBean>>> getTroubleFragment2(@Query("line_id") String line_id);
+    Observable<BaseResult<List<LocalAddTrouble>>> getTroubleFragment2(@Query("line_id") String line_id);
 
     //获取班级列表
     @GET("common/listGET")
@@ -1075,6 +1075,15 @@ public interface ApiServise {
     //隐患 处理措施类型
     @GET("admin/dict/listGET")
     Observable<BaseResult<List<CLCSTypeBean>>> getCLCSType(@Query("p_code") String p_code);
+
+    //保存隐患
+    @Multipart
+    @POST("/task/trouble/savePOST")
+    Observable<BaseResult> saveTrouble(@PartMap Map<String, RequestBody> params);
+
+    //隐患 获取类别
+    @GET("admin/dict/listsGET")
+    Observable<BaseResult<List<TroubleTypeBean>>> getTroubleType(@Query("p_codes") String p_codeStr);
 
     //缺陷列表
     @GET("task/defect/grade/allGET")

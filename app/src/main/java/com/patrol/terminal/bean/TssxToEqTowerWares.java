@@ -39,9 +39,9 @@ public class TssxToEqTowerWares implements Serializable {
     //特殊属性 parKey
     private String pda_sign;
 
-    private String wares_name;
+    private String wares_name;//
     //
-    private TssxToTaskTrouble taskTrouble;
+    private List<TssxToFile> eqTowerWaresImgList;//图片
 
     public String getWares_name() {
         return wares_name;
@@ -59,12 +59,12 @@ public class TssxToEqTowerWares implements Serializable {
         this.pda_sign = pda_sign;
     }
 
-    public TssxToTaskTrouble getTaskTrouble() {
-        return taskTrouble;
+    public List<TssxToFile> getEqTowerWaresImgList() {
+        return eqTowerWaresImgList;
     }
 
-    public void setTaskTrouble(TssxToTaskTrouble taskTrouble) {
-        this.taskTrouble = taskTrouble;
+    public void setEqTowerWaresImgList(List<TssxToFile> eqTowerWaresImgList) {
+        this.eqTowerWaresImgList = eqTowerWaresImgList;
     }
 
     public String getId() {

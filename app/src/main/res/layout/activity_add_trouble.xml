@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.CheckActivity">
+
+    <include layout="@layout/include_title" />
+
+    <LinearLayout style="@style/defect_detail_item_ly">
+
+        <TextView
+            style="@style/defect_detail_item_left"
+            android:text="隐患类别：" />
+
+        <TextView
+            android:id="@+id/trouble_yhlb"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/dp_30"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/btn_white_bg"
+            android:gravity="center"
+            android:minHeight="30dp"
+            android:padding="5dp"
+            android:text="防雷" />
+    </LinearLayout>
+
+    <View style="@style/line_gray" />
+
+    <include layout="@layout/activity_yh_fl" />
+
+</LinearLayout>

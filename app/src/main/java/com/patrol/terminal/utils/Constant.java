@@ -41,6 +41,7 @@ public class Constant {
     public static final int PATROL_RECORD_REQUEST_CODE = 40;//巡视记录拍照
     public static final int DEFECT_REQUEST_CODE = 50;//常规巡视拍照
     public static final int DEFECT_AUDIT_EDIT_REQUEST_CODE = 60;//缺陷复核拍照
+    public static final int DEFECT_ADD_TROUBLE_CODE = 70;//添加隐患
     public static final String PARTOL_RECORD_PIC_INDEX = "partolRecordPicIndex";
     public static String USERDEPNAME = "userdepname";
 

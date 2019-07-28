@@ -17,6 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.patrol.terminal.R;
@@ -27,6 +30,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.CLCSTypeBean;
+import com.patrol.terminal.bean.LocalAddTrouble;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean_Table;
 import com.patrol.terminal.bean.LocalPatrolRecordBean;
@@ -74,8 +78,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -691,28 +693,52 @@ public class PatrolRecordActivity extends BaseActivity {
             params.put("eqTowerWaresList[" + i + "].wares_id", toRequestBody(localByTssx.get(i).getKey()));
             params.put("eqTowerWaresList[" + i + "].line_id", toRequestBody(localByTssx.get(i).getLine_id()));//线路id
             params.put("eqTowerWaresList[" + i + "].tower_id", toRequestBody(localByTaskId.getTower_id()));//杆塔id
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.task_id", toRequestBody(task_id));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.line_id", toRequestBody(localByTssx.get(i).getLine_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_id", toRequestBody(localByTaskId.getTower_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_id", toRequestBody(localByTaskId.getTower_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.start_name", toRequestBody(localByTaskId.getTower_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.end_name", toRequestBody(localByTaskId.getTower_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.type_id", toRequestBody(localByTssx.get(i).getKey()));
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.year", toRequestBody(localByTssx.get(i).getYear()));//
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.month", toRequestBody(localByTssx.get(i).getMonth()));//
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.day", toRequestBody(localByTssx.get(i).getDay()));//
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_level", toRequestBody(setDjStrToKey(localByTssx.get(i).getDj())));//隐患等级
-            params.put("eqTowerWaresList[" + i + "].taskTrouble.content", toRequestBody(localByTssx.get(i).getYhnr()));//隐患内容
-
+            params.put("eqTowerWaresList[" + i + "].remarks", toRequestBody(localByTssx.get(i).getYhnr()));
+            params.put("eqTowerWaresList[" + i + "].id", toRequestBody(localByTssx.get(i).getKey()));
 
             if (pics != null) {
                 String[] split = pics.split(";");
                 for (int j = 0; j < split.length; j++) {
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
-                    params.put("eqTowerWaresList[" + i + "].taskTrouble.trouble_file\"; filename=\"" + split[j], requestFile);
+                    params.put("eqTowerWaresList[" + i + "].eqTowerWaresFiles\"; filename=\"" + split[j], requestFile);
                 }
             }
         }
+
+        //离线的添加隐患
+        List<LocalAddTrouble> troubleList = LocalAddTrouble.getAllLocalData(line_id, task_id);
+        for (int i = 0; i < localByTssx.size(); i++) {
+            LocalAddTrouble bean = troubleList.get(i);
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.task_id", toRequestBody(bean.getTask_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.type_id", toRequestBody(bean.getType_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.type_name", toRequestBody(bean.getType_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.grade_sign", toRequestBody(bean.getGrade_sign()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.content", toRequestBody(bean.getContent()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.line_id", toRequestBody(bean.getLine_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.line_name", toRequestBody(bean.getLine_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.tower_id", toRequestBody(bean.getTower_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.tower_name", toRequestBody(bean.getTower_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.from_user_id", toRequestBody(bean.getFrom_user_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.find_user_id", toRequestBody(bean.getFind_user_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.find_user_name", toRequestBody(bean.getFind_user_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.find_dep_id", toRequestBody(bean.getFind_dep_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.find_dep_name", toRequestBody(bean.getFind_dep_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.in_status", toRequestBody(bean.getIn_status()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.remark", toRequestBody(bean.getRemarks()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.wares_id", toRequestBody(bean.getWares_id()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.wares_name", toRequestBody(bean.getWares_name()));
+            params.put("eqTowerWaresList[" + i + "].taskTroubleList.advice_deal_notes", toRequestBody(bean.getAdvice_deal_notes()));
+
+            String pics = bean.getTroubleFiles();
+            if (pics != null) {
+                String[] split = pics.split(";");
+                for (int j = 0; j < split.length; j++) {
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
+                    params.put("eqTowerWaresList[" + i + "].taskTroubleList.troubleFiles\"; filename=\"" + split[j], requestFile);
+                }
+            }
+        }
+
         substepUpload(params);
 
     }

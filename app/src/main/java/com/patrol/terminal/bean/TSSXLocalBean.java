@@ -2,6 +2,7 @@ package com.patrol.terminal.bean;
 
 import com.patrol.terminal.sqlite.AppDataBase;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.widget.CustomSpinner;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -10,7 +11,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import java.io.Serializable;
 
 @Table(database = AppDataBase.class)
-public class TSSXLocalBean extends BaseModel implements Serializable {
+public class TSSXLocalBean extends BaseModel implements Serializable, CustomSpinner.CustomSpinnerItem {
 
     @PrimaryKey(autoincrement = true)
     private int local_id;
@@ -287,5 +288,10 @@ public class TSSXLocalBean extends BaseModel implements Serializable {
 
     public void setTower_number(Integer tower_number) {
         this.tower_number = tower_number;
+    }
+
+    @Override
+    public String getItemStr() {
+        return values;
     }
 }

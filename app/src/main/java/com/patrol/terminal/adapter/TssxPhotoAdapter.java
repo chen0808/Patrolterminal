@@ -18,11 +18,9 @@ import java.util.List;
 public class TssxPhotoAdapter extends android.widget.BaseAdapter {
 
     private Context mContext;
-//    private final LocalPatrolDefectBean bean;
     private LayoutInflater inflater;
     private List<String> mList = new ArrayList<>();
     private ViewHolder holder;
-    private int tssxId;
     private onDelPhotoAdapter onDelPhoto;
 
     public TssxPhotoAdapter(Context context) {
@@ -69,7 +67,7 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
             convertView.setTag(holder);
         }
 
-        if (position != mList.size()) {//代表+号之前的需要正常显示图片
+        if (position < mList.size()) {//代表+号之前的需要正常显示图片
             String path = mList.get(position);
             if (path.contains("http")) {
                 Glide.with(mContext).load(path).into(holder.iv);
@@ -77,22 +75,23 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
                 if (!TextUtils.isEmpty(path))
                     Glide.with(mContext).load(new File(path)).into(holder.iv);
             }
+
             if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
                 holder.ivDelete.setVisibility(View.GONE);
             } else {
                 holder.ivDelete.setVisibility(View.VISIBLE);
             }
+
         } else {
-            holder.iv.setImageResource(R.drawable.item_photo_add);//最后一个显示加号图片
+            Glide.with(mContext).load(R.mipmap.zj).into(holder.iv);//最后一个显示加号图片
             holder.ivDelete.setVisibility(View.GONE);
         }
-
 
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                onDelPhoto.onDelPhotoAdapterStr(mList.get(position));
+                if (onDelPhoto != null)
+                    onDelPhoto.onDelPhotoAdapterStr(mList.get(position));
                 mList.remove(position);
                 notifyDataSetChanged();
             }
@@ -101,24 +100,18 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
         return convertView;
     }
 
-    public void showDelImg(Boolean isShow) {
-
-    }
-
-    public interface onDelPhotoAdapter{
-        void onDelPhotoAdapterStr(String delPhotoStr);
-    }
-
-    public void setDelItem(onDelPhotoAdapter delPhoto)
-    {
+    public void setDelItem(onDelPhotoAdapter delPhoto) {
         this.onDelPhoto = delPhoto;
     }
 
-
-    public void setNotifyDataSetChanged(List<String> list)
-    {
+    public void setNotifyDataSetChanged(List<String> list) {
         this.mList = list;
         notifyDataSetChanged();
+    }
+
+
+    public interface onDelPhotoAdapter {
+        void onDelPhotoAdapterStr(String delPhotoStr);
     }
 
     class ViewHolder {

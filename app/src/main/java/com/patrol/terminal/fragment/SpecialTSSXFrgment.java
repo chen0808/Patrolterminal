@@ -41,7 +41,6 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.NoScrollViewPager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -146,9 +145,10 @@ public class SpecialTSSXFrgment extends BaseFragment {
         intTSSX();
         initClick();
         loadLocalData();
-
-        if (Utils.isNetworkConnected(getContext())) {
+        if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
             saveTssx();
+        } else {
+            loadLocalData();
         }
 
         personalTaskListBean = SQLite.select().from(PersonalTaskListBean.class)
@@ -373,7 +373,7 @@ public class SpecialTSSXFrgment extends BaseFragment {
 //        ProgressDialog.show(getContext(),false,"正在加载中...");
         if (!TextUtils.isEmpty(tower_id)) {
             BaseRequest.getInstance().getService()
-                    .getTssxList(tower_id, task_id)
+                    .getTssxList(tower_id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new BaseObserver<List<TssxToEqTowerWares>>(getContext()) {
@@ -386,12 +386,12 @@ public class SpecialTSSXFrgment extends BaseFragment {
                                     TSSXBean tssxBean = new TSSXBean();
                                     tssxBean.setKey(bean.getWares_id());
                                     tssxBean.setValues(bean.getWares_name());
-                                    tssxBean.setDj(setDjIdStatus(bean.getTaskTrouble().getTrouble_level()));
+//                                    tssxBean.setDj(setDjIdStatus(bean.getTaskTrouble().getTrouble_level()));
                                     tssxBean.setParKey(intToKey(bean.getPda_sign()));//特殊属性父id
+                                    tssxBean.setYhnr(bean.getRemarks());
 
-                                    if (bean.getTaskTrouble() != null) {
-                                        tssxBean.setYhnr(bean.getTaskTrouble().getContent());
-                                        tssxBean.setPhotoList(fileListToList(bean.getTaskTrouble().getFileList()));
+                                    if (bean.getEqTowerWaresImgList() != null) {
+                                        tssxBean.setPhotoList(fileListToList(bean.getEqTowerWaresImgList()));
                                     }
 
                                     typeBeanList.add(tssxBean);
@@ -415,7 +415,6 @@ public class SpecialTSSXFrgment extends BaseFragment {
                         @Override
                         protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
 //                            ProgressDialog.cancle();
-//                            loadLocalData();
                         }
                     });
         }

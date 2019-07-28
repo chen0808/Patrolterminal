@@ -26,8 +26,8 @@ public class BaseRequest {
             .readTimeout(20, TimeUnit.SECONDS)//设置读取超时时间
             .writeTimeout(20, TimeUnit.SECONDS)//设置写入超时时间
             .addInterceptor(InterceptorUtil.HeaderInterceptor())//添加其他拦截器
-            .addInterceptor(InterceptorUtil.LogInterceptor())//添加日志拦截器
-//            .addInterceptor(InterceptorUtil.interceptor)//日志
+//            .addInterceptor(InterceptorUtil.LogInterceptor())//添加日志拦截器
+            .addInterceptor(InterceptorUtil.interceptor)//日志
             .build();
     Retrofit retrofit = new Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create()) //添加Gson转换器

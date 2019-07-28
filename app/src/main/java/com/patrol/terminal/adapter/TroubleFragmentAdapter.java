@@ -10,21 +10,23 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.TroubleDetailActivity;
-import com.patrol.terminal.bean.TroubleBean;
+import com.patrol.terminal.bean.LocalAddTrouble;
 
 import java.util.List;
 
-public class TroubleFragmentAdapter extends BaseQuickAdapter<TroubleBean, BaseViewHolder> {
-    public TroubleFragmentAdapter(int layoutResId, @Nullable List<TroubleBean> data) {
+public class TroubleFragmentAdapter extends BaseQuickAdapter<LocalAddTrouble, BaseViewHolder> {
+    public TroubleFragmentAdapter(int layoutResId, @Nullable List<LocalAddTrouble> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, TroubleBean item) {
-        helper.setText(R.id.tv_name, "线路名称：" + item.getLine_name() + " " + item.getTowers())
+    protected void convert(BaseViewHolder helper, LocalAddTrouble item) {
+        helper.setText(R.id.tv_name, "线路名称：" + item.getLine_name() + " " + item.getTower_name())
                 .setText(R.id.tv_time, "隐患类型：" + item.getType_name())
                 .setText(R.id.tv_detail, "发现时间：" + item.getFind_time())
                 .setText(R.id.iv_icon, "隐患");
+        helper.getView(R.id.item_defect_status).setVisibility(View.GONE);
+
         RelativeLayout rlDefectitem = helper.getView(R.id.rl_defect_item);
         rlDefectitem.setOnClickListener(new View.OnClickListener() {
             @Override
