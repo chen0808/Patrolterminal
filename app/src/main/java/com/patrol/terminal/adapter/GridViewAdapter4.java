@@ -26,13 +26,14 @@ public class GridViewAdapter4 extends android.widget.BaseAdapter {
 
     @Override
     public int getCount() {
-        //return mList.size() + 1;//因为最后多了一个添加图片的ImageView
-        int count = mList == null ? 1 : mList.size() + 1;
-        if (count > Constant.MAX_SELECT_PIC_NUM) {
-            return mList.size();
-        } else {
-            return count;
-        }
+//        //return mList.size() + 1;//因为最后多了一个添加图片的ImageView
+//        int count = mList == null ? 1 : mList.size() + 1;
+//        if (count > Constant.MAX_SELECT_PIC_NUM) {
+//            return mList.size();
+//        } else {
+//            return count;
+//        }
+        return mList.size();
     }
 
     @Override

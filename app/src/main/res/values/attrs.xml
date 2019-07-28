@@ -70,4 +70,8 @@
             <enum name="R2L" value="1" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="DangerSubmitView">
+        <attr name="danger_name" format="string"/>
+    </declare-styleable>
 </resources>

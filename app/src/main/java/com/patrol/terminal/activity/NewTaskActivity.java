@@ -165,7 +165,7 @@ public class NewTaskActivity extends BaseActivity {
         if (job.contains(Constant.RUNNING_SQUAD_LEADER)) {
             mDataList.add("分组");
             mDataList.add("车辆");
-            mDataList.add("计划");
+            mDataList.add("任务");
 
             groupNum.setVisibility(View.VISIBLE);
             carNum.setVisibility(View.VISIBLE);

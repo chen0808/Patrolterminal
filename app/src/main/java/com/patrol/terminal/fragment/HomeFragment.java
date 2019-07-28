@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.CheckActivity;
+import com.patrol.terminal.activity.DangerVerifyActivity;
 import com.patrol.terminal.activity.DefectActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
 import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
@@ -428,6 +429,11 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 break;
 
             case R.id.rl_task_now:
+                Intent intent40 = new Intent(getActivity(), DangerVerifyActivity.class);
+
+
+                getActivity().startActivity(intent40);
+                break;
             case R.id.rl_task_history:
                 Intent intent = new Intent(getActivity(), NewTaskActivity.class);
                 if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){

@@ -359,13 +359,13 @@ public class GroupTaskFrgment extends BaseFragment {
                     protected void onSuccees(BaseResult<List<GroupTaskBean>> t) throws Exception {
                         result = t.getResults();
                         groupTaskAdapter.setNewData(result);
-
+                        RxRefreshEvent.publish("refreshGroupNum@"+result.size());
                         for (int i = 0; i < result.size(); i++) {
                             //查询后存储到本地数据库  by linmeng
                             saveToDatebase(result.get(i));
                         }
 
-                        RxRefreshEvent.publish("refreshGroupNum@"+result.size());
+
                         mRefrsh.setRefreshing(false);
                         isRefresh=true;
                         ProgressDialog .cancle();

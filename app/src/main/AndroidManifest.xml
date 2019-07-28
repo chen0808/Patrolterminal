@@ -32,7 +32,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.DepOFTaskActivity"></activity>
+        <activity android:name=".activity.DangerVerifyActivity"></activity>
+        <activity android:name=".activity.DepOFTaskActivity" />
         <activity android:name=".activity.MyInfoActivity" />
         <activity android:name=".activity.CheckActivity" />
         <activity android:name=".activity.NextMonthPlanActivity" />

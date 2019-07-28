@@ -59,6 +59,15 @@ public class GroupOfDayBean {
     private String day_tower_id;
     private boolean check;
     private String is_rob;
+    private String defect_id;
+
+    public String getDefect_id() {
+        return defect_id;
+    }
+
+    public void setDefect_id(String defect_id) {
+        this.defect_id = defect_id;
+    }
 
     public String getIs_rob() {
         return is_rob;

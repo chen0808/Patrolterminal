@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.CaptureActivity;
+import com.patrol.terminal.activity.DangerVerifyActivity;
 import com.patrol.terminal.activity.DefectIngAuditActivity;
 import com.patrol.terminal.activity.GroupTaskDetailActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
@@ -171,6 +172,7 @@ public class Utils {
                 intent.putExtra("data_id", bean.getData_id() );
                 break;
             case "11":
+                intent.setClass(context, DangerVerifyActivity.class);
                 break;
             case "12":
                 break;

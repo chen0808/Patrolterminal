@@ -1,5 +1,6 @@
 package com.patrol.terminal.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,11 +30,14 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.PlusImageActivity;
+import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.CLCSTypeBean;
 import com.patrol.terminal.bean.LocalPatrolDefectBean;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.sqlite.MyOpenhelper;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.widget.PinchImageView;
 
 import org.angmarch.views.NiceSpinner;
 import org.angmarch.views.OnSpinnerItemSelectedListener;
@@ -413,7 +417,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
             checkOneRb.setEnabled(false);
             checkTwoRb.setEnabled(false);
             checkThreeRb.setEnabled(false);
-            gridView.setEnabled(false);
+//            gridView.setEnabled(false);
             defectSpinner.setEnabled(false);
             if (item.getPics() == null) {
                 initGridViewFromOnline(gridView, item.getOnline_pics());
@@ -441,6 +445,13 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         }
         GridViewAdapter4 adapter = new GridViewAdapter4(mContext, list);
         gridView.setAdapter(adapter);
+        List<String> finalList = list;
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                viewPluImg(finalList.get(position));
+            }
+        });
     }
 
     private void initGridView(GridView gridView, int pos, String pics, String task_id, String patrol_id) {
@@ -469,7 +480,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                     //如果“增加按钮形状的”图片的位置是最后一张，且添加了的图片的数量不超过5张，才能点击
                     if (finalList.size() == Constant.MAX_SELECT_PIC_NUM) {
                         //查看大图
-//                        viewPluImg(position);
+                        viewPluImg(finalList.get(position));
                     } else {
                         //添加凭证图片
                         startCamera();
@@ -479,7 +490,8 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                         Constant.defect_patrol_index = position;
                     }
                 } else {
-//                    viewPluImg(position);
+//                   //查看大图
+                        viewPluImg(finalList.get(position));
                 }
             }
         });
@@ -515,13 +527,23 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
 //        }
 //    }
 
-    //查看大图
-//    private void viewPluImg(int position) {
-//        Intent intent = new Intent(mContext, PlusImageActivity.class);
-//        intent.putStringArrayListExtra(Constant.IMG_LIST, mPicList);
-//        intent.putExtra(Constant.POSITION, position);
-//        activity.startActivityForResult(intent, Constant.REQUEST_CODE_MAIN);
-//    }
+//    查看大图
+    private void viewPluImg(File file) {
+        Dialog dialog = new Dialog(mContext);
+        dialog.setContentView(R.layout.dialog_big_image);
+        PinchImageView iv = dialog.findViewById(R.id.iv);
+            Glide.with(mContext).load(file).into(iv);
+        dialog.show();
+    }
+
+    //    查看大图
+    private void viewPluImg(String url) {
+        Dialog dialog = new Dialog(mContext);
+        dialog.setContentView(R.layout.dialog_big_image);
+        PinchImageView iv = dialog.findViewById(R.id.iv);
+        Glide.with(mContext).load(url).into(iv);
+        dialog.show();
+    }
 //    private void uploadItem(PatrolLevel2 item2, String content, String time, RelativeLayout rlContent, LinearLayout llContent, TextView tvContent) {
 //        params.clear();
 //        params.put("task_id", toRequestBody(item2.getTask_id()));
