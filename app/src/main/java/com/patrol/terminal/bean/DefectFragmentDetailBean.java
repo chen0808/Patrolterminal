@@ -71,6 +71,7 @@ public class DefectFragmentDetailBean implements Serializable {
     private String category_id;
     private String grade_id;
     private String grade_name;// 缺陷级别   危急，严重，一般
+    private String grade_sign;// 缺陷标识（1：一般，2：严重，3：危急）
     private Object patrol_id;
     private String patrol_name;// 缺陷巡视内容   1导线，地线腐蚀
     private String content;// 缺陷内容   手输入内容
@@ -486,5 +487,13 @@ public class DefectFragmentDetailBean implements Serializable {
 
     public void setTask_check_id(String task_check_id) {
         this.task_check_id = task_check_id;
+    }
+
+    public String getGrade_sign() {
+        return grade_sign;
+    }
+
+    public void setGrade_sign(String grade_sign) {
+        this.grade_sign = grade_sign;
     }
 }

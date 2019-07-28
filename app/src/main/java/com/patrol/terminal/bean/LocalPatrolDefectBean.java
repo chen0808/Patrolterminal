@@ -42,6 +42,8 @@ public class LocalPatrolDefectBean extends BaseModel implements Serializable {
     @Column
     private String grade_name;// 缺陷级别   危急，严重，一般
     @Column
+    private String grade_sign;// 缺陷标识（1：一般，2：严重，3：危急）
+    @Column
     private String content;
     @Column
     private String line_id;
@@ -290,5 +292,13 @@ public class LocalPatrolDefectBean extends BaseModel implements Serializable {
 
     public void setFind_dep_name(String find_dep_name) {
         this.find_dep_name = find_dep_name;
+    }
+
+    public String getGrade_sign() {
+        return grade_sign;
+    }
+
+    public void setGrade_sign(String grade_sign) {
+        this.grade_sign = grade_sign;
     }
 }

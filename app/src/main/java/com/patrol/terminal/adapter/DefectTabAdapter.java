@@ -285,6 +285,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                             checkThreeRb.setChecked(false);
                             item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
                             item.setGrade_name("一般");
+                            item.setGrade_sign("1");
                         } else {
                             if (levelStr.contains("危急")) {
                                 checkOneRb.setChecked(true);
@@ -292,24 +293,28 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                                 checkThreeRb.setChecked(false);
                                 item.setGrade_id("10C639F13341484997EE8D955322BE02");
                                 item.setGrade_name("危急");
+                                item.setGrade_sign("3");
                             } else if (levelStr.contains("严重")) {
                                 checkOneRb.setChecked(false);
                                 checkTwoRb.setChecked(true);
                                 checkThreeRb.setChecked(false);
                                 item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
                                 item.setGrade_name("严重");
+                                item.setGrade_sign("2");
                             } else if (levelStr.contains("一般")) {
                                 checkOneRb.setChecked(false);
                                 checkTwoRb.setChecked(false);
                                 checkThreeRb.setChecked(true);
                                 item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
                                 item.setGrade_name("一般");
+                                item.setGrade_sign("1");
                             } else {   //默认为一般
                                 checkOneRb.setChecked(true);
                                 checkTwoRb.setChecked(false);
                                 checkThreeRb.setChecked(false);
                                 item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
                                 item.setGrade_name("一般");
+                                item.setGrade_sign("1");
                             }
                         }
                         item.update();
@@ -325,6 +330,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 checkThreeRb.setChecked(false);
                 item.setGrade_id("10C639F13341484997EE8D955322BE02");
                 item.setGrade_name("危急");
+                item.setGrade_sign("3");
                 item.update();
             }
         });
@@ -336,6 +342,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 checkThreeRb.setChecked(false);
                 item.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
                 item.setGrade_name("严重");
+                item.setGrade_sign("2");
                 item.update();
             }
         });
@@ -347,6 +354,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
                 checkThreeRb.setChecked(true);
                 item.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
                 item.setGrade_name("一般");
+                item.setGrade_sign("1");
                 item.update();
             }
         });

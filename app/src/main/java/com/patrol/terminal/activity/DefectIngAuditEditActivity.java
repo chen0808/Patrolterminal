@@ -187,6 +187,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                 checkThreeRb.setChecked(false);
                 bean.setGrade_id("10C639F13341484997EE8D955322BE02");
                 bean.setGrade_name("危急");
+                bean.setGrade_sign("3");
             }
         });
 
@@ -198,6 +199,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                 checkThreeRb.setChecked(false);
                 bean.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
                 bean.setGrade_name("严重");
+                bean.setGrade_sign("2");
             }
         });
 
@@ -209,6 +211,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                 checkThreeRb.setChecked(true);
                 bean.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
                 bean.setGrade_name("一般");
+                bean.setGrade_sign("1");
             }
         });
 
@@ -477,6 +480,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
         params.put("line_name", toRequestBody(bean.getLine_name()));
         params.put("tower_name", toRequestBody(bean.getTower_name()));
         params.put("grade_name", toRequestBody(bean.getGrade_name()));
+        params.put("grade_sign", toRequestBody(bean.getGrade_sign()));
         params.put("deal_notes", toRequestBody(bean.getDeal_notes()));
         params.put("close_time", toRequestBody(year + "-" + month + "-" + day));
         for(int i=0;i<mPicList.size();i++){
