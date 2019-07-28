@@ -109,6 +109,7 @@ public class DefectFragmentDetailBean implements Serializable {
     private Object dep_name;
     // 缺陷入库状态     不管  （0：编制，1：待班长审核，2：待专责审核，3：复核中，4：审核通过，5：审核不通过）
     private String in_status;
+    private String task_check_id;
     private List<FileBean> fileList;
 
     public String getClose_time() {
@@ -477,5 +478,13 @@ public class DefectFragmentDetailBean implements Serializable {
 
     public void setPatrol_name(String patrol_name) {
         this.patrol_name = patrol_name;
+    }
+
+    public String getTask_check_id() {
+        return task_check_id;
+    }
+
+    public void setTask_check_id(String task_check_id) {
+        this.task_check_id = task_check_id;
     }
 }

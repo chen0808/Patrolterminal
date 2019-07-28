@@ -1108,6 +1108,11 @@ public interface ApiServise {
     @POST("/task/defect/inAuditPOST")
     Observable<BaseResult> inAuditPOST(@Body InAuditPostBean bean);
 
+    //上传缺陷复核
+    @Multipart
+    @POST("task/defect/updateAndImgPOST")
+    Observable<BaseResult> updateAndImgPOST(@PartMap Map<String, RequestBody> params);
+
     //缺陷再复核-转班组
     @POST("/plan/day/defectCheckPOST")
     Observable<BaseResult> defectCheckPOSTGroup(@Body InAuditPostBean bean);

@@ -8,6 +8,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -97,6 +98,8 @@ public class DefectIngAuditActivity extends BaseActivity {
     TextView turnToRepair;
     @BindView(R.id.layout_bottom)
     LinearLayout layoutBottom;
+    @BindView(R.id.scroll_view)
+    ScrollView scrollView;
 
     private DefectAuditPicAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
@@ -171,6 +174,9 @@ public class DefectIngAuditActivity extends BaseActivity {
                                 defectStatus.setText("待复核");
                                 defectStatus.setTextColor(getResources().getColor(R.color.orange));
                                 layoutBottom.setVisibility(View.GONE);
+                                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
+                                layoutParams.bottomMargin = 0;
+                                scrollView.setLayoutParams(layoutParams);
                                 titleName.setText("缺陷记录");
                                 break;
                         }

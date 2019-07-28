@@ -20,10 +20,12 @@ public class DefectAuditPicEditAdapter extends android.widget.BaseAdapter {
     private Context mContext;
     private List<String> mList;
     private LayoutInflater inflater;
+    private String in_status;
 
-    public DefectAuditPicEditAdapter(Context mContext, List<String> mList) {
+    public DefectAuditPicEditAdapter(Context mContext, List<String> mList, String in_status) {
         this.mContext = mContext;
         this.mList = mList;
+        this.in_status = in_status;
         inflater = LayoutInflater.from(mContext);
     }
 
@@ -50,12 +52,22 @@ public class DefectAuditPicEditAdapter extends android.widget.BaseAdapter {
 
         //代表+号之前的需要正常显示图片
         if (mList.get(position) != null && !mList.get(position).equals("")) {
-            Glide.with(mContext).load(mList.get(position)).into(iv);
+            if(mList.get(position).startsWith("http") || mList.get(position).startsWith("https")){
+                Glide.with(mContext).load(mList.get(position)).into(iv);
+            } else {
+                Bitmap bitmap = getLoacalBitmap(mList.get(position));
+                iv .setImageBitmap(bitmap);
+            }
             ivDelete.setVisibility(View.VISIBLE);
         } else {
             iv.setImageResource(R.mipmap.zj);//最后一个显示加号图片
             ivDelete.setVisibility(View.GONE);
         }
+
+        if(in_status.equals("3")){
+            ivDelete.setVisibility(View.GONE);
+        }
+
         ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

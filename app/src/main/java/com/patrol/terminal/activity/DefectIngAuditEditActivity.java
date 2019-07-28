@@ -14,14 +14,19 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.patrol.terminal.R;
@@ -33,7 +38,6 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.CLCSTypeBean;
 import com.patrol.terminal.bean.DefectFragmentDetailBean;
-import com.patrol.terminal.bean.InAuditPostBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
@@ -46,18 +50,24 @@ import org.angmarch.views.NiceSpinner;
 import org.angmarch.views.OnSpinnerItemSelectedListener;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 //缺陷审核编辑
 public class DefectIngAuditEditActivity extends BaseActivity {
@@ -82,6 +92,8 @@ public class DefectIngAuditEditActivity extends BaseActivity {
     TextView patrolName;
     @BindView(R.id.defect_category_name)
     TextView defectCategoryName;
+    @BindView(R.id.defect_grade_name)
+    TextView defectGradeName;
     @BindView(R.id.defect_find_time)
     TextView defectFindTime;
     @BindView(R.id.defect_deal_notes)
@@ -112,13 +124,20 @@ public class DefectIngAuditEditActivity extends BaseActivity {
     LinearLayout layoutBottom;
     @BindView(R.id.rg_content_type)
     RadioGroup rgContentType;
+    @BindView(R.id.check_one_button)
+    RadioButton checkOneRb;
+    @BindView(R.id.check_two_button)
+    RadioButton checkTwoRb;
+    @BindView(R.id.check_three_button)
+    RadioButton checkThreeRb;
     @BindView(R.id.defect_spinner)
     NiceSpinner defectSpinner;
+    @BindView(R.id.scroll_view)
+    ScrollView scrollView;
 
     private DefectAuditPicEditAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
     private DefectFragmentDetailBean bean;
-    private String mJobType;
     private String year;
     private String month;
     private String day;
@@ -126,6 +145,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
     private List<String> clcsListStr;
     private String id;
     private int picIndex = 0;
+    private Map<String, RequestBody> params = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,10 +170,44 @@ public class DefectIngAuditEditActivity extends BaseActivity {
         defectSpinner.setBackgroundColor(getResources().getColor(R.color.transparent));
         defectSpinner.attachDataSource(clcsListStr);
 
+        checkOneRb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkOneRb.setChecked(true);
+                checkTwoRb.setChecked(false);
+                checkThreeRb.setChecked(false);
+                bean.setGrade_id("10C639F13341484997EE8D955322BE02");
+                bean.setGrade_name("危急");
+            }
+        });
+
+        checkTwoRb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkOneRb.setChecked(false);
+                checkTwoRb.setChecked(true);
+                checkThreeRb.setChecked(false);
+                bean.setGrade_id("2CEB42DA67764AC0BF911B02FB579775");
+                bean.setGrade_name("严重");
+            }
+        });
+
+        checkThreeRb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkOneRb.setChecked(false);
+                checkTwoRb.setChecked(false);
+                checkThreeRb.setChecked(true);
+                bean.setGrade_id("37E5647975394B1E952DC5D2796C7D73");
+                bean.setGrade_name("一般");
+            }
+        });
+
         defectSpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
             @Override
             public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
                 CLCSTypeBean typeBean = clcsTypeList.get(position);
+                bean.setDeal_notes(typeBean.getName());
 //                item.setClcsName(typeBean.getName());
 //                item.setClcsId(typeBean.getId());
 //                item.update();
@@ -186,6 +240,15 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                             case "3":
                                 defectStatus.setText("审核通过");
                                 defectStatus.setTextColor(getResources().getColor(R.color.green));
+                                defectGradeName.setVisibility(View.VISIBLE);
+                                rgContentType.setVisibility(View.GONE);
+                                layoutBottom.setVisibility(View.GONE);
+                                defectDealNotes.setVisibility(View.VISIBLE);
+                                defectSpinner.setVisibility(View.GONE);
+                                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
+                                layoutParams.bottomMargin = 0;
+                                scrollView.setLayoutParams(layoutParams);
+                                titleName.setText("缺陷记录");
                                 break;
                             case "4":
                                 defectStatus.setText("审核不通过");
@@ -233,9 +296,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                             defectCategoryName.setText(bean.getCategory_name());
                         }
 
-                        RadioButton checkOneRb = (RadioButton) rgContentType.getChildAt(0);
-                        RadioButton checkTwoRb = (RadioButton) rgContentType.getChildAt(1);
-                        RadioButton checkThreeRb = (RadioButton) rgContentType.getChildAt(2);
+                        defectGradeName.setText(bean.getGrade_name());
 
                         if ("一般".equals(bean.getGrade_name())) {
                             checkOneRb.setChecked(false);
@@ -276,6 +337,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                         }
 
                         if (bean.getDeal_notes() != null) {
+                            defectDealNotes.setText(bean.getDeal_notes());
                             if(clcsListStr != null){
                                 for(int i=0;i<clcsListStr.size();i++){
                                     if(clcsListStr.get(i).contains(bean.getDeal_notes())){
@@ -289,13 +351,32 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                         if (bean.getFileList() != null && bean.getFileList().size() > 0) {
                             deffectImg.setVisibility(View.VISIBLE);
                             mPicList.clear();
+
                             for (int i = 0; i < bean.getFileList().size(); i++) {
-                                mPicList.add(BaseUrl.BASE_URL + bean.getFileList().get(i).getFile_path() + bean.getFileList().get(i).getFilename());
+                                String url = BaseUrl.BASE_URL + bean.getFileList().get(i).getFile_path() + bean.getFileList().get(i).getFilename();
+                                mPicList.add(url);
+                                int j = i;
+                                String path = Environment.getExternalStorageDirectory().getPath()
+                                        + "/MyPhoto/" + id + "_" + i + ".jpg";
+                                Glide.with(DefectIngAuditEditActivity.this).asBitmap().load(url).into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        try {
+                                            FileUtil.saveFile(resource, path);
+                                            mPicList.set(j, path);
+                                            mGridViewAddImgAdapter.notifyDataSetChanged();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
                             }
-                            if(bean.getFileList().size() < 5){
+
+                            if(!bean.getIn_status().equals("3") && bean.getFileList().size() < 5){
                                 mPicList.add("");
                             }
-                            mGridViewAddImgAdapter = new DefectAuditPicEditAdapter(DefectIngAuditEditActivity.this, mPicList);
+
+                            mGridViewAddImgAdapter = new DefectAuditPicEditAdapter(DefectIngAuditEditActivity.this, mPicList, bean.getIn_status());
                             defectGridView.setAdapter(mGridViewAddImgAdapter);
                             defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -310,6 +391,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                                 }
                             });
                         }
+
                     }
 
                     @Override
@@ -326,34 +408,41 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.defect_deadline:
-                showDay();
+                if(!bean.getIn_status().equals("3")){
+                    showDay();
+                }
                 break;
             case R.id.stock_in:
-                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
-                    submit("3");
-                } else {
-                    submit("2");
-                }
+                submit("3");
                 break;
             case R.id.turn_to_repair:
                 break;
         }
     }
 
-    public void inAuditPOST(String in_status) {
+    public void updateAndImgPOST(String in_status) {
         ProgressDialog.show(this, false, "正在加载。。。。");
-        InAuditPostBean inAuditPostBean = new InAuditPostBean();
-        inAuditPostBean.setId(bean.getId());
-        inAuditPostBean.setIn_status(in_status);
-        inAuditPostBean.setFrom_user_id(SPUtil.getUserId(this));
-        inAuditPostBean.setFrom_user_name(SPUtil.getUserName(this));
-        inAuditPostBean.setLine_name(bean.getLine_name());
-        inAuditPostBean.setTower_name(bean.getTower_name());
-        if(in_status.equals("3")){
-            inAuditPostBean.setClose_time(year + "-" + month + "-" + day);
+        params.clear();
+        params.put("id", toRequestBody(bean.getId()));
+        params.put("task_check_id", toRequestBody(bean.getTask_check_id()));
+        params.put("in_status", toRequestBody(in_status));
+        params.put("from_user_id", toRequestBody(SPUtil.getUserId(this)));
+        params.put("from_user_name", toRequestBody(SPUtil.getUserName(this)));
+        params.put("line_name", toRequestBody(bean.getLine_name()));
+        params.put("tower_name", toRequestBody(bean.getTower_name()));
+        params.put("grade_name", toRequestBody(bean.getGrade_name()));
+        params.put("deal_notes", toRequestBody(bean.getDeal_notes()));
+        params.put("close_time", toRequestBody(year + "-" + month + "-" + day));
+        for(int i=0;i<mPicList.size();i++){
+            if(!mPicList.get(i).equals("")){
+                File file = new File(mPicList.get(i));
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                params.put("defect_file\"; filename=\"" + i + ".jpg", requestFile);
+            }
         }
+
         BaseRequest.getInstance().getService()
-                .inAuditPOST(inAuditPostBean)
+                .updateAndImgPOST(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver(this) {
@@ -381,6 +470,7 @@ public class DefectIngAuditEditActivity extends BaseActivity {
         Intent intent = new Intent(this, PlusImageActivity.class);
         intent.putStringArrayListExtra(Constant.IMG_LIST, mPicList);
         intent.putExtra("isDelPic", "0");
+        intent.putExtra(Constant.POSITION, position);
         startActivityForResult(intent, Constant.REQUEST_CODE_MAIN);
     }
 
@@ -445,51 +535,19 @@ public class DefectIngAuditEditActivity extends BaseActivity {
 
     //提交缺陷审核
     public void submit(String in_status) {
-        if(in_status.equals("4")){
-            CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(DefectIngAuditEditActivity.this, "驳回", "取消", "确定") {
-                @Override
-                public void ok() {
-                    super.ok();
-                    inAuditPOST("4");
-                }
-
-                @Override
-                public void cancle() {
-                    super.cancle();
-                }
-            };
-            dialog.show();
-        } else {
-            if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
-                CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(this, "入库", "取消", "确定") {
-                    @Override
-                    public void ok() {
-                        super.ok();
-                        inAuditPOST("3");
-                    }
-
-                    @Override
-                    public void cancle() {
-                        super.cancle();
-                    }
-                };
-                dialog.show();
-            } else {
-                CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(this, "通过", "取消", "确定") {
-                    @Override
-                    public void ok() {
-                        super.ok();
-                        inAuditPOST("2");
-                    }
-
-                    @Override
-                    public void cancle() {
-                        super.cancle();
-                    }
-                };
-                dialog.show();
+        CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(this, "入库", "取消", "确定") {
+            @Override
+            public void ok() {
+                super.ok();
+                updateAndImgPOST(in_status);
             }
-        }
+
+            @Override
+            public void cancle() {
+                super.cancle();
+            }
+        };
+        dialog.show();
     }
 
     public void getClcsData() {
@@ -540,6 +598,16 @@ public class DefectIngAuditEditActivity extends BaseActivity {
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    public RequestBody toRequestBody(String value) {
+        if (value != null) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            return requestBody;
+        } else {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            return requestBody;
         }
     }
 }
