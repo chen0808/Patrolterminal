@@ -46,7 +46,7 @@ public class CustomSpinner extends LinearLayout {
     private OnItemSelectedListenerSpinner onItemSelectedListener;
     private OnCusAdapter onCusAdapter;
 
-    private int height;
+    private int height;//popdialog 高
     private int postion = 0;//选中项
 
     public CustomSpinner(Context context) {
@@ -180,9 +180,10 @@ public class CustomSpinner extends LinearLayout {
     }
 
     public void attachDataSource(List itemList) {
-
+        list = null;
+        listStr = null;
         if (itemList == null || itemList.size() == 0) {
-            tv_name.setText("");
+            tv_name.setText("未关联数据");
             return;
         }
 
@@ -231,7 +232,7 @@ public class CustomSpinner extends LinearLayout {
     public Object getSelectObject() {
 
         if (onCusAdapter != null) {
-            return ((CustomSpinnerItem) onCusAdapter.getAdapter().getItem(CustomSpinner.this.postion));
+            return onCusAdapter.getAdapter().getItem(CustomSpinner.this.postion);
         } else {
             if (list != null) {
                 return list.get(CustomSpinner.this.postion);
@@ -247,7 +248,7 @@ public class CustomSpinner extends LinearLayout {
      *
      * @param popHeight
      */
-    public void setSpinnerheight(int popHeight) {
+    public void setSpinnerHeight(int popHeight) {
         this.height = popHeight;
     }
 

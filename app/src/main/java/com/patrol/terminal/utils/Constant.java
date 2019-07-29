@@ -132,4 +132,5 @@ public class Constant {
     public static String DJ_YB_STR = "一般";
     public static String DJ_YZ_STR = "严重";
     public static String DJ_WJ_STR = "危急";
+
 }

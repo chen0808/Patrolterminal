@@ -14,16 +14,13 @@
             style="@style/defect_detail_item_left"
             android:text="隐患类别：" />
 
-        <TextView
-            android:id="@+id/trouble_yhlb"
-            android:layout_width="100dp"
-            android:layout_height="@dimen/dp_30"
+
+        <com.patrol.terminal.widget.CustomSpinner
+            android:id="@+id/trouble_type"
+            style="@style/cus_spinner"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/btn_white_bg"
-            android:gravity="center"
-            android:minHeight="30dp"
-            android:padding="5dp"
-            android:text="防雷" />
+            android:background="@drawable/btn_white_bg" />
+
     </LinearLayout>
 
     <View style="@style/line_gray" />

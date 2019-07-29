@@ -30,14 +30,9 @@
 
             <com.patrol.terminal.widget.CustomSpinner
                 android:id="@+id/fl_stsx"
-                android:layout_width="140dp"
-                android:layout_height="@dimen/dp_30"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/btn_white_bg"
-                android:gravity="center"
-                android:minWidth="120dp"
-                android:minHeight="30dp"
-                android:padding="5dp" />
+                style="@style/cus_spinner"
+                android:layout_width="160dp"
+                android:background="@drawable/btn_white_bg" />
 
         </LinearLayout>
 
@@ -102,18 +97,13 @@
 
             <TextView
                 style="@style/defect_detail_item_left"
-                android:text="处理措施：" />
+                android:text="建议处理措施：" />
 
             <com.patrol.terminal.widget.CustomSpinner
                 android:id="@+id/fl_clcs"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/btn_white_bg"
-                android:gravity="center"
-                android:minWidth="130dp"
-                android:minHeight="30dp"
-                android:padding="5dp" />
+                style="@style/cus_spinner"
+                android:layout_width="160dp"
+                android:background="@drawable/btn_white_bg" />
 
         </LinearLayout>
 

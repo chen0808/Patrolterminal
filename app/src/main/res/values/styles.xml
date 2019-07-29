@@ -244,5 +244,16 @@
         <item name="android:textSize">@dimen/sp_16</item>
     </style>
 
+    <style name="cus_spinner">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">120dp</item>
+        <item name="android:minHeight">30dp</item>
+        <item name="android:padding">5dp</item>
+
+    </style>
+
 
 </resources>

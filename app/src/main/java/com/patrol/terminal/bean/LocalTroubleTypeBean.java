@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * 隐患标识配置
- *
+ * <p>
  * 1：三跨，2：防鸟，3：防雷，4：防风，5：防山火，6：防外破，7：地灾
  * "id": "4193B5063B6944379CBFEB3A215DEF60",
  * "code": "azfnc",
@@ -31,7 +31,7 @@ import java.util.List;
 public class LocalTroubleTypeBean extends BaseModel implements CustomSpinner.CustomSpinnerItem {
 
     public final static String TROUBLE_SK = "sk";
-    public final static String TROUBLE_FN = "fn";
+    public final static String TROUBLE_FN = "fnh";
     public final static String TROUBLE_FL = "fl";
     public final static String TROUBLE_FF = "ff";
     public final static String TROUBLE_FSH = "fsh";
@@ -52,6 +52,90 @@ public class LocalTroubleTypeBean extends BaseModel implements CustomSpinner.Cus
     private String p_name;
     @Column
     private String full_name;
+
+    public static List<LocalTroubleTypeBean.TroubleType> troubleTypes = null;
+
+    /**
+     * 1：三跨，2：防鸟，3：防雷，4：防风，5：防山火，6：防外破，7：地灾
+     */
+    public static List<LocalTroubleTypeBean.TroubleType> getTroubleType() {
+
+        if (troubleTypes == null) {
+            troubleTypes = new ArrayList<>();
+            LocalTroubleTypeBean.TroubleType type1 = new LocalTroubleTypeBean.TroubleType();
+            type1.setId("1");
+            type1.setTypeStr(TROUBLE_SK);
+            type1.setName("三跨");
+            troubleTypes.add(type1);
+            LocalTroubleTypeBean.TroubleType type2 = new LocalTroubleTypeBean.TroubleType();
+            type2.setId("2");
+            type2.setTypeStr(TROUBLE_FN);
+            type2.setName("防鸟害");
+            troubleTypes.add(type2);
+            LocalTroubleTypeBean.TroubleType type3 = new LocalTroubleTypeBean.TroubleType();
+            type3.setId("3");
+            type3.setTypeStr(TROUBLE_FL);
+            type3.setName("防雷");
+            troubleTypes.add(type3);
+            LocalTroubleTypeBean.TroubleType type4 = new LocalTroubleTypeBean.TroubleType();
+            type4.setId("4");
+            type4.setTypeStr(TROUBLE_FF);
+            type4.setName("防风");
+            troubleTypes.add(type4);
+            LocalTroubleTypeBean.TroubleType type5 = new LocalTroubleTypeBean.TroubleType();
+            type5.setId("5");
+            type5.setTypeStr(TROUBLE_FSH);
+            type5.setName("防山火");
+            troubleTypes.add(type5);
+            LocalTroubleTypeBean.TroubleType type6 = new LocalTroubleTypeBean.TroubleType();
+            type6.setId("6");
+            type6.setTypeStr(TROUBLE_FWP);
+            type6.setName("防外破");
+            troubleTypes.add(type6);
+            LocalTroubleTypeBean.TroubleType type7 = new LocalTroubleTypeBean.TroubleType();
+            type7.setId("7");
+            type7.setTypeStr(TROUBLE_DZ);
+            type7.setName("地灾");
+            troubleTypes.add(type7);
+        }
+
+        return troubleTypes;
+    }
+
+    public static class TroubleType implements CustomSpinner.CustomSpinnerItem {
+        private String id;//1
+        private String typeStr;//fl
+        private String name;//防雷
+
+        public String getTypeStr() {
+            return typeStr;
+        }
+
+        public void setTypeStr(String typeStr) {
+            this.typeStr = typeStr;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getItemStr() {
+            return name;
+        }
+    }
 
     public String getId() {
         return id;

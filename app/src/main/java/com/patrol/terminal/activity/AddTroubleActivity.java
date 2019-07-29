@@ -32,6 +32,7 @@ import com.patrol.terminal.sqlite.AppDataBase;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.CustomSpinner;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
@@ -45,7 +46,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class AddTroubleActivity extends BaseActivity {
@@ -76,9 +76,10 @@ public class AddTroubleActivity extends BaseActivity {
     CustomSpinner tssxSpinner;
     @BindView(R.id.yh_fl_gridview)
     GridView yh_gridview;
+    @BindView(R.id.trouble_type)
+    CustomSpinner typeSpinner;
 
-    private Disposable subscribe;
-    private LocalAddTrouble addTrouble;
+
     private String task_id;
     private String line_id;
     private String line_name;
@@ -86,10 +87,7 @@ public class AddTroubleActivity extends BaseActivity {
     private String tower_name;
     private String YHDJStr;//隐患等级
     private PersonalTaskListBean personalTaskListBean;
-//    private TSSXLocalBean tssxBean;
-//    private List<TSSXLocalBean> tssxList;
 
-    //    private List<LocalTroubleTypeBean> typeList = new ArrayList<>();
     private List<String> photoList = new ArrayList<>();
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
@@ -106,22 +104,19 @@ public class AddTroubleActivity extends BaseActivity {
         tower_id = getIntent().getStringExtra("tower_id");// 杆塔id
         tower_name = getIntent().getStringExtra("tower_name");// 杆塔名字
 
-        getTroubleType();
-        initView();
         getLocalList();
+        initView();
+        if (Utils.isNetworkConnected(this)) {
+            getTroubleType();
+        } else {
+            initClcsType();
+        }
 
     }
 
     public void initView() {
         fl_gth.setText(line_name + " " + tower_name);
-
-//        tssxSpinner.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
-//            @Override
-//            public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
-//                tssxBean = tssxList.get(i);
-//            }
-//        });
-
+        //隐患等级
         yh_radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -140,6 +135,17 @@ public class AddTroubleActivity extends BaseActivity {
             }
         });
 
+        //隐患类别
+        typeSpinner.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
+            @Override
+            public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
+
+                LocalTroubleTypeBean.TroubleType type = (LocalTroubleTypeBean.TroubleType) typeSpinner.getSelectObject();
+
+                clcsSpinner.attachDataSource(LocalTroubleTypeBean.indexList(type.getTypeStr()));
+            }
+        });
+
     }
 
     @OnClick(R.id.add_fl_save)
@@ -148,10 +154,20 @@ public class AddTroubleActivity extends BaseActivity {
     }
 
     public void getLocalList() {
+        clcsSpinner.setSpinnerHeight(390);
+        typeSpinner.attachDataSource(LocalTroubleTypeBean.getTroubleType());
 
         personalTaskListBean = PersonalTaskListBean.getPersonalTask(this, task_id);
 
-        tssxSpinner.attachDataSource(TSSXLocalBean.getTssxList(task_id, tower_id));
+        List<TSSXLocalBean> tssxLocalList = new ArrayList<>();//TSSXLocalBean.getTssxList(task_id, tower_id);
+        if (tssxLocalList != null) {
+            TSSXLocalBean txxsLocal = new TSSXLocalBean();
+            txxsLocal.setKey("");
+            txxsLocal.setValues("不关联");
+            tssxLocalList.add(txxsLocal);
+        }
+        tssxLocalList.addAll(TSSXLocalBean.getTssxList(task_id, tower_id));
+        tssxSpinner.attachDataSource(tssxLocalList);
 
     }
 
@@ -176,8 +192,9 @@ public class AddTroubleActivity extends BaseActivity {
                                                 LocalTroubleTypeBean bean = list.get(i);
                                                 bean.save();
                                             }
-
-                                            clcsSpinner.attachDataSource(LocalTroubleTypeBean.indexList(LocalTroubleTypeBean.TROUBLE_FL));
+                                            initClcsType();
+//                                            LocalTroubleTypeBean.TroubleType type = (LocalTroubleTypeBean.TroubleType)typeSpinner.getSelectObject();
+//                                            clcsSpinner.attachDataSource(LocalTroubleTypeBean.indexList(type.getTypeStr()));
                                         }
                                     }).build().executeSync();
                         }
@@ -185,9 +202,19 @@ public class AddTroubleActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
+                        initClcsType();
                     }
                 });
+    }
+
+    //处理离线  处理措施
+    public void initClcsType() {
+        LocalTroubleTypeBean.TroubleType type = (LocalTroubleTypeBean.TroubleType) typeSpinner.getSelectObject();
+        List<LocalTroubleTypeBean> clcsList = LocalTroubleTypeBean.indexList(type.getTypeStr());
+        if (clcsList != null)
+            clcsSpinner.attachDataSource(clcsList);
+        else
+            clcsSpinner.attachDataSource(null);
     }
 
 
@@ -199,20 +226,22 @@ public class AddTroubleActivity extends BaseActivity {
         }
 
         TSSXLocalBean tssxBean = (TSSXLocalBean) tssxSpinner.getSelectObject();
-        if (tssxBean == null) {
-            Toast.makeText(this, "请选择关联特殊属性", Toast.LENGTH_LONG).show();
-            return;
-        }
+//        if (tssxBean != null) {
+//            Toast.makeText(this, "请选择关联特殊属性", Toast.LENGTH_LONG).show();
+//            return;
+//        }
 
         if (photoList.size() == 0) {
             Toast.makeText(this, "请添加至少一张图片", Toast.LENGTH_LONG).show();
             return;
         }
 
+        LocalTroubleTypeBean.TroubleType type = (LocalTroubleTypeBean.TroubleType) typeSpinner.getSelectObject();
+
         LocalAddTrouble trouble = new LocalAddTrouble();
         trouble.setTask_id(task_id);
-        trouble.setType_id("3");
-        trouble.setType_name("防雷");
+        trouble.setType_id(type.getId());//"3"
+        trouble.setType_name(type.getName());//"防雷"
         trouble.setGrade_sign(djToStr(YHDJStr));
         trouble.setContent(fl_yhnr.getText().toString().trim());
         trouble.setLine_id(line_id);
@@ -314,12 +343,5 @@ public class AddTroubleActivity extends BaseActivity {
         startActivityForResult(intent, Constant.DEFECT_REQUEST_CODE);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (subscribe != null) {
-            subscribe.dispose();
-        }
-    }
 
 }
