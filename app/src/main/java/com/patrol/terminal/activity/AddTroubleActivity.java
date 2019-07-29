@@ -24,19 +24,18 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.JDDZbean_Table;
 import com.patrol.terminal.bean.LocalAddTrouble;
+import com.patrol.terminal.bean.LocalTroubleTypeBean;
 import com.patrol.terminal.bean.PersonalTaskListBean;
-import com.patrol.terminal.bean.PersonalTaskListBean_Table;
 import com.patrol.terminal.bean.TSSXLocalBean;
-import com.patrol.terminal.bean.TSSXLocalBean_Table;
-import com.patrol.terminal.bean.TroubleTypeBean;
+import com.patrol.terminal.sqlite.AppDataBase;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
-import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.CustomSpinner;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,8 +47,6 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 public class AddTroubleActivity extends BaseActivity {
 
@@ -58,8 +55,6 @@ public class AddTroubleActivity extends BaseActivity {
     @BindView(R.id.title_name)
     TextView titleName;
 
-    //    @BindView(R.id.fl_clcs)
-//    EditText fl_clcs;
     @BindView(R.id.fl_bz)
     EditText fl_bz;
     @BindView(R.id.fl_yhnr)
@@ -91,11 +86,10 @@ public class AddTroubleActivity extends BaseActivity {
     private String tower_name;
     private String YHDJStr;//隐患等级
     private PersonalTaskListBean personalTaskListBean;
-    private TSSXLocalBean tssxBean;
-    private List<TSSXLocalBean> tssxList;
+//    private TSSXLocalBean tssxBean;
+//    private List<TSSXLocalBean> tssxList;
 
-    private List<TroubleTypeBean> typeList = new ArrayList<>();
-    private List<TroubleTypeBean> selectClcsList = new ArrayList<>();
+    //    private List<LocalTroubleTypeBean> typeList = new ArrayList<>();
     private List<String> photoList = new ArrayList<>();
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
@@ -111,20 +105,22 @@ public class AddTroubleActivity extends BaseActivity {
         line_name = getIntent().getStringExtra("line_name");// 线路名字
         tower_id = getIntent().getStringExtra("tower_id");// 杆塔id
         tower_name = getIntent().getStringExtra("tower_name");// 杆塔名字
+
         getTroubleType();
-        getLocalTssxList();
         initView();
+        getLocalList();
+
     }
 
     public void initView() {
         fl_gth.setText(line_name + " " + tower_name);
 
-        tssxSpinner.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
-            @Override
-            public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
-                tssxBean = tssxList.get(i);
-            }
-        });
+//        tssxSpinner.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
+//            @Override
+//            public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
+//                tssxBean = tssxList.get(i);
+//            }
+//        });
 
         yh_radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -148,23 +144,15 @@ public class AddTroubleActivity extends BaseActivity {
 
     @OnClick(R.id.add_fl_save)
     void saveFLTrouble() {
-        String yhnr = fl_yhnr.getText().toString().trim();
-        String bz = fl_bz.getText().toString().trim();
         saveTrouble();
     }
 
-    public void getLocalTssxList() {
+    public void getLocalList() {
 
-        personalTaskListBean = SQLite.select().from(PersonalTaskListBean.class)
-                .where(PersonalTaskListBean_Table.id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(this)))
-                .querySingle();
+        personalTaskListBean = PersonalTaskListBean.getPersonalTask(this, task_id);
 
-        tssxList = SQLite.select().from(TSSXLocalBean.class)
-                .where(TSSXLocalBean_Table.task_id.is(task_id))
-                .and(TSSXLocalBean_Table.tower_id.is(tower_id))
-                .queryList();
+        tssxSpinner.attachDataSource(TSSXLocalBean.getTssxList(task_id, tower_id));
 
-        tssxSpinner.attachDataSource(tssxList);
     }
 
     public void getTroubleType() {
@@ -172,14 +160,26 @@ public class AddTroubleActivity extends BaseActivity {
                 .getTroubleType("sk,fnh,fl,ff,fsh,fwp,dz")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<TroubleTypeBean>>(this) {
+                .subscribe(new BaseObserver<List<LocalTroubleTypeBean>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<TroubleTypeBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<LocalTroubleTypeBean>> t) throws Exception {
                         if (t.isSuccess()) {
-                            typeList.clear();
-                            typeList.addAll(t.getResults());
 
-                            clcsSpinner.attachDataSource(indexList(TroubleTypeBean.TROUBLE_FL));
+                            FlowManager.getDatabase(AppDataBase.class).
+                                    beginTransactionAsync(new ITransaction() {
+                                        @Override
+                                        public void execute(DatabaseWrapper databaseWrapper) {
+                                            LocalTroubleTypeBean.delAllData();
+
+                                            List<LocalTroubleTypeBean> list = t.getResults();
+                                            for (int i = 0; i < list.size(); i++) {
+                                                LocalTroubleTypeBean bean = list.get(i);
+                                                bean.save();
+                                            }
+
+                                            clcsSpinner.attachDataSource(LocalTroubleTypeBean.indexList(LocalTroubleTypeBean.TROUBLE_FL));
+                                        }
+                                    }).build().executeSync();
                         }
                     }
 
@@ -191,17 +191,6 @@ public class AddTroubleActivity extends BaseActivity {
     }
 
 
-    public List<TroubleTypeBean> indexList(String type) {
-        selectClcsList.clear();
-        for (int i = 0; i < typeList.size(); i++) {
-            TroubleTypeBean typeBean = typeList.get(i);
-            if (typeBean.getP_code().equals(type)) {
-                selectClcsList.add(typeBean);
-            }
-        }
-        return selectClcsList;
-    }
-
     public void saveTrouble() {
 
         if (TextUtils.isEmpty(YHDJStr)) {
@@ -209,12 +198,13 @@ public class AddTroubleActivity extends BaseActivity {
             return;
         }
 
-        if (tssxBean == null && tssxList.size() > 0) {
+        TSSXLocalBean tssxBean = (TSSXLocalBean) tssxSpinner.getSelectObject();
+        if (tssxBean == null) {
             Toast.makeText(this, "请选择关联特殊属性", Toast.LENGTH_LONG).show();
             return;
         }
 
-        if (photoList.size() > 0) {
+        if (photoList.size() == 0) {
             Toast.makeText(this, "请添加至少一张图片", Toast.LENGTH_LONG).show();
             return;
         }
@@ -257,7 +247,7 @@ public class AddTroubleActivity extends BaseActivity {
         trouble.save();
         Toast.makeText(AddTroubleActivity.this, "保存成功", Toast.LENGTH_LONG).show();
 
-        //                标记离线操作
+        // 标记离线操作
         if (personalTaskListBean != null) {
             personalTaskListBean.setIs_save("0");
             personalTaskListBean.update();
@@ -266,71 +256,8 @@ public class AddTroubleActivity extends BaseActivity {
         setResult(RESULT_OK);
         finish();
 
-//        ProgressDialog.show(this,false,"正在加载中...");
-//        Map<String, RequestBody> params = new HashMap<>();
-//        params.put("task_id", toRequestBody(task_id));
-//        params.put("type_id", toRequestBody("3"));
-//        params.put("type_name", toRequestBody("防雷"));
-//        params.put("grade_sign", toRequestBody(djToStr(YHDJStr)));
-//        params.put("content", toRequestBody(fl_yhnr.getText().toString().trim()));
-//        params.put("line_id", toRequestBody(line_id));
-//        params.put("line_name", toRequestBody(line_name));
-//        params.put("tower_id", toRequestBody(tower_id));
-//        params.put("tower_name", toRequestBody(tower_name));
-//        params.put("find_user_id", toRequestBody(personalTaskListBean.getUser_id()));
-//        params.put("from_user_id", toRequestBody(personalTaskListBean.getUser_id()));
-//        params.put("find_user_name", toRequestBody(personalTaskListBean.getUser_name()));
-//        params.put("find_dep_name", toRequestBody(personalTaskListBean.getDep_name()));
-//        params.put("find_dep_id", toRequestBody(personalTaskListBean.getDep_id()));
-//        params.put("in_status", toRequestBody("1"));//默认
-//        params.put("remarks", toRequestBody(fl_bz.getText().toString().trim()));
-//        if(tssxBean != null){
-//            params.put("wares_id", toRequestBody(tssxBean.getKey()));//特殊属性
-//            params.put("wares_name", toRequestBody(tssxBean.getValues()));
-//        }else{
-//            params.put("wares_id",toRequestBody(""));//
-//            params.put("wares_name", toRequestBody(""));
-//        }
-//
-//        params.put("advice_deal_notes", toRequestBody(clcsSpinner.getSelectItem()));
-//
-//        for (int j = 0; j < photoList.size(); j++) {
-//            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(photoList.get(j)));
-//            params.put("troubleFiles\"; filename=\"" + photoList.get(j), requestFile);
-//        }
-//
-//        BaseRequest.getInstance().getService()
-//                .saveTrouble(params)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver(this) {
-//                    protected void onSuccees(BaseResult t) throws Exception {
-//                        if (t.isSuccess()) {
-//                            Toast.makeText(AddTroubleActivity.this, "提交成功", Toast.LENGTH_LONG).show();
-//                            setResult(RESULT_OK);
-//                            finish();
-//                        } else {
-//                            Toast.makeText(AddTroubleActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                        ProgressDialog.cancle();
-//                    }
-//
-//                });
     }
 
-    public RequestBody toRequestBody(String value) {
-        if (!TextUtils.isEmpty(value)) {
-            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
-            return requestBody;
-        } else {
-            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
-            return requestBody;
-        }
-    }
 
     public String djToStr(String djStr) {
         if (TextUtils.isEmpty(djStr)) djStr = Constant.DJ_YB_STR;

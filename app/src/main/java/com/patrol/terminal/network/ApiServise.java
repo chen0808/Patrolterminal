@@ -1083,7 +1083,7 @@ public interface ApiServise {
 
     //隐患 获取类别
     @GET("admin/dict/listsGET")
-    Observable<BaseResult<List<TroubleTypeBean>>> getTroubleType(@Query("p_codes") String p_codeStr);
+    Observable<BaseResult<List<LocalTroubleTypeBean>>> getTroubleType(@Query("p_codes") String p_codeStr);
 
     //缺陷列表
     @GET("task/defect/grade/allGET")

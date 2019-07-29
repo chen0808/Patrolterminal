@@ -224,6 +224,25 @@ public class CustomSpinner extends LinearLayout {
     }
 
     /**
+     * 获取当前选中对象
+     *
+     * @return
+     */
+    public Object getSelectObject() {
+
+        if (onCusAdapter != null) {
+            return ((CustomSpinnerItem) onCusAdapter.getAdapter().getItem(CustomSpinner.this.postion));
+        } else {
+            if (list != null) {
+                return list.get(CustomSpinner.this.postion);
+            } else if (listStr != null) {
+                return listStr.get(CustomSpinner.this.postion);
+            }
+        }
+        return null;
+    }
+
+    /**
      * 设置下拉框高度 默认550
      *
      * @param popHeight

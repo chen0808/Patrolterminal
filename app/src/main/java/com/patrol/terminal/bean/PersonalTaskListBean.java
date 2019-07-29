@@ -1,12 +1,13 @@
 package com.patrol.terminal.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.content.Context;
 
 import com.patrol.terminal.sqlite.AppDataBase;
+import com.patrol.terminal.utils.SPUtil;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.io.Serializable;
@@ -99,6 +100,19 @@ public class PersonalTaskListBean extends BaseModel implements Serializable {
     private String tower_model;
     @Column
     private String is_save;
+
+    /**
+     * 获取当前对象
+     *
+     * @param mContext
+     * @param task_id
+     * @return
+     */
+    public static PersonalTaskListBean getPersonalTask(Context mContext, String task_id) {
+        return SQLite.select().from(PersonalTaskListBean.class)
+                .where(PersonalTaskListBean_Table.id.eq(task_id), JDDZbean_Table.user_id.eq(SPUtil.getUserId(mContext)))
+                .querySingle();
+    }
 
     public String getIs_save() {
         return is_save;

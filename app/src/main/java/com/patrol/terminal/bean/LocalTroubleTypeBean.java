@@ -1,9 +1,19 @@
 package com.patrol.terminal.bean;
 
+import com.patrol.terminal.sqlite.AppDataBase;
 import com.patrol.terminal.widget.CustomSpinner;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 隐患标识配置
+ *
  * 1：三跨，2：防鸟，3：防雷，4：防风，5：防山火，6：防外破，7：地灾
  * "id": "4193B5063B6944379CBFEB3A215DEF60",
  * "code": "azfnc",
@@ -17,7 +27,8 @@ import com.patrol.terminal.widget.CustomSpinner;
  * "leaf": 1,
  * "leaf_total": 0
  */
-public class TroubleTypeBean implements CustomSpinner.CustomSpinnerItem {
+@Table(database = AppDataBase.class)
+public class LocalTroubleTypeBean extends BaseModel implements CustomSpinner.CustomSpinnerItem {
 
     public final static String TROUBLE_SK = "sk";
     public final static String TROUBLE_FN = "fn";
@@ -27,11 +38,19 @@ public class TroubleTypeBean implements CustomSpinner.CustomSpinnerItem {
     public final static String TROUBLE_FWP = "fwp";
     public final static String TROUBLE_DZ = "dz";
 
-
+    private static List<LocalTroubleTypeBean> clcsList;
+    private static List<LocalTroubleTypeBean> indexClcsList = new ArrayList<>();
+    @PrimaryKey(autoincrement = true)
+    private int local_id;
+    @Column
     private String id;
+    @Column
     private String name;
+    @Column
     private String p_code;
+    @Column
     private String p_name;
+    @Column
     private String full_name;
 
     public String getId() {
@@ -78,4 +97,40 @@ public class TroubleTypeBean implements CustomSpinner.CustomSpinnerItem {
     public String getItemStr() {
         return name;
     }
+
+    /**
+     * 获取当前类别的处理措施
+     *
+     * @param type
+     * @return
+     */
+    public static List<LocalTroubleTypeBean> indexList(String type) {
+        if (clcsList == null)
+            clcsList = SQLite.select().from(LocalTroubleTypeBean.class).queryList();
+        indexClcsList.clear();
+        for (int i = 0; i < clcsList.size(); i++) {
+            LocalTroubleTypeBean typeBean = clcsList.get(i);
+            if (typeBean.getP_code().equals(type)) {
+                indexClcsList.add(typeBean);
+            }
+        }
+        return indexClcsList;
+    }
+
+    /**
+     * 删除所有数据
+     */
+    public static void delAllData() {
+        SQLite.delete().from(LocalTroubleTypeBean.class).execute();
+    }
+
+    public int getLocal_id() {
+        return local_id;
+    }
+
+    public void setLocal_id(int local_id) {
+        this.local_id = local_id;
+    }
+
+
 }
