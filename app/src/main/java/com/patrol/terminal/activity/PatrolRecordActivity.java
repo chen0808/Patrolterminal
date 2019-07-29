@@ -709,32 +709,32 @@ public class PatrolRecordActivity extends BaseActivity {
         List<LocalAddTrouble> troubleList = LocalAddTrouble.getAllLocalData(line_id, tower_id);
         for (int i = 0; i < localByTssx.size(); i++) {
             LocalAddTrouble bean = troubleList.get(i);
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.task_id", toRequestBody(bean.getTask_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.type_id", toRequestBody(bean.getType_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.type_name", toRequestBody(bean.getType_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.grade_sign", toRequestBody(bean.getGrade_sign()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.content", toRequestBody(bean.getContent()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.line_id", toRequestBody(bean.getLine_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.line_name", toRequestBody(bean.getLine_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.tower_id", toRequestBody(bean.getTower_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.tower_name", toRequestBody(bean.getTower_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.from_user_id", toRequestBody(bean.getFrom_user_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.find_user_id", toRequestBody(bean.getFind_user_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.find_user_name", toRequestBody(bean.getFind_user_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.find_dep_id", toRequestBody(bean.getFind_dep_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.find_dep_name", toRequestBody(bean.getFind_dep_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.in_status", toRequestBody(bean.getIn_status()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.remark", toRequestBody(bean.getRemarks()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.wares_id", toRequestBody(bean.getWares_id()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.wares_name", toRequestBody(bean.getWares_name()));
-            params.put("eqTowerWaresList[" + i + "].taskTroubleList.advice_deal_notes", toRequestBody(bean.getAdvice_deal_notes()));
+            params.put("taskTroubleList[" + i + "].task_id", toRequestBody(bean.getTask_id()));
+            params.put("taskTroubleList[" + i + "].type_id", toRequestBody(bean.getType_id()));
+            params.put("taskTroubleList[" + i + "].type_name", toRequestBody(bean.getType_name()));
+            params.put("taskTroubleList[" + i + "].grade_sign", toRequestBody(bean.getGrade_sign()));
+            params.put("taskTroubleList[" + i + "].content", toRequestBody(bean.getContent()));
+            params.put("taskTroubleList[" + i + "].line_id", toRequestBody(bean.getLine_id()));
+            params.put("taskTroubleList[" + i + "].line_name", toRequestBody(bean.getLine_name()));
+            params.put("taskTroubleList[" + i + "].tower_id", toRequestBody(bean.getTower_id()));
+            params.put("taskTroubleList[" + i + "].tower_name", toRequestBody(bean.getTower_name()));
+            params.put("taskTroubleList[" + i + "].from_user_id", toRequestBody(bean.getFrom_user_id()));
+            params.put("taskTroubleList[" + i + "].find_user_id", toRequestBody(bean.getFind_user_id()));
+            params.put("taskTroubleList[" + i + "].find_user_name", toRequestBody(bean.getFind_user_name()));
+            params.put("taskTroubleList[" + i + "].find_dep_id", toRequestBody(bean.getFind_dep_id()));
+            params.put("taskTroubleList[" + i + "].find_dep_name", toRequestBody(bean.getFind_dep_name()));
+            params.put("taskTroubleList[" + i + "].in_status", toRequestBody(bean.getIn_status()));
+            params.put("taskTroubleList[" + i + "].remark", toRequestBody(bean.getRemarks()));
+            params.put("taskTroubleList[" + i + "].wares_id", toRequestBody(bean.getWares_id()));
+            params.put("taskTroubleList[" + i + "].wares_name", toRequestBody(bean.getWares_name()));
+            params.put("taskTroubleList[" + i + "].advice_deal_notes", toRequestBody(bean.getAdvice_deal_notes()));
 
             String pics = bean.getTroubleFiles();
             if (pics != null) {
                 String[] split = pics.split(";");
                 for (int j = 0; j < split.length; j++) {
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(split[j]));
-                    params.put("eqTowerWaresList[" + i + "].taskTroubleList.troubleFiles\"; filename=\"" + split[j], requestFile);
+                    params.put("taskTroubleList[" + i + "].troubleFiles\"; filename=\"" + split[j], requestFile);
                 }
             }
         }
