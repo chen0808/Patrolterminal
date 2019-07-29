@@ -1,5 +1,6 @@
 package com.patrol.terminal.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -144,6 +145,7 @@ public class DefectIngAuditActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<DefectFragmentDetailBean>() {
+                    @SuppressLint("NewApi")
                     @Override
                     protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
                         bean = t.getResults();
@@ -165,19 +167,17 @@ public class DefectIngAuditActivity extends BaseActivity {
                             case "3":
                                 defectStatus.setText("审核通过");
                                 defectStatus.setTextColor(getResources().getColor(R.color.green));
+                                hiddenBottomLayout();
                                 break;
                             case "4":
                                 defectStatus.setText("审核不通过");
                                 defectStatus.setTextColor(getResources().getColor(R.color.write_red));
+                                hiddenBottomLayout();
                                 break;
                             case "5":
                                 defectStatus.setText("待复核");
                                 defectStatus.setTextColor(getResources().getColor(R.color.orange));
-                                layoutBottom.setVisibility(View.GONE);
-                                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
-                                layoutParams.bottomMargin = 0;
-                                scrollView.setLayoutParams(layoutParams);
-                                titleName.setText("缺陷记录");
+                                hiddenBottomLayout();
                                 break;
                         }
 
@@ -250,6 +250,15 @@ public class DefectIngAuditActivity extends BaseActivity {
                             initdate(sdf.format(c.getTime()));
                         }
 
+                        if((bean.getIn_status().equals("3") || bean.getIn_status().equals("4") || bean.getIn_status().equals("5")) && bean.getClose_time() != null){
+                            String[] times = bean.getClose_time().split("-");
+                            year = times[0];
+                            month = times[1];
+                            day = times[2];
+                            defectDeadline.setText(year + "年" + month + "月" + day + "日");
+                            defectDeadline.setCompoundDrawablesRelative(null, null, null, null);
+                        }
+
                         if (bean.getDeal_notes() != null) {
                             defectDealNotes.setText(bean.getDeal_notes());
                         }
@@ -286,7 +295,9 @@ public class DefectIngAuditActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.defect_deadline:
-                showDay();
+                if(!bean.getIn_status().equals("3") && !bean.getIn_status().equals("4") && !bean.getIn_status().equals("5")){
+                    showDay();
+                }
                 break;
             case R.id.reject:
                 submit("4");
@@ -454,5 +465,13 @@ public class DefectIngAuditActivity extends BaseActivity {
                 dialog.show();
             }
         }
+    }
+
+    private void hiddenBottomLayout() {
+        layoutBottom.setVisibility(View.GONE);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
+        layoutParams.bottomMargin = 0;
+        scrollView.setLayoutParams(layoutParams);
+        titleName.setText("缺陷记录");
     }
 }
