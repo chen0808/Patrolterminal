@@ -24,6 +24,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DefectBanjiAdapter;
 import com.patrol.terminal.adapter.DefectBanjiXLAdapter;
 import com.patrol.terminal.adapter.DefectIngAdapter;
+import com.patrol.terminal.adapter.DefectIngTabAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -72,7 +73,7 @@ public class DefectIsRidFragment extends BaseFragment {
     @BindView(R.id.ly_sx)
     RelativeLayout ry_sx;
 
-    private DefectIngAdapter groupTaskAdapter;
+    private DefectIngTabAdapter groupTaskAdapter;
     private DefectBanjiAdapter banjiAdapter;
     private DefectBanjiXLAdapter banjixlAdapter;
     private String jobType;
@@ -161,7 +162,7 @@ public class DefectIsRidFragment extends BaseFragment {
         lv_banji.setAdapter(banjiAdapter);
         banjixlAdapter = new DefectBanjiXLAdapter(mContext, banjixlList);
         lv_xianlu.setAdapter(banjixlAdapter);
-        groupTaskAdapter = new DefectIngAdapter(R.layout.fragment_defect_not_in_item, 0);
+        groupTaskAdapter = new DefectIngTabAdapter(R.layout.fragment_defect_not_in_item, 3);
         planRv.setAdapter(groupTaskAdapter);
         planRv.useDefaultLoadMore();
         planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {

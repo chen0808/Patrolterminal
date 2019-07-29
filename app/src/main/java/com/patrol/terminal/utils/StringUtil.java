@@ -70,9 +70,31 @@ public class StringUtil {
                 return "审核通过";
             case "4":
                 return "审核不通过";
+            case "5":
+                return "待复核";
         }
         return "";
     }
+
+    //获取运行班月计划审核状态
+    public static int getDefectColor(String state) {
+        switch (state) {
+            case "0":
+                return R.color.blue;
+            case "1":
+                return R.color.line_point_1;
+            case "2":
+                return R.color.line_point_0;
+            case "3":
+                return R.color.green;
+            case "4":
+                return R.color.write_red;
+            case "5":
+                return R.color.orange;
+        }
+        return R.color.line_point_0;
+    }
+
     //获取个人任务审核状态
     public static int getPersonalColor(String state) {
         switch (state) {
