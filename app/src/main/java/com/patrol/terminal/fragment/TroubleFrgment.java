@@ -49,6 +49,8 @@ public class TroubleFrgment extends BaseFragment {
     private List<LocalAddTrouble> troubleList = new ArrayList<>();
     private TroubleFragmentAdapter adapter;
 
+    private String tower_id;
+
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trouble, null);
@@ -59,7 +61,6 @@ public class TroubleFrgment extends BaseFragment {
     protected void initData() {
         line_id = (String) SPUtil.get(getActivity(), "ids", "line_id", "");
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
-
             @Override
             public void accept(String s) throws Exception {
                 if (s.startsWith("updateSpecial")) {
@@ -77,6 +78,8 @@ public class TroubleFrgment extends BaseFragment {
         rvTrouble.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new TroubleFragmentAdapter(R.layout.fragment_defect_item, troubleList);
         rvTrouble.setAdapter(adapter);
+
+        tower_id = getActivity().getIntent().getStringExtra("tower_id");
 
         getdata();
 
@@ -97,7 +100,7 @@ public class TroubleFrgment extends BaseFragment {
 
     private void getdata() {
         BaseRequest.getInstance().getService()
-                .getTroubleFragment2(line_id)
+                .getTroubleFragment2(line_id, tower_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())//TroubleBean
                 .subscribe(new BaseObserver<List<LocalAddTrouble>>(getActivity()) {
@@ -108,18 +111,18 @@ public class TroubleFrgment extends BaseFragment {
                                 beginTransactionAsync(new ITransaction() {
                                     @Override
                                     public void execute(DatabaseWrapper databaseWrapper) {
-                                        LocalAddTrouble.delData(getActivity().getIntent().getStringExtra("task_id"));
+                                        LocalAddTrouble.delNetData(tower_id);
 
                                         for (int i = 0; i < results.size(); i++) {
                                             LocalAddTrouble bean = results.get(i);
                                             bean.setIsdownload("0");
                                             bean.save();
                                         }
+
+                                        getLocalData();
                                     }
                                 }).build().executeSync();
 
-                        troubleList.addAll(results);
-                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -131,7 +134,7 @@ public class TroubleFrgment extends BaseFragment {
 
     public void getLocalData() {
         troubleList.clear();
-        troubleList.addAll(LocalAddTrouble.getAllData());
+        troubleList.addAll(LocalAddTrouble.getAllData(tower_id));
         adapter.notifyDataSetChanged();
 
     }

@@ -1,6 +1,7 @@
 package com.patrol.terminal.adapter;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -26,6 +27,11 @@ public class TroubleFragmentAdapter extends BaseQuickAdapter<LocalAddTrouble, Ba
                 .setText(R.id.tv_detail, "发现时间：" + item.getFind_time())
                 .setText(R.id.iv_icon, "隐患");
         helper.getView(R.id.item_defect_status).setVisibility(View.GONE);
+        if (TextUtils.isEmpty(item.getFind_time())) {
+            helper.getView(R.id.tv_detail).setVisibility(View.GONE);
+        } else {
+            helper.getView(R.id.tv_detail).setVisibility(View.VISIBLE);
+        }
 
         RelativeLayout rlDefectitem = helper.getView(R.id.rl_defect_item);
         rlDefectitem.setOnClickListener(new View.OnClickListener() {

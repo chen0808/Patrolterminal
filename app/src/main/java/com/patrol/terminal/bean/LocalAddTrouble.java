@@ -18,7 +18,7 @@ public class LocalAddTrouble extends BaseModel implements Serializable {
 
     @PrimaryKey(autoincrement = true)
     private int local_id;
-    @Column
+    @Column//数据id
     private String id;
     @Column// 隐患类型id 类别 3防雷
     private String type_id;
@@ -72,18 +72,30 @@ public class LocalAddTrouble extends BaseModel implements Serializable {
     private String troubleFiles;//图片
 
 
-    public static void delData(String task_id) {
-        SQLite.delete(LocalAddTrouble.class).where(LocalAddTrouble_Table.task_id.is(task_id));
+    public static void delData(String tower_id) {
+        SQLite.delete(LocalAddTrouble.class).where(LocalAddTrouble_Table.tower_id.is(tower_id)).execute();
+        ;
     }
 
+    /**
+     * 删除网络数据
+     *
+     * @param tower_id
+     */
+    public static void delNetData(String tower_id) {
+        SQLite.delete(LocalAddTrouble.class)
+                .where(LocalAddTrouble_Table.tower_id.is(tower_id))
+                .and(LocalAddTrouble_Table.isdownload.is("0")).execute();
+    }
     /**
      * 获取所有数据
      *
      * @return
      */
-    public static List<LocalAddTrouble> getAllData() {
+    public static List<LocalAddTrouble> getAllData(String tower_id) {
         return SQLite.select()
                 .from(LocalAddTrouble.class)
+                .where(LocalAddTrouble_Table.tower_id.is(tower_id))
                 .queryList();
     }
 
@@ -92,11 +104,11 @@ public class LocalAddTrouble extends BaseModel implements Serializable {
      *
      * @return
      */
-    public static List<LocalAddTrouble> getAllLocalData(String line_id, String task_id) {
+    public static List<LocalAddTrouble> getAllLocalData(String line_id, String tower_id) {
         return SQLite.select()
                 .from(LocalAddTrouble.class)
                 .where(LocalAddTrouble_Table.isdownload.is("1"))
-                .and(LocalAddTrouble_Table.task_id.is(task_id))
+                .and(LocalAddTrouble_Table.tower_id.is(tower_id))
                 .and(LocalAddTrouble_Table.line_id.is(line_id))
                 .queryList();
     }

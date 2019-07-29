@@ -214,8 +214,13 @@ public class AddTroubleActivity extends BaseActivity {
             return;
         }
 
+        if (photoList.size() > 0) {
+            Toast.makeText(this, "请添加至少一张图片", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         LocalAddTrouble trouble = new LocalAddTrouble();
-        trouble.setTower_id(task_id);
+        trouble.setTask_id(task_id);
         trouble.setType_id("3");
         trouble.setType_name("防雷");
         trouble.setGrade_sign(djToStr(YHDJStr));
@@ -223,7 +228,7 @@ public class AddTroubleActivity extends BaseActivity {
         trouble.setLine_id(line_id);
         trouble.setLine_name(line_name);
         trouble.setTower_id(tower_id);
-        trouble.setType_name(tower_name);
+        trouble.setTower_name(tower_name);
         trouble.setFind_user_id(personalTaskListBean.getUser_id());
         trouble.setFrom_user_id(personalTaskListBean.getUser_id());
         trouble.setFind_user_name(personalTaskListBean.getUser_name());
@@ -251,6 +256,13 @@ public class AddTroubleActivity extends BaseActivity {
         trouble.setTroubleFiles(path);
         trouble.save();
         Toast.makeText(AddTroubleActivity.this, "保存成功", Toast.LENGTH_LONG).show();
+
+        //                标记离线操作
+        if (personalTaskListBean != null) {
+            personalTaskListBean.setIs_save("0");
+            personalTaskListBean.update();
+        }
+
         setResult(RESULT_OK);
         finish();
 

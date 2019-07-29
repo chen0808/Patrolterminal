@@ -595,7 +595,7 @@ public interface ApiServise {
 
     //巡视记录缺陷列表
     @GET("task/trouble/listGET")
-    Observable<BaseResult<List<LocalAddTrouble>>> getTroubleFragment2(@Query("line_id") String line_id);
+    Observable<BaseResult<List<LocalAddTrouble>>> getTroubleFragment2(@Query("line_id") String line_id, @Query("tower_id") String tower_id);
 
     //获取班级列表
     @GET("common/listGET")

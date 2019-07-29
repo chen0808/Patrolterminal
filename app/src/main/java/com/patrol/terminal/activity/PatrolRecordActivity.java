@@ -706,7 +706,7 @@ public class PatrolRecordActivity extends BaseActivity {
         }
 
         //离线的添加隐患
-        List<LocalAddTrouble> troubleList = LocalAddTrouble.getAllLocalData(line_id, task_id);
+        List<LocalAddTrouble> troubleList = LocalAddTrouble.getAllLocalData(line_id, tower_id);
         for (int i = 0; i < localByTssx.size(); i++) {
             LocalAddTrouble bean = troubleList.get(i);
             params.put("eqTowerWaresList[" + i + "].taskTroubleList.task_id", toRequestBody(bean.getTask_id()));
@@ -771,7 +771,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 .subscribe(new BaseObserver(this) {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
-                        ProgressDialog.cancle();
+//                        ProgressDialog.cancle();
                         saveTodoAudit("1");
                     }
 
@@ -784,6 +784,7 @@ public class PatrolRecordActivity extends BaseActivity {
 
     //保存待办信息
     public void saveTodoAudit(String state) {
+//        ProgressDialog.show(this, true, "正在上传...");
         SaveTodoReqbean saveTodoReqbean = new SaveTodoReqbean();
         saveTodoReqbean.setAudit_status(state);
         saveTodoReqbean.setId(task_id);
@@ -798,6 +799,7 @@ public class PatrolRecordActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<TypeBean> t) throws Exception {
                         ProgressDialog.cancle();
                         if (t.getCode() == 1) {
+                            LocalAddTrouble.delData(tower_id);
                             Toast.makeText(PatrolRecordActivity.this, "成功", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
                             RxRefreshEvent.publish("refreshGroup");
