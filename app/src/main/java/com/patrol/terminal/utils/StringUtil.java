@@ -56,6 +56,7 @@ public class StringUtil {
         }
         return "";
     }
+
     //获取缺陷状态
     public static String getDefectState(String state) {
         switch (state) {

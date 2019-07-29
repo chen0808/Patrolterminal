@@ -166,7 +166,7 @@ public class WeekPlanFrgment extends BaseFragment {
         String nextBeginTime = TimeUtil.getFirstDayOfWeek(nextYear, nextWeek);
         String nextEndTime = TimeUtil.getLastDayOfWeek(nextYear, nextWeek);
         taskDate.setText(year + "年第" + week + "周(" + beginDate + "至" + endDate + ")");
-        addNextPlan.setText("下周计划制定(" + nextBeginTime + "至" + nextEndTime + ")");
+        addNextPlan.setText("周计划制定(" + nextBeginTime + "至" + nextEndTime + ")");
         planTotalTitle.setText("本周计划工作汇总");
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         planRv.setLayoutManager(manager);

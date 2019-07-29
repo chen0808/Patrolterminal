@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.DangerToPatrolActivity">
+
+    <include layout="@layout/include_title" />
+
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="隐患类别："></com.patrol.terminal.widget.DangerSubmitView>
+
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_dep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="负责班组："></com.patrol.terminal.widget.DangerSubmitView>
+
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_level"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="隐患等级："></com.patrol.terminal.widget.DangerSubmitView>
+
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="工作线路："></com.patrol.terminal.widget.DangerSubmitView>
+
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_tower"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="杆塔号："></com.patrol.terminal.widget.DangerSubmitView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="72dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</LinearLayout>

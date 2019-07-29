@@ -13,6 +13,7 @@
         android:layout_width="72dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:gravity="right"
         android:textColor="@color/color_33"
         android:text="隐患类别："
         />

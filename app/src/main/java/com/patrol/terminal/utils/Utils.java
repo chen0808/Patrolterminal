@@ -117,7 +117,7 @@ public class Utils {
 
     //1月运行计划审核 2，周运行计划审核，3 运行小组长查看小组任务 4运行组员查看个人任务 5红外测温测量审核，6接电电阻测审量核，7绝缘子测量审核 8杆塔倾斜测量审核 9巡视记录审核 10缺陷审核，11隐患审核
     // 12保电，安全，验收专责查看检修任务13月检修计划 14周检修计划审核 15检修班长查看周检修任务  16检修负责人查看周检修任务 17工作票审核 18 控制卡审核 19验收计划审核 20安全质量监督审核 21运行组员抢单
-    //22 抢单退还
+    //22 抢单退还 //25 防雷隐患审核
     public static Intent goTodo(Context context, TodoBean bean) {
         Intent intent = new Intent();
         switch (bean.getFlow_sign()) {
@@ -172,7 +172,7 @@ public class Utils {
                 intent.putExtra("data_id", bean.getData_id() );
                 break;
             case "11":
-                intent.setClass(context, DangerVerifyActivity.class);
+
                 break;
             case "12":
                 break;
@@ -183,6 +183,10 @@ public class Utils {
             case "22":
                 intent.setClass(context, GroupTaskDetailActivity.class);
                 intent.putExtra("from", "todoRob");
+                break;
+            case "25":
+                intent.setClass(context, DangerVerifyActivity.class);
+                intent.putExtra("flow_sign", bean.getFlow_sign());
                 break;
         }
         return intent;
@@ -239,6 +243,8 @@ public class Utils {
                 return R.mipmap.todo21;
             case "22":
                 return R.mipmap.todo22;
+            case "25":
+                return R.mipmap.todo11;
             default:
                 return R.mipmap.todo1;
         }

@@ -27,7 +27,7 @@
                     <TextView
                         android:layout_width="@dimen/dp_100"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_20"
+                        
                         android:gravity="center_vertical|right"
                         android:minHeight="@dimen/dp_35"
                         android:text="线路名字："
@@ -63,7 +63,7 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
+                            
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="缺陷杆塔："
@@ -100,7 +100,6 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="缺陷等级："
@@ -134,7 +133,7 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:layout_width="120dp"
+                            android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
@@ -166,7 +165,6 @@
                     <TextView
                         android:layout_width="@dimen/dp_100"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_20"
                         android:layout_marginTop="10dp"
                         android:gravity="center_vertical|right"
                         android:text="缺陷内容："
@@ -198,7 +196,6 @@
                     <TextView
                         android:layout_width="@dimen/dp_100"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_20"
                         android:layout_marginTop="10dp"
                         android:gravity="center_vertical|right"
                         android:text="巡视内容："
@@ -236,7 +233,6 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="缺陷类别："
@@ -273,7 +269,6 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="处理措施："
@@ -310,7 +305,6 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="发现人："
@@ -347,7 +341,6 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="发现班组："
@@ -383,7 +376,6 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="发现时间："
@@ -420,7 +412,6 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="处理人："
@@ -457,7 +448,6 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="处理部门："
@@ -494,7 +484,6 @@
                         <TextView
                             android:layout_width="@dimen/dp_100"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_20"
                             android:gravity="center_vertical|right"
                             android:minHeight="@dimen/dp_35"
                             android:text="处理时间："
@@ -528,7 +517,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
                         <LinearLayout
-                            android:layout_width="120dp"
+                            android:layout_width="100dp"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|right"
                             >
@@ -589,6 +578,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:columnWidth="60dp"
+                    android:layout_marginLeft="@dimen/dp_20"
                     android:horizontalSpacing="10dp"
                     android:numColumns="auto_fit"
                     android:verticalSpacing="10dp" />

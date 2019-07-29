@@ -1,21 +1,44 @@
 package com.patrol.terminal.activity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.PicterAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.FangLeiTodoBean;
+import com.patrol.terminal.bean.InAuditTroubleReqBean;
+import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.DangerSubmitView;
+import com.patrol.terminal.widget.PinchImageView;
+import com.patrol.terminal.widget.ProgressDialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
-public class DangerVerifyActivity extends BaseActivity {
+public class DangerVerifyActivity extends BaseActivity implements BaseQuickAdapter.OnItemChildClickListener {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -49,6 +72,22 @@ public class DangerVerifyActivity extends BaseActivity {
     TextView dangerSubmitNo;
     @BindView(R.id.danger_submit_yes)
     TextView dangerSubmitYes;
+    @BindView(R.id.danger_pic)
+    RecyclerView dangerPic;
+    @BindView(R.id.danger_special_pic)
+    RecyclerView dangerSpecialPic;
+    @BindView(R.id.btn_ll)
+    LinearLayout btnLl;
+    private String f_id;
+    private String id;
+    private String find_dep_id;
+    private String line_name;
+    private String tower_name;
+    private String audit_status;
+    private PicterAdapter adapter1;
+    private PicterAdapter adapter2;
+    private List<FangLeiTodoBean.TroubleFileListBean> eqTowerWaresImgList=new ArrayList<>();
+    private List<FangLeiTodoBean.TroubleFileListBean> troubleFileList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +98,42 @@ public class DangerVerifyActivity extends BaseActivity {
     }
 
     private void initview() {
+        ProgressDialog.show(this,true,"正在加载。。。。");
         titleName.setText("隐患审核");
-        fanglei();
+        dangerPic.setLayoutManager(new GridLayoutManager(this, 5));
+        dangerSpecialPic.setLayoutManager(new GridLayoutManager(this, 5));
+        adapter1 = new PicterAdapter(R.layout.item_pic, troubleFileList);
+        adapter2 = new PicterAdapter(R.layout.item_pic, eqTowerWaresImgList);
+        dangerPic.setAdapter(adapter1);
+        dangerSpecialPic.setAdapter(adapter2);
+        adapter1.setOnItemChildClickListener(this);
+        adapter2.setOnItemChildClickListener(this);
+        String flow_sign = getIntent().getStringExtra("flow_sign");
+        String data_id = getIntent().getStringExtra("task_id");
+        audit_status = getIntent().getStringExtra("audit_status");
+        switch (audit_status) {
+            case "2":
+                dangerSubmitYes.setText("转巡视");
+            case "4":
+                btnLl.setVisibility(View.GONE);
+                break;
+        }
+        getFangLeiTodo(data_id);
     }
 
-    public void fanglei(){
-        DangerSubmitView view1=new DangerSubmitView(this,"完成状态：","");
-        DangerSubmitView view2=new DangerSubmitView(this,"处理时间：","");
-        DangerSubmitView view3=new DangerSubmitView(this,"厂家：","");
-        DangerSubmitView view4=new DangerSubmitView(this,"处理措施：","");
-        DangerSubmitView view5=new DangerSubmitView(this,"备注：","");
+    public void fanglei(FangLeiTodoBean results) {
+        DangerSubmitView view1 = new DangerSubmitView(this, "审核状态：", StringUtil.getDefectState(results.getIn_status()));
+        DangerSubmitView view2 = new DangerSubmitView(this, "处理时间：", results.getDeal_time() == null ? "无" : results.getDeal_time());
+        DangerSubmitView view3 = new DangerSubmitView(this, "厂家：", results.getCompany() == null ? "暂无" : results.getCompany());
+        DangerSubmitView view4 = new DangerSubmitView(this, "处理措施：", results.getAdvice_deal_notes() == null ? "暂无" : results.getAdvice_deal_notes());
+        DangerSubmitView view5 = new DangerSubmitView(this, "备注：", results.getRemark() == null ? "无" : results.getRemark());
         dangerMoreLl.addView(view1);
         dangerMoreLl.addView(view2);
         dangerMoreLl.addView(view3);
         dangerMoreLl.addView(view4);
         dangerMoreLl.addView(view5);
     }
+
     @OnClick({R.id.title_back, R.id.danger_submit_no, R.id.danger_submit_yes})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -82,9 +141,97 @@ public class DangerVerifyActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.danger_submit_no:
+                inAuditTrouble("4");
                 break;
             case R.id.danger_submit_yes:
+                if ("1".equals(audit_status)) {
+                    inAuditTrouble("2");
+                } else {
+                    inAuditTrouble("3");
+                }
                 break;
         }
     }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        List<FangLeiTodoBean.TroubleFileListBean> troubleFileList=adapter.getData();
+        showBigImage(troubleFileList.get(position).getFile_path());
+    }
+    //查看大图
+    private void showBigImage(String url) {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_big_image);
+        PinchImageView iv = dialog.findViewById(R.id.iv);
+        Glide.with(this).load(url).into(iv);
+        dialog.show();
+    }
+    public void getFangLeiTodo(String data_id) {
+        BaseRequest.getInstance().getService()
+                .getFangLeiTodo(data_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<FangLeiTodoBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<FangLeiTodoBean> t) throws Exception {
+                        FangLeiTodoBean results = t.getResults();
+                        f_id = results.getId();
+                        id = results.getTask_trouble_id();
+                        find_dep_id = results.getFind_dep_id();
+                        line_name = results.getLine_name();
+                        tower_name = results.getTower_name();
+                        troubleFileList = results.getTroubleFileList();
+                        if (results.getWares_name()!=null){
+                            eqTowerWaresImgList = results.getEqTowerWaresImgList();
+                            dangerSpecialInfo.setVisibility(View.VISIBLE);
+                            dangerSpecialContent.setContent(results.getWares_name());
+                            adapter2.setNewData(eqTowerWaresImgList);
+                        }
+                        dangerType.setContent(results.getType_name());
+                        dangerFindDep.setContent(results.getFind_dep_name());
+                        dangerLineLevel.setContent(results.getLine_level());
+                        dangerLineName.setContent(results.getLine_name());
+                        dangerTowerName.setContent(results.getTower_name());
+                        dangerFindTime.setContent(results.getFind_time());
+                        adapter2.setNewData(results.getTroubleFileList());
+                        fanglei(results);
+                        adapter1.setNewData(troubleFileList);
+                        ProgressDialog.cancle();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
+
+
+    public void inAuditTrouble(String status) {
+        InAuditTroubleReqBean bean = new InAuditTroubleReqBean();
+        bean.setIn_status(status);
+        bean.setF_id(f_id);
+        bean.setId(id);
+        bean.setFrom_user_id(SPUtil.getUserId(this));
+        bean.setType_id("3");
+        bean.setFind_dep_id(find_dep_id);
+        bean.setLine_name(line_name);
+        bean.setTower_name(tower_name);
+        BaseRequest.getInstance().getService()
+                .inAuditTrouble(bean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        Toast.makeText(DangerVerifyActivity.this, "处理成功", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }
+
 }

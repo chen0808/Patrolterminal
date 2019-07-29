@@ -1134,4 +1134,11 @@ public interface ApiServise {
     @GET("/task/group/list/allGET")
     Observable<BaseResult<List<DepInfoBean>>> getDepInfo(@Query("year") String year,@Query("month") String month,@Query("day") String day);
 
+    //获取防雷隐患待办
+    @GET("/task/trouble/thunder/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getFangLeiTodo(@Query("id") String id);
+
+    //隐患审核
+    @POST("/task/trouble/inAuditPOST")
+    Observable<BaseResult> inAuditTrouble(@Body InAuditTroubleReqBean bean);
 }
