@@ -147,16 +147,16 @@ public class DefectIngDetailActivity extends BaseActivity {
                                 defect_qxrkzt.setTextColor(getResources().getColor(R.color.line_point_0));
                                 break;
                             case "3":
-                                defect_qxrkzt.setText("复核中");
-                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.line_point_3));
-                                break;
-                            case "4":
                                 defect_qxrkzt.setText("审核通过");
                                 defect_qxrkzt.setTextColor(getResources().getColor(R.color.green));
                                 break;
-                            case "5":
+                            case "4":
                                 defect_qxrkzt.setText("审核不通过");
-                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.green));
+                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.write_red));
+                                break;
+                            case "5":
+                                defect_qxrkzt.setText("待复核");
+                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.orange));
                                 break;
                         }
 

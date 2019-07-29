@@ -85,7 +85,6 @@ public class DefectNotInFragment extends BaseFragment {
     private String dep_id;
     private List<BanjiBean> banjiList = new ArrayList<>();
     private List<BanjiXLBean> banjixlList = new ArrayList<>();
-
     private Context mContext;
 
     @Override
@@ -162,7 +161,7 @@ public class DefectNotInFragment extends BaseFragment {
         lv_banji.setAdapter(banjiAdapter);
         banjixlAdapter = new DefectBanjiXLAdapter(mContext, banjixlList);
         lv_xianlu.setAdapter(banjixlAdapter);
-        groupTaskAdapter = new DefectIngAdapter(R.layout.fragment_defect_item, 0);
+        groupTaskAdapter = new DefectIngAdapter(R.layout.fragment_defect_not_in_item, 0);
         planRv.setAdapter(groupTaskAdapter);
         planRv.useDefaultLoadMore();
         planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
@@ -322,9 +321,9 @@ public class DefectNotInFragment extends BaseFragment {
 
     //班级线路缺陷
     public void getBanjiXLQx(String search_name, String line_id) {
-//        ProgressDialog.show(mActivity, true, "正在加载中。。。。");
+//        ProgressDialog.show(mContext, true, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getXLDefact(pageNum, count, line_id, search_name,"grade_sign desc,find_time desc")
+                .getXLDefact(pageNum, count, line_id, search_name,"grade_sign desc,find_time desc", "1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(mContext) {

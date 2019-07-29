@@ -20,6 +20,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.activity.CheckActivity;
 import com.patrol.terminal.activity.DangerVerifyActivity;
 import com.patrol.terminal.activity.DefectActivity;
+import com.patrol.terminal.activity.DefectTabActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
 import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
 import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
@@ -415,7 +416,8 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 startActivity(new Intent(getActivity(), NewTaskActivity.class));
                 break;
             case R.id.rl_defact:
-                startActivity(new Intent(getActivity(), DefectActivity.class));
+//                startActivity(new Intent(getActivity(), DefectActivity.class));
+                startActivity(new Intent(getActivity(), DefectTabActivity.class));
                 break;
             case R.id.rl_trouble:
                 startActivity(new Intent(getActivity(), TroubleActivity.class));

@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
-import com.patrol.terminal.fragment.ControlToolFragment;
+import com.patrol.terminal.fragment.DefectIsRidFragment;
 import com.patrol.terminal.fragment.DefectNotInFragment;
-import com.patrol.terminal.fragment.NewControlQualityFragment;
+import com.patrol.terminal.fragment.DefectNotRidFragment;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -59,10 +59,9 @@ public class DefectTabActivity extends BaseActivity {
         titleName.setText("缺陷库");
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new DefectNotInFragment());
-        fragmentList.add(new DefectNotInFragment());
-        fragmentList.add(new DefectNotInFragment());
-//        fragmentList.add(new NewControlQualityFragment());
-//        fragmentList.add(new ControlToolFragment());
+        fragmentList.add(new DefectNotRidFragment());
+        fragmentList.add(new DefectIsRidFragment());
+
         MyFragmentPagerAdapter CardPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         defectTabVg.setAdapter(CardPagerAdapter);
         defectTabVg.setNoScroll(true);

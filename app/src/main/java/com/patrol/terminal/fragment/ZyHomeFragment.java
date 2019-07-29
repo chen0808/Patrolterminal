@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DefectActivity;
+import com.patrol.terminal.activity.DefectTabActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
 import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
 import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
@@ -298,7 +299,8 @@ public class ZyHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
                 startActivity(new Intent(getActivity(), NewTaskActivity.class));
                 break;
             case R.id.rl_defact:
-                startActivity(new Intent(getActivity(), DefectActivity.class));
+//                startActivity(new Intent(getActivity(), DefectActivity.class));
+                startActivity(new Intent(getActivity(), DefectTabActivity.class));
                 break;
             case R.id.rl_trouble:
                 startActivity(new Intent(getActivity(), TroubleActivity.class));

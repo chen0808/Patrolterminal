@@ -250,7 +250,8 @@ public class NewTaskActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.task_def:
-                intent.setClass(this, DefectActivity.class);
+//                intent.setClass(this, DefectActivity.class);
+                intent.setClass(this, DefectTabActivity.class);
                 startActivity(intent);
                 break;
             case R.id.task_dan:

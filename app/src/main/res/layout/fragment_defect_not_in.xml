@@ -73,7 +73,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/grade_sign"/>
+                android:src="@mipmap/grade_sign"
+                android:paddingRight="@dimen/dp_5"/>
             <TextView
                 android:id="@+id/grade_sign"
                 android:layout_width="wrap_content"
@@ -91,7 +92,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/defect_status"/>
+                android:src="@mipmap/defect_status"
+                android:paddingRight="@dimen/dp_5"/>
             <TextView
                 android:id="@+id/defect_status"
                 android:layout_width="wrap_content"
@@ -110,7 +112,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/defect_filter"/>
+                android:src="@mipmap/defect_filter"
+                android:paddingRight="@dimen/dp_5"/>
             <TextView
                 android:id="@+id/defect_filter"
                 android:layout_width="wrap_content"
