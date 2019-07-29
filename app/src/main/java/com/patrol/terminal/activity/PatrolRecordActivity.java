@@ -707,7 +707,7 @@ public class PatrolRecordActivity extends BaseActivity {
 
         //离线的添加隐患
         List<LocalAddTrouble> troubleList = LocalAddTrouble.getAllLocalData(line_id, tower_id);
-        for (int i = 0; i < localByTssx.size(); i++) {
+        for (int i = 0; i < troubleList.size(); i++) {
             LocalAddTrouble bean = troubleList.get(i);
             params.put("taskTroubleList[" + i + "].task_id", toRequestBody(bean.getTask_id()));
             params.put("taskTroubleList[" + i + "].type_id", toRequestBody(bean.getType_id()));

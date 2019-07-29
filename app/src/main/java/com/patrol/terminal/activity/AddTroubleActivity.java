@@ -159,14 +159,14 @@ public class AddTroubleActivity extends BaseActivity {
 
         personalTaskListBean = PersonalTaskListBean.getPersonalTask(this, task_id);
 
-        List<TSSXLocalBean> tssxLocalList = new ArrayList<>();//TSSXLocalBean.getTssxList(task_id, tower_id);
-        if (tssxLocalList != null) {
+        List<TSSXLocalBean> tssxLocalList = TSSXLocalBean.getTssxList(task_id, tower_id);//TSSXLocalBean.getTssxList(task_id, tower_id);
+        if (tssxLocalList.size() > 0) {
             TSSXLocalBean txxsLocal = new TSSXLocalBean();
             txxsLocal.setKey("");
-            txxsLocal.setValues("不关联");
-            tssxLocalList.add(txxsLocal);
+            txxsLocal.setValues("不关联属性");
+            tssxLocalList.add(0, txxsLocal);
         }
-        tssxLocalList.addAll(TSSXLocalBean.getTssxList(task_id, tower_id));
+//        tssxLocalList.addAll(TSSXLocalBean.getTssxList(task_id, tower_id));
         tssxSpinner.attachDataSource(tssxLocalList);
 
     }

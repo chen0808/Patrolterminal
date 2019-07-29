@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -37,17 +38,17 @@ public class TroubleFragmentAdapter extends BaseQuickAdapter<LocalAddTrouble, Ba
         rlDefectitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String lineName = ((PatrolRecordActivity) mContext).getLineName();
-//                Intent intent = new Intent(mContext, TestActivity.class);
-//                intent.putExtra("line_name", lineName);
-//                mContext.startActivity(intent);
 
+                if (TextUtils.isEmpty(item.getFind_time())) {
+                    Toast.makeText(mContext, "待提交隐患不可查看", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(mContext, TroubleDetailActivity.class);
+                    intent.putExtra("line_id", item.getLine_id());
+                    intent.putExtra("type", item.getType_id());
+                    intent.putExtras(intent);
+                    mContext.startActivity(intent);
+                }
 
-                Intent intent = new Intent(mContext, TroubleDetailActivity.class);
-                intent.putExtra("line_id", item.getLine_id());
-                intent.putExtra("type", item.getType_id());
-                intent.putExtras(intent);
-                mContext.startActivity(intent);
             }
         });
     }
