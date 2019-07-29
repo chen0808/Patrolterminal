@@ -187,4 +187,17 @@ public class StringUtil {
         }
         return typeNmae;
     }
+
+    public static String getDangerLevel(String level) {
+        switch (level) {
+            case "1":
+                return "一般";
+            case "2":
+                return "重大";
+            case "3":
+                return "紧急";
+
+        }
+        return "";
+    }
 }

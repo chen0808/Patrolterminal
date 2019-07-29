@@ -24,7 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:danger_name="隐患类别：" />
-
+            <com.patrol.terminal.widget.DangerSubmitView
+                android:id="@+id/danger_level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:danger_name="隐患等级：" />
             <com.patrol.terminal.widget.DangerSubmitView
                 android:id="@+id/danger_find_dep"
                 android:layout_width="match_parent"

@@ -1141,4 +1141,8 @@ public interface ApiServise {
     //隐患审核
     @POST("/task/trouble/inAuditPOST")
     Observable<BaseResult> inAuditTrouble(@Body InAuditTroubleReqBean bean);
+
+    //生成隐患巡视计划
+    @POST("/plan/day/troublePlanPOST")
+    Observable<BaseResult> createDangerPatrol(@Body DangerPatrolReqBean bean);
 }

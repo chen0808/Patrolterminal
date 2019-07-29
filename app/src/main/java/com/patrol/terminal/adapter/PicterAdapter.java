@@ -9,8 +9,10 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
+import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.AddressBookLevel2;
 import com.patrol.terminal.bean.FangLeiTodoBean;
+import com.patrol.terminal.utils.Constant;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class PicterAdapter extends BaseQuickAdapter<FangLeiTodoBean.TroubleFileL
 
         if (item.getFile_path()!=null){
             ImageView imageView = helper.getView(R.id.item_pic_iv);
-            Glide.with(mContext).load(item.getFile_path()).into(imageView);
+            Glide.with(mContext).load(BaseUrl.BASE_URL+item.getFile_path()+item.getFilename()).into(imageView);
         }
     }
 }

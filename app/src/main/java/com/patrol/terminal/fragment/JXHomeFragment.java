@@ -157,7 +157,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
 
         userId = SPUtil.getUserId(getContext());
 
-        rlPlan.setVisibility(View.VISIBLE);
+        rlPlan.setVisibility(View.GONE);
         rlTask.setVisibility(View.GONE);
         //运行班组长和组员进来隐藏计划
 //        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
@@ -166,7 +166,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
 
         if (jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {  //检修班成员只有当前任务和历史任务
             llBacklog.setVisibility(View.GONE);
-            llLastTask.setVisibility(View.VISIBLE);
+            llLastTask.setVisibility(View.GONE);
         }else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.REFURBISHMENT_LEADER)
                 || jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)
                 || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) { //检修班长和检修专责,保电专责，验收专责，安全专责只有待办和当前任务 //检修主管只在待办审核月计划
