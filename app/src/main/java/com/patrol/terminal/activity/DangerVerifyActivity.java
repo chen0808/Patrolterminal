@@ -215,8 +215,13 @@ public class DangerVerifyActivity extends BaseActivity implements  BaseQuickAdap
                         dangerTowerName.setContent(results.getTower_name());
                         dangerFindTime.setContent(results.getFind_time());
                         adapter2.setNewData(results.getTroubleFileList());
-                        fanglei(results);
                         adapter1.setNewData(troubleFileList);
+                        switch (type_id){
+                            case "3":
+                                fanglei(results);
+                                break;
+                        }
+                        fanglei(results);
                         ProgressDialog.cancle();
                     }
 
@@ -234,7 +239,7 @@ public class DangerVerifyActivity extends BaseActivity implements  BaseQuickAdap
         bean.setF_id(f_id);
         bean.setId(id);
         bean.setFrom_user_id(SPUtil.getUserId(this));
-        bean.setType_id("3");
+        bean.setType_id(type_id);
         bean.setFind_dep_id(find_dep_id);
         bean.setLine_name(line_name);
         bean.setTower_name(tower_name);

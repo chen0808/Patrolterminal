@@ -11,13 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DefectActivity;
 import com.patrol.terminal.activity.LoginActivity;
+import com.patrol.terminal.activity.NewMainActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.TroubleActivity;
@@ -47,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -97,6 +97,34 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     TextView homeLastTaskNoData;
     @BindView(R.id.ll_last_task)
     RelativeLayout llLastTask;
+    @BindView(R.id.one_line)
+    TextView oneLine;
+    @BindView(R.id.two_line)
+    TextView twoLine;
+    @BindView(R.id.rl_title)
+    RelativeLayout rlTitle;
+    @BindView(R.id.img_db)
+    ImageView imgDb;
+    @BindView(R.id.rl_todo)
+    RelativeLayout rlTodo;
+    @BindView(R.id.img_dqrw)
+    ImageView imgDqrw;
+    @BindView(R.id.rl_task_now)
+    RelativeLayout rlTaskNow;
+    @BindView(R.id.img_lsrw)
+    ImageView imgLsrw;
+    @BindView(R.id.rl_task_history)
+    RelativeLayout rlTaskHistory;
+    @BindView(R.id.img_rjhwc)
+    ImageView imgRjhwc;
+    @BindView(R.id.rl_day_plan_finish)
+    RelativeLayout rlDayPlanFinish;
+    @BindView(R.id.home_done_data)
+    TextView homeDoneData;
+    @BindView(R.id.data_change)
+    ImageView dataChange;
+    @BindView(R.id.wanchenglv_name)
+    TextView wanchenglvName;
 
     private String[] typeList = new String[]{};
     private List<String> types = new ArrayList<>();
@@ -109,7 +137,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     private BackLogAdapter adapter;
     private ProgressDialog progressDialog;
 
-    private String year,month;
+    private String year, month;
     private String week;
     private String userId;
     private String sign;
@@ -123,8 +151,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     }
 
     @OnClick(R.id.iv_header)
-    void headerClick()
-    {
+    void headerClick() {
         SPUtil.clear(getActivity(), Constant.USER);
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         getActivity().setResult(RESULT_OK);
@@ -136,13 +163,13 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     protected void initData() {
         String time = SPUtil.getString(getContext(), "date", "overhaulTime", DateUatil.getTime(new Date(System.currentTimeMillis())));
         String[] years = time.split("年");
-        if(years[1].contains("月")){
+        if (years[1].contains("月")) {
             String[] months = years[1].split("月");
             month = Integer.parseInt(months[0]) + "";
         }
 
         year = years[0];
-        week = DateUatil.getWeekNum()+"";
+        week = DateUatil.getWeekNum() + "";
 
 
         String name = SPUtil.getString(getContext(), Constant.USER, Constant.USERNAME, "");
@@ -157,7 +184,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
 
         userId = SPUtil.getUserId(getContext());
 
-        rlPlan.setVisibility(View.GONE);
+        rlPlan.setVisibility(View.VISIBLE);
         rlTask.setVisibility(View.GONE);
         //运行班组长和组员进来隐藏计划
 //        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
@@ -167,7 +194,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         if (jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)) {  //检修班成员只有当前任务和历史任务
             llBacklog.setVisibility(View.GONE);
             llLastTask.setVisibility(View.GONE);
-        }else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.REFURBISHMENT_LEADER)
+        } else if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.REFURBISHMENT_LEADER)
                 || jobType.contains(Constant.POWER_CONSERVATION_SPECIALIZED) || jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)
                 || jobType.contains(Constant.SAFETY_SPECIALIZED) || jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) { //检修班长和检修专责,保电专责，验收专责，安全专责只有待办和当前任务 //检修主管只在待办审核月计划
 //            llBacklog.setVisibility(View.VISIBLE);
@@ -212,25 +239,25 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     private void initTask() {
         if (jobType.contains(Constant.REFURBISHMENT_LEADER)) {
             sign = "3";
-        }else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)){
+        } else if (jobType.contains(Constant.ACCEPTANCE_CHECK_SPECIALIZED)) {
             sign = "1";
-        }else if (jobType.contains(Constant.SAFETY_SPECIALIZED)) {
+        } else if (jobType.contains(Constant.SAFETY_SPECIALIZED)) {
             sign = "2";
-        }else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {
+        } else if (jobType.contains(Constant.REFURBISHMENT_MEMBER)) {
             sign = "4";
         }
 
-       if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {
-           getZzWeekList();
-       }else {
-           getWeekList(sign);
-       }
+        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {
+            getZzWeekList();
+        } else {
+            getWeekList(sign);
+        }
     }
 
     //检修专责获取周任务列表
     public void getZzWeekList() {
         BaseRequest.getInstance().getService()
-                .getOverhaulZzTaskList(year,month,week)
+                .getOverhaulZzTaskList(year, month, week)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<OverhaulZzTaskBean>>(getContext()) {
@@ -264,7 +291,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     public void getWeekList(String sign) {
         Log.w("linmeng", "sign:" + sign);
         BaseRequest.getInstance().getService()
-                .getOverhaulTaskList(year,month,week, userId, sign)
+                .getOverhaulTaskList(year, month, week, userId, sign)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<OverhaulMonthBean>>(getContext()) {
@@ -322,7 +349,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         data.clear();
     }
 
-    @OnClick({R.id.rl_plan, R.id.rl_task, R.id.rl_defact, R.id.rl_trouble, R.id.scanner_iv})
+    @OnClick({R.id.rl_plan, R.id.rl_task, R.id.rl_defact, R.id.rl_trouble, R.id.scanner_iv, R.id.rl_todo, R.id.rl_task_now, R.id.rl_task_history, R.id.rl_day_plan_finish})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_plan:
@@ -353,8 +380,30 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
             case R.id.scanner_iv:  //扫一扫
                 progressDialog.show(getContext(), false, "正在搜索RFID...");
                 //openRFID();
+                break;
+            case R.id.rl_todo:
+                ((NewMainActivity) getActivity()).setFragment(1);
+                break;
 
+            case R.id.rl_task_now:
+            case R.id.rl_task_history:
+                Intent intent = new Intent(getActivity(), NewTaskActivity.class);
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                    intent.putExtra("index", 4);
+                }else {
+                    intent.putExtra("index", 1);
+                }
 
+                getActivity().startActivity(intent);
+                break;
+            case R.id.rl_day_plan_finish:
+                Intent intent1 = new Intent(getActivity(), NewPlanActivity.class);
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                    intent1.putExtra("index", 5);
+                }else {
+                    intent1.putExtra("index", 2);
+                }
+                getActivity().startActivity(intent1);
                 break;
         }
     }
@@ -424,7 +473,6 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
                     }
                 });
     }
-
 
 
 //    @Override

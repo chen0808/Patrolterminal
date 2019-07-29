@@ -279,10 +279,10 @@ public class OverhaulZzWeekTaskFrgment extends BaseFragment {
                 taskDate.setText(time);
                 //taskDate.setText(time);
 
-                Map<String, Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), week);
-                String beginDate = (String) taskDateStr.get("beginDate");
-                String endDate = (String) taskDateStr.get("endDate");
-                taskDate.setText(beginDate + "至" + endDate + "（" + "第" + week + "周" + "）");
+//                Map<String, Object> taskDateStr = DateUatil.getScopeForWeeks(Integer.parseInt(year), Integer.parseInt(month), week);
+//                String beginDate = (String) taskDateStr.get("beginDate");
+//                String endDate = (String) taskDateStr.get("endDate");
+//                taskDate.setText(beginDate + "至" + endDate + "（" + "第" + week + "周" + "）");
 
                 getWeekList();
 
