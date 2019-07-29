@@ -18,13 +18,9 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.DefectFragmentDetailBean;
-import com.patrol.terminal.bean.PatrolRecordPicBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.widget.ProgressDialog;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,7 +32,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class DefectIngDetailActivity extends BaseActivity {
 
-
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)
@@ -47,7 +42,6 @@ public class DefectIngDetailActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
-
     @BindView(R.id.defect_line_name)
     TextView defect_line_name;
     @BindView(R.id.defect_ganta)
@@ -76,27 +70,22 @@ public class DefectIngDetailActivity extends BaseActivity {
     TextView defect_fxr;
     @BindView(R.id.defect_fxrbm)
     TextView defect_fxrbm;
-    //    @BindView(R.id.defect_wcqq)
-//    TextView defect_wcqq;
-//    @BindView(R.id.defect_ggbz)
-//    TextView defect_ggbz;
     @BindView(R.id.defect_wczt)
     TextView defect_wczt;
-
-
     @BindView(R.id.deffect_img)
     TextView deffectImg;
     @BindView(R.id.defect_gridView)
     GridView defectGridView;
+
     private DefectPicAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
-    private int page = 1;
-
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String id = getIntent().getStringExtra("id");
+        type = getIntent().getIntExtra("type", 0);
         setContentView(R.layout.activity_defect_ing);
         ButterKnife.bind(this);
         initview(id);
@@ -133,7 +122,14 @@ public class DefectIngDetailActivity extends BaseActivity {
                         defect_xqbz.setText(bean.getDeal_dep_name());
                         defect_xqsj.setText(bean.getDeal_time());
 
-                        switch (bean.getIn_status()) {
+                        String status;
+                        if(type == 1){
+                            status = bean.getIn_status();
+                        } else {
+                            status = bean.getDone_status();
+                        }
+
+                        switch (status) {
                             case "0":
                                 defect_qxrkzt.setText("编制");
                                 defect_qxrkzt.setTextColor(getResources().getColor(R.color.blue));
@@ -187,9 +183,7 @@ public class DefectIngDetailActivity extends BaseActivity {
                                 defect_wczt.setText("未完成");
                                 break;
                         }
-//                        defect_ggbz.setText(bean.getRemark());
 
-//                        getPartrolRecord(bean.getId());
                         if (bean.getFileList() != null && bean.getFileList().size() > 0) {
                             deffectImg.setVisibility(View.VISIBLE);
                             mPicList.clear();
@@ -225,47 +219,6 @@ public class DefectIngDetailActivity extends BaseActivity {
                 finish();
                 break;
         }
-    }
-
-    public void getPartrolRecord(String id) {
-
-        ProgressDialog.show(this, false, "正在加载。。。。");
-        BaseRequest.getInstance().getService()
-                .getDefectPic(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<PatrolRecordPicBean>>(this) {
-
-
-                    @Override
-                    protected void onSuccees(BaseResult<List<PatrolRecordPicBean>> t) throws Exception {
-                        if (t.getCode() == 1) {
-                            List<PatrolRecordPicBean> results = t.getResults();
-                            if (results.size() > 0) {
-                                deffectImg.setVisibility(View.VISIBLE);
-                                for (int i = 0; i < results.size(); i++) {
-                                    PatrolRecordPicBean overhaulFileBean = results.get(i);
-                                    String file_path = overhaulFileBean.getFile_path();
-                                    if (overhaulFileBean.getFilename() != null) {
-                                        String compressPath = BaseUrl.BASE_URL + file_path.substring(1, file_path.length()) + overhaulFileBean.getFilename();
-
-                                        mPicList.add(compressPath);
-                                    }
-                                }
-                            } else {
-                                deffectImg.setVisibility(View.GONE);
-                            }
-                            mGridViewAddImgAdapter.notifyDataSetChanged();
-                        }
-
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-
-                    }
-
-                });
     }
 
     //查看大图

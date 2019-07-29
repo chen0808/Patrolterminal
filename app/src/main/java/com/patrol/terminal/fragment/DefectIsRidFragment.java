@@ -108,54 +108,54 @@ public class DefectIsRidFragment extends BaseFragment {
         planRv.setLayoutManager(manager);
         planRv.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelOffset(R.dimen.dp_10)));
 
-        // 创建菜单：
-        SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
-            @Override
-            public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
-                int width = getResources().getDimensionPixelOffset(R.dimen.dp_70);
-                int height = ViewGroup.LayoutParams.MATCH_PARENT;
-                // 注意：哪边不想要菜单，那么不要添加即可。
-                SwipeMenuItem addItem;
-                addItem = new SwipeMenuItem(mContext)
-                        .setBackground(R.drawable.swip_menu_item_1)
-                        .setText("驳回")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                rightMenu.addMenuItem(addItem);
-                addItem = new SwipeMenuItem(mContext)
-                        .setBackground(R.drawable.swip_menu_item_2)
-                        .setText("复核")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                rightMenu.addMenuItem(addItem);
-                addItem = new SwipeMenuItem(mContext)
-                        .setBackground(R.drawable.swip_menu_item_3)
-                        .setText("入库")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                rightMenu.addMenuItem(addItem);
-            }
-        };
-
-        // 设置监听器。
-        planRv.setSwipeMenuCreator(mSwipeMenuCreator);
-
-        OnItemMenuClickListener mMenuItemClickListener = new OnItemMenuClickListener() {
-            @Override
-            public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
-                // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
-                menuBridge.closeMenu();
-                int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
-                int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        // 菜单点击监听。
-        planRv.setOnItemMenuClickListener(mMenuItemClickListener);
+//        // 创建菜单：
+//        SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
+//            @Override
+//            public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
+//                int width = getResources().getDimensionPixelOffset(R.dimen.dp_70);
+//                int height = ViewGroup.LayoutParams.MATCH_PARENT;
+//                // 注意：哪边不想要菜单，那么不要添加即可。
+//                SwipeMenuItem addItem;
+//                addItem = new SwipeMenuItem(mContext)
+//                        .setBackground(R.drawable.swip_menu_item_1)
+//                        .setText("驳回")
+//                        .setTextColor(Color.WHITE)
+//                        .setWidth(width)
+//                        .setHeight(height);
+//                rightMenu.addMenuItem(addItem);
+//                addItem = new SwipeMenuItem(mContext)
+//                        .setBackground(R.drawable.swip_menu_item_2)
+//                        .setText("复核")
+//                        .setTextColor(Color.WHITE)
+//                        .setWidth(width)
+//                        .setHeight(height);
+//                rightMenu.addMenuItem(addItem);
+//                addItem = new SwipeMenuItem(mContext)
+//                        .setBackground(R.drawable.swip_menu_item_3)
+//                        .setText("入库")
+//                        .setTextColor(Color.WHITE)
+//                        .setWidth(width)
+//                        .setHeight(height);
+//                rightMenu.addMenuItem(addItem);
+//            }
+//        };
+//
+//        // 设置监听器。
+//        planRv.setSwipeMenuCreator(mSwipeMenuCreator);
+//
+//        OnItemMenuClickListener mMenuItemClickListener = new OnItemMenuClickListener() {
+//            @Override
+//            public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
+//                // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
+//                menuBridge.closeMenu();
+//                int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
+//                int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
+//                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//
+//        // 菜单点击监听。
+//        planRv.setOnItemMenuClickListener(mMenuItemClickListener);
 
         //班级
         banjiAdapter = new DefectBanjiAdapter(mContext, banjiList);

@@ -27,6 +27,7 @@ public class DefectIngTabAdapter extends BaseQuickAdapter<DefectFragmentBean, Ba
                 Intent intent = new Intent(mContext, DefectIngDetailActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putSerializable("id", item.getId());
+                bundle.putInt("type", mType);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
