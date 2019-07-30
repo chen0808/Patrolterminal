@@ -173,7 +173,7 @@ public class TroubleActivity extends BaseActivity {
     private void getAllTrouble() {
         ProgressDialog.show(this, true, "正在加载...");
         BaseRequest.getInstance().getService()
-                .getSelectDanger(page_num, page_size, line_id, search)
+                .getSelectDanger(page_num, page_size, line_id, search, "", "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<TroubleFragmentBean>>(this) {

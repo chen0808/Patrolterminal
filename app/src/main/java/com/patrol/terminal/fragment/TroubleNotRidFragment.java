@@ -50,8 +50,8 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-//隐患未入库
-public class TroubleNotInFragment extends BaseFragment {
+//隐患库未消缺
+public class TroubleNotRidFragment extends BaseFragment {
     @BindView(R.id.iv_yh_search)
     ImageView ivSearch;
     @BindView(R.id.yh_rv)
@@ -109,47 +109,28 @@ public class TroubleNotInFragment extends BaseFragment {
                 int height = ViewGroup.LayoutParams.MATCH_PARENT;
                 // 注意：哪边不想要菜单，那么不要添加即可。
                 SwipeMenuItem addItem;
-                if(troubleList.get(viewType).getIn_status().equals("2") && mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
-                    // 注意：哪边不想要菜单，那么不要添加即可。
-                    addItem = new SwipeMenuItem(mContext)
-                            .setBackground(R.drawable.swip_menu_item_1)
-                            .setText("驳回")
-                            .setTextColor(Color.WHITE)
-                            .setWidth(width)
-                            .setHeight(height);
-                    rightMenu.addMenuItem(addItem);
-
+                if(mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
                     addItem = new SwipeMenuItem(mContext)
                             .setBackground(R.drawable.swip_menu_item_2)
-                            .setText("复核")
+                            .setText("消缺")
                             .setTextColor(Color.WHITE)
                             .setWidth(width)
                             .setHeight(height);
                     rightMenu.addMenuItem(addItem);
-
-                    addItem = new SwipeMenuItem(mContext)
-                            .setBackground(R.drawable.swip_menu_item_3)
-                            .setText("入库")
-                            .setTextColor(Color.WHITE)
-                            .setWidth(width)
-                            .setHeight(height);
-                    rightMenu.addMenuItem(addItem);
-                } else if (troubleList.get(viewType).getIn_status().equals("1") && mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                     addItem = new SwipeMenuItem(mContext)
                             .setBackground(R.drawable.swip_menu_item_1)
-                            .setText("驳回")
+                            .setText("转检修")
                             .setTextColor(Color.WHITE)
                             .setWidth(width)
                             .setHeight(height);
                     rightMenu.addMenuItem(addItem);
-
+                } else if(mJobType.contains(Constant.RUNNING_SQUAD_LEADER)){
                     addItem = new SwipeMenuItem(mContext)
-                            .setBackground(R.drawable.swip_menu_item_3)
-                            .setText("通过")
+                            .setBackground(R.drawable.swip_menu_item_2)
+                            .setText("消缺")
                             .setTextColor(Color.WHITE)
                             .setWidth(width)
                             .setHeight(height);
-
                     rightMenu.addMenuItem(addItem);
                 }
             }
@@ -282,7 +263,7 @@ public class TroubleNotInFragment extends BaseFragment {
     private void getAllTrouble() {
 //        ProgressDialog.show(mContext, true, "正在加载...");
         BaseRequest.getInstance().getService()
-                .getSelectDanger(page_num, page_size, line_id, search, "grade_sign desc,find_time desc", "1")
+                .getSelectDanger(page_num, page_size, line_id, search, "grade_sign desc,find_time desc", "2")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<TroubleFragmentBean>>(mContext) {

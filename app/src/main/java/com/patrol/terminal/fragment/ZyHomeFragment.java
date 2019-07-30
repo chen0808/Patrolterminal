@@ -23,6 +23,7 @@ import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.PersonalTaskDetailActivity;
 import com.patrol.terminal.activity.TroubleActivity;
+import com.patrol.terminal.activity.TroubleTabActivity;
 import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
 import com.patrol.terminal.adapter.BackLogAdapter;
 import com.patrol.terminal.adapter.BackLogTaskAdapter;
@@ -303,7 +304,7 @@ public class ZyHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
                 startActivity(new Intent(getActivity(), DefectTabActivity.class));
                 break;
             case R.id.rl_trouble:
-                startActivity(new Intent(getActivity(), TroubleActivity.class));
+                startActivity(new Intent(getActivity(), TroubleTabActivity.class));
                 break;
 
             case R.id.scanner_iv:  //扫一扫

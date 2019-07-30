@@ -628,7 +628,7 @@ public interface ApiServise {
 //    Observable<BaseResult<List<TroubleFragmentBean>>> getAllDanger(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("search") String search);
     //根据条件获取隐患
     @GET("task/trouble/pdaPageGET")
-    Observable<BaseResult<List<TroubleFragmentBean>>> getSelectDanger(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("line_id") String line_id, @Query("line_name") String line_name);
+    Observable<BaseResult<List<TroubleFragmentBean>>> getSelectDanger(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("line_id") String line_id, @Query("line_name") String line_name, @Query("order") String order, @Query("trouble_sign") String trouble_sign);
 
     //防鸟患
     @GET("task/trouble/bird/listGET")

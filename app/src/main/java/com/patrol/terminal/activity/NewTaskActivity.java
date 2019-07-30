@@ -255,7 +255,7 @@ public class NewTaskActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.task_dan:
-                intent.setClass(this, TroubleActivity.class);
+                intent.setClass(this, TroubleTabActivity.class);
                 startActivity(intent);
                 break;
             case R.id.task_cheak:

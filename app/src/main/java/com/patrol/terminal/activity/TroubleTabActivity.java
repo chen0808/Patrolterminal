@@ -15,7 +15,9 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.fragment.DefectIsRidFragment;
 import com.patrol.terminal.fragment.DefectNotInFragment;
 import com.patrol.terminal.fragment.DefectNotRidFragment;
+import com.patrol.terminal.fragment.TroubleIsRidFragment;
 import com.patrol.terminal.fragment.TroubleNotInFragment;
+import com.patrol.terminal.fragment.TroubleNotRidFragment;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -60,8 +62,8 @@ public class TroubleTabActivity extends BaseActivity {
         titleName.setText("隐患库");
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new TroubleNotInFragment());
-        fragmentList.add(new DefectNotRidFragment());
-        fragmentList.add(new DefectIsRidFragment());
+        fragmentList.add(new TroubleNotRidFragment());
+        fragmentList.add(new TroubleIsRidFragment());
 
         MyFragmentPagerAdapter CardPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         troubleTabVg.setAdapter(CardPagerAdapter);

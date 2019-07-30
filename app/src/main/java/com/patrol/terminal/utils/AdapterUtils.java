@@ -44,6 +44,10 @@ public class AdapterUtils {
     //设置图标文字
     public static void setIconTextNew(TextView icon, String type_name) {
         switch (type_name) {
+            case "三跨":
+                icon.setText("三跨");
+                icon.setBackgroundResource(R.drawable.plan_sankua_bg);
+                break;
             case "防雷":
                 icon.setText("防雷");
                 icon.setBackgroundResource(R.drawable.plan_week_bg);

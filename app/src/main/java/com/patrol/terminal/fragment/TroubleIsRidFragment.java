@@ -50,8 +50,8 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-//隐患未入库
-public class TroubleNotInFragment extends BaseFragment {
+//隐患库已消缺
+public class TroubleIsRidFragment extends BaseFragment {
     @BindView(R.id.iv_yh_search)
     ImageView ivSearch;
     @BindView(R.id.yh_rv)
@@ -282,7 +282,7 @@ public class TroubleNotInFragment extends BaseFragment {
     private void getAllTrouble() {
 //        ProgressDialog.show(mContext, true, "正在加载...");
         BaseRequest.getInstance().getService()
-                .getSelectDanger(page_num, page_size, line_id, search, "grade_sign desc,find_time desc", "1")
+                .getSelectDanger(page_num, page_size, line_id, search, "grade_sign desc,find_time desc", "3")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<TroubleFragmentBean>>(mContext) {

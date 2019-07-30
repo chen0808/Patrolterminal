@@ -20,6 +20,7 @@ import com.patrol.terminal.activity.NewMainActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.TroubleActivity;
+import com.patrol.terminal.activity.TroubleTabActivity;
 import com.patrol.terminal.adapter.BackLogAdapter;
 import com.patrol.terminal.adapter.PlanFinishRateAdapter;
 import com.patrol.terminal.base.BaseFragment;
@@ -375,7 +376,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
                 startActivity(new Intent(getActivity(), DefectTabActivity.class));
                 break;
             case R.id.rl_trouble:
-                startActivity(new Intent(getActivity(), TroubleActivity.class));
+                startActivity(new Intent(getActivity(), TroubleTabActivity.class));
                 break;
 
             case R.id.scanner_iv:  //扫一扫
