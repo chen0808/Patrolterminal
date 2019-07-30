@@ -1,6 +1,7 @@
 package com.patrol.terminal.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.DefectPlanActivity;
 import com.patrol.terminal.adapter.DefectBanjiAdapter;
 import com.patrol.terminal.adapter.DefectBanjiXLAdapter;
 import com.patrol.terminal.adapter.DefectIngAdapter;
@@ -154,7 +156,9 @@ public class DefectNotRidFragment extends BaseFragment {
                 menuBridge.closeMenu();
                 int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
                 int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(getContext(), DefectPlanActivity.class);
+                intent.putExtra("id",defectList.get(adapterPosition).getId());
+                startActivity(intent);
             }
         };
 

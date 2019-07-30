@@ -89,21 +89,21 @@ public class DangerToPatrolActivity extends BaseActivity {
         dangerPatrolDep.setContent(dep_name);
         dangerPatrolLine.setContent(line_name);
         dangerPatrolTower.setContent(tower_name);
-
-        switch (danger_level) {
-            case "一般":
-                dangerPatrolDate.setText("30");
-                break;
-            case "重大":
-                dangerPatrolDate.setText("7");
-                break;
-            case "紧急":
-                dangerPatrolDate.setText("1");
-                break;
-            default:
-                dangerPatrolDate.setText("30");
-                break;
-        }
+//
+//        switch (danger_level) {
+//            case "一般":
+//                dangerPatrolDate.setText("30");
+//                break;
+//            case "重大":
+//                dangerPatrolDate.setText("7");
+//                break;
+//            case "紧急":
+//                dangerPatrolDate.setText("1");
+//                break;
+//            default:
+//                dangerPatrolDate.setText("30");
+//                break;
+//        }
     }
 
 

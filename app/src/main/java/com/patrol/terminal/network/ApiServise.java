@@ -189,6 +189,11 @@ public interface ApiServise {
     @GET("/task/group/user/usersGET")
     Observable<BaseResult<List<DepUserBean>>> getPersonal(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
 
+
+    //获取班组所有成隐患列表
+    @GET("sys/dep/byIdGET")
+    Observable<BaseResult<DepPersonalBean>> getDepPersonal( @Query("id") String dep_id);
+
     //获取车辆列表
     @GET("/eq/vehicle/pda/listGET")
     Observable<BaseResult<List<EqVehicleBean>>> getVehicle(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);

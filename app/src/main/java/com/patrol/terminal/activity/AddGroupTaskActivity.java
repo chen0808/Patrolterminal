@@ -109,10 +109,11 @@ public class AddGroupTaskActivity extends BaseActivity {
     private String duty_user_name;
     private String duty_user_id;
     private AlertDialog personalDialog;
+    private AlertDialog personalGroupDialog;
     private String[] personals;
     private  List<String> personalPosin=new ArrayList<>();
     private int dutyPositon;
-    private AlertDialog personalGroupDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

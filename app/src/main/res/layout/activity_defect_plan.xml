@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.DangerToPatrolActivity">
+
+    <include layout="@layout/include_title" />
+
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="缺陷类别："></com.patrol.terminal.widget.DangerSubmitView>
+
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_dep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="消缺班组："></com.patrol.terminal.widget.DangerSubmitView>
+
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_level"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="缺陷等级："></com.patrol.terminal.widget.DangerSubmitView>
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="缺陷内容："></com.patrol.terminal.widget.DangerSubmitView>
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="工作线路："></com.patrol.terminal.widget.DangerSubmitView>
+
+    <com.patrol.terminal.widget.DangerSubmitView
+        android:id="@+id/danger_patrol_tower"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:danger_name="杆塔号："></com.patrol.terminal.widget.DangerSubmitView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:text="处理措施："
+            android:textColor="@color/color_33"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical|right"
+            />
+        <EditText
+            android:id="@+id/danger_patrol_idea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColorHint="@color/color_69"
+            android:textColor="@color/color_69"
+            android:hint="请输入处理措施"
+            android:textSize="@dimen/sp_14"
+            android:background="@null"
+            android:gravity="center_vertical"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_d1" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:text="负责人："
+            android:textColor="@color/color_33"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical|right"
+            />
+        <TextView
+            android:id="@+id/danger_patrol_team"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="请选择负责人"
+            android:gravity="center_vertical"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_d1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_30"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/color_33"
+            android:layout_marginLeft="16dp"
+            android:text="选择组员："
+            android:gravity="center_vertical|right"
+            />
+        <TextView
+            android:id="@+id/danger_patrol_personal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="请选择负责人"
+            android:gravity="center_vertical"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_d1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:text="消缺时间："
+            android:gravity="center_vertical|right"
+            android:textColor="@color/color_33"
+            android:layout_marginLeft="16dp"
+            />
+        <TextView
+            android:id="@+id/danger_patrol_start_time"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="match_parent"
+            android:hint="选择起始时间"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/dp_10"
+            android:text="至"
+            />
+        <TextView
+            android:id="@+id/danger_patrol_end_time"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="match_parent"
+            android:hint="选择结束时间"
+            android:gravity="center_vertical"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_d1" />
+    <LinearLayout
+        android:id="@+id/ll_control_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/control_card"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="查看控制卡"
+            android:textColor="@color/white" />
+
+        <org.angmarch.views.NiceSpinner
+            android:id="@+id/ns_control_card"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+          ></org.angmarch.views.NiceSpinner>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/danger_patrol_save"
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="@dimen/dp_40"
+        android:background="@drawable/btn_bg"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_200"
+        android:text="保存"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        />
+</LinearLayout>

@@ -28,7 +28,7 @@ public class DepUserBean {
          private String user_id;
         private String name;
         private String user_name;
-    private String sign;
+        private String sign;
         private String login;
         private String password;
         private String sex;

@@ -104,7 +104,7 @@ public class AddDayPlanActivity extends BaseActivity {
     private String[] types;
     private int selectNum = 0;
     private int allNum = 0;
-
+    private String[] personals;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
