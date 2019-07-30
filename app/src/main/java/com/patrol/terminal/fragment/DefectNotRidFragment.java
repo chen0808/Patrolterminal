@@ -76,7 +76,6 @@ public class DefectNotRidFragment extends BaseFragment {
     private DefectIngTabAdapter groupTaskAdapter;
     private DefectBanjiAdapter banjiAdapter;
     private DefectBanjiXLAdapter banjixlAdapter;
-    private String jobType;
     private int pageNum = 1;
     private int count = 10;
     private String search_name = "";
@@ -86,6 +85,7 @@ public class DefectNotRidFragment extends BaseFragment {
     private String dep_id;
     private List<BanjiBean> banjiList = new ArrayList<>();
     private List<BanjiXLBean> banjixlList = new ArrayList<>();
+    private String mJobType;
     private Context mContext;
 
     @Override
@@ -98,9 +98,9 @@ public class DefectNotRidFragment extends BaseFragment {
     protected void initData() {
         mContext = getActivity();
 
-        jobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         dep_id = SPUtil.getDepId(mContext);
-        if ((jobType.contains("_zz") || jobType.contains("_zg")) && !jobType.contains("b_zz")) {
+        if ((mJobType.contains("_zz") || mJobType.contains("_zg")) && !mJobType.contains("b_zz")) {
             dep_id = null;
         }
 
@@ -116,20 +116,31 @@ public class DefectNotRidFragment extends BaseFragment {
                 int height = ViewGroup.LayoutParams.MATCH_PARENT;
                 // 注意：哪边不想要菜单，那么不要添加即可。
                 SwipeMenuItem addItem;
-                addItem = new SwipeMenuItem(mContext)
-                        .setBackground(R.drawable.swip_menu_item_1)
-                        .setText("转检修")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                rightMenu.addMenuItem(addItem);
-                addItem = new SwipeMenuItem(mContext)
-                        .setBackground(R.drawable.swip_menu_item_2)
-                        .setText("消缺")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                rightMenu.addMenuItem(addItem);
+
+                if(mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+                    addItem = new SwipeMenuItem(mContext)
+                            .setBackground(R.drawable.swip_menu_item_2)
+                            .setText("消缺")
+                            .setTextColor(Color.WHITE)
+                            .setWidth(width)
+                            .setHeight(height);
+                    rightMenu.addMenuItem(addItem);
+                    addItem = new SwipeMenuItem(mContext)
+                            .setBackground(R.drawable.swip_menu_item_1)
+                            .setText("转检修")
+                            .setTextColor(Color.WHITE)
+                            .setWidth(width)
+                            .setHeight(height);
+                    rightMenu.addMenuItem(addItem);
+                } else if(mJobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                    addItem = new SwipeMenuItem(mContext)
+                            .setBackground(R.drawable.swip_menu_item_2)
+                            .setText("消缺")
+                            .setTextColor(Color.WHITE)
+                            .setWidth(width)
+                            .setHeight(height);
+                    rightMenu.addMenuItem(addItem);
+                }
             }
         };
 
@@ -220,7 +231,7 @@ public class DefectNotRidFragment extends BaseFragment {
     public void getAllBanji() {
         //班长和班员传参数  不传查所有的
         String depId = "";
-        String mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains("xb_")) {
             depId = SPUtil.getDepId(mContext);
         }
