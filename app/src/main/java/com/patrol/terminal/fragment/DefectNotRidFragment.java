@@ -24,6 +24,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DefectBanjiAdapter;
 import com.patrol.terminal.adapter.DefectBanjiXLAdapter;
 import com.patrol.terminal.adapter.DefectIngAdapter;
+import com.patrol.terminal.adapter.DefectIngTabAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -72,7 +73,7 @@ public class DefectNotRidFragment extends BaseFragment {
     @BindView(R.id.ly_sx)
     RelativeLayout ry_sx;
 
-    private DefectIngAdapter groupTaskAdapter;
+    private DefectIngTabAdapter groupTaskAdapter;
     private DefectBanjiAdapter banjiAdapter;
     private DefectBanjiXLAdapter banjixlAdapter;
     private String jobType;
@@ -117,21 +118,14 @@ public class DefectNotRidFragment extends BaseFragment {
                 SwipeMenuItem addItem;
                 addItem = new SwipeMenuItem(mContext)
                         .setBackground(R.drawable.swip_menu_item_1)
-                        .setText("驳回")
+                        .setText("转检修")
                         .setTextColor(Color.WHITE)
                         .setWidth(width)
                         .setHeight(height);
                 rightMenu.addMenuItem(addItem);
                 addItem = new SwipeMenuItem(mContext)
                         .setBackground(R.drawable.swip_menu_item_2)
-                        .setText("复核")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                rightMenu.addMenuItem(addItem);
-                addItem = new SwipeMenuItem(mContext)
-                        .setBackground(R.drawable.swip_menu_item_3)
-                        .setText("入库")
+                        .setText("消缺")
                         .setTextColor(Color.WHITE)
                         .setWidth(width)
                         .setHeight(height);
@@ -161,7 +155,7 @@ public class DefectNotRidFragment extends BaseFragment {
         lv_banji.setAdapter(banjiAdapter);
         banjixlAdapter = new DefectBanjiXLAdapter(mContext, banjixlList);
         lv_xianlu.setAdapter(banjixlAdapter);
-        groupTaskAdapter = new DefectIngAdapter(R.layout.fragment_defect_not_in_item, 0);
+        groupTaskAdapter = new DefectIngTabAdapter(R.layout.fragment_defect_not_in_item, 2);
         planRv.setAdapter(groupTaskAdapter);
         planRv.useDefaultLoadMore();
         planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
