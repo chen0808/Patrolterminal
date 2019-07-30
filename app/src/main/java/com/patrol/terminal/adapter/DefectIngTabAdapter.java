@@ -49,9 +49,9 @@ public class DefectIngTabAdapter extends BaseQuickAdapter<DefectFragmentBean, Ba
         viewHolder.setGone(R.id.iv_icon_iv,true);
         if ("一般".equals(item.getGrade_name())){
             viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.yiban);
-        }else if ("严重".equals(item.getGrade_name())){
+        } else if ("严重".equals(item.getGrade_name())){
             viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.yanzhong);
-        }else if ("危急".equals(item.getGrade_name())){
+        } else if ("危急".equals(item.getGrade_name())){
             viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.weiji);
         }
     }

@@ -17,6 +17,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.DefectFragmentBean2;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.SpaceItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class DefectFrgment extends BaseFragment {
     @Override
     protected void initData() {
         rvDefect.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvDefect.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelOffset(R.dimen.dp_10)));
         adapter = new DefectFragmentAdapter(R.layout.fragment_defect_item, results);
         rvDefect.setAdapter(adapter);
         subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
@@ -65,7 +67,7 @@ public class DefectFrgment extends BaseFragment {
 
     public void getdata() {
         BaseRequest.getInstance().getService()
-                .getDefectFragment(line_id).subscribeOn(Schedulers.io())
+                .getDefectFragment(line_id, "grade_sign desc,find_time desc", "3").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean2>>(getActivity()) {
                     @Override

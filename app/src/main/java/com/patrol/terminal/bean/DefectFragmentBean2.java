@@ -56,6 +56,9 @@ public class DefectFragmentBean2 implements Serializable {
     private String id;
     private String content;
     private String tower_name;
+    private String in_status;
+    private String done_status;
+    private String grade_name;
 
     public String getTower_name() {
         return tower_name;
@@ -119,5 +122,29 @@ public class DefectFragmentBean2 implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getIn_status() {
+        return in_status;
+    }
+
+    public void setIn_status(String in_status) {
+        this.in_status = in_status;
+    }
+
+    public String getGrade_name() {
+        return grade_name;
+    }
+
+    public void setGrade_name(String grade_name) {
+        this.grade_name = grade_name;
+    }
+
+    public String getDone_status() {
+        return done_status;
+    }
+
+    public void setDone_status(String done_status) {
+        this.done_status = done_status;
     }
 }

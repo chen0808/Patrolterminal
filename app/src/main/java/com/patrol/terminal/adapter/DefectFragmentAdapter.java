@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DefectIngDetailActivity;
 import com.patrol.terminal.bean.DefectFragmentBean2;
+import com.patrol.terminal.utils.StringUtil;
 
 import java.util.List;
 
@@ -27,27 +28,24 @@ public class DefectFragmentAdapter extends BaseQuickAdapter<DefectFragmentBean2,
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, DefectIngDetailActivity.class);
                 intent.putExtra("id", item.getId());
+                intent.putExtra("type", "2");
                 mContext.startActivity(intent);
             }
         });
-       /* if ("0".equals(item.getStatus())) {
-            viewHolder.setText(R.id.item_line_state, "未分配");
-            viewHolder.setTextColor(R.id.item_line_state, mContext.getResources().getColor(R.color.write_red));
-            viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_red_bg);
-        } else {
-            viewHolder.setText(R.id.item_line_state, "已分配");
-            viewHolder.setTextColor(R.id.item_line_state, mContext.getResources().getColor(R.color.green));
-            viewHolder.setBackgroundRes(R.id.item_line_state, R.drawable.state_green_bg);
+
+        viewHolder.setText(R.id.tv_name, "内容：" + item.getContent())
+                .setText(R.id.tv_time, "线路杆塔：" + item.getLine_name()+item.getTower_name())
+                .setText(R.id.tv_detail, "发现时间：" + item.getFind_time());
+
+        viewHolder.setText(R.id.item_defect_status, StringUtil.getDefectState(item.getDone_status()));
+        viewHolder.setTextColor(R.id.item_defect_status, mContext.getResources().getColor(StringUtil.getDefectColor(item.getDone_status())));
+
+        if ("一般".equals(item.getGrade_name())){
+            viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.yiban);
+        } else if ("严重".equals(item.getGrade_name())){
+            viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.yanzhong);
+        } else if ("危急".equals(item.getGrade_name())){
+            viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.weiji);
         }
-        if ("0".equals(item.getAudit_status())) {
-            viewHolder.setText(R.id.tv_detail, "审核情况：未审核");
-        } else if ("1".equals(item.getAudit_status())) {
-            viewHolder.setText(R.id.tv_detail, "审核情况：已审核");
-        }*/
-        viewHolder.setText(R.id.tv_name, "线路名称：" + item.getLine_name() + " " + item.getTower_name() + "\n" + "缺陷内容：" + item.getContent())
-                .setText(R.id.tv_time, "缺陷类型：" + item.getCategory_name())
-                .setText(R.id.tv_detail, "发现时间：" + item.getFind_time())
-                .setText(R.id.iv_icon, "缺陷");
-        ;
     }
 }

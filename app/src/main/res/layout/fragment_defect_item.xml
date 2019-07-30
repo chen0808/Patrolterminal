@@ -3,7 +3,6 @@
     android:id="@+id/rl_defect_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp_10"
     android:background="@drawable/stoke_home_list">
 
     <RelativeLayout
@@ -27,14 +26,14 @@
             android:paddingRight="10dp"
             android:paddingBottom="13dp"
             android:text="缺陷"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone"/>
         <ImageView
             android:id="@+id/iv_icon_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:scaleType="centerCrop"
-            android:visibility="gone"
             android:src="@mipmap/yiban"
              />
         </RelativeLayout>
@@ -64,12 +63,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="巡视时间" />
-            <TextView
-                android:id="@+id/item_defect_status"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="状态：" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="状态：" />
+                <TextView
+                    android:id="@+id/item_defect_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="" />
+            </LinearLayout>
             <TextView
                 android:id="@+id/tv_detail"
                 android:layout_width="wrap_content"

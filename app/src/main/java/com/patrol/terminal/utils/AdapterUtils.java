@@ -52,7 +52,7 @@ public class AdapterUtils {
                 icon.setText("防雷");
                 icon.setBackgroundResource(R.drawable.plan_week_bg);
                 break;
-            case "防鸟患":
+            case "防鸟害":
                 icon.setText("防鸟");
                 icon.setBackgroundResource(R.drawable.plan_qing_bg);
                 break;
@@ -68,8 +68,8 @@ public class AdapterUtils {
                 icon.setText("防破");
                 icon.setBackgroundResource(R.drawable.plan_kaiyong_bg);
                 break;
-            case "防地灾":
-                icon.setText("防灾");
+            case "地灾":
+                icon.setText("地灾");
                 icon.setBackgroundResource(R.drawable.plan_red_bg);
                 break;
             case "防洪防汛":

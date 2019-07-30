@@ -584,7 +584,7 @@ public interface ApiServise {
 //    Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("table") String table, @Query("column") String column, @Query("where") String where, @Query("line_id") String line_id);
     //巡视记录缺陷列表
     @GET("task/defect/listGET")
-    Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("line_id") String line_id);
+    Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("line_id") String line_id, @Query("order") String order, @Query("in_status") String in_status);
 
     //巡视记录缺陷详情
     @GET("task/defect/byIdGET")
