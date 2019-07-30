@@ -34,7 +34,7 @@ public class LocalPatrolDefectBean extends BaseModel implements Serializable {
     @Column
     private String status;
     @Column
-    private String category_id;
+    private String category_id;// 缺陷类别id
     @Column
     private String category_name;// 缺陷类别  导线，地线
     @Column

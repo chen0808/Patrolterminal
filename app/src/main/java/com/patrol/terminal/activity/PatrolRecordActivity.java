@@ -647,6 +647,7 @@ public class PatrolRecordActivity extends BaseActivity {
             }
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.task_id", toRequestBody(task_id));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.in_status", toRequestBody("1"));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.category_id", toRequestBody(localDefectByTaskId.get(i).getCategory_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.category_name", toRequestBody(localDefectByTaskId.get(i).getCategory_name()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.grade_id", toRequestBody(localDefectByTaskId.get(i).getGrade_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.grade_name", toRequestBody(localDefectByTaskId.get(i).getGrade_name()));
@@ -667,7 +668,7 @@ public class PatrolRecordActivity extends BaseActivity {
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_id", toRequestBody(localByTaskId.getDep_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_dep_name", toRequestBody(localByTaskId.getDep_name()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.deal_id", toRequestBody(localDefectByTaskId.get(i).getClcsId()));
-            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.deal_notes", toRequestBody(localDefectByTaskId.get(i).getClcsName()));
+            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.advice_deal_notes", toRequestBody(localDefectByTaskId.get(i).getClcsName()));
 
             String pics = localDefectByTaskId.get(i).getPics();
             if (pics != null) {
