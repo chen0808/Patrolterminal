@@ -71,11 +71,11 @@ public class TroubleDetailBean implements Serializable {
     private String small_tower_name;
     private String big_tower_name;
     private String tension;
-    private String is_independent;
-    private String is_double;
-    private String is_drainage;
-    private String is_metal;
-    private String is_adss;
+    private String is_independent = "0";
+    private String is_double = "0";
+    private String is_drainage = "0";
+    private String is_metal = "0";
+    private String is_adss = "0";
 
     public String getId() {
         return id;
@@ -533,3 +533,4 @@ public class TroubleDetailBean implements Serializable {
         this.is_adss = is_adss;
     }
 }
+

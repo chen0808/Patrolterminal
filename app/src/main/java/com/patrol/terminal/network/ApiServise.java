@@ -1143,6 +1143,31 @@ public interface ApiServise {
     @GET("/task/trouble/thunder/oneGET")
     Observable<BaseResult<FangLeiTodoBean>> getFangLeiTodo(@Query("id") String id);
 
+    //获取防feng隐患待办
+    @GET("/task/trouble/wind/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getFangFengTodo(@Query("id") String id);
+
+    //获取防山火隐患待办
+    @GET("/task/trouble/fire/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getShanhuoTodo(@Query("id") String id);
+
+    //获取 防外破 隐患待办
+    @GET("/task/trouble/break/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getFangWaiPoTodo(@Query("id") String id);
+
+    //获取 地灾 隐患待办
+    @GET("/task/trouble/disaster/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getDiZaiTodo(@Query("id") String id);
+
+    //获取 防鸟害 隐患待办
+    @GET("/task/trouble/bird/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getFangNiaoHaiTodo(@Query("id") String id);
+
+    //获取 三跨 隐患待办
+    @GET("/task/trouble/across/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getSanKuaTodo(@Query("id") String id);
+
+
     //隐患审核
     @POST("/task/trouble/inAuditPOST")
     Observable<BaseResult> inAuditTrouble(@Body InAuditTroubleReqBean bean);

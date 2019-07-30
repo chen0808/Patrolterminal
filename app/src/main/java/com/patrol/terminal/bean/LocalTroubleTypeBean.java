@@ -37,6 +37,13 @@ public class LocalTroubleTypeBean extends BaseModel implements CustomSpinner.Cus
     public final static String TROUBLE_FSH = "fsh";
     public final static String TROUBLE_FWP = "fwp";
     public final static String TROUBLE_DZ = "dz";
+    public final static String TROUBLE_SK_INT = "1";
+    public final static String TROUBLE_FN_INT = "2";
+    public final static String TROUBLE_FL_INT = "3";
+    public final static String TROUBLE_FF_INT = "4";
+    public final static String TROUBLE_FSH_INT = "5";
+    public final static String TROUBLE_FWP_INT = "6";
+    public final static String TROUBLE_DZ_INT = "7";
 
     private static List<LocalTroubleTypeBean> clcsList;
     private static List<LocalTroubleTypeBean> indexClcsList = new ArrayList<>();

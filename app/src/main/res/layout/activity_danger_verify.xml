@@ -24,11 +24,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:danger_name="隐患类别：" />
+
             <com.patrol.terminal.widget.DangerSubmitView
                 android:id="@+id/danger_level"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:danger_name="隐患等级：" />
+
             <com.patrol.terminal.widget.DangerSubmitView
                 android:id="@+id/danger_find_dep"
                 android:layout_width="match_parent"
@@ -59,6 +61,8 @@
                 android:layout_height="wrap_content"
                 app:danger_name="发现时间：" />
 
+            <!--动态添加-->
+
             <LinearLayout
                 android:id="@+id/danger_more_ll"
                 android:layout_width="match_parent"
@@ -68,24 +72,24 @@
             <TextView
                 android:layout_width="72dp"
                 android:layout_height="@dimen/dp_30"
-                android:gravity="center_vertical|right"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/color_33"
+                android:gravity="center_vertical|right"
                 android:text="隐患照片："
-                />
+                android:textColor="@color/color_33" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/danger_pic"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginBottom="@dimen/dp_10"
-                ></androidx.recyclerview.widget.RecyclerView>
+                android:layout_marginBottom="@dimen/dp_10"></androidx.recyclerview.widget.RecyclerView>
+
             <LinearLayout
                 android:id="@+id/danger_special_info"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
@@ -106,21 +110,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:danger_name="内容：" />
+
                 <TextView
+                    android:id="@+id/danger_special_pic_tv"
                     android:layout_width="72dp"
                     android:layout_height="@dimen/dp_30"
-                    android:gravity="center_vertical|right"
                     android:layout_marginLeft="16dp"
-                    android:textColor="@color/color_33"
+                    android:gravity="center_vertical|right"
                     android:text="照片："
-                    />
+                    android:textColor="@color/color_33" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/danger_special_pic"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginBottom="@dimen/dp_10"
-                    ></androidx.recyclerview.widget.RecyclerView>
+                    android:layout_marginBottom="@dimen/dp_10"></androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>
 
             <LinearLayout

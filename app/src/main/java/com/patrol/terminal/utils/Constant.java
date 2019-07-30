@@ -133,4 +133,17 @@ public class Constant {
     public static String DJ_YZ_STR = "严重";
     public static String DJ_WJ_STR = "危急";
 
+
+    //23、三跨，24、防鸟，25、防雷，26、防风，27、防山火，28、防外破，29、地灾
+    public static final String FLOW_SIGN_SK = "23";
+    public static final String FLOW_SIGN_FN = "24";
+    public static final String FLOW_SIGN_FL = "25";
+    public static final String FLOW_SIGN_FF = "26";
+    public static final String FLOW_SIGN_FSH = "27";
+    public static final String FLOW_SIGN_FWP = "28";
+    public static final String FLOW_SIGN_DZ = "29";
+
+    //隐患审核不关联特殊属性
+    public static final String YH_BUGUANLIAN = "不关联属性";
+
 }
