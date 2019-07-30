@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.DefectBanjiAdapter;
 import com.patrol.terminal.adapter.DefectBanjiXLAdapter;
-import com.patrol.terminal.adapter.TroubleAdapter;
+import com.patrol.terminal.adapter.TroubleTabAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -72,18 +72,18 @@ public class TroubleNotInFragment extends BaseFragment {
     @BindView(R.id.ly_sx)
     RelativeLayout ry_sx;
 
-    private TroubleAdapter adapter;
+    private TroubleTabAdapter adapter;
     private int page_num = 1;
     private int page_size = 10;
     private List<TroubleFragmentBean> troubleList = new ArrayList<>();
     private List<TroubleFragmentBean> searchList = new ArrayList<>();
     private String search = "";
-    private List<TroubleFragmentBean> defectdata = new ArrayList<>();
     private DefectBanjiAdapter banjiAdapter;
     private DefectBanjiXLAdapter banjixlAdapter;
     private List<BanjiBean> banjiList = new ArrayList<>();
     private List<BanjiXLBean> banjixlList = new ArrayList<>();
     private String line_id = "";
+    private String mJobType;
     private Context mContext;
 
     @Override
@@ -95,6 +95,8 @@ public class TroubleNotInFragment extends BaseFragment {
     @Override
     protected void initData() {
         mContext = getActivity();
+
+        mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
 
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         planRv.setLayoutManager(manager);
@@ -108,27 +110,49 @@ public class TroubleNotInFragment extends BaseFragment {
                 int height = ViewGroup.LayoutParams.MATCH_PARENT;
                 // 注意：哪边不想要菜单，那么不要添加即可。
                 SwipeMenuItem addItem;
-                addItem = new SwipeMenuItem(mContext)
-                        .setBackground(R.drawable.swip_menu_item_1)
-                        .setText("驳回")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                rightMenu.addMenuItem(addItem);
-                addItem = new SwipeMenuItem(mContext)
-                        .setBackground(R.drawable.swip_menu_item_2)
-                        .setText("复核")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                rightMenu.addMenuItem(addItem);
-                addItem = new SwipeMenuItem(mContext)
-                        .setBackground(R.drawable.swip_menu_item_3)
-                        .setText("入库")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                rightMenu.addMenuItem(addItem);
+                if(troubleList.get(viewType).getIn_status().equals("2") && mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+                    // 注意：哪边不想要菜单，那么不要添加即可。
+                    addItem = new SwipeMenuItem(mContext)
+                            .setBackground(R.drawable.swip_menu_item_1)
+                            .setText("驳回")
+                            .setTextColor(Color.WHITE)
+                            .setWidth(width)
+                            .setHeight(height);
+                    rightMenu.addMenuItem(addItem);
+
+                    addItem = new SwipeMenuItem(mContext)
+                            .setBackground(R.drawable.swip_menu_item_2)
+                            .setText("复核")
+                            .setTextColor(Color.WHITE)
+                            .setWidth(width)
+                            .setHeight(height);
+                    rightMenu.addMenuItem(addItem);
+
+                    addItem = new SwipeMenuItem(mContext)
+                            .setBackground(R.drawable.swip_menu_item_3)
+                            .setText("入库")
+                            .setTextColor(Color.WHITE)
+                            .setWidth(width)
+                            .setHeight(height);
+                    rightMenu.addMenuItem(addItem);
+                } else if (troubleList.get(viewType).getIn_status().equals("1") && mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
+                    addItem = new SwipeMenuItem(mContext)
+                            .setBackground(R.drawable.swip_menu_item_1)
+                            .setText("驳回")
+                            .setTextColor(Color.WHITE)
+                            .setWidth(width)
+                            .setHeight(height);
+                    rightMenu.addMenuItem(addItem);
+
+                    addItem = new SwipeMenuItem(mContext)
+                            .setBackground(R.drawable.swip_menu_item_3)
+                            .setText("通过")
+                            .setTextColor(Color.WHITE)
+                            .setWidth(width)
+                            .setHeight(height);
+
+                    rightMenu.addMenuItem(addItem);
+                }
             }
         };
 
@@ -149,7 +173,7 @@ public class TroubleNotInFragment extends BaseFragment {
         // 菜单点击监听。
         planRv.setOnItemMenuClickListener(mMenuItemClickListener);
 
-        adapter = new TroubleAdapter(R.layout.fragment_trouble_not_in_item, defectdata);
+        adapter = new TroubleTabAdapter(R.layout.fragment_trouble_not_in_item, 1);
         planRv.setAdapter(adapter);
         planRv.useDefaultLoadMore();
         planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
@@ -291,7 +315,7 @@ public class TroubleNotInFragment extends BaseFragment {
     public void getAllBanji() {
         //班长和班员传参数 不传查所有的
         String depId = "";
-        String mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains("xb_")) {
             depId = SPUtil.getDepId(mContext);
         }

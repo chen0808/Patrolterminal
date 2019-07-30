@@ -41,6 +41,39 @@ public class AdapterUtils {
         }
     }
 
+    //设置图标文字
+    public static void setIconTextNew(TextView icon, String type_name) {
+        switch (type_name) {
+            case "防雷":
+                icon.setText("防雷");
+                icon.setBackgroundResource(R.drawable.plan_week_bg);
+                break;
+            case "防鸟患":
+                icon.setText("防鸟");
+                icon.setBackgroundResource(R.drawable.plan_qing_bg);
+                break;
+            case "防风":
+                icon.setText("防风");
+                icon.setBackgroundResource(R.drawable.plan_yellow_bg);
+                break;
+            case "防山火":
+                icon.setText("防火");
+                icon.setBackgroundResource(R.drawable.plan_mon_bg);
+                break;
+            case "防外破":
+                icon.setText("防破");
+                icon.setBackgroundResource(R.drawable.plan_kaiyong_bg);
+                break;
+            case "防地灾":
+                icon.setText("防灾");
+                icon.setBackgroundResource(R.drawable.plan_red_bg);
+                break;
+            case "防洪防汛":
+                icon.setText("防洪");
+                icon.setBackgroundResource(R.drawable.plan_green_bg);
+        }
+    }
+
     //设置内容颜色
     public static void setText(TextView textView, String text) {
         if (text.contains("定期巡视")) {

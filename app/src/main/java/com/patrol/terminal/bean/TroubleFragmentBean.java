@@ -20,6 +20,16 @@ public class TroubleFragmentBean implements Serializable {
     private String line_id;
     private int ROW_ID;
 
+    private String find_time;
+    private String type_name;
+    private String done_status;
+    private String type_id;
+    private String tower_name;
+    private String id;
+    private String in_status;
+    private Integer row_id;
+    private String content;
+
     public String getOwner_name() {
         return owner_name;
     }
@@ -66,5 +76,77 @@ public class TroubleFragmentBean implements Serializable {
 
     public void setROW_ID(int ROW_ID) {
         this.ROW_ID = ROW_ID;
+    }
+
+    public String getFind_time() {
+        return find_time;
+    }
+
+    public void setFind_time(String find_time) {
+        this.find_time = find_time;
+    }
+
+    public String getType_name() {
+        return type_name;
+    }
+
+    public void setType_name(String type_name) {
+        this.type_name = type_name;
+    }
+
+    public String getDone_status() {
+        return done_status;
+    }
+
+    public void setDone_status(String done_status) {
+        this.done_status = done_status;
+    }
+
+    public String getType_id() {
+        return type_id;
+    }
+
+    public void setType_id(String type_id) {
+        this.type_id = type_id;
+    }
+
+    public String getTower_name() {
+        return tower_name;
+    }
+
+    public void setTower_name(String tower_name) {
+        this.tower_name = tower_name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getIn_status() {
+        return in_status;
+    }
+
+    public void setIn_status(String in_status) {
+        this.in_status = in_status;
+    }
+
+    public Integer getRow_id() {
+        return row_id;
+    }
+
+    public void setRow_id(Integer row_id) {
+        this.row_id = row_id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

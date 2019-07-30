@@ -15,27 +15,18 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             >
-        <TextView
-            android:id="@+id/iv_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:background="@mipmap/green_circle_bg"
-            android:paddingLeft="10dp"
-            android:paddingTop="13dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="13dp"
-            android:text="缺陷"
-            android:textColor="@color/white" />
-        <ImageView
-            android:id="@+id/iv_icon_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:scaleType="centerCrop"
-            android:visibility="gone"
-            android:src="@mipmap/yiban"
-             />
+            <TextView
+                android:id="@+id/iv_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:background="@mipmap/green_circle_bg"
+                android:paddingLeft="10dp"
+                android:paddingTop="13dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="13dp"
+                android:text="缺陷"
+                android:textColor="@color/white" />
         </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,12 +54,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="巡视时间" />
-            <TextView
-                android:id="@+id/item_defect_status"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="状态：" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="状态：" />
+                <TextView
+                    android:id="@+id/item_defect_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="" />
+            </LinearLayout>
             <TextView
                 android:id="@+id/tv_detail"
                 android:layout_width="wrap_content"
