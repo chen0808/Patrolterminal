@@ -16,7 +16,7 @@ public class TroubleFragmentBean implements Serializable {
     private String owner_name;
     private String line_level;
     private String line_name;
-    private String dep_name;
+    private String dep_name = "";
     private String line_id;
     private int ROW_ID;
 

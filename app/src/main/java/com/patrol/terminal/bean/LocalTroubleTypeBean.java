@@ -196,7 +196,7 @@ public class LocalTroubleTypeBean extends BaseModel implements CustomSpinner.Cus
      * @return
      */
     public static List<LocalTroubleTypeBean> indexList(String type) {
-        if (clcsList == null)
+        if (clcsList == null || clcsList.size() == 0)
             clcsList = SQLite.select().from(LocalTroubleTypeBean.class).queryList();
         indexClcsList.clear();
         for (int i = 0; i < clcsList.size(); i++) {

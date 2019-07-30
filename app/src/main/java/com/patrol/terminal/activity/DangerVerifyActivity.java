@@ -148,7 +148,8 @@ public class DangerVerifyActivity extends BaseActivity implements BaseQuickAdapt
                 }
                 dangerSubmitYes.setText("转巡视");
                 break;
-            case "4":
+            case "3": //通过
+            case "4"://不通过
                 btnLl.setVisibility(View.GONE);
                 break;
         }
@@ -298,13 +299,14 @@ public class DangerVerifyActivity extends BaseActivity implements BaseQuickAdapt
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
                         Toast.makeText(DangerVerifyActivity.this, "处理成功", Toast.LENGTH_SHORT).show();
-                        if ("3".equals(status)) {
+                        if ("3".equals(status)) {//转巡视
                             Intent intent = new Intent(DangerVerifyActivity.this, DangerToPatrolActivity.class);
                             intent.putExtra("danger_type", type_name);
                             intent.putExtra("danger_level", dangerLevel);
                             intent.putExtra("line_name", line_name);
                             intent.putExtra("dep_name", find_dep_name);
                             intent.putExtra("tower_name", tower_name);
+                            intent.putExtra("find_dep_id", find_dep_id);
                             intent.putExtra("f_id", f_id);
                             intent.putExtra("id", id);
                             intent.putExtra("type_id", type_id);

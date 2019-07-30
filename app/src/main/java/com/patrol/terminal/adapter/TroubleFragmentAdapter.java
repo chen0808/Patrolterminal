@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.TroubleDetailActivity;
+import com.patrol.terminal.activity.DangerDetailActivity;
 import com.patrol.terminal.bean.LocalAddTrouble;
 
 import java.util.List;
@@ -42,14 +42,17 @@ public class TroubleFragmentAdapter extends BaseQuickAdapter<LocalAddTrouble, Ba
                 if (TextUtils.isEmpty(item.getFind_time())) {
                     Toast.makeText(mContext, "待提交隐患不可查看", Toast.LENGTH_LONG).show();
                 } else {
-                    Intent intent = new Intent(mContext, TroubleDetailActivity.class);
-                    intent.putExtra("line_id", item.getLine_id());
-                    intent.putExtra("type", item.getType_id());
-                    intent.putExtras(intent);
+
+                    Intent intent = new Intent(mContext, DangerDetailActivity.class);
+                    intent.putExtra("id", item.getId());
+                    intent.putExtra("type_id", item.getType_id());
                     mContext.startActivity(intent);
+
                 }
 
             }
         });
+
     }
+
 }

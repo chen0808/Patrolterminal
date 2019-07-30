@@ -151,6 +151,13 @@ public class Constant {
     public static final String FLOW_SIGN_FSH = "27";
     public static final String FLOW_SIGN_FWP = "28";
     public static final String FLOW_SIGN_DZ = "29";
+    public static final String FLOW_SIGN_SK_STR = "三跨";
+    public static final String FLOW_SIGN_FN_STR = "防鸟害";
+    public static final String FLOW_SIGN_FL_STR = "防雷";
+    public static final String FLOW_SIGN_FF_STR = "防风";
+    public static final String FLOW_SIGN_FSH_STR = "防山火";
+    public static final String FLOW_SIGN_FWP_STR = "防外破";
+    public static final String FLOW_SIGN_DZ_STR = "地灾";
 
     //隐患审核不关联特殊属性
     public static final String YH_BUGUANLIAN = "不关联属性";

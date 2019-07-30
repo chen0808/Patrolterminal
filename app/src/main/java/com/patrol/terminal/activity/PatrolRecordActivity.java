@@ -659,8 +659,6 @@ public class PatrolRecordActivity extends BaseActivity {
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.line_name", toRequestBody(localByTaskId.getLine_name()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.tower_id", toRequestBody(localByTaskId.getTower_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.tower_name", toRequestBody(localByTaskId.getTower_name()));
-//            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.start_name", toRequestBody(localByTaskId.getTower_name()));
-//            params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.end_name", toRequestBody(localByTaskId.getTower_name()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_id", toRequestBody(localByTaskId.getUser_id()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.find_user_name", toRequestBody(localByTaskId.getUser_name()));
             params.put("taskDefectPatrolRecodeList[" + i + "].taskDefect.from_user_id", toRequestBody(localByTaskId.getUser_id()));

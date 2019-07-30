@@ -48,6 +48,9 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * 添加隐患
+ */
 public class AddTroubleActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
@@ -140,9 +143,14 @@ public class AddTroubleActivity extends BaseActivity {
             @Override
             public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
 
-                LocalTroubleTypeBean.TroubleType type = (LocalTroubleTypeBean.TroubleType) typeSpinner.getSelectObject();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LocalTroubleTypeBean.TroubleType type = (LocalTroubleTypeBean.TroubleType) typeSpinner.getSelectObject();
 
-                clcsSpinner.attachDataSource(LocalTroubleTypeBean.indexList(type.getTypeStr()));
+                        clcsSpinner.attachDataSource(LocalTroubleTypeBean.indexList(type.getTypeStr()));
+                    }
+                });
             }
         });
 
