@@ -32,6 +32,7 @@ import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.SettingActivity;
 import com.patrol.terminal.activity.TroubleActivity;
+import com.patrol.terminal.activity.TroubleTabActivity;
 import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
 import com.patrol.terminal.adapter.BackLogTaskAdapter;
 import com.patrol.terminal.adapter.BackTodoYXAdapter;
@@ -420,7 +421,8 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 startActivity(new Intent(getActivity(), DefectTabActivity.class));
                 break;
             case R.id.rl_trouble:
-                startActivity(new Intent(getActivity(), TroubleActivity.class));
+//                startActivity(new Intent(getActivity(), TroubleActivity.class));
+                startActivity(new Intent(getActivity(), TroubleTabActivity.class));
                 break;
             case R.id.scanner_iv:  //扫一扫
                 progressDialog.show(getContext(), false, "正在搜索RFID...");

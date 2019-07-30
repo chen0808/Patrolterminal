@@ -133,6 +133,15 @@ public class Constant {
     public static String DJ_YZ_STR = "严重";
     public static String DJ_WJ_STR = "危急";
 
+    //1.三跨 ，2.防鸟，3.防雷，4.防风，5.防山火，6.防外破，7.地灾
+    public static final String TYPE_ID_SK = "1";
+    public static final String TYPE_ID_FN = "2";
+    public static final String TYPE_ID_FL = "3";
+    public static final String TYPE_ID_FF = "4";
+    public static final String TYPE_ID_FSH = "5";
+    public static final String TYPE_ID_FWP = "6";
+    public static final String TYPE_ID_DZ = "7";
+
 
     //23、三跨，24、防鸟，25、防雷，26、防风，27、防山火，28、防外破，29、地灾
     public static final String FLOW_SIGN_SK = "23";

@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.DefectIngDetailActivity;
+import com.patrol.terminal.activity.DangerDetailActivity;
 import com.patrol.terminal.bean.TroubleFragmentBean;
 import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.StringUtil;
@@ -26,9 +26,10 @@ public class TroubleTabAdapter extends BaseQuickAdapter<TroubleFragmentBean, Bas
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, DefectIngDetailActivity.class);
+                Intent intent = new Intent(mContext, DangerDetailActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putSerializable("id", item.getId());
+                bundle.putSerializable("type_id", item.getType_id());
                 bundle.putInt("type", mType);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);

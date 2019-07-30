@@ -1143,7 +1143,7 @@ public interface ApiServise {
     @GET("/task/trouble/thunder/oneGET")
     Observable<BaseResult<FangLeiTodoBean>> getFangLeiTodo(@Query("id") String id);
 
-    //获取防feng隐患待办
+    //获取防风隐患待办
     @GET("/task/trouble/wind/oneGET")
     Observable<BaseResult<FangLeiTodoBean>> getFangFengTodo(@Query("id") String id);
 
@@ -1166,6 +1166,34 @@ public interface ApiServise {
     //获取 三跨 隐患待办
     @GET("/task/trouble/across/oneGET")
     Observable<BaseResult<FangLeiTodoBean>> getSanKuaTodo(@Query("id") String id);
+
+    //获取防雷隐患待办
+    @GET("/task/trouble/thunder/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getFangLei(@Query("task_trouble_id") String id);
+
+    //获取防feng隐患待办
+    @GET("/task/trouble/wind/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getFangFeng(@Query("task_trouble_id") String id);
+
+    //获取防山火隐患待办
+    @GET("/task/trouble/fire/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getShanhuo(@Query("task_trouble_id") String id);
+
+    //获取 防外破 隐患待办
+    @GET("/task/trouble/break/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getFangWaiPo(@Query("task_trouble_id") String id);
+
+    //获取 地灾 隐患待办
+    @GET("/task/trouble/disaster/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getDiZai(@Query("task_trouble_id") String id);
+
+    //获取 防鸟害 隐患待办
+    @GET("/task/trouble/bird/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getFangNiaoHai(@Query("task_trouble_id") String id);
+
+    //获取 三跨 隐患待办
+    @GET("/task/trouble/across/oneGET")
+    Observable<BaseResult<FangLeiTodoBean>> getSanKua(@Query("task_trouble_id") String id);
 
 
     //隐患审核

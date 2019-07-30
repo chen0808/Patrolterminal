@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.DangerVerifyActivity">
+
+    <include layout="@layout/include_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.patrol.terminal.widget.DangerSubmitView
+                android:id="@+id/danger_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:danger_name="隐患类别：" />
+
+            <com.patrol.terminal.widget.DangerSubmitView
+                android:id="@+id/danger_level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:danger_name="隐患等级：" />
+
+            <com.patrol.terminal.widget.DangerSubmitView
+                android:id="@+id/danger_find_dep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:danger_name="发现班组：" />
+
+            <com.patrol.terminal.widget.DangerSubmitView
+                android:id="@+id/danger_line_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:danger_name="线路名称：" />
+
+            <com.patrol.terminal.widget.DangerSubmitView
+                android:id="@+id/danger_line_level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:danger_name="线路等级：" />
+
+            <com.patrol.terminal.widget.DangerSubmitView
+                android:id="@+id/danger_tower_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:danger_name="杆塔名称：" />
+
+            <com.patrol.terminal.widget.DangerSubmitView
+                android:id="@+id/danger_find_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:danger_name="发现时间：" />
+
+            <!--动态添加-->
+
+            <LinearLayout
+                android:id="@+id/danger_more_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+
+            <TextView
+                android:layout_width="72dp"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical|right"
+                android:text="隐患照片："
+                android:textColor="@color/color_33" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/danger_pic"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="@dimen/dp_10"></androidx.recyclerview.widget.RecyclerView>
+
+            <LinearLayout
+                android:id="@+id/danger_special_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_10"
+                    android:background="@color/color_d1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginLeft="16dp"
+                    android:gravity="center_vertical"
+                    android:text="特殊属性"
+                    android:textColor="@color/color_33"
+                    android:textSize="@dimen/sp_18" />
+
+                <com.patrol.terminal.widget.DangerSubmitView
+                    android:id="@+id/danger_special_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:danger_name="内容：" />
+
+                <TextView
+                    android:id="@+id/danger_special_pic_tv"
+                    android:layout_width="72dp"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginLeft="16dp"
+                    android:gravity="center_vertical|right"
+                    android:text="照片："
+                    android:textColor="@color/color_33" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/danger_special_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="@dimen/dp_10"></androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

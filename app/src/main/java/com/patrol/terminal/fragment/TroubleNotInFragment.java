@@ -60,7 +60,6 @@ public class TroubleNotInFragment extends BaseFragment {
     AutoCompleteTextView tvContent;
     @BindView(R.id.search_yh_delete)
     ImageView searchDelete;
-
     @BindView(R.id.trouble_filter)
     TextView troubleFilter;
     @BindView(R.id.yh_sx_save)
