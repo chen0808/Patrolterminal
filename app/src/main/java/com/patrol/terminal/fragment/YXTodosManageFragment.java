@@ -32,11 +32,7 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
-import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
-import com.yanzhenjie.recyclerview.SwipeMenu;
-import com.yanzhenjie.recyclerview.SwipeMenuBridge;
-import com.yanzhenjie.recyclerview.SwipeMenuCreator;
-import com.yanzhenjie.recyclerview.SwipeMenuItem;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
@@ -201,7 +197,6 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
     }
 
 
-
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 //        if (isTodoPage ==IS_TODO_PAGE){
@@ -212,10 +207,22 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
         clearTodo(results.get(position).getId());
         String task_id = results.get(position).getData_id();
         Intent intent = Utils.goTodo(getContext(), results.get(position));
+        if (intent == null) {
+            Toast.makeText(getContext(), "数据异常", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        intent.putExtra("id", results.get(position).getId());
         intent.putExtra("audit_status", results.get(position).getNode_sign());
         intent.putExtra("task_id", task_id);
 //        intent.putExtra("sign", deal_type);
-        startActivity(intent);
+
+        if (results.get(position).getFlow_sign().equals("9")) {//待办跳转巡视记录缺 tower_id
+            getTowerId(task_id, intent);
+        } else {
+            startActivity(intent);
+        }
+
     }
 
     //清除待办
@@ -234,6 +241,54 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         Log.e("fff", e.toString());
+                    }
+                });
+    }
+
+    //待办跳转巡视记录需要  tower_id
+    private void getTowerId(String id, Intent intent) {
+        ProgressDialog.show(mActivity);
+        BaseRequest.getInstance().getService()
+                .getTowerId("TASK_PERSONAL", "id,tower_id", id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<GetTowerId>>(mActivity) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<GetTowerId>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.isSuccess()) {
+                            intent.putExtra("tower_id", t.getResults().get(0).getTower_id());
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Toast.makeText(mContext, "请求失败请重试", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    //消除所有查看类型待办
+    public void clearTodoAll() {
+
+        BaseRequest.getInstance().getService()
+                .clearTodoAll(SPUtil.getUserId(getContext()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<TaskBean>(getContext()) {
+                    @Override
+                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
+                        if (t.getCode() == 1) {
+                            Toast.makeText(getContext(), "处理完成", Toast.LENGTH_SHORT).show();
+                            getYXtodo();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                     }
                 });
     }
@@ -308,28 +363,6 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                 });
     }
 
-//    public void getYXtodoHave() {
-//        BaseRequest.getInstance().getService()
-//                .getDepPersonalList(year, month, day, SPUtil.getUserId(getContext()), "5")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<List<PersonalTaskListBean>>(getContext()) {
-//                    @Override
-//                    protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
-//                        fragTodoRef.setRefreshing(false);
-//                        resultsHave = t.getResults();
-//                        if (isTodoPage == IS_DONE_PAGE) {
-//                            toDoManageAdapter.setNewData(resultsHave);
-//                        }
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                        fragTodoRef.setRefreshing(false);
-//                    }
-//                });
-//    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -371,26 +404,24 @@ public class YXTodosManageFragment extends BaseFragment implements BaseQuickAdap
                 });
     }
 
-    //消除所有查看类型待办
-    public void clearTodoAll() {
+    public static class GetTowerId {
+        private String tower_id;
+        private String id;
 
-        BaseRequest.getInstance().getService()
-                .clearTodoAll(SPUtil.getUserId(getContext()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<TaskBean>(getContext()) {
-                    @Override
-                    protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
-                        if (t.getCode() == 1) {
-                            Toast.makeText(getContext(),"处理完成",Toast.LENGTH_SHORT).show();
-                            getYXtodo();
-                        }
+        public String getTower_id() {
+            return tower_id;
+        }
 
-                    }
+        public void setTower_id(String tower_id) {
+            this.tower_id = tower_id;
+        }
 
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                    }
-                });
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
     }
 }

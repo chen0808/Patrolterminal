@@ -49,9 +49,8 @@ public class LocalAddTrouble extends BaseModel implements Serializable {
     private String find_dep_id;
     @Column// 发现人班组名字
     private String find_dep_name;
-    @Column// 隐患入库状态（0：编制，1：待班长审核，2：待专责审核，3：审核通过，4：审核不通过）
+    @Column// 隐患入库状态（0：编制，1：待班长审核，2：待专责审核，3：审核通过，4：审核不通过）,5：待提交
     private String in_status;//提交默认为1
-
 
     //防雷隐患
     @Column

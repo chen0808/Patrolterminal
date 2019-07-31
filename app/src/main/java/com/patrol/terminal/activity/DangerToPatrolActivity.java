@@ -17,6 +17,7 @@ import com.patrol.terminal.bean.DangerPatrolReqBean;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.DangerSubmitView;
 import com.patrol.terminal.widget.DateSelectViewUtil;
+import com.patrol.terminal.widget.ProgressDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -120,6 +121,7 @@ public class DangerToPatrolActivity extends BaseActivity {
 
 
     public void createDangerPatrol() {
+        ProgressDialog.show(this);
         String day = dangerPatrolDate.getText().toString().trim();
         if ("".equals(time)){
             Toast.makeText(this,"请先选择结束日期",Toast.LENGTH_SHORT).show();
@@ -152,13 +154,14 @@ public class DangerToPatrolActivity extends BaseActivity {
                 .subscribe(new BaseObserver(this) {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
-                        Toast.makeText(DangerToPatrolActivity.this, "处理成功", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(DangerToPatrolActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
+                        ProgressDialog.cancle();
                         finish();
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                     }
                 });
     }

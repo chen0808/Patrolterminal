@@ -72,6 +72,8 @@ public class StringUtil {
                 return "审核不通过";
             case "5":
                 return "待复核";
+            case "6":
+                return "待提交";
         }
         return "";
     }

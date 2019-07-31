@@ -776,7 +776,9 @@ public class PatrolRecordActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Toast.makeText(PatrolRecordActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                         ProgressDialog.cancle();
+
                     }
                 });
     }
@@ -804,12 +806,14 @@ public class PatrolRecordActivity extends BaseActivity {
                             RxRefreshEvent.publish("refreshGroup");
                             RxRefreshEvent.publish("refreshTodo");
                             finish();
+                        } else {
+                            Toast.makeText(PatrolRecordActivity.this, t.getMsg(), Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        Toast.makeText(PatrolRecordActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                         ProgressDialog.cancle();
                     }
                 });

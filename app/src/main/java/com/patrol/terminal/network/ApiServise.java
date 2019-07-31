@@ -3,6 +3,7 @@ package com.patrol.terminal.network;
 import com.patrol.terminal.adapter.SaveCheckReqBean;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.*;
+import com.patrol.terminal.fragment.YXTodosManageFragment.GetTowerId;
 import com.patrol.terminal.overhaul.OverhaulFileBean;
 
 import java.util.List;
@@ -579,9 +580,9 @@ public interface ApiServise {
     @POST("work/tool/pda/updatePOST")
     Observable<BaseResult<ControlToolBeanList>> postControlTool(@Body List<ControlToolBean> beans);
 
-    //巡视记录缺陷列表
-//    @GET("common/listGET")
-//    Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("table") String table, @Query("column") String column, @Query("where") String where, @Query("line_id") String line_id);
+    //个人任务详情  获取Tower_id
+    @GET("common/listGET")
+    Observable<BaseResult<List<GetTowerId>>> getTowerId(@Query("table") String table, @Query("column") String column, @Query("id") String id);
     //巡视记录缺陷列表
     @GET("task/defect/listGET")
     Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("line_id") String line_id, @Query("order") String order, @Query("in_status") String in_status);

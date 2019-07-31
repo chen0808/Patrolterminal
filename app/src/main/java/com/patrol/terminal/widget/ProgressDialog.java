@@ -10,6 +10,10 @@ import android.content.DialogInterface;
 public class ProgressDialog {
     private static android.app.ProgressDialog progressDialog;
 
+    public static void show(Context mContext) {
+        show(mContext, false, "正在加载中...");
+    }
+
     public static void show(Context cxt, boolean cancelable, String str) {
 
         try {

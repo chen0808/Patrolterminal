@@ -160,14 +160,14 @@ public class Utils {
                 break;
             case "8":
                 intent.setClass(context, XieGanTaQingXieCeWenActivity.class);
-                intent.putExtra("sign","6" );
+                intent.putExtra("sign", "6");
                 break;
             case "9":
                 intent.setClass(context, PatrolRecordActivity.class);
                 break;
             case "10":
                 intent.setClass(context, DefectIngAuditActivity.class);
-                intent.putExtra("data_id", bean.getData_id() );
+                intent.putExtra("data_id", bean.getData_id());
                 break;
             case "11":
 
@@ -182,6 +182,7 @@ public class Utils {
                 intent.setClass(context, GroupTaskDetailActivity.class);
                 intent.putExtra("from", "todoRob");
                 break;
+//            case "0"://待办跳转日计划巡视详情
             case Constant.FLOW_SIGN_SK:
             case Constant.FLOW_SIGN_FN:
             case Constant.FLOW_SIGN_FL://防雷
@@ -191,6 +192,10 @@ public class Utils {
             case Constant.FLOW_SIGN_DZ:
                 intent.setClass(context, DangerVerifyActivity.class);
                 intent.putExtra("flow_sign", bean.getFlow_sign());
+
+                break;
+            default:
+                intent = null;
                 break;
         }
         return intent;
@@ -315,6 +320,7 @@ public class Utils {
 
         return countryList;
     }
+
     public static boolean isNetworkConnected(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context
@@ -327,8 +333,7 @@ public class Utils {
         return false;
     }
 
-    public static void hideClickStatus(Activity activity)
-    {
+    public static void hideClickStatus(Activity activity) {
         //隐藏虚拟按键，并且全屏
         if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
             View v = activity.getWindow().getDecorView();
@@ -336,7 +341,7 @@ public class Utils {
         } else if (Build.VERSION.SDK_INT >= 19) {
             //for new api versions.
             View decorView = activity.getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY ;
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             //  | View.SYSTEM_UI_FLAG_FULLSCREEN
             decorView.setSystemUiVisibility(uiOptions);
         }

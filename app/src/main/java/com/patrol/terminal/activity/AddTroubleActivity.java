@@ -261,6 +261,7 @@ public class AddTroubleActivity extends BaseActivity {
         trouble.setFind_user_name(personalTaskListBean.getUser_name());
         trouble.setFind_dep_id(personalTaskListBean.getDep_id());
         trouble.setFind_dep_name(personalTaskListBean.getDep_name());
+        trouble.setIsdownload("1");
         trouble.setIn_status("1");
         trouble.setRemarks(fl_bz.getText().toString().trim());
         if (tssxBean != null) {
