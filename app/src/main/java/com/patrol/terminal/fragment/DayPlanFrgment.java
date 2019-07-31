@@ -127,6 +127,7 @@ public class DayPlanFrgment extends BaseFragment {
     private List<DayListBean> nextDayList;
     private List<String> lineNum=new ArrayList<>();
     private String mJobType;
+    private static final int seconds_of_1day = 24 * 60 * 60*1000;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -140,9 +141,11 @@ public class DayPlanFrgment extends BaseFragment {
         addPlanStatus.setVisibility(View.GONE);
         addNextPlan.setText("日计划制定");
         planTotalTitle.setText("今日工作计划汇总");
+
         mJobType = SPUtil.getString(getActivity(), Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         inteDate();
+        inteNextDate();
         taskTitle.setText("日计划列表");
         taskDate.setText(time);
 
@@ -292,7 +295,7 @@ public class DayPlanFrgment extends BaseFragment {
                     Intent intent = new Intent(getContext(), AddDayPlanActivity.class);
                     intent.putExtra("year", String.valueOf(nextyear));
                     intent.putExtra("month", String.valueOf(nextmonth));
-                    intent.putExtra("day", String.valueOf(day));
+                    intent.putExtra("day", String.valueOf(nextDay));
                     intent.putExtra("from", "DayPlanFrgment");
                     startActivityForResult(intent, 10);
                 } else {
@@ -355,18 +358,14 @@ public class DayPlanFrgment extends BaseFragment {
         month = Integer.parseInt(months[0]) + "";
         year = years[0];
         day = Integer.parseInt(days[0]) + "";
-        nextDay = Integer.parseInt(days[0]) + 1;
-        nextmonth = Integer.parseInt(months[0]);
-        nextyear = Integer.parseInt(years[0]);
-        int monthOfDay = TimeUtil.getMonthOfDay(Integer.parseInt(year), Integer.parseInt(month));
-        if (nextDay > monthOfDay) {
-            nextDay = 1;
-            nextmonth = Integer.parseInt(months[0]) + 1;
-            if (nextmonth > 12) {
-                nextmonth = 1;
-                nextyear = Integer.parseInt(year) + 1;
-            }
-        }
+
+    }
+    public void inteNextDate() {
+        String nextTime = DateUatil.getDate(new Date(System.currentTimeMillis() + seconds_of_1day));
+        String[] split = nextTime.split("-");
+        nextyear=Integer.parseInt(split[0]);
+        nextmonth=Integer.parseInt(split[1]);
+        nextDay=Integer.parseInt(split[2]);
     }
 
     @Override

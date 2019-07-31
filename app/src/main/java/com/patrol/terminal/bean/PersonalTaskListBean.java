@@ -100,6 +100,16 @@ public class PersonalTaskListBean extends BaseModel implements Serializable {
     private String tower_model;
     @Column
     private String is_save;
+    @Column
+    private String defect_id;
+
+    public String getDefect_id() {
+        return defect_id;
+    }
+
+    public void setDefect_id(String defect_id) {
+        this.defect_id = defect_id;
+    }
 
     /**
      * 获取当前对象

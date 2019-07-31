@@ -63,16 +63,16 @@ public class DefectFragmentDetailBean implements Serializable {
      */
 
     private String id;
-    private Object month_line_id;
-    private Object week_id;
-    private Object day_id;
-    private Object group_id;
-    private Object task_id;
+    private String month_line_id;
+    private String week_id;
+    private String day_id;
+    private String group_id;
+    private String task_id;
     private String category_id;
     private String grade_id;
     private String grade_name;// 缺陷级别   危急，严重，一般
     private String grade_sign;// 缺陷标识（1：一般，2：严重，3：危急）
-    private Object patrol_id;
+    private String patrol_id;
     private String patrol_name;// 缺陷巡视内容   1导线，地线腐蚀
     private String content;// 缺陷内容   手输入内容
     private String line_id;// 线路id
@@ -89,25 +89,25 @@ public class DefectFragmentDetailBean implements Serializable {
     private String deal_time;// 消除时间
     private String auditor;
     private String audit_status;
-    private Object week_line_id;
-    private Object day_line_id;
-    private Object month_id;
-    private Object group_list_id;
-    private Object deal_dep_id;
+    private String week_line_id;
+    private String day_line_id;
+    private String month_id;
+    private String group_list_id;
+    private String deal_dep_id;
     private String start_id;
     private String end_id;
     // 缺陷完成状态   不管  （0：待处理，1：月计划分配，2：周计划分配，3：日计划分配，4：进行中，5：已完成，6：未完成）
     private String done_status;
-    private Object find_user_id;
+    private String find_user_id;
     private String find_user_name;// 发现人姓名
-    private Object deal_user_id;
+    private String deal_user_id;
     private String deal_user_name;// 处理人姓名
     private String remark;// 工作备注
-    private Object find_dep_id;// 发现人部门id  登录人部门id
+    private String find_dep_id;// 发现人部门id  登录人部门id
     private String find_dep_name;// 发现人部门名称
     private String category_name;// 缺陷类别  导线，地线
-    private Object user_name;
-    private Object dep_name;
+    private String user_name;
+    private String dep_name;
     // 缺陷入库状态     不管  （0：编制，1：待班长审核，2：待专责审核，3：复核中，4：审核通过，5：审核不通过）
     private String in_status;
     private String task_check_id;
@@ -145,43 +145,43 @@ public class DefectFragmentDetailBean implements Serializable {
         this.id = id;
     }
 
-    public Object getMonth_line_id() {
+    public String getMonth_line_id() {
         return month_line_id;
     }
 
-    public void setMonth_line_id(Object month_line_id) {
+    public void setMonth_line_id(String month_line_id) {
         this.month_line_id = month_line_id;
     }
 
-    public Object getWeek_id() {
+    public String getWeek_id() {
         return week_id;
     }
 
-    public void setWeek_id(Object week_id) {
+    public void setWeek_id(String week_id) {
         this.week_id = week_id;
     }
 
-    public Object getDay_id() {
+    public String getDay_id() {
         return day_id;
     }
 
-    public void setDay_id(Object day_id) {
+    public void setDay_id(String day_id) {
         this.day_id = day_id;
     }
 
-    public Object getGroup_id() {
+    public String getGroup_id() {
         return group_id;
     }
 
-    public void setGroup_id(Object group_id) {
+    public void setGroup_id(String group_id) {
         this.group_id = group_id;
     }
 
-    public Object getTask_id() {
+    public String getTask_id() {
         return task_id;
     }
 
-    public void setTask_id(Object task_id) {
+    public void setTask_id(String task_id) {
         this.task_id = task_id;
     }
 
@@ -201,11 +201,11 @@ public class DefectFragmentDetailBean implements Serializable {
         this.grade_id = grade_id;
     }
 
-    public Object getPatrol_id() {
+    public String getPatrol_id() {
         return patrol_id;
     }
 
-    public void setPatrol_id(Object patrol_id) {
+    public void setPatrol_id(String patrol_id) {
         this.patrol_id = patrol_id;
     }
 
@@ -297,43 +297,43 @@ public class DefectFragmentDetailBean implements Serializable {
         this.audit_status = audit_status;
     }
 
-    public Object getWeek_line_id() {
+    public String getWeek_line_id() {
         return week_line_id;
     }
 
-    public void setWeek_line_id(Object week_line_id) {
+    public void setWeek_line_id(String week_line_id) {
         this.week_line_id = week_line_id;
     }
 
-    public Object getDay_line_id() {
+    public String getDay_line_id() {
         return day_line_id;
     }
 
-    public void setDay_line_id(Object day_line_id) {
+    public void setDay_line_id(String day_line_id) {
         this.day_line_id = day_line_id;
     }
 
-    public Object getMonth_id() {
+    public String getMonth_id() {
         return month_id;
     }
 
-    public void setMonth_id(Object month_id) {
+    public void setMonth_id(String month_id) {
         this.month_id = month_id;
     }
 
-    public Object getGroup_list_id() {
+    public String getGroup_list_id() {
         return group_list_id;
     }
 
-    public void setGroup_list_id(Object group_list_id) {
+    public void setGroup_list_id(String group_list_id) {
         this.group_list_id = group_list_id;
     }
 
-    public Object getDeal_dep_id() {
+    public String getDeal_dep_id() {
         return deal_dep_id;
     }
 
-    public void setDeal_dep_id(Object deal_dep_id) {
+    public void setDeal_dep_id(String deal_dep_id) {
         this.deal_dep_id = deal_dep_id;
     }
 
@@ -361,11 +361,11 @@ public class DefectFragmentDetailBean implements Serializable {
         this.line_name = line_name;
     }
 
-    public Object getFind_user_id() {
+    public String getFind_user_id() {
         return find_user_id;
     }
 
-    public void setFind_user_id(Object find_user_id) {
+    public void setFind_user_id(String find_user_id) {
         this.find_user_id = find_user_id;
     }
 
@@ -377,11 +377,11 @@ public class DefectFragmentDetailBean implements Serializable {
         this.find_user_name = find_user_name;
     }
 
-    public Object getDeal_user_id() {
+    public String getDeal_user_id() {
         return deal_user_id;
     }
 
-    public void setDeal_user_id(Object deal_user_id) {
+    public void setDeal_user_id(String deal_user_id) {
         this.deal_user_id = deal_user_id;
     }
 
@@ -401,11 +401,11 @@ public class DefectFragmentDetailBean implements Serializable {
         this.remark = remark;
     }
 
-    public Object getFind_dep_id() {
+    public String getFind_dep_id() {
         return find_dep_id;
     }
 
-    public void setFind_dep_id(Object find_dep_id) {
+    public void setFind_dep_id(String find_dep_id) {
         this.find_dep_id = find_dep_id;
     }
 
@@ -433,19 +433,19 @@ public class DefectFragmentDetailBean implements Serializable {
         this.grade_name = grade_name;
     }
 
-    public Object getUser_name() {
+    public String getUser_name() {
         return user_name;
     }
 
-    public void setUser_name(Object user_name) {
+    public void setUser_name(String user_name) {
         this.user_name = user_name;
     }
 
-    public Object getDep_name() {
+    public String getDep_name() {
         return dep_name;
     }
 
-    public void setDep_name(Object dep_name) {
+    public void setDep_name(String dep_name) {
         this.dep_name = dep_name;
     }
 

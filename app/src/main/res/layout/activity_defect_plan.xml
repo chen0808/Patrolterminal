@@ -59,8 +59,7 @@
             android:id="@+id/danger_patrol_idea"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColorHint="@color/color_69"
-            android:textColor="@color/color_69"
+            android:textColor="@color/black_gray"
             android:hint="请输入处理措施"
             android:textSize="@dimen/sp_14"
             android:background="@null"
@@ -88,6 +87,7 @@
             android:id="@+id/danger_patrol_team"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@color/black_gray"
             android:hint="请选择负责人"
             android:gravity="center_vertical"
             />
@@ -115,6 +115,7 @@
             android:id="@+id/danger_patrol_personal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@color/black_gray"
             android:hint="请选择负责人"
             android:gravity="center_vertical"
             />
@@ -142,13 +143,15 @@
             android:layout_width="@dimen/dp_100"
             android:layout_height="match_parent"
             android:hint="选择起始时间"
+            android:textColor="@color/black_gray"
             android:gravity="center_vertical"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_marginRight="@dimen/dp_10"
+            android:textColor="@color/color_33"
+            android:layout_marginRight="@dimen/dp_20"
             android:text="至"
             />
         <TextView
@@ -156,6 +159,7 @@
             android:layout_width="@dimen/dp_100"
             android:layout_height="match_parent"
             android:hint="选择结束时间"
+            android:textColor="@color/black_gray"
             android:gravity="center_vertical"
             />
     </LinearLayout>
@@ -170,6 +174,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="16dp"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -192,6 +197,40 @@
           ></org.angmarch.views.NiceSpinner>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/defect_plan_auditor_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/danger_patrol_no"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_40"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/dp_200"
+            android:text="驳回"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            />
+        <TextView
+            android:id="@+id/danger_patrol_yes"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_40"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/dp_200"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:text="同意"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/danger_patrol_save"
         android:layout_width="@dimen/dp_200"
@@ -200,7 +239,8 @@
         android:gravity="center"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_200"
-        android:text="保存"
+        android:text="提交"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_16"
         />

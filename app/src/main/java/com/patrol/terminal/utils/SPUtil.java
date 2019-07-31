@@ -95,6 +95,12 @@ public class SPUtil {
                 Context.MODE_PRIVATE);
         return sp.getString(Constant.DEPID, "");
     }
+
+    public static String getIP(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(Constant.USER,
+                Context.MODE_PRIVATE);
+        return sp.getString("ip", "");
+    }
     public static String getUserId(Context context) {
         SharedPreferences sp = context.getSharedPreferences(Constant.USER,
                 Context.MODE_PRIVATE);

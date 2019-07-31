@@ -78,7 +78,7 @@
             android:layout_height="@dimen/dp_40"
             android:text="月计划列表"
             android:textStyle="bold"
-            android:drawableLeft="@mipmap/plan_icon"
+            android:drawableLeft="@mipmap/task_icon"
             android:gravity="center_vertical"
             android:drawablePadding="@dimen/dp_5"
             android:textSize="@dimen/sp_16"
