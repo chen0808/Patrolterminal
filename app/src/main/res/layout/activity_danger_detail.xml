@@ -113,7 +113,7 @@
 
                 <TextView
                     android:id="@+id/danger_special_pic_tv"
-                    android:layout_width="72dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_30"
                     android:layout_marginLeft="16dp"
                     android:gravity="center_vertical|right"

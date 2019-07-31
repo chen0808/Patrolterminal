@@ -40,6 +40,7 @@ public class DefectFragmentAdapter extends BaseQuickAdapter<DefectFragmentBean2,
         viewHolder.setText(R.id.item_defect_status, StringUtil.getDefectState(item.getDone_status()));
         viewHolder.setTextColor(R.id.item_defect_status, mContext.getResources().getColor(StringUtil.getDefectColor(item.getDone_status())));
 
+        viewHolder.getView(R.id.iv_icon_iv).setVisibility(View.VISIBLE);
         if ("一般".equals(item.getGrade_name())){
             viewHolder.setImageResource(R.id.iv_icon_iv,R.mipmap.yiban);
         } else if ("严重".equals(item.getGrade_name())){

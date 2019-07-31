@@ -69,6 +69,8 @@ public class LocalAddTrouble extends BaseModel implements Serializable {
     private String find_time;//发现时间
     @Column
     private String troubleFiles;//图片
+    @Column
+    private String done_status;//图片
 
 
     public static void delData(String tower_id) {
@@ -310,5 +312,13 @@ public class LocalAddTrouble extends BaseModel implements Serializable {
 
     public void setClcs(String clcs) {
         this.clcs = clcs;
+    }
+
+    public String getDone_status() {
+        return done_status;
+    }
+
+    public void setDone_status(String done_status) {
+        this.done_status = done_status;
     }
 }

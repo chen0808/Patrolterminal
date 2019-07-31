@@ -3,6 +3,7 @@ package com.patrol.terminal.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.patrol.terminal.sqlite.AppDataBase;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.SpaceItemDecoration;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
@@ -76,10 +78,17 @@ public class TroubleFrgment extends BaseFragment {
         }
 
         rvTrouble.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvTrouble.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelOffset(R.dimen.dp_10)));
         adapter = new TroubleFragmentAdapter(R.layout.fragment_defect_item, troubleList);
         rvTrouble.setAdapter(adapter);
 
         tower_id = getActivity().getIntent().getStringExtra("tower_id");
+
+        if(tower_id != null){
+            Log.i("yinyanhua", "tower_id = " + tower_id);
+        } else {
+            Log.i("yinyanhua", "tower_id = null");
+        }
 
         getdata();
 
@@ -100,7 +109,7 @@ public class TroubleFrgment extends BaseFragment {
 
     private void getdata() {
         BaseRequest.getInstance().getService()
-                .getTroubleFragment2(line_id, tower_id)
+                .getTroubleFragment2(line_id, tower_id, "3")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())//TroubleBean
                 .subscribe(new BaseObserver<List<LocalAddTrouble>>(getActivity()) {

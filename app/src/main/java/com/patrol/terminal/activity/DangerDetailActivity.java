@@ -1,7 +1,6 @@
 package com.patrol.terminal.activity;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +22,6 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.FangLeiTodoBean;
-import com.patrol.terminal.bean.InAuditTroubleReqBean;
 import com.patrol.terminal.bean.LocalTroubleTypeBean;
 import com.patrol.terminal.network.ApiServise;
 import com.patrol.terminal.utils.Constant;
@@ -129,9 +126,7 @@ public class DangerDetailActivity extends BaseActivity implements BaseQuickAdapt
         adapter2.setOnItemClickListener(this);
 
         getTodoDetail(type_id, id);
-
     }
-
 
     //获取隐患详情 1.三跨 ，2.防鸟，3.防雷，4.防风，5.防山火，6.防外破，7.地灾
     public void getTodoDetail(String type_id, String id) {
@@ -152,7 +147,6 @@ public class DangerDetailActivity extends BaseActivity implements BaseQuickAdapt
             observable = apiServise.getFangWaiPo(id);
         else if (type_id.equals(Constant.TYPE_ID_DZ))
             observable = apiServise.getDiZai(id);
-
 
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -184,11 +178,10 @@ public class DangerDetailActivity extends BaseActivity implements BaseQuickAdapt
                             eqTowerWaresImgList = results.getEqTowerWaresImgList();
                             if (eqTowerWaresImgList == null || eqTowerWaresImgList.size() == 0) {
                                 dangerSpecialPic.setVisibility(View.GONE);
-                                yh_pic_tv.setText("  照片：无");
+                                yh_pic_tv.setText("  照片：暂无");
                             } else {
                                 adapter2.setNewData(eqTowerWaresImgList);
                             }
-
                         }
 
                         detailView(results);
@@ -213,11 +206,17 @@ public class DangerDetailActivity extends BaseActivity implements BaseQuickAdapt
             case LocalTroubleTypeBean.TROUBLE_FSH_INT:
             case LocalTroubleTypeBean.TROUBLE_FF_INT://防雷防风一样
             case LocalTroubleTypeBean.TROUBLE_FL_INT:
-                DangerSubmitView view1 = new DangerSubmitView(this, "审核状态：", StringUtil.getDefectState(results.getIn_status()));
-                DangerSubmitView view2 = new DangerSubmitView(this, "处理时间：", results.getDeal_time() == null ? "无" : results.getDeal_time());
+                DangerSubmitView view1;
+                if(type == 1){
+                    view1 = new DangerSubmitView(this, "审核状态：", StringUtil.getDefectState(results.getIn_status()));
+                } else {
+                    view1 = new DangerSubmitView(this, "审核状态：", StringUtil.getDefectState(results.getDone_status()));
+                }
+
+                DangerSubmitView view2 = new DangerSubmitView(this, "处理时间：", results.getDeal_time() == null ? "暂无" : results.getDeal_time());
                 DangerSubmitView view3 = new DangerSubmitView(this, "厂家：", results.getCompany() == null ? "暂无" : results.getCompany());
                 DangerSubmitView view4 = new DangerSubmitView(this, "处理措施：", results.getAdvice_deal_notes() == null ? "暂无" : results.getAdvice_deal_notes());
-                DangerSubmitView view5 = new DangerSubmitView(this, "备注：", results.getRemark() == null ? "无" : results.getRemark());
+                DangerSubmitView view5 = new DangerSubmitView(this, "备注：", results.getRemark() == null ? "暂无" : results.getRemark());
                 list.add(view1);
                 list.add(view2);
                 list.add(view3);
@@ -225,7 +224,6 @@ public class DangerDetailActivity extends BaseActivity implements BaseQuickAdapt
                 list.add(view5);
                 break;
         }
-
 
         for (int i = 0; i < list.size(); i++) {
             dangerMoreLl.addView(list.get(i));

@@ -153,7 +153,7 @@ public class TroubleNotRidFragment extends BaseFragment {
         // 菜单点击监听。
         planRv.setOnItemMenuClickListener(mMenuItemClickListener);
 
-        adapter = new TroubleTabAdapter(R.layout.fragment_trouble_not_in_item, 1);
+        adapter = new TroubleTabAdapter(R.layout.fragment_trouble_not_in_item, 2);
         planRv.setAdapter(adapter);
         planRv.useDefaultLoadMore();
         planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
