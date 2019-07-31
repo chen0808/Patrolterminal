@@ -106,7 +106,7 @@ public class NextDayPlanActivity extends BaseActivity {
         ll35kv.setVisibility(View.GONE);
         taskAddIv.setVisibility(View.VISIBLE);
         year = getIntent().getIntExtra("year", 2019);
-        month = getIntent().getIntExtra("month", 23);
+        month = getIntent().getIntExtra("month", 11);
         day = getIntent().getIntExtra("day", 23);
         titleName.setText(year + "年" + month + "月" + day + "日计划");
         planTotalTitle.setText(day + "日工作计划汇总");

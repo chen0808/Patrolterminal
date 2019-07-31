@@ -32,7 +32,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.DefectPlanActivity"></activity>
+        <activity android:name=".activity.DefectPlanActivity" />
         <activity android:name=".activity.DangerToPatrolActivity" />
         <activity android:name=".activity.DangerVerifyActivity" />
         <activity android:name=".activity.DepOFTaskActivity" />

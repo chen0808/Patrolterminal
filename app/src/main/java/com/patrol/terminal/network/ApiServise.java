@@ -194,6 +194,11 @@ public interface ApiServise {
     @GET("sys/dep/byIdGET")
     Observable<BaseResult<DepPersonalBean>> getDepPersonal( @Query("id") String dep_id);
 
+
+    //获取消缺计划详情
+    @GET("task/defect/oneGET")
+    Observable<BaseResult<DefectPlanDetailBean>> getDefectPlanDetail( @Query("id") String id);
+
     //获取车辆列表
     @GET("/eq/vehicle/pda/listGET")
     Observable<BaseResult<List<EqVehicleBean>>> getVehicle(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
@@ -1203,4 +1208,8 @@ public interface ApiServise {
     //生成隐患巡视计划
     @POST("/plan/day/troublePlanPOST")
     Observable<BaseResult> createDangerPatrol(@Body DangerPatrolReqBean bean);
+
+    //制定消缺计划
+    @POST("task/defect/makeDefectPOST")
+    Observable<BaseResult> makeDefectPOST(@Body MakeDefectPlanBean bean);
 }

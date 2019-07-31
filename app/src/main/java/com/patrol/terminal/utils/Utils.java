@@ -13,6 +13,7 @@ import android.view.View;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DangerVerifyActivity;
 import com.patrol.terminal.activity.DefectIngAuditActivity;
+import com.patrol.terminal.activity.DefectPlanActivity;
 import com.patrol.terminal.activity.GroupTaskDetailActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
 import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
@@ -192,6 +193,9 @@ public class Utils {
                 intent.setClass(context, DangerVerifyActivity.class);
                 intent.putExtra("flow_sign", bean.getFlow_sign());
                 break;
+            case "30":
+                intent.setClass(context, DefectPlanActivity.class);
+                break;
         }
         return intent;
     }
@@ -221,6 +225,7 @@ public class Utils {
                 return R.mipmap.todo8;
             case "9":
                 return R.mipmap.todo9;
+            case "30":
             case "10":
                 return R.mipmap.todo10;
             case "11":
@@ -249,11 +254,11 @@ public class Utils {
                 return R.mipmap.todo22;
             case "23":
             case "24":
+            case "25":
             case "26":
             case "27":
             case "28":
             case "29":
-            case "25":
                 return R.mipmap.todo11;
             default:
                 return R.mipmap.todo1;

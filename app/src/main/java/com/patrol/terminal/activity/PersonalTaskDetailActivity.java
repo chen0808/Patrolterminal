@@ -192,6 +192,11 @@ public class PersonalTaskDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PersonalTaskListBean bean = results.get(position);
+                if ("8".equals(bean.getType_sign())) {
+                    Intent intent = new Intent(PersonalTaskDetailActivity.this, DefectPlanActivity.class);
+                    intent.putExtra("task_id", bean.getDefect_id());
+                    startActivity(intent);
+                } else {
                 Intent intent = new Intent();
                 intent.putExtra("line_id", bean.getLine_id());
                 intent.putExtra("line_name", bean.getLine_name());
@@ -241,7 +246,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
 
                 }
                 startActivityForResult(intent, 25);
-            }
+            }}
         });
     }
 

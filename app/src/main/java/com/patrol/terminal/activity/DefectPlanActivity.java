@@ -2,7 +2,9 @@ package com.patrol.terminal.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,9 +20,13 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.ControlCardBean;
 import com.patrol.terminal.bean.DefectFragmentDetailBean;
+import com.patrol.terminal.bean.DefectPlanDetailBean;
 import com.patrol.terminal.bean.DepPersonalBean;
-import com.patrol.terminal.bean.DepUserBean;
+import com.patrol.terminal.bean.MakeDefectPlanBean;
+import com.patrol.terminal.bean.TaskDefectUser;
+import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.DangerSubmitView;
@@ -82,7 +88,13 @@ public class DefectPlanActivity extends BaseActivity {
     NiceSpinner nsControlCard;
     @BindView(R.id.ll_control_card)
     LinearLayout llControlCard;
-    private List<DepPersonalBean.UserListBean> personalList;
+    @BindView(R.id.danger_patrol_no)
+    TextView dangerPatrolNo;
+    @BindView(R.id.danger_patrol_yes)
+    TextView dangerPatrolYes;
+    @BindView(R.id.defect_plan_auditor_ll)
+    LinearLayout defectPlanAuditorLl;
+    private List<DepPersonalBean.UserListBean> personalList = new ArrayList<>();
     private String[] personals;
     private AlertDialog personalDialog;
     private AlertDialog personalGroupDialog;
@@ -91,7 +103,18 @@ public class DefectPlanActivity extends BaseActivity {
     private ArrayList<String> personalSelect = new ArrayList<>();
     private long start = 0;
     private long end = 0;
-
+    private String startTime;
+    private String endTime;
+    private String line_name;
+    private String tower_name;
+    private String find_dep_id;
+    private String id;
+    private String mJobType;
+    private String find_dep_name;
+    private String tower_id;
+    private String line_id;
+    private List<String> nameType = new ArrayList<>();
+    private ControlCardBean controlCardId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,12 +125,60 @@ public class DefectPlanActivity extends BaseActivity {
 
     private void initview() {
         titleName.setText("消缺计划");
-        String id = getIntent().getStringExtra("id");
-        getDefectDeatail(id);
-        getPersonal();
+        id = getIntent().getStringExtra("id");
+        String audit_status = getIntent().getStringExtra("audit_status");
+        mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
+        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && audit_status == null&&id!=null) {
+            defectPlanAuditorLl.setVisibility(View.GONE);
+            dangerPatrolSave.setVisibility(View.VISIBLE);
+            getDefectDeatail(id);
+            getPersonal();
+        } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(audit_status)) {
+            id = getIntent().getStringExtra("task_id");
+            defectPlanAuditorLl.setVisibility(View.VISIBLE);
+            dangerPatrolSave.setVisibility(View.GONE);
+            getDefectPlanDetail();
+            setEnable();
+        } else if (mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+            llControlCard.setVisibility(View.VISIBLE);
+            defectPlanAuditorLl.setVisibility(View.GONE);
+            dangerPatrolSave.setVisibility(View.GONE);
+            getDefectPlanDetail();
+            controlCard();
+            setEnable();
+        } else {
+            llControlCard.setVisibility(View.VISIBLE);
+            controlCard.setText("查看控制卡");
+            nsControlCard.setVisibility(View.GONE);
+            defectPlanAuditorLl.setVisibility(View.GONE);
+            dangerPatrolSave.setVisibility(View.GONE);
+            getDefectPlanDetail();
+            setEnable();
+        }
+
     }
 
-    @OnClick({R.id.title_back, R.id.danger_patrol_team, R.id.danger_patrol_personal, R.id.danger_patrol_start_time, R.id.danger_patrol_end_time, R.id.danger_patrol_save})
+    public void setEnable() {
+        dangerPatrolIdea.setEnabled(false);
+        dangerPatrolIdea.setFocusable(false);
+        dangerPatrolTeam.setEnabled(false);
+        dangerPatrolTeam.setFocusable(false);
+        dangerPatrolPersonal.setEnabled(false);
+        dangerPatrolPersonal.setFocusable(false);
+        dangerPatrolStartTime.setEnabled(false);
+        dangerPatrolStartTime.setFocusable(false);
+        dangerPatrolEndTime.setEnabled(false);
+        dangerPatrolEndTime.setFocusable(false);
+        dangerPatrolIdea.setClickable(false);
+        dangerPatrolTeam.setClickable(false);
+        dangerPatrolPersonal.setClickable(false);
+        dangerPatrolStartTime.setClickable(false);
+        dangerPatrolEndTime.setClickable(false);
+
+    }
+
+    @OnClick({R.id.title_back, R.id.danger_patrol_team, R.id.danger_patrol_personal, R.id.danger_patrol_start_time,
+            R.id.danger_patrol_end_time, R.id.danger_patrol_save, R.id.danger_patrol_no, R.id.danger_patrol_yes})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -124,9 +195,27 @@ public class DefectPlanActivity extends BaseActivity {
                 break;
             case R.id.danger_patrol_end_time:
                 showDay(1);
-
+                break;
+            case R.id.danger_patrol_no:
+                makeDefectPlan("3");
+                break;
+            case R.id.danger_patrol_yes:
+                makeDefectPlan("2");
                 break;
             case R.id.danger_patrol_save:
+                if (start == 0) {
+                    Toast.makeText(this, "请选择起始日期", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (end == 0) {
+                    Toast.makeText(this, "请选择结束日期", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if ("".equals(teamName)) {
+                    Toast.makeText(this, "请选择负责人", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                makeDefectPlan("1");
                 break;
         }
     }
@@ -144,7 +233,7 @@ public class DefectPlanActivity extends BaseActivity {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 if (type == 0) {
-                    String startTime = DateUatil.getDate(date);
+                    startTime = DateUatil.getDate(date);
                     start = date.getTime();
                     if (end < start && end != 0) {
                         if (date.getTime() < System.currentTimeMillis()) {
@@ -158,7 +247,7 @@ public class DefectPlanActivity extends BaseActivity {
                             return;
                         }
                     }
-                    dangerPatrolEndTime.setText(startTime);
+                    dangerPatrolStartTime.setText(startTime);
                 } else {
                     end = date.getTime();
                     if (end < start && start != 0) {
@@ -167,7 +256,7 @@ public class DefectPlanActivity extends BaseActivity {
                             return;
                         }
                     }
-                    String endTime = DateUatil.getDate(date);
+                    endTime = DateUatil.getDate(date);
                     if (!endTime.equals(DateUatil.getTime())) {
                         if (date.getTime() < System.currentTimeMillis()) {
                             Toast.makeText(DefectPlanActivity.this, "结束时间不能低于当天", Toast.LENGTH_SHORT);
@@ -216,8 +305,65 @@ public class DefectPlanActivity extends BaseActivity {
                 });
     }
 
-    public void showPersonalGroup() {
+    //获取消缺计划详情
+    public void getDefectPlanDetail() {
 
+        BaseRequest.getInstance().getService()
+                .getDefectPlanDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<DefectPlanDetailBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<DefectPlanDetailBean> t) throws Exception {
+                        DefectPlanDetailBean bean = t.getResults();
+                        line_name = bean.getLine_name();
+                        tower_name = bean.getTower_name();
+                        find_dep_id = bean.getDeal_dep_id();
+                        find_dep_name = bean.getDeal_dep_name();
+                        tower_id = bean.getTower_id();
+                        line_id = bean.getLine_id();
+                        startTime=bean.getDeal_time();
+                        endTime=bean.getClose_time();
+                        dangerPatrolType.setContent(bean.getCategory_name());
+                        dangerPatrolDep.setContent(bean.getDeal_dep_name());
+                        dangerPatrolLine.setContent(bean.getLine_name());
+                        dangerPatrolTower.setContent(bean.getTower_name());
+                        dangerPatrolLevel.setContent(bean.getGrade_name());
+                        dangerPatrolContent.setContent(bean.getContent());
+                        dangerPatrolIdea.setText(bean.getDeal_notes());
+                        dangerPatrolStartTime.setText(bean.getDeal_time());
+                        dangerPatrolEndTime.setText(bean.getClose_time());
+                        List<DefectPlanDetailBean.TaskDefectUserListBean> taskDefectUserList = bean.getTaskDefectUserList();
+                        String names = "";
+                        for (int i = 0; i < taskDefectUserList.size(); i++) {
+                            DepPersonalBean.UserListBean userListBean = new DepPersonalBean.UserListBean();
+                            DefectPlanDetailBean.TaskDefectUserListBean taskDefectUserListBean = taskDefectUserList.get(i);
+                            String name = taskDefectUserListBean.getUser_name();
+                            if ("2".equals(taskDefectUserListBean.getSign())) {
+                                dangerPatrolTeam.setText(name);
+                            } else if ("3".equals(taskDefectUserListBean.getSign())) {
+                                if ("".equals(names)) {
+                                    names = name;
+                                } else {
+                                    names = names + "," + name;
+                                }
+                            }
+
+                            userListBean.setName(name);
+                            userListBean.setId(taskDefectUserListBean.getUser_id());
+                            personalList.add(userListBean);
+                        }
+                        dangerPatrolPersonal.setText(names);
+                        ProgressDialog.cancle();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }
+
+    public void showPersonalGroup() {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setTitle("选择负责人");
         /**
@@ -261,14 +407,17 @@ public class DefectPlanActivity extends BaseActivity {
         personalGroupDialog.show();
     }
 
+    //展示组员多选列表
     public void showPersonal() {
         personalSelect.clear();
         boolean[] booleans = new boolean[personals.length];
         String names = dangerPatrolPersonal.getText().toString();
-        String[] split = names.split(",");
-        for (int i = 0; i < split.length; i++) {
-            String name = split[i];
-            personalSelect.add(name);
+        if (!"".equals(names)) {
+            String[] split = names.split(",");
+            for (int i = 0; i < split.length; i++) {
+                String name = split[i];
+                personalSelect.add(name);
+            }
         }
         for (int i = 0; i < personals.length; i++) {
             String personal = personals[i];
@@ -292,10 +441,10 @@ public class DefectPlanActivity extends BaseActivity {
 
                 if (isChecked) {
                     personalSelect.add(personals[i]);
-                }else {
+                } else {
                     for (int j = 0; j < personalSelect.size(); j++) {
                         String s = personalSelect.get(j);
-                        if (s.equals(personals[i])){
+                        if (s.equals(personals[i])) {
                             personalSelect.remove(j);
                             break;
                         }
@@ -337,8 +486,9 @@ public class DefectPlanActivity extends BaseActivity {
         personalDialog.show();
     }
 
+    //获取缺陷详情
     public void getDefectDeatail(String id) {
-        ProgressDialog.show(this,true,"正在加载中。。。");
+        ProgressDialog.show(this, true, "正在加载中。。。");
         BaseRequest.getInstance().getService().getDefectDetail(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -346,6 +496,12 @@ public class DefectPlanActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
                         DefectFragmentDetailBean bean = t.getResults();
+                        line_name = bean.getLine_name();
+                        tower_name = bean.getTower_name();
+                        find_dep_id = SPUtil.getDepId(DefectPlanActivity.this);
+                        find_dep_name =  SPUtil.getDepName(DefectPlanActivity.this);
+                        tower_id = bean.getTower_id();
+                        line_id = bean.getLine_id();
                         dangerPatrolType.setContent(bean.getCategory_name());
                         dangerPatrolDep.setContent(bean.getFind_dep_name());
                         dangerPatrolLine.setContent(bean.getLine_name());
@@ -363,5 +519,110 @@ public class DefectPlanActivity extends BaseActivity {
                 });
     }
 
+    //提交消缺计划
+    public void makeDefectPlan(String status) {
+        ProgressDialog.show(this, true, "正在加载中。。。");
+        List<TaskDefectUser> userlist = new ArrayList<>();
+        String deal = dangerPatrolIdea.getText().toString().trim();
+        teamName=dangerPatrolTeam.getText().toString();
+        if ("".equals(deal)) {
+            Toast.makeText(this, "请填写处理措施", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String names = dangerPatrolPersonal.getText().toString();
+        if ("".equals(names)) {
+            Toast.makeText(this, "请选择组员", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            names = teamName + "," + names;
+            String[] split = names.split(",");
+            for (int i = 0; i < split.length; i++) {
+                String name = split[i];
+                for (int j = 0; j < personalList.size(); j++) {
+                    DepPersonalBean.UserListBean userListBean = personalList.get(j);
+                    if (name.equals(userListBean.getName())) {
+                        TaskDefectUser user = new TaskDefectUser();
+                        if (i == 0) {
+                            user.setSign("2");
+                        } else {
+                            user.setSign("3");
+                        }
+                        user.setTask_defect_id(id);
+                        user.setUser_name(userListBean.getName());
+                        user.setUser_id(userListBean.getId());
+                        userlist.add(user);
+                    }
+                }
+            }
+        }
+        MakeDefectPlanBean bean = new MakeDefectPlanBean();
+        bean.setDeal_time(startTime);
+        bean.setClose_time(endTime);
+        bean.setLine_name(line_name);
+        bean.setTower_name(tower_name);
+        bean.setDeal_dep_id(find_dep_id);
+        bean.setTower_id(tower_id);
+        bean.setLine_id(line_id);
+        bean.setDeal_dep_name(find_dep_name);
+        bean.setDeal_notes(deal);
+        bean.setMake_status(status);
+        bean.setTaskDefectUserList(userlist);
+        bean.setFrom_user_id(SPUtil.getUserId(this));
+        bean.setId(id);
+        BaseRequest.getInstance().getService().makeDefectPOST(bean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver() {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
 
+                        ProgressDialog.cancle();
+                        finish();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
+    private void controlCard() {
+        BaseRequest.getInstance().getService()
+                .controlCardType("kzk")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<ControlCardBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<ControlCardBean>> t) throws Exception {
+                        Log.w("linmeng", "t.toString():" + t.toString());
+                        if (t.getCode() == 1) {
+                            List<ControlCardBean> results = t.getResults();
+                            for (int i = 0; i < results.size(); i++) {
+                                nameType.add(results.get(i).getName());
+                            }
+                            nsControlCard.attachDataSource(nameType);
+                            controlCardId = results.get(0);
+                            nsControlCard.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    controlCardId = results.get(position);
+                                    Log.w("linmeng", "controlCardId:" + controlCardId.getId());
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                }
+                            });
+                        } else {
+                            Toast.makeText(mContext, t.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+    }
 }
