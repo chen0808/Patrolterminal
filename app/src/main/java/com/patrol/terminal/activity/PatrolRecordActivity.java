@@ -114,7 +114,6 @@ public class PatrolRecordActivity extends BaseActivity {
     ImageView ivPhoto5;
     @BindView(R.id.iv_photo6)
     ImageView ivPhoto6;
-    private static final String[] data = new String[]{"常规巡视", "特殊属性", "缺陷", "隐患"};
     @BindView(R.id.magic_indicator)
     MagicIndicator magicIndicator;
     @BindView(R.id.view_pager)
@@ -123,6 +122,8 @@ public class PatrolRecordActivity extends BaseActivity {
     FloatingActionButton fab;
     @BindView(R.id.menban)
     TextView menban;
+
+    private static final String[] data = new String[]{"常规巡视", "特殊属性", "缺陷", "隐患"};
     private MyFragmentPagerAdapter pagerAdapter;
     private Disposable subscribe;
     private Map<String, RequestBody> params = new HashMap<>();
@@ -677,8 +678,7 @@ public class PatrolRecordActivity extends BaseActivity {
                 }
             }
         }
-//        substepUpload(params);
-//        Map<String, RequestBody> params1 = new HashMap<>();
+
         //本地特殊屬性
         List<TSSXLocalBean> localByTssx = SQLite.select().from(TSSXLocalBean.class).where(TSSXLocalBean_Table.task_id.is(task_id)).queryList();
         for (int i = 0; i < localByTssx.size(); i++) {
@@ -739,7 +739,6 @@ public class PatrolRecordActivity extends BaseActivity {
         }
 
         substepUpload(params);
-
     }
 
     /**

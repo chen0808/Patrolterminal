@@ -83,7 +83,7 @@ public class DefectTabAdapter extends BaseQuickAdapter<LocalPatrolDefectBean, Ba
         defectSpinner.setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
         defectSpinner.attachDataSource(clcsListStr);
 
-        if (!TextUtils.isEmpty(item.getClcsName()))
+        if (!TextUtils.isEmpty(item.getClcsName()) && !item.getClcsName().equals("null"))
             defectSpinner.setSelectedIndex(clcsListStr.indexOf(item.getClcsName()));
         else {
             defectSpinner.setSelectedIndex(0);

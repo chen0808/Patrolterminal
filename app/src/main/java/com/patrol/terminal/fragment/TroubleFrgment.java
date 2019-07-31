@@ -3,7 +3,6 @@ package com.patrol.terminal.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,15 +82,7 @@ public class TroubleFrgment extends BaseFragment {
         rvTrouble.setAdapter(adapter);
 
         tower_id = getActivity().getIntent().getStringExtra("tower_id");
-
-        if(tower_id != null){
-            Log.i("yinyanhua", "tower_id = " + tower_id);
-        } else {
-            Log.i("yinyanhua", "tower_id = null");
-        }
-
         getdata();
-
     }
 
     @OnClick(R.id.btn_add_trouble)
@@ -104,7 +95,6 @@ public class TroubleFrgment extends BaseFragment {
         intent.putExtra("task_id", getActivity().getIntent().getStringExtra("task_id"));
         intent.setClass(getActivity(), AddTroubleActivity.class);
         startActivityForResult(intent, Constant.DEFECT_ADD_TROUBLE_CODE);
-
     }
 
     private void getdata() {
@@ -131,7 +121,6 @@ public class TroubleFrgment extends BaseFragment {
                                         getLocalData();
                                     }
                                 }).build().executeSync();
-
                     }
 
                     @Override
@@ -145,7 +134,6 @@ public class TroubleFrgment extends BaseFragment {
         troubleList.clear();
         troubleList.addAll(LocalAddTrouble.getAllData(tower_id));
         adapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -156,7 +144,6 @@ public class TroubleFrgment extends BaseFragment {
                 case Constant.DEFECT_ADD_TROUBLE_CODE:
                     getLocalData();
                     break;
-
             }
         }
     }
