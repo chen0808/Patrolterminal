@@ -4,7 +4,7 @@ import com.patrol.terminal.R;
 
 public class StringUtil {
 
-    public static String[] typeSigns = new String[]{"定期巡视", "故障巡视", "接地电阻检测", "特殊性巡视", "红外测温检测", "杆塔倾斜检测", "保电巡视", "缺陷消除", "隐患处理", "绝缘子零值检测", "监督性巡视", "安全监督", "验收报告", "缺陷复核"};
+    public static String[] typeSigns = new String[]{"定期巡视", "故障巡视", "接地电阻检测", "特殊性巡视", "红外测温检测", "杆塔倾斜检测", "保电巡视", "缺陷消除", "隐患处理", "绝缘子零值检测", "监督性巡视", "安全监督", "验收报告", "缺陷复核", "隐患巡视"};
 
     //获取运行班月计划审核状态
     public static String getYXBstate(String state) {
@@ -72,8 +72,6 @@ public class StringUtil {
                 return "审核不通过";
             case "5":
                 return "待复核";
-            case "6":
-                return "待提交";
         }
         return "";
     }

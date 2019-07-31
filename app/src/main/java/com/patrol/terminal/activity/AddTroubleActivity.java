@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -282,17 +283,30 @@ public class AddTroubleActivity extends BaseActivity {
             }
         }
         trouble.setTroubleFiles(path);
-        trouble.save();
-        Toast.makeText(AddTroubleActivity.this, "保存成功", Toast.LENGTH_LONG).show();
 
-        // 标记离线操作
-        if (personalTaskListBean != null) {
-            personalTaskListBean.setIs_save("0");
-            personalTaskListBean.update();
-        }
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (LocalAddTrouble.addStatus(tower_id, line_id, type.getId())) {
+                    trouble.save();
+                } else {
+                    Toast.makeText(AddTroubleActivity.this, "不可重复添加 " + trouble.getType_name() + " 隐患", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
-        setResult(RESULT_OK);
-        finish();
+                Toast.makeText(AddTroubleActivity.this, "保存成功", Toast.LENGTH_LONG).show();
+
+                // 标记离线操作
+                if (personalTaskListBean != null) {
+                    personalTaskListBean.setIs_save("0");
+                    personalTaskListBean.update();
+                }
+
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
 
     }
 
