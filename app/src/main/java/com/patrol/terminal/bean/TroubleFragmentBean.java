@@ -29,6 +29,49 @@ public class TroubleFragmentBean implements Serializable {
     private String in_status;
     private Integer row_id;
     private String content;
+    private String find_dep_id;
+    private String find_dep_name;
+    private String f_id;
+    private String grade_sign;
+
+    public String getF_id() {
+        return f_id;
+    }
+
+    public void setF_id(String f_id) {
+        this.f_id = f_id;
+    }
+
+    public String getGrade_sign() {
+        if (grade_sign.equals("1"))
+            return "一般";
+        else if (grade_sign.equals("2"))
+            return "严重";
+        else if (grade_sign.equals("2"))
+            return "危急";
+
+        return "一般";
+    }
+
+    public void setGrade_sign(String grade_sign) {
+        this.grade_sign = grade_sign;
+    }
+
+    public String getFind_dep_name() {
+        return find_dep_name;
+    }
+
+    public void setFind_dep_name(String find_dep_name) {
+        this.find_dep_name = find_dep_name;
+    }
+
+    public String getFind_dep_id() {
+        return find_dep_id;
+    }
+
+    public void setFind_dep_id(String find_dep_id) {
+        this.find_dep_id = find_dep_id;
+    }
 
     public String getOwner_name() {
         return owner_name;

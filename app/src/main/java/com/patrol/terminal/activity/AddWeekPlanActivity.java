@@ -294,6 +294,7 @@ public class AddWeekPlanActivity extends BaseActivity {
 
 
     //展示工作类型
+    private int checkedItem = 0;
     public void showTypeSign() {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setTitle("选择工作类型");
@@ -302,9 +303,10 @@ public class AddWeekPlanActivity extends BaseActivity {
          * 第二个参数：默认被选中的，布尔类数组
          * 第三个参数：勾选事件监听
          */
-        alertBuilder.setSingleChoiceItems(types, 0, new DialogInterface.OnClickListener() {
+        alertBuilder.setSingleChoiceItems(types, checkedItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int options1) {
+                checkedItem = options1;
                 monthPlanType.setText(types[options1]);
                 if ("全部".equals(types[options1])) {
                     sign = null;

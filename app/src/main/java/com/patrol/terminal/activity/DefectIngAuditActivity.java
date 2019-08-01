@@ -28,6 +28,7 @@ import com.patrol.terminal.bean.InAuditPostBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.CancelOrOkDialogNew;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -150,35 +151,13 @@ public class DefectIngAuditActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
                         bean = t.getResults();
 
-                        //缺陷入库状态（0：编制，1：待班长审核，2：待专责审核，3：审核通过，4：审核不通过, 5: 待复核）
-                        switch (bean.getIn_status()) {
-                            case "0":
-                                defectStatus.setText("编制");
-                                defectStatus.setTextColor(getResources().getColor(R.color.blue));
-                                break;
-                            case "1":
-                                defectStatus.setText("待班长审核");
-                                defectStatus.setTextColor(getResources().getColor(R.color.line_point_1));
-                                break;
-                            case "2":
-                                defectStatus.setText("待专责审核");
-                                defectStatus.setTextColor(getResources().getColor(R.color.line_point_0));
-                                break;
-                            case "3":
-                                defectStatus.setText("审核通过");
-                                defectStatus.setTextColor(getResources().getColor(R.color.green));
+                        if(bean.getIn_status() != null){
+                            defectStatus.setText(StringUtil.getDefectState(bean.getIn_status()));
+                            defectStatus.setTextColor(getResources().getColor(StringUtil.getDefectColor(bean.getIn_status())));
+
+                            if(bean.getIn_status().equals("3") || bean.getIn_status().equals("4") || bean.getIn_status().equals("5")){
                                 hiddenBottomLayout();
-                                break;
-                            case "4":
-                                defectStatus.setText("审核不通过");
-                                defectStatus.setTextColor(getResources().getColor(R.color.write_red));
-                                hiddenBottomLayout();
-                                break;
-                            case "5":
-                                defectStatus.setText("待复核");
-                                defectStatus.setTextColor(getResources().getColor(R.color.orange));
-                                hiddenBottomLayout();
-                                break;
+                            }
                         }
 
                         if(bean.getContent() != null){
