@@ -493,12 +493,15 @@ public class DefectNotInFragment extends BaseFragment {
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
                         if(t.getCode() == 1){
-                            tvContent.setText("");
-                            search_name = "";
-                            pageNum = 1;
-                            line_name = banjixlAdapter.getSelectLine();
-                            defectList.clear();
-                            getBanjiXLQx(search_name, line_name);
+                            defectList.get(adapterPosition).setIn_status(in_status);
+                            groupTaskAdapter.notifyItemChanged(adapterPosition);
+
+//                            tvContent.setText("");
+//                            search_name = "";
+//                            pageNum = 1;
+//                            line_name = banjixlAdapter.getSelectLine();
+//                            defectList.clear();
+//                            getBanjiXLQx(search_name, line_name);
                             Toast.makeText(mContext,"处理完成",Toast.LENGTH_SHORT).show();
                         }
                     }
