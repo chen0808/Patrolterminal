@@ -15,7 +15,6 @@ import com.patrol.terminal.bean.MonthPlanBean;
 import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.StringUtil;
-import com.patrol.terminal.widget.HorizontalLineView;
 
 import java.util.List;
 
@@ -42,8 +41,8 @@ public class NextMonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseVi
 
             //时间
             if (item.getStart_time() != null && item.getEnd_time() != null) {
-                viewHolder.setText(R.id.tv_time, "时间：" + item.getStart_time() + " ~ " + item.getEnd_time());
                 viewHolder.setVisible(R.id.tv_time, true);
+                viewHolder.setText(R.id.tv_time, "时间：" + item.getStart_time() + " ~ " + item.getEnd_time());
             }
 
             //编辑
@@ -61,9 +60,9 @@ public class NextMonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseVi
             TextView tvContent = viewHolder.getView(R.id.tv_content);
             AdapterUtils.setText(tvContent, StringUtil.getTypeSign(item.getType_sign()));
         } else {
-            viewHolder.setText(R.id.item_plan_date_tv, "保")
-                    .setVisible(R.id.plan_to_change, true);
-            viewHolder.setOnClickListener(R.id.plan_to_change, new View.OnClickListener() {
+            viewHolder.setText(R.id.tv_icon, "保")
+                    .setVisible(R.id.iv_edit, true);
+            viewHolder.setOnClickListener(R.id.iv_edit, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, LineCheckActivity.class);
@@ -74,11 +73,12 @@ public class NextMonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseVi
                     mContext.startActivity(intent);
                 }
             });
-            View view = viewHolder.getView(R.id.item_plan_status);
-            view.setVisibility(View.GONE);
-            viewHolder.setText(R.id.item_plan_device_name, item.getRepair_content())
-                    .setText(R.id.item_plan_content, "停电区域 : " + item.getBlackout_range())
-                    .setText(R.id.item_line_status, "停电时间 : " + item.getStart_time() + " - " + item.getEnd_time());
+//            View view = viewHolder.getView(R.id.tv_audit_status);
+//            view.setVisibility(View.GONE);
+            viewHolder.setVisible(R.id.tv_time, true);
+            viewHolder.setText(R.id.tv_content, item.getRepair_content())
+                    .setText(R.id.tv_audit_status, "停电区域 : " + item.getBlackout_range())
+                    .setText(R.id.tv_time, "停电时间 : " + item.getStart_time() + " - " + item.getEnd_time());
         }
     }
 }

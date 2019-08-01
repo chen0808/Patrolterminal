@@ -220,9 +220,6 @@ public class DefectIngAuditEditActivity extends BaseActivity {
             public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
                 CLCSTypeBean typeBean = clcsTypeList.get(position);
                 bean.setDeal_notes(typeBean.getName());
-//                item.setClcsName(typeBean.getName());
-//                item.setClcsId(typeBean.getId());
-//                item.update();
             }
         });
 
