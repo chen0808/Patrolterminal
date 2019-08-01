@@ -109,22 +109,7 @@ public class TroubleNotRidFragment extends BaseFragment {
                 int height = ViewGroup.LayoutParams.MATCH_PARENT;
                 // 注意：哪边不想要菜单，那么不要添加即可。
                 SwipeMenuItem addItem;
-                if(mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
-                    addItem = new SwipeMenuItem(mContext)
-                            .setBackground(R.drawable.swip_menu_item_2)
-                            .setText("消缺")
-                            .setTextColor(Color.WHITE)
-                            .setWidth(width)
-                            .setHeight(height);
-                    rightMenu.addMenuItem(addItem);
-                    addItem = new SwipeMenuItem(mContext)
-                            .setBackground(R.drawable.swip_menu_item_1)
-                            .setText("转检修")
-                            .setTextColor(Color.WHITE)
-                            .setWidth(width)
-                            .setHeight(height);
-                    rightMenu.addMenuItem(addItem);
-                } else if(mJobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                if(mJobType.contains(Constant.RUNNING_SQUAD_LEADER)){
                     addItem = new SwipeMenuItem(mContext)
                             .setBackground(R.drawable.swip_menu_item_2)
                             .setText("消缺")
@@ -146,7 +131,7 @@ public class TroubleNotRidFragment extends BaseFragment {
                 menuBridge.closeMenu();
                 int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
                 int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
             }
         };
 
