@@ -1,6 +1,7 @@
 package com.patrol.terminal.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.DangerToPatrolActivity;
 import com.patrol.terminal.adapter.DefectBanjiAdapter;
 import com.patrol.terminal.adapter.DefectBanjiXLAdapter;
 import com.patrol.terminal.adapter.TroubleTabAdapter;
@@ -30,9 +32,11 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.BanjiBean;
 import com.patrol.terminal.bean.BanjiXLBean;
+import com.patrol.terminal.bean.InAuditTroubleReqBean;
 import com.patrol.terminal.bean.TroubleFragmentBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.CancelOrOkDialog;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SpaceItemDecoration;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
@@ -109,7 +113,7 @@ public class TroubleNotInFragment extends BaseFragment {
                 int height = ViewGroup.LayoutParams.MATCH_PARENT;
                 // 注意：哪边不想要菜单，那么不要添加即可。
                 SwipeMenuItem addItem;
-                if(troubleList.get(viewType).getIn_status().equals("2") && mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+                if (troubleList.get(viewType).getIn_status().equals("2") && mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
                     // 注意：哪边不想要菜单，那么不要添加即可。
                     addItem = new SwipeMenuItem(mContext)
                             .setBackground(R.drawable.swip_menu_item_1)
@@ -121,7 +125,7 @@ public class TroubleNotInFragment extends BaseFragment {
 
                     addItem = new SwipeMenuItem(mContext)
                             .setBackground(R.drawable.swip_menu_item_2)
-                            .setText("复核")
+                            .setText("通过")
                             .setTextColor(Color.WHITE)
                             .setWidth(width)
                             .setHeight(height);
@@ -129,7 +133,7 @@ public class TroubleNotInFragment extends BaseFragment {
 
                     addItem = new SwipeMenuItem(mContext)
                             .setBackground(R.drawable.swip_menu_item_3)
-                            .setText("入库")
+                            .setText("转巡视")
                             .setTextColor(Color.WHITE)
                             .setWidth(width)
                             .setHeight(height);
@@ -163,9 +167,92 @@ public class TroubleNotInFragment extends BaseFragment {
             public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
                 // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
                 menuBridge.closeMenu();
-                int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
                 int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, menuPosition + " " + adapterPosition, Toast.LENGTH_SHORT).show();
+                TroubleFragmentBean troubleBean = adapter.getData().get(adapterPosition);
+                if (troubleBean.getIn_status().equals("1") && mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {//班长
+                    switch (menuPosition) {
+                        case 0://添加的第一个按钮  驳回
+                            CancelOrOkDialog.setOnDialogclick(getActivity(), "是否驳回？", "取消", "确定", new CancelOrOkDialog.onDialogClick() {
+                                @Override
+                                public void ok() {
+                                    inAuditTrouble("4", adapterPosition);
+                                }
+
+                                @Override
+                                public void cancle() {
+                                }
+                            });
+
+                            break;
+                        case 1://通过
+                            CancelOrOkDialog.setOnDialogclick(getActivity(), "是否通过？", "取消", "确定", new CancelOrOkDialog.onDialogClick() {
+                                @Override
+                                public void ok() {
+                                    inAuditTrouble("2", adapterPosition);
+                                }
+
+                                @Override
+                                public void cancle() {
+                                }
+                            });
+
+                            break;
+                    }
+
+                } else if (troubleBean.getIn_status().equals("2") && mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {//专责
+                    switch (menuPosition) {
+                        case 0://添加的第一个按钮  驳回
+                            CancelOrOkDialog.setOnDialogclick(getActivity(), "是否驳回？", "取消", "确定", new CancelOrOkDialog.onDialogClick() {
+                                @Override
+                                public void ok() {
+                                    inAuditTrouble("4", adapterPosition);
+                                }
+
+                                @Override
+                                public void cancle() {
+                                }
+                            });
+                            break;
+                        case 1://通过
+                            CancelOrOkDialog.setOnDialogclick(getActivity(), "是否驳回？", "取消", "确定", new CancelOrOkDialog.onDialogClick() {
+                                @Override
+                                public void ok() {
+                                    inAuditTrouble("3", adapterPosition);
+                                }
+
+                                @Override
+                                public void cancle() {
+                                }
+                            });
+                            break;
+                        case 2:
+                            CancelOrOkDialog.setOnDialogclick(getActivity(), "是否转巡视？", "取消", "确定", new CancelOrOkDialog.onDialogClick() {
+                                @Override
+                                public void ok() {
+                                    Intent intent = new Intent(getActivity(), DangerToPatrolActivity.class);
+                                    intent.putExtra("danger_type", troubleBean.getType_name());
+                                    intent.putExtra("danger_level", troubleBean.getGrade_sign());
+                                    intent.putExtra("line_name", troubleBean.getLine_name());
+                                    intent.putExtra("dep_name", troubleBean.getFind_dep_name());
+                                    intent.putExtra("tower_name", troubleBean.getTower_name());
+                                    intent.putExtra("find_dep_id", troubleBean.getFind_dep_id());
+                                    intent.putExtra("f_id", troubleBean.getF_id());
+                                    intent.putExtra("id", troubleBean.getId());
+                                    intent.putExtra("type_id", troubleBean.getType_id());
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void cancle() {
+                                }
+                            });
+                            break;
+
+                    }
+
+                }
+
             }
         };
 
@@ -233,6 +320,52 @@ public class TroubleNotInFragment extends BaseFragment {
 
         getAllTrouble();
         getAllBanji();
+    }
+
+
+    public void inAuditTrouble(String status, int position) {
+        TroubleFragmentBean troubleBean = adapter.getData().get(position);
+
+        ProgressDialog.show(getActivity(), true, "正在加载。。。。");
+        InAuditTroubleReqBean bean = new InAuditTroubleReqBean();
+        bean.setIn_status(status);
+        bean.setF_id("");
+        bean.setId(troubleBean.getId());
+        bean.setFrom_user_id(SPUtil.getUserId(getActivity()));
+        bean.setType_id(troubleBean.getType_id());
+        bean.setFind_dep_id(troubleBean.getFind_dep_id());
+        bean.setLine_name(troubleBean.getLine_name());
+        bean.setTower_name(troubleBean.getTower_name());
+        BaseRequest.getInstance().getService()
+                .inAuditTrouble(bean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(getActivity()) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        Toast.makeText(getActivity(), "处理成功", Toast.LENGTH_SHORT).show();
+//                        if ("3".equals(status)) {//转巡视
+//                            Intent intent = new Intent(getActivity(), DangerToPatrolActivity.class);
+//                            intent.putExtra("danger_type", type_name);
+//                            intent.putExtra("danger_level", dangerLevel);
+//                            intent.putExtra("line_name", line_name);
+//                            intent.putExtra("dep_name", find_dep_name);
+//                            intent.putExtra("tower_name", tower_name);
+//                            intent.putExtra("find_dep_id", find_dep_id);
+//                            intent.putExtra("f_id", f_id);
+//                            intent.putExtra("id", id);
+//                            intent.putExtra("type_id", type_id);
+//                            startActivity(intent);
+//                        }
+//                        finish();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
     }
 
     private void setDataToList(List<TroubleFragmentBean> beans) {
