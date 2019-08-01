@@ -49,7 +49,6 @@ public class NextMonthPlanAdapter extends BaseQuickAdapter<MonthPlanBean, BaseVi
             ImageView edit = viewHolder.getView(R.id.iv_edit);
             AdapterUtils.setStatus(edit, item.getAudit_status());
 
-
             //审核状态
             viewHolder.setVisible(R.id.tv_audit_status, true);
             TextView tvAuditStatus = viewHolder.getView(R.id.tv_audit_status);

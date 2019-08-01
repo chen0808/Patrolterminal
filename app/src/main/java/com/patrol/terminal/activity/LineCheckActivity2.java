@@ -65,6 +65,7 @@ public class LineCheckActivity2 extends BaseActivity {
     private String id;
     private int selectPosin = -1;
     private List<LineCheckBean> results = new ArrayList<>();
+    private List<LineCheckBean> searchResults = new ArrayList<>();
     private LineCheckAdapter adapter;
     private LineCheckBean selectBean;
     private String from;
@@ -118,13 +119,15 @@ public class LineCheckActivity2 extends BaseActivity {
         rvLineCheck.setAdapter(adapter);
         rvLineCheck.setEmptyView(findViewById(R.id.plan_empty));
         rvLineCheck.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectPosin = position;
+                if (searchResults != null && searchResults.size() > 0) {
+                    selectBean = searchResults.get(position);
+                } else {
+                    selectBean = results.get(position);
+                }
                 adapter.notifyDataSetChanged();
-                selectBean = results.get(position);
-
             }
         });
         titleSetting.setVisibility(View.VISIBLE);
@@ -184,13 +187,16 @@ public class LineCheckActivity2 extends BaseActivity {
 
                 break;
             case R.id.search_line:
+                searchResults.clear();
                 String trim = lineNameEt.getText().toString().trim();
                 for (int i = 0; i < results.size(); i++) {
                     LineCheckBean lineCheckBean = results.get(i);
                     if (lineCheckBean.getName().contains(trim)) {
-                        rvLineCheck.setSelection(i);
+//                        rvLineCheck.setSelection(i);
+                        searchResults.add(lineCheckBean);
                     }
                 }
+                adapter.setData(searchResults);
                 break;
         }
     }
