@@ -177,6 +177,7 @@ public class ReviewTaskActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if(t.getCode() == 1){
                             Toast.makeText(ReviewTaskActivity.this,"处理完成",Toast.LENGTH_SHORT).show();
+                            setResult(1101);
                             finish();
                         }
                     }
@@ -190,7 +191,7 @@ public class ReviewTaskActivity extends BaseActivity {
                 });
     }
 
-    //缺陷再复核-转班组
+    //缺陷再复核-转个人
     public void defectCheckPOSTMine() {
         ProgressDialog.show(this, false, "正在加载。。。。");
         InAuditPostBean inAuditPostBean = new InAuditPostBean();
@@ -218,6 +219,7 @@ public class ReviewTaskActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if(t.getCode() == 1){
                             Toast.makeText(ReviewTaskActivity.this,"处理完成",Toast.LENGTH_SHORT).show();
+                            setResult(1101);
                             finish();
                         }
                     }

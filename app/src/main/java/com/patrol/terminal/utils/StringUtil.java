@@ -71,7 +71,7 @@ public class StringUtil {
             case "4":
                 return "审核不通过";
             case "5":
-                return "待复核";
+                return "复核中";
         }
         return "";
     }
@@ -84,7 +84,7 @@ public class StringUtil {
             case "1":
                 return R.color.line_point_1;
             case "2":
-                return R.color.line_point_0;
+                return R.color.line_point_1;
             case "3":
                 return R.color.green;
             case "4":

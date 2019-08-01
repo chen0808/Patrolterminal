@@ -95,6 +95,7 @@ public class DefectNotInFragment extends BaseFragment {
     private String year;
     private String month;
     private String day;
+    private int curPosition = -1;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -193,6 +194,7 @@ public class DefectNotInFragment extends BaseFragment {
                             submit("3", adapterPosition);
                             break;
                         case 2:
+                            curPosition = adapterPosition;
                             Intent intent2 = new Intent(mContext, ReviewTaskActivity.class);
                             intent2.putExtra("id", defectList.get(adapterPosition).getId());
                             startActivityForResult(intent2, 10);
@@ -493,12 +495,15 @@ public class DefectNotInFragment extends BaseFragment {
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
                         if(t.getCode() == 1){
-                            tvContent.setText("");
-                            search_name = "";
-                            pageNum = 1;
-                            line_name = banjixlAdapter.getSelectLine();
-                            defectList.clear();
-                            getBanjiXLQx(search_name, line_name);
+                            defectList.get(adapterPosition).setIn_status(in_status);
+                            groupTaskAdapter.notifyItemChanged(adapterPosition);
+
+//                            tvContent.setText("");
+//                            search_name = "";
+//                            pageNum = 1;
+//                            line_name = banjixlAdapter.getSelectLine();
+//                            defectList.clear();
+//                            getBanjiXLQx(search_name, line_name);
                             Toast.makeText(mContext,"处理完成",Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -519,5 +524,21 @@ public class DefectNotInFragment extends BaseFragment {
         year = times[0];
         month = months[0];
         day = months[1].split("日")[0];
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1101) {
+            switch (requestCode) {
+                case 10:
+                    if(curPosition != -1){
+                        defectList.get(curPosition).setIn_status("5");
+                        groupTaskAdapter.notifyItemChanged(curPosition);
+                        curPosition = -1;
+                    }
+                    break;
+            }
+        }
     }
 }
