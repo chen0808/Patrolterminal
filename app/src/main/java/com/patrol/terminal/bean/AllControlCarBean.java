@@ -15,35 +15,35 @@ public class AllControlCarBean implements Parcelable {
      * workQualityCard : {"id":"9F521AC0F336466BA308C3762E9893EF","task_id":"F2597AA5F9B7414EA9BB8FC4C3637BD5","remark":"saas","repair_content":"3、断开1116和开一线31#塔三相引流。","leader":"叶怀刚","start_time":"2019-5-7","end_time":"2019-5-9","dep_name":null,"workers":"王小龙,李嘉辰","workStandardRelations":[{"id":"7D87FBC9D10F49D88799AB35BC5C253B","w_q_c_id":"9F521AC0F336466BA308C3762E9893EF","w_q_s_id":"EA05E8938C4D4DD486573C31A605CDBE","status":"asdsa","process":"核对现场","standard":"持票核对线路\u201c三号\u201d。","warning":"误登杆塔"},{"id":"E316517739584820B2C79C14EEB3C811","w_q_c_id":"9F521AC0F336466BA308C3762E9893EF","w_q_s_id":"B39DEB8557364D4986BA673FD2909934","status":"ada","process":"安全用具及工器具检查","standard":"安全带无破损，扣环无卡涩现象，且配件齐全；绝缘绳索无破损及断股现象;","warning":"高空坠落"},{"id":"F553B73521DD46BCB86BFB26A4375783","w_q_c_id":"9F521AC0F336466BA308C3762E9893EF","w_q_s_id":"FD6664DB916A481DBA26D3D758E91A08","status":"ada","process":"攀登杆塔","standard":"检查杆根、爬梯、脚钉完好牢固。","warning":"高空坠落"},{"id":"1D91F95DC5354BC8BFD400FD766B1B53","w_q_c_id":"9F521AC0F336466BA308C3762E9893EF","w_q_s_id":"41B82A355C9844D7A5D3DC9ED5C483B0","status":"adsa","process":"抛扔绝缘绳","standard":"杆塔上工作人员安装视频监控设备时手脚动作不得过大。杆上工作人员抛至绳索时手脚动作不得过大；","warning":"高空坠落触电"}]}
      */
 
-    private WorkControlCardBean workControlCard;
-    private WorkQualityCardBean workQualityCard;
-    private List<WorkToolsBean> workTools;
+    private CardControl workControlCard;
+    private CardQualityUser workQualityCard;
+    private List<CardTool> workTools;
 
-    public WorkControlCardBean getWorkControlCard() {
+    public CardControl getWorkControlCard() {
         return workControlCard;
     }
 
-    public void setWorkControlCard(WorkControlCardBean workControlCard) {
+    public void setWorkControlCard(CardControl workControlCard) {
         this.workControlCard = workControlCard;
     }
 
-    public WorkQualityCardBean getWorkQualityCard() {
+    public CardQualityUser getWorkQualityCard() {
         return workQualityCard;
     }
 
-    public void setWorkQualityCard(WorkQualityCardBean workQualityCard) {
+    public void setWorkQualityCard(CardQualityUser workQualityCard) {
         this.workQualityCard = workQualityCard;
     }
 
-    public List<WorkToolsBean> getWorkTools() {
+    public List<CardTool> getWorkTools() {
         return workTools;
     }
 
-    public void setWorkTools(List<WorkToolsBean> workTools) {
+    public void setWorkTools(List<CardTool> workTools) {
         this.workTools = workTools;
     }
 
-    public static class WorkControlCardBean implements Parcelable {
+    public static class CardControl implements Parcelable {
 
 
         /**
@@ -291,7 +291,7 @@ public class AllControlCarBean implements Parcelable {
             };
         }
 
-        public static Creator<WorkControlCardBean> getCREATOR() {
+        public static Creator<CardControl> getCREATOR() {
             return CREATOR;
         }
 
@@ -529,7 +529,7 @@ public class AllControlCarBean implements Parcelable {
             };
         }
 
-        public WorkControlCardBean() {
+        public CardControl() {
         }
 
         @Override
@@ -551,7 +551,7 @@ public class AllControlCarBean implements Parcelable {
             dest.writeParcelable(this.sysFile, flags);
         }
 
-        protected WorkControlCardBean(Parcel in) {
+        protected CardControl(Parcel in) {
             this.id = in.readString();
             this.serial = in.readString();
             this.check_task_id = in.readString();
@@ -564,20 +564,20 @@ public class AllControlCarBean implements Parcelable {
             this.sysFile = in.readParcelable(SysFile.class.getClassLoader());
         }
 
-        public static final Creator<WorkControlCardBean> CREATOR = new Creator<WorkControlCardBean>() {
+        public static final Creator<CardControl> CREATOR = new Creator<CardControl>() {
             @Override
-            public WorkControlCardBean createFromParcel(Parcel source) {
-                return new WorkControlCardBean(source);
+            public CardControl createFromParcel(Parcel source) {
+                return new CardControl(source);
             }
 
             @Override
-            public WorkControlCardBean[] newArray(int size) {
-                return new WorkControlCardBean[size];
+            public CardControl[] newArray(int size) {
+                return new CardControl[size];
             }
         };
     }
 
-    public static class WorkQualityCardBean implements Parcelable {
+    public static class CardQualityUser implements Parcelable {
 
         private String id;
         private String check_task_id;
@@ -784,7 +784,7 @@ public class AllControlCarBean implements Parcelable {
             };
         }
 
-        public static Creator<WorkQualityCardBean> getCREATOR() {
+        public static Creator<CardQualityUser> getCREATOR() {
             return CREATOR;
         }
 
@@ -910,7 +910,7 @@ public class AllControlCarBean implements Parcelable {
             };
         }
 
-        public WorkQualityCardBean() {
+        public CardQualityUser() {
         }
 
         @Override
@@ -929,7 +929,7 @@ public class AllControlCarBean implements Parcelable {
             dest.writeParcelable(this.sysFile, flags);
         }
 
-        protected WorkQualityCardBean(Parcel in) {
+        protected CardQualityUser(Parcel in) {
             this.id = in.readString();
             this.check_task_id = in.readString();
             this.remark = in.readString();
@@ -939,20 +939,20 @@ public class AllControlCarBean implements Parcelable {
             this.sysFile = in.readParcelable(SysFile.class.getClassLoader());
         }
 
-        public static final Creator<WorkQualityCardBean> CREATOR = new Creator<WorkQualityCardBean>() {
+        public static final Creator<CardQualityUser> CREATOR = new Creator<CardQualityUser>() {
             @Override
-            public WorkQualityCardBean createFromParcel(Parcel source) {
-                return new WorkQualityCardBean(source);
+            public CardQualityUser createFromParcel(Parcel source) {
+                return new CardQualityUser(source);
             }
 
             @Override
-            public WorkQualityCardBean[] newArray(int size) {
-                return new WorkQualityCardBean[size];
+            public CardQualityUser[] newArray(int size) {
+                return new CardQualityUser[size];
             }
         };
     }
 
-    public static class WorkToolsBean implements Parcelable {
+    public static class CardTool implements Parcelable {
 
         /**
          * id : DF6A4D96D613487494478D62B8571AC6
@@ -1047,11 +1047,11 @@ public class AllControlCarBean implements Parcelable {
             this.check_task_id = check_task_id;
         }
 
-        public static Creator<WorkToolsBean> getCREATOR() {
+        public static Creator<CardTool> getCREATOR() {
             return CREATOR;
         }
 
-        public WorkToolsBean() {
+        public CardTool() {
         }
 
         @Override
@@ -1072,7 +1072,7 @@ public class AllControlCarBean implements Parcelable {
             dest.writeString(this.check_task_id);
         }
 
-        protected WorkToolsBean(Parcel in) {
+        protected CardTool(Parcel in) {
             this.id = in.readString();
             this.tool_id = in.readString();
             this.tool_name = in.readString();
@@ -1084,15 +1084,15 @@ public class AllControlCarBean implements Parcelable {
             this.check_task_id = in.readString();
         }
 
-        public static final Creator<WorkToolsBean> CREATOR = new Creator<WorkToolsBean>() {
+        public static final Creator<CardTool> CREATOR = new Creator<CardTool>() {
             @Override
-            public WorkToolsBean createFromParcel(Parcel source) {
-                return new WorkToolsBean(source);
+            public CardTool createFromParcel(Parcel source) {
+                return new CardTool(source);
             }
 
             @Override
-            public WorkToolsBean[] newArray(int size) {
-                return new WorkToolsBean[size];
+            public CardTool[] newArray(int size) {
+                return new CardTool[size];
             }
         };
     }
@@ -1113,10 +1113,10 @@ public class AllControlCarBean implements Parcelable {
     }
 
     protected AllControlCarBean(Parcel in) {
-        this.workControlCard = in.readParcelable(WorkControlCardBean.class.getClassLoader());
-        this.workQualityCard = in.readParcelable(WorkQualityCardBean.class.getClassLoader());
-        this.workTools = new ArrayList<WorkToolsBean>();
-        in.readList(this.workTools, WorkToolsBean.class.getClassLoader());
+        this.workControlCard = in.readParcelable(CardControl.class.getClassLoader());
+        this.workQualityCard = in.readParcelable(CardQualityUser.class.getClassLoader());
+        this.workTools = new ArrayList<CardTool>();
+        in.readList(this.workTools, CardTool.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<AllControlCarBean> CREATOR = new Parcelable.Creator<AllControlCarBean>() {

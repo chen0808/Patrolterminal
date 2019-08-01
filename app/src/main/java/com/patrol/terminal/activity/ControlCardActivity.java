@@ -15,6 +15,9 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.fragment.ControlDepFrgment;
 import com.patrol.terminal.fragment.ControlToolFragment;
 import com.patrol.terminal.fragment.NewControlQualityFragment;
+import com.patrol.terminal.fragment.YXControlDepFrgment;
+import com.patrol.terminal.fragment.YXControlToolFragment;
+import com.patrol.terminal.fragment.YXNewControlQualityFragment;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -60,19 +63,29 @@ public class ControlCardActivity extends BaseActivity {
     private void initview() {
         //isLook = getIntent().getBooleanExtra("is_look", false);  //是否为查看模式
         titleName.setText("控制卡");
+        String from = getIntent().getStringExtra("from");
+
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new ControlDepFrgment());
-        fragmentList.add(new NewControlQualityFragment());
-        fragmentList.add(new ControlToolFragment());
+
+        if ("yx".equals(from)) {
+            fragmentList.add(new YXControlDepFrgment());
+            fragmentList.add(new YXNewControlQualityFragment());
+            fragmentList.add(new YXControlToolFragment());
+        } else {
+            fragmentList.add(new ControlDepFrgment());
+            fragmentList.add(new NewControlQualityFragment());
+            fragmentList.add(new ControlToolFragment());
+        }
         MyFragmentPagerAdapter CardPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         controlCardVg.setAdapter(CardPagerAdapter);
         controlCardVg.setNoScroll(true);
+        controlCardVg.setOffscreenPageLimit(3);
         controlCardRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.control_rb1:
-                          controlCardVg.setCurrentItem(0);
+                        controlCardVg.setCurrentItem(0);
                         break;
                     case R.id.control_rb2:
                         controlCardVg.setCurrentItem(1);

@@ -3,40 +3,25 @@ package com.patrol.terminal.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
-import com.patrol.terminal.base.BaseObserver;
-import com.patrol.terminal.base.BaseRequest;
-import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.ClassMemberBean;
-import com.patrol.terminal.bean.ControlDepWorkInfo;
-import com.patrol.terminal.bean.OverhaulSendUserBean;
+import com.patrol.terminal.bean.CardControlProject;
 import com.patrol.terminal.bean.SelectWorkerBean;
-import com.patrol.terminal.overhaul.OverhaulMonitorPublishActivity;
-import com.patrol.terminal.utils.Constant;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class ControlDepdapter1 extends BaseAdapter {
     private Context context;
-    private List<ControlDepWorkInfo> list;
+    private List<CardControlProject> list;
     private boolean isCanClick;
     private List<SelectWorkerBean.SelectUserInfo> mWorkerSelectList;
 
-    public ControlDepdapter1(Context context, List<ControlDepWorkInfo> traceList, boolean isCanClick, List<SelectWorkerBean.SelectUserInfo> workerSelectList) {
+    public ControlDepdapter1(Context context, List<CardControlProject> traceList, boolean isCanClick, List<SelectWorkerBean.SelectUserInfo> workerSelectList) {
         this.context = context;
         this.list = traceList;
         this.isCanClick = isCanClick;
@@ -75,13 +60,13 @@ public class ControlDepdapter1 extends BaseAdapter {
                 if (list.get(position) != null) {
                     holder.mDivisonNo.setText("" + list.get(position).getDivisonNo());
                     holder.mDivisonContent.setText(list.get(position).getContent());
-                    holder.mDivisonName.setText(list.get(position).getDivisonName());
+                    holder.mDivisonName.setText(list.get(position).getUser_name());
                 }
             }
 
             if (!isCanClick) {  //是查看模式
                 holder.mDivisonName.setClickable(false);
-            }else {
+            } else {
                 holder.mDivisonName.setClickable(true);
                 holder.mDivisonName.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -95,18 +80,20 @@ public class ControlDepdapter1 extends BaseAdapter {
             }
 
 
-
             convertView.setTag(holder);
         }
 
         return convertView;
     }
 
-    public void setData(List<ControlDepWorkInfo> typeBeanList) {
+    public void setData(List<CardControlProject> typeBeanList) {
         list = typeBeanList;
         notifyDataSetChanged();
     }
 
+    public List<CardControlProject> getData() {
+        return list;
+    }
 
     static class ViewHolder {
         private TextView mDivisonNo;
@@ -114,48 +101,20 @@ public class ControlDepdapter1 extends BaseAdapter {
         private TextView mDivisonName;
     }
 
-    public void showSingleChooseDialog(Context context, String title, String[] workers, String[] workers_id,  ViewHolder holder, int position) {
+    public void showSingleChooseDialog(Context context, String title, String[] workers, String[] workers_id, ViewHolder holder, int position) {
         new AlertDialog.Builder(context).setTitle(title).setItems(workers, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //Toast.makeText(context, "您已经选择了: " + which + ":" + workers[which],Toast.LENGTH_LONG).show();
                 holder.mDivisonName.setText(workers[which]);
-                list.get(position).setDivisonName(workers[which]);
-                list.get(position).setUserId(workers_id[which]);
+                list.get(position).setUser_name(workers[which]);
+                list.get(position).setUser_id(workers_id[which]);
                 dialog.dismiss();
             }
         }).show();
     }
 
     private void getAllSendToPerson(ViewHolder holder, int position) {
-//        BaseRequest.getInstance().getService()
-//                .getAllClassMember("B7FF21A674F144DE8D13EB8B3B79E64F")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<List<ClassMemberBean>>(context) {
-//                    @Override
-//                    protected void onSuccees(BaseResult<List<ClassMemberBean>> t) throws Exception {
-//                        if(t.getCode() == 1) {
-//                            if (t.getResults() != null && t.getResults().size() > 0) {
-//                                List<ClassMemberBean.UserListBean> userListBeans = t.getResults().get(0).getUserList();
-//                                String[] workers = new String[userListBeans.size()];
-//                                String[] workers_id = new String[userListBeans.size()];
-//                                for (int i = 0; i < userListBeans.size(); i++) {
-//                                    String userName = userListBeans.get(i).getName();
-//                                    String userId = userListBeans.get(i).getId();
-//                                    workers[i] = userName;
-//                                    workers_id[i] = userId;
-//                                }
-//
-//                                showSingleChooseDialog(context, "工作人员", workers, workers_id, holder, position);
-//                            }
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                    }
-//                });
+
 
         if (mWorkerSelectList != null && mWorkerSelectList.size() > 0) {
             String[] workers = new String[mWorkerSelectList.size()];

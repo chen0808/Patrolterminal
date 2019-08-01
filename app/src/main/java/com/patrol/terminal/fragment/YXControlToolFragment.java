@@ -22,6 +22,7 @@ import com.patrol.terminal.bean.AllControlCarBean;
 import com.patrol.terminal.bean.ControlToolBean;
 import com.patrol.terminal.bean.ControlToolBeanList;
 import com.patrol.terminal.bean.ControlToolInfo;
+import com.patrol.terminal.bean.DefectPlanDetailBean;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulZzTaskBean;
 import com.patrol.terminal.utils.Constant;
@@ -37,7 +38,7 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ControlToolFragment extends BaseFragment {
+public class YXControlToolFragment extends BaseFragment {
 
     @BindView(R.id.control_xianlu_name)
     TextView controlXianluName;
@@ -87,17 +88,10 @@ public class ControlToolFragment extends BaseFragment {
         enterType = mActivity.getIntent().getIntExtra(Constant.CONTROL_CARD_ENTER_TYPE, Constant.IS_OTHER_LOOK);  //是否为查看模式
         String jobType = SPUtil.getString(mActivity, Constant.USER, Constant.JOBTYPE, "");
 
-        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {  //专责接受的Bean不一样
-            OverhaulZzTaskBean bean = mActivity.getIntent().getParcelableExtra("bean");
-            if (bean != null) {
+
+        DefectPlanDetailBean bean = (DefectPlanDetailBean) mActivity.getIntent().getSerializableExtra("bean");
                 taskId = bean.getId();
-            }
-        }else {
-            OverhaulMonthBean bean = mActivity.getIntent().getParcelableExtra("bean");
-            if (bean != null) {
-                taskId = bean.getId();
-            }
-        }
+
 
         //ControlCardBean controlBean = (ControlCardBean) mActivity.getIntent().getSerializableExtra("id");
         AllControlCarBean allControlCarBean = mActivity.getIntent().getParcelableExtra("allControlBean");

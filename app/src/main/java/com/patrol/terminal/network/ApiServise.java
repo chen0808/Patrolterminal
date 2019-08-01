@@ -560,15 +560,15 @@ public interface ApiServise {
     Observable<BaseResult<List<AddressBookBean>>> getAllUser();
 
     //获取班组作业控制卡-作业项目
-    @GET("work/project/listGET")
-    Observable<BaseResult<List<ControlDepWorkBean>>> getControlDepWork1(@Query("type_id") String type_id, @Query("order") String order);
+    @GET("card/project/listGET")
+    Observable<BaseResult<List<CardControlProject>>> getControlDepWork1(@Query("type_id") String type_id, @Query("order") String order);
 
     //获取班组作业控制卡-安全控制措施
-    @GET("work/safe/listGET")
-    Observable<BaseResult<List<ControlDepWorkBean2>>> getControlDepWork2(@Query("type_id") String type_id, @Query("order") String order);
+    @GET("card/safe/listGET")
+    Observable<BaseResult<List<CardControlSafe>>> getControlDepWork2(@Query("type_id") String type_id, @Query("order") String order);
 
     //获取工序质量控制卡
-    @GET("work/standard/listGET")
+    @GET("card/standard/listGET")
     Observable<BaseResult<List<ControlQualityBean>>> getControlQuality(@Query("type_id") String type, @Query("order") String order);
 
     //上传工序控制卡
@@ -776,7 +776,7 @@ public interface ApiServise {
 
     //所有控制卡作业项目列表
     @GET("card/project/listGET")
-    Observable<BaseResult<List<ControlDepWorkBean>>> controlCardProjectList();
+    Observable<BaseResult<List<CardControlProject>>> controlCardProjectList();
 
     //所有控制卡作业危险点分析及安全措施列表
     @GET("card/safe/listGET")
@@ -1213,4 +1213,10 @@ public interface ApiServise {
     //制定消缺计划
     @POST("task/defect/makeDefectPOST")
     Observable<BaseResult> makeDefectPOST(@Body MakeDefectPlanBean bean);
+
+    //提交班组控制卡
+    @POST("card/control/savePOST")
+    Observable<BaseResult> saveDepControl(@Body CardControl bean);
+
+
 }

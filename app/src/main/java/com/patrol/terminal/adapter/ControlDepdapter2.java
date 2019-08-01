@@ -8,15 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.bean.CardControlSafe;
 import com.patrol.terminal.bean.ControlDepWorkInfo2;
 
 import java.util.List;
 
 public class ControlDepdapter2 extends BaseAdapter {
     private Context context;
-    private List<ControlDepWorkInfo2> list;
+    private List<CardControlSafe> list;
     private boolean isLook;
-    public ControlDepdapter2(Context context, List<ControlDepWorkInfo2> traceList) {
+    public ControlDepdapter2(Context context, List<CardControlSafe> traceList) {
         this.context = context;
         this.list = traceList;
         this.isLook = isLook;
@@ -57,8 +58,8 @@ public class ControlDepdapter2 extends BaseAdapter {
                 if (list.get(position) != null) {
                     holder.mDivisonNo.setText("" + list.get(position).getDivisonNo());
                     holder.mDivisonContent.setText(list.get(position).getContent());
-                    holder.mSafeContent.setText(list.get(position).getSaveContent());
-                    holder.mDivisonName.setText(list.get(position).getDivisonName());
+                    holder.mSafeContent.setText(list.get(position).getContent());
+                    holder.mDivisonName.setText(list.get(position).getDuty_user_name());
 
 
                 }
@@ -71,7 +72,7 @@ public class ControlDepdapter2 extends BaseAdapter {
         return convertView;
     }
 
-    public void setData(List<ControlDepWorkInfo2> typeBeanList) {
+    public void setData(List<CardControlSafe> typeBeanList) {
         list = typeBeanList;
         notifyDataSetChanged();
 

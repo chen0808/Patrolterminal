@@ -102,7 +102,6 @@ public class PersonalTaskListBean extends BaseModel implements Serializable {
     private String is_save;
     @Column
     private String defect_id;
-
     public String getDefect_id() {
         return defect_id;
     }

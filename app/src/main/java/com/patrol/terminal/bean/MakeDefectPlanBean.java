@@ -15,8 +15,26 @@ public class MakeDefectPlanBean {
     private String deal_dep_name;
     private String line_id;
     private String tower_id;
+    private String duty_user_id;
+    private String duty_user_name;
     private List<TaskDefectUser> taskDefectUserList;
 
+
+    public String getDuty_user_id() {
+        return duty_user_id;
+    }
+
+    public void setDuty_user_id(String duty_user_id) {
+        this.duty_user_id = duty_user_id;
+    }
+
+    public String getDuty_user_name() {
+        return duty_user_name;
+    }
+
+    public void setDuty_user_name(String duty_user_name) {
+        this.duty_user_name = duty_user_name;
+    }
 
     public String getLine_id() {
         return line_id;

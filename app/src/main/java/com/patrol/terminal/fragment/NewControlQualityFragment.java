@@ -65,7 +65,7 @@ public class NewControlQualityFragment extends BaseFragment {
     private List<ControlQualityBean> controlQualityBeans;
     private ControlOperationAdapter depdapter1;
     private Activity mActivity;
-    private AllControlCarBean.WorkQualityCardBean workQualityCardBean = null;
+    private AllControlCarBean.CardQualityUser workQualityCardBean = null;
     private boolean isCanClick = true;  //默认能点击，填写和更新状态
     private int enterType;
     private boolean isFzrUpdate = false;
@@ -197,7 +197,7 @@ public class NewControlQualityFragment extends BaseFragment {
                     etRemarkTv.setText(workQualityCardBean.getRemark());
                     setQualityList(workQualityCardBean.getWorkStandardStatuses());
 
-                    AllControlCarBean.WorkQualityCardBean.SysFile sysFile = workQualityCardBean.getSysFile();
+                    AllControlCarBean.CardQualityUser.SysFile sysFile = workQualityCardBean.getSysFile();
                     if (sysFile != null) {
                         String filePath = sysFile.getFile_path();
                         filePath = filePath.substring(1, filePath.length());
@@ -236,7 +236,7 @@ public class NewControlQualityFragment extends BaseFragment {
                     etRemark.setText(workQualityCardBean.getRemark());
                     setQualityList(workQualityCardBean.getWorkStandardStatuses());
 
-                    AllControlCarBean.WorkQualityCardBean.SysFile sysFile = workQualityCardBean.getSysFile();
+                    AllControlCarBean.CardQualityUser.SysFile sysFile = workQualityCardBean.getSysFile();
                     if (sysFile != null) {
                         String filePath = sysFile.getFile_path();
                         filePath = filePath.substring(1, filePath.length());
@@ -278,7 +278,7 @@ public class NewControlQualityFragment extends BaseFragment {
         }
     }
 
-    private void setQualityList(List<AllControlCarBean.WorkQualityCardBean.WorkStandardRelationsBean> workStandardRelationsBeans) {
+    private void setQualityList(List<AllControlCarBean.CardQualityUser.WorkStandardRelationsBean> workStandardRelationsBeans) {
         mControlQualityList.clear();
 
         for (int i = 0; i < workStandardRelationsBeans.size(); i++) {

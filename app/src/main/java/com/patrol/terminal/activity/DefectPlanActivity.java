@@ -1,6 +1,7 @@
 package com.patrol.terminal.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,12 +21,17 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.AllControlCarBean;
 import com.patrol.terminal.bean.ControlCardBean;
 import com.patrol.terminal.bean.DefectFragmentDetailBean;
 import com.patrol.terminal.bean.DefectPlanDetailBean;
 import com.patrol.terminal.bean.DepPersonalBean;
 import com.patrol.terminal.bean.MakeDefectPlanBean;
+import com.patrol.terminal.bean.OverhaulMonthBean;
+import com.patrol.terminal.bean.SelectWorkerBean;
 import com.patrol.terminal.bean.TaskDefectUser;
+import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
+import com.patrol.terminal.overhaul.OverhaulZzWeekTaskDetailActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
@@ -115,6 +121,11 @@ public class DefectPlanActivity extends BaseActivity {
     private String line_id;
     private List<String> nameType = new ArrayList<>();
     private ControlCardBean controlCardId;
+    private AllControlCarBean allControlCarBean;
+    SelectWorkerBean selectWorkerBean = new SelectWorkerBean();
+    private String teamId;
+    private DefectPlanDetailBean bean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,21 +136,26 @@ public class DefectPlanActivity extends BaseActivity {
 
     private void initview() {
         titleName.setText("消缺计划");
-        id = getIntent().getStringExtra("id");
+       String  defect_id = getIntent().getStringExtra("id");
+        if (defect_id==null){
+            id = getIntent().getStringExtra("task_id");
+        }else {
+            id=defect_id;
+        }
         String audit_status = getIntent().getStringExtra("audit_status");
         mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
-        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && audit_status == null&&id!=null) {
+        if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && audit_status == null&&defect_id!=null) {
             defectPlanAuditorLl.setVisibility(View.GONE);
             dangerPatrolSave.setVisibility(View.VISIBLE);
             getDefectDeatail(id);
             getPersonal();
         } else if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED) && "1".equals(audit_status)) {
-            id = getIntent().getStringExtra("task_id");
             defectPlanAuditorLl.setVisibility(View.VISIBLE);
             dangerPatrolSave.setVisibility(View.GONE);
             getDefectPlanDetail();
             setEnable();
         } else if (mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+            controlCard.setText("填写控制卡");
             llControlCard.setVisibility(View.VISIBLE);
             defectPlanAuditorLl.setVisibility(View.GONE);
             dangerPatrolSave.setVisibility(View.GONE);
@@ -178,11 +194,54 @@ public class DefectPlanActivity extends BaseActivity {
     }
 
     @OnClick({R.id.title_back, R.id.danger_patrol_team, R.id.danger_patrol_personal, R.id.danger_patrol_start_time,
-            R.id.danger_patrol_end_time, R.id.danger_patrol_save, R.id.danger_patrol_no, R.id.danger_patrol_yes})
+            R.id.danger_patrol_end_time, R.id.danger_patrol_save, R.id.danger_patrol_no, R.id.danger_patrol_yes,R.id.control_card})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
+                break;
+            case R.id.control_card:
+                int entenType;
+                if ((mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)&&teamName.equals(SPUtil.getUserName(this)))) {  //负责人填写状态,提交后不可填写
+                    if (allControlCarBean == null) {
+                        entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
+                    } else {
+                        if (allControlCarBean.getWorkControlCard() == null && allControlCarBean.getWorkQualityCard() == null && allControlCarBean.getWorkTools().size() == 0) {
+                            entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
+                        } else {
+                            entenType = Constant.IS_FZR_UPDATE;      //负责人更新模式
+                        }
+                    }
+
+                    Intent intent1 = new Intent(DefectPlanActivity.this, ControlCardActivity.class);
+                    intent1.putExtra(Constant.CONTROL_CARD_ENTER_TYPE, entenType);
+                    intent1.putExtra("allControlBean", allControlCarBean);    //上次填写的内容存储
+                    intent1.putExtra("selectedUserListBeans", selectWorkerBean);
+                    intent1.putExtra("bean", bean);
+                    intent1.putExtra("from", "yx");
+                    intent1.putExtra("id", controlCardId);   //模板
+                    //intent1.putExtra("leaderName", leaderName);
+                    //intent1.putExtra("leaderId", leaderId);
+                    //其他人员进来
+                    startActivityForResult(intent1, 1002);
+                } else {      //其他人员进来
+                    if (allControlCarBean == null) {
+                        Toast.makeText(DefectPlanActivity.this, "当前无控制卡！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (allControlCarBean.getWorkControlCard() == null && allControlCarBean.getWorkQualityCard() == null && allControlCarBean.getWorkTools().size() == 0) {
+                            Toast.makeText(DefectPlanActivity.this, "当前无控制卡！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            entenType = Constant.IS_OTHER_LOOK;
+                            Intent intent2 = new Intent(DefectPlanActivity.this, ControlCardActivity.class);
+                            intent2.putExtra(Constant.CONTROL_CARD_ENTER_TYPE, entenType); //其他人员查看模式
+                            intent2.putExtra("allControlBean", allControlCarBean);
+                            intent2.putExtra("id", controlCardId);
+                            //intent2.putExtra("leaderName", leaderName);
+                            //intent2.putExtra("leaderId", leaderId);
+                            startActivityForResult(intent2, 1001);
+                        }
+                    }
+                }
                 break;
             case R.id.danger_patrol_team:
                 showPersonalGroup();
@@ -220,6 +279,7 @@ public class DefectPlanActivity extends BaseActivity {
         }
     }
 
+    //日期选择
     public void showDay(int type) {
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         Calendar startDate = Calendar.getInstance();
@@ -315,15 +375,15 @@ public class DefectPlanActivity extends BaseActivity {
                 .subscribe(new BaseObserver<DefectPlanDetailBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<DefectPlanDetailBean> t) throws Exception {
-                        DefectPlanDetailBean bean = t.getResults();
+                        bean = t.getResults();
                         line_name = bean.getLine_name();
                         tower_name = bean.getTower_name();
                         find_dep_id = bean.getDeal_dep_id();
                         find_dep_name = bean.getDeal_dep_name();
                         tower_id = bean.getTower_id();
                         line_id = bean.getLine_id();
-                        startTime=bean.getDeal_time();
-                        endTime=bean.getClose_time();
+                        startTime= bean.getDeal_time();
+                        endTime= bean.getClose_time();
                         dangerPatrolType.setContent(bean.getCategory_name());
                         dangerPatrolDep.setContent(bean.getDeal_dep_name());
                         dangerPatrolLine.setContent(bean.getLine_name());
@@ -335,12 +395,16 @@ public class DefectPlanActivity extends BaseActivity {
                         dangerPatrolEndTime.setText(bean.getClose_time());
                         List<DefectPlanDetailBean.TaskDefectUserListBean> taskDefectUserList = bean.getTaskDefectUserList();
                         String names = "";
+                        List<SelectWorkerBean.SelectUserInfo> selectUserInfos = new ArrayList<>();
                         for (int i = 0; i < taskDefectUserList.size(); i++) {
                             DepPersonalBean.UserListBean userListBean = new DepPersonalBean.UserListBean();
+                            SelectWorkerBean.SelectUserInfo userInfo = new SelectWorkerBean.SelectUserInfo();
                             DefectPlanDetailBean.TaskDefectUserListBean taskDefectUserListBean = taskDefectUserList.get(i);
                             String name = taskDefectUserListBean.getUser_name();
                             if ("2".equals(taskDefectUserListBean.getSign())) {
                                 dangerPatrolTeam.setText(name);
+                                teamName=name;
+                                teamId = taskDefectUserListBean.getUser_id();
                             } else if ("3".equals(taskDefectUserListBean.getSign())) {
                                 if ("".equals(names)) {
                                     names = name;
@@ -349,11 +413,15 @@ public class DefectPlanActivity extends BaseActivity {
                                 }
                             }
 
+                            userInfo.setUserId(taskDefectUserListBean.getUser_id());
+                            userInfo.setUserName(name);
                             userListBean.setName(name);
                             userListBean.setId(taskDefectUserListBean.getUser_id());
                             personalList.add(userListBean);
+                            selectUserInfos.add(userInfo);
                         }
                         dangerPatrolPersonal.setText(names);
+                        selectWorkerBean.setUserInfos(selectUserInfos);
                         ProgressDialog.cancle();
                     }
 
@@ -363,6 +431,7 @@ public class DefectPlanActivity extends BaseActivity {
                 });
     }
 
+    //选择负责人弹框
     public void showPersonalGroup() {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setTitle("选择负责人");
@@ -522,6 +591,7 @@ public class DefectPlanActivity extends BaseActivity {
     //提交消缺计划
     public void makeDefectPlan(String status) {
         ProgressDialog.show(this, true, "正在加载中。。。");
+          MakeDefectPlanBean bean = new MakeDefectPlanBean();
         List<TaskDefectUser> userlist = new ArrayList<>();
         String deal = dangerPatrolIdea.getText().toString().trim();
         teamName=dangerPatrolTeam.getText().toString();
@@ -544,6 +614,8 @@ public class DefectPlanActivity extends BaseActivity {
                         TaskDefectUser user = new TaskDefectUser();
                         if (i == 0) {
                             user.setSign("2");
+                            bean.setDuty_user_id(userListBean.getId());
+                            bean.setDuty_user_name(userListBean.getName());
                         } else {
                             user.setSign("3");
                         }
@@ -555,7 +627,7 @@ public class DefectPlanActivity extends BaseActivity {
                 }
             }
         }
-        MakeDefectPlanBean bean = new MakeDefectPlanBean();
+
         bean.setDeal_time(startTime);
         bean.setClose_time(endTime);
         bean.setLine_name(line_name);
@@ -586,6 +658,7 @@ public class DefectPlanActivity extends BaseActivity {
                     }
                 });
     }
+    //获取控制卡类型
     private void controlCard() {
         BaseRequest.getInstance().getService()
                 .controlCardType("kzk")
@@ -625,4 +698,42 @@ public class DefectPlanActivity extends BaseActivity {
                     }
                 });
     }
+
+    //获取控制卡内容
+    private void getControlCardContent() {
+        BaseRequest.getInstance().getService()
+                .getControlCardContent(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<AllControlCarBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<AllControlCarBean> t) throws Exception {
+
+                        if (t.getCode() == 1) {
+                            allControlCarBean = t.getResults();
+                            if (mJobType.contains(Constant.REFURBISHMENT_MEMBER)) {  //负责人进来, 填写过的将数据带过去
+                                if (allControlCarBean == null) {   //负责人第一次进来
+                                    nsControlCard.setVisibility(View.VISIBLE);
+                                } else {
+                                    if (allControlCarBean.getWorkControlCard() == null && allControlCarBean.getWorkQualityCard() == null && allControlCarBean.getWorkTools().size() == 0) {
+                                        nsControlCard.setVisibility(View.VISIBLE);
+                                    } else {
+//                                    nsWorkTicket.setVisibility(View.GONE);
+                                        nsControlCard.setVisibility(View.GONE);
+                                    }
+                                }
+
+                            } else {   //其他人进控制卡
+                                nsControlCard.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+    }
+
 }

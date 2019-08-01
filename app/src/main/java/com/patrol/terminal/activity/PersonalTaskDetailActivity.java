@@ -327,7 +327,7 @@ public class PersonalTaskDetailActivity extends BaseActivity {
         personalTaskListBean.setDone_time(bean.getDone_time());
         personalTaskListBean.setSub_time(bean.getSub_time());
         personalTaskListBean.setCheck_report(bean.getCheck_report());
-
+        personalTaskListBean.setDefect_id(bean.getDefect_id());
 
         List<PersonalTaskListBean> existBeans = SQLite.select().from(PersonalTaskListBean.class)
                 .where(PersonalTaskListBean_Table.id.eq(bean.getId()))

@@ -1,8 +1,9 @@
 package com.patrol.terminal.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DefectPlanDetailBean {
+public class DefectPlanDetailBean implements Serializable {
 
 
         /**
@@ -409,7 +410,7 @@ public class DefectPlanDetailBean {
             this.taskDefectUserList = taskDefectUserList;
         }
 
-        public static class FileListBean {
+        public static class FileListBean implements Serializable{
             /**
              * id : E18978F02F944524A6DE852BE5504E99
              * task_id : B440DAFD994C49EEA36F9470C51376F8
@@ -475,7 +476,7 @@ public class DefectPlanDetailBean {
             }
         }
 
-        public static class TaskDefectUserListBean {
+        public static class TaskDefectUserListBean implements Serializable{
             /**
              * id : E1975813303D44D89BC016FF094385BD
              * task_defect_id : 740ABDC9B8304B7D8C8220F99CF04116
