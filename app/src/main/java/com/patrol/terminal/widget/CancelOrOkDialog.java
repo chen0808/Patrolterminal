@@ -49,7 +49,8 @@ public class CancelOrOkDialog extends Dialog {
             public void onClick(View paramView) {
                 if (paramView.getId()==R.id.cancel_tv){
                 //取消
-                    click.cancle();
+                    if (click != null)
+                        click.cancle();
                     cancle();
                     dismiss();
                 }
@@ -61,7 +62,8 @@ public class CancelOrOkDialog extends Dialog {
             public void onClick(View paramView) {
                 if (paramView.getId()==R.id.ok_tv){
                     ok();
-                    click.ok();
+                    if (click != null)
+                        click.ok();
                     dismiss();
                 }
             }
