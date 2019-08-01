@@ -3,6 +3,7 @@ package com.patrol.terminal.activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -181,6 +182,7 @@ public class NewPlanActivity extends BaseActivity {
                 simplePagerTitleView.setNormalColor(getResources().getColor(R.color.black_gray));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
                 simplePagerTitleView.setText(mDataList.get(index));
+                simplePagerTitleView.setPadding(0,26, 0,  0);
                 simplePagerTitleView.setTextSize(13);
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
