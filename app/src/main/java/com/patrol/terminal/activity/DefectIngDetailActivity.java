@@ -19,6 +19,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.DefectFragmentDetailBean;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 import java.util.ArrayList;
 import butterknife.BindView;
@@ -129,32 +130,8 @@ public class DefectIngDetailActivity extends BaseActivity {
                             status = bean.getDone_status();
                         }
 
-                        switch (status) {
-                            case "0":
-                                defect_qxrkzt.setText("编制");
-                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.blue));
-                                break;
-                            case "1":
-                                defect_qxrkzt.setText("待班长审核");
-                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.line_point_1));
-                                break;
-                            case "2":
-                                defect_qxrkzt.setText("待专责审核");
-                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.line_point_0));
-                                break;
-                            case "3":
-                                defect_qxrkzt.setText("审核通过");
-                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.green));
-                                break;
-                            case "4":
-                                defect_qxrkzt.setText("审核不通过");
-                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.write_red));
-                                break;
-                            case "5":
-                                defect_qxrkzt.setText("待复核");
-                                defect_qxrkzt.setTextColor(getResources().getColor(R.color.orange));
-                                break;
-                        }
+                        defect_qxrkzt.setText(StringUtil.getDefectState(status));
+                        defect_qxrkzt.setTextColor(getResources().getColor(StringUtil.getDefectColor(status)));
 
                         defect_clr.setText(bean.getDeal_user_name());
                         defect_fxr.setText(bean.getFind_user_name());

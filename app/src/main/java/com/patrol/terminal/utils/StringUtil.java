@@ -84,7 +84,7 @@ public class StringUtil {
             case "1":
                 return R.color.line_point_1;
             case "2":
-                return R.color.line_point_0;
+                return R.color.line_point_1;
             case "3":
                 return R.color.green;
             case "4":
