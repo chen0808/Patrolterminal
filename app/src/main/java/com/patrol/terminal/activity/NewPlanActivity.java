@@ -182,7 +182,7 @@ public class NewPlanActivity extends BaseActivity {
                 simplePagerTitleView.setNormalColor(getResources().getColor(R.color.black_gray));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
                 simplePagerTitleView.setText(mDataList.get(index));
-                simplePagerTitleView.setPadding(0,26, 0,  0);
+                simplePagerTitleView.setPadding(10,26, 10,  0);
                 simplePagerTitleView.setTextSize(13);
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override

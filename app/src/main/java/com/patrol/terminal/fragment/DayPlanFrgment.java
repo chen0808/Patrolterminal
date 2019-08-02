@@ -214,7 +214,7 @@ public class DayPlanFrgment extends BaseFragment {
                             donePlanRange.setText("计划进度 : 0%");
                         } else {
                             //默认保留两位会有错误，这里设置保留小数点后4位
-                            double range = Utils.div(done_num_total, all_num_total, 4)*100;
+                            double range = Utils.newDiv(done_num_total, all_num_total, 4)*100;
                             donePlanRange.setText("计划进度 : " + range + "%");
                         }
                     }
