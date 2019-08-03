@@ -142,7 +142,7 @@ public class DefectNotRidFragment extends BaseFragment {
                 int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
                 int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
                 Intent intent=new Intent(getContext(), DefectPlanActivity.class);
-                intent.putExtra("id",defectList.get(adapterPosition).getId());
+                intent.putExtra("defect_id",defectList.get(adapterPosition).getId());
                 startActivity(intent);
             }
         };
