@@ -87,7 +87,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/line_point_1"
                 android:text="0"
-                android:paddingLeft="24dp"
                 />
             <TextView
                 android:id="@+id/car_num"
@@ -99,7 +98,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/line_point_3"
                 android:text="0"
-                android:paddingLeft="24dp"
                 />
             <TextView
                 android:id="@+id/day_plan_num"
@@ -111,7 +109,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/deffect_color"
                 android:text="0"
-                android:paddingLeft="24dp"
                 />
             <TextView
                 android:id="@+id/group_task_num"
@@ -123,7 +120,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/week_plan_num"
                 android:text="0"
-                android:paddingLeft="24dp"
                 />
             <TextView
                 android:id="@+id/personal_task_num"
@@ -136,7 +132,6 @@
                 android:gravity="bottom"
                 android:textColor="@color/day_plan_num"
                 android:text="0"
-                android:paddingLeft="24dp"
                 />
         </LinearLayout>
         <net.lucode.hackware.magicindicator.MagicIndicator
