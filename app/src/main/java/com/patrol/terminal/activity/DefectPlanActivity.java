@@ -22,6 +22,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AllControlCarBean;
+import com.patrol.terminal.bean.CardControl;
 import com.patrol.terminal.bean.ControlCardBean;
 import com.patrol.terminal.bean.DefectFragmentDetailBean;
 import com.patrol.terminal.bean.DefectPlanDetailBean;
@@ -122,7 +123,7 @@ public class DefectPlanActivity extends BaseActivity {
     private List<String> nameType = new ArrayList<>();
     private ControlCardBean controlCardId;
     private AllControlCarBean allControlCarBean;
-    SelectWorkerBean selectWorkerBean = new SelectWorkerBean();
+    private  SelectWorkerBean selectWorkerBean = new SelectWorkerBean();
     private String teamId;
     private DefectPlanDetailBean bean;
 
@@ -142,6 +143,7 @@ public class DefectPlanActivity extends BaseActivity {
         }else {
             id=defect_id;
         }
+
         String audit_status = getIntent().getStringExtra("audit_status");
         mJobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER) && audit_status == null&&defect_id!=null) {
@@ -153,6 +155,8 @@ public class DefectPlanActivity extends BaseActivity {
             defectPlanAuditorLl.setVisibility(View.VISIBLE);
             dangerPatrolSave.setVisibility(View.GONE);
             getDefectPlanDetail();
+            getCardControl(id);
+            controlCard();
             setEnable();
         } else if (mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             controlCard.setText("填写控制卡");
@@ -160,6 +164,7 @@ public class DefectPlanActivity extends BaseActivity {
             defectPlanAuditorLl.setVisibility(View.GONE);
             dangerPatrolSave.setVisibility(View.GONE);
             getDefectPlanDetail();
+            getCardControl(id);
             controlCard();
             setEnable();
         } else {
@@ -169,6 +174,8 @@ public class DefectPlanActivity extends BaseActivity {
             defectPlanAuditorLl.setVisibility(View.GONE);
             dangerPatrolSave.setVisibility(View.GONE);
             getDefectPlanDetail();
+            getCardControl(id);
+            controlCard();
             setEnable();
         }
 
@@ -206,7 +213,7 @@ public class DefectPlanActivity extends BaseActivity {
                     if (allControlCarBean == null) {
                         entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
                     } else {
-                        if (allControlCarBean.getWorkControlCard() == null && allControlCarBean.getWorkQualityCard() == null && allControlCarBean.getWorkTools().size() == 0) {
+                        if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool().size() == 0) {
                             entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
                         } else {
                             entenType = Constant.IS_FZR_UPDATE;      //负责人更新模式
@@ -228,13 +235,14 @@ public class DefectPlanActivity extends BaseActivity {
                     if (allControlCarBean == null) {
                         Toast.makeText(DefectPlanActivity.this, "当前无控制卡！", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (allControlCarBean.getWorkControlCard() == null && allControlCarBean.getWorkQualityCard() == null && allControlCarBean.getWorkTools().size() == 0) {
+                        if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardControl() == null && allControlCarBean.getCardTool().size() == 0) {
                             Toast.makeText(DefectPlanActivity.this, "当前无控制卡！", Toast.LENGTH_SHORT).show();
                         } else {
                             entenType = Constant.IS_OTHER_LOOK;
                             Intent intent2 = new Intent(DefectPlanActivity.this, ControlCardActivity.class);
                             intent2.putExtra(Constant.CONTROL_CARD_ENTER_TYPE, entenType); //其他人员查看模式
                             intent2.putExtra("allControlBean", allControlCarBean);
+                            intent2.putExtra("from", "yx");
                             intent2.putExtra("id", controlCardId);
                             //intent2.putExtra("leaderName", leaderName);
                             //intent2.putExtra("leaderId", leaderId);
@@ -698,34 +706,30 @@ public class DefectPlanActivity extends BaseActivity {
                     }
                 });
     }
-
-    //获取控制卡内容
-    private void getControlCardContent() {
+    //班组控制卡数据回显
+    private void getCardControl(String id) {
         BaseRequest.getInstance().getService()
-                .getControlCardContent(id)
+                .getCardControl(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<AllControlCarBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<AllControlCarBean> t) throws Exception {
-
-                        if (t.getCode() == 1) {
-                            allControlCarBean = t.getResults();
-                            if (mJobType.contains(Constant.REFURBISHMENT_MEMBER)) {  //负责人进来, 填写过的将数据带过去
-                                if (allControlCarBean == null) {   //负责人第一次进来
+                        allControlCarBean = t.getResults();
+                        if (mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人进来, 填写过的将数据带过去
+                            if (allControlCarBean == null) {   //负责人第一次进来
+                                nsControlCard.setVisibility(View.VISIBLE);
+                            } else {
+                                if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool()== null ) {
                                     nsControlCard.setVisibility(View.VISIBLE);
                                 } else {
-                                    if (allControlCarBean.getWorkControlCard() == null && allControlCarBean.getWorkQualityCard() == null && allControlCarBean.getWorkTools().size() == 0) {
-                                        nsControlCard.setVisibility(View.VISIBLE);
-                                    } else {
 //                                    nsWorkTicket.setVisibility(View.GONE);
-                                        nsControlCard.setVisibility(View.GONE);
-                                    }
+                                    nsControlCard.setVisibility(View.GONE);
                                 }
-
-                            } else {   //其他人进控制卡
-                                nsControlCard.setVisibility(View.GONE);
                             }
+
+                        } else {   //其他人进控制卡
+                            nsControlCard.setVisibility(View.GONE);
                         }
                     }
 
@@ -735,5 +739,6 @@ public class DefectPlanActivity extends BaseActivity {
                     }
                 });
     }
+
 
 }

@@ -1,12 +1,15 @@
 package com.patrol.terminal.bean;
 
 
+import java.io.Serializable;
+
 /**
  * 表名: CARD_QUALITY_STANDARD - 工序质量控制标准关系表
  *
  * Date：2019-05-30 20:05:16
  */
-public class CardQualityStandard {
+public class CardQualityStandard implements Serializable {
+private  int divisonNo;
 
     // 数据id
     private String id;
@@ -28,6 +31,23 @@ public class CardQualityStandard {
 
     // 检查情况
     private String status;
+    private Integer sort;
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public int getDivisonNo() {
+        return divisonNo;
+    }
+
+    public void setDivisonNo(int divisonNo) {
+        this.divisonNo = divisonNo;
+    }
 
     /*** 自定义字段 ***/
     public String getId() {

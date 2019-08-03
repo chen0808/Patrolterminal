@@ -1,13 +1,16 @@
 package com.patrol.terminal.bean;
 
 
+import java.io.Serializable;
+
 /**
  * 表名: CARD_TOOL - 工器具材料标准配置表
  *
  * Date：2019-05-30 20:06:38
  */
-public class CardTool {
+public class CardTool implements Serializable {
 
+    private int num;
     // 数据id
     private String id;
 
@@ -34,6 +37,14 @@ public class CardTool {
 
     // （0：工器具，1：材料）
     private String tool_type;
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
 
     /*** 自定义字段 ***/
     public String getId() {

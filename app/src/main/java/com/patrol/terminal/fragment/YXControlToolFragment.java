@@ -19,10 +19,12 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AllControlCarBean;
+import com.patrol.terminal.bean.CardTool;
 import com.patrol.terminal.bean.ControlToolBean;
 import com.patrol.terminal.bean.ControlToolBeanList;
 import com.patrol.terminal.bean.ControlToolInfo;
 import com.patrol.terminal.bean.DefectPlanDetailBean;
+import com.patrol.terminal.bean.EqToolTemp;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulZzTaskBean;
 import com.patrol.terminal.utils.Constant;
@@ -58,8 +60,8 @@ public class YXControlToolFragment extends BaseFragment {
     Button addBtn01;
     @BindView(R.id.add_btn_02)
     Button addBtn02;
-    private List<ControlToolInfo> mControlToolList1 = new ArrayList<>();
-    private List<ControlToolInfo> mControlToolList2 = new ArrayList<>();
+    private List<CardTool> mControlToolList1 = new ArrayList<>();
+    private List<CardTool> mControlToolList2 = new ArrayList<>();
 
     private Context mContext;
     private Activity mActivity;
@@ -73,7 +75,8 @@ public class YXControlToolFragment extends BaseFragment {
     private String taskId = "";
 
     private boolean isCanClick = true;  //默认能点击，填写和更新状态
-    private  List<AllControlCarBean.CardTool> workToolsBeans = null;
+    private List<CardTool> workToolsBeans = null;
+    private List<EqToolTemp> eqToolTemp;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,15 +91,15 @@ public class YXControlToolFragment extends BaseFragment {
         enterType = mActivity.getIntent().getIntExtra(Constant.CONTROL_CARD_ENTER_TYPE, Constant.IS_OTHER_LOOK);  //是否为查看模式
         String jobType = SPUtil.getString(mActivity, Constant.USER, Constant.JOBTYPE, "");
 
-
+        getToolDetail();
         DefectPlanDetailBean bean = (DefectPlanDetailBean) mActivity.getIntent().getSerializableExtra("bean");
                 taskId = bean.getId();
 
 
         //ControlCardBean controlBean = (ControlCardBean) mActivity.getIntent().getSerializableExtra("id");
-        AllControlCarBean allControlCarBean = mActivity.getIntent().getParcelableExtra("allControlBean");
+        AllControlCarBean allControlCarBean = (AllControlCarBean) mActivity.getIntent().getSerializableExtra("allControlBean");
         if (allControlCarBean != null) {
-            workToolsBeans = allControlCarBean.getWorkTools();
+            workToolsBeans = allControlCarBean.getCardTool();
         }
 
         depdapter1 = new ControlToolAdapter(getContext());
@@ -158,21 +161,12 @@ public class YXControlToolFragment extends BaseFragment {
         }
     }
 
-    private void getAllInfo(List<AllControlCarBean.CardTool> workToolsBeans) {
+    private void getAllInfo(List<CardTool> workToolsBeans) {
         if (workToolsBeans != null && workToolsBeans.size() > 0) {
             int j = 0,k = 0;
             for (int i = 0; i < workToolsBeans.size(); i++) {
-                AllControlCarBean.CardTool item = workToolsBeans.get(i);
-                String toolType = item.getTool_type();
-
-                ControlToolInfo bean = new ControlToolInfo();
-                bean.setName(item.getTool_name());
-                bean.setType(item.getType());
-                bean.setUnit(item.getUnit());
-                bean.setTotal(item.getTotal());
-                bean.setDetail(item.getDetail());
-                bean.setTool_type(toolType);
-                bean.setId(item.getId());
+                CardTool bean = workToolsBeans.get(i);
+                String toolType = bean.getTool_type();
                 if (toolType.equals("0")) {
                     bean.setNum(j++);
                     mControlToolList1.add(bean);
@@ -192,51 +186,27 @@ public class YXControlToolFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_btn_01:
-                AddToolDialog.show(mContext, depdapter1, mControlToolList1);
+                AddToolDialog.show(mContext, depdapter1, mControlToolList1,eqToolTemp);
 
                 break;
 
             case R.id.add_btn_02:
-                AddToolDialog.show(mContext, depdapter2, mControlToolList2);
+                AddToolDialog.show(mContext, depdapter2, mControlToolList2,eqToolTemp);
 
                 break;
 
             case R.id.control_card_submit:
-                List<ControlToolBean> controlToolBeans = new ArrayList<>();
+                List<CardTool> controlToolBeans = new ArrayList<>();
                 for (int i = 0; i < mControlToolList1.size(); i++) {
 
-                    ControlToolBean bean = new ControlToolBean();
-                    bean.setCheck_task_id(taskId);
-                    bean.setTool_name(mControlToolList1.get(i).getName());
-                    bean.setType(mControlToolList1.get(i).getType());
-                    bean.setUnit(mControlToolList1.get(i).getUnit());
-                    bean.setTotal(mControlToolList1.get(i).getTotal());
-                    bean.setDetail(mControlToolList1.get(i).getDetail());
+                    CardTool bean = mControlToolList1.get(i);
                     bean.setTool_type("0");
-//                    if (enterType == Constant.IS_FZR_UPDATE && isFzrUpdate) {  //更新
-//                        String id = mControlToolList1.get(i).getId();
-//                        if (id != null) {
-//                            bean.setId(id);
-//                        }
-//                    }
                     controlToolBeans.add(bean);
                 }
 
                 for (int i = 0; i < mControlToolList2.size(); i++) {
-                    ControlToolBean bean = new ControlToolBean();
-                    bean.setCheck_task_id(taskId);
-                    bean.setTool_name(mControlToolList2.get(i).getName());
-                    bean.setType(mControlToolList2.get(i).getType());
-                    bean.setUnit(mControlToolList2.get(i).getUnit());
-                    bean.setTotal(mControlToolList2.get(i).getTotal());
-                    bean.setDetail(mControlToolList2.get(i).getDetail());
+                    CardTool bean = mControlToolList1.get(i);
                     bean.setTool_type("1");
-//                    if (enterType == Constant.IS_FZR_UPDATE && isFzrUpdate) {  //更新
-//                        String id = mControlToolList2.get(i).getId();
-//                        if (id != null) {
-//                            bean.setId(id);
-//                        }
-//                    }
                     controlToolBeans.add(bean);
                 }
 
@@ -263,5 +233,23 @@ public class YXControlToolFragment extends BaseFragment {
                         });
                 break;
         }
+    }
+
+    public void getToolDetail(){
+        BaseRequest.getInstance().getService()
+                .getToolType()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<EqToolTemp>>(mContext) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<EqToolTemp>> t) throws Exception {
+                        eqToolTemp = t.getResults();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
     }
 }

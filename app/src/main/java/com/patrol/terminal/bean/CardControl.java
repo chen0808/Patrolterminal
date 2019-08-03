@@ -1,5 +1,6 @@
 package com.patrol.terminal.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  *
  * Date：2019-05-30 20:04:55
  */
-public class CardControl {
+public class CardControl  implements Serializable {
 
     // 数据id
     private String id;

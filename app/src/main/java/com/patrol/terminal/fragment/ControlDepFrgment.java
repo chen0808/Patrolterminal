@@ -92,7 +92,7 @@ public class ControlDepFrgment extends BaseFragment {
     private int month;
 
     private boolean isCanClick = true;  //默认能点击，填写和更新状态
-    private AllControlCarBean.CardControl workControlCardBean = null;
+    private AllControlCarBean workControlCardBean = null;
 
     private SelectWorkerBean workerSelectList;
 

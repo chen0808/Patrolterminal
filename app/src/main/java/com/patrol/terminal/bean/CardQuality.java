@@ -1,6 +1,7 @@
 package com.patrol.terminal.bean;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,12 +9,12 @@ import java.util.List;
  *
  * Date：2019-05-30 20:05:13
  */
-public class CardQuality {
+public class CardQuality implements Serializable {
 
     // 数据id
     private String id;
 
-    // 班组作业控制卡id
+    // 关联id，检修id，缺陷隐患id
     private String task_repair_id;
 
     // 班组id
@@ -42,7 +43,8 @@ public class CardQuality {
 
     // 备注
     private String remark;
-
+    // 作业名称
+    private String content;
     /*** 自定义字段 ***/
 
     // PDA关键工序标准及要求
@@ -53,6 +55,14 @@ public class CardQuality {
 
     // PDA工作票签名文件BASE64 sz
     private String file;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getId() {
         return id;

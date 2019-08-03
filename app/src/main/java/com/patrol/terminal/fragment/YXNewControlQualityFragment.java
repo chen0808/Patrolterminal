@@ -27,6 +27,11 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.AllControlCarBean;
+import com.patrol.terminal.bean.CardControl;
+import com.patrol.terminal.bean.CardControlSign;
+import com.patrol.terminal.bean.CardQuality;
+import com.patrol.terminal.bean.CardQualityStandard;
+import com.patrol.terminal.bean.CardQualityUser;
 import com.patrol.terminal.bean.ControlCardBean;
 import com.patrol.terminal.bean.ControlOperationBean;
 import com.patrol.terminal.bean.ControlQualityBean;
@@ -35,7 +40,9 @@ import com.patrol.terminal.bean.DefectPlanDetailBean;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulZzTaskBean;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.SignDialog;
 
 import java.io.File;
@@ -47,6 +54,7 @@ import java.util.Map;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
@@ -61,12 +69,12 @@ public class YXNewControlQualityFragment extends BaseFragment {
 
     private Context mContext;
 
-    private List<ControlQualityInfo> mControlQualityList = new ArrayList<>();
+    private List<CardQualityStandard> mControlQualityList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
-    private List<ControlQualityBean> controlQualityBeans;
+    private List<CardQualityStandard> controlQualityBeans;
     private ControlOperationAdapter depdapter1;
     private Activity mActivity;
-    private AllControlCarBean.CardQualityUser workQualityCardBean = null;
+    private CardQuality workQualityCardBean = null;
     private boolean isCanClick = true;  //默认能点击，填写和更新状态
     private int enterType;
     private boolean isFzrUpdate = false;
@@ -87,7 +95,10 @@ public class YXNewControlQualityFragment extends BaseFragment {
     private EditText etRemark;
     private TextView etRemarkTv;
     private TextView controlCardSubmit;
-
+    private String controlName;
+    private DefectPlanDetailBean bean;
+    private CardControl cardControl;
+    private ControlQualityAdapter qualityAdapter;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -128,7 +139,6 @@ public class YXNewControlQualityFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 ControlOperationBean bean = setValue();
-                putValue(bean);
                 uploadControlQuality();
             }
         });
@@ -142,38 +152,80 @@ public class YXNewControlQualityFragment extends BaseFragment {
 
         String jobType = SPUtil.getString(getContext(), Constant.USER, Constant.JOBTYPE, "");
 
+
         enterType = mActivity.getIntent().getIntExtra(Constant.CONTROL_CARD_ENTER_TYPE, Constant.IS_OTHER_LOOK);  //是否为查看模式
-
-
-        DefectPlanDetailBean bean = (DefectPlanDetailBean) mActivity.getIntent().getSerializableExtra("bean");
-
-        if (bean != null) {
-            List<DefectPlanDetailBean.TaskDefectUserListBean> taskDefectUserList = bean.getTaskDefectUserList();
-            for (int i = 0; i < taskDefectUserList.size(); i++) {
-                DefectPlanDetailBean.TaskDefectUserListBean taskDefectUserListBean = taskDefectUserList.get(i);
-                if ("2".equals(taskDefectUserListBean.getSign())) {
-                    leaderName = taskDefectUserListBean.getUser_name();
-                    leaderId = taskDefectUserListBean.getId();
+//        leaderName = mActivity.getIntent().getStringExtra("leaderName");
+//        leaderId = mActivity.getIntent().getStringExtra("leaderId");
+        AllControlCarBean allControlCarBean = (AllControlCarBean) mActivity.getIntent().getSerializableExtra("allControlBean");
+        workQualityCardBean = allControlCarBean.getCardQuality();
+        ControlCardBean controlBean = (ControlCardBean) mActivity.getIntent().getSerializableExtra("id");
+        if (workQualityCardBean == null) {  //专责接受的Bean不一样
+            bean = (DefectPlanDetailBean) mActivity.getIntent().getSerializableExtra("bean");
+            if (bean != null) {
+                taskId = bean.getId();
+                List<DefectPlanDetailBean.TaskDefectUserListBean> taskDefectUserList = bean.getTaskDefectUserList();
+                String names = "";
+                for (int i = 0; i < taskDefectUserList.size(); i++) {
+                    DefectPlanDetailBean.TaskDefectUserListBean taskDefectUserListBean = taskDefectUserList.get(i);
+                    if ("2".equals(taskDefectUserListBean.getSign())) {
+                        leaderName = taskDefectUserListBean.getUser_name();
+                        leaderId = taskDefectUserListBean.getId();
+                    } else {
+                        if ("".equals(names)) {
+                            names = taskDefectUserListBean.getUser_name();
+                        } else {
+                            names = names + "," + taskDefectUserListBean.getUser_name();
+                        }
+                    }
                 }
+                controlName = bean.getLine_name() + bean.getTower_name() + bean.getDeal_notes();
+                controlCardName.setText(controlName);
+                controlCardType.setText(bean.getDeal_dep_name());
+                controlCardDep.setText(leaderName);
+
+                //getFzrInfo(bean.getRepair_id(), "2");
+                controlCardPersonal.setText(names);
+                controlCardNo.setText("暂无");
+                controlCardStartTime.setText(bean.getDeal_time());
+                controlCardEndTime.setText(bean.getClose_time());
+                getQualityList(controlBean.getId());
             }
-            taskId = bean.getId();
-            //String status = bean.getTask_status();
-//                year = bean.getYear();
-//                month = bean.getMonth();
-            controlCardName.setText(bean.getLine_name()+bean.getTower_name()+"杆塔消缺");
-            controlCardType.setText("单班组作业");
-            controlCardDep.setText(bean.getDeal_dep_name());
+        } else {
+            List<CardQualityUser> userList = workQualityCardBean.getUserList();
+            String names = "";
+            taskId = workQualityCardBean.getId();
+            for (int i = 0; i < userList.size(); i++) {
+                CardQualityUser cardQualityUser = userList.get(i);
+
+                    if ("".equals(names)) {
+                        names = cardQualityUser.getUser_name();
+                    } else {
+                        names = names + "," + cardQualityUser.getUser_name();
+                    }
+            }
+            leaderId = workQualityCardBean.getDuty_user_id();
+            leaderName = workQualityCardBean.getDuty_user_name();
+            controlName = workQualityCardBean.getContent();
+            controlCardName.setText(controlName);
+            controlCardType.setText(workQualityCardBean.getDep_name());
+            controlCardDep.setText(leaderName);
 
             //getFzrInfo(bean.getRepair_id(), "2");
-            controlCardPersonal.setText(leaderName);
-            controlCardNo.setText("无");
-            controlCardStartTime.setText(bean.getDeal_time());
-            controlCardEndTime.setText(bean.getClose_time());
+            controlCardPersonal.setText(names);
+            controlCardNo.setText("暂无");
+            controlCardStartTime.setText(workQualityCardBean.getStart_time());
+            controlCardEndTime.setText(workQualityCardBean.getEnd_time());
+            String filePath = workQualityCardBean.getFile_path();
+            filePath = filePath.substring(1, filePath.length());
+            String fileName = workQualityCardBean.getFilename();
+            String url = filePath + fileName;
+            if (url != null) {
+                showSign(url);
+            }
+            etRemarkTv.setText(workQualityCardBean.getRemark());
+            setQualityList(workQualityCardBean.getStandardList());
         }
 
-
-        ControlCardBean controlBean = (ControlCardBean) mActivity.getIntent().getSerializableExtra("id");
-        getWorkQualityCard();
 
         switch (enterType) {
             case Constant.IS_OTHER_LOOK:    //查看模式
@@ -182,25 +234,6 @@ public class YXNewControlQualityFragment extends BaseFragment {
                 etRemarkTv.setVisibility(View.VISIBLE);
                 etRemark.setVisibility(View.GONE);
 
-                if (workQualityCardBean != null) {
-                    etRemarkTv.setText(workQualityCardBean.getRemark());
-                    setQualityList(workQualityCardBean.getWorkStandardStatuses());
-
-                    AllControlCarBean.CardQualityUser.SysFile sysFile = workQualityCardBean.getSysFile();
-                    if (sysFile != null) {
-                        String filePath = sysFile.getFile_path();
-                        filePath = filePath.substring(1, filePath.length());
-                        String fileName = sysFile.getFilename();
-                        String url = filePath + fileName;
-                        if (url != null) {
-                            showSign(url);
-                        }
-                    }
-                } else {  //如果进来质量卡为空,则显示模板,表示上次没填写,但是查看模式,也不可再填写
-                    if (controlBean != null) {
-                        getQualityList(controlBean.getId());
-                    }
-                }
                 break;
 
             case Constant.IS_FZR_WRITE:    //负责人填写
@@ -208,10 +241,6 @@ public class YXNewControlQualityFragment extends BaseFragment {
                 controlCardSubmit.setVisibility(View.VISIBLE);
                 etRemarkTv.setVisibility(View.GONE);
                 etRemark.setVisibility(View.VISIBLE);
-
-                if (controlBean != null) {
-                    getQualityList(controlBean.getId());
-                }
                 break;
 
             case Constant.IS_FZR_UPDATE:    //负责人更新  OR  填写
@@ -223,24 +252,10 @@ public class YXNewControlQualityFragment extends BaseFragment {
                 if (workQualityCardBean != null) {
                     isFzrUpdate = true;
                     etRemark.setText(workQualityCardBean.getRemark());
-                    setQualityList(workQualityCardBean.getWorkStandardStatuses());
-
-                    AllControlCarBean.CardQualityUser.SysFile sysFile = workQualityCardBean.getSysFile();
-                    if (sysFile != null) {
-                        String filePath = sysFile.getFile_path();
-                        filePath = filePath.substring(1, filePath.length());
-                        String fileName = sysFile.getFilename();
-                        String url = filePath + fileName;
-                        if (url != null) {
-                            showSign(url);
-                        }
-                    }
+                    setQualityList(workQualityCardBean.getStandardList());
 
                 } else {
                     isFzrUpdate = false;
-                    if (controlBean != null) {
-                        getQualityList(controlBean.getId());
-                    }
                 }
                 break;
         }
@@ -254,37 +269,29 @@ public class YXNewControlQualityFragment extends BaseFragment {
         }
     }
 
-    private void getWorkQualityCard() {
-        AllControlCarBean allControlCarBean = mActivity.getIntent().getParcelableExtra("allControlBean");
-        if (allControlCarBean != null) {
-            workQualityCardBean = allControlCarBean.getWorkQualityCard();
-            if (workQualityCardBean != null) {
-                leaderId = workQualityCardBean.getDuty_user_id();
-                leaderName = workQualityCardBean.getDuty_user_name();
-                controlCardPersonal.setText(leaderName);
-                controlCardDep.setText(leaderName);
-            }
-        }
-    }
 
-    private void setQualityList(List<AllControlCarBean.CardQualityUser.WorkStandardRelationsBean> workStandardRelationsBeans) {
+
+    private void setQualityList(List<CardQualityStandard> workStandardRelationsBeans) {
         mControlQualityList.clear();
 
         for (int i = 0; i < workStandardRelationsBeans.size(); i++) {
-            ControlQualityInfo info = new ControlQualityInfo();
+            CardQualityStandard info = workStandardRelationsBeans.get(i);
             info.setDivisonNo(i + 1);
-            info.setKeyDivison(workStandardRelationsBeans.get(i).getProcess());
-            info.setContent(workStandardRelationsBeans.get(i).getStandard());
-            info.setSafeDivison(workStandardRelationsBeans.get(i).getWarning());
-            info.setCheckInfo(workStandardRelationsBeans.get(i).getStatus());
-            info.setW_q_s_id(workStandardRelationsBeans.get(i).getWork_standard_id());
             mControlQualityList.add(info);
         }
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         newControlQualityRv.setLayoutManager(manager);
-        ControlQualityAdapter qualityAdapter = new ControlQualityAdapter(R.layout.item_control_quality_division, mControlQualityList, isCanClick);
+        qualityAdapter = new ControlQualityAdapter(R.layout.item_control_quality_division, mControlQualityList, isCanClick);
         newControlQualityRv.setAdapter(qualityAdapter);
+        ViewGroup parentViewGroup = (ViewGroup) header.getParent();
+        if (parentViewGroup != null) {
+            parentViewGroup.removeAllViews();
+        }
+        ViewGroup parentViewGroup1 = (ViewGroup) bottom.getParent();
+        if (parentViewGroup1 != null) {
+            parentViewGroup1.removeAllViews();
+        }
         qualityAdapter.addHeaderView(header);
         qualityAdapter.addFooterView(bottom);
     }
@@ -295,9 +302,9 @@ public class YXNewControlQualityFragment extends BaseFragment {
                 .getControlQuality(/*"8235B623B83A4E50A3F006C3F8FCB287"*/id, Constant.SORT_ASC)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<ControlQualityBean>>(mContext) {
+                .subscribe(new BaseObserver<List<CardQualityStandard>>(mContext) {
                     @Override
-                    protected void onSuccees(BaseResult<List<ControlQualityBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<CardQualityStandard>> t) throws Exception {
                         Log.w("linmeng", "t.toString():" + t.toString());
                         if (t.getCode() == 1) {
                             controlQualityBeans = t.getResults();
@@ -315,24 +322,19 @@ public class YXNewControlQualityFragment extends BaseFragment {
                 });
     }
 
-    private void updateInfo1(List<ControlQualityBean> controlQualityBeans) {
+    private void updateInfo1(List<CardQualityStandard> controlQualityBeans) {
         mControlQualityList.clear();
 
         for (int i = 0; i < controlQualityBeans.size(); i++) {
-            ControlQualityInfo info = new ControlQualityInfo();
-            info.setDivisonNo(i + 1);
-            info.setKeyDivison(controlQualityBeans.get(i).getProcess());
-            info.setContent(controlQualityBeans.get(i).getStandard());
-            info.setSafeDivison(controlQualityBeans.get(i).getWarning());
-            info.setType(controlQualityBeans.get(i).getType_id());
-            info.setW_q_s_id(controlQualityBeans.get(i).getWork_standard_id());
-
-            mControlQualityList.add(info);
+            CardQualityStandard controlQualityBean = controlQualityBeans.get(i);
+            controlQualityBean.setDivisonNo(i + 1);
+            controlQualityBean.setCard_standard_id(controlQualityBean.getId());
+            mControlQualityList.add(controlQualityBean);
         }
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         newControlQualityRv.setLayoutManager(manager);
-        ControlQualityAdapter qualityAdapter = new ControlQualityAdapter(R.layout.item_control_quality_division, mControlQualityList, isCanClick);
+        qualityAdapter = new ControlQualityAdapter(R.layout.item_control_quality_division, mControlQualityList, isCanClick);
         newControlQualityRv.setAdapter(qualityAdapter);
         qualityAdapter.addHeaderView(header);
         qualityAdapter.addFooterView(bottom);
@@ -368,32 +370,48 @@ public class YXNewControlQualityFragment extends BaseFragment {
         List<ControlOperationBean.WorkStandardRelation> workStandardRelations = new ArrayList<>();
 
         for (int i = 0; i < mControlQualityList.size(); i++) {
-            workStandardRelations.add(new ControlOperationBean.WorkStandardRelation(mControlQualityList.get(i).getW_q_s_id(), mControlQualityList.get(i).getCheckInfo() == null ? "未填写" : mControlQualityList.get(i).getCheckInfo()));
         }
         bean.setWorkStandardRelations(workStandardRelations);
 
         return bean;
     }
 
-    private void putValue(ControlOperationBean bean) {
-        params.put("duty_user_id", toRequestBody(bean.getDuty_user_id()));
-        params.put("duty_user_name", toRequestBody(bean.getDuty_user_name()));
-        params.put("remark", toRequestBody(bean.getRemark()));
-        params.put("check_task_id", toRequestBody(bean.getTask_id()));
 
-        for (int i = 0; i < bean.getWorkStandardRelations().size(); i++) {
-            params.put("workStandardStatuses[" + i + "].work_standard_id", toRequestBody(bean.getWorkStandardRelations().get(i).getW_q_s_id()));
-            params.put("workStandardStatuses[" + i + "].status", toRequestBody(bean.getWorkStandardRelations().get(i).getStatus()));
-        }
-
-        if (mPicList != null && mPicList.size() > 0) {
-            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), mPicList.get(0));
-            params.put("file\"; filename=\"" + mPicList.get(0).getName(), requestFile);
-        }
-    }
 
     private void uploadControlQuality() {
-        BaseRequest.getInstance().getService().upLoadControlQuality(params).subscribeOn(Schedulers.io())
+
+        List<CardQualityUser> userList=new ArrayList<>();
+        for (int i = 0; i < bean.getTaskDefectUserList().size(); i++) {
+            DefectPlanDetailBean.TaskDefectUserListBean taskDefectUserListBean = bean.getTaskDefectUserList().get(i);
+            String sign = taskDefectUserListBean.getSign();
+            if ("3".equals(sign)){
+                CardQualityUser user=new CardQualityUser();
+                user.setUser_id(taskDefectUserListBean.getUser_id());
+                user.setUser_name(taskDefectUserListBean.getUser_name());
+                userList.add(user);
+            }
+        }
+        List<CardQualityStandard> data = qualityAdapter.getData();
+        String remark = etRemark.getText().toString();
+        CardQuality cardQuality=new CardQuality();
+        cardQuality.setContent(controlName);
+        cardQuality.setDep_id(bean.getDeal_dep_id());
+        cardQuality.setDep_name(bean.getDeal_dep_name());
+        cardQuality.setDuty_user_id(leaderId);
+        cardQuality.setDuty_user_name(leaderName);
+        cardQuality.setEnd_time(bean.getClose_time());
+        cardQuality.setStart_time(bean.getDeal_time());
+
+        cardQuality.setRemark(remark);
+        cardQuality.setTask_repair_id(taskId);
+        cardQuality.setStandardList(data);
+        cardQuality.setUserList(userList);
+        for (int i = 0; i < mPicList.size(); i++) {
+            File file = mPicList.get(i);
+            String sign = FileUtil.fileToBase64(file);
+            cardQuality.setFile(sign);
+        }
+        BaseRequest.getInstance().getService().saveQualityControl(cardQuality).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver(getActivity()) {
                     @Override
@@ -408,15 +426,7 @@ public class YXNewControlQualityFragment extends BaseFragment {
                 });
     }
 
-    public RequestBody toRequestBody(String value) {
-        if (value != null) {
-            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
-            return requestBody;
-        } else {
-            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
-            return requestBody;
-        }
-    }
+
 
     public int Dp2Px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;

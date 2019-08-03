@@ -6,11 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
-import com.patrol.terminal.bean.ControlQualityInfo;
+import com.patrol.terminal.bean.CardTool;
 import com.patrol.terminal.bean.ControlToolInfo;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.List;
 
 public class ControlToolAdapter extends BaseAdapter {
     private Context context;
-    private List<ControlToolInfo> list=new ArrayList<>();
+    private List<CardTool> list=new ArrayList<>();
 
     public ControlToolAdapter(Context context) {
         this.context = context;
@@ -58,24 +57,24 @@ public class ControlToolAdapter extends BaseAdapter {
         }
         if (list != null && list.get(position) != null) {
             holder.mDivisonNo.setText("" + (list.get(position).getNum() + 1));
-            holder.mDivisonName.setText(list.get(position).getName());
+            holder.mDivisonName.setText(list.get(position).getTool_name());
             holder.mDivisonModel.setText(list.get(position).getType());
             holder.mDivisonUnit.setText(list.get(position).getUnit());
             holder.mDivisonNum.setText(list.get(position).getTotal());
-            holder.mDivisonRemarks.setText(list.get(position).getDetail());
+            holder.mDivisonRemarks.setText(list.get(position).getRemark());
         }
 
         return convertView;
     }
 
-    public void setData(List<ControlToolInfo> typeBeanList) {
+    public void setData(List<CardTool> typeBeanList) {
         Log.w("linmeng", "typeBeanList:" + typeBeanList.size());
         list = typeBeanList;
         notifyDataSetChanged();
 
     }
 
-    public List<ControlToolInfo>  getData() {
+    public List<CardTool>  getData() {
         return list;
     }
 

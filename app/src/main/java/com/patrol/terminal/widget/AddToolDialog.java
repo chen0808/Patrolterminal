@@ -1,19 +1,20 @@
 package com.patrol.terminal.widget;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.ControlToolAdapter;
-import com.patrol.terminal.bean.ControlToolInfo;
+import com.patrol.terminal.bean.CardTool;
+import com.patrol.terminal.bean.EqToolTemp;
+import com.patrol.terminal.bean.LocalTroubleTypeBean;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -21,14 +22,15 @@ public class AddToolDialog {
 
     private static AlertDialog dialog;
     private static View dialogView;
-    private static EditText divisonNameEt;
-    private static EditText divisonModelEt;
+    private static CustomSpinner divisonNameEt;
+    private static CustomSpinner divisonModelEt;
     private static EditText divisonUnitEt;
     private static EditText divisonTotalEt;
     private static EditText divisonRemarksEt;
+    private static List<String> names;
+    private static List<EqToolTemp> eqToolTempLists=new ArrayList<>();
 
-
-    public static void show(Context context, ControlToolAdapter adapter, List<ControlToolInfo> list) {
+    public static void show(Context context, ControlToolAdapter adapter, List<CardTool> list, List<EqToolTemp> eqToolTempList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         dialogView = LayoutInflater.from(context).inflate(R.layout.add_tool_dialog, null);
         divisonNameEt = dialogView.findViewById(R.id.divison_name_et);
@@ -36,7 +38,31 @@ public class AddToolDialog {
         divisonUnitEt = dialogView.findViewById(R.id.divison_unit_et);
         divisonTotalEt = dialogView.findViewById(R.id.divison_num_et);
         divisonRemarksEt = dialogView.findViewById(R.id.divison_remarks_et);
-
+        names = new ArrayList<>();
+        for (int i = 0; i < eqToolTempList.size(); i++) {
+            EqToolTemp eqToolTemp = eqToolTempList.get(i);
+            String name= eqToolTemp.getName();
+            if (names.indexOf(name)==-1){
+                names.add(name);
+            }
+            eqToolTempLists.add(eqToolTemp);
+        }
+        divisonNameEt.attachDataSource(names);
+        //隐患类别
+        divisonNameEt.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
+            @Override
+            public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
+                String s = names.get(i);
+              List<String>  typeList=new ArrayList<>();
+                for (int j = 0; j < eqToolTempList.size(); j++) {
+                    EqToolTemp eqToolTemp = eqToolTempList.get(j);
+                    if (s.equals(eqToolTemp.getName())&&eqToolTemp.getType()!=null){
+                        typeList.add(eqToolTemp.getType());
+                    }
+                }
+                divisonModelEt.attachDataSource(typeList);
+            }
+        });
         Button cancel = dialogView.findViewById(R.id.btn_cancel);
         Button sure = dialogView.findViewById(R.id.btn_sure);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -51,12 +77,12 @@ public class AddToolDialog {
             public void onClick(View v) {
                 dialog.dismiss();
 
-                ControlToolInfo controlToolInfo = new ControlToolInfo();
-                controlToolInfo.setName(divisonNameEt.getText().toString());
-                controlToolInfo.setType(divisonModelEt.getText().toString());
+                CardTool controlToolInfo = new CardTool();
+                controlToolInfo.setTool_name(divisonNameEt.getSelectItem());
+                controlToolInfo.setType(divisonModelEt.getSelectItem());
                 controlToolInfo.setUnit(divisonUnitEt.getText().toString());
                 controlToolInfo.setTotal(divisonTotalEt.getText().toString());
-                controlToolInfo.setDetail(divisonRemarksEt.getText().toString());
+                controlToolInfo.setRemark(divisonRemarksEt.getText().toString());
                 controlToolInfo.setNum(list.size() + 1);
 
                 list.add(controlToolInfo);
@@ -72,8 +98,8 @@ public class AddToolDialog {
 //        return controlToolInfo;
 //    }
      //点击一行修改
-    public static void update(Context context, ControlToolAdapter adapter, List<ControlToolInfo> list, int position) {
-        ControlToolInfo info = list.get(position);
+    public static void update(Context context, ControlToolAdapter adapter, List<CardTool> list, int position) {
+        CardTool info = list.get(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         dialogView = LayoutInflater.from(context).inflate(R.layout.add_tool_dialog, null);
         divisonNameEt = dialogView.findViewById(R.id.divison_name_et);
@@ -82,11 +108,20 @@ public class AddToolDialog {
         divisonTotalEt = dialogView.findViewById(R.id.divison_num_et);
         divisonRemarksEt = dialogView.findViewById(R.id.divison_remarks_et);
 
-        divisonNameEt.setText(info.getName());
-        divisonModelEt.setText(info.getType());
+        divisonNameEt.attachDataSource(names);
+
+        List<String>  typeList=new ArrayList<>();
+        for (int i = 0; i <eqToolTempLists.size() ; i++) {
+            EqToolTemp eqToolTemp = eqToolTempLists.get(i);
+            if (info.getTool_name().equals(eqToolTemp.getName())){
+                typeList.add(eqToolTemp.getType());
+            }
+        }
+        divisonNameEt.setSelectedIndex(names.indexOf(info.getTool_name()));
+        divisonModelEt.setSelectedIndex(typeList.indexOf(info.getType()));
         divisonUnitEt.setText(info.getUnit());
         divisonTotalEt.setText(info.getTotal());
-        divisonRemarksEt.setText(info.getDetail());
+        divisonRemarksEt.setText(info.getRemark());
 
         Button cancel = dialogView.findViewById(R.id.btn_cancel);
         Button sure = dialogView.findViewById(R.id.btn_sure);
@@ -112,11 +147,11 @@ public class AddToolDialog {
 
                 //list.remove(position);
                 //list.add(position, controlToolInfo);
-                list.get(position).setName(divisonNameEt.getText().toString());
-                list.get(position).setType(divisonModelEt.getText().toString());
+                list.get(position).setTool_name(divisonNameEt.getSelectItem());
+                list.get(position).setType(divisonModelEt.getSelectItem());
                 list.get(position).setUnit(divisonUnitEt.getText().toString());
                 list.get(position).setTotal(divisonTotalEt.getText().toString());
-                list.get(position).setDetail(divisonRemarksEt.getText().toString());
+                list.get(position).setRemark(divisonRemarksEt.getText().toString());
                 list.get(position).setNum(position);
 
                 adapter.setData(list);

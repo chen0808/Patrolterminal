@@ -475,7 +475,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                                 if (allControlCarBean == null) {   //负责人第一次进来
                                     nsControlCard.setVisibility(View.VISIBLE);
                                 } else {
-                                    if (allControlCarBean.getWorkControlCard() == null && allControlCarBean.getWorkQualityCard() == null && allControlCarBean.getWorkTools().size() == 0) {
+                                    if (allControlCarBean.getCardTool() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool().size() == 0) {
                                         nsControlCard.setVisibility(View.VISIBLE);
                                     } else {
 //                                    nsWorkTicket.setVisibility(View.GONE);
@@ -915,7 +915,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     if (allControlCarBean == null) {
                         entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
                     } else {
-                        if (allControlCarBean.getWorkControlCard() == null && allControlCarBean.getWorkQualityCard() == null && allControlCarBean.getWorkTools().size() == 0) {
+                        if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool().size() == 0) {
                             entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
                         } else {
                             entenType = Constant.IS_FZR_UPDATE;      //负责人更新模式
@@ -936,7 +936,7 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     if (allControlCarBean == null) {
                         Toast.makeText(OverhaulWeekPlanDetailActivity.this, "当前无控制卡！", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (allControlCarBean.getWorkControlCard() == null && allControlCarBean.getWorkQualityCard() == null && allControlCarBean.getWorkTools().size() == 0) {
+                        if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool().size() == 0) {
                             Toast.makeText(OverhaulWeekPlanDetailActivity.this, "当前无控制卡！", Toast.LENGTH_SHORT).show();
                         } else {
                             entenType = Constant.IS_OTHER_LOOK;

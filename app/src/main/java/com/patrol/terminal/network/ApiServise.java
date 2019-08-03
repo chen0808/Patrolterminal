@@ -569,7 +569,7 @@ public interface ApiServise {
 
     //获取工序质量控制卡
     @GET("card/standard/listGET")
-    Observable<BaseResult<List<ControlQualityBean>>> getControlQuality(@Query("type_id") String type, @Query("order") String order);
+    Observable<BaseResult<List<CardQualityStandard>>> getControlQuality(@Query("type_id") String type, @Query("order") String order);
 
     //上传工序控制卡
     @Multipart
@@ -583,7 +583,7 @@ public interface ApiServise {
 
     //上传工器具配置
     @POST("work/tool/pda/updatePOST")
-    Observable<BaseResult<ControlToolBeanList>> postControlTool(@Body List<ControlToolBean> beans);
+    Observable<BaseResult<ControlToolBeanList>> postControlTool(@Body List<CardTool> beans);
 
     //个人任务详情  获取Tower_id
     @GET("common/listGET")
@@ -1218,5 +1218,14 @@ public interface ApiServise {
     @POST("card/control/savePOST")
     Observable<BaseResult> saveDepControl(@Body CardControl bean);
 
+    //提交班组控制卡
+    @POST("card/quality/savePOST")
+    Observable<BaseResult> saveQualityControl(@Body CardQuality bean);
+    //获取工器具
+    @GET("eq/tool/temp/listGET")
+    Observable<BaseResult<List<EqToolTemp>>> getToolType();
 
+    //获取控制卡详情
+    @GET("card/control/allGET")
+    Observable<BaseResult<AllControlCarBean>> getCardControl(@Query("task_repair_id") String id);
 }

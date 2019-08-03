@@ -11,29 +11,30 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
+import com.patrol.terminal.bean.CardQualityStandard;
 import com.patrol.terminal.bean.ControlQualityInfo;
 
 import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class ControlQualityAdapter extends BaseQuickAdapter<ControlQualityInfo, BaseViewHolder> {
+public class ControlQualityAdapter extends BaseQuickAdapter<CardQualityStandard, BaseViewHolder> {
     
     private boolean isCanClick;
-    public ControlQualityAdapter(int layoutResId, @Nullable List<ControlQualityInfo> data,boolean isCanClick) {
+    public ControlQualityAdapter(int layoutResId, @Nullable List<CardQualityStandard> data, boolean isCanClick) {
         super(layoutResId, data);
         this.isCanClick=isCanClick;
     }
 
 
     @Override
-    protected void convert(BaseViewHolder holder, ControlQualityInfo item) {
+    protected void convert(BaseViewHolder holder, CardQualityStandard item) {
 
         holder.setText(R.id.divison_no,"" + item.getDivisonNo());
-        holder.setText(R.id.divison_key,item.getKeyDivison());
-        holder.setText(R.id.divison_demand,item.getContent());
-        holder.setText(R.id.divison_risk,item.getSafeDivison());
-        holder.setText(R.id.divison_inspections,item.getCheckInfo());
+        holder.setText(R.id.divison_key,item.getProcess());
+        holder.setText(R.id.divison_demand,item.getStandard());
+        holder.setText(R.id.divison_risk,item.getWarning());
+        holder.setText(R.id.divison_inspections,item.getStatus());
         TextView mCheckInfo = holder.getView(R.id.divison_inspections);
         if (!isCanClick) {
             mCheckInfo.setClickable(false);
@@ -57,7 +58,7 @@ public class ControlQualityAdapter extends BaseQuickAdapter<ControlQualityInfo, 
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    item.setCheckInfo(s.toString());
+                    item.setStatus(s.toString());
                 }
 
                 @Override
@@ -67,12 +68,12 @@ public class ControlQualityAdapter extends BaseQuickAdapter<ControlQualityInfo, 
             });
         }
     }
-    public void showSingleChooseDialog(Context context, String title, String[] workers, BaseViewHolder holder, int position, ControlQualityInfo item) {
+    public void showSingleChooseDialog(Context context, String title, String[] workers, BaseViewHolder holder, int position, CardQualityStandard item) {
         new AlertDialog.Builder(context).setTitle(title).setItems(workers, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //Toast.makeText(context, "您已经选择了: " + which + ":" + workers[which],Toast.LENGTH_LONG).show();
                holder.setText(R.id.divison_inspections,workers[which]);
-                item.setCheckInfo(workers[which]);
+                item.setStatus(workers[which]);
                 dialog.dismiss();
             }
         }).show();

@@ -1,12 +1,14 @@
 package com.patrol.terminal.bean;
 
 
+import java.io.Serializable;
+
 /**
  * 表名: CARD_CONTROL_PROJECT - 作业项目人员关系表
  *
  * Date：2019-05-30 20:04:57
  */
-public class CardControlProject {
+public class CardControlProject implements Serializable {
     private int divisonNo;
     // 数据id
     private String id;

@@ -94,12 +94,13 @@ public class YXControlDepFrgment extends BaseFragment {
 //    private int month;
 
     private boolean isCanClick = true;  //默认能点击，填写和更新状态
-    private AllControlCarBean.CardControl workControlCardBean = null;
+    private AllControlCarBean workControlCardBean = null;
 
     private SelectWorkerBean workerSelectList;
     private String controlName;
     private DefectPlanDetailBean bean;
     private ControlDepdapter1 depdapter1;
+    private CardControl cardControl;
 
 
     @Override
@@ -107,7 +108,6 @@ public class YXControlDepFrgment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_control_card, null);
         return view;
     }
-
 
 
     @Override
@@ -118,59 +118,26 @@ public class YXControlDepFrgment extends BaseFragment {
 
 
         enterType = mActivity.getIntent().getIntExtra(Constant.CONTROL_CARD_ENTER_TYPE, Constant.IS_OTHER_LOOK);  //是否为查看模式
-        workerSelectList =  mActivity.getIntent().getParcelableExtra("selectedUserListBeans");
-//        leaderName = mActivity.getIntent().getStringExtra("leaderName");
-//        leaderId = mActivity.getIntent().getStringExtra("leaderId");
+        workerSelectList = mActivity.getIntent().getParcelableExtra("selectedUserListBeans");
+        workControlCardBean = (AllControlCarBean) mActivity.getIntent().getSerializableExtra("allControlBean");
 
         bean = (DefectPlanDetailBean) mActivity.getIntent().getSerializableExtra("bean");
-
-            if (bean != null) {
-                List<DefectPlanDetailBean.TaskDefectUserListBean> taskDefectUserList = bean.getTaskDefectUserList();
-                for (int i = 0; i < taskDefectUserList.size(); i++) {
-                    DefectPlanDetailBean.TaskDefectUserListBean taskDefectUserListBean = taskDefectUserList.get(i);
-                    if ("2".equals(taskDefectUserListBean.getSign())){
-                        leaderName=taskDefectUserListBean.getUser_name();
-                        leaderId=taskDefectUserListBean.getId();
-                    }
-                }
-                taskId = bean.getId();
-                //String status = bean.getTask_status();
-//                year = bean.getYear();
-//                month = bean.getMonth();
-                controlName = bean.getLine_name() + bean.getTower_name() + bean.getDeal_notes();
-                tvControlName.setText(controlName);
-                controlCardType.setText("单班组作业");
-                controlCardDep.setText(bean.getDeal_dep_name());
-
-                //getFzrInfo(bean.getRepair_id(), "2");
-                controlCardPersonal.setText(leaderName);
-                controlCardTicket.setText("无");
-                controlCardStartTime.setText(bean.getDeal_time());
-                controlCardEndTime.setText(bean.getClose_time());
-            }
-
+        cardControl = workControlCardBean.getCardControl();
+        if (cardControl == null) {
+            initfirst();
+        } else {
+            initSecond();
+        }
 
         ControlCardBean controlBean = (ControlCardBean) mActivity.getIntent().getSerializableExtra("id");
-        getWorkControlCard();
-        safe(controlBean.getId());
+
         switch (enterType) {
             case Constant.IS_OTHER_LOOK:    //其他人员查看
                 isCanClick = false;
                 controlCardSubmit.setVisibility(View.GONE);
-                if (workControlCardBean != null) {
-                    lookDivide(workControlCardBean.getWorkProjectUsers());
+                if (cardControl != null) {
 
-                    AllControlCarBean.CardControl.SysFile sysFile = workControlCardBean.getSysFile();
-                    if (sysFile != null) {
-                        String filePath = sysFile.getFile_path();
-                        filePath = filePath.substring(1, filePath.length());
-                        String fileName = sysFile.getFilename();
-                        String url = filePath + fileName;
-                        if (url != null) {
-                            showSign(url);
-                        }
-                    }
-                }else {
+                } else {
                     if (controlBean != null) {
                         divide(controlBean.getId());
                         safe(controlBean.getId());
@@ -182,91 +149,102 @@ public class YXControlDepFrgment extends BaseFragment {
                 isCanClick = true;
                 controlCardSubmit.setVisibility(View.VISIBLE);
 
-                if (controlBean != null) {
-                    divide(controlBean.getId());
-                }
                 break;
 
             case Constant.IS_FZR_UPDATE:    //负责人更新  OR  填写
                 isCanClick = true;
                 controlCardSubmit.setVisibility(View.VISIBLE);
-                if (workControlCardBean != null) {
+                if (cardControl != null) {
                     isFzrUpdate = true;
-                    lookDivide(workControlCardBean.getWorkProjectUsers());
 
-                    AllControlCarBean.CardControl.SysFile sysFile = workControlCardBean.getSysFile();
-                    if (sysFile != null) {
-                        String filePath = sysFile.getFile_path();
-                        filePath = filePath.substring(1, filePath.length());
-                        String fileName = sysFile.getFilename();
-                        String url = filePath + fileName;
-                        if (url != null) {
-                            showSign(url);
-                        }
-                    }
-                }else {
-                    isFzrUpdate = false;
-                    if (controlBean != null) {
-                        divide(controlBean.getId());
-                        safe(controlBean.getId());
-                    }
-                }
+                } else {
+                    isFzrUpdate = false;}
                 break;
         }
 
 
+    }
 
+
+    //第一次进来没数据
+    public void initfirst(){
+        if (bean != null) {
+            List<DefectPlanDetailBean.TaskDefectUserListBean> taskDefectUserList = bean.getTaskDefectUserList();
+            for (int i = 0; i < taskDefectUserList.size(); i++) {
+                DefectPlanDetailBean.TaskDefectUserListBean taskDefectUserListBean = taskDefectUserList.get(i);
+                if ("2".equals(taskDefectUserListBean.getSign())) {
+                    leaderName = taskDefectUserListBean.getUser_name();
+                    leaderId = taskDefectUserListBean.getId();
+                }
+            }
+            taskId = bean.getId();
+            //String status = bean.getTask_status();
+//                year = bean.getYear();
+//                month = bean.getMonth();
+            controlName = bean.getLine_name() + bean.getTower_name() + bean.getDeal_notes();
+            tvControlName.setText(controlName);
+            controlCardType.setText("单班组作业");
+            controlCardDep.setText(bean.getDeal_dep_name());
+
+            //getFzrInfo(bean.getRepair_id(), "2");
+            controlCardPersonal.setText(leaderName);
+            controlCardTicket.setText("无");
+            controlCardStartTime.setText(bean.getDeal_time());
+            controlCardEndTime.setText(bean.getClose_time());
+        }
+    }
+
+    //初始化有数据的时候
+    public void initSecond() {
+        leaderName = cardControl.getDuty_user_name();
+        leaderId = cardControl.getDuty_user_id();
+        tvControlName.setText(cardControl.getContent());
+        controlCardType.setText(cardControl.getProperty());
+        controlCardDep.setText(cardControl.getDep_name());
+
+        //getFzrInfo(bean.getRepair_id(), "2");
+        controlCardPersonal.setText(leaderName);
+        controlCardTicket.setText("无");
+        controlCardStartTime.setText(cardControl.getStart_time());
+        controlCardEndTime.setText(cardControl.getEnd_time());
+        List<CardControlSign> signList = cardControl.getSignList();
+        if (signList != null) {
+            for (int i = 0; i < signList.size(); i++) {
+                CardControlSign sign = signList.get(i);
+                String filePath = sign.getFile_path();
+                filePath = filePath.substring(1, filePath.length());
+                String fileName = sign.getFilename();
+                String url = filePath + fileName;
+                if (url != null) {
+                    showSign(url);
+                }
+            }
+        }
+        lookDivide(cardControl.getProjectList());
+        lookSafe(cardControl.getSafeList());
     }
 
     private void showSign(String url) {
         //显示签名
         Log.w("linmeng", "url:" + BaseUrl.BASE_URL + url);
-        if (url!=null) {
+        if (url != null) {
             Glide.with(this).load(BaseUrl.BASE_URL + url).into(ivSignaturePad);
         }
     }
 
-    private void getWorkControlCard() {
-        AllControlCarBean allControlCarBean = mActivity.getIntent().getParcelableExtra("allControlBean");
-        if (allControlCarBean != null) {
-            workControlCardBean = allControlCarBean.getWorkControlCard();
-            if (workControlCardBean != null) {
-                leaderName = workControlCardBean.getDuty_user_name();
-                leaderId = workControlCardBean.getDuty_user_id();
-                controlCardPersonal.setText(leaderName);
-            }
-        }
-    }
 
 
-    private void lookDivide(List<AllControlCarBean.CardControl.WorkProjectUsersBean> workProjectUsersBeans) {
-        mControlDepShowList1.clear();
+    private void lookDivide(List<CardControlProject> workProjectUsersBeans) {
+        mControlDepShowList1=workProjectUsersBeans;
 
-        for (int i = 0; i < workProjectUsersBeans.size(); i++) {
-            CardControlProject info = new CardControlProject();
-            info.setDivisonNo(i + 1);
-            info.setContent(workProjectUsersBeans.get(i).getId());
-//            if (i == 0) {
-//                info.setDivisonName(leaderName);   //1是定死的负责人
-//            } else {
-            info.setUser_name(workProjectUsersBeans.get(i).getUser_name());
-//            }
-            info.setUser_id(workProjectUsersBeans.get(i).getUser_id());
-            info.setCard_project_id(workProjectUsersBeans.get(i).getId());
-            mControlDepShowList1.add(info);
-        }
-
-        ControlDepdapter1 depdapter1;
         if (workerSelectList != null) {
-             depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick, workerSelectList.getUserInfos());   //更新模式
-        }else {
-             depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick, null);   //查看模式
+            depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick, workerSelectList.getUserInfos());   //更新模式
+        } else {
+            depdapter1 = new ControlDepdapter1(getContext(), mControlDepShowList1, isCanClick, null);   //查看模式
         }
 
         controlCardDiv.setAdapter(depdapter1);
     }
-
-
 
 
     //危险点分析及安全措施指南
@@ -330,11 +308,11 @@ public class YXControlDepFrgment extends BaseFragment {
             String user_name = cardControlProject.getUser_name();
             String user_id = cardControlProject.getUser_id();
             if (i == 0) {
-                cardControlProject.setUser_name(user_name==null?leaderName:user_name);   //1是定死的负责人
-                cardControlProject.setUser_id(user_id==null?leaderId:user_id);
+                cardControlProject.setUser_name(user_name == null ? leaderName : user_name);   //1是定死的负责人
+                cardControlProject.setUser_id(user_id == null ? leaderId : user_id);
             } else {
-                cardControlProject.setUser_name(user_name==null?"":user_name);   //1是定死的负责人
-                cardControlProject.setUser_id(user_id==null?"":user_id);
+                cardControlProject.setUser_name(user_name == null ? "" : user_name);   //1是定死的负责人
+                cardControlProject.setUser_id(user_id == null ? "" : user_id);
             }
             cardControlProject.setCard_project_id(bean.getId());
             mControlDepShowList1.add(cardControlProject);
@@ -348,17 +326,22 @@ public class YXControlDepFrgment extends BaseFragment {
 
         for (int i = 0; i < cardControlSafes.size(); i++) {
             CardControlSafe cardControlSafe = cardControlSafes.get(i);
-            cardControlSafe.setDivisonNo(i+1);
+            cardControlSafe.setDivisonNo(i + 1);
             String user_name = cardControlSafe.getDuty_user_name();
             String user_id = cardControlSafe.getDuty_user_id();
-            cardControlSafe.setDuty_user_name(user_name==null?leaderName:user_name);   //1是定死的负责人
-            cardControlSafe.setDuty_user_id(user_id==null?leaderId:user_id);
+            cardControlSafe.setDuty_user_name(user_name == null ? leaderName : user_name);   //1是定死的负责人
+            cardControlSafe.setDuty_user_id(user_id == null ? leaderId : user_id);
         }
 
         ControlDepdapter2 depdapter2 = new ControlDepdapter2(getContext(), cardControlSafes);
         controlCardGuide.setAdapter(depdapter2);
     }
+    private void lookSafe(List<CardControlSafe> cardControlSafes) {
 
+
+        ControlDepdapter2 depdapter2 = new ControlDepdapter2(getContext(), cardControlSafes);
+        controlCardGuide.setAdapter(depdapter2);
+    }
 
     @OnClick({R.id.control_card_start_time, R.id.control_card_end_time, R.id.control_card_submit, R.id.iv_signature_pad})
     public void onViewClicked(View view) {
@@ -395,19 +378,18 @@ public class YXControlDepFrgment extends BaseFragment {
     }
 
 
-
     private void saveDepControl() {
         List<CardControlProject> data = depdapter1.getData();
-        List<CardControlSign> signList=new ArrayList<>();
+        List<CardControlSign> signList = new ArrayList<>();
         for (int i = 0; i < mPicList.size(); i++) {
-            CardControlSign signbean=new CardControlSign();
+            CardControlSign signbean = new CardControlSign();
             File file = mPicList.get(i);
             String sign = FileUtil.fileToBase64(file);
             signbean.setSign("0");
             signbean.setFile(sign);
             signList.add(signbean);
         }
-        CardControl cardControl=new CardControl();
+        CardControl cardControl = new CardControl();
         cardControl.setWriter_user_id(leaderId);
         cardControl.setWriter_user_name(leaderName);
         cardControl.setContent(controlName);

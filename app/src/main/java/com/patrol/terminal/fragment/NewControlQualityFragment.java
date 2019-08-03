@@ -27,6 +27,8 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.AllControlCarBean;
+import com.patrol.terminal.bean.CardQuality;
+import com.patrol.terminal.bean.CardQualityStandard;
 import com.patrol.terminal.bean.ControlCardBean;
 import com.patrol.terminal.bean.ControlOperationBean;
 import com.patrol.terminal.bean.ControlQualityBean;
@@ -60,12 +62,12 @@ public class NewControlQualityFragment extends BaseFragment {
 
     private Context mContext;
 
-    private List<ControlQualityInfo> mControlQualityList = new ArrayList<>();
+    private List<CardQualityStandard> mControlQualityList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
-    private List<ControlQualityBean> controlQualityBeans;
+    private List<CardQualityStandard> controlQualityBeans;
     private ControlOperationAdapter depdapter1;
     private Activity mActivity;
-    private AllControlCarBean.CardQualityUser workQualityCardBean = null;
+    private CardQuality workQualityCardBean = null;
     private boolean isCanClick = true;  //默认能点击，填写和更新状态
     private int enterType;
     private boolean isFzrUpdate = false;
@@ -195,18 +197,15 @@ public class NewControlQualityFragment extends BaseFragment {
 
                 if (workQualityCardBean != null) {
                     etRemarkTv.setText(workQualityCardBean.getRemark());
-                    setQualityList(workQualityCardBean.getWorkStandardStatuses());
+                    setQualityList(workQualityCardBean.getStandardList());
 
-                    AllControlCarBean.CardQualityUser.SysFile sysFile = workQualityCardBean.getSysFile();
-                    if (sysFile != null) {
-                        String filePath = sysFile.getFile_path();
+                        String filePath = workQualityCardBean.getFile_path();
                         filePath = filePath.substring(1, filePath.length());
-                        String fileName = sysFile.getFilename();
+                        String fileName = workQualityCardBean.getFilename();
                         String url = filePath + fileName;
                         if (url != null) {
                             showSign(url);
                         }
-                    }
                 } else {  //如果进来质量卡为空,则显示模板,表示上次没填写,但是查看模式,也不可再填写
                     if (controlBean != null) {
                         getQualityList(controlBean.getId());
@@ -234,18 +233,15 @@ public class NewControlQualityFragment extends BaseFragment {
                 if (workQualityCardBean != null) {
                     isFzrUpdate = true;
                     etRemark.setText(workQualityCardBean.getRemark());
-                    setQualityList(workQualityCardBean.getWorkStandardStatuses());
+                    setQualityList(workQualityCardBean.getStandardList());
 
-                    AllControlCarBean.CardQualityUser.SysFile sysFile = workQualityCardBean.getSysFile();
-                    if (sysFile != null) {
-                        String filePath = sysFile.getFile_path();
+                        String filePath = workQualityCardBean.getFile_path();
                         filePath = filePath.substring(1, filePath.length());
-                        String fileName = sysFile.getFilename();
+                        String fileName = workQualityCardBean.getFilename();
                         String url = filePath + fileName;
                         if (url != null) {
                             showSign(url);
                         }
-                    }
 
                 } else {
                     isFzrUpdate = false;
@@ -268,7 +264,7 @@ public class NewControlQualityFragment extends BaseFragment {
     private void getWorkQualityCard() {
         AllControlCarBean allControlCarBean = mActivity.getIntent().getParcelableExtra("allControlBean");
         if (allControlCarBean != null) {
-            workQualityCardBean = allControlCarBean.getWorkQualityCard();
+            workQualityCardBean = allControlCarBean.getCardQuality();
             if (workQualityCardBean != null) {
                 leaderId = workQualityCardBean.getDuty_user_id();
                 leaderName = workQualityCardBean.getDuty_user_name();
@@ -278,17 +274,12 @@ public class NewControlQualityFragment extends BaseFragment {
         }
     }
 
-    private void setQualityList(List<AllControlCarBean.CardQualityUser.WorkStandardRelationsBean> workStandardRelationsBeans) {
+    private void setQualityList(List<CardQualityStandard> workStandardRelationsBeans) {
         mControlQualityList.clear();
 
         for (int i = 0; i < workStandardRelationsBeans.size(); i++) {
-            ControlQualityInfo info = new ControlQualityInfo();
+            CardQualityStandard info = workStandardRelationsBeans.get(i);
             info.setDivisonNo(i + 1);
-            info.setKeyDivison(workStandardRelationsBeans.get(i).getProcess());
-            info.setContent(workStandardRelationsBeans.get(i).getStandard());
-            info.setSafeDivison(workStandardRelationsBeans.get(i).getWarning());
-            info.setCheckInfo(workStandardRelationsBeans.get(i).getStatus());
-            info.setW_q_s_id(workStandardRelationsBeans.get(i).getWork_standard_id());
             mControlQualityList.add(info);
         }
 
@@ -306,9 +297,9 @@ public class NewControlQualityFragment extends BaseFragment {
                 .getControlQuality(/*"8235B623B83A4E50A3F006C3F8FCB287"*/id, Constant.SORT_ASC)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<ControlQualityBean>>(mContext) {
+                .subscribe(new BaseObserver<List<CardQualityStandard>>(mContext) {
                     @Override
-                    protected void onSuccees(BaseResult<List<ControlQualityBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<CardQualityStandard>> t) throws Exception {
                         Log.w("linmeng", "t.toString():" + t.toString());
                         if (t.getCode() == 1) {
                             controlQualityBeans = t.getResults();
@@ -326,19 +317,14 @@ public class NewControlQualityFragment extends BaseFragment {
                 });
     }
 
-    private void updateInfo1(List<ControlQualityBean> controlQualityBeans) {
+    private void updateInfo1(List<CardQualityStandard> controlQualityBeans) {
         mControlQualityList.clear();
 
         for (int i = 0; i < controlQualityBeans.size(); i++) {
-            ControlQualityInfo info = new ControlQualityInfo();
-            info.setDivisonNo(i + 1);
-            info.setKeyDivison(controlQualityBeans.get(i).getProcess());
-            info.setContent(controlQualityBeans.get(i).getStandard());
-            info.setSafeDivison(controlQualityBeans.get(i).getWarning());
-            info.setType(controlQualityBeans.get(i).getType_id());
-            info.setW_q_s_id(controlQualityBeans.get(i).getWork_standard_id());
+            CardQualityStandard controlQualityBean = controlQualityBeans.get(i);
+            controlQualityBean.setDivisonNo(i + 1);
 
-            mControlQualityList.add(info);
+            mControlQualityList.add(controlQualityBean);
         }
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -379,7 +365,6 @@ public class NewControlQualityFragment extends BaseFragment {
         List<ControlOperationBean.WorkStandardRelation> workStandardRelations = new ArrayList<>();
 
         for (int i = 0; i < mControlQualityList.size(); i++) {
-            workStandardRelations.add(new ControlOperationBean.WorkStandardRelation(mControlQualityList.get(i).getW_q_s_id(), mControlQualityList.get(i).getCheckInfo() == null ? "未填写" : mControlQualityList.get(i).getCheckInfo()));
         }
         bean.setWorkStandardRelations(workStandardRelations);
 

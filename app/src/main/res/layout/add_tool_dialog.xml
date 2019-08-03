@@ -15,12 +15,13 @@
             android:layout_height="wrap_content"
             android:text="名称:"></TextView>
 
-        <EditText
+        <com.patrol.terminal.widget.CustomSpinner
             android:id="@+id/divison_name_et"
             android:layout_width="0dp"
             android:layout_weight="3"
+            android:gravity="center_vertical"
             android:layout_height="match_parent"
-            android:background="@drawable/stoke_gray"></EditText>
+            android:background="@drawable/stoke_gray"></com.patrol.terminal.widget.CustomSpinner>
     </LinearLayout>
 
     <LinearLayout android:layout_width="match_parent"
@@ -33,12 +34,13 @@
             android:layout_height="wrap_content"
             android:text="型号/规格:"></TextView>
 
-        <EditText
+        <com.patrol.terminal.widget.CustomSpinner
             android:id="@+id/divison_model_et"
             android:layout_width="0dp"
             android:layout_weight="3"
+            android:gravity="center_vertical"
             android:layout_height="match_parent"
-            android:background="@drawable/stoke_gray"></EditText>
+            android:background="@drawable/stoke_gray"></com.patrol.terminal.widget.CustomSpinner>
     </LinearLayout>
 
     <LinearLayout android:layout_width="match_parent"
@@ -73,6 +75,7 @@
         android:id="@+id/divison_num_et"
         android:layout_width="0dp"
         android:layout_weight="3"
+        android:inputType="number"
         android:layout_height="match_parent"
         android:background="@drawable/stoke_gray"></EditText>
 </LinearLayout>

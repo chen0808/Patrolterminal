@@ -1,12 +1,14 @@
 package com.patrol.terminal.bean;
 
 
+import java.io.Serializable;
+
 /**
  * 表名: CARD_CONTROL_SAFE - 安全控制措施负责人关联表
  *
  * Date：2019-05-30 20:05:02
  */
-public class CardControlSafe {
+public class CardControlSafe implements Serializable {
     private int divisonNo;
 
     // 数据id

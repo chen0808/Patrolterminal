@@ -1,12 +1,14 @@
 package com.patrol.terminal.bean;
 
 
+import java.io.Serializable;
+
 /**
  * 表名: CARD_QUALITY_USER - 工序质量控制成员关系表
  *
  * Date：2019-05-30 20:05:19
  */
-public class CardQualityUser {
+public class CardQualityUser implements Serializable {
 
     // 数据id
     private String id;

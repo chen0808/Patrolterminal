@@ -1,12 +1,14 @@
 package com.patrol.terminal.bean;
 
 
+import java.io.Serializable;
+
 /**
  * 表名: CARD_CONTROL_SIGN - 班组作业控制卡签名表
  *
  * Date：2019-05-30 20:05:05
  */
-public class CardControlSign {
+public class CardControlSign implements Serializable {
 
     // 数据id
     private String id;
