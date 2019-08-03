@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amap.api.maps.model.Text;
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -69,6 +68,7 @@ public class LineCheckWeekActivity extends BaseActivity {
     private String id;
     private int selectPosin = -1;
     private List<LineCheckBean> results = new ArrayList<>();
+    private List<LineCheckBean> searchResults = new ArrayList<>();
     private LineCheckAdapter adapter;
     private LineCheckBean selectBean;
     private String from;
@@ -126,9 +126,12 @@ public class LineCheckWeekActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectPosin = position;
+                if (searchResults != null && searchResults.size() > 0) {
+                    selectBean = searchResults.get(position);
+                } else {
+                    selectBean = results.get(position);
+                }
                 adapter.notifyDataSetChanged();
-                selectBean = results.get(position);
-
             }
         });
         titleSetting.setVisibility(View.VISIBLE);
@@ -188,13 +191,16 @@ public class LineCheckWeekActivity extends BaseActivity {
 
                 break;
             case R.id.search_line:
+                searchResults.clear();
                 String trim = lineNameEt.getText().toString().trim();
                 for (int i = 0; i < results.size(); i++) {
                     LineCheckBean lineCheckBean = results.get(i);
                     if (lineCheckBean.getName().contains(trim)) {
-                        rvLineCheck.setSelection(i);
+//                        rvLineCheck.setSelection(i);
+                        searchResults.add(lineCheckBean);
                     }
                 }
+                adapter.setData(searchResults);
                 break;
         }
     }

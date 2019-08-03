@@ -137,12 +137,12 @@ public class DangerVerifyActivity extends BaseActivity implements BaseQuickAdapt
         audit_status = getIntent().getStringExtra("audit_status");
 
         switch (audit_status) {
-            case "1":
+            case "1"://待班长
                 if (!mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {//班长
                     btnLl.setVisibility(View.GONE);
                 }
                 break;
-            case "2":
+            case "2"://待专责 审核
                 if (!mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {//专责
                     btnLl.setVisibility(View.GONE);
                 }

@@ -49,7 +49,7 @@ public class LocalAddTrouble extends BaseModel implements Serializable {
     private String find_dep_id;
     @Column// 发现人班组名字
     private String find_dep_name;
-    @Column// 隐患入库状态（0：编制，1：待班长审核，2：待专责审核，3：审核通过，4：审核不通过）,5：待提交
+    @Column// 隐患入库状态（0：编制，1：待班长审核，2：待专责审核，3：审核通过，4：审核不通过）
     private String in_status;//提交默认为1
 
     //防雷隐患
@@ -112,6 +112,27 @@ public class LocalAddTrouble extends BaseModel implements Serializable {
                 .and(LocalAddTrouble_Table.tower_id.is(tower_id))
                 .and(LocalAddTrouble_Table.line_id.is(line_id))
                 .queryList();
+    }
+
+    /**
+     * 查询添加状态
+     *
+     * @return
+     */
+    public static boolean addStatus(String tower_id, String line_id, String type_id) {
+
+        LocalAddTrouble trouble = SQLite.select()
+                .from(LocalAddTrouble.class)
+                .where(LocalAddTrouble_Table.isdownload.is("1"))
+                .and(LocalAddTrouble_Table.tower_id.is(tower_id))
+                .and(LocalAddTrouble_Table.line_id.is(line_id))
+                .and(LocalAddTrouble_Table.type_id.is(type_id))
+                .querySingle();
+
+        if (trouble == null)
+            return true;
+        else
+            return false;
     }
 
     public String getFind_time() {

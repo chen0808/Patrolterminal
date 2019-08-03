@@ -48,7 +48,9 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/dp_20"
-                        android:text="完成进度：0%" />
+                        android:layout_toRightOf="@+id/plan_total_title"
+                        android:text="完成进度：0%"
+                        android:gravity="right"/>
                 </RelativeLayout>
 
                 <LinearLayout

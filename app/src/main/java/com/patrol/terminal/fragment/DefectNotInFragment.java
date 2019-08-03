@@ -1,6 +1,7 @@
 package com.patrol.terminal.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.ReviewTaskActivity;
 import com.patrol.terminal.adapter.DefectBanjiAdapter;
 import com.patrol.terminal.adapter.DefectBanjiXLAdapter;
 import com.patrol.terminal.adapter.DefectIngTabAdapter;
@@ -31,8 +33,11 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.BanjiBean;
 import com.patrol.terminal.bean.BanjiXLBean;
 import com.patrol.terminal.bean.DefectFragmentBean;
+import com.patrol.terminal.bean.InAuditPostBean;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.CancelOrOkDialogNew;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SpaceItemDecoration;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
@@ -43,6 +48,7 @@ import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -86,6 +92,10 @@ public class DefectNotInFragment extends BaseFragment {
     private List<BanjiXLBean> banjixlList = new ArrayList<>();
     private String mJobType;
     private Context mContext;
+    private String year;
+    private String month;
+    private String day;
+    private int curPosition = -1;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,6 +106,9 @@ public class DefectNotInFragment extends BaseFragment {
     @Override
     protected void initData() {
         mContext = getActivity();
+
+        String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+        initdate(time);
 
         mJobType = SPUtil.getString(mContext, Constant.USER, Constant.JOBTYPE, Constant.RUNNING_SQUAD_LEADER);
         dep_id = SPUtil.getDepId(mContext);
@@ -125,16 +138,16 @@ public class DefectNotInFragment extends BaseFragment {
                     rightMenu.addMenuItem(addItem);
 
                     addItem = new SwipeMenuItem(mContext)
-                            .setBackground(R.drawable.swip_menu_item_2)
-                            .setText("复核")
+                            .setBackground(R.drawable.swip_menu_item_3)
+                            .setText("入库")
                             .setTextColor(Color.WHITE)
                             .setWidth(width)
                             .setHeight(height);
                     rightMenu.addMenuItem(addItem);
 
                     addItem = new SwipeMenuItem(mContext)
-                            .setBackground(R.drawable.swip_menu_item_3)
-                            .setText("入库")
+                            .setBackground(R.drawable.swip_menu_item_2)
+                            .setText("复核")
                             .setTextColor(Color.WHITE)
                             .setWidth(width)
                             .setHeight(height);
@@ -168,9 +181,41 @@ public class DefectNotInFragment extends BaseFragment {
             public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
                 // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
                 menuBridge.closeMenu();
-                int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
+//                int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
                 int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
+
+                if(mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+                    switch (menuPosition) {
+                        case 0:
+                            submit("4", adapterPosition);
+                            break;
+                        case 1:
+                            submit("3", adapterPosition);
+                            break;
+                        case 2:
+                            curPosition = adapterPosition;
+                            Intent intent2 = new Intent(mContext, ReviewTaskActivity.class);
+                            intent2.putExtra("id", defectList.get(adapterPosition).getId());
+                            startActivityForResult(intent2, 10);
+                            break;
+                        case 3:
+                            break;
+                        default:
+                            break;
+                    }
+                } else if(mJobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                    switch (menuPosition) {
+                        case 0:
+                            submit("4", adapterPosition);
+                            break;
+                        case 1:
+                            submit("2", adapterPosition);
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         };
 
@@ -313,7 +358,6 @@ public class DefectNotInFragment extends BaseFragment {
         } else {
             groupTaskAdapter.addData(beans);
         }
-
     }
 
     //筛选线路查询
@@ -377,6 +421,124 @@ public class DefectNotInFragment extends BaseFragment {
                 search_name = "";
                 tvContent.setText("");
             break;
+        }
+    }
+
+    //提交缺陷审核
+    public void submit(String in_status, int adapterPosition) {
+        if(in_status.equals("4")){
+            CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(mContext, "驳回", "取消", "确定") {
+                @Override
+                public void ok() {
+                    super.ok();
+                    inAuditPOST("4", adapterPosition);
+                }
+
+                @Override
+                public void cancle() {
+                    super.cancle();
+                }
+            };
+            dialog.show();
+        } else {
+            if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
+                CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(mContext, "入库", "取消", "确定") {
+                    @Override
+                    public void ok() {
+                        super.ok();
+                        inAuditPOST("3", adapterPosition);
+                    }
+
+                    @Override
+                    public void cancle() {
+                        super.cancle();
+                    }
+                };
+                dialog.show();
+            } else {
+                CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(mContext, "通过", "取消", "确定") {
+                    @Override
+                    public void ok() {
+                        super.ok();
+                        inAuditPOST("2", adapterPosition);
+                    }
+
+                    @Override
+                    public void cancle() {
+                        super.cancle();
+                    }
+                };
+                dialog.show();
+            }
+        }
+    }
+
+    public void inAuditPOST(String in_status, int adapterPosition) {
+        ProgressDialog.show(mContext, false, "正在加载。。。。");
+        InAuditPostBean inAuditPostBean = new InAuditPostBean();
+        inAuditPostBean.setId(defectList.get(adapterPosition).getId());
+        inAuditPostBean.setIn_status(in_status);
+        inAuditPostBean.setFrom_user_id(SPUtil.getUserId(mContext));
+        inAuditPostBean.setFrom_user_name(SPUtil.getUserName(mContext));
+        inAuditPostBean.setLine_name(defectList.get(adapterPosition).getLine_name());
+        inAuditPostBean.setTower_name(defectList.get(adapterPosition).getTower_name());
+        if(in_status.equals("3")){
+            inAuditPostBean.setClose_time(year + "-" + month + "-" + day);
+        }
+        BaseRequest.getInstance().getService()
+                .inAuditPOST(inAuditPostBean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(mContext) {
+
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        if(t.getCode() == 1){
+                            defectList.get(adapterPosition).setIn_status(in_status);
+                            groupTaskAdapter.notifyItemChanged(adapterPosition);
+
+//                            tvContent.setText("");
+//                            search_name = "";
+//                            pageNum = 1;
+//                            line_name = banjixlAdapter.getSelectLine();
+//                            defectList.clear();
+//                            getBanjiXLQx(search_name, line_name);
+                            Toast.makeText(mContext,"处理完成",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                });
+    }
+
+    //初始化日期
+    public void initdate(String time) {
+        String[] times = time.split("年");
+        String[] months = times[1].split("月");
+        year = times[0];
+        month = months[0];
+        day = months[1].split("日")[0];
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1101) {
+            switch (requestCode) {
+                case 10:
+                    if(curPosition != -1){
+                        defectList.get(curPosition).setIn_status("5");
+                        groupTaskAdapter.notifyItemChanged(curPosition);
+                        curPosition = -1;
+                    }
+                    break;
+            }
         }
     }
 }

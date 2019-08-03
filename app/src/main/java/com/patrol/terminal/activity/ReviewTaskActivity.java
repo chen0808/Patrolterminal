@@ -1,5 +1,6 @@
 package com.patrol.terminal.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,6 +68,7 @@ public class ReviewTaskActivity extends BaseActivity {
     private String day;
     private Disposable subscribe;
     private DefectFragmentDetailBean bean;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +82,23 @@ public class ReviewTaskActivity extends BaseActivity {
         Intent intent = getIntent();
         if(intent != null){
             bean = (DefectFragmentDetailBean)intent.getSerializableExtra("DefectFragmentDetailBean");
+            id = intent.getStringExtra("id");
         }
 
-        if (bean.getFind_dep_name() != null) {
-            defectFindDepName.setText(bean.getFind_dep_name());
-        }
+        if(id != null){
+            getDefectDetail();
+        } else if(bean != null){
+            if (bean.getFind_dep_name() != null) {
+                defectFindDepName.setText(bean.getFind_dep_name());
+            }
 
-        if(bean.getLine_name() != null){
-            defectLineName.setText(bean.getLine_name());
-        }
+            if(bean.getLine_name() != null){
+                defectLineName.setText(bean.getLine_name());
+            }
 
-        if(bean.getTower_name() != null){
-            towerName.setText(bean.getTower_name());
+            if(bean.getTower_name() != null){
+                towerName.setText(bean.getTower_name());
+            }
         }
 
         String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
@@ -170,6 +177,7 @@ public class ReviewTaskActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if(t.getCode() == 1){
                             Toast.makeText(ReviewTaskActivity.this,"处理完成",Toast.LENGTH_SHORT).show();
+                            setResult(1101);
                             finish();
                         }
                     }
@@ -183,7 +191,7 @@ public class ReviewTaskActivity extends BaseActivity {
                 });
     }
 
-    //缺陷再复核-转班组
+    //缺陷再复核-转个人
     public void defectCheckPOSTMine() {
         ProgressDialog.show(this, false, "正在加载。。。。");
         InAuditPostBean inAuditPostBean = new InAuditPostBean();
@@ -211,6 +219,7 @@ public class ReviewTaskActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if(t.getCode() == 1){
                             Toast.makeText(ReviewTaskActivity.this,"处理完成",Toast.LENGTH_SHORT).show();
+                            setResult(1101);
                             finish();
                         }
                     }
@@ -221,6 +230,38 @@ public class ReviewTaskActivity extends BaseActivity {
                         Toast.makeText(ReviewTaskActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
+                });
+    }
+
+    //缺陷再复核-转班组
+    public void getDefectDetail() {
+        ProgressDialog.show(this, false, "正在加载。。。。");
+        BaseRequest.getInstance().getService().getDefectDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<DefectFragmentDetailBean>() {
+                    @SuppressLint("NewApi")
+                    @Override
+                    protected void onSuccees(BaseResult<DefectFragmentDetailBean> t) throws Exception {
+                        bean = t.getResults();
+
+                        if (bean.getFind_dep_name() != null) {
+                            defectFindDepName.setText(bean.getFind_dep_name());
+                        }
+
+                        if(bean.getLine_name() != null){
+                            defectLineName.setText(bean.getLine_name());
+                        }
+
+                        if(bean.getTower_name() != null){
+                            towerName.setText(bean.getTower_name());
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
                 });
     }
 

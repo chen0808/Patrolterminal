@@ -203,6 +203,7 @@ public class NewTaskActivity extends BaseActivity {
                 SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
                 simplePagerTitleView.setNormalColor(getResources().getColor(R.color.black_gray));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
+                simplePagerTitleView.setPadding(0, 26, 0, 0);
                 simplePagerTitleView.setText(mDataList.get(index));
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -57,7 +57,7 @@ public class DepTaskAdapter extends BaseQuickAdapter<DepInfoBean, BaseViewHolder
             //默认保留两位会有错误，这里设置保留小数点后4位
             double range = 0;
             try {
-                range = Utils.div(item.getDone_num(), item.getAll_num(), 4) * 100;
+                range = Utils.newDiv(item.getDone_num(), item.getAll_num(), 4) * 100;
                 viewHolder.setText(R.id.plan_progressbar_num, range + "%");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

@@ -28,6 +28,7 @@ import com.patrol.terminal.bean.TodoBean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import jxl.Sheet;
@@ -290,6 +291,25 @@ public class Utils {
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
         //默认保留两位会有错误，这里设置保留小数点后4位
         return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+
+    /**
+     * 提供精确的除法运算方法div
+     *
+     * @param value1 被除数
+     * @param value2 除数
+     * @param scale  精确范围
+     * @return 两个参数的商
+     * @throws IllegalAccessException
+     **/
+    public static double newDiv(double value1, double value2, int scale) throws IllegalAccessException {
+        //如果精确范围小于0，抛出异常信息
+        if (scale < 0) {
+            throw new IllegalAccessException("精确度不能小于0");
+        }
+        int value=(int)(value1*10000/value2);
+        return value/10000.0;
     }
 
     /**

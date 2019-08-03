@@ -60,17 +60,18 @@
         android:layout_height="40dp"
         android:background="@color/base_status_bar"></View>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginTop="-27dp"
+        android:layout_marginTop="-23dp"
         android:layout_marginRight="@dimen/dp_10"
         android:background="@drawable/shape_white_bg"
        >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
             android:gravity="center"
             >
@@ -78,69 +79,74 @@
             <TextView
                 android:id="@+id/group_num"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="@dimen/sp_16"
                 android:layout_marginLeft="50dp"
-                android:gravity="center_horizontal|bottom"
+                android:gravity="bottom"
                 android:textStyle="bold"
                 android:textColor="@color/line_point_1"
                 android:text="0"
+                android:paddingLeft="24dp"
                 />
             <TextView
                 android:id="@+id/car_num"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="@dimen/sp_16"
-                android:gravity="center_horizontal|bottom"
+                android:gravity="bottom"
                 android:textStyle="bold"
                 android:textColor="@color/line_point_3"
                 android:text="0"
+                android:paddingLeft="24dp"
                 />
             <TextView
                 android:id="@+id/day_plan_num"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="@dimen/sp_16"
-                android:gravity="center_horizontal|bottom"
+                android:gravity="bottom"
                 android:textStyle="bold"
                 android:textColor="@color/deffect_color"
                 android:text="0"
+                android:paddingLeft="24dp"
                 />
             <TextView
                 android:id="@+id/group_task_num"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="@dimen/sp_16"
-                android:gravity="center_horizontal|bottom"
+                android:gravity="bottom"
                 android:textStyle="bold"
                 android:textColor="@color/week_plan_num"
                 android:text="0"
+                android:paddingLeft="24dp"
                 />
             <TextView
                 android:id="@+id/personal_task_num"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="@dimen/sp_16"
                 android:layout_marginRight="50dp"
                android:textStyle="bold"
-                android:gravity="center_horizontal|bottom"
+                android:gravity="bottom"
                 android:textColor="@color/day_plan_num"
                 android:text="0"
+                android:paddingLeft="24dp"
                 />
         </LinearLayout>
         <net.lucode.hackware.magicindicator.MagicIndicator
             android:id="@+id/magic_indicator4"
             android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_height="35dp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_height="46dp"
+            android:layout_gravity="center_horizontal"
+            />
 
-    </RelativeLayout>
+    </FrameLayout>
 
     <com.patrol.terminal.widget.NoScrollViewPager
         android:id="@+id/view_pager"

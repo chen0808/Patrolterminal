@@ -3,6 +3,7 @@ package com.patrol.terminal.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -277,7 +278,9 @@ public class WeekPlanFrgment extends BaseFragment {
                         if (all_num_total == 0) {
                             donePlanRange.setText("计划进度：0%");
                         } else {
-                            double range = Utils.div(done_num_total, all_num_total, 4)*100;
+                            Log.d("linmeng", "done_num_total:" + done_num_total);
+                            Log.d("linmeng", "all_num_total:" + all_num_total);
+                            double range = Utils.newDiv(done_num_total, all_num_total, 4)*100;
                             donePlanRange.setText("计划进度：" + range + "%");
                         }
                         if (lineList.size() != 0) {
