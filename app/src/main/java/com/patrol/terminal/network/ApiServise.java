@@ -1228,4 +1228,8 @@ public interface ApiServise {
     //获取控制卡详情
     @GET("card/control/allGET")
     Observable<BaseResult<AllControlCarBean>> getCardControl(@Query("task_repair_id") String id);
+
+    //获取工器具台账
+    @GET("/eq/tools/listGET")
+    Observable<BaseResult<List<EqToolsBean>>> getEqTools();
 }
