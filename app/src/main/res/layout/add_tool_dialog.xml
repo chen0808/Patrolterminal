@@ -57,6 +57,7 @@
             android:id="@+id/divison_unit_et"
             android:layout_width="0dp"
             android:layout_weight="3"
+            android:gravity="center"
             android:layout_height="match_parent"
             android:background="@drawable/stoke_gray"></EditText>
     </LinearLayout>

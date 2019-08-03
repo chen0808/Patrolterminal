@@ -39,6 +39,7 @@ public class AddToolDialog {
         divisonTotalEt = dialogView.findViewById(R.id.divison_num_et);
         divisonRemarksEt = dialogView.findViewById(R.id.divison_remarks_et);
         names = new ArrayList<>();
+        //获取工器具名称
         for (int i = 0; i < eqToolTempList.size(); i++) {
             EqToolTemp eqToolTemp = eqToolTempList.get(i);
             String name= eqToolTemp.getName();
@@ -47,20 +48,40 @@ public class AddToolDialog {
             }
             eqToolTempLists.add(eqToolTemp);
         }
+        List<String> type=new ArrayList<>();
+        if (names.size()>0){
+            for (int i = 0; i < eqToolTempList.size(); i++) {
+                EqToolTemp eqToolTemp = eqToolTempList.get(i);
+                String name= eqToolTemp.getName();
+                if (names.get(0).equals(name)&&eqToolTemp.getType()!=null){
+                    type.add(eqToolTemp.getType());
+                    divisonUnitEt.setText(eqToolTemp.getUnit());
+                }
+            }
+        }
         divisonNameEt.attachDataSource(names);
+        if (type.size()!=0){
+            divisonModelEt.attachDataSource(type);
+        }
+
+
         //隐患类别
         divisonNameEt.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
             @Override
             public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
                 String s = names.get(i);
+                String nuit="";
               List<String>  typeList=new ArrayList<>();
                 for (int j = 0; j < eqToolTempList.size(); j++) {
                     EqToolTemp eqToolTemp = eqToolTempList.get(j);
                     if (s.equals(eqToolTemp.getName())&&eqToolTemp.getType()!=null){
                         typeList.add(eqToolTemp.getType());
+                        nuit=eqToolTemp.getUnit();
                     }
                 }
                 divisonModelEt.attachDataSource(typeList);
+                divisonUnitEt.setText(nuit);
+
             }
         });
         Button cancel = dialogView.findViewById(R.id.btn_cancel);

@@ -137,7 +137,7 @@ public class DefectPlanActivity extends BaseActivity {
 
     private void initview() {
         titleName.setText("消缺计划");
-       String  defect_id = getIntent().getStringExtra("id");
+       String  defect_id = getIntent().getStringExtra("defect_id");
         if (defect_id==null){
             id = getIntent().getStringExtra("task_id");
         }else {
@@ -384,6 +384,7 @@ public class DefectPlanActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<DefectPlanDetailBean> t) throws Exception {
                         bean = t.getResults();
+                        if (bean!=null){
                         line_name = bean.getLine_name();
                         tower_name = bean.getTower_name();
                         find_dep_id = bean.getDeal_dep_id();
@@ -429,7 +430,7 @@ public class DefectPlanActivity extends BaseActivity {
                             selectUserInfos.add(userInfo);
                         }
                         dangerPatrolPersonal.setText(names);
-                        selectWorkerBean.setUserInfos(selectUserInfos);
+                        selectWorkerBean.setUserInfos(selectUserInfos);}
                         ProgressDialog.cancle();
                     }
 

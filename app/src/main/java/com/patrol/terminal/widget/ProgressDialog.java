@@ -23,7 +23,7 @@ public class ProgressDialog {
 //                    progressDialog.cancel();
 //            }
             progressDialog = new android.app.ProgressDialog(cxt);
-            progressDialog.setCancelable(cancelable);
+            progressDialog.setCancelable(true);
             progressDialog.setMessage(str);
             progressDialog.show();
             progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {

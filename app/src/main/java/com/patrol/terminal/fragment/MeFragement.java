@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.ControlCardTaizhangActivity;
 import com.patrol.terminal.activity.MapActivity;
 import com.patrol.terminal.activity.MyPerformanceActivity;
 import com.patrol.terminal.activity.ScoreListActivity;
@@ -44,6 +45,8 @@ public class MeFragement extends BaseFragment {
     RelativeLayout rlSendCar;
     @BindView(R.id.rl_send_car_temporary)
     RelativeLayout rlSendCarTemporary;
+    @BindView(R.id.rl_eq_tools)
+    RelativeLayout rlEqTools;
     @BindView(R.id.rl_my_position)
     RelativeLayout rlMyPosition;
     @BindView(R.id.rl_setting)
@@ -62,7 +65,7 @@ public class MeFragement extends BaseFragment {
 
     }
 
-    @OnClick({R.id.rl_team_assessment, R.id.rl_my_performance, R.id.rl_send_car, R.id.rl_setting, R.id.rl_send_car_temporary, R.id.rl_my_position})
+    @OnClick({R.id.rl_team_assessment, R.id.rl_my_performance, R.id.rl_send_car, R.id.rl_setting, R.id.rl_send_car_temporary, R.id.rl_my_position, R.id.rl_eq_tools})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_team_assessment:
@@ -82,6 +85,9 @@ public class MeFragement extends BaseFragment {
                 break;
             case R.id.rl_my_position:
                 startActivity(new Intent(getActivity(), MapActivity.class));
+                break;
+            case R.id.rl_eq_tools:
+                startActivity(new Intent(getActivity(), ControlCardTaizhangActivity.class));
                 break;
         }
     }
