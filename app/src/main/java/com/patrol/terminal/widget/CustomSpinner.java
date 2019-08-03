@@ -49,6 +49,13 @@ public class CustomSpinner extends LinearLayout {
     private int height;//popdialog 高
     private int postion = 0;//选中项
 
+    /**
+     * 自定义item类 必须 实现该类
+     */
+    public interface CustomSpinnerItem {
+        String getItemStr();//显示的选择项
+    }
+
     public CustomSpinner(Context context) {
         super(context);
         initView(context);
@@ -272,13 +279,6 @@ public class CustomSpinner extends LinearLayout {
             pop.dismiss();
         }
         super.destroyDrawingCache();
-    }
-
-    /**
-     * 自定义item类 必须 实现该类
-     */
-    public interface CustomSpinnerItem {
-        String getItemStr();//显示的选择项
     }
 
     public interface OnItemSelectedListenerSpinner {
