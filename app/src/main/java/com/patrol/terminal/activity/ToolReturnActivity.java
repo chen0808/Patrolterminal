@@ -101,7 +101,7 @@ public class ToolReturnActivity extends BaseActivity {
     }
 
     public void saveToolReturn() {
-        ProgressDialog.show(this);
+
         List<EqToolsOut> returnList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).isCheck() && list.get(i).getOut_status().equals("0")) {
@@ -114,7 +114,7 @@ public class ToolReturnActivity extends BaseActivity {
             Utils.showToast("请选择归还工器具");
             return;
         }
-
+        ProgressDialog.show(this);
         BaseRequest.getInstance().getService()
                 .getToolReturn(returnList)
                 .subscribeOn(Schedulers.io())
