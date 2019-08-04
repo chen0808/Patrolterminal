@@ -151,6 +151,7 @@ public class PatrolRecordActivity extends BaseActivity {
     private AMapLocationClientOption locationOption;
     private AMapLocationClient locationClient = null;
     private List<TaskGps> taskGpsList = new ArrayList<>();
+    private TaskBean bean;
     /**
      * 定位监听
      */
@@ -191,6 +192,11 @@ public class PatrolRecordActivity extends BaseActivity {
                     taskGps.setYear(year);
                     taskGps.setMonth(month);
                     taskGps.setDay(day);
+                    String userName = SPUtil.getString(PatrolRecordActivity.this, Constant.USER, Constant.USERNAME, "");
+                    taskGps.setUser_name(userName);
+                    String depName = SPUtil.getString(PatrolRecordActivity.this, Constant.USER, Constant.DEPNAME, "");
+                    taskGps.setDep_name(depName);
+                    taskGps.setContent(bean.getLine_name() + bean.getTower_name() + bean.getUser_name() + "巡视任务");
                     taskGpsList.add(taskGps);
                     Log.w("linmeng", "longitude:" + longitude + ",latitude:" + latitude + ",locationTime:" + locationTime + ",address:" + address);
                 }
@@ -270,8 +276,6 @@ public class PatrolRecordActivity extends BaseActivity {
         query();
         getTask(task_id);
         getSpinnerCLCS();
-        //初始化定位
-        initLocation();
         taskGpsList.clear();
     }
 
@@ -533,7 +537,9 @@ public class PatrolRecordActivity extends BaseActivity {
                 .subscribe(new BaseObserver<TaskBean>(this) {
                     @Override
                     protected void onSuccees(BaseResult<TaskBean> t) throws Exception {
-                        TaskBean bean = t.getResults();
+                        bean = t.getResults();
+                        //初始化定位
+                        initLocation();
                         saveLocalAsync(bean);
 //                        save(localBean);
                         query();

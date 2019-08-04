@@ -1,25 +1,29 @@
 package com.patrol.terminal.activity;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.maps.model.Polyline;
-import com.amap.api.maps.model.PolylineOptions;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -32,6 +36,11 @@ import com.patrol.terminal.bean.DepBean;
 import com.patrol.terminal.bean.DepPersonalBean;
 import com.patrol.terminal.bean.LocationBean;
 import com.patrol.terminal.bean.PositionListBean;
+import com.patrol.terminal.gaode.ClusterClickListener;
+import com.patrol.terminal.gaode.ClusterItem;
+import com.patrol.terminal.gaode.ClusterOverlay;
+import com.patrol.terminal.gaode.ClusterRender;
+import com.patrol.terminal.gaode.RegionItem;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
@@ -40,6 +49,7 @@ import com.patrol.terminal.widget.MapNameSelectDialog;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,13 +83,15 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     private RelativeLayout back;
     private List<LocationBean> locationList = new ArrayList<>();
 
-//    private AMapLocationClient locationClient = null;
+    //    private AMapLocationClient locationClient = null;
 //    private AMapLocationClientOption locationOption = null;
     private boolean isPopWindowShow = false;
     //private MapNameSelectDialog.PopWindowItemClick itemClick;
     private TimePickerView pvTime;
     private String year, month, day;
     private String time;
+    private ClusterOverlay mClusterOverlay;
+    private Map<Integer, Drawable> mBackDrawAbles = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +128,6 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
 
         //初始化定位
         //initLocation();
-
     }
 
 //    private static final int REQUEST_TAKE_PHOTO_PERMISSION = 1;
@@ -235,17 +246,46 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
 //           }
 //        }
 //    };
+private ClusterRender renderer = new ClusterRender() {
+    @Override
+    public View getView(int clusterNum) {
+        View view = null;
+        if (clusterNum == 1) {
+            view = LayoutInflater.from(MapActivity.this).inflate(R.layout.item_map_window_null, null);
+        } else {
+            view = LayoutInflater.from(MapActivity.this).inflate(R.layout.item_map_window2, null);
+            TextView tvNum = view.findViewById(R.id.tv_num);
+            tvNum.setText(String.valueOf(clusterNum));
+        }
+        return view;
+    }
+};
+    private ClusterClickListener clusterListener = new ClusterClickListener() {
+        @Override
+        public void onClick(Marker marker, List<ClusterItem> clusterItems) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (ClusterItem clusterItem : clusterItems) {
+                builder.include(clusterItem.getPosition());
+            }
+            LatLngBounds latLngBounds = builder.build();
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 0)
+            );
+
+
+        }
+    };
 
     private void initData() {
         String userId = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
         String date = DateUatil.getTime() + "%";
-        BaseRequest.getInstance().getService().getPositonList(userId, date).subscribeOn(Schedulers.io())
+        BaseRequest.getInstance().getService().getPositonList(userId, "2019", "9", "3").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PositionListBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<PositionListBean>> t) throws Exception {
                         if (t.getCode() == 1) {
                             List<PositionListBean> positionListBeans = t.getResults();
+                            List<ClusterItem> items = new ArrayList<ClusterItem>();
                             for (int i = 0; i < positionListBeans.size(); i++) {
                                 LocationBean locationBean = new LocationBean();
                                 LatLng latLng = new LatLng(positionListBeans.get(i).getLat(), positionListBeans.get(i).getLon());
@@ -253,7 +293,14 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                                 locationBean.setPosition(positionListBeans.get(i).getAddress());
                                 locationBean.setTime(positionListBeans.get(i).getLoc_time());
                                 locationList.add(locationBean);
+
+                                RegionItem regionItem = new RegionItem(latLng, "test" + i);
+                                items.add(regionItem);
                             }
+                            mClusterOverlay = new ClusterOverlay(aMap, items, dp2px(getApplicationContext(), 100),
+                                    getApplicationContext());
+                            mClusterOverlay.setClusterRenderer(renderer);
+                            mClusterOverlay.setOnClusterClickListener(clusterListener);
                             aMap.moveCamera(CameraUpdateFactory.changeLatLng(locationList.get(0).getLatLng()));
                             aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                             drawLocation();
@@ -268,6 +315,26 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                 });
 
         getDepInfo();
+    }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public int dp2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    private Bitmap drawCircle(int radius, int color) {
+
+        Bitmap bitmap = Bitmap.createBitmap(radius * 2, radius * 2,
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        RectF rectF = new RectF(0, 0, radius * 2, radius * 2);
+        paint.setColor(color);
+        canvas.drawArc(rectF, 0, 360, true, paint);
+        return bitmap;
     }
 
     private void addMarkers() {
@@ -328,14 +395,14 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
         if (locationList != null && locationList.size() > 1) {
             addMarkers();
 
-            List<LatLng> latlngList = new ArrayList<>();
-            for (int i = 0; i < locationList.size(); i++) {
-                LatLng latLng = locationList.get(i).getLatLng();
-                latlngList.add(latLng);
-            }
-
-            Polyline polyline = aMap.addPolyline(new PolylineOptions().
-                    addAll(latlngList).width(10).color(Color.argb(255, 1, 1, 1)));
+//            List<LatLng> latlngList = new ArrayList<>();
+//            for (int i = 0; i < locationList.size(); i++) {
+//                LatLng latLng = locationList.get(i).getLatLng();
+//                latlngList.add(latLng);
+//            }
+//
+//            Polyline polyline = aMap.addPolyline(new PolylineOptions().
+//                    addAll(latlngList).width(10).color(Color.argb(255, 1, 1, 1)));
         }
     }
 
@@ -350,7 +417,9 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
 
     @Override
     public void onMapClick(LatLng latLng) {
-        mMarker.hideInfoWindow();
+        if (mMarker != null) {
+            mMarker.hideInfoWindow();
+        }
     }
 
     @Override
@@ -367,13 +436,10 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     }
 
     public void render(Marker marker, View view) {
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.window_linearlayout);
-        //设置透明度
-        layout.getBackground().setAlpha(240);
-        TextView name = (TextView) view.findViewById(R.id.address_tv);
-        TextView info = (TextView) view.findViewById(R.id.time_tv);
-        name.setText(mMarker.getTitle());
-        info.setText(mMarker.getSnippet());
+//        TextView tvAddress = view.findViewById(R.id.tv_address);
+//        TextView tvTime = view.findViewById(R.id.tv_time);
+//        tvAddress.setText(mMarker.getTitle());
+//        tvTime.setText(mMarker.getSnippet());
     }
 
     @OnClick({R.id.date_tv, R.id.name_tv})
@@ -387,7 +453,7 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                 if (!isPopWindowShow) {
                     showNamePopWindow();
                     isPopWindowShow = true;
-                }else {
+                } else {
                     mapNameSelectDialog.dismiss();
                     isPopWindowShow = false;
                 }
@@ -398,6 +464,7 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
 
 
     private MapNameSelectDialog mapNameSelectDialog;
+
     private void showNamePopWindow() {
         if (depList != null && depList.size() > 0) {
             mapNameSelectDialog = new MapNameSelectDialog(MapActivity.this, depList, classMemberList);
@@ -414,13 +481,14 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                 }
             });
             mapNameSelectDialog.showAsDropDown(dateTv);
-        }else {
-            Toast.makeText(MapActivity.this,"未获取到班组数据!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MapActivity.this, "未获取到班组数据!", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     private List<DepBean> depList = new ArrayList<>();
+
     private void getDepInfo() {
         //获取所有班组
         BaseRequest.getInstance().getService()
@@ -443,6 +511,7 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     }
 
     private List<DepPersonalBean.UserListBean> classMemberList = new ArrayList<>();
+
     private void getClassMember(String depId) {
         BaseRequest.getInstance().getService()
                 .getDepPersonal(depId)
