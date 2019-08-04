@@ -186,6 +186,7 @@ public class DefectNotRidFragment extends BaseFragment {
             public void afterTextChanged(Editable s) {
                 search_name = tvContent.getText().toString();
                 if (TextUtils.isEmpty(search_name)) {
+                    groupTaskAdapter.setNewData(null);
                     groupTaskAdapter.setNewData(defectList);
                 } else {
                     searchList.clear();
@@ -195,6 +196,7 @@ public class DefectNotRidFragment extends BaseFragment {
                             searchList.add(defectList.get(i));
                         }
                     }
+                    groupTaskAdapter.setNewData(null);
                     groupTaskAdapter.setNewData(searchList);
                 }
             }

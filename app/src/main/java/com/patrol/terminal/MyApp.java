@@ -1,12 +1,15 @@
 package com.patrol.terminal;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.patrol.terminal.utils.ExceptionCrashHandler;
 import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;
+
+import androidx.multidex.MultiDex;
 
 public class MyApp extends Application {
     @Override
@@ -18,6 +21,12 @@ public class MyApp extends Application {
         ExceptionCrashHandler.getInstance().init(this);
 
         Logger.addLogAdapter(new AndroidLogAdapter());
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
     }
 }
 
