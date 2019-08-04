@@ -403,6 +403,7 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     private void showNamePopWindow() {
         if (depList != null && depList.size() > 0) {
             mapNameSelectDialog = new MapNameSelectDialog(MapActivity.this, depList, classMemberList);
+            mapNameSelectDialog.setOutsideTouchable(true);
             mapNameSelectDialog.setCallback(new MapNameSelectDialog.PopWindowItemClick() {
                 @Override
                 public void setNameAndId(String name, String id) {
