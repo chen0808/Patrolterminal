@@ -20,13 +20,9 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AllControlCarBean;
 import com.patrol.terminal.bean.CardTool;
-import com.patrol.terminal.bean.ControlToolBean;
 import com.patrol.terminal.bean.ControlToolBeanList;
-import com.patrol.terminal.bean.ControlToolInfo;
 import com.patrol.terminal.bean.DefectPlanDetailBean;
 import com.patrol.terminal.bean.EqToolTemp;
-import com.patrol.terminal.bean.OverhaulMonthBean;
-import com.patrol.terminal.bean.OverhaulZzTaskBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.AddToolDialog;
@@ -60,6 +56,9 @@ public class YXControlToolFragment extends BaseFragment {
     Button addBtn01;
     @BindView(R.id.add_btn_02)
     Button addBtn02;
+    @BindView(R.id.control_card_record)
+    Button toolRecord;//记录
+
     private List<CardTool> mControlToolList1 = new ArrayList<>();
     private List<CardTool> mControlToolList2 = new ArrayList<>();
 
@@ -93,7 +92,7 @@ public class YXControlToolFragment extends BaseFragment {
 
         getToolDetail();
         DefectPlanDetailBean bean = (DefectPlanDetailBean) mActivity.getIntent().getSerializableExtra("bean");
-                taskId = bean.getId();
+        taskId = bean.getId();
 
 
         //ControlCardBean controlBean = (ControlCardBean) mActivity.getIntent().getSerializableExtra("id");
@@ -142,7 +141,7 @@ public class YXControlToolFragment extends BaseFragment {
         }
 
 
-        if(isCanClick) {
+        if (isCanClick) {
             controlCardDiv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -163,14 +162,14 @@ public class YXControlToolFragment extends BaseFragment {
 
     private void getAllInfo(List<CardTool> workToolsBeans) {
         if (workToolsBeans != null && workToolsBeans.size() > 0) {
-            int j = 0,k = 0;
+            int j = 0, k = 0;
             for (int i = 0; i < workToolsBeans.size(); i++) {
                 CardTool bean = workToolsBeans.get(i);
                 String toolType = bean.getTool_type();
                 if (toolType.equals("0")) {
                     bean.setNum(j++);
                     mControlToolList1.add(bean);
-                }else if (toolType.equals("1")) {
+                } else if (toolType.equals("1")) {
                     bean.setNum(k++);
                     mControlToolList2.add(bean);
                 }
@@ -182,16 +181,20 @@ public class YXControlToolFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.add_btn_01, R.id.add_btn_02, R.id.control_card_submit})
+    @OnClick({R.id.add_btn_01, R.id.add_btn_02, R.id.control_card_submit, R.id.control_card_record})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.control_card_record:
+//                Intent intent = new Intent(getActivity(), ToolRecordActivity.class);
+//                startActivity(intent);
+                break;
             case R.id.add_btn_01:
-                AddToolDialog.show(mContext, depdapter1, mControlToolList1,eqToolTemp);
+                AddToolDialog.show(mContext, depdapter1, mControlToolList1, eqToolTemp);
 
                 break;
 
             case R.id.add_btn_02:
-                AddToolDialog.show(mContext, depdapter2, mControlToolList2,eqToolTemp);
+                AddToolDialog.show(mContext, depdapter2, mControlToolList2, eqToolTemp);
 
                 break;
 
@@ -235,7 +238,7 @@ public class YXControlToolFragment extends BaseFragment {
         }
     }
 
-    public void getToolDetail(){
+    public void getToolDetail() {
         BaseRequest.getInstance().getService()
                 .getToolType()
                 .subscribeOn(Schedulers.io())

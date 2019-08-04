@@ -70,7 +70,7 @@ public class ControlCardActivity extends BaseActivity {
         if ("yx".equals(from)) {
             fragmentList.add(new YXControlDepFrgment());
             fragmentList.add(new YXNewControlQualityFragment());
-            fragmentList.add(new YXControlToolFragment());
+            fragmentList.add(new YXControlToolFragment());//工器具配置表
         } else {
             fragmentList.add(new ControlDepFrgment());
             fragmentList.add(new NewControlQualityFragment());
