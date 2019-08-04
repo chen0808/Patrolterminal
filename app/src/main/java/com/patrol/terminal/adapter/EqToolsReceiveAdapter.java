@@ -2,6 +2,7 @@ package com.patrol.terminal.adapter;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -11,6 +12,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.EqToolsBean;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EqToolsReceiveAdapter extends BaseQuickAdapter<EqToolsBean, BaseViewHolder> {
     private Context mContext;
@@ -49,43 +53,74 @@ public class EqToolsReceiveAdapter extends BaseQuickAdapter<EqToolsBean, BaseVie
         }
 
         TextWatcher watcher = new TextWatcher() {
-//            private CharSequence temp;
-//            private int editStart ;
-//            private int editEnd ;
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                temp = s;
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                ed.setText(s + "");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 String trim = ed.getText().toString().trim();
                 if(!TextUtils.isEmpty(trim) && !trim.equals("0")) {
-//                    editStart = ed.getSelectionStart();
-//                    editEnd = ed.getSelectionEnd();
-//
-//                    Pattern p = Pattern.compile("^(100|[1-9]\\d|\\d)$");//处理0~100正则
-//
-//                    Matcher m =p.matcher(s.toString());
-//                    if(m.find() || ("").equals(s.toString())){
-//                        Log.i("yinyanhua", "OK!");
-//                    }else{
-//                        Log.i("yinyanhua", "请输入正确的数值比例!");
-//                        s.delete(editStart-1, editEnd);
-//                        int tempSelection = editStart;
-//                        Log.i("yinyanhua", "11111111");
-//                        ed.setText(s.toString());
-//                        ed.setSelection(tempSelection);
-//                    }
+                    Pattern p = Pattern.compile("^[1-9]\\d*$");
 
-                    item.setTotal(Integer.parseInt(trim));
-                    viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
+                    Matcher m = p.matcher(s.toString());
+                    if(m.find() || ("").equals(s.toString())){
+                        if(Integer.parseInt(trim) > item.getInventory()){
+                            int selEndIndex = Selection.getSelectionEnd(s);
+                            //截取新字符串
+                            String newStr = trim.substring(0, trim.length()-1);
+                            ed.setText(newStr);
+                            s = ed.getText();
+                            //新字符串长度
+                            int newLen = s.length();
+                            //旧光标位置超过字符串长度
+                            if(selEndIndex > newLen){
+                                selEndIndex = s.length();
+                            }
+                            //设置新的光标所在位置
+                            Selection.setSelection(s, selEndIndex);
+
+                            String temp = ed.getText().toString().trim();
+                            if(!TextUtils.isEmpty(temp) && !temp.equals("0")){
+                                item.setTotal(Integer.parseInt(temp));
+                                viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
+                            } else {
+                                item.setTotal(0);
+                                viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                            }
+                        } else {
+                            item.setTotal(Integer.parseInt(trim));
+                            viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
+                        }
+                    } else {
+                        int selEndIndex = Selection.getSelectionEnd(s);
+                        //截取新字符串
+                        String newStr = trim.substring(0, trim.length()-1);
+                        ed.setText(newStr);
+                        s = ed.getText();
+                        //新字符串长度
+                        int newLen = s.length();
+                        //旧光标位置超过字符串长度
+                        if(selEndIndex > newLen){
+                            selEndIndex = s.length();
+                        }
+                        //设置新的光标所在位置
+                        Selection.setSelection(s, selEndIndex);
+
+                        String temp = ed.getText().toString().trim();
+                        if(!TextUtils.isEmpty(temp) && !temp.equals("0")){
+                            item.setTotal(Integer.parseInt(temp));
+                            viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
+                        } else {
+                            item.setTotal(0);
+                            viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        }
+                    }
                 } else {
                     item.setTotal(0);
                     viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
