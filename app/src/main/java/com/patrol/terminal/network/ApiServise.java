@@ -193,12 +193,12 @@ public interface ApiServise {
 
     //获取班组所有成隐患列表
     @GET("sys/dep/byIdGET")
-    Observable<BaseResult<DepPersonalBean>> getDepPersonal( @Query("id") String dep_id);
+    Observable<BaseResult<DepPersonalBean>> getDepPersonal(@Query("id") String dep_id);
 
 
     //获取消缺计划详情
     @GET("task/defect/oneGET")
-    Observable<BaseResult<DefectPlanDetailBean>> getDefectPlanDetail( @Query("id") String id);
+    Observable<BaseResult<DefectPlanDetailBean>> getDefectPlanDetail(@Query("id") String id);
 
     //获取车辆列表
     @GET("/eq/vehicle/pda/listGET")
@@ -336,9 +336,10 @@ public interface ApiServise {
     //组任务列表
     @GET("/task/group/list/listGET")
     Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("duty_user_id") String duty_user_id, @Query("work_user_id") String work_user_id, @Query("order") String order);
+
     //组任务列表
     @GET("/task/group/list/listGET")
-    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id,  @Query("order") String order);
+    Observable<BaseResult<List<GroupTaskBean>>> getGroupList(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id, @Query("order") String order);
 
     //组任务详情
     @GET("/task/group/list/byIdGET")
@@ -490,6 +491,7 @@ public interface ApiServise {
     //上传红外线测温
     @POST("task/temperature/updatePOST")
     Observable<BaseResult<HwcwBean>> upLoadInfrared(@Body HwcwBean params);
+
     //上传斜杆塔倾斜测量
     @POST("task/tilt/updatePOST")
     Observable<BaseResult<HwcwBean>> upLoadTowerBias(@Body GTQXCLbean params);
@@ -588,6 +590,7 @@ public interface ApiServise {
     //个人任务详情  获取Tower_id
     @GET("common/listGET")
     Observable<BaseResult<List<GetTowerId>>> getTowerId(@Query("table") String table, @Query("column") String column, @Query("id") String id);
+
     //巡视记录缺陷列表
     @GET("task/defect/listGET")
     Observable<BaseResult<List<DefectFragmentBean2>>> getDefectFragment(@Query("line_id") String line_id, @Query("order") String order, @Query("in_status") String in_status);
@@ -1120,6 +1123,7 @@ public interface ApiServise {
     //获取小组列表
     @GET("/task/group/usersGET")
     Observable<BaseResult<List<AddGroupTaskReqBean>>> getGroupTeam(@Query("year") String year, @Query("month") String month, @Query("day") String day, @Query("dep_id") String dep_id);
+
     //添加小组任务
     @POST("/task/group/user/savePOST")
     Observable<BaseResult<List<DangerBean>>> savaGroupTeam(@Body GroupTeamSaveBean bean);
@@ -1143,7 +1147,7 @@ public interface ApiServise {
 
     //获取班组信息
     @GET("/task/group/list/allGET")
-    Observable<BaseResult<List<DepInfoBean>>> getDepInfo(@Query("year") String year,@Query("month") String month,@Query("day") String day);
+    Observable<BaseResult<List<DepInfoBean>>> getDepInfo(@Query("year") String year, @Query("month") String month, @Query("day") String day);
 
     //获取防雷隐患待办
     @GET("/task/trouble/thunder/oneGET")
@@ -1221,6 +1225,7 @@ public interface ApiServise {
     //提交班组控制卡
     @POST("card/quality/savePOST")
     Observable<BaseResult> saveQualityControl(@Body CardQuality bean);
+
     //获取工器具
     @GET("eq/tool/temp/listGET")
     Observable<BaseResult<List<EqToolTemp>>> getToolType();
@@ -1232,4 +1237,13 @@ public interface ApiServise {
     //获取工器具台账
     @GET("/eq/tools/listGET")
     Observable<BaseResult<List<EqToolsBean>>> getEqTools(@Query("name") String name);
+
+    //工器具领用记录列表
+    @GET("eq/tools/history/listGET")
+    Observable<BaseResult<List<EqToolsOut>>> getToolRecordList(@Query("user_id") String userId);
+
+    //工器具 归还
+    @POST("eq/tools/history/updateBatchPOST")
+    Observable<BaseResult> getToolReturn(@Body List<EqToolsOut> list);
+
 }

@@ -18,9 +18,9 @@ import com.patrol.terminal.activity.ScoreListActivity;
 import com.patrol.terminal.activity.SendCarActivity;
 import com.patrol.terminal.activity.SendCarTemporaryActivity;
 import com.patrol.terminal.activity.SettingActivity;
+import com.patrol.terminal.activity.ToolRecordListActivity;
+import com.patrol.terminal.activity.ToolReturnActivity;
 import com.patrol.terminal.base.BaseFragment;
-import com.patrol.terminal.utils.Constant;
-import com.patrol.terminal.utils.SPUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -67,7 +67,7 @@ public class MeFragement extends BaseFragment {
 
     }
 
-    @OnClick({R.id.rl_team_assessment, R.id.rl_my_performance, R.id.rl_send_car, R.id.rl_setting, R.id.rl_send_car_temporary, R.id.rl_my_position, R.id.rl_eq_tools, R.id.rl_eq_tools_receive})
+    @OnClick({R.id.rl_team_assessment, R.id.rl_my_performance, R.id.rl_send_car, R.id.rl_setting, R.id.rl_send_car_temporary, R.id.rl_my_position, R.id.toolReturn, R.id.toolRecordList, R.id.rl_eq_tools, R.id.rl_eq_tools_receive})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_team_assessment:
@@ -93,6 +93,12 @@ public class MeFragement extends BaseFragment {
                 break;
             case R.id.rl_eq_tools_receive:
                 startActivity(new Intent(getActivity(), EqToolsReceiveActivity.class));
+                break;
+            case R.id.toolRecordList:
+                startActivity(new Intent(getActivity(), ToolRecordListActivity.class));
+                break;
+            case R.id.toolReturn:
+                startActivity(new Intent(getActivity(), ToolReturnActivity.class));
                 break;
         }
     }

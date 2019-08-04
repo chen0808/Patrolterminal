@@ -38,7 +38,6 @@ import com.patrol.terminal.fragment.AnylyzeFrgment;
 import com.patrol.terminal.fragment.HomeFragment;
 import com.patrol.terminal.fragment.JXHomeFragment;
 import com.patrol.terminal.fragment.MeFragement;
-import com.patrol.terminal.fragment.TodosManageFragment;
 import com.patrol.terminal.fragment.YXTodosManageFragment;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.training.TrainingHomeFragment;
@@ -148,7 +147,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
     @Override
     protected void onResume() {
         super.onResume();
-        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER)&&!jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
+        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) && !jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             getGroupName();
         }
     }
@@ -179,7 +178,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //        } else {                                                    //有待办的角色
         mainExameRb.setVisibility(View.VISIBLE);
 
-            mFragments.add(new YXTodosManageFragment());
+        mFragments.add(new YXTodosManageFragment());
 
 //        }
 
