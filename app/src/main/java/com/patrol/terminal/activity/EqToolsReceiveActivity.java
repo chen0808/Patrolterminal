@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.EqToolsAdapter;
+import com.patrol.terminal.adapter.EqToolsReceiveAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -31,8 +32,8 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-/*工器具台账*/
-public class ControlCardTaizhangActivity extends BaseActivity {
+/*工器具领用*/
+public class EqToolsReceiveActivity extends BaseActivity {
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)
@@ -52,7 +53,7 @@ public class ControlCardTaizhangActivity extends BaseActivity {
 
     private List<EqToolsBean> eqToolsList = new ArrayList<>();;
     private List<EqToolsBean> searchList = new ArrayList<>();
-    private EqToolsAdapter eqToolsAdapter;
+    private EqToolsReceiveAdapter eqToolsReceiveAdapter;
     private String search_name = "";
     private int pageNum = 1;
     private int count = 10;
@@ -60,18 +61,18 @@ public class ControlCardTaizhangActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_control_card_taizhang);
+        setContentView(R.layout.activity_eq_tools_receive);
         ButterKnife.bind(this);
         initview();
         getEqTools(search_name);
     }
 
     private void initview() {
-        titleName.setText("工器具台账");
+        titleName.setText("工器具领用");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         controlCardDiv.setLayoutManager(manager);
-        eqToolsAdapter = new EqToolsAdapter(R.layout.item_eq_tool_division);
-        controlCardDiv.setAdapter(eqToolsAdapter);
+        eqToolsReceiveAdapter = new EqToolsReceiveAdapter(R.layout.item_eq_tool_receive, this);
+        controlCardDiv.setAdapter(eqToolsReceiveAdapter);
 
         tvContent.addTextChangedListener(new TextWatcher() {
             @Override
@@ -93,7 +94,7 @@ public class ControlCardTaizhangActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 search_name = tvContent.getText().toString();
                 if (TextUtils.isEmpty(search_name)) {
-                    eqToolsAdapter.setNewData(eqToolsList);
+                    eqToolsReceiveAdapter.setNewData(eqToolsList);
                 } else {
                     searchList.clear();
                     for (int i = 0; i < eqToolsList.size(); i++) {
@@ -101,7 +102,7 @@ public class ControlCardTaizhangActivity extends BaseActivity {
                             searchList.add(eqToolsList.get(i));
                         }
                     }
-                    eqToolsAdapter.setNewData(searchList);
+                    eqToolsReceiveAdapter.setNewData(searchList);
                 }
             }
         });
@@ -128,8 +129,8 @@ public class ControlCardTaizhangActivity extends BaseActivity {
                             for(int i=0;i<eqToolsList.size();i++){
                                 eqToolsList.get(i).setNumber(i);
                             }
-                            eqToolsAdapter.addData(eqToolsList);
-                            eqToolsAdapter.notifyDataSetChanged();
+                            eqToolsReceiveAdapter.addData(eqToolsList);
+                            eqToolsReceiveAdapter.notifyDataSetChanged();
                         }
                     }
 

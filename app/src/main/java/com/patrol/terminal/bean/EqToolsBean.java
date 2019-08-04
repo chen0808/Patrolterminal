@@ -12,6 +12,7 @@ public class EqToolsBean implements Serializable {
     private String brand;
     private String remarks;
     private Integer number;
+    private Integer receiveNum;
 
     public String getId() {
         return id;
@@ -75,5 +76,13 @@ public class EqToolsBean implements Serializable {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public Integer getReceiveNum() {
+        return receiveNum;
+    }
+
+    public void setReceiveNum(Integer receiveNum) {
+        this.receiveNum = receiveNum;
     }
 }
