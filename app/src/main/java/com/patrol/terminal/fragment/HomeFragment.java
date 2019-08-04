@@ -2,7 +2,6 @@ package com.patrol.terminal.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,26 +11,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.CheckActivity;
-import com.patrol.terminal.activity.DangerVerifyActivity;
-import com.patrol.terminal.activity.DefectActivity;
 import com.patrol.terminal.activity.DefectTabActivity;
 import com.patrol.terminal.activity.HongWaiCeWenActivity;
 import com.patrol.terminal.activity.JiediDianZuCeLiangActicivity;
 import com.patrol.terminal.activity.JueYuanZiLingZhiJianCeActivity;
 import com.patrol.terminal.activity.LoginActivity;
+import com.patrol.terminal.activity.MapActivity;
 import com.patrol.terminal.activity.MonitoringRecordActivity;
+import com.patrol.terminal.activity.MyPerformanceActivity;
 import com.patrol.terminal.activity.NewMainActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
-import com.patrol.terminal.activity.SettingActivity;
-import com.patrol.terminal.activity.TroubleActivity;
+import com.patrol.terminal.activity.ScoreListActivity;
+import com.patrol.terminal.activity.SendCarActivity;
+import com.patrol.terminal.activity.SendCarTemporaryActivity;
 import com.patrol.terminal.activity.TroubleTabActivity;
 import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
 import com.patrol.terminal.adapter.BackLogTaskAdapter;
@@ -44,9 +41,9 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.PersonalTaskListBean;
 import com.patrol.terminal.bean.PlanFinishRateBean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
+import com.patrol.terminal.training.NewTrainPlanActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
-import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -54,11 +51,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
@@ -126,6 +124,40 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     RelativeLayout rlTaskHistory;
     @BindView(R.id.rl_day_plan_finish)
     RelativeLayout rlDayPlanFinish;
+    @BindView(R.id.img_db)
+    ImageView imgDb;
+    @BindView(R.id.img_dqrw)
+    ImageView imgDqrw;
+    @BindView(R.id.img_lsrw)
+    ImageView imgLsrw;
+    @BindView(R.id.img_rjhwc)
+    ImageView imgRjhwc;
+    @BindView(R.id.img_car)
+    ImageView imgCar;
+    @BindView(R.id.rl_send_car_allot)
+    RelativeLayout rlSendCarAllot;
+    @BindView(R.id.img_dep_kaohe)
+    ImageView imgDepKaohe;
+    @BindView(R.id.rl_dep_kaohe)
+    RelativeLayout rlDepKaohe;
+    @BindView(R.id.img_my_jixiao)
+    ImageView imgMyJixiao;
+    @BindView(R.id.rl_my_jixiao)
+    RelativeLayout rlMyJixiao;
+    @BindView(R.id.img_take_car)
+    ImageView imgTakeCar;
+    @BindView(R.id.rl_take_car)
+    RelativeLayout rlTakeCar;
+    @BindView(R.id.img_my_guiji)
+    ImageView imgMyGuiji;
+    @BindView(R.id.rl_my_guiji)
+    RelativeLayout rlMyGuiji;
+    @BindView(R.id.img_my_peixun)
+    ImageView imgMyPeixun;
+    @BindView(R.id.rl_my_peixun)
+    RelativeLayout rlMyPeixun;
+    @BindView(R.id.home_date)
+    TextView homeDate;
 
     private List<PersonalTaskListBean> backLogData = new ArrayList<>();
     private List<PersonalTaskListBean> taskData = new ArrayList<>();
@@ -154,6 +186,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     protected void initData() {
         time = DateUatil.getCurrTime();
         inteDate();
+         homeDate.setText(DateUatil.getTime()+"   "+DateUatil.getWeeks());
         String name = SPUtil.getString(getContext(), Constant.USER, Constant.USERNAME, "");
         String dep = SPUtil.getDepName(getContext());
         String job = SPUtil.getString(getContext(), Constant.USER, Constant.USERJOBNAME, "");
@@ -395,7 +428,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     }
 
 
-    @OnClick({R.id.rl_plan, R.id.rl_task, R.id.rl_defact, R.id.rl_trouble, R.id.scanner_iv, R.id.rl_todo, R.id.rl_task_now, R.id.rl_task_history, R.id.rl_day_plan_finish})
+    @OnClick({R.id.rl_plan, R.id.rl_task, R.id.rl_defact, R.id.rl_trouble, R.id.scanner_iv, R.id.rl_todo, R.id.rl_task_now, R.id.rl_task_history, R.id.rl_day_plan_finish, R.id.rl_send_car_allot, R.id.rl_dep_kaohe, R.id.rl_my_jixiao, R.id.rl_take_car, R.id.rl_my_guiji, R.id.rl_my_peixun})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_plan:
@@ -435,9 +468,9 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             case R.id.rl_task_now:
             case R.id.rl_task_history:
                 Intent intent = new Intent(getActivity(), NewTaskActivity.class);
-                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                     intent.putExtra("index", 4);
-                }else {
+                } else {
                     intent.putExtra("index", 1);
                 }
 
@@ -445,12 +478,36 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 break;
             case R.id.rl_day_plan_finish:
                 Intent intent1 = new Intent(getActivity(), NewPlanActivity.class);
-                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                     intent1.putExtra("index", 5);
-                }else {
+                } else {
                     intent1.putExtra("index", 2);
                 }
                 getActivity().startActivity(intent1);
+                break;
+            case R.id.rl_send_car_allot:
+                Intent intent2 = new Intent(getActivity(), SendCarActivity.class);
+                getActivity().startActivity(intent2);
+                break;
+            case R.id.rl_dep_kaohe:
+                Intent intent3 = new Intent(getActivity(), ScoreListActivity.class);
+                getActivity().startActivity(intent3);
+                break;
+            case R.id.rl_my_jixiao:
+                Intent intent4 = new Intent(getActivity(), MyPerformanceActivity.class);
+                getActivity().startActivity(intent4);
+                break;
+            case R.id.rl_take_car:
+                Intent intent5 = new Intent(getActivity(), SendCarTemporaryActivity.class);
+                getActivity().startActivity(intent5);
+                break;
+            case R.id.rl_my_guiji:
+                Intent intent6 = new Intent(getActivity(), MapActivity.class);
+                getActivity().startActivity(intent6);
+                break;
+            case R.id.rl_my_peixun:
+                Intent intent7 = new Intent(getActivity(), NewTrainPlanActivity.class);
+                getActivity().startActivity(intent7);
                 break;
         }
     }
@@ -501,8 +558,9 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                     @Override
                     protected void onSuccees(BaseResult<List<PersonalTaskListBean>> t) throws Exception {
                         backLogData = t.getResults();
-                        if (adapter!=null){
-                        adapter.setNewData(backLogData);}
+                        if (adapter != null) {
+                            adapter.setNewData(backLogData);
+                        }
                         if (backLogData.size() == 0) {
                             homeTodoNoData.setVisibility(View.VISIBLE);
                         } else {
@@ -576,4 +634,6 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
             refreshTodo.dispose();
         }
     }
+
+
 }

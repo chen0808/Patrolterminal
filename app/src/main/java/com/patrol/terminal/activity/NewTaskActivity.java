@@ -171,10 +171,10 @@ public class NewTaskActivity extends BaseActivity {
             carNum.setVisibility(View.VISIBLE);
             dayPlanNum.setVisibility(View.VISIBLE);
         } else {
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 60), UIUtil.dip2px(this, 30));
-            layoutParams.setMargins(UIUtil.dip2px(this, UIUtil.dip2px(this, 42)), 0, UIUtil.dip2px(this, 30), 0);
-            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 60), UIUtil.dip2px(this, 30));
-            layoutParams1.setMargins(UIUtil.dip2px(this, UIUtil.dip2px(this, 8)), 0, UIUtil.dip2px(this, 60), 0);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 50), LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(UIUtil.dip2px(this, UIUtil.dip2px(this, 1)), 0, UIUtil.dip2px(this, 30), 0);
+            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 50), LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams1.setMargins(UIUtil.dip2px(this, UIUtil.dip2px(this, 0)), 0, UIUtil.dip2px(this, 10), 0);
             groupTaskNum.setLayoutParams(layoutParams);
             personalTaskNum.setLayoutParams(layoutParams1);
             groupTaskNum.setGravity(Gravity.BOTTOM);
@@ -203,7 +203,7 @@ public class NewTaskActivity extends BaseActivity {
                 SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
                 simplePagerTitleView.setNormalColor(getResources().getColor(R.color.black_gray));
                 simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.orange_vip));
-                simplePagerTitleView.setPadding(0, 26, 0, 0);
+                simplePagerTitleView.setPadding(0, 30, 0, 0);
                 simplePagerTitleView.setText(mDataList.get(index));
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -231,9 +231,9 @@ public class NewTaskActivity extends BaseActivity {
             @Override
             public int getIntrinsicWidth() {
                 if (job.contains(Constant.RUNNING_SQUAD_LEADER)) {
-                    return UIUtil.dip2px(NewTaskActivity.this, 10);
+                    return UIUtil.dip2px(NewTaskActivity.this, 30);
                 } else {
-                    return UIUtil.dip2px(NewTaskActivity.this, 64);
+                    return UIUtil.dip2px(NewTaskActivity.this, 50);
                 }
 
             }

@@ -22,6 +22,16 @@ public class EqToolTemp {
 
     // 备注
     private String remarks;
+    // （0：工器具，1：材料）
+    private String tool_type;
+
+    public String getTool_type() {
+        return tool_type;
+    }
+
+    public void setTool_type(String tool_type) {
+        this.tool_type = tool_type;
+    }
 
     /*** 自定义字段 ***/
     public String getId() {

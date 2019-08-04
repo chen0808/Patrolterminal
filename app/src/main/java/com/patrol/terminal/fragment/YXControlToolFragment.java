@@ -1,7 +1,10 @@
 package com.patrol.terminal.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +31,9 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.AddToolDialog;
 import com.patrol.terminal.widget.NoScrollListView;
+import com.patrol.terminal.widget.SignDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,8 +62,8 @@ public class YXControlToolFragment extends BaseFragment {
     Button addBtn01;
     @BindView(R.id.add_btn_02)
     Button addBtn02;
-    @BindView(R.id.control_card_record)
-    Button toolRecord;//记录
+    @BindView(R.id.iv_signature_pad)
+    ImageView ivSignaturePad;
 
     private List<CardTool> mControlToolList1 = new ArrayList<>();
     private List<CardTool> mControlToolList2 = new ArrayList<>();
@@ -75,7 +81,9 @@ public class YXControlToolFragment extends BaseFragment {
 
     private boolean isCanClick = true;  //默认能点击，填写和更新状态
     private List<CardTool> workToolsBeans = null;
-    private List<EqToolTemp> eqToolTemp;
+    private List<EqToolTemp> eqToolTemp1=new ArrayList<>();
+    private List<EqToolTemp> eqToolTemp2=new ArrayList<>();
+    private List<File> mPicList = new ArrayList<>();
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -145,7 +153,7 @@ public class YXControlToolFragment extends BaseFragment {
             controlCardDiv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    AddToolDialog.update(mContext, depdapter1, mControlToolList1, position);
+                    AddToolDialog.update(mContext, depdapter1, mControlToolList1, position,eqToolTemp1);
 
                 }
             });
@@ -153,7 +161,7 @@ public class YXControlToolFragment extends BaseFragment {
             controlCardDiv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    AddToolDialog.update(mContext, depdapter2, mControlToolList2, position);
+                    AddToolDialog.update(mContext, depdapter2, mControlToolList2, position,eqToolTemp2);
                 }
             });
 
@@ -181,20 +189,16 @@ public class YXControlToolFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.add_btn_01, R.id.add_btn_02, R.id.control_card_submit, R.id.control_card_record})
+    @OnClick({R.id.add_btn_01, R.id.add_btn_02, R.id.control_card_submit, R.id.iv_signature_pad})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.control_card_record:
-//                Intent intent = new Intent(getActivity(), ToolRecordActivity.class);
-//                startActivity(intent);
-                break;
             case R.id.add_btn_01:
-                AddToolDialog.show(mContext, depdapter1, mControlToolList1, eqToolTemp);
+                AddToolDialog.show(mContext, depdapter1, mControlToolList1, eqToolTemp1);
 
                 break;
 
             case R.id.add_btn_02:
-                AddToolDialog.show(mContext, depdapter2, mControlToolList2, eqToolTemp);
+                AddToolDialog.show(mContext, depdapter2, mControlToolList2, eqToolTemp2);
 
                 break;
 
@@ -206,13 +210,11 @@ public class YXControlToolFragment extends BaseFragment {
                     bean.setTool_type("0");
                     controlToolBeans.add(bean);
                 }
-
                 for (int i = 0; i < mControlToolList2.size(); i++) {
                     CardTool bean = mControlToolList1.get(i);
                     bean.setTool_type("1");
                     controlToolBeans.add(bean);
                 }
-
                 BaseRequest.getInstance().getService()
                         .postControlTool(controlToolBeans)
                         .subscribeOn(Schedulers.io())
@@ -235,6 +237,22 @@ public class YXControlToolFragment extends BaseFragment {
                             }
                         });
                 break;
+            case R.id.iv_signature_pad:
+                if (isCanClick) {
+
+                   Dialog dialog1 = SignDialog.show(getActivity(), ivSignaturePad);
+                    dialog1.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            if (ivSignaturePad.getDrawable() != null) {
+                                File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "controlDep");
+                                mPicList.add(file1);
+                            }
+                        }
+                    });
+                }
+                break;
+
         }
     }
 
@@ -246,7 +264,15 @@ public class YXControlToolFragment extends BaseFragment {
                 .subscribe(new BaseObserver<List<EqToolTemp>>(mContext) {
                     @Override
                     protected void onSuccees(BaseResult<List<EqToolTemp>> t) throws Exception {
-                        eqToolTemp = t.getResults();
+                        List<EqToolTemp> results = t.getResults();
+                        for (int i = 0; i < results.size(); i++) {
+                            EqToolTemp eqToolTemp = results.get(i);
+                            if ("0".equals(eqToolTemp.getTool_type())){
+                                eqToolTemp1.add(eqToolTemp);
+                            }else if ("1".equals(eqToolTemp.getTool_type())){
+                                eqToolTemp2.add(eqToolTemp);
+                            }
+                        }
                     }
 
                     @Override
@@ -256,3 +282,4 @@ public class YXControlToolFragment extends BaseFragment {
                 });
     }
 }
+

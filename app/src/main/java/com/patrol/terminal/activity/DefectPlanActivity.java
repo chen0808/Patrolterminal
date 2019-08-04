@@ -160,6 +160,7 @@ public class DefectPlanActivity extends BaseActivity {
             setEnable();
         } else if (mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             controlCard.setText("填写控制卡");
+            nsControlCard.setVisibility(View.VISIBLE);
             llControlCard.setVisibility(View.VISIBLE);
             defectPlanAuditorLl.setVisibility(View.GONE);
             dangerPatrolSave.setVisibility(View.GONE);
@@ -717,21 +718,21 @@ public class DefectPlanActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult<AllControlCarBean> t) throws Exception {
                         allControlCarBean = t.getResults();
-                        if (mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人进来, 填写过的将数据带过去
-                            if (allControlCarBean == null) {   //负责人第一次进来
-                                nsControlCard.setVisibility(View.VISIBLE);
-                            } else {
-                                if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool()== null ) {
-                                    nsControlCard.setVisibility(View.VISIBLE);
-                                } else {
-//                                    nsWorkTicket.setVisibility(View.GONE);
-                                    nsControlCard.setVisibility(View.GONE);
-                                }
-                            }
-
-                        } else {   //其他人进控制卡
-                            nsControlCard.setVisibility(View.GONE);
-                        }
+//                        if (mJobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {  //负责人进来, 填写过的将数据带过去
+//                            if (allControlCarBean == null) {   //负责人第一次进来
+//                                nsControlCard.setVisibility(View.VISIBLE);
+//                            } else {
+//                                if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool().size()==0 ) {
+//                                    nsControlCard.setVisibility(View.VISIBLE);
+//                                } else {
+////                                    nsWorkTicket.setVisibility(View.GONE);
+//                                    nsControlCard.setVisibility(View.GONE);
+//                                }
+//                            }
+//
+//                        } else {   //其他人进控制卡
+//                            nsControlCard.setVisibility(View.GONE);
+//                        }
                     }
 
                     @Override

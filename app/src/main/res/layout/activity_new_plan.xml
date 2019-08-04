@@ -81,33 +81,30 @@
 
             <TextView
                 android:id="@+id/month_plan_num"
-                android:layout_width="105dp"
+                android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal|bottom"
                 android:text="0"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/sp_16"
-                android:layout_marginRight="3dp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/week_plan_num"
-                android:layout_width="105dp"
+                android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal|bottom"
                 android:text="0"
                 android:textColor="@color/week_plan_num"
                 android:textSize="@dimen/sp_16"
-                android:layout_marginRight="5dp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/day_plan_num"
-                android:layout_width="105dp"
+                android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal|bottom"
                 android:text="0"
-                android:layout_marginRight="7dp"
                 android:textColor="@color/day_plan_num"
                 android:textSize="@dimen/sp_16"
                 android:textStyle="bold" />
@@ -115,9 +112,9 @@
 
         <net.lucode.hackware.magicindicator.MagicIndicator
             android:id="@+id/magic_indicator4"
-            android:layout_width="280dp"
+            android:layout_width="wrap_content"
             android:layout_height="46dp"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
             />
 
     </FrameLayout>

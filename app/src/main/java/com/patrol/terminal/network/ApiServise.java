@@ -583,8 +583,9 @@ public interface ApiServise {
     @POST("work/control/card/pda/updatePOST")
     Observable<BaseResult> upLoadControlCard(@PartMap Map<String, RequestBody> params);
 
+
     //上传工器具配置
-    @POST("work/tool/pda/updatePOST")
+    @POST("card/tool/saveBatchPOST")
     Observable<BaseResult<ControlToolBeanList>> postControlTool(@Body List<CardTool> beans);
 
     //个人任务详情  获取Tower_id
