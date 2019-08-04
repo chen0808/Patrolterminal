@@ -3,24 +3,35 @@ package com.patrol.terminal;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.multidex.MultiDex;
+
+import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.patrol.terminal.utils.ExceptionCrashHandler;
 import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
-import androidx.multidex.MultiDex;
-
 public class MyApp extends Application {
+
+    private static Context mContext;
+
+    public static Context getAppContext() {
+        return mContext;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = this.getApplicationContext();
         //初始化DBFLOW
         FlowManager.init(this);
         FlowLog.setMinimumLoggingLevel(FlowLog.Level.V);//添加日志
         ExceptionCrashHandler.getInstance().init(this);
 
         Logger.addLogAdapter(new AndroidLogAdapter());
+
+        Stetho.initializeWithDefaults(this);
     }
 
     @Override
