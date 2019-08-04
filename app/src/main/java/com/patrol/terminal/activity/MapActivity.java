@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,14 +25,18 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.DepBean;
+import com.patrol.terminal.bean.DepPersonalBean;
 import com.patrol.terminal.bean.LocationBean;
 import com.patrol.terminal.bean.PositionListBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.MapNameSelectDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,10 +45,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChangeListener,*/ /*RouteSearch.OnRouteSearchListener,*/
-        View.OnClickListener, AMap.OnMarkerClickListener, AMap.OnMapClickListener, AMap.InfoWindowAdapter {
+        View.OnClickListener, AMap.OnMarkerClickListener, AMap.OnMapClickListener, AMap.InfoWindowAdapter/*, MapNameSelectDialog.PopWindowItemClick*/ {
 
-    @BindView(R.id.btn_location_test)
-    Button btnLocationTest;
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)
@@ -56,8 +57,13 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
+    @BindView(R.id.map)
+    MapView map;
+    @BindView(R.id.date_tv)
+    TextView dateTv;
+    @BindView(R.id.name_tv)
+    TextView nameTv;
 
-    private MapView map;
     private AMap aMap;
     private RelativeLayout back;
     //private ArrayList<LatLng> locationList = new ArrayList<>();
@@ -65,13 +71,15 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
 
 //    private AMapLocationClient locationClient = null;
 //    private AMapLocationClientOption locationOption = null;
+    private boolean isPopWindowShow = false;
+    //private MapNameSelectDialog.PopWindowItemClick itemClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
-       // checkPremission();
+        // checkPremission();
         back = findViewById(R.id.title_back);
         back.setOnClickListener(this);
         titleName.setText("轨迹");
@@ -251,6 +259,8 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                         Log.e("", e.getMessage());
                     }
                 });
+
+        getDepInfo();
     }
 
     private void addMarkers() {
@@ -306,12 +316,6 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
         finish();
     }
 
-    @OnClick(R.id.btn_location_test)
-    public void onViewClicked() {
-//        testLocation = new LatLonPoint(locationList.get(0).getLatitude() + (Math.random() - 0.5) * 0.03, locationList.get(0).getLongitude() + (Math.random() - 0.5) * 0.03);
-//        locationList.add(testLocation);
-//        drawLocation();
-    }
 
     private void drawLocation() {
         if (locationList != null && locationList.size() > 1) {
@@ -329,6 +333,7 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     }
 
     private Marker mMarker;
+
     @Override
     public boolean onMarkerClick(Marker marker) {
         mMarker = marker;
@@ -363,4 +368,88 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
         name.setText(mMarker.getTitle());
         info.setText(mMarker.getSnippet());
     }
+
+    @OnClick({R.id.date_tv, R.id.name_tv})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.date_tv:
+                break;
+            case R.id.name_tv:
+                if (!isPopWindowShow) {
+                    showNamePopWindow();
+                    isPopWindowShow = true;
+                }else {
+                    mapNameSelectDialog.dismiss();
+                    isPopWindowShow = false;
+                }
+
+                break;
+        }
+    }
+
+
+    private MapNameSelectDialog mapNameSelectDialog;
+    private void showNamePopWindow() {
+        if (depList != null && depList.size() > 0) {
+            mapNameSelectDialog = new MapNameSelectDialog(MapActivity.this, depList, classMemberList);
+            mapNameSelectDialog.setCallback(new MapNameSelectDialog.PopWindowItemClick() {
+                @Override
+                public void setNameAndId(String name, String id) {
+                    nameTv.setText(name);
+                    if (isPopWindowShow) {
+                        mapNameSelectDialog.dismiss();
+                        isPopWindowShow = false;
+                    }
+
+                }
+            });
+            mapNameSelectDialog.showAsDropDown(dateTv);
+        }else {
+            Toast.makeText(MapActivity.this,"未获取到班组数据!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private List<DepBean> depList = new ArrayList<>();
+    private void getDepInfo() {
+        //获取所有班组
+        BaseRequest.getInstance().getService()
+                .getDepList("SYS_DEP", "ID,name", "1")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<DepBean>>(MapActivity.this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<DepBean>> t) throws Exception {
+                        depList = t.getResults();
+                        if (depList != null && depList.size() > 0) {
+                            getClassMember(depList.get(0).getId());  //默认获取第一个班级
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+    }
+
+    private List<DepPersonalBean.UserListBean> classMemberList = new ArrayList<>();
+    private void getClassMember(String depId) {
+        BaseRequest.getInstance().getService()
+                .getDepPersonal(depId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<DepPersonalBean>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<DepPersonalBean> t) throws Exception {
+                        classMemberList = t.getResults().getUserList();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                    }
+                });
+
+
+    }
+
 }

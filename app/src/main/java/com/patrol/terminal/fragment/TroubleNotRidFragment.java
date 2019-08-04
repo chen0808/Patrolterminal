@@ -184,6 +184,7 @@ public class TroubleNotRidFragment extends BaseFragment {
             public void afterTextChanged(Editable s) {
                 search = tvContent.getText().toString();
                 if (TextUtils.isEmpty(search)) {
+                    adapter.setNewData(null);
                     adapter.setNewData(troubleList);
                 } else {
                     searchList.clear();
@@ -192,6 +193,7 @@ public class TroubleNotRidFragment extends BaseFragment {
                             searchList.add(troubleList.get(i));
                         }
                     }
+                    adapter.setNewData(null);
                     adapter.setNewData(searchList);
                 }
             }

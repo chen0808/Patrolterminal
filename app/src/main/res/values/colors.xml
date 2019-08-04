@@ -27,6 +27,7 @@
     <color name="black_gray">#666666</color>
     <color name="hint_color">#cacaca</color>
     <color name="transparent">#00ffffff</color>
+    <color name="half_transparent">#bbffffff</color>
     <color name="my_fragment_color">#4b4b4b</color>
     <color name="tra_tv_coler">#202020</color>
     <color name="tra_et_coler">#b3b3b3</color>
