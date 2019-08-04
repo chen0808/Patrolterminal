@@ -12,8 +12,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.EqToolsBean;
 
-import java.util.List;
-
 public class EqToolsReceiveAdapter extends BaseQuickAdapter<EqToolsBean, BaseViewHolder> {
     private Context mContext;
 
@@ -42,29 +40,54 @@ public class EqToolsReceiveAdapter extends BaseQuickAdapter<EqToolsBean, BaseVie
             ed.removeTextChangedListener((TextWatcher) ed.getTag());
         }
 
-        if(item.getReceiveNum() == null || item.getReceiveNum() == 0){
+        if(item.getTotal() == null || item.getTotal() == 0){
             viewHolder.setText(R.id.divison_remarks, "0");
             viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         } else {
-            viewHolder.setText(R.id.divison_remarks, item.getReceiveNum().toString());
+            viewHolder.setText(R.id.divison_remarks, item.getTotal().toString());
             viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
         }
 
         TextWatcher watcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//            private CharSequence temp;
+//            private int editStart ;
+//            private int editEnd ;
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                temp = s;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                ed.setText(s + "");
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
                 String trim = ed.getText().toString().trim();
                 if(!TextUtils.isEmpty(trim) && !trim.equals("0")) {
-                    item.setReceiveNum(Integer.parseInt(trim));
+//                    editStart = ed.getSelectionStart();
+//                    editEnd = ed.getSelectionEnd();
+//
+//                    Pattern p = Pattern.compile("^(100|[1-9]\\d|\\d)$");//处理0~100正则
+//
+//                    Matcher m =p.matcher(s.toString());
+//                    if(m.find() || ("").equals(s.toString())){
+//                        Log.i("yinyanhua", "OK!");
+//                    }else{
+//                        Log.i("yinyanhua", "请输入正确的数值比例!");
+//                        s.delete(editStart-1, editEnd);
+//                        int tempSelection = editStart;
+//                        Log.i("yinyanhua", "11111111");
+//                        ed.setText(s.toString());
+//                        ed.setSelection(tempSelection);
+//                    }
+
+                    item.setTotal(Integer.parseInt(trim));
                     viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
                 } else {
-                    item.setReceiveNum(0);
+                    item.setTotal(0);
                     viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
                 }
             }

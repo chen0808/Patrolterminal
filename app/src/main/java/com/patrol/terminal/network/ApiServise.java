@@ -1247,4 +1247,8 @@ public interface ApiServise {
     @POST("eq/tools/history/updateBatchPOST")
     Observable<BaseResult> getToolReturn(@Body List<EqToolsOut> list);
 
+    //工器具领用
+    @POST("eq/tools/history/saveBatchPOST")
+    Observable<BaseResult> getToolReceive(@Body List<EqToolsReceiveBean> list);
+
 }
