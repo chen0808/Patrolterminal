@@ -11,6 +11,7 @@ public class EqToolsBean implements Serializable {
     private Integer inventory;
     private String brand;
     private String remarks;
+    private Integer number;
 
     public String getId() {
         return id;
@@ -66,5 +67,13 @@ public class EqToolsBean implements Serializable {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 }

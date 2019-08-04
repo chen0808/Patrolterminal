@@ -1242,5 +1242,5 @@ public interface ApiServise {
 
     //获取工器具台账
     @GET("/eq/tools/listGET")
-    Observable<BaseResult<List<EqToolsBean>>> getEqTools();
+    Observable<BaseResult<List<EqToolsBean>>> getEqTools(@Query("name") String name);
 }
