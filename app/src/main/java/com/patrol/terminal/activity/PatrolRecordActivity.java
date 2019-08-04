@@ -175,8 +175,8 @@ public class PatrolRecordActivity extends BaseActivity {
                     taskGps.setLon(longitude);
                     taskGps.setAddress(address);
                     taskGps.setLoc_time(locationTime);
-//            positionInfo.setData_id(null);
-//            positionInfo.setSign(null);
+//                  positionInfo.setData_id(null);
+//                  positionInfo.setSign(null);
                     taskGps.setUser_id(user_id);
                     taskGps.setData_id(task_id);
                     String depId = SPUtil.getString(PatrolRecordActivity.this, Constant.USER, Constant.DEPID, "");

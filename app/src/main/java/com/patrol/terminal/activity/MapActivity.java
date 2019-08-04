@@ -43,7 +43,6 @@ import com.patrol.terminal.gaode.ClusterItem;
 import com.patrol.terminal.gaode.ClusterOverlay;
 import com.patrol.terminal.gaode.ClusterRender;
 import com.patrol.terminal.gaode.RegionItem;
-import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.MapNameSelectDialog;
@@ -53,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,43 +95,37 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     private String time;
     private ClusterOverlay mClusterOverlay;
     private Map<Integer, Drawable> mBackDrawAbles = new HashMap<>();
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
-        ButterKnife.bind(this);
-        // checkPremission();
-        back = findViewById(R.id.title_back);
-        back.setOnClickListener(this);
-        titleName.setText("轨迹");
-        map = findViewById(R.id.map);
-        map.onCreate(savedInstanceState);
-
-        aMap = map.getMap();
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
-
-        MyLocationStyle myLocationStyle = new MyLocationStyle();
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
-//        myLocationStyle.interval(20000);
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的style
-        aMap.setMyLocationEnabled(true);//显示定位蓝点
-
-        //aMap.setOnMyLocationChangeListener(this);
-
-        //手势交互
-        UiSettings aMapUiSettings = aMap.getUiSettings();
-        aMapUiSettings.setRotateGesturesEnabled(false);//禁用旋转
-
-        aMap.setOnMarkerClickListener(this);
-        aMap.setOnMapClickListener(this);
-        aMap.setInfoWindowAdapter(this);
-
-        initData();
-
-        //初始化定位
-        //initLocation();
-    }
+    private String userid;
+    //    /**
+//     * 定位监听
+//     */
+//    AMapLocationListener locationListener = new AMapLocationListener() {
+//        @Override
+//        public void onLocationChanged(AMapLocation location) {
+//            if (null != location) {
+//                if(location.getErrorCode() == 0) {
+//                    double longitude = location.getLongitude();
+//                    double latitude = location.getLatitude();
+//                    String locationTime = DateUatil.getTime(location.getTime());
+//                }
+//
+//           }
+//        }
+//    };
+    private ClusterRender renderer = new ClusterRender() {
+        @Override
+        public View getView(int clusterNum) {
+            View view = null;
+            if (clusterNum == 1) {
+                view = LayoutInflater.from(MapActivity.this).inflate(R.layout.item_map_window_null, null);
+            } else {
+                view = LayoutInflater.from(MapActivity.this).inflate(R.layout.item_map_window2, null);
+                TextView tvNum = view.findViewById(R.id.tv_num);
+                tvNum.setText(String.valueOf(clusterNum));
+            }
+            return view;
+        }
+    };
 
 //    private static final int REQUEST_TAKE_PHOTO_PERMISSION = 1;
 //        private void checkPremission() {
@@ -232,37 +226,49 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
 //            }
 //    }
 
-
-//    /**
-//     * 定位监听
-//     */
-//    AMapLocationListener locationListener = new AMapLocationListener() {
-//        @Override
-//        public void onLocationChanged(AMapLocation location) {
-//            if (null != location) {
-//                if(location.getErrorCode() == 0) {
-//                    double longitude = location.getLongitude();
-//                    double latitude = location.getLatitude();
-//                    String locationTime = DateUatil.getTime(location.getTime());
-//                }
-//
-//           }
-//        }
-//    };
-private ClusterRender renderer = new ClusterRender() {
     @Override
-    public View getView(int clusterNum) {
-        View view = null;
-        if (clusterNum == 1) {
-            view = LayoutInflater.from(MapActivity.this).inflate(R.layout.item_map_window_null, null);
-        } else {
-            view = LayoutInflater.from(MapActivity.this).inflate(R.layout.item_map_window2, null);
-            TextView tvNum = view.findViewById(R.id.tv_num);
-            tvNum.setText(String.valueOf(clusterNum));
-        }
-        return view;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
+        ButterKnife.bind(this);
+        // checkPremission();
+        back = findViewById(R.id.title_back);
+        back.setOnClickListener(this);
+        titleName.setText("轨迹");
+        map = findViewById(R.id.map);
+        map.onCreate(savedInstanceState);
+
+        aMap = map.getMap();
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
+
+        MyLocationStyle myLocationStyle = new MyLocationStyle();
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+//        myLocationStyle.interval(20000);
+        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的style
+        aMap.setMyLocationEnabled(true);//显示定位蓝点
+
+        //aMap.setOnMyLocationChangeListener(this);
+
+        //手势交互
+        UiSettings aMapUiSettings = aMap.getUiSettings();
+        aMapUiSettings.setRotateGesturesEnabled(false);//禁用旋转
+
+        aMap.setOnMarkerClickListener(this);
+        aMap.setOnMapClickListener(this);
+        aMap.setInfoWindowAdapter(this);
+        userid = SPUtil.getUserId(this);
+        String time = DateUatil.getCurrTime();
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        String[] days = months[1].split("日");
+        String year = years[0];
+        String month = Integer.parseInt(months[0]) + "";
+        String day = Integer.parseInt(days[0]) + "";
+        initData(userid, year, month, day);
+
+        //初始化定位
+        //initLocation();
     }
-};
     private ClusterClickListener clusterListener = new ClusterClickListener() {
         @Override
         public void onClick(Marker marker, List<ClusterItem> clusterItems) {
@@ -278,15 +284,16 @@ private ClusterRender renderer = new ClusterRender() {
         }
     };
 
-    private void initData() {
-        String userId = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
-        String date = DateUatil.getTime() + "%";
-        BaseRequest.getInstance().getService().getPositonList(userId, "2019", "9", "3").subscribeOn(Schedulers.io())
+    private void initData(String userId, String year, String month, String day) {
+        Log.d("initData", "userId:" + userId + "year:" + year + "month:" + month + "day" + day);
+        BaseRequest.getInstance().getService().getPositonList(userId, year, month, day).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PositionListBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<PositionListBean>> t) throws Exception {
                         if (t.getCode() == 1) {
+                            locationList.clear();
+                            aMap.clear();
                             List<PositionListBean> positionListBeans = t.getResults();
                             List<ClusterItem> items = new ArrayList<ClusterItem>();
                             for (int i = 0; i < positionListBeans.size(); i++) {
@@ -466,8 +473,8 @@ private ClusterRender renderer = new ClusterRender() {
             case R.id.search_btn:
                 if (TextUtils.isEmpty(dateTv.getText().toString()) || TextUtils.isEmpty(nameTv.getText().toString())) {
                     Toast.makeText(this, "请选择日期和人员!", Toast.LENGTH_SHORT).show();
-                }else {
-                    //TODO by chenfei
+                } else {
+                    initData(userid, year, month, day);
                 }
                 break;
         }
@@ -484,6 +491,7 @@ private ClusterRender renderer = new ClusterRender() {
                 @Override
                 public void setNameAndId(String name, String id) {
                     nameTv.setText(name);
+                    userid = id;
                     if (isPopWindowShow) {
                         mapNameSelectDialog.dismiss();
                         isPopWindowShow = false;
