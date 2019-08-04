@@ -30,7 +30,6 @@ public class MyApp extends Application {
 
         Logger.addLogAdapter(new AndroidLogAdapter());
 
-//        Stetho.initializeWithDefaults(this);
     }
 
     @Override

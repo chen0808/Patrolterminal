@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,12 +69,14 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     TextView dateTv;
     @BindView(R.id.name_tv)
     TextView nameTv;
+    @BindView(R.id.search_btn)
+    Button searchBtn;
 
     private AMap aMap;
     private RelativeLayout back;
     private List<LocationBean> locationList = new ArrayList<>();
 
-//    private AMapLocationClient locationClient = null;
+    //    private AMapLocationClient locationClient = null;
 //    private AMapLocationClientOption locationOption = null;
     private boolean isPopWindowShow = false;
     //private MapNameSelectDialog.PopWindowItemClick itemClick;
@@ -378,7 +380,7 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
         info.setText(mMarker.getSnippet());
     }
 
-    @OnClick({R.id.date_tv, R.id.name_tv})
+    @OnClick({R.id.date_tv, R.id.name_tv, R.id.search_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.date_tv:
@@ -389,17 +391,22 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                 if (!isPopWindowShow) {
                     showNamePopWindow();
                     isPopWindowShow = true;
-                }else {
+                } else {
                     mapNameSelectDialog.dismiss();
                     isPopWindowShow = false;
                 }
 
+                break;
+
+            case R.id.search_btn:
+                //TODO by chenfei
                 break;
         }
     }
 
 
     private MapNameSelectDialog mapNameSelectDialog;
+
     private void showNamePopWindow() {
         if (depList != null && depList.size() > 0) {
             mapNameSelectDialog = new MapNameSelectDialog(MapActivity.this, depList, classMemberList);
@@ -416,13 +423,14 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                 }
             });
             mapNameSelectDialog.showAsDropDown(dateTv);
-        }else {
-            Toast.makeText(MapActivity.this,"未获取到班组数据!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MapActivity.this, "未获取到班组数据!", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     private List<DepBean> depList = new ArrayList<>();
+
     private void getDepInfo() {
         //获取所有班组
         BaseRequest.getInstance().getService()
@@ -445,6 +453,7 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     }
 
     private List<DepPersonalBean.UserListBean> classMemberList = new ArrayList<>();
+
     private void getClassMember(String depId) {
         BaseRequest.getInstance().getService()
                 .getDepPersonal(depId)
