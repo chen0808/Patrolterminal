@@ -27,7 +27,7 @@ public class AddToolDialog {
     private static EditText divisonUnitEt;
     private static EditText divisonTotalEt;
     private static EditText divisonRemarksEt;
-    private static List<String> names;
+    private static List<String>   names = new ArrayList<>();;
     private static List<EqToolTemp> eqToolTempLists=new ArrayList<>();
 
     public static void show(Context context, ControlToolAdapter adapter, List<CardTool> list, List<EqToolTemp> eqToolTempList) {
@@ -38,7 +38,7 @@ public class AddToolDialog {
         divisonUnitEt = dialogView.findViewById(R.id.divison_unit_et);
         divisonTotalEt = dialogView.findViewById(R.id.divison_num_et);
         divisonRemarksEt = dialogView.findViewById(R.id.divison_remarks_et);
-        names = new ArrayList<>();
+
         //获取工器具名称
         for (int i = 0; i < eqToolTempList.size(); i++) {
             EqToolTemp eqToolTemp = eqToolTempList.get(i);
@@ -53,18 +53,20 @@ public class AddToolDialog {
             for (int i = 0; i < eqToolTempList.size(); i++) {
                 EqToolTemp eqToolTemp = eqToolTempList.get(i);
                 String name= eqToolTemp.getName();
-                if (names.get(0).equals(name)&&eqToolTemp.getType()!=null){
-                    type.add(eqToolTemp.getType());
+                if (names.get(0).equals(name)){
                     divisonUnitEt.setText(eqToolTemp.getUnit());
+                   if (eqToolTemp.getType()!=null){
+                       type.add(eqToolTemp.getType());
+                   }
                 }
             }
         }
         divisonNameEt.attachDataSource(names);
-        if (type.size()!=0){
-            divisonModelEt.attachDataSource(type);
+        if (type.size()==0){
+            type.add("无");
         }
 
-
+        divisonModelEt.attachDataSource(type);
         //隐患类别
         divisonNameEt.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
             @Override
@@ -78,6 +80,9 @@ public class AddToolDialog {
                         typeList.add(eqToolTemp.getType());
                         nuit=eqToolTemp.getUnit();
                     }
+                }
+                if (typeList.size()==0){
+                    typeList.add("无规格");
                 }
                 divisonModelEt.attachDataSource(typeList);
                 divisonUnitEt.setText(nuit);
@@ -119,7 +124,7 @@ public class AddToolDialog {
 //        return controlToolInfo;
 //    }
      //点击一行修改
-    public static void update(Context context, ControlToolAdapter adapter, List<CardTool> list, int position) {
+    public static void update(Context context, ControlToolAdapter adapter, List<CardTool> list, int position, List<EqToolTemp> eqToolTempList) {
         CardTool info = list.get(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         dialogView = LayoutInflater.from(context).inflate(R.layout.add_tool_dialog, null);
@@ -128,16 +133,59 @@ public class AddToolDialog {
         divisonUnitEt = dialogView.findViewById(R.id.divison_unit_et);
         divisonTotalEt = dialogView.findViewById(R.id.divison_num_et);
         divisonRemarksEt = dialogView.findViewById(R.id.divison_remarks_et);
-
+         names.clear();
+        eqToolTempLists.clear();
+        //获取工器具名称
+        for (int i = 0; i < eqToolTempList.size(); i++) {
+            EqToolTemp eqToolTemp = eqToolTempList.get(i);
+            String name= eqToolTemp.getName();
+            if (names.indexOf(name)==-1){
+                names.add(name);
+            }
+            eqToolTempLists.add(eqToolTemp);
+        }
         divisonNameEt.attachDataSource(names);
 
         List<String>  typeList=new ArrayList<>();
         for (int i = 0; i <eqToolTempLists.size() ; i++) {
             EqToolTemp eqToolTemp = eqToolTempLists.get(i);
-            if (info.getTool_name().equals(eqToolTemp.getName())){
+            if (info.getTool_name().equals(eqToolTemp.getName())&&eqToolTemp.getType()!=null){
                 typeList.add(eqToolTemp.getType());
             }
         }
+        if (typeList.size()==0){
+            typeList.add("无规格");
+        }
+
+        //隐患类别
+        divisonNameEt.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
+            @Override
+            public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
+                String s = names.get(i);
+                String nuit="";
+                List<String>  typeList=new ArrayList<>();
+                for (int j = 0; j < eqToolTempList.size(); j++) {
+                    EqToolTemp eqToolTemp = eqToolTempList.get(j);
+                    if (s.equals(eqToolTemp.getName())&&eqToolTemp.getType()!=null){
+                        typeList.add(eqToolTemp.getType());
+                        nuit=eqToolTemp.getUnit();
+                    }
+                }
+                if (typeList.size()==0){
+                    typeList.add("无");
+                }
+                divisonModelEt.attachDataSource(typeList);
+                divisonUnitEt.setText(nuit);
+
+            }
+        });
+        //隐患类别
+        divisonModelEt.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
+            @Override
+            public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
+
+            }
+        });
         divisonNameEt.setSelectedIndex(names.indexOf(info.getTool_name()));
         divisonModelEt.setSelectedIndex(typeList.indexOf(info.getType()));
         divisonUnitEt.setText(info.getUnit());

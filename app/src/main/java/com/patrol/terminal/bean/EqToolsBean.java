@@ -12,7 +12,8 @@ public class EqToolsBean implements Serializable {
     private String brand;
     private String remarks;
     private Integer number;
-    private Integer receiveNum;
+    private Integer total;
+    private String tool_type;
 
     public String getId() {
         return id;
@@ -78,11 +79,19 @@ public class EqToolsBean implements Serializable {
         this.number = number;
     }
 
-    public Integer getReceiveNum() {
-        return receiveNum;
+    public Integer getTotal() {
+        return total;
     }
 
-    public void setReceiveNum(Integer receiveNum) {
-        this.receiveNum = receiveNum;
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public String getTool_type() {
+        return tool_type;
+    }
+
+    public void setTool_type(String tool_type) {
+        this.tool_type = tool_type;
     }
 }

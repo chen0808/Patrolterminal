@@ -13,13 +13,16 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.EqToolsAdapter;
 import com.patrol.terminal.adapter.EqToolsReceiveAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.EqToolsBean;
+import com.patrol.terminal.bean.EqToolsReceiveBean;
+import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.CancelOrOkDialogNew;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
@@ -50,9 +53,12 @@ public class EqToolsReceiveActivity extends BaseActivity {
     ImageView searchDelete;
     @BindView(R.id.control_card_div)
     SwipeRecyclerView controlCardDiv;
+    @BindView(R.id.txt_submit)
+    TextView txtSubmit;
 
     private List<EqToolsBean> eqToolsList = new ArrayList<>();;
     private List<EqToolsBean> searchList = new ArrayList<>();
+    private List<EqToolsReceiveBean> receiveList = new ArrayList<>();
     private EqToolsReceiveAdapter eqToolsReceiveAdapter;
     private String search_name = "";
     private int pageNum = 1;
@@ -108,10 +114,39 @@ public class EqToolsReceiveActivity extends BaseActivity {
         });
     }
 
-    @OnClick(R.id.title_back)
-    public void onViewClicked() {
-        finish();
+    @OnClick({R.id.title_back, R.id.txt_submit})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.title_back:
+                finish();
+                break;
+            case R.id.txt_submit:
+                receiveList.clear();
+                if(eqToolsList != null && eqToolsList.size() > 0){
+                    for(int i=0;i<eqToolsList.size();i++){
+                        if(eqToolsList.get(i).getTotal() != null && eqToolsList.get(i).getTotal().intValue() > 0){
+                            EqToolsReceiveBean eqToolsReceiveBean = new EqToolsReceiveBean();
+                            eqToolsReceiveBean.setEq_tools_id(eqToolsList.get(i).getId());
+                            eqToolsReceiveBean.setEq_tools_name(eqToolsList.get(i).getName());
+                            eqToolsReceiveBean.setType(eqToolsList.get(i).getType());
+                            eqToolsReceiveBean.setUnit(eqToolsList.get(i).getUnit());
+                            eqToolsReceiveBean.setTotal(eqToolsList.get(i).getTotal());
+                            eqToolsReceiveBean.setBrand(eqToolsList.get(i).getBrand());
+                            eqToolsReceiveBean.setUser_id(SPUtil.getUserId(this));
+                            eqToolsReceiveBean.setUser_name(SPUtil.getUserName(this));
+                            eqToolsReceiveBean.setDep_id(SPUtil.getDepId(this));
+                            eqToolsReceiveBean.setDep_name(SPUtil.getDepName(this));
+                            eqToolsReceiveBean.setRemarks(eqToolsList.get(i).getRemarks());
+                            eqToolsReceiveBean.setTool_type(eqToolsList.get(i).getTool_type());
+                            receiveList.add(eqToolsReceiveBean);
+                        }
+                    }
+                }
+                submit();
+                break;
+        }
     }
+
 
     //获取工器具台账
     public void getEqTools(String search_name) {
@@ -139,5 +174,46 @@ public class EqToolsReceiveActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+    //工器具批量领用
+    public void getToolReceive() {
+        ProgressDialog.show(this, true, "正在加载中。。。。");
+        BaseRequest.getInstance().getService()
+                .getToolReceive(receiveList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        if (t.isSuccess()) {
+                            Utils.showToast("领用成功");
+                            finish();
+                        }
+                        ProgressDialog.cancle();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
+
+    //提交缺陷审核
+    public void submit() {
+        CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(this, "领用", "取消", "确定") {
+            @Override
+            public void ok() {
+                super.ok();
+                getToolReceive();
+            }
+
+            @Override
+            public void cancle() {
+                super.cancle();
+            }
+        };
+        dialog.show();
     }
 }

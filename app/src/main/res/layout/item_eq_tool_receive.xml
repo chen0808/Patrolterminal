@@ -114,7 +114,8 @@
         android:gravity="center"
         android:textColor="@color/color_33"
         android:textSize="@dimen/sp_12"
-        android:inputType="number"/>
+        android:inputType="number"
+        />
 
     <View
         android:layout_width="1dp"

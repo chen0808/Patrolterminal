@@ -150,7 +150,12 @@ public class DateUatil {
         SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 hh时mm分");
         return format.format(date);
     }
-
+    public static String getWeeks(){
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String week = sdf.format(date);
+        return week;
+    }
     public static String getTime(long time) {
         Date date = new Date(time);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

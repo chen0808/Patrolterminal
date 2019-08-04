@@ -7,9 +7,11 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,7 +53,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,6 +79,8 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     TextView dateTv;
     @BindView(R.id.name_tv)
     TextView nameTv;
+    @BindView(R.id.search_btn)
+    Button searchBtn;
 
     private AMap aMap;
     private RelativeLayout back;
@@ -442,7 +445,7 @@ private ClusterRender renderer = new ClusterRender() {
 //        tvTime.setText(mMarker.getSnippet());
     }
 
-    @OnClick({R.id.date_tv, R.id.name_tv})
+    @OnClick({R.id.date_tv, R.id.name_tv, R.id.search_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.date_tv:
@@ -458,6 +461,14 @@ private ClusterRender renderer = new ClusterRender() {
                     isPopWindowShow = false;
                 }
 
+                break;
+
+            case R.id.search_btn:
+                if (TextUtils.isEmpty(dateTv.getText().toString()) || TextUtils.isEmpty(nameTv.getText().toString())) {
+                    Toast.makeText(this, "请选择日期和人员!", Toast.LENGTH_SHORT).show();
+                }else {
+                    //TODO by chenfei
+                }
                 break;
         }
     }

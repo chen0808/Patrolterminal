@@ -150,7 +150,7 @@ public class ControlToolFragment extends BaseFragment {
             controlCardDiv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    AddToolDialog.update(mContext, depdapter1, mControlToolList1, position);
+                    AddToolDialog.update(mContext, depdapter1, mControlToolList1, position,eqToolTemp);
 
                 }
             });
@@ -158,7 +158,7 @@ public class ControlToolFragment extends BaseFragment {
             controlCardDiv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    AddToolDialog.update(mContext, depdapter2, mControlToolList2, position);
+                    AddToolDialog.update(mContext, depdapter2, mControlToolList2, position,eqToolTemp);
                 }
             });
 
@@ -213,8 +213,6 @@ public class ControlToolFragment extends BaseFragment {
                     bean.setTool_type("1");
                     controlToolBeans.add(bean);
                 }
-
-
                 BaseRequest.getInstance().getService()
                         .postControlTool(controlToolBeans)
                         .subscribeOn(Schedulers.io())

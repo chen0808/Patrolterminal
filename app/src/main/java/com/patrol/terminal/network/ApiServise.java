@@ -583,8 +583,9 @@ public interface ApiServise {
     @POST("work/control/card/pda/updatePOST")
     Observable<BaseResult> upLoadControlCard(@PartMap Map<String, RequestBody> params);
 
+
     //上传工器具配置
-    @POST("work/tool/pda/updatePOST")
+    @POST("card/tool/saveBatchPOST")
     Observable<BaseResult<ControlToolBeanList>> postControlTool(@Body List<CardTool> beans);
 
     //上传坐标信息
@@ -1250,5 +1251,9 @@ public interface ApiServise {
     //工器具 归还
     @POST("eq/tools/history/updateBatchPOST")
     Observable<BaseResult> getToolReturn(@Body List<EqToolsOut> list);
+
+    //工器具领用
+    @POST("eq/tools/history/saveBatchPOST")
+    Observable<BaseResult> getToolReceive(@Body List<EqToolsReceiveBean> list);
 
 }

@@ -180,22 +180,24 @@ public class NewTrainPlanActivity extends BaseActivity {
 
             if (fromType == Constant.FROM_YEAR_TO_ENTER_TYPE) {
                 TrainingYearPlanBean trainingYearPlanBean = getIntent().getParcelableExtra(Constant.TRAIN_YEAR_PLAN);
+                if (trainingYearPlanBean!=null){
                 trainTypeId = trainingYearPlanBean.getType_id();
                 trainLevelId = trainingYearPlanBean.getTrain_level();
                 trainNameEt.setText(trainingYearPlanBean.getName());
                 //trainTypeSpinner.setText(trainingYearPlanBean.getType_name());
                 trainTypeSpinnerTv.setText(trainingYearPlanBean.getType_name());
                 trainLevelSpinnerTv.setText(trainingYearPlanBean.getTrain_level_name());
-                trainUnitEt.setText(trainingYearPlanBean.getHost_unit());
+                trainUnitEt.setText(trainingYearPlanBean.getHost_unit());}
             } else if (fromType == Constant.FROM_MONTH_TO_ENTER_TYPE) {
                 TrainingMonthPlanBean trainingMonthPlanBean = getIntent().getParcelableExtra(Constant.TRAIN_MONTH_PLAN);
+                if (trainingMonthPlanBean!=null){
                 trainTypeId = trainingMonthPlanBean.getType_id();
                 trainLevelId = trainingMonthPlanBean.getTrain_level();
                 trainNameEt.setText(trainingMonthPlanBean.getName());
                 //trainTypeSpinner.setText(trainingMonthPlanBean.getType_name());
                 trainTypeSpinnerTv.setText(trainingMonthPlanBean.getType_name());
                 trainLevelSpinnerTv.setText(trainingMonthPlanBean.getTrain_level_name());
-                trainUnitEt.setText(trainingMonthPlanBean.getHost_unit());
+                trainUnitEt.setText(trainingMonthPlanBean.getHost_unit());}
             }
 
             titleSettingTv.setText("分发");
