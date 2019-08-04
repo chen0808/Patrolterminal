@@ -21,6 +21,9 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
@@ -36,6 +39,8 @@ import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.MapNameSelectDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,13 +72,15 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
 
     private AMap aMap;
     private RelativeLayout back;
-    //private ArrayList<LatLng> locationList = new ArrayList<>();
     private List<LocationBean> locationList = new ArrayList<>();
 
 //    private AMapLocationClient locationClient = null;
 //    private AMapLocationClientOption locationOption = null;
     private boolean isPopWindowShow = false;
     //private MapNameSelectDialog.PopWindowItemClick itemClick;
+    private TimePickerView pvTime;
+    private String year, month, day;
+    private String time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -375,6 +382,8 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.date_tv:
+                //显示时间选择器
+                showDay();
                 break;
             case R.id.name_tv:
                 if (!isPopWindowShow) {
@@ -450,8 +459,46 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                     }
                 });
+    }
+
+    public void showDay() {
+        Calendar selectedDate = Calendar.getInstance();//系统当前时间
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(2018, 1, 23);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2028, 2, 28);
+        //时间选择器 ，自定义布局
+        //选中事件回调
+        //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+        pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                time = DateUatil.getDay(date);
+                dateTv.setText(time);
+                initDate();
+            }
+        })
+                .setDate(selectedDate)
+                .setRangDate(startDate, endDate)
+                .setContentTextSize(18)
+                .setLineSpacingMultiplier(1.2f)
+                .setTextXOffset(0, 0, 0, 40, 0, -40)
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setDividerColor(0xFF24AD9D)
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .setLabel("年", "月", "日", "时", "分", "秒")
+                .build();
+        pvTime.show();
+    }
 
 
+    public void initDate() {
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        String[] days = months[1].split("日");
+        month = Integer.parseInt(months[0]) + "";
+        year = years[0];
+        day = Integer.parseInt(days[0]) + "";
     }
 
 }
