@@ -1243,4 +1243,13 @@ public interface ApiServise {
     //获取工器具台账
     @GET("/eq/tools/listGET")
     Observable<BaseResult<List<EqToolsBean>>> getEqTools(@Query("name") String name);
+
+    //工器具领用记录列表
+    @GET("eq/tools/history/listGET")
+    Observable<BaseResult<List<EqToolsOut>>> getToolRecordList(@Query("user_id") String userId);
+
+    //工器具 归还
+    @POST("eq/tools/history/updateBatchPOST")
+    Observable<BaseResult> getToolReturn(@Body List<EqToolsOut> list);
+
 }

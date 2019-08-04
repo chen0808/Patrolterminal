@@ -193,7 +193,7 @@
         <item name="android:windowBackground">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
-
+    <!---->
     <style name="line_gray">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
@@ -252,8 +252,13 @@
         <item name="android:minWidth">120dp</item>
         <item name="android:minHeight">30dp</item>
         <item name="android:padding">5dp</item>
-
     </style>
 
+    <!--竖线-->
+    <style name="line_shu">
+        <item name="android:background">@color/color_33</item>
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
 
 </resources>

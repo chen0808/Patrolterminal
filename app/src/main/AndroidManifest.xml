@@ -107,6 +107,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.EqToolsReceiveActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.TroubleTabActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
@@ -317,6 +321,14 @@
         <activity
             android:name=".activity.AddTroubleActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ToolRecordListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ToolReturnActivity"
+            android:screenOrientation="portrait" />
+
 
         <meta-data
             android:name="com.amap.api.v2.apikey"

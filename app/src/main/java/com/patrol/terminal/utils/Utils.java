@@ -9,7 +9,9 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.patrol.terminal.MyApp;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.DangerVerifyActivity;
 import com.patrol.terminal.activity.DefectIngAuditActivity;
@@ -28,11 +30,12 @@ import com.patrol.terminal.bean.TodoBean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import jxl.Sheet;
 import jxl.Workbook;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class Utils {
 
@@ -371,4 +374,19 @@ public class Utils {
             decorView.setSystemUiVisibility(uiOptions);
         }
     }
+
+    public static void showToast(String msg) {
+        Toast.makeText(MyApp.getAppContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    public RequestBody toRequestBody(String value) {
+        if (value != null) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            return requestBody;
+        } else {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            return requestBody;
+        }
+    }
+
 }
