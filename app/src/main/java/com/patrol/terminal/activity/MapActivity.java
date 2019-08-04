@@ -2,6 +2,7 @@ package com.patrol.terminal.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -399,7 +400,11 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                 break;
 
             case R.id.search_btn:
-                //TODO by chenfei
+                if (TextUtils.isEmpty(dateTv.getText().toString()) || TextUtils.isEmpty(nameTv.getText().toString())) {
+                    Toast.makeText(this, "请选择日期和人员!", Toast.LENGTH_SHORT).show();
+                }else {
+                    //TODO by chenfei
+                }
                 break;
         }
     }
