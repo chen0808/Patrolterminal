@@ -5,7 +5,6 @@ import android.content.Context;
 
 import androidx.multidex.MultiDex;
 
-import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.patrol.terminal.utils.ExceptionCrashHandler;
@@ -31,7 +30,7 @@ public class MyApp extends Application {
 
         Logger.addLogAdapter(new AndroidLogAdapter());
 
-        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
     }
 
     @Override
