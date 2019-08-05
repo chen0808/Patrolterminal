@@ -41,8 +41,14 @@ public class DefectIngTabAdapter extends BaseQuickAdapter<DefectFragmentBean, Ba
             viewHolder.setText(R.id.item_defect_status, StringUtil.getDefectState(item.getIn_status()));
             viewHolder.setTextColor(R.id.item_defect_status, mContext.getResources().getColor(StringUtil.getDefectColor(item.getIn_status())));
         } else {
-            viewHolder.setText(R.id.item_defect_status, StringUtil.getDefectState(item.getDone_status()));
-            viewHolder.setTextColor(R.id.item_defect_status, mContext.getResources().getColor(StringUtil.getDefectColor(item.getDone_status())));
+            if ("0".equals(item.getMake_status())||"2".equals(item.getMake_status())){
+                viewHolder.setText(R.id.item_defect_status, StringUtil.getDefectPlanState(item.getDone_status()));
+                viewHolder.setTextColor(R.id.item_defect_status, mContext.getResources().getColor(StringUtil.getDefectColor(item.getDone_status())));
+            }else {
+                viewHolder.setText(R.id.item_defect_status, StringUtil.getYxbWeekState(item.getMake_status()));
+                viewHolder.setTextColor(R.id.item_defect_status, mContext.getResources().getColor(StringUtil.getDefectColor(item.getMake_status())));
+            }
+
         }
 
         viewHolder.setGone(R.id.iv_icon,false);

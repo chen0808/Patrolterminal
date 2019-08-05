@@ -386,7 +386,11 @@ public class DefectPlanActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<DefectPlanDetailBean> t) throws Exception {
                         bean = t.getResults();
                         if (bean!=null){
-                        line_name = bean.getLine_name();
+                            String done_status = bean.getDone_status();
+                            if ("1".equals(done_status)){
+
+                            }
+                            line_name = bean.getLine_name();
                         tower_name = bean.getTower_name();
                         find_dep_id = bean.getDeal_dep_id();
                         find_dep_name = bean.getDeal_dep_name();
@@ -657,7 +661,6 @@ public class DefectPlanActivity extends BaseActivity {
                 .subscribe(new BaseObserver() {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
-
                         ProgressDialog.cancle();
                         finish();
                     }

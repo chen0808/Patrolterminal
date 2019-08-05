@@ -32,6 +32,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.JXTotalActivity"></activity>
         <activity android:name=".activity.DefectPlanActivity" />
         <activity android:name=".activity.DangerToPatrolActivity" />
         <activity android:name=".activity.DangerVerifyActivity" />
@@ -321,14 +322,12 @@
         <activity
             android:name=".activity.AddTroubleActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.ToolRecordListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ToolReturnActivity"
             android:screenOrientation="portrait" />
-
 
         <meta-data
             android:name="com.amap.api.v2.apikey"

@@ -13,13 +13,18 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
-import com.patrol.terminal.activity.DefectActivity;
+import com.patrol.terminal.activity.ControlCardTaizhangActivity;
 import com.patrol.terminal.activity.DefectTabActivity;
+import com.patrol.terminal.activity.JXTotalActivity;
 import com.patrol.terminal.activity.LoginActivity;
+import com.patrol.terminal.activity.MapActivity;
+import com.patrol.terminal.activity.MyPerformanceActivity;
 import com.patrol.terminal.activity.NewMainActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
 import com.patrol.terminal.activity.NewTaskActivity;
-import com.patrol.terminal.activity.TroubleActivity;
+import com.patrol.terminal.activity.ScoreListActivity;
+import com.patrol.terminal.activity.SendCarActivity;
+import com.patrol.terminal.activity.SendCarTemporaryActivity;
 import com.patrol.terminal.activity.TroubleTabActivity;
 import com.patrol.terminal.adapter.BackLogAdapter;
 import com.patrol.terminal.adapter.PlanFinishRateAdapter;
@@ -38,6 +43,7 @@ import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
 import com.patrol.terminal.overhaul.OverhaulZzWeekTaskDetailActivity;
 import com.patrol.terminal.overhaul.OvhaulHomeOtherTaskAdapter;
 import com.patrol.terminal.overhaul.OvhaulHomeZzTaskAdapter;
+import com.patrol.terminal.training.NewTrainPlanActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
@@ -127,6 +133,36 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     ImageView dataChange;
     @BindView(R.id.wanchenglv_name)
     TextView wanchenglvName;
+    @BindView(R.id.rl_task_tv)
+    TextView rlTaskTv;
+    @BindView(R.id.img_car)
+    ImageView imgCar;
+    @BindView(R.id.rl_send_car_allot)
+    RelativeLayout rlSendCarAllot;
+    @BindView(R.id.img_dep_kaohe)
+    ImageView imgDepKaohe;
+    @BindView(R.id.rl_dep_kaohe)
+    RelativeLayout rlDepKaohe;
+    @BindView(R.id.img_my_jixiao)
+    ImageView imgMyJixiao;
+    @BindView(R.id.rl_my_jixiao)
+    RelativeLayout rlMyJixiao;
+    @BindView(R.id.img_take_car)
+    ImageView imgTakeCar;
+    @BindView(R.id.rl_take_car)
+    RelativeLayout rlTakeCar;
+    @BindView(R.id.img_my_guiji)
+    ImageView imgMyGuiji;
+    @BindView(R.id.rl_my_guiji)
+    RelativeLayout rlMyGuiji;
+    @BindView(R.id.img_my_peixun)
+    ImageView imgMyPeixun;
+    @BindView(R.id.rl_my_peixun)
+    RelativeLayout rlMyPeixun;
+    @BindView(R.id.home_date)
+    TextView homeDate;
+    @BindView(R.id.rjhw_tv)
+    TextView rjhwTv;
 
     private String[] typeList = new String[]{};
     private List<String> types = new ArrayList<>();
@@ -149,6 +185,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         progressDialog = new ProgressDialog();
+
         return view;
     }
 
@@ -163,6 +200,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
 
     @Override
     protected void initData() {
+        rjhwTv.setText("工器具管理");
         String time = SPUtil.getString(getContext(), "date", "overhaulTime", DateUatil.getTime(new Date(System.currentTimeMillis())));
         String[] years = time.split("年");
         if (years[1].contains("月")) {
@@ -187,7 +225,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         userId = SPUtil.getUserId(getContext());
 
         rlPlan.setVisibility(View.VISIBLE);
-        rlTask.setVisibility(View.GONE);
+        rlTaskTv.setText("检修");
         //运行班组长和组员进来隐藏计划
 //        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
 //            rlPlan.setVisibility(View.GONE);
@@ -351,7 +389,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         data.clear();
     }
 
-    @OnClick({R.id.rl_plan, R.id.rl_task, R.id.rl_defact, R.id.rl_trouble, R.id.scanner_iv, R.id.rl_todo, R.id.rl_task_now, R.id.rl_task_history, R.id.rl_day_plan_finish})
+    @OnClick({R.id.rl_plan, R.id.rl_task, R.id.rl_defact, R.id.rl_trouble, R.id.scanner_iv, R.id.rl_todo, R.id.rl_task_now, R.id.rl_task_history, R.id.rl_day_plan_finish, R.id.rl_send_car_allot, R.id.rl_dep_kaohe, R.id.rl_my_jixiao, R.id.rl_take_car, R.id.rl_my_guiji, R.id.rl_my_peixun})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_plan:
@@ -370,7 +408,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
 
                 break;
             case R.id.rl_task:
-                startActivity(new Intent(getActivity(), NewTaskActivity.class));
+                startActivity(new Intent(getActivity(), JXTotalActivity.class));
                 break;
             case R.id.rl_defact:
                 startActivity(new Intent(getActivity(), DefectTabActivity.class));
@@ -389,23 +427,37 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
 
             case R.id.rl_task_now:
             case R.id.rl_task_history:
-                Intent intent = new Intent(getActivity(), NewTaskActivity.class);
-                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
-                    intent.putExtra("index", 4);
-                }else {
-                    intent.putExtra("index", 1);
-                }
+                Intent intent = new Intent(getActivity(), OverhaulPlanActivity.class);
 
                 getActivity().startActivity(intent);
                 break;
             case R.id.rl_day_plan_finish:
-                Intent intent1 = new Intent(getActivity(), NewPlanActivity.class);
-                if (jobType.contains(Constant.RUNNING_SQUAD_LEADER)){
-                    intent1.putExtra("index", 5);
-                }else {
-                    intent1.putExtra("index", 2);
-                }
+                Intent intent1 = new Intent(getActivity(), ControlCardTaizhangActivity.class);
                 getActivity().startActivity(intent1);
+                break;
+            case R.id.rl_send_car_allot:
+                Intent intent2 = new Intent(getActivity(), SendCarActivity.class);
+                getActivity().startActivity(intent2);
+                break;
+            case R.id.rl_dep_kaohe:
+                Intent intent3 = new Intent(getActivity(), ScoreListActivity.class);
+                getActivity().startActivity(intent3);
+                break;
+            case R.id.rl_my_jixiao:
+                Intent intent4 = new Intent(getActivity(), MyPerformanceActivity.class);
+                getActivity().startActivity(intent4);
+                break;
+            case R.id.rl_take_car:
+                Intent intent5 = new Intent(getActivity(), SendCarTemporaryActivity.class);
+                getActivity().startActivity(intent5);
+                break;
+            case R.id.rl_my_guiji:
+                Intent intent6 = new Intent(getActivity(), MapActivity.class);
+                getActivity().startActivity(intent6);
+                break;
+            case R.id.rl_my_peixun:
+                Intent intent7 = new Intent(getActivity(), NewTrainPlanActivity.class);
+                getActivity().startActivity(intent7);
                 break;
         }
     }

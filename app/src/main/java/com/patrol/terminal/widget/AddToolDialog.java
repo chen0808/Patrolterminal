@@ -38,6 +38,8 @@ public class AddToolDialog {
         divisonUnitEt = dialogView.findViewById(R.id.divison_unit_et);
         divisonTotalEt = dialogView.findViewById(R.id.divison_num_et);
         divisonRemarksEt = dialogView.findViewById(R.id.divison_remarks_et);
+        eqToolTempLists.clear();
+        names.clear();
 
         //获取工器具名称
         for (int i = 0; i < eqToolTempList.size(); i++) {
@@ -63,7 +65,7 @@ public class AddToolDialog {
         }
         divisonNameEt.attachDataSource(names);
         if (type.size()==0){
-            type.add("无");
+            type.add("无规格");
         }
 
         divisonModelEt.attachDataSource(type);

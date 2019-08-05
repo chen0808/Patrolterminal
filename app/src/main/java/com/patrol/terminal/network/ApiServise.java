@@ -276,6 +276,7 @@ public interface ApiServise {
     @POST("plan/repair/auditPOST")
     Observable<BaseResult<List<MonthPlanBean>>> submitMonthOve(@Body List<OverPlanReqBean> bean);
 
+
     //一键审核
     @POST("/plan/month/line/batchAuditPOST/state")
     Observable<BaseResult<List<MonthPlanBean>>> submitMonthPlanState(@Body SubmitPlanReqStateBean bean);
@@ -1232,7 +1233,7 @@ public interface ApiServise {
     Observable<BaseResult> saveQualityControl(@Body CardQuality bean);
 
     //获取工器具
-    @GET("eq/tool/temp/listGET")
+    @GET("eq/tools/listGET")
     Observable<BaseResult<List<EqToolTemp>>> getToolType();
 
     //获取控制卡详情

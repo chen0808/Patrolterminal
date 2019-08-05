@@ -68,6 +68,7 @@ public class DefectFragmentBean implements Serializable {
         private String deal_dep_name;
         private String deal_time;
         private String done_status;
+    private String make_status;
         private String in_status;
         private Object remark;
         private Object defect_file;
@@ -78,7 +79,15 @@ public class DefectFragmentBean implements Serializable {
         private Object month;
         private Object day;
 
-        public String getId() {
+    public String getMake_status() {
+        return make_status;
+    }
+
+    public void setMake_status(String make_status) {
+        this.make_status = make_status;
+    }
+
+    public String getId() {
             return id;
         }
 

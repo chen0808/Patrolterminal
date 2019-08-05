@@ -335,6 +335,14 @@ public class DefectNotRidFragment extends BaseFragment {
                             }
                             defectList.addAll(result);
                             setDataToList(result);
+                            for (int i = 0; i < defectList.size(); i++) {
+                                DefectFragmentBean bean = defectList.get(i);
+                                if ("0".equals(bean.getMake_status())&&"0".equals(bean.getDone_status())){
+                                    planRv.setSwipeItemMenuEnabled(i,true);
+                                }else {
+                                    planRv.setSwipeItemMenuEnabled(i,false);
+                                }
+                            }
                         }
                     }
 

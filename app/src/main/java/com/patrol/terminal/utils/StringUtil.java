@@ -75,7 +75,26 @@ public class StringUtil {
         }
         return "";
     }
-
+    //获取缺陷状态
+    public static String getDefectPlanState(String state) {
+        switch (state) {
+            case "0":
+                return "待制定";
+            case "1":
+                return "待填写控制卡";
+            case "2":
+                return "待班张审核";
+            case "3":
+                return "待专责审核";
+            case "4":
+                return "审核通过";
+            case "5":
+                return "审核不通过";
+            case "6":
+                return "复核中";
+        }
+        return "";
+    }
     //获取运行班月计划审核状态
     public static int getDefectColor(String state) {
         switch (state) {

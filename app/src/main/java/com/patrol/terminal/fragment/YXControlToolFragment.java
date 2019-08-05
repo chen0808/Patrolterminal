@@ -122,7 +122,6 @@ public class YXControlToolFragment extends BaseFragment {
                 controlCardSubmit.setVisibility(View.GONE);
                 addBtn01.setVisibility(View.GONE);
                 addBtn02.setVisibility(View.GONE);
-
                 if (workToolsBeans.size() > 0) {
                     getAllInfo(workToolsBeans);
                 }
@@ -208,11 +207,15 @@ public class YXControlToolFragment extends BaseFragment {
 
                     CardTool bean = mControlToolList1.get(i);
                     bean.setTool_type("0");
+                    bean.setTool_id(bean.getId());
+                    bean.setTask_repair_id(taskId);
                     controlToolBeans.add(bean);
                 }
                 for (int i = 0; i < mControlToolList2.size(); i++) {
-                    CardTool bean = mControlToolList1.get(i);
+                    CardTool bean = mControlToolList2.get(i);
                     bean.setTool_type("1");
+                    bean.setTool_id(bean.getId());
+                    bean.setTask_repair_id(taskId);
                     controlToolBeans.add(bean);
                 }
                 BaseRequest.getInstance().getService()

@@ -133,6 +133,7 @@
                     android:layout_marginTop="10dp" />
 
                 <TextView
+                    android:id="@+id/rl_task_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -313,6 +314,7 @@
                     android:src="@mipmap/day_plan_finish" />
 
                 <TextView
+                    android:id="@+id/rjhw_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/img_rjhwc"
@@ -505,7 +507,7 @@
         <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="35°C-21°C   兰州  晴"
+        android:text="35°C-21°C     兰州    晴"
         android:textColor="@color/white"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/dp_50"
@@ -538,7 +540,7 @@
            android:layout_marginLeft="@dimen/dp_20"
            android:layout_marginTop="@dimen/dp_10"
 
-           android:text="· ·国家电网以混促改与恒大集团联手推进智慧能源服......"
+           android:text="· 国家电网以混促改与恒大集团联手推进智慧能源服......"
            />
     <View
         android:layout_width="match_parent"
@@ -551,7 +553,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/sp_20"
-        android:text="· ·国家电网以混促改与恒大集团联手推进智慧能源服......"
+        android:text="· 国网时评：坚定“四个自信” 走有中国特色的电力......"
         />
     <View
         android:layout_width="match_parent"
@@ -564,7 +566,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/sp_20"
-        android:text="· ·国家电网以混促改与恒大集团联手推进智慧能源服......"
+        android:text="· 电网聚焦：施工作业实现远程可视化监控"
         />
     <RelativeLayout
         android:id="@+id/ll_backlog"
