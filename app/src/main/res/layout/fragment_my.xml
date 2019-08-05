@@ -458,7 +458,6 @@
                     android:text="设置" />
 
             </RelativeLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

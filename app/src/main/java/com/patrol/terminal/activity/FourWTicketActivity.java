@@ -5,13 +5,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ import com.patrol.terminal.bean.TicketWork;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.GetViewBitmapUtils;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -125,6 +128,12 @@ public class FourWTicketActivity extends BaseActivity {
     TextView tvSignTime1;
     @BindView(R.id.tv_sign_time2)
     TextView tvSignTime2;
+    @BindView(R.id.btn_pic)
+    Button btnPic;
+    @BindView(R.id.btn_preview)
+    Button btnPreview;
+    @BindView(R.id.sv_ticket)
+    ScrollView svTicket;
     private List<AddressBookLevel2> nameList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
     private List<TicketWork> workList = new ArrayList<>();
@@ -140,7 +149,9 @@ public class FourWTicketActivity extends BaseActivity {
     private List<TicketUser> userList = new ArrayList<>();
     //    private List<TicketSafeContent> safeList = new ArrayList<>();
     private FourTicketBean results;
-//    private SafeAdapter safeAdapter;
+    private String photoPath;
+    private String photoName;
+    //    private SafeAdapter safeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +231,9 @@ public class FourWTicketActivity extends BaseActivity {
 //                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
 //                    }
 //                });
+        if (taskId == null) {
+            return;
+        }
         //已填写数据
         BaseRequest.getInstance().getService().searchFourTicket(taskId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -500,7 +514,8 @@ public class FourWTicketActivity extends BaseActivity {
     }
 
     @OnClick({R.id.title_back, R.id.tv_crew_id, R.id.iv_signature_pad, R.id.iv_signature_pad_2,
-            R.id.iv_signature_pad_3, R.id.iv_signature_pad_4, R.id.title_setting, R.id.tv_start_time, R.id.tv_end_time})
+            R.id.iv_signature_pad_3, R.id.iv_signature_pad_4, R.id.title_setting, R.id.tv_start_time, R.id.tv_end_time
+            , R.id.btn_pic, R.id.btn_preview})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -589,6 +604,23 @@ public class FourWTicketActivity extends BaseActivity {
                         contentAdapter.setNewData(workList);
                     }
                 });
+                break;
+            case R.id.btn_pic:
+                View view1 = getLayoutInflater().inflate(R.layout.activity_third_working_ticket, null);
+                Bitmap bitmapFromScroll = GetViewBitmapUtils.getBitmapFromScroll(svTicket);
+                photoPath = Environment.getExternalStorageDirectory().getPath();
+                photoName = "fourTicket" + System.currentTimeMillis();
+                GetViewBitmapUtils.savePhoto(bitmapFromScroll, photoPath, photoName);
+                Toast.makeText(this, "在文件路径" + photoPath + "下，已生成图片", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_preview:
+                if (photoPath != null && photoName != null) {
+                    Intent intentPreview = new Intent(this, PreviewActivity.class);
+                    intentPreview.putExtra("photo", photoPath + "/" + photoName);
+                    startActivity(intentPreview);
+                } else {
+                    Toast.makeText(this, "请先生成图片", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

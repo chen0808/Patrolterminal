@@ -6,7 +6,28 @@
 
     <include layout="@layout/include_title" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_pic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="生成图片" />
+
+        <Button
+            android:id="@+id/btn_preview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="预览" />
+    </LinearLayout>
+
     <ScrollView
+        android:id="@+id/sv_ticket"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

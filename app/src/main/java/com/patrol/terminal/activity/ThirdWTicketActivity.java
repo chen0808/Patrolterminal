@@ -5,13 +5,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ import com.patrol.terminal.bean.TicketWork;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.GetViewBitmapUtils;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -142,10 +145,16 @@ public class ThirdWTicketActivity extends BaseActivity {
     TextView tvSignTime2;
     @BindView(R.id.tv_sign_time3)
     TextView tvSignTime3;
+    @BindView(R.id.btn_pic)
+    Button btnPic;
+    @BindView(R.id.btn_preview)
+    Button btnPreview;
+    @BindView(R.id.sv_ticket)
+    ScrollView svTicket;
     private List<AddressBookLevel2> nameList = new ArrayList<>();
     private List<File> mPicList = new ArrayList<>();
     private List<TicketWork> workList = new ArrayList<>();
-    private TaskContentAdapter contentAdapter;
+    private TaskContentAdapter contentAdapter = new TaskContentAdapter(R.layout.item_task_content, null);
     private Map<String, RequestBody> params = new HashMap<>();
     private String taskId;
     private String leaderName;
@@ -158,6 +167,8 @@ public class ThirdWTicketActivity extends BaseActivity {
     private List<TicketSafeContent> safeList = new ArrayList();
     private ThirdTicketBean results;
     private SafeAdapter safeAdapter;
+    private String photoName;
+    private String photoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +185,10 @@ public class ThirdWTicketActivity extends BaseActivity {
         signList.clear();
         userList.clear();
         safeList.clear();
+
+        rvTaskContent.setLayoutManager(new LinearLayoutManager(ThirdWTicketActivity.this));
+        rvTaskContent.setAdapter(contentAdapter);
+
         titleName.setText("电力线路带电作业工作票");
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("提交");
@@ -225,8 +240,11 @@ public class ThirdWTicketActivity extends BaseActivity {
 //        } else {
 
 //        }
-
+        getDefaultSafe();
         //已填写数据
+        if (taskId == null) {
+            return;
+        }
         BaseRequest.getInstance().getService().searchThirdTicket(taskId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<ThirdTicketBean>(this) {
@@ -234,10 +252,7 @@ public class ThirdWTicketActivity extends BaseActivity {
                     protected void onSuccees(BaseResult<ThirdTicketBean> t) throws Exception {
                         results = t.getResults();
                         if (results == null) {
-                            rvTaskContent.setLayoutManager(new LinearLayoutManager(ThirdWTicketActivity.this));
-                            contentAdapter = new TaskContentAdapter(R.layout.item_task_content, workList);
-                            rvTaskContent.setAdapter(contentAdapter);
-                            getDefaultSafe();
+                            contentAdapter.setNewData(results.getWorkList());
                         } else {
                             setData(results);
                         }
@@ -341,7 +356,7 @@ public class ThirdWTicketActivity extends BaseActivity {
             workList.addAll(results.getWorkList());
         }
         rvTaskContent.setLayoutManager(new LinearLayoutManager(this));
-        contentAdapter = new TaskContentAdapter(R.layout.item_task_content, workList);
+        contentAdapter.setNewData(workList);
         rvTaskContent.setAdapter(contentAdapter);
     }
 
@@ -551,7 +566,7 @@ public class ThirdWTicketActivity extends BaseActivity {
     @OnClick({R.id.title_back, R.id.tv_crew_id, R.id.iv_signature_pad, R.id.iv_signature_pad_2,
             R.id.iv_signature_pad_3, R.id.iv_signature_pad_4, R.id.iv_signature_pad_5,
             R.id.title_setting, R.id.iv_task_add, R.id.tv_s_time, R.id.tv_e_time, R.id.iv_safe_change,
-            R.id.tv_sign_time1, R.id.tv_sign_time2, R.id.tv_sign_time3})
+            R.id.tv_sign_time1, R.id.tv_sign_time2, R.id.tv_sign_time3, R.id.btn_pic, R.id.btn_preview})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_safe_change:
@@ -659,6 +674,23 @@ public class ThirdWTicketActivity extends BaseActivity {
                     workList.add(new TicketWork(et1.getText().toString(), et2.getText().toString(), et3.getText().toString()));
                     contentAdapter.setNewData(workList);
                 });
+                break;
+            case R.id.btn_pic:
+                View view1 = getLayoutInflater().inflate(R.layout.activity_third_working_ticket, null);
+                Bitmap bitmapFromScroll = GetViewBitmapUtils.getBitmapFromScroll(svTicket);
+                photoPath = Environment.getExternalStorageDirectory().getPath();
+                photoName = "thirdTicket" + System.currentTimeMillis();
+                GetViewBitmapUtils.savePhoto(bitmapFromScroll, photoPath, photoName);
+                Toast.makeText(this, "在文件路径" + photoPath + "下，已生成图片", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_preview:
+                if (photoPath != null && photoName != null) {
+                    Intent intentPreview = new Intent(this, PreviewActivity.class);
+                    intentPreview.putExtra("photo", photoPath + "/" + photoName);
+                    startActivity(intentPreview);
+                } else {
+                    Toast.makeText(this, "请先生成图片", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
