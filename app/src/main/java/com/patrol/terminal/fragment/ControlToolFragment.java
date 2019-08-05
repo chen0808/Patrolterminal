@@ -1,7 +1,10 @@
 package com.patrol.terminal.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +25,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.AllControlCarBean;
 import com.patrol.terminal.bean.CardTool;
 import com.patrol.terminal.bean.ControlToolBeanList;
+import com.patrol.terminal.bean.DefectPlanDetailBean;
 import com.patrol.terminal.bean.EqToolTemp;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulZzTaskBean;
@@ -28,7 +33,9 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.AddToolDialog;
 import com.patrol.terminal.widget.NoScrollListView;
+import com.patrol.terminal.widget.SignDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +45,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class ControlToolFragment extends BaseFragment {
+
 
     @BindView(R.id.control_xianlu_name)
     TextView controlXianluName;
@@ -57,6 +65,9 @@ public class ControlToolFragment extends BaseFragment {
     Button addBtn01;
     @BindView(R.id.add_btn_02)
     Button addBtn02;
+    @BindView(R.id.iv_signature_pad)
+    ImageView ivSignaturePad;
+
     private List<CardTool> mControlToolList1 = new ArrayList<>();
     private List<CardTool> mControlToolList2 = new ArrayList<>();
 
@@ -73,7 +84,9 @@ public class ControlToolFragment extends BaseFragment {
 
     private boolean isCanClick = true;  //默认能点击，填写和更新状态
     private List<CardTool> workToolsBeans = null;
-    private List<EqToolTemp> eqToolTemp;
+    private List<EqToolTemp> eqToolTemp1=new ArrayList<>();
+    private List<EqToolTemp> eqToolTemp2=new ArrayList<>();
+    private List<File> mPicList = new ArrayList<>();
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,20 +101,16 @@ public class ControlToolFragment extends BaseFragment {
         enterType = mActivity.getIntent().getIntExtra(Constant.CONTROL_CARD_ENTER_TYPE, Constant.IS_OTHER_LOOK);  //是否为查看模式
         String jobType = SPUtil.getString(mActivity, Constant.USER, Constant.JOBTYPE, "");
 
-        if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED)) {  //专责接受的Bean不一样
-            OverhaulZzTaskBean bean = mActivity.getIntent().getParcelableExtra("bean");
-            if (bean != null) {
-                taskId = bean.getId();
-            }
-        }else {
-            OverhaulMonthBean bean = mActivity.getIntent().getParcelableExtra("bean");
-            if (bean != null) {
-                taskId = bean.getId();
-            }
+        getToolDetail();
+        DefectPlanDetailBean bean = (DefectPlanDetailBean) mActivity.getIntent().getSerializableExtra("bean");
+        if (bean!=null){
+            taskId = bean.getId();
         }
 
+
+
         //ControlCardBean controlBean = (ControlCardBean) mActivity.getIntent().getSerializableExtra("id");
-        AllControlCarBean allControlCarBean = mActivity.getIntent().getParcelableExtra("allControlBean");
+        AllControlCarBean allControlCarBean = (AllControlCarBean) mActivity.getIntent().getSerializableExtra("allControlBean");
         if (allControlCarBean != null) {
             workToolsBeans = allControlCarBean.getCardTool();
         }
@@ -119,7 +128,6 @@ public class ControlToolFragment extends BaseFragment {
                 controlCardSubmit.setVisibility(View.GONE);
                 addBtn01.setVisibility(View.GONE);
                 addBtn02.setVisibility(View.GONE);
-
                 if (workToolsBeans.size() > 0) {
                     getAllInfo(workToolsBeans);
                 }
@@ -146,11 +154,11 @@ public class ControlToolFragment extends BaseFragment {
         }
 
 
-        if(isCanClick) {
+        if (isCanClick) {
             controlCardDiv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    AddToolDialog.update(mContext, depdapter1, mControlToolList1, position,eqToolTemp);
+                    AddToolDialog.update(mContext, depdapter1, mControlToolList1, position,eqToolTemp1);
 
                 }
             });
@@ -158,7 +166,7 @@ public class ControlToolFragment extends BaseFragment {
             controlCardDiv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    AddToolDialog.update(mContext, depdapter2, mControlToolList2, position,eqToolTemp);
+                    AddToolDialog.update(mContext, depdapter2, mControlToolList2, position,eqToolTemp2);
                 }
             });
 
@@ -167,14 +175,14 @@ public class ControlToolFragment extends BaseFragment {
 
     private void getAllInfo(List<CardTool> workToolsBeans) {
         if (workToolsBeans != null && workToolsBeans.size() > 0) {
-            int j = 0,k = 0;
+            int j = 0, k = 0;
             for (int i = 0; i < workToolsBeans.size(); i++) {
                 CardTool bean = workToolsBeans.get(i);
                 String toolType = bean.getTool_type();
                 if (toolType.equals("0")) {
                     bean.setNum(j++);
                     mControlToolList1.add(bean);
-                }else if (toolType.equals("1")) {
+                } else if (toolType.equals("1")) {
                     bean.setNum(k++);
                     mControlToolList2.add(bean);
                 }
@@ -186,16 +194,16 @@ public class ControlToolFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.add_btn_01, R.id.add_btn_02, R.id.control_card_submit})
+    @OnClick({R.id.add_btn_01, R.id.add_btn_02, R.id.control_card_submit, R.id.iv_signature_pad})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_btn_01:
-                AddToolDialog.show(mContext, depdapter1, mControlToolList1, eqToolTemp);
+                AddToolDialog.show(mContext, depdapter1, mControlToolList1, eqToolTemp1);
 
                 break;
 
             case R.id.add_btn_02:
-                AddToolDialog.show(mContext, depdapter2, mControlToolList2, eqToolTemp);
+                AddToolDialog.show(mContext, depdapter2, mControlToolList2, eqToolTemp2);
 
                 break;
 
@@ -205,12 +213,15 @@ public class ControlToolFragment extends BaseFragment {
 
                     CardTool bean = mControlToolList1.get(i);
                     bean.setTool_type("0");
+                    bean.setTool_id(bean.getId());
+                    bean.setTask_repair_id(taskId);
                     controlToolBeans.add(bean);
                 }
-
                 for (int i = 0; i < mControlToolList2.size(); i++) {
-                    CardTool bean = mControlToolList1.get(i);
+                    CardTool bean = mControlToolList2.get(i);
                     bean.setTool_type("1");
+                    bean.setTool_id(bean.getId());
+                    bean.setTask_repair_id(taskId);
                     controlToolBeans.add(bean);
                 }
                 BaseRequest.getInstance().getService()
@@ -235,9 +246,26 @@ public class ControlToolFragment extends BaseFragment {
                             }
                         });
                 break;
+            case R.id.iv_signature_pad:
+                if (isCanClick) {
+
+                    Dialog dialog1 = SignDialog.show(getActivity(), ivSignaturePad);
+                    dialog1.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            if (ivSignaturePad.getDrawable() != null) {
+                                File file1 = SignDialog.saveBitmapFile(((BitmapDrawable) (ivSignaturePad).getDrawable()).getBitmap(), "controlDep");
+                                mPicList.add(file1);
+                            }
+                        }
+                    });
+                }
+                break;
+
         }
     }
-    public void getToolDetail(){
+
+    public void getToolDetail() {
         BaseRequest.getInstance().getService()
                 .getToolType()
                 .subscribeOn(Schedulers.io())
@@ -245,7 +273,15 @@ public class ControlToolFragment extends BaseFragment {
                 .subscribe(new BaseObserver<List<EqToolTemp>>(mContext) {
                     @Override
                     protected void onSuccees(BaseResult<List<EqToolTemp>> t) throws Exception {
-                        eqToolTemp = t.getResults();
+                        List<EqToolTemp> results = t.getResults();
+                        for (int i = 0; i < results.size(); i++) {
+                            EqToolTemp eqToolTemp = results.get(i);
+                            if ("0".equals(eqToolTemp.getTool_type())){
+                                eqToolTemp1.add(eqToolTemp);
+                            }else if ("1".equals(eqToolTemp.getTool_type())){
+                                eqToolTemp2.add(eqToolTemp);
+                            }
+                        }
                     }
 
                     @Override

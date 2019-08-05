@@ -62,6 +62,7 @@ public class GridViewAdapter5 extends android.widget.BaseAdapter {
 
         int userImgId = mList.get(position).getUserImgId();
         Log.w("linmeng", "userImgId:" + userImgId);
+
         Glide.with(mContext).load(mContext.getResources().getDrawable(mList.get(position).getUserImgId())).into(nameIv);
 
 

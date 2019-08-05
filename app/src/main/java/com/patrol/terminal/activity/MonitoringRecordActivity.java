@@ -81,7 +81,7 @@ public class MonitoringRecordActivity extends BaseActivity implements BaseQuickA
     }
 
     private void initData() {
-        bean = getIntent().getParcelableExtra("bean");
+        bean = (PersonalTaskListBean) getIntent().getSerializableExtra("bean");
     }
 
 

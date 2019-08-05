@@ -159,7 +159,8 @@ public class YXNewControlQualityFragment extends BaseFragment {
         AllControlCarBean allControlCarBean = (AllControlCarBean) mActivity.getIntent().getSerializableExtra("allControlBean");
         workQualityCardBean = allControlCarBean.getCardQuality();
         ControlCardBean controlBean = (ControlCardBean) mActivity.getIntent().getSerializableExtra("id");
-        if (workQualityCardBean == null) {  //专责接受的Bean不一样
+        if (workQualityCardBean == null) {
+            getQualityList(controlBean.getId());
             bean = (DefectPlanDetailBean) mActivity.getIntent().getSerializableExtra("bean");
             if (bean != null) {
                 taskId = bean.getId();
@@ -188,7 +189,7 @@ public class YXNewControlQualityFragment extends BaseFragment {
                 controlCardNo.setText("暂无");
                 controlCardStartTime.setText(bean.getDeal_time());
                 controlCardEndTime.setText(bean.getClose_time());
-                getQualityList(controlBean.getId());
+
             }
         } else {
             List<CardQualityUser> userList = workQualityCardBean.getUserList();

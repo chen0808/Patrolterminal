@@ -16,7 +16,10 @@ import com.patrol.terminal.activity.SecondWTicketActivity;
 import com.patrol.terminal.activity.ThirdWTicketActivity;
 import com.patrol.terminal.adapter.GridViewAdapter5;
 import com.patrol.terminal.base.BaseFragment;
+import com.patrol.terminal.bean.AllControlCarBean;
+import com.patrol.terminal.bean.ControlCardBean;
 import com.patrol.terminal.bean.MapUserInfo;
+import com.patrol.terminal.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,16 +51,6 @@ public class OverhanlWorkFragment extends BaseFragment {
         mapUserInfo2.setUserName("工作票二");
         results.add(mapUserInfo2);
 
-      /*  MapUserInfo mapUserInfo3 = new MapUserInfo();
-        mapUserInfo3.setUserImgId(R.mipmap.todo3);
-        mapUserInfo3.setUserName("电力线路带电作业工作票");
-        results.add(mapUserInfo3);*/
-//
-//        MapUserInfo mapUserInfo4 = new MapUserInfo();
-//        mapUserInfo4.setUserImgId(R.mipmap.todo4);
-//        mapUserInfo4.setUserName("工作票四");
-//        results.add(mapUserInfo4);
-
         MapUserInfo mapUserInfo5 = new MapUserInfo();
         mapUserInfo5.setUserImgId(R.mipmap.todo4);
         mapUserInfo5.setUserName("控制卡");
@@ -76,13 +69,14 @@ public class OverhanlWorkFragment extends BaseFragment {
                     case 1:
                         intent.setClass(getContext(), SecondWTicketActivity.class);
                         break;
-//                    case 2:
-//                        intent.setClass(getContext(), ThirdWTicketActivity.class);
-//                        break;
-//                    case 3:
-//                        intent.setClass(getContext(), FourWTicketActivity.class);
-//                        break;
                     case 2:
+                       int entenType = Constant.IS_FZR_WRITE;
+                        AllControlCarBean workControlCardBean=new AllControlCarBean();
+                        intent.putExtra(Constant.CONTROL_CARD_ENTER_TYPE, entenType);
+                       ControlCardBean controlBean=new ControlCardBean();
+                        controlBean.setId("D831CD00AC0D4A68B6114F6A0A4A5282");
+                        intent.putExtra("id",controlBean);
+                        intent.putExtra("allControlBean",workControlCardBean);
                         intent.setClass(getContext(), ControlCardActivity.class);
                         break;
                 }

@@ -15,7 +15,10 @@ import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.SecondWTicketActivity;
 import com.patrol.terminal.adapter.GridViewAdapter5;
 import com.patrol.terminal.base.BaseFragment;
+import com.patrol.terminal.bean.AllControlCarBean;
+import com.patrol.terminal.bean.ControlCardBean;
 import com.patrol.terminal.bean.MapUserInfo;
+import com.patrol.terminal.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,19 +41,19 @@ public class OverhanlWorkReadyFragment extends BaseFragment {
     protected void initData() {
         results.clear();
         MapUserInfo mapUserInfo1 = new MapUserInfo();
-        mapUserInfo1.setUserImgId(R.mipmap.todo6);
-        mapUserInfo1.setUserName("保电巡视");
+        mapUserInfo1.setUserImgId(R.mipmap.todo1);
+        mapUserInfo1.setUserName("工作票一");
         results.add(mapUserInfo1);
 
         MapUserInfo mapUserInfo2 = new MapUserInfo();
-        mapUserInfo2.setUserImgId(R.mipmap.word);
-        mapUserInfo2.setUserName("上传保电方案");
+        mapUserInfo2.setUserImgId(R.mipmap.todo2);
+        mapUserInfo2.setUserName("工作票二");
         results.add(mapUserInfo2);
 
-        MapUserInfo mapUserInfo3 = new MapUserInfo();
-        mapUserInfo2.setUserImgId(R.mipmap.excel);
-        mapUserInfo2.setUserName("上传验收方案");
-        results.add(mapUserInfo3);
+        MapUserInfo mapUserInfo5 = new MapUserInfo();
+        mapUserInfo5.setUserImgId(R.mipmap.todo4);
+        mapUserInfo5.setUserName("控制卡");
+        results.add(mapUserInfo5);
 
 
         weekAdapter = new GridViewAdapter5(getContext(), results);
@@ -61,20 +64,21 @@ public class OverhanlWorkReadyFragment extends BaseFragment {
                 Intent intent = new Intent();
                 switch (i) {
                     case 0:
-                        intent.setClass(getContext(), PatrolRecordActivity.class);
+                        intent.setClass(getContext(), FirstWTicketActivity.class);
                         break;
                     case 1:
                         intent.setClass(getContext(), SecondWTicketActivity.class);
                         break;
                     case 2:
-//                        intent.setClass(getContext(), ThirdWTicketActivity.class);
+                        int entenType = Constant.IS_FZR_WRITE;
+                        AllControlCarBean workControlCardBean=new AllControlCarBean();
+                        intent.putExtra(Constant.CONTROL_CARD_ENTER_TYPE, entenType);
+                        ControlCardBean controlBean=new ControlCardBean();
+                        controlBean.setId("D831CD00AC0D4A68B6114F6A0A4A5282");
+                        intent.putExtra("id",controlBean);
+                        intent.putExtra("allControlBean",workControlCardBean);
+                        intent.setClass(getContext(), ControlCardActivity.class);
                         break;
-////                    case 3:
-////                        intent.setClass(getContext(), FourWTicketActivity.class);
-////                        break;
-//                    case 4:
-//                        intent.setClass(getContext(), ControlCardActivity.class);
-//                        break;
                 }
                 startActivity(intent);
 

@@ -98,7 +98,7 @@ public class SafeAndQulityFrgment extends BaseFragment implements BaseQuickAdapt
             case 0:
                 Intent intent = new Intent();
                 PersonalTaskListBean bean=new PersonalTaskListBean();
-                bean.setId("");
+                bean.setId("C42BA7B2ACF84516A0511ABC82B4602F");
                 bean.setAudit_status("0");
                 intent.putExtra("bean", bean);
                 intent.setClass(getContext(), MonitoringRecordActivity.class);
@@ -107,7 +107,7 @@ public class SafeAndQulityFrgment extends BaseFragment implements BaseQuickAdapt
 
             case 1:
                 Intent intent1 = new Intent();
-                intent1.putExtra("task_id", "");
+                intent1.putExtra("task_id", "C42BA7B2ACF84516A0511ABC82B4602F");
                 intent1.putExtra("audit_status", audit_status);
                 intent1.setClass(getContext(), CheckActivity.class);
                 startActivity(intent1);

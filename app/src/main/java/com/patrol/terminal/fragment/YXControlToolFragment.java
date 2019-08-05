@@ -100,7 +100,10 @@ public class YXControlToolFragment extends BaseFragment {
 
         getToolDetail();
         DefectPlanDetailBean bean = (DefectPlanDetailBean) mActivity.getIntent().getSerializableExtra("bean");
-        taskId = bean.getId();
+        if (bean!=null){
+            taskId = bean.getId();
+        }
+
 
 
         //ControlCardBean controlBean = (ControlCardBean) mActivity.getIntent().getSerializableExtra("id");

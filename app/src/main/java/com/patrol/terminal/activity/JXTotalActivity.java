@@ -94,6 +94,7 @@ public class JXTotalActivity extends BaseActivity implements RadioGroup.OnChecke
         fragmentList.add(new OverhanlWorkReadyFragment());
         fragmentList.add(new OverhanlWorkFragment());
         fragmentList.add(new OverhanDaidianFragment());
+
         fragmentList.add(new OverhanlQiangxiuFragment());
         fragmentList.add(new SafeAndQulityFrgment());
         MyFragmentPagerAdapter taskPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
