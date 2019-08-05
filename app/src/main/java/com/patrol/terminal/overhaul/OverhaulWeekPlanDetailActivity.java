@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -35,7 +37,6 @@ import com.patrol.terminal.bean.AddressBookLevel2;
 import com.patrol.terminal.bean.AllControlCarBean;
 import com.patrol.terminal.bean.ClassMemberBean;
 import com.patrol.terminal.bean.ControlCardBean;
-import com.patrol.terminal.bean.OverhaulFzrSendBean;
 import com.patrol.terminal.bean.OverhaulMonthBean;
 import com.patrol.terminal.bean.OverhaulSendUserBean;
 import com.patrol.terminal.bean.OverhaulSendUserBean2;
@@ -45,6 +46,7 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.NoScrollListView;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -56,7 +58,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -936,7 +937,9 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     if (allControlCarBean == null) {
                         Toast.makeText(OverhaulWeekPlanDetailActivity.this, "当前无控制卡！", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool().size() == 0) {
+                        if (allControlCarBean.getCardTool() == null) {
+                            Utils.showToast("当前无控制卡！");
+                        } else if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool().size() == 0) {
                             Toast.makeText(OverhaulWeekPlanDetailActivity.this, "当前无控制卡！", Toast.LENGTH_SHORT).show();
                         } else {
                             entenType = Constant.IS_OTHER_LOOK;
