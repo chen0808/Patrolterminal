@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -45,7 +47,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -795,6 +796,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
     }
 
     private void changeWeekPlan(OverhaulYearBean overhaulYearBean) {
+        ProgressDialog.show(this);
         BaseRequest.getInstance().getService()
                 .updateJxMonthPlan(overhaulYearBean)
                 .subscribeOn(Schedulers.io())
@@ -803,6 +805,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
 
                     @Override
                     protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
+                        ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             //刷新界面
                             Toast.makeText(OverhaulWeekDetailActivity.this, "修改成功！", Toast.LENGTH_SHORT).show();
@@ -814,6 +817,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                         Log.e("fff", e.toString());
                     }
                 });
@@ -960,6 +964,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
     }
 
     private void savaVoStatus() {
+        ProgressDialog.show(this);
         //传递参数：overhaulSendUserBeans， 状态：待分发（专责制定后），已分发（专责分派下去给班长后），已分派（班长分派给班员后）  发送出去    TODO
         OverhaulZZSendBean overhaulZZSendBean = new OverhaulZZSendBean();
         overhaulZZSendBean.setId(results.getId());
@@ -972,6 +977,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
                 .subscribe(new BaseObserver<List<OverhaulSendUserBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<OverhaulSendUserBean>> t) throws Exception {
+                        ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             finish();
                         } else {
@@ -980,6 +986,7 @@ public class OverhaulWeekDetailActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                     }
                 });
     }
