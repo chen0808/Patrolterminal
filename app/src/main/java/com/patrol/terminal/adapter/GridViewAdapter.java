@@ -5,20 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.patrol.terminal.R;
-import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.bean.DepPersonalBean;
+import com.patrol.terminal.bean.MapUserInfo;
 
 import java.util.List;
 
 public class GridViewAdapter extends android.widget.BaseAdapter {
 
     private Context mContext;
-    private List<String> mList;
+    private List<MapUserInfo> mList;
     private LayoutInflater inflater;
 
-    public GridViewAdapter(Context mContext, List<String> mList) {
+    public GridViewAdapter(Context mContext, List<MapUserInfo> mList) {
         this.mContext = mContext;
         this.mList = mList;
         inflater = LayoutInflater.from(mContext);
@@ -26,13 +28,16 @@ public class GridViewAdapter extends android.widget.BaseAdapter {
 
     @Override
     public int getCount() {
-        //return mList.size() + 1;//因为最后多了一个添加图片的ImageView
-        int count = mList == null ? 1 : mList.size() + 1;
-        if (count > Constant.MAX_SELECT_PIC_NUM) {
+        if (mList.size() > 0) {
             return mList.size();
         } else {
-            return count;
+            return 0;
         }
+    }
+
+    public void setData(List<MapUserInfo> mList) {
+        this.mList = mList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -47,15 +52,16 @@ public class GridViewAdapter extends android.widget.BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = inflater.inflate(R.layout.grid_item, parent,false);
-        ImageView iv = (ImageView) convertView.findViewById(R.id.pic_iv);
-        if (position < mList.size()) {
-            //代表+号之前的需要正常显示图片
-            String picUrl = mList.get(position); //图片路径
-            Glide.with(mContext).load(picUrl).into(iv);
-        } else {
-            iv.setImageResource(R.mipmap.zj);//最后一个显示加号图片
-        }
+        convertView = inflater.inflate(R.layout.map_name_gridview_item, parent,false);
+        ImageView nameIv = (ImageView) convertView.findViewById(R.id.name_item_iv);
+        TextView nameTv = (TextView) convertView.findViewById(R.id.name_item_tv);
+
+        String name = mList.get(position).getUserName();
+        nameTv.setText(name);
+
+        Glide.with(mContext).load(mContext.getResources().getDrawable(mList.get(position).getUserImgId())).into(nameIv);
+
+
         return convertView;
     }
 }
