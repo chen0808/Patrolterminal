@@ -6,17 +6,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.ControlToolAdapter;
 import com.patrol.terminal.bean.CardTool;
 import com.patrol.terminal.bean.EqToolTemp;
-import com.patrol.terminal.bean.LocalTroubleTypeBean;
+import com.patrol.terminal.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import androidx.appcompat.app.AlertDialog;
 
 public class AddToolDialog {
 
@@ -40,6 +39,11 @@ public class AddToolDialog {
         divisonRemarksEt = dialogView.findViewById(R.id.divison_remarks_et);
         eqToolTempLists.clear();
         names.clear();
+
+        if (eqToolTempList == null) {
+            Utils.showToast("数据异常请重试");
+            return;
+        }
 
         //获取工器具名称
         for (int i = 0; i < eqToolTempList.size(); i++) {

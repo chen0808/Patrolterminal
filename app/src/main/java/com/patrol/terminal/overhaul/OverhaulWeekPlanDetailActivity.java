@@ -462,6 +462,11 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
     }
 
     private void getControlCardContent() {
+        if (overhaulMonthBean == null) {
+            Utils.showToast("数据异常请重试");
+            return;
+        }
+
         BaseRequest.getInstance().getService()
                 .getControlCardContent(overhaulMonthBean.getId())
                 .subscribeOn(Schedulers.io())
@@ -916,7 +921,9 @@ public class OverhaulWeekPlanDetailActivity extends BaseActivity {
                     if (allControlCarBean == null) {
                         entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
                     } else {
-                        if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool().size() == 0) {
+                        if (allControlCarBean.getCardTool() == null) {
+                            entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
+                        } else if (allControlCarBean.getCardControl() == null && allControlCarBean.getCardQuality() == null && allControlCarBean.getCardTool().size() == 0) {
                             entenType = Constant.IS_FZR_WRITE;       //负责人填写模式
                         } else {
                             entenType = Constant.IS_FZR_UPDATE;      //负责人更新模式
