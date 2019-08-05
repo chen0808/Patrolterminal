@@ -104,7 +104,7 @@ public class OverhaulAddMonthPlanActivity extends BaseActivity {
     private LineCheckBean lineCheckBean;
     private String[] towers;
     private List<Tower> towerList;
-
+    private String line_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,12 +138,14 @@ public class OverhaulAddMonthPlanActivity extends BaseActivity {
 
         overhaulYearBean = getIntent().getParcelableExtra("bean");
         if (overhaulYearBean != null) {
+            line_id = overhaulYearBean.getLine_id();
             monthPlanNuit.setText(overhaulYearBean.getApply_dep_name());
             monthPlanNuit.setEnabled(false);
             monthPlanNuit.setTextColor(Color.BLACK);
             monthPlanDeviceName.setText(overhaulYearBean.getLine_name());
             monthPlanDeviceName.setEnabled(false);
             monthPlanDeviceName.setTextColor(Color.BLACK);
+            getTempTower(line_id);
             monthPlanVo.setText(overhaulYearBean.getVoltage_level());
             monthPlanVo.setEnabled(true);
             monthPlanVo.setTextColor(Color.BLACK);
@@ -181,14 +183,14 @@ public class OverhaulAddMonthPlanActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.month_plan_start_range:
-                if (lineCheckBean==null){
+                if (line_id == null) {
                     Toast.makeText(this,"请先选择设备名称",Toast.LENGTH_SHORT).show();
                     return;
                 }
                showTowerDialog(1);
                 break;
             case R.id.month_plan_end_range:
-                if (lineCheckBean==null){
+                if (line_id == null) {
                     Toast.makeText(this,"请先选择设备名称",Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -289,6 +291,7 @@ public class OverhaulAddMonthPlanActivity extends BaseActivity {
     }
 
     private void updateOverhaulMonthList(OverhaulYearBean overhaulYearBean) {
+        ProgressDialog.show(this);
         BaseRequest.getInstance().getService()
                 .updateJxMonthPlan(overhaulYearBean)
                 .subscribeOn(Schedulers.io())
@@ -297,6 +300,7 @@ public class OverhaulAddMonthPlanActivity extends BaseActivity {
 
                     @Override
                     protected void onSuccees(BaseResult<List<OverhaulYearBean>> t) throws Exception {
+                        ProgressDialog.cancle();
                         if (t.getCode() == 1) {
                             //刷新界面
                             Toast.makeText(OverhaulAddMonthPlanActivity.this, "修改成功！", Toast.LENGTH_SHORT).show();
@@ -328,6 +332,7 @@ public class OverhaulAddMonthPlanActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
                         Log.e("fff", e.toString());
                     }
                 });
@@ -464,16 +469,17 @@ public class OverhaulAddMonthPlanActivity extends BaseActivity {
             if (data != null) {
                 lineCheckBean = (LineCheckBean) data.getSerializableExtra("bean");
                 monthPlanDeviceName.setText(lineCheckBean.getName());
-                getTempTower();
+                line_id = lineCheckBean.getId();
+                getTempTower(line_id);
             }
         }
     }
 
     //获取线路杆塔
-    public void getTempTower() {
+    public void getTempTower(String id) {
         ProgressDialog.show(this, false, "正在加载。。。");
         BaseRequest.getInstance().getService()
-                .getTempTower(lineCheckBean.getId(), "name")
+                .getTempTower(id, "name")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<Tower>>(this) {
