@@ -588,6 +588,10 @@ public interface ApiServise {
     @POST("card/tool/saveBatchPOST")
     Observable<BaseResult<ControlToolBeanList>> postControlTool(@Body List<CardTool> beans);
 
+    //上传坐标信息
+    @POST("task/gps/pdaUpdateBatchPOST")
+    Observable<BaseResult> postPosition(@Body List<TaskGps> beans);
+
     //个人任务详情  获取Tower_id
     @GET("common/listGET")
     Observable<BaseResult<List<GetTowerId>>> getTowerId(@Query("table") String table, @Query("column") String column, @Query("id") String id);
@@ -986,7 +990,7 @@ public interface ApiServise {
 
     //获取个人轨迹集合
     @GET("task/gps/listGET")
-    Observable<BaseResult<List<PositionListBean>>> getPositonList(@Query("user_id") String user_id, @Query("loc_time like") String date);
+    Observable<BaseResult<List<PositionListBean>>> getPositonList(@Query("user_id") String user_id, @Query("year") String year, @Query("month") String month, @Query("day") String day);
 
     //获取检修班班长待办
     @GET("task/repair/listGET")
@@ -1234,6 +1238,7 @@ public interface ApiServise {
     //获取控制卡详情
     @GET("card/control/allGET")
     Observable<BaseResult<AllControlCarBean>> getCardControl(@Query("task_repair_id") String id);
+
 
     //获取工器具台账
     @GET("/eq/tools/listGET")

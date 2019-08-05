@@ -1,6 +1,11 @@
 package com.patrol.terminal.activity;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -8,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,11 +22,10 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.maps.model.Polyline;
-import com.amap.api.maps.model.PolylineOptions;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -35,7 +38,11 @@ import com.patrol.terminal.bean.DepBean;
 import com.patrol.terminal.bean.DepPersonalBean;
 import com.patrol.terminal.bean.LocationBean;
 import com.patrol.terminal.bean.PositionListBean;
-import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.gaode.ClusterClickListener;
+import com.patrol.terminal.gaode.ClusterItem;
+import com.patrol.terminal.gaode.ClusterOverlay;
+import com.patrol.terminal.gaode.ClusterRender;
+import com.patrol.terminal.gaode.RegionItem;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.MapNameSelectDialog;
@@ -43,7 +50,9 @@ import com.patrol.terminal.widget.MapNameSelectDialog;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,44 +93,39 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     private TimePickerView pvTime;
     private String year, month, day;
     private String time;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
-        ButterKnife.bind(this);
-        // checkPremission();
-        back = findViewById(R.id.title_back);
-        back.setOnClickListener(this);
-        titleName.setText("轨迹");
-        map = findViewById(R.id.map);
-        map.onCreate(savedInstanceState);
-
-        aMap = map.getMap();
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
-
-        MyLocationStyle myLocationStyle = new MyLocationStyle();
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
-//        myLocationStyle.interval(20000);
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的style
-        aMap.setMyLocationEnabled(true);//显示定位蓝点
-
-        //aMap.setOnMyLocationChangeListener(this);
-
-        //手势交互
-        UiSettings aMapUiSettings = aMap.getUiSettings();
-        aMapUiSettings.setRotateGesturesEnabled(false);//禁用旋转
-
-        aMap.setOnMarkerClickListener(this);
-        aMap.setOnMapClickListener(this);
-        aMap.setInfoWindowAdapter(this);
-
-        initData();
-
-        //初始化定位
-        //initLocation();
-
-    }
+    private ClusterOverlay mClusterOverlay;
+    private Map<Integer, Drawable> mBackDrawAbles = new HashMap<>();
+    private String userid;
+    //    /**
+//     * 定位监听
+//     */
+//    AMapLocationListener locationListener = new AMapLocationListener() {
+//        @Override
+//        public void onLocationChanged(AMapLocation location) {
+//            if (null != location) {
+//                if(location.getErrorCode() == 0) {
+//                    double longitude = location.getLongitude();
+//                    double latitude = location.getLatitude();
+//                    String locationTime = DateUatil.getTime(location.getTime());
+//                }
+//
+//           }
+//        }
+//    };
+    private ClusterRender renderer = new ClusterRender() {
+        @Override
+        public View getView(int clusterNum) {
+            View view = null;
+            if (clusterNum == 1) {
+                view = LayoutInflater.from(MapActivity.this).inflate(R.layout.item_map_window_null, null);
+            } else {
+                view = LayoutInflater.from(MapActivity.this).inflate(R.layout.item_map_window2, null);
+                TextView tvNum = view.findViewById(R.id.tv_num);
+                tvNum.setText(String.valueOf(clusterNum));
+            }
+            return view;
+        }
+    };
 
 //    private static final int REQUEST_TAKE_PHOTO_PERMISSION = 1;
 //        private void checkPremission() {
@@ -222,34 +226,76 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
 //            }
 //    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
+        ButterKnife.bind(this);
+        // checkPremission();
+        back = findViewById(R.id.title_back);
+        back.setOnClickListener(this);
+        titleName.setText("轨迹");
+        map = findViewById(R.id.map);
+        map.onCreate(savedInstanceState);
 
-//    /**
-//     * 定位监听
-//     */
-//    AMapLocationListener locationListener = new AMapLocationListener() {
-//        @Override
-//        public void onLocationChanged(AMapLocation location) {
-//            if (null != location) {
-//                if(location.getErrorCode() == 0) {
-//                    double longitude = location.getLongitude();
-//                    double latitude = location.getLatitude();
-//                    String locationTime = DateUatil.getTime(location.getTime());
-//                }
-//
-//           }
-//        }
-//    };
+        aMap = map.getMap();
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
 
-    private void initData() {
-        String userId = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
-        String date = DateUatil.getTime() + "%";
-        BaseRequest.getInstance().getService().getPositonList(userId, date).subscribeOn(Schedulers.io())
+        MyLocationStyle myLocationStyle = new MyLocationStyle();
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+//        myLocationStyle.interval(20000);
+        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的style
+        aMap.setMyLocationEnabled(true);//显示定位蓝点
+
+        //aMap.setOnMyLocationChangeListener(this);
+
+        //手势交互
+        UiSettings aMapUiSettings = aMap.getUiSettings();
+        aMapUiSettings.setRotateGesturesEnabled(false);//禁用旋转
+
+        aMap.setOnMarkerClickListener(this);
+        aMap.setOnMapClickListener(this);
+        aMap.setInfoWindowAdapter(this);
+        userid = SPUtil.getUserId(this);
+        String time = DateUatil.getCurrTime();
+        String[] years = time.split("年");
+        String[] months = years[1].split("月");
+        String[] days = months[1].split("日");
+        String year = years[0];
+        String month = Integer.parseInt(months[0]) + "";
+        String day = Integer.parseInt(days[0]) + "";
+        initData(userid, year, month, day);
+
+        //初始化定位
+        //initLocation();
+    }
+    private ClusterClickListener clusterListener = new ClusterClickListener() {
+        @Override
+        public void onClick(Marker marker, List<ClusterItem> clusterItems) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (ClusterItem clusterItem : clusterItems) {
+                builder.include(clusterItem.getPosition());
+            }
+            LatLngBounds latLngBounds = builder.build();
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 0)
+            );
+
+
+        }
+    };
+
+    private void initData(String userId, String year, String month, String day) {
+        Log.d("initData", "userId:" + userId + "year:" + year + "month:" + month + "day" + day);
+        BaseRequest.getInstance().getService().getPositonList(userId, year, month, day).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<PositionListBean>>(this) {
                     @Override
                     protected void onSuccees(BaseResult<List<PositionListBean>> t) throws Exception {
                         if (t.getCode() == 1) {
+                            locationList.clear();
+                            aMap.clear();
                             List<PositionListBean> positionListBeans = t.getResults();
+                            List<ClusterItem> items = new ArrayList<ClusterItem>();
                             for (int i = 0; i < positionListBeans.size(); i++) {
                                 LocationBean locationBean = new LocationBean();
                                 LatLng latLng = new LatLng(positionListBeans.get(i).getLat(), positionListBeans.get(i).getLon());
@@ -257,11 +303,17 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                                 locationBean.setPosition(positionListBeans.get(i).getAddress());
                                 locationBean.setTime(positionListBeans.get(i).getLoc_time());
                                 locationList.add(locationBean);
+
+                                RegionItem regionItem = new RegionItem(latLng, "test" + i);
+                                items.add(regionItem);
                             }
+                            mClusterOverlay = new ClusterOverlay(aMap, items, dp2px(getApplicationContext(), 100),
+                                    getApplicationContext());
+                            mClusterOverlay.setClusterRenderer(renderer);
+                            mClusterOverlay.setOnClusterClickListener(clusterListener);
                             aMap.moveCamera(CameraUpdateFactory.changeLatLng(locationList.get(0).getLatLng()));
                             aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                             drawLocation();
-
                         }
 
                     }
@@ -273,6 +325,26 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                 });
 
         getDepInfo();
+    }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public int dp2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    private Bitmap drawCircle(int radius, int color) {
+
+        Bitmap bitmap = Bitmap.createBitmap(radius * 2, radius * 2,
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        RectF rectF = new RectF(0, 0, radius * 2, radius * 2);
+        paint.setColor(color);
+        canvas.drawArc(rectF, 0, 360, true, paint);
+        return bitmap;
     }
 
     private void addMarkers() {
@@ -333,14 +405,14 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
         if (locationList != null && locationList.size() > 1) {
             addMarkers();
 
-            List<LatLng> latlngList = new ArrayList<>();
-            for (int i = 0; i < locationList.size(); i++) {
-                LatLng latLng = locationList.get(i).getLatLng();
-                latlngList.add(latLng);
-            }
-
-            Polyline polyline = aMap.addPolyline(new PolylineOptions().
-                    addAll(latlngList).width(10).color(Color.argb(255, 1, 1, 1)));
+//            List<LatLng> latlngList = new ArrayList<>();
+//            for (int i = 0; i < locationList.size(); i++) {
+//                LatLng latLng = locationList.get(i).getLatLng();
+//                latlngList.add(latLng);
+//            }
+//
+//            Polyline polyline = aMap.addPolyline(new PolylineOptions().
+//                    addAll(latlngList).width(10).color(Color.argb(255, 1, 1, 1)));
         }
     }
 
@@ -355,7 +427,9 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
 
     @Override
     public void onMapClick(LatLng latLng) {
-        mMarker.hideInfoWindow();
+        if (mMarker != null) {
+            mMarker.hideInfoWindow();
+        }
     }
 
     @Override
@@ -372,13 +446,10 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
     }
 
     public void render(Marker marker, View view) {
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.window_linearlayout);
-        //设置透明度
-        layout.getBackground().setAlpha(240);
-        TextView name = (TextView) view.findViewById(R.id.address_tv);
-        TextView info = (TextView) view.findViewById(R.id.time_tv);
-        name.setText(mMarker.getTitle());
-        info.setText(mMarker.getSnippet());
+//        TextView tvAddress = view.findViewById(R.id.tv_address);
+//        TextView tvTime = view.findViewById(R.id.tv_time);
+//        tvAddress.setText(mMarker.getTitle());
+//        tvTime.setText(mMarker.getSnippet());
     }
 
     @OnClick({R.id.date_tv, R.id.name_tv, R.id.search_btn})
@@ -402,8 +473,8 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
             case R.id.search_btn:
                 if (TextUtils.isEmpty(dateTv.getText().toString()) || TextUtils.isEmpty(nameTv.getText().toString())) {
                     Toast.makeText(this, "请选择日期和人员!", Toast.LENGTH_SHORT).show();
-                }else {
-                    //TODO by chenfei
+                } else {
+                    initData(userid, year, month, day);
                 }
                 break;
         }
@@ -420,6 +491,7 @@ public class MapActivity extends BaseActivity implements /*AMap.OnMyLocationChan
                 @Override
                 public void setNameAndId(String name, String id) {
                     nameTv.setText(name);
+                    userid = id;
                     if (isPopWindowShow) {
                         mapNameSelectDialog.dismiss();
                         isPopWindowShow = false;

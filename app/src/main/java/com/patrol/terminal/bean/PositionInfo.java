@@ -1,5 +1,7 @@
 package com.patrol.terminal.bean;
 
+import java.util.List;
+
 public class PositionInfo {
     private double lon;
     private double lat;
@@ -8,6 +10,15 @@ public class PositionInfo {
     private String address;
     private String sign;
     private String data_id;
+    private List<String> taskIdList;
+
+    public List<String> getTaskIdList() {
+        return taskIdList;
+    }
+
+    public void setTaskIdList(List<String> taskIdList) {
+        this.taskIdList = taskIdList;
+    }
 
     public double getLon() {
         return lon;

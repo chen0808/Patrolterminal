@@ -58,7 +58,7 @@ public class BaseGridViewAdapter extends android.widget.BaseAdapter {
         String name = mList.get(position).getName();
         nameTv.setText(name);
 
-        Glide.with(mContext).load(mContext.getResources().getDrawable(R.mipmap.big_round)).into(nameIv);
+        Glide.with(mContext).load(mContext.getResources().getDrawable(R.mipmap.map_user_icon)).into(nameIv);
 
 
 //        if (position < mList.size()) {
