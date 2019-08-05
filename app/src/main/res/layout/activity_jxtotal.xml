@@ -25,7 +25,7 @@
             android:button="@null"
             android:checked="true"
             android:gravity="center"
-            android:text="项目计划"
+            android:text="项目任务"
             android:textColor="@drawable/selector_text_white_color" />
 
         <RadioButton
@@ -37,7 +37,7 @@
             android:background="@drawable/selector_jx_bg_color"
             android:button="@null"
             android:gravity="center"
-            android:text="项目任务"
+            android:text="检修准备"
             android:textColor="@drawable/selector_text_white_color" />
 
         <RadioButton
@@ -48,7 +48,7 @@
             android:background="@drawable/selector_jx_bg_color"
             android:button="@null"
             android:gravity="center"
-            android:text="检修准备"
+            android:text="项目实施"
             android:textColor="@drawable/selector_text_white_color" />
 
         <RadioButton
@@ -62,7 +62,7 @@
             android:gravity="center"
             android:layout_marginTop="41dp"
             android:layout_marginLeft="-412dp"
-            android:text="项目实施"
+            android:text="带电作业"
             android:textColor="@drawable/selector_text_white_color" />
 
         <RadioButton
@@ -97,7 +97,7 @@
         android:layout_height="@dimen/dp_40"
         android:layout_marginLeft="@dimen/dp_20"
         android:gravity="center"
-        android:text="项目计划"
+        android:text="项目任务"
         android:textColor="@color/black"
         android:textSize="20sp" />
 

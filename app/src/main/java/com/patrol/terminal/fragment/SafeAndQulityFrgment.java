@@ -15,6 +15,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.CheckActivity;
 import com.patrol.terminal.activity.FieldAntiInspectionActivity;
 import com.patrol.terminal.activity.GetToPostCheckActivity;
 import com.patrol.terminal.activity.IllegalInspectionReferenceActivity;
@@ -69,7 +70,7 @@ public class SafeAndQulityFrgment extends BaseFragment implements BaseQuickAdapt
     RelativeLayout titleSetting;
     @BindView(R.id.rv_monitoring_record)
     RecyclerView rvMonitoringRecord;
-    private String[] data = {"一、现场情况", "二、到岗到位检查", "三、现场反违章检查", "四、违章检查参考", "五、检查监督要求"};
+    private String[] data = {"一、到场质量监督", "二、验收报告"};
     private String audit_status="0";
 
 
@@ -96,7 +97,11 @@ public class SafeAndQulityFrgment extends BaseFragment implements BaseQuickAdapt
         switch (position) {
             case 0:
                 Intent intent = new Intent();
-                intent.setClass(getContext(), SituationOnSiteActivity.class);
+                PersonalTaskListBean bean=new PersonalTaskListBean();
+                bean.setId("");
+                bean.setAudit_status("0");
+                intent.putExtra("bean", bean);
+                intent.setClass(getContext(), MonitoringRecordActivity.class);
                 startActivity(intent);
                 break;
 
@@ -104,31 +109,11 @@ public class SafeAndQulityFrgment extends BaseFragment implements BaseQuickAdapt
                 Intent intent1 = new Intent();
                 intent1.putExtra("task_id", "");
                 intent1.putExtra("audit_status", audit_status);
-                intent1.setClass(getContext(), GetToPostCheckActivity.class);
+                intent1.setClass(getContext(), CheckActivity.class);
                 startActivity(intent1);
                 break;
 
-            case 2:
-                Intent intent2 = new Intent();
-                intent2.putExtra("task_id","");
-                intent2.putExtra("audit_status",audit_status);
-                intent2.setClass(getContext(), FieldAntiInspectionActivity.class);
-                startActivity(intent2);
-                break;
 
-            case 3:
-                Intent intent3 = new Intent();
-                intent3.setClass(getContext(), IllegalInspectionReferenceActivity.class);
-                startActivity(intent3);
-                break;
-
-            case 4:
-                Intent intent4 = new Intent();
-                intent4.setClass(getContext(), InspectionRequirementsActivity.class);
-                intent4.putExtra("audit_status", audit_status);
-                intent4.putExtra("task_id", "");
-                startActivity(intent4);
-                break;
         }
     }
 
