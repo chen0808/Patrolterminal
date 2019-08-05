@@ -11,9 +11,8 @@ import android.widget.GridView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.ControlCardActivity;
 import com.patrol.terminal.activity.FirstWTicketActivity;
-import com.patrol.terminal.activity.FourWTicketActivity;
+import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.SecondWTicketActivity;
-import com.patrol.terminal.activity.ThirdWTicketActivity;
 import com.patrol.terminal.adapter.GridViewAdapter5;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.bean.MapUserInfo;
@@ -23,7 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class OverhanlWorkFragment extends BaseFragment {
+public class OverhanlWorkReadyFragment extends BaseFragment {
     @BindView(R.id.gridview)
     GridView gridview;
     private GridViewAdapter5 weekAdapter;
@@ -39,29 +38,20 @@ public class OverhanlWorkFragment extends BaseFragment {
     protected void initData() {
         results.clear();
         MapUserInfo mapUserInfo1 = new MapUserInfo();
-        mapUserInfo1.setUserImgId(R.mipmap.todo1);
-        mapUserInfo1.setUserName("工作票一");
+        mapUserInfo1.setUserImgId(R.mipmap.todo6);
+        mapUserInfo1.setUserName("保电巡视");
         results.add(mapUserInfo1);
 
         MapUserInfo mapUserInfo2 = new MapUserInfo();
-        mapUserInfo2.setUserImgId(R.mipmap.todo2);
-        mapUserInfo2.setUserName("工作票二");
+        mapUserInfo2.setUserImgId(R.mipmap.word);
+        mapUserInfo2.setUserName("上传保电方案");
         results.add(mapUserInfo2);
 
-      /*  MapUserInfo mapUserInfo3 = new MapUserInfo();
-        mapUserInfo3.setUserImgId(R.mipmap.todo3);
-        mapUserInfo3.setUserName("电力线路带电作业工作票");
-        results.add(mapUserInfo3);*/
-//
-//        MapUserInfo mapUserInfo4 = new MapUserInfo();
-//        mapUserInfo4.setUserImgId(R.mipmap.todo4);
-//        mapUserInfo4.setUserName("工作票四");
-//        results.add(mapUserInfo4);
+        MapUserInfo mapUserInfo3 = new MapUserInfo();
+        mapUserInfo2.setUserImgId(R.mipmap.excel);
+        mapUserInfo2.setUserName("上传验收方案");
+        results.add(mapUserInfo3);
 
-        MapUserInfo mapUserInfo5 = new MapUserInfo();
-        mapUserInfo5.setUserImgId(R.mipmap.todo4);
-        mapUserInfo5.setUserName("控制卡");
-        results.add(mapUserInfo5);
 
         weekAdapter = new GridViewAdapter5(getContext(), results);
         gridview.setAdapter(weekAdapter);
@@ -71,20 +61,20 @@ public class OverhanlWorkFragment extends BaseFragment {
                 Intent intent = new Intent();
                 switch (i) {
                     case 0:
-                        intent.setClass(getContext(), FirstWTicketActivity.class);
+                        intent.setClass(getContext(), PatrolRecordActivity.class);
                         break;
                     case 1:
                         intent.setClass(getContext(), SecondWTicketActivity.class);
                         break;
-//                    case 2:
-//                        intent.setClass(getContext(), ThirdWTicketActivity.class);
-//                        break;
-//                    case 3:
-//                        intent.setClass(getContext(), FourWTicketActivity.class);
-//                        break;
                     case 2:
-                        intent.setClass(getContext(), ControlCardActivity.class);
+//                        intent.setClass(getContext(), ThirdWTicketActivity.class);
                         break;
+////                    case 3:
+////                        intent.setClass(getContext(), FourWTicketActivity.class);
+////                        break;
+//                    case 4:
+//                        intent.setClass(getContext(), ControlCardActivity.class);
+//                        break;
                 }
                 startActivity(intent);
 

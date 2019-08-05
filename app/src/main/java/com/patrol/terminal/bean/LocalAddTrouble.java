@@ -68,9 +68,9 @@ public class LocalAddTrouble extends BaseModel implements Serializable {
     @Column
     private String find_time;//发现时间
     @Column
-    private String troubleFiles;//图片
+    private String troubleFiles = "";//图片
     @Column
-    private String done_status;//图片
+    private String done_status = "";//图片
 
 
     public static void delData(String tower_id) {

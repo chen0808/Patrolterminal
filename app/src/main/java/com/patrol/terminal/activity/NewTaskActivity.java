@@ -171,9 +171,9 @@ public class NewTaskActivity extends BaseActivity {
             carNum.setVisibility(View.VISIBLE);
             dayPlanNum.setVisibility(View.VISIBLE);
         } else {
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 50), LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(UIUtil.dip2px(this, UIUtil.dip2px(this, 1)), 0, UIUtil.dip2px(this, 30), 0);
-            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 50), LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 40), LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(UIUtil.dip2px(this, UIUtil.dip2px(this, 16)), 0, UIUtil.dip2px(this, 39), 0);
+            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(UIUtil.dip2px(this, 40), LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams1.setMargins(UIUtil.dip2px(this, UIUtil.dip2px(this, 0)), 0, UIUtil.dip2px(this, 10), 0);
             groupTaskNum.setLayoutParams(layoutParams);
             personalTaskNum.setLayoutParams(layoutParams1);

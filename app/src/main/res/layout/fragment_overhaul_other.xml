@@ -10,7 +10,7 @@
     <GridView
         android:id="@+id/gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:numColumns="4"
         android:horizontalSpacing="15dp"
         android:verticalSpacing="16dp"
@@ -19,6 +19,88 @@
         android:padding="10dp"
         ></GridView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="检修准备工作条例"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_20"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+
+        android:text="· 线路运检单位应考虑关联设备的检修周期,编制线路检修计划,避免同一回路设备重复停电.各级运检部门对检修计划进行审核,并协调停电计划"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/color_de"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/sp_20"
+        android:text="· 线路运检单位组织输电检修班在检修实施前根据检修内容进行现场勘察,现场勘察应查看检修作业现场的设备状况、需要停电的范围、保留的带电部位、作业环境、危险点、危险源及交叉跨越情况等,并作好现场勘察记录"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/color_de"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/sp_20"
+        android:text="· 线路运检单位组织输电检修班在检修作业实施前编制符合现场实际、可操作的作业指导书,编制组织措施、技术措施、安全措施等.对危险、复杂和难度较大的检修作业项目,应编制检修方案,经运检部审核后报本单位分管生产领导(总工程师)批准后实施"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/color_de"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/sp_20"
+        android:text="· 输电检修班应配备符合相应电压等级、机械荷载、试验合格、数量足够的设备材料、安全工器具和检修机具"
+        />
+    <View
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"
+    android:layout_marginBottom="6dp"
+    android:layout_marginTop="6dp"
+    android:background="@color/color_de"
+    />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/sp_20"
+        android:text="· 输电检修班在检修作业前应做好技术交底、机械荷载、试验合格、数量足够的设备材料、安全工器具和检修机具"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/color_de"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/sp_20"
+        android:text="· 实施外包的检修项目应符合公司外包管理办法的相关规定,并在检修作业前签订相应规定,并在检修作业前签订相应的外包合同和安全协议"
+        />
 
 
 </LinearLayout>
