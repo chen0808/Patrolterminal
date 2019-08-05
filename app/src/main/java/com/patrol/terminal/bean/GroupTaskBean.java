@@ -116,7 +116,7 @@ public class GroupTaskBean extends BaseModel implements Parcelable {
     @Column
     private String end_id;
     @Column
-    private String audit_status;
+    private String audit_status = "";
     @Column
     private boolean check;
     @Column
