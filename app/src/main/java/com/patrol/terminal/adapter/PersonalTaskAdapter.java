@@ -1,5 +1,6 @@
 package com.patrol.terminal.adapter;
 
+import android.text.TextUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -36,6 +37,10 @@ public class PersonalTaskAdapter extends BaseQuickAdapter<GroupTaskBean, BaseVie
             //任务来源
             if ("1".equals(item.getIs_rob())) {
 
+                String status = item.getAudit_status();
+                if (TextUtils.isEmpty(status)) {
+                    return;
+                }
                 switch (item.getAudit_status()){
                     case "0":
                         AdapterUtils.setText(tvAllorStatus, "状态：抢单/未完成");

@@ -6,6 +6,24 @@ public class OverPlanReqBean {
     private String week_audit_status;
     private String from_user_id;
     private String line_name;
+    private String year;
+    private String month;
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
 
     public String getLine_name() {
         return line_name;

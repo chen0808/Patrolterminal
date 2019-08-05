@@ -99,7 +99,7 @@ public class TroubleFrgment extends BaseFragment {
 
     private void getdata() {
         BaseRequest.getInstance().getService()
-                .getTroubleFragment2(line_id, tower_id, "3")
+                .getTroubleFragment2(line_id, tower_id)//, "3"
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())//TroubleBean
                 .subscribe(new BaseObserver<List<LocalAddTrouble>>(getActivity()) {
