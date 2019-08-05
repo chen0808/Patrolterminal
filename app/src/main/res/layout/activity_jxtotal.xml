@@ -7,94 +7,100 @@
     android:orientation="vertical"
     tools:context=".activity.JXTotalActivity">
 
-  <include layout="@layout/include_title"/>
+    <include layout="@layout/include_title" />
 
     <RadioGroup
+        android:id="@+id/jx_rg1"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:orientation="horizontal"
-        >
+        android:layout_height="81dp"
+        android:orientation="horizontal">
+
         <RadioButton
             android:id="@+id/jx_total1"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:button="@null"
-            android:background="@drawable/selector_jx_bg_color"
-            android:textColor="@drawable/selector_text_white_color"
-            android:checked="true"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_height="@dimen/dp_40"
             android:layout_marginRight="1dp"
-            android:text="项目任务"
-            />
+            android:layout_weight="1"
+            android:background="@drawable/selector_jx_bg_color"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="项目计划"
+            android:textColor="@drawable/selector_text_white_color" />
+
         <RadioButton
             android:id="@+id/jx_total2"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:button="@null"
-            android:background="@drawable/selector_jx_bg_color"
-            android:textColor="@drawable/selector_text_white_color"
-            android:layout_weight="1"
+            android:layout_height="@dimen/dp_40"
             android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_jx_bg_color"
+            android:button="@null"
             android:gravity="center"
-            android:text="检修准备"
-            />
+            android:text="项目任务"
+            android:textColor="@drawable/selector_text_white_color" />
+
         <RadioButton
             android:id="@+id/jx_total3"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:button="@null"
-            android:background="@drawable/selector_jx_bg_color"
-            android:textColor="@drawable/selector_text_white_color"
+            android:layout_height="@dimen/dp_40"
             android:layout_weight="1"
+            android:background="@drawable/selector_jx_bg_color"
+            android:button="@null"
             android:gravity="center"
-            android:text="项目实施"
-            />
+            android:text="检修准备"
+            android:textColor="@drawable/selector_text_white_color" />
 
-    </RadioGroup>
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:layout_marginTop="1dp"
-        android:orientation="horizontal"
-        >
         <RadioButton
             android:id="@+id/jx_total4"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:button="@null"
-            android:background="@drawable/selector_jx_bg_color"
-            android:textColor="@drawable/selector_text_white_color"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_height="@dimen/dp_40"
             android:layout_marginRight="1dp"
-            android:text="带电作业"
-            />
+            android:layout_weight="1"
+            android:background="@drawable/selector_jx_bg_color"
+            android:button="@null"
+            android:gravity="center"
+            android:layout_marginTop="41dp"
+            android:layout_marginLeft="-412dp"
+            android:text="项目实施"
+            android:textColor="@drawable/selector_text_white_color" />
+
         <RadioButton
             android:id="@+id/jx_total5"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:button="@null"
-            android:background="@drawable/selector_jx_bg_color"
-            android:textColor="@drawable/selector_text_white_color"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_height="@dimen/dp_40"
             android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_jx_bg_color"
+            android:button="@null"
+            android:layout_marginTop="41dp"
+            android:gravity="center"
             android:text="抢修管理"
-            />
+            android:textColor="@drawable/selector_text_white_color" />
+
         <RadioButton
             android:id="@+id/jx_total6"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:button="@null"
-            android:background="@drawable/selector_jx_bg_color"
-            android:textColor="@drawable/selector_text_white_color"
+            android:layout_height="@dimen/dp_40"
             android:layout_weight="1"
+            android:background="@drawable/selector_jx_bg_color"
+            android:button="@null"
             android:gravity="center"
+            android:layout_marginTop="41dp"
             android:text="安全与质量控制"
-            />
-
+            android:textColor="@drawable/selector_text_white_color" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/jx_title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:gravity="center"
+        android:text="项目计划"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/jx_viewpager"
         android:layout_width="match_parent"
