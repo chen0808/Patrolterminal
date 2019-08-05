@@ -19,6 +19,10 @@ import com.patrol.terminal.fragment.MonthPlanFrgment;
 import com.patrol.terminal.fragment.SafeAndQulityFrgment;
 import com.patrol.terminal.fragment.WeekPlanFrgment;
 import com.patrol.terminal.overhaul.OverhanlPublishFragment;
+import com.patrol.terminal.overhaul.OverhanlWorkFragment;
+import com.patrol.terminal.overhaul.OverhaulWeekPlanFrgment;
+import com.patrol.terminal.overhaul.OverhaulWeekTaskFrgment;
+import com.patrol.terminal.overhaul.OverhaulYearPlanFrgment;
 import com.patrol.terminal.utils.Utils;
 
 import java.util.ArrayList;
@@ -83,12 +87,12 @@ public class JXTotalActivity extends BaseActivity implements RadioGroup.OnChecke
 
 
         List<Fragment> fragmentList = new ArrayList<>();
+        fragmentList.add(new OverhaulWeekPlanFrgment());
+        fragmentList.add(new OverhaulWeekTaskFrgment());
+        fragmentList.add(new OverhanlWorkFragment());
+        fragmentList.add(new OverhanlWorkFragment());
+        fragmentList.add(new SafeAndQulityFrgment());
         fragmentList.add(new OverhanlPublishFragment());
-        fragmentList.add(new SafeAndQulityFrgment());
-        fragmentList.add(new SafeAndQulityFrgment());
-        fragmentList.add(new SafeAndQulityFrgment());
-        fragmentList.add(new SafeAndQulityFrgment());
-        fragmentList.add(new SafeAndQulityFrgment());
         MyFragmentPagerAdapter taskPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         jxViewpager.setAdapter(taskPagerAdapter);
     }
