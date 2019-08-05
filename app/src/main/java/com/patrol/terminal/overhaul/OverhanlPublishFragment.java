@@ -88,7 +88,7 @@ public class OverhanlPublishFragment extends BaseFragment {
         results.add(mapUserInfo8);
 
         MapUserInfo mapUserInfo9 = new MapUserInfo();
-        mapUserInfo9.setUserImgId(R.mipmap.todo8);
+        mapUserInfo9.setUserImgId(R.mipmap.todo6);
         mapUserInfo9.setUserName("年计划详情");
         results.add(mapUserInfo9);
 

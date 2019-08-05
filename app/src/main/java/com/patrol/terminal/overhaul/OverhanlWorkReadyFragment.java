@@ -38,7 +38,7 @@ public class OverhanlWorkReadyFragment extends BaseFragment {
     protected void initData() {
         results.clear();
         MapUserInfo mapUserInfo1 = new MapUserInfo();
-        mapUserInfo1.setUserImgId(R.mipmap.todo8);
+        mapUserInfo1.setUserImgId(R.mipmap.todo6);
         mapUserInfo1.setUserName("保电巡视");
         results.add(mapUserInfo1);
 

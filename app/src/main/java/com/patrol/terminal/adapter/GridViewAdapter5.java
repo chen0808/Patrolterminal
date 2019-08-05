@@ -1,6 +1,7 @@
 package com.patrol.terminal.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,8 @@ public class GridViewAdapter5 extends android.widget.BaseAdapter {
         String name = mList.get(position).getUserName();
         nameTv.setText(name);
 
+        int userImgId = mList.get(position).getUserImgId();
+        Log.w("linmeng", "userImgId:" + userImgId);
         Glide.with(mContext).load(mContext.getResources().getDrawable(mList.get(position).getUserImgId())).into(nameIv);
 
 

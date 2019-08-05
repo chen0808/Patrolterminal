@@ -82,7 +82,7 @@ public class OverhanlWorkFragment extends BaseFragment {
 //                    case 3:
 //                        intent.setClass(getContext(), FourWTicketActivity.class);
 //                        break;
-                    case 4:
+                    case 2:
                         intent.setClass(getContext(), ControlCardActivity.class);
                         break;
                 }
