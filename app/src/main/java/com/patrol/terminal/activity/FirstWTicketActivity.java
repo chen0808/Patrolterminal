@@ -5,16 +5,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,10 +56,10 @@ import com.patrol.terminal.bean.TicketSafeContent;
 import com.patrol.terminal.bean.TicketSign;
 import com.patrol.terminal.bean.TicketUser;
 import com.patrol.terminal.bean.TicketWork;
-import com.patrol.terminal.overhaul.OverhaulWeekPlanDetailActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.GetViewBitmapUtils;
 import com.patrol.terminal.utils.PickerUtils;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -80,7 +81,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class FirstWTicketActivity extends BaseActivity{
+public class FirstWTicketActivity extends BaseActivity {
 
 
     @BindView(R.id.title_back)
@@ -202,6 +203,12 @@ public class FirstWTicketActivity extends BaseActivity{
     TextView tvSignTime7;
     @BindView(R.id.tv_sign_time8)
     TextView tvSignTime8;
+    @BindView(R.id.btn_pic)
+    Button btnPic;
+    @BindView(R.id.btn_preview)
+    Button btnPreview;
+    @BindView(R.id.sv_ticket)
+    ScrollView svTicket;
     private List<TicketWork> workList = new ArrayList<>();
     private List<TicketFirstGround> groundList = new ArrayList<>();
     private List<TicketFirstPermit> permitList = new ArrayList<>();
@@ -210,10 +217,10 @@ public class FirstWTicketActivity extends BaseActivity{
     private List<TicketUser> userList = new ArrayList<>();
     private List<TicketSafeContent> safeList = new ArrayList<>();
 
-    private WorkAdapter workAdapter;
-    private GroundLineAdapter groundLineAdapter;
-    private LicensingStartedAdapter licensingStartedAdapter;
-    private LicensingEndAdapter licensingEndAdapter;
+    private WorkAdapter workAdapter = new WorkAdapter(R.layout.item_task_content, null);
+    private GroundLineAdapter groundLineAdapter = new GroundLineAdapter(R.layout.item_ground_line, null);
+    private LicensingStartedAdapter licensingStartedAdapter = new LicensingStartedAdapter(R.layout.item_licensing_started, null);
+    private LicensingEndAdapter licensingEndAdapter = new LicensingEndAdapter(R.layout.item_licensing_started, null);
     private String leaderName = "";
     private String leaderId = "";
     private String taskId;
@@ -233,6 +240,8 @@ public class FirstWTicketActivity extends BaseActivity{
     private List<OverhaulUserInfo> userData = new ArrayList<>();
     private int signPosition = 0;
     private int signPosition2 = 0;
+    private String photoPath;
+    private String photoName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,6 +259,21 @@ public class FirstWTicketActivity extends BaseActivity{
         signList.clear();
         userList.clear();
         safeList.clear();
+
+        rvTaskContent.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+        rvTaskContent.setAdapter(workAdapter);
+
+        groundLinesToHangListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+        groundLinesToHangListView.setAdapter(groundLineAdapter);
+
+        //确认工作票1-6页
+        licensingStartedListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+        licensingStartedListView.setAdapter(licensingStartedAdapter);
+
+        //工作终结报告
+        licensingEndListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
+        licensingEndListView.setAdapter(licensingEndAdapter);
+
 
         String jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         String userId = SPUtil.getString(this, Constant.USER, Constant.USERID, "");
@@ -348,6 +372,10 @@ public class FirstWTicketActivity extends BaseActivity{
             titleSettingTv.setText("发送");
         }
 
+        getDefaultSafe();
+        if (taskId == null) {
+            return;
+        }
         //已填写数据
         BaseRequest.getInstance().getService().searchFirstTicket(taskId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -365,25 +393,10 @@ public class FirstWTicketActivity extends BaseActivity{
                                 workList.add(ticketWork);
                             }
 
-                            rvTaskContent.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
-                            workAdapter = new WorkAdapter(R.layout.item_task_content, workList);
-                            rvTaskContent.setAdapter(workAdapter);
-
-                            groundLinesToHangListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
-                            groundLineAdapter = new GroundLineAdapter(R.layout.item_ground_line, groundList);
-                            groundLinesToHangListView.setAdapter(groundLineAdapter);
-
-                            //确认工作票1-6页
-                            licensingStartedListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
-                            licensingStartedAdapter = new LicensingStartedAdapter(R.layout.item_licensing_started, permitList);
-                            licensingStartedListView.setAdapter(licensingStartedAdapter);
-
-                            //工作终结报告
-                            licensingEndListView.setLayoutManager(new LinearLayoutManager(FirstWTicketActivity.this));
-                            licensingEndAdapter = new LicensingEndAdapter(R.layout.item_licensing_started, endList);
-                            licensingEndListView.setAdapter(licensingEndAdapter);
-
-                            getDefaultSafe();
+                            workAdapter.setNewData(workList);
+                            groundLineAdapter.setNewData(groundList);
+                            licensingStartedAdapter.setNewData(permitList);
+                            licensingEndAdapter.setNewData(endList);
                         } else {
                             setData(results);
                         }
@@ -402,7 +415,7 @@ public class FirstWTicketActivity extends BaseActivity{
                 .subscribe(new BaseObserver<LineName>(this) {
                     @Override
                     protected void onSuccees(BaseResult<LineName> t) throws Exception {
-                        Log.w("linmeng", "t.getResults():" +t.getResults());
+                        Log.w("linmeng", "t.getResults():" + t.getResults());
                         LineName result = t.getResults();
                         if (result != null) {
                             Log.w("linmeng", "result.getVoltage_level():" + result.getVoltage_level());
@@ -467,7 +480,7 @@ public class FirstWTicketActivity extends BaseActivity{
         if ("0".equals(status)) { //工作负责人第一次发送给签发人
             status = "1";
             bean.setStatus(status);
-        }else if ("2".equals(status)) {  //签发人签字后，负责人再次填写提交
+        } else if ("2".equals(status)) {  //签发人签字后，负责人再次填写提交
             status = "3";
         }
         bean.setStatus(status);
@@ -572,12 +585,12 @@ public class FirstWTicketActivity extends BaseActivity{
         status = results.getStatus();  //状态
         if ("0".equals(status)) {        //第一次进来发送给签发人
             titleSettingTv.setText("发送");
-        } else if("1".equals(status)){   //签发人还未签字进来
+        } else if ("1".equals(status)) {   //签发人还未签字进来
             //titleSetting.setVisibility(View.GONE);
             titleSettingTv.setText("提交");   //暂时让编辑，待办还未做好  TODO
-        }else if("2".equals(status)){   //签发人签字后进来提交内容
+        } else if ("2".equals(status)) {   //签发人签字后进来提交内容
             titleSettingTv.setText("提交");
-        }else if("3".equals(status)){   //负责人提交工作票后仅查看
+        } else if ("3".equals(status)) {   //负责人提交工作票后仅查看
             titleSetting.setVisibility(View.GONE);
         }
 
@@ -987,7 +1000,7 @@ public class FirstWTicketActivity extends BaseActivity{
             R.id.iv_licensing_started_add, R.id.iv_licensing_end_add, R.id.tv_postpone,
             R.id.tv_s_time, R.id.tv_e_time, R.id.tv_sign_time1, R.id.tv_sign_time2, R.id.tv_sign_time3, R.id.tv_sign_time4,
             R.id.tv_sign_time5, R.id.tv_sign_time6, R.id.tv_sign_time7, R.id.tv_sign_time8,
-            R.id.et_old_leader, R.id.tv_leader, R.id.iv_safe, R.id.iv_safe_change})
+            R.id.et_old_leader, R.id.tv_leader, R.id.iv_safe, R.id.iv_safe_change, R.id.btn_pic, R.id.btn_preview})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_safe_change:
@@ -1015,7 +1028,7 @@ public class FirstWTicketActivity extends BaseActivity{
                     }
 
                     if (workList.size() > 0) {
-                        for(int i = 0; i < workList.size(); i++) {
+                        for (int i = 0; i < workList.size(); i++) {
                             String workRangeStr = workList.get(i).getWork_range();
                             if (TextUtils.isEmpty(workRangeStr)) {
                                 Toast.makeText(this, "请填写工作任务的工作地点或地段！", Toast.LENGTH_SHORT).show();
@@ -1027,7 +1040,7 @@ public class FirstWTicketActivity extends BaseActivity{
                     //弹框选择签发人
                     showSelectQfrDialog();
 
-                }else if ("2".equals(status)){   //签发人已经签字需改状态
+                } else if ("2".equals(status)) {   //签发人已经签字需改状态
                     ProgressDialog.show(FirstWTicketActivity.this, true, "正在上传...");
                     FirstTicketBean bean = getData();
                     Map<String, RequestBody> params = setParams(bean);
@@ -1048,8 +1061,6 @@ public class FirstWTicketActivity extends BaseActivity{
                                 }
                             });
                 }
-
-
 
 
                 break;
@@ -1177,6 +1188,23 @@ public class FirstWTicketActivity extends BaseActivity{
                 break;
             case R.id.tv_postpone:
                 PickerUtils.showDate(FirstWTicketActivity.this, tvPostpone);
+                break;
+            case R.id.btn_pic:
+                View view1 = getLayoutInflater().inflate(R.layout.activity_third_working_ticket, null);
+                Bitmap bitmapFromScroll = GetViewBitmapUtils.getBitmapFromScroll(svTicket);
+                photoPath = Environment.getExternalStorageDirectory().getPath();
+                photoName = "firstTicket" + System.currentTimeMillis();
+                GetViewBitmapUtils.savePhoto(bitmapFromScroll, photoPath, photoName);
+                Toast.makeText(this, "在文件路径" + photoPath + "下，已生成图片", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_preview:
+                if (photoPath != null && photoName != null) {
+                    Intent intentPreview = new Intent(this, PreviewActivity.class);
+                    intentPreview.putExtra("photo", photoPath + "/" + photoName);
+                    startActivity(intentPreview);
+                } else {
+                    Toast.makeText(this, "请先生成图片", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
