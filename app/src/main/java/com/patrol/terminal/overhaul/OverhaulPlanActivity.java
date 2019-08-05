@@ -1,15 +1,15 @@
 package com.patrol.terminal.overhaul;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
@@ -36,12 +36,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-//检修班计划管理界面
+/**
+ * 检修班计划管理界面
+ */
 public class OverhaulPlanActivity extends BaseActivity {
 
 
@@ -80,10 +81,10 @@ public class OverhaulPlanActivity extends BaseActivity {
 
         if (jobType.contains(Constant.REFURBISHMENT_SPECIALIZED) || jobType.contains(Constant.MAINTENANCE_SUPERVISOR)) {   //检修专责能看年月周计划,周任务
             mDataList = Arrays.asList(CHANNELS);
-            fragmentList.add(new OverhaulYearPlanFrgment());
-            fragmentList.add(new OverhaulMonthPlanFrgment());
-            fragmentList.add(new OverhaulWeekPlanFrgment());
-            fragmentList.add(new OverhaulZzWeekTaskFrgment());
+            fragmentList.add(new OverhaulYearPlanFrgment());//年计划
+            fragmentList.add(new OverhaulMonthPlanFrgment());//月计划
+            fragmentList.add(new OverhaulWeekPlanFrgment());//周计划
+            fragmentList.add(new OverhaulZzWeekTaskFrgment());//周任务
         } else if (jobType.contains(Constant.REFURBISHMENT_LEADER) || jobType.contains(Constant.REFURBISHMENT_TEMA_LEADER)    //班长,负责人能看周任务
                 || jobType.contains(Constant.REFURBISHMENT_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
             mDataList = Arrays.asList(CHANNELS_01);
