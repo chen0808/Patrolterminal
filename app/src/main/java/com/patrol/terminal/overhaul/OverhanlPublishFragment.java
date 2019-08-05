@@ -12,6 +12,7 @@ import android.widget.GridView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GridViewAdapter;
+import com.patrol.terminal.adapter.GridViewAdapter5;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -40,7 +41,7 @@ import io.reactivex.schedulers.Schedulers;
 public class OverhanlPublishFragment extends BaseFragment {
     @BindView(R.id.gridview)
     GridView gridview;
-    private GridViewAdapter weekAdapter;
+    private GridViewAdapter5 weekAdapter;
     private List<MapUserInfo> results = new ArrayList<>();
 
     @Override
@@ -96,7 +97,7 @@ public class OverhanlPublishFragment extends BaseFragment {
         mapUserInfo10.setUserName("专责任务详情");
         results.add(mapUserInfo10);
 
-        weekAdapter = new GridViewAdapter(getContext(), results);
+        weekAdapter = new GridViewAdapter5(getContext(), results);
         gridview.setAdapter(weekAdapter);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
