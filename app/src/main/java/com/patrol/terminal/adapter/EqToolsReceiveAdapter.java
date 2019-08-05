@@ -39,6 +39,12 @@ public class EqToolsReceiveAdapter extends BaseQuickAdapter<EqToolsBean, BaseVie
                 .setText(R.id.divison_num, item.getInventory() + "")
                 .setText(R.id.divison_brand, item.getBrand());
 
+        if(item.getInventory() != null){
+            viewHolder.setText(R.id.divison_num, item.getInventory() + "");
+        } else {
+            viewHolder.setText(R.id.divison_num, "0");
+        }
+
         EditText ed = viewHolder.getView(R.id.divison_remarks);
         if (ed.getTag() instanceof TextWatcher) {
             ed.removeTextChangedListener((TextWatcher) ed.getTag());
@@ -70,32 +76,59 @@ public class EqToolsReceiveAdapter extends BaseQuickAdapter<EqToolsBean, BaseVie
 
                     Matcher m = p.matcher(s.toString());
                     if(m.find() || ("").equals(s.toString())){
-                        if(Integer.parseInt(trim) > item.getInventory()){
-                            int selEndIndex = Selection.getSelectionEnd(s);
-                            //截取新字符串
-                            String newStr = trim.substring(0, trim.length()-1);
-                            ed.setText(newStr);
-                            s = ed.getText();
-                            //新字符串长度
-                            int newLen = s.length();
-                            //旧光标位置超过字符串长度
-                            if(selEndIndex > newLen){
-                                selEndIndex = s.length();
-                            }
-                            //设置新的光标所在位置
-                            Selection.setSelection(s, selEndIndex);
+                        if(item.getInventory() != null){
+                            if(Integer.parseInt(trim) > item.getInventory()){
+                                int selEndIndex = Selection.getSelectionEnd(s);
+                                //截取新字符串
+                                String newStr = trim.substring(0, trim.length()-1);
+                                ed.setText(newStr);
+                                s = ed.getText();
+                                //新字符串长度
+                                int newLen = s.length();
+                                //旧光标位置超过字符串长度
+                                if(selEndIndex > newLen){
+                                    selEndIndex = s.length();
+                                }
+                                //设置新的光标所在位置
+                                Selection.setSelection(s, selEndIndex);
 
-                            String temp = ed.getText().toString().trim();
-                            if(!TextUtils.isEmpty(temp) && !temp.equals("0")){
-                                item.setTotal(Integer.parseInt(temp));
-                                viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
+                                String temp = ed.getText().toString().trim();
+                                if(!TextUtils.isEmpty(temp) && !temp.equals("0")){
+                                    item.setTotal(Integer.parseInt(temp));
+                                    viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
+                                } else {
+                                    item.setTotal(0);
+                                    viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                                }
                             } else {
-                                item.setTotal(0);
-                                viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                                item.setTotal(Integer.parseInt(trim));
+                                viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
                             }
                         } else {
-                            item.setTotal(Integer.parseInt(trim));
-                            viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
+                            if(Integer.parseInt(trim) > 0){
+                                int selEndIndex = Selection.getSelectionEnd(s);
+                                //截取新字符串
+                                String newStr = trim.substring(0, trim.length()-1);
+                                ed.setText(newStr);
+                                s = ed.getText();
+                                //新字符串长度
+                                int newLen = s.length();
+                                //旧光标位置超过字符串长度
+                                if(selEndIndex > newLen){
+                                    selEndIndex = s.length();
+                                }
+                                //设置新的光标所在位置
+                                Selection.setSelection(s, selEndIndex);
+
+                                String temp = ed.getText().toString().trim();
+                                if(!TextUtils.isEmpty(temp) && !temp.equals("0")){
+                                    item.setTotal(Integer.parseInt(temp));
+                                    viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.base_status_bar));
+                                } else {
+                                    item.setTotal(0);
+                                    viewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                                }
+                            }
                         }
                     } else {
                         int selEndIndex = Selection.getSelectionEnd(s);
