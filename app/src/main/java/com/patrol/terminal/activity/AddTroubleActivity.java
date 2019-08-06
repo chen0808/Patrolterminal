@@ -230,7 +230,7 @@ public class AddTroubleActivity extends BaseActivity {
     public void saveTrouble() {
 
         if (TextUtils.isEmpty(YHDJStr)) {
-            Toast.makeText(this, "请选择隐含等级", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "请选择隐患等级", Toast.LENGTH_LONG).show();
             return;
         }
 
