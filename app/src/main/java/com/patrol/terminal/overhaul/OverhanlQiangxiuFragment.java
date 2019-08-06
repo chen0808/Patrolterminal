@@ -31,7 +31,7 @@ public class OverhanlQiangxiuFragment extends BaseFragment {
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_overhaul_other, container, false);
+        View view = inflater.inflate(R.layout.fragment_overhaul_qiangxiu, container, false);
         return view;
     }
 

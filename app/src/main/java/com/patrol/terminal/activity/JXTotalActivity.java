@@ -119,7 +119,7 @@ public class JXTotalActivity extends BaseActivity implements RadioGroup.OnChecke
                 break;
             case R.id.jx_total3:
                 jxViewpager.setCurrentItem(2);
-                jxTitle.setText(jxTotal3.getText());
+                jxTitle.setText("现场照片");
                 break;
             case R.id.jx_total4:
                 jxViewpager.setCurrentItem(3);
