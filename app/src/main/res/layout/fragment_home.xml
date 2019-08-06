@@ -457,7 +457,7 @@
                     android:layout_below="@id/img_my_guiji"
                     android:layout_centerInParent="true"
                     android:layout_marginTop="5dp"
-                    android:text="我的轨迹"
+                    android:text="轨迹"
                     android:textSize="13sp" />
             </RelativeLayout>
 
