@@ -87,7 +87,18 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:src="@mipmap/scanner"
-                android:visibility="gone"></ImageView>
+                android:visibility="gone" />
+
+
+            <com.patrol.terminal.widget.CustomSpinner
+                android:id="@+id/checkJuese"
+                style="@style/btn_save"
+                android:layout_width="110dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -200,8 +211,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:scaleType="centerCrop"
-        android:background="@mipmap/main_top" />
+        android:background="@mipmap/main_top"
+        android:scaleType="centerCrop" />
 
     <View
         android:layout_width="match_parent"
@@ -210,8 +221,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:paddingLeft="@dimen/dp_10"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_10">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -429,7 +440,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/img_take_car"
                     android:layout_centerInParent="true"
-                     android:layout_marginTop="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:text="用车申请"
                     android:textSize="13sp" />
 
@@ -493,81 +504,79 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginBottom="@dimen/dp_20"
-        >
+        android:layout_marginBottom="@dimen/dp_20">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_80"
-            android:scaleType="fitXY"
             android:layout_marginLeft="@dimen/dp_20"
             android:layout_marginRight="@dimen/dp_20"
+            android:scaleType="fitXY"
             android:src="@mipmap/tq" />
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="35°C-21°C     兰州    晴"
-        android:textColor="@color/white"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/dp_50"
-        android:layout_marginTop="@dimen/dp_10"
-        />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_50"
+            android:text="35°C-21°C     兰州    晴"
+            android:textColor="@color/white" />
+
         <TextView
             android:id="@+id/home_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="08:30  星期六"
-            android:textColor="@color/white"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp_50"
             android:layout_marginTop="45dp"
-            />
+            android:layout_marginRight="@dimen/dp_50"
+            android:text="08:30  星期六"
+            android:textColor="@color/white" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="综合新闻"
-        android:textColor="@color/black"
-        android:textSize="@dimen/sp_20"
         android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_10"
-        />
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_marginLeft="@dimen/dp_20"
-           android:layout_marginTop="@dimen/dp_10"
+        android:text="综合新闻"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_20" />
 
-           android:text="· 国家电网以混促改与恒大集团联手推进智慧能源服......"
-           />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+
+        android:text="· 国家电网以混促改与恒大集团联手推进智慧能源服......" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp"
-        android:background="@color/color_de"
-        />
+        android:layout_marginBottom="6dp"
+        android:background="@color/color_de" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/sp_20"
-        android:text="· 国网时评：坚定“四个自信” 走有中国特色的电力......"
-        />
+        android:text="· 国网时评：坚定“四个自信” 走有中国特色的电力......" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp"
-        android:background="@color/color_de"
-        />
+        android:layout_marginBottom="6dp"
+        android:background="@color/color_de" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/sp_20"
-        android:text="· 电网聚焦：施工作业实现远程可视化监控"
-        />
+        android:text="· 电网聚焦：施工作业实现远程可视化监控" />
+
     <RelativeLayout
         android:id="@+id/ll_backlog"
         android:layout_width="match_parent"

@@ -2,12 +2,14 @@ package com.patrol.terminal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
@@ -20,7 +22,6 @@ import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,31 +46,49 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         String userJob = (String) SPUtil.get(this, Constant.USER, Constant.USERJOBNAME, "");
-        if (!userJob.equals("")) {
-            startActivity(new Intent(this, NewMainActivity.class));
-            finish();
-        }
+
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+
         longinName.setText("");
         loginPsw.setText("123456");
+
+        if (!userJob.equals("") && bundle == null) {
+            startActivity(new Intent(this, NewMainActivity.class));
+            finish();
+        } else {
+            if (bundle != null) {
+                String name = intent.getExtras().getString(Constant.SWITCH_NAME, "");
+                String pwd = intent.getExtras().getString(Constant.SWITCH_PWD, "");
+                if (!TextUtils.isEmpty(name)) {
+                    longinName.setText(name);
+                    loginPsw.setText(pwd);
+                    login(name, pwd);
+                }
+            }
+        }
     }
 
-    public void login() {
+    public void login(String name, String password) {
 
         if (!Utils.isNetworkConnected(this)) {
             Toast.makeText(this, "请检查网络", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String name = longinName.getText().toString();
-        String password = loginPsw.getText().toString();
-        if (name.isEmpty()) {
-            Toast.makeText(this, "用户名不能为空", Toast.LENGTH_SHORT).show();
-            return;
+        if (TextUtils.isEmpty(name)) {
+            name = longinName.getText().toString();
+            password = loginPsw.getText().toString();
+            if (name.isEmpty()) {
+                Toast.makeText(this, "用户名不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (password.isEmpty()) {
+                Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
-        if (password.isEmpty()) {
-            Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
+
         ProgressDialog.show(this, false, "正在登录。。。");
         BaseRequest.getInstance().getService()
                 .login(name, password/*"a0a22ac2958f9be136f3c320b6cb6a8b"*/)
@@ -143,7 +162,6 @@ public class LoginActivity extends BaseActivity {
         if (resultCode == -1) {
             switch (requestCode) {
                 case DEP_CHOOSE_REQUEST:
-
                     String jobType = data.getExtras().getString(Constant.RESULT);
                     SPUtil.putString(LoginActivity.this, Constant.USER, Constant.JOBTYPE, jobType);  //只选择第一种角色  TODO
                     goToMainActivity(jobType);
@@ -220,7 +238,7 @@ public class LoginActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_login:
-                login();
+                login("", "");
                 break;
         }
     }

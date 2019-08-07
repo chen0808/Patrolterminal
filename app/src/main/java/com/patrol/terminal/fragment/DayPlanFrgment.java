@@ -35,7 +35,6 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.utils.Utils;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -52,6 +51,9 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * 日计划
+ */
 public class DayPlanFrgment extends BaseFragment {
 
     @BindView(R.id.add_next_plan)
@@ -360,6 +362,7 @@ public class DayPlanFrgment extends BaseFragment {
         day = Integer.parseInt(days[0]) + "";
 
     }
+
     public void inteNextDate() {
         String nextTime = DateUatil.getDate(new Date(System.currentTimeMillis() + seconds_of_1day));
         String[] split = nextTime.split("-");

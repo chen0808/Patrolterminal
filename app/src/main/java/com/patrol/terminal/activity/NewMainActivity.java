@@ -115,6 +115,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //        getDefectList();
     }
 
+
     public void setFragment(int index) {
         fragmentVp.setCurrentItem(index);
     }
