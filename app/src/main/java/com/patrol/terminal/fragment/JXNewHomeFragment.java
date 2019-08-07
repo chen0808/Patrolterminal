@@ -21,7 +21,6 @@ import com.patrol.terminal.activity.MapActivity;
 import com.patrol.terminal.activity.MyPerformanceActivity;
 import com.patrol.terminal.activity.NewMainActivity;
 import com.patrol.terminal.activity.NewPlanActivity;
-import com.patrol.terminal.activity.NewTaskActivity;
 import com.patrol.terminal.activity.ScoreListActivity;
 import com.patrol.terminal.activity.SendCarActivity;
 import com.patrol.terminal.activity.SendCarTemporaryActivity;
@@ -62,7 +61,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
-public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */ {
+public class JXNewHomeFragment extends BaseFragment /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */ {
 
 
     @BindView(R.id.iv_header)
@@ -225,7 +224,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         userId = SPUtil.getUserId(getContext());
 
         rlPlan.setVisibility(View.VISIBLE);
-        rlTask.setVisibility(View.GONE);
+        rlTaskTv.setVisibility(View.GONE);
         //运行班组长和组员进来隐藏计划
 //        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
 //            rlPlan.setVisibility(View.GONE);

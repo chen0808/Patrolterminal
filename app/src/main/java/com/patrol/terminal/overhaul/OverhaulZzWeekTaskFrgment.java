@@ -14,10 +14,12 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.JXTotalActivity;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.JxbSignInfo;
 import com.patrol.terminal.bean.OverhaulZzTaskBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -141,7 +143,8 @@ public class OverhaulZzWeekTaskFrgment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent();
-                intent.setClass(getContext(), OverhaulZzWeekTaskDetailActivity.class);   //专责周任务详情   TODO
+//                intent.setClass(getContext(), OverhaulZzWeekTaskDetailActivity.class);   //专责周任务详情   TODO
+                intent.setClass(getContext(), JXTotalActivity.class);
                 Bundle bundle = new Bundle();
                 if (results.get(position) != null) {
                     bundle.putString("id", results.get(position).getId());
