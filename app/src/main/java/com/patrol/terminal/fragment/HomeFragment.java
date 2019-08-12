@@ -495,7 +495,6 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 } else {
                     intent.putExtra("index", 1);
                 }
-
                 getActivity().startActivity(intent);
                 break;
             case R.id.rl_day_plan_finish:

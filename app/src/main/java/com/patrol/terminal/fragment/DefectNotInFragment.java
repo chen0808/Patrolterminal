@@ -127,7 +127,7 @@ public class DefectNotInFragment extends BaseFragment {
                 int width = getResources().getDimensionPixelOffset(R.dimen.dp_70);
                 int height = ViewGroup.LayoutParams.MATCH_PARENT;
                 SwipeMenuItem addItem;
-                if(defectList.get(viewType).getIn_status().equals("2") && mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+                if (defectList.get(viewType).getIn_status().equals("2") && mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
                     // 注意：哪边不想要菜单，那么不要添加即可。
                     addItem = new SwipeMenuItem(mContext)
                             .setBackground(R.drawable.swip_menu_item_1)
@@ -185,7 +185,7 @@ public class DefectNotInFragment extends BaseFragment {
                 int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
 //                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
 
-                if(mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+                if (mJobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)) {
                     switch (menuPosition) {
                         case 0:
                             submit("4", adapterPosition);
@@ -204,7 +204,7 @@ public class DefectNotInFragment extends BaseFragment {
                         default:
                             break;
                     }
-                } else if(mJobType.contains(Constant.RUNNING_SQUAD_LEADER)){
+                } else if (mJobType.contains(Constant.RUNNING_SQUAD_LEADER)) {
                     switch (menuPosition) {
                         case 0:
                             submit("4", adapterPosition);
@@ -387,7 +387,7 @@ public class DefectNotInFragment extends BaseFragment {
     public void getBanjiXLQx(String search_name, String line_id) {
 //        ProgressDialog.show(mContext, true, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getXLDefact(pageNum, count, line_id, search_name,"grade_sign desc,find_time desc", "1")
+                .getXLDefact(pageNum, count, line_id, search_name, "grade_sign desc,find_time desc", "1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(mContext) {
@@ -401,6 +401,7 @@ public class DefectNotInFragment extends BaseFragment {
                             } else {
                                 planRv.loadMoreFinish(true, false);
                             }
+                            defectList.clear();
                             defectList.addAll(result);
                             setDataToList(result);
                         }
@@ -420,13 +421,13 @@ public class DefectNotInFragment extends BaseFragment {
                 searchDelete.setVisibility(View.GONE);
                 search_name = "";
                 tvContent.setText("");
-            break;
+                break;
         }
     }
 
     //提交缺陷审核
     public void submit(String in_status, int adapterPosition) {
-        if(in_status.equals("4")){
+        if (in_status.equals("4")) {
             CancelOrOkDialogNew dialog = new CancelOrOkDialogNew(mContext, "驳回", "取消", "确定") {
                 @Override
                 public void ok() {
@@ -482,7 +483,7 @@ public class DefectNotInFragment extends BaseFragment {
         inAuditPostBean.setFrom_user_name(SPUtil.getUserName(mContext));
         inAuditPostBean.setLine_name(defectList.get(adapterPosition).getLine_name());
         inAuditPostBean.setTower_name(defectList.get(adapterPosition).getTower_name());
-        if(in_status.equals("3")){
+        if (in_status.equals("3")) {
             inAuditPostBean.setClose_time(year + "-" + month + "-" + day);
         }
         BaseRequest.getInstance().getService()
@@ -494,7 +495,7 @@ public class DefectNotInFragment extends BaseFragment {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
-                        if(t.getCode() == 1){
+                        if (t.getCode() == 1) {
                             defectList.get(adapterPosition).setIn_status(in_status);
                             groupTaskAdapter.notifyItemChanged(adapterPosition);
 
@@ -504,7 +505,7 @@ public class DefectNotInFragment extends BaseFragment {
 //                            line_name = banjixlAdapter.getSelectLine();
 //                            defectList.clear();
 //                            getBanjiXLQx(search_name, line_name);
-                            Toast.makeText(mContext,"处理完成",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "处理完成", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -532,7 +533,7 @@ public class DefectNotInFragment extends BaseFragment {
         if (resultCode == 1101) {
             switch (requestCode) {
                 case 10:
-                    if(curPosition != -1){
+                    if (curPosition != -1) {
                         defectList.get(curPosition).setIn_status("5");
                         groupTaskAdapter.notifyItemChanged(curPosition);
                         curPosition = -1;
