@@ -24,8 +24,12 @@ import com.patrol.terminal.overhaul.OverhanlQiangxiuFragment;
 import com.patrol.terminal.overhaul.OverhanlWorkFragment;
 import com.patrol.terminal.overhaul.OverhanlWorkReadyFragment;
 import com.patrol.terminal.overhaul.OverhaulWeekPlanFrgment;
+import com.patrol.terminal.overhaul.OverhaulWeekTaskDetailFrgment;
 import com.patrol.terminal.overhaul.OverhaulWeekTaskFrgment;
 import com.patrol.terminal.overhaul.OverhaulYearPlanFrgment;
+import com.patrol.terminal.overhaul.OverhaulZzWeekTaskDetailFrgment;
+import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
 
 import java.util.ArrayList;
@@ -83,14 +87,18 @@ public class JXTotalActivity extends BaseActivity implements RadioGroup.OnChecke
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         int width = wm.getDefaultDisplay().getWidth();//左侧设置的间距
         int height = Utils.dip2px(this, 41);//处
-
+       String  jobType = SPUtil.getString(this, Constant.USER, Constant.JOBTYPE, "");
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) jxTotal4.getLayoutParams();
         params.setMargins(-width, height,  Utils.dip2px(this, 1), 0);//宽度设置为屏幕的一半，高度为合适的高度值
         jxTotal4.setLayoutParams(params);
 
 
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new OverhaulWeekTaskFrgment());
+        if (jobType.contains(Constant.RUNNING_SQUAD_SPECIALIZED)){
+            fragmentList.add(new OverhaulZzWeekTaskDetailFrgment());
+        }else {
+            fragmentList.add(new OverhaulWeekTaskDetailFrgment());
+        }
         fragmentList.add(new OverhanlWorkReadyFragment());
         fragmentList.add(new OverhanlWorkFragment());
         fragmentList.add(new OverhanDaidianFragment());

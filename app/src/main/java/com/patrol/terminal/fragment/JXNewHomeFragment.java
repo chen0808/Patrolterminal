@@ -2,7 +2,6 @@ package com.patrol.terminal.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
@@ -50,13 +46,14 @@ import com.patrol.terminal.training.NewTrainPlanActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.widget.CustomSpinner;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -64,7 +61,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
-public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */ {
+public class JXNewHomeFragment extends BaseFragment /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */ {
 
 
     @BindView(R.id.iv_header)
@@ -165,8 +162,6 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
     TextView homeDate;
     @BindView(R.id.rjhw_tv)
     TextView rjhwTv;
-    @BindView(R.id.checkJuese)
-    CustomSpinner checkJuese;
 
     private String[] typeList = new String[]{};
     private List<String> types = new ArrayList<>();
@@ -229,7 +224,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         userId = SPUtil.getUserId(getContext());
 
         rlPlan.setVisibility(View.VISIBLE);
-        rlTask.setVisibility(View.GONE);
+        rlTaskTv.setVisibility(View.GONE);
         //运行班组长和组员进来隐藏计划
 //        if (jobType.contains(Constant.RUNNING_SQUAD_MEMBER) || jobType.contains(Constant.RUNNING_SQUAD_TEMA_LEADER)) {
 //            rlPlan.setVisibility(View.GONE);
@@ -259,23 +254,6 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
         initBackLog();
         initTask();
         initPlanFinishRate();
-
-        checkJuese.attachDataSource(Constant.getLoginList());
-        checkJuese.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
-            @Override
-            public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
-                Constant.LoginBean loginBean = (Constant.LoginBean) checkJuese.getSelectObject();
-                if (!TextUtils.isEmpty(loginBean.getLoginName())) {
-                    Intent intent = new Intent();
-                    intent.putExtra(Constant.SWITCH_NAME, loginBean.getLoginName());
-                    intent.putExtra(Constant.SWITCH_PWD, loginBean.getLoginPwd());
-                    intent.setClass(getActivity(), LoginActivity.class);
-                    getActivity().setResult(RESULT_OK, intent);
-                    startActivity(intent);
-                    getActivity().finish();
-                }
-            }
-        });
     }
 
     private void initBackLog() {

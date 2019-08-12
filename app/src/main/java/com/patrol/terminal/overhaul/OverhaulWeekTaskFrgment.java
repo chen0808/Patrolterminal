@@ -14,6 +14,7 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.JXTotalActivity;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -124,7 +125,8 @@ public class OverhaulWeekTaskFrgment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent();
-                intent.setClass(getContext(), OverhaulWeekPlanDetailActivity.class);
+//                intent.setClass(getContext(), OverhaulWeekPlanDetailActivity.class);
+                intent.setClass(getContext(), JXTotalActivity.class);
                 Bundle bundle = new Bundle();
                 if (results.get(position) != null) {
                     bundle.putString("id", results.get(position).getId());
