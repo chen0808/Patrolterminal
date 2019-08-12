@@ -31,6 +31,7 @@ import com.patrol.terminal.fragment.HomeFragment;
 import com.patrol.terminal.fragment.JXHomeFragment;
 import com.patrol.terminal.fragment.MeFragement;
 import com.patrol.terminal.fragment.YXTodosManageFragment;
+import com.patrol.terminal.overhaul.NewJXHomeFragment;
 import com.patrol.terminal.sqlite.DefactContentDBHelper;
 import com.patrol.terminal.training.TrainingHomeFragment;
 import com.patrol.terminal.utils.Constant;
@@ -154,7 +155,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         } else if (jobType.contains("yx")) {//运行专责
             mFragments.add(new HomeFragment());
         } else {
-            mFragments.add(new JXHomeFragment());
+            mFragments.add(new NewJXHomeFragment());
         }
 
         //分配每个职位进来的待办
