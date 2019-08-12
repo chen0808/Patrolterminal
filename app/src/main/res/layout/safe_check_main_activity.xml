@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <LinearLayout
+        android:id="@+id/check_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_90"
+        android:layout_margin="@dimen/dp_10"
+        android:background="@drawable/safe_check_tv_check_bg"
+        android:gravity="center">
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="检查"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:drawableLeft="@mipmap/safe_check_check_icon"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center_vertical"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_90"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/reform_ll"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/safe_check_tv_reform_bg"
+            android:gravity="center">
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="整改"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:drawableLeft="@mipmap/safe_check_reform_icon"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/recheck_ll"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/safe_check_tv_recheck_bg"
+            android:gravity="center"
+            android:layout_marginLeft="10dp">
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="复检"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:drawableLeft="@mipmap/safe_check_recheck_icon"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical"></TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/nature_of_inspection_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_90"
+        android:layout_margin="@dimen/dp_10"
+        android:background="@drawable/safe_check_tv_nature_ins_bg"
+        android:gravity="center">
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="检查性质"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:drawableLeft="@mipmap/safe_check_nature_of_ins_icon"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center_vertical"></TextView>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/add_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/safe_check_add_img"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        ></ImageView>
+
+
+
+</LinearLayout>
