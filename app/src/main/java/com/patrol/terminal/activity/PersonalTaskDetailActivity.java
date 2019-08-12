@@ -242,9 +242,15 @@ public class PersonalTaskDetailActivity extends BaseActivity {
                         intent.setClass(PersonalTaskDetailActivity.this, CheckActivity.class);
                         intent.putExtra("content", bean.getCheck_report());
                         break;
-
+                    default:
+                        intent = null;
+                        break;
 
                 }
+                    if (intent == null) {
+                        Utils.showToast("连接中断，请重试");
+                        return;
+                    }
                 startActivityForResult(intent, 25);
             }}
         });

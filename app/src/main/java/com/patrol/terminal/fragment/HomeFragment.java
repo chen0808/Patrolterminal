@@ -2,6 +2,7 @@ package com.patrol.terminal.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
@@ -45,14 +49,13 @@ import com.patrol.terminal.training.NewTrainPlanActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.CustomSpinner;
 import com.patrol.terminal.widget.ProgressDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -158,6 +161,8 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     RelativeLayout rlMyPeixun;
     @BindView(R.id.home_date)
     TextView homeDate;
+    @BindView(R.id.checkJuese)
+    CustomSpinner checkJuese;
 
     private List<PersonalTaskListBean> backLogData = new ArrayList<>();
     private List<PersonalTaskListBean> taskData = new ArrayList<>();
@@ -260,6 +265,23 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 getActivity().setResult(RESULT_OK);
                 startActivity(intent);
                 getActivity().finish();
+            }
+        });
+
+        checkJuese.attachDataSource(Constant.getLoginList());
+        checkJuese.setOnItemSelectedListener(new CustomSpinner.OnItemSelectedListenerSpinner() {
+            @Override
+            public void onItemSelected(CustomSpinner parent, View view, int i, long l) {
+                Constant.LoginBean loginBean = (Constant.LoginBean) checkJuese.getSelectObject();
+                if (!TextUtils.isEmpty(loginBean.getLoginName())) {
+                    Intent intent = new Intent();
+                    intent.putExtra(Constant.SWITCH_NAME, loginBean.getLoginName());
+                    intent.putExtra(Constant.SWITCH_PWD, loginBean.getLoginPwd());
+                    intent.setClass(getActivity(), LoginActivity.class);
+                    getActivity().setResult(RESULT_OK, intent);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
             }
         });
     }

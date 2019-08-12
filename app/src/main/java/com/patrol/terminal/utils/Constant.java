@@ -1,7 +1,9 @@
 package com.patrol.terminal.utils;
 
 import com.luck.picture.lib.entity.LocalMedia;
+import com.patrol.terminal.widget.CustomSpinner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Constant {
@@ -162,4 +164,101 @@ public class Constant {
     //隐患审核不关联特殊属性
     public static final String YH_BUGUANLIAN = "不关联属性";
 
+
+    public static final String SWITCH_NAME = "switch_name";
+    public static final String SWITCH_PWD = "switch_pwd";
+
+    public static List<LoginBean> getLoginList() {
+        List<LoginBean> list = new ArrayList<>();
+        LoginBean bean0 = new LoginBean();
+        bean0.setLoginName("");
+        bean0.setLoginPwd("");
+        bean0.setName("切换角色");
+
+        LoginBean bean11 = new LoginBean();
+        bean11.setLoginName("王健");
+        bean11.setLoginPwd("123456");
+        bean11.setName("运行主管");
+        LoginBean bean = new LoginBean();
+        bean.setLoginName("王小龙");
+        bean.setLoginPwd("123456");
+        bean.setName("运行专责");
+        LoginBean bean1 = new LoginBean();
+        bean1.setLoginName("黄静波");
+        bean1.setLoginPwd("123456");
+        bean1.setName("运行班长");
+        LoginBean bean2 = new LoginBean();
+        bean2.setLoginName("马宝龙");
+        bean2.setLoginPwd("123456");
+        bean2.setName("运行班员");
+
+        LoginBean bean21 = new LoginBean();
+        bean21.setLoginName("徐向军");
+        bean21.setLoginPwd("123456");
+        bean21.setName("检修主管");
+        LoginBean bean22 = new LoginBean();
+        bean22.setLoginName("桑彦斌");
+        bean22.setLoginPwd("123456");
+        bean22.setName("检修专责");
+        LoginBean bean23 = new LoginBean();
+        bean23.setLoginName("叶怀刚");
+        bean23.setLoginPwd("123456");
+        bean23.setName("检修班长");
+        LoginBean bean24 = new LoginBean();
+        bean24.setLoginName("李小东");
+        bean24.setLoginPwd("123456");
+        bean24.setName("检修班员");
+
+        list.add(bean0);
+
+        list.add(bean11);
+        list.add(bean);
+        list.add(bean1);
+        list.add(bean2);
+
+        list.add(bean21);
+        list.add(bean22);
+        list.add(bean23);
+        list.add(bean24);
+
+
+        return list;
+    }
+
+
+    public static class LoginBean implements CustomSpinner.CustomSpinnerItem {
+
+        String loginName;
+        String loginPwd;
+        String name;
+
+        public String getLoginName() {
+            return loginName;
+        }
+
+        public void setLoginName(String loginName) {
+            this.loginName = loginName;
+        }
+
+        public String getLoginPwd() {
+            return loginPwd;
+        }
+
+        public void setLoginPwd(String loginPwd) {
+            this.loginPwd = loginPwd;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getItemStr() {
+            return name;
+        }
+    }
 }

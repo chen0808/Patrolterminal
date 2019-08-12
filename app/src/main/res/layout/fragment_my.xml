@@ -424,7 +424,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:text="我的轨迹" />
+                    android:text="轨迹" />
 
             </RelativeLayout>
 
