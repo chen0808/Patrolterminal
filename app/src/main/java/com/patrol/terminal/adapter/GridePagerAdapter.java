@@ -60,6 +60,7 @@ public class GridePagerAdapter extends PagerAdapter {
         GridView gridview = (GridView) itemView.findViewById(R.id.gridview);
         GridViewAdapter5 weekAdapter = new GridViewAdapter5(context, imgList.get(position));
         gridview.setAdapter(weekAdapter);
+        //检修首页界面跳转
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
