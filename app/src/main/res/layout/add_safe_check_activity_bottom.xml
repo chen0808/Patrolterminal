@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2"
+    android:orientation="vertical">
+
+        <!--添加检查结果-->
+        <LinearLayout
+            android:id="@+id/add_check_result_rl"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="添加检查结果"
+                android:textColor="@color/main_blue"
+                android:textSize="18sp"
+                android:drawableLeft="@mipmap/add_icon"
+                android:drawablePadding="@dimen/dp_10"></TextView>
+        </LinearLayout>
+
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="记录人:"
+                android:textSize="18sp"
+                android:textColor="@color/tv_gray"
+                ></TextView>
+
+            <TextView
+                android:id="@+id/record_person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="叶怀刚"
+                android:textSize="18sp"></TextView>
+        </LinearLayout>
+</LinearLayout>

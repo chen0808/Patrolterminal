@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import java.util.List;
 
 public class CheckResultBean {
-    private int checkResult;   //0:通过   1:不通过
+    private int checkResult;   //0:正常   1:通过   2:待整改
     private String checkContent;
     private List<Bitmap> checkPics;
 

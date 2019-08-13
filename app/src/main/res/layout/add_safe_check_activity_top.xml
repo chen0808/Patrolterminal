@@ -2,12 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
-    <include layout="@layout/include_title" />
-
-       <!-- &lt;!&ndash;项目&ndash;&gt;
+        <!--项目-->
         <RelativeLayout
             android:id="@+id/project_rl"
             android:layout_width="match_parent"
@@ -34,7 +31,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="3dp"></TextView>
 
-            <TextView android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/project_content_tv"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="请选择"
                 android:textSize="18sp"
@@ -52,7 +51,7 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_10"></ImageView>
 
-        &lt;!&ndash;性质&ndash;&gt;
+        <!--性质-->
         <RelativeLayout
             android:id="@+id/nature_rl"
             android:layout_width="match_parent"
@@ -98,8 +97,8 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_10"></ImageView>
 
-        &lt;!&ndash;性质选项&ndash;&gt;
-        &lt;!&ndash;若是动态的一行显示不完,则重写RadioGroup&ndash;&gt;
+        <!--性质选项-->
+        <!--若是动态的一行显示不完,则重写RadioGroup-->
         <RadioGroup
             android:id="@+id/nature_rg"
             android:layout_width="match_parent"
@@ -133,7 +132,7 @@
                 android:text="其它"></RadioButton>
         </RadioGroup>
 
-        &lt;!&ndash;日期&ndash;&gt;
+        <!--日期-->
         <RelativeLayout
             android:id="@+id/date_rl"
             android:layout_width="match_parent"
@@ -144,7 +143,7 @@
                 android:id="@+id/date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="日期"
+                android:text="时间"
                 android:textColor="@color/tv_gray"
                 android:textSize="18sp"
                 android:layout_alignParentLeft="true"
@@ -162,7 +161,7 @@
 
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2019-08-12"
+                android:text="2019-08-12 14:56"
                 android:textSize="18sp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp_10"
@@ -177,7 +176,7 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_10"></ImageView>
 
-        &lt;!&ndash;检查人&ndash;&gt;
+        <!--检查人-->
         <RelativeLayout
             android:id="@+id/check_person_rl"
             android:layout_width="match_parent"
@@ -221,7 +220,7 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_10"></ImageView>
 
-        &lt;!&ndash;检查项&ndash;&gt;
+        <!--检查项-->
         <RelativeLayout
             android:id="@+id/check_items_rl"
             android:layout_width="match_parent"
@@ -247,19 +246,9 @@
                 android:layout_toRightOf="@+id/check_items_tv"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="3dp"></TextView>
-
-            &lt;!&ndash; <TextView android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:text="请选择"
-                 android:textSize="18sp"
-                 android:layout_alignParentRight="true"
-                 android:layout_marginRight="@dimen/dp_10"
-                 android:layout_centerVertical="true"
-                 android:drawableRight="@mipmap/icon_go"
-                 android:drawablePadding="@dimen/dp_10"></TextView>&ndash;&gt;
         </RelativeLayout>
 
-        &lt;!&ndash;检查项内容&ndash;&gt;
+        <!--检查项内容-->
         <EditText android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_below="@+id/check_items_tv"
@@ -269,58 +258,10 @@
             android:gravity="top"
             android:paddingLeft="@dimen/dp_10"
             android:paddingTop="@dimen/dp_10"
-            ></EditText>-->
+            ></EditText>
 
-
-        <com.yanzhenjie.recyclerview.SwipeRecyclerView
-            android:id="@+id/plan_rv"
-            android:layout_width="match_parent"
-            android:overScrollMode="never"
-            android:paddingBottom="@dimen/dp_10"
-            android:layout_height="wrap_content"
-            ></com.yanzhenjie.recyclerview.SwipeRecyclerView>
-
-
-        <!--&lt;!&ndash;添加检查结果&ndash;&gt;
-        <LinearLayout
-            android:id="@+id/add_check_result_rl"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="添加检查结果"
-                android:textColor="@color/main_blue"
-                android:textSize="18sp"
-                android:drawableLeft="@mipmap/add_icon"
-                android:drawablePadding="@dimen/dp_10"></TextView>
-        </LinearLayout>
-
-
-        <LinearLayout android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_10">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="记录人:"
-                android:textSize="18sp"
-                android:textColor="@color/tv_gray"
-                ></TextView>
-
-            <TextView
-                android:id="@+id/record_person"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="叶怀刚"
-                android:textSize="18sp"></TextView>
-        </LinearLayout>-->
+    <ImageView android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:src="@color/color_f2"></ImageView>
 
 </LinearLayout>

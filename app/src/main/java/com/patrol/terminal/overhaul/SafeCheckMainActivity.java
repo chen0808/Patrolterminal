@@ -53,23 +53,25 @@ public class SafeCheckMainActivity extends BaseActivity {
 
     @OnClick({R.id.title_back, R.id.check_ll, R.id.reform_ll, R.id.recheck_ll, R.id.nature_of_inspection_ll, R.id.add_iv})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
             case R.id.check_ll:
+                intent.setClass(SafeCheckMainActivity.this, CheckProjectActivity.class);
                 break;
             case R.id.reform_ll:
-                break;
+                //break;
             case R.id.recheck_ll:
-                break;
+                //break;
             case R.id.nature_of_inspection_ll:
-                break;
+                //break;
             case R.id.add_iv:
-                Intent intent = new Intent();
                 intent.setClass(SafeCheckMainActivity.this, AddSafeCheckActivity.class);
-                startActivity(intent);
                 break;
+
         }
+        startActivity(intent);
     }
 }
