@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -43,14 +44,31 @@ public class WorkingLogActivity extends BaseActivity {
         titleName.setText("施工日志");
     }
 
-    @OnClick({R.id.title_back, R.id.tv_add})
+    @OnClick({R.id.title_back, R.id.layout_construction_side, R.id.layout_supervisor_side, R.id.layout_building_side, R.id.tv_add})
     public void onViewClicked(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
+            case R.id.layout_construction_side:
+                intent = new Intent(this, ConstructionSideActivity.class);
+                intent.putExtra("logType", 1);
+                startActivity(intent);
+                break;
+            case R.id.layout_supervisor_side:
+                intent = new Intent(this, ConstructionSideActivity.class);
+                intent.putExtra("logType", 2);
+                startActivity(intent);
+                break;
+            case R.id.layout_building_side:
+                intent = new Intent(this, ConstructionSideActivity.class);
+                intent.putExtra("logType", 3);
+                startActivity(intent);
+                break;
             case R.id.tv_add:
-                Intent intent = new Intent(this, WorkingLogDetailActivity.class);
+                intent = new Intent(this, WorkingLogDetailActivity.class);
+                intent.putExtra("logType", 1);
                 startActivity(intent);
                 break;
         }

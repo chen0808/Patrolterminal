@@ -98,12 +98,24 @@ public class GridePagerAdapter extends PagerAdapter {
                         case 7:
                             intent.setClass(context, ThirdWTicketActivity.class);
                             break;
-
-
+                    }
+                } else if(position == 1){
+                    switch (i) {
+                        //电子公告
+                        case 0:
+                            intent.setClass(context, ThirdWTicketActivity.class);
+                            break;
+                        //内部新闻
+                        case 1:
+                            intent.setClass(context, ThirdWTicketActivity.class);
+                            break;
+                        //技术规范
+                        case 2:
+                            intent.setClass(context, ThirdWTicketActivity.class);
+                            break;
                     }
                 }
                 context.startActivity(intent);
-
             }
         });
         container.addView(itemView);

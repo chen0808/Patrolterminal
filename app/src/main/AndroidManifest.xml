@@ -359,6 +359,7 @@
         <activity android:name=".activity.TemporaryDayActivity" />
         <activity android:name=".activity.WorkingLogActivity" />
         <activity android:name=".activity.WorkingLogDetailActivity" />
+        <activity android:name=".activity.ConstructionSideActivity" />
     </application>
 
 </manifest>
