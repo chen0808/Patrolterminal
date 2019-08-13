@@ -10,14 +10,12 @@ import android.widget.GridView;
 
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.bumptech.glide.Glide;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.ProjectBoardActivity;
 import com.patrol.terminal.activity.ThirdWTicketActivity;
 import com.patrol.terminal.bean.MapUserInfo;
 
 import java.util.List;
-
-import uk.co.senab.photoview.PhotoView;
 
 /**
  * 图片浏览的适配器
@@ -65,10 +63,10 @@ public class GridePagerAdapter extends PagerAdapter {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent();
-                if (position==0) {
+                if (position == 0) {
                     switch (i) {
                         case 0:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, ProjectBoardActivity.class);
                             break;
                         case 1:
                             intent.setClass(context, ThirdWTicketActivity.class);

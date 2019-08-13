@@ -113,6 +113,9 @@
     <color name="trouble_detail_tab">#6BA7D6</color>
     <color name="progress_bar_background">#C1C1C1</color>
     <color name="progress_bar_progress">#5EC746</color>
+    <color name="project_total">#F3877B</color>
+    <color name="project_total_ing">#9CCC66</color>
+    <color name="project_total_ed">#71C2F1</color>
 
     <color name="safe_check_tv_check_bg_unpressed">#4FAEFE</color>
     <color name="safe_check_tv_check_bg_pressed">#5897FF</color>
