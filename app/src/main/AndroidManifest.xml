@@ -69,6 +69,10 @@
         <activity android:name=".activity.TroubleDetailActivity" />
         <activity android:name=".activity.DefectListActivity" />
         <activity android:name=".activity.PhotoTestActivity" />
+        <activity android:name=".activity.ProjectBoardActivity" />
+        <activity android:name=".activity.BudgetActivity" />
+        <activity android:name=".activity.ProjectPlanActivity" />
+        <activity android:name=".activity.ProjectPlanListActivity" />
         <activity
             android:name=".activity.NewTaskActivity"
             android:screenOrientation="portrait" />

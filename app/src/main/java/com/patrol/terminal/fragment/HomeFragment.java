@@ -163,6 +163,10 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     TextView homeDate;
     @BindView(R.id.checkJuese)
     CustomSpinner checkJuese;
+    @BindView(R.id.rl_task_tv)
+    TextView rlTaskTv;
+    @BindView(R.id.rjhw_tv)
+    TextView rjhwTv;
 
     private List<PersonalTaskListBean> backLogData = new ArrayList<>();
     private List<PersonalTaskListBean> taskData = new ArrayList<>();
@@ -191,7 +195,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     protected void initData() {
         time = DateUatil.getCurrTime();
         inteDate();
-         homeDate.setText(DateUatil.getTime()+"   "+DateUatil.getWeeks());
+        homeDate.setText(DateUatil.getTime() + "   " + DateUatil.getWeeks());
         String name = SPUtil.getString(getContext(), Constant.USER, Constant.USERNAME, "");
         String dep = SPUtil.getDepName(getContext());
         String job = SPUtil.getString(getContext(), Constant.USER, Constant.USERJOBNAME, "");
@@ -495,7 +499,6 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 } else {
                     intent.putExtra("index", 1);
                 }
-
                 getActivity().startActivity(intent);
                 break;
             case R.id.rl_day_plan_finish:

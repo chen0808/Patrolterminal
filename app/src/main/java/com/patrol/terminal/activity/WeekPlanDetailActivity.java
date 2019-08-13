@@ -94,11 +94,11 @@ public class WeekPlanDetailActivity extends BaseActivity {
         tvLineName.setText("线路名称 : " + monthPlanDetailBean.getLine_name());
         tvLineNo.setText("班  组 : " + monthPlanDetailBean.getDep_name());
         tvLineDate.setText("时  间 : " + monthPlanDetailBean.getYear() + "年" + monthPlanDetailBean.getWeek() + "周");
-            tvLineTower.setText("杆  段 : " + monthPlanDetailBean.getName());
+        tvLineTower.setText("杆  段 : " + monthPlanDetailBean.getName());
 
         String type_sign = monthPlanDetailBean.getType_sign();
         String[] split = type_sign.split(",");
-        for (int i = 0; i <split.length; i++) {
+        for (int i = 0; i < split.length; i++) {
             String type = split[i];
             DefectBean planTypeBean = new DefectBean();
             planTypeBean.setContent(StringUtil.typeSigns[Integer.valueOf(type) - 1] + "计划");
