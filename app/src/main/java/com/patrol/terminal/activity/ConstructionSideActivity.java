@@ -167,7 +167,7 @@ public class ConstructionSideActivity extends BaseActivity {
     public void getBanjiXLQx(String search_name, String line_id) {
         ProgressDialog.show(mContext, true, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getXLDefact(pageNum, count, line_id, search_name,"grade_sign desc,find_time desc", "1")
+                .getXLDefact(pageNum, count, line_id, search_name,"grade_sign desc,find_time desc", "3")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<DefectFragmentBean>>(mContext) {

@@ -360,6 +360,8 @@
         <activity android:name=".activity.WorkingLogActivity" />
         <activity android:name=".activity.WorkingLogDetailActivity" />
         <activity android:name=".activity.ConstructionSideActivity" />
+        <activity android:name=".overhaul.ElectronicNoticeActivity" />
+        <activity android:name=".overhaul.ElectronicNoticeAddActivity" />
     </application>
 
 </manifest>

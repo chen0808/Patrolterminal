@@ -15,6 +15,7 @@ import com.patrol.terminal.activity.ProjectBoardActivity;
 import com.patrol.terminal.activity.ThirdWTicketActivity;
 import com.patrol.terminal.activity.WorkingLogActivity;
 import com.patrol.terminal.bean.MapUserInfo;
+import com.patrol.terminal.overhaul.ElectronicNoticeActivity;
 
 import java.util.List;
 
@@ -103,7 +104,7 @@ public class GridePagerAdapter extends PagerAdapter {
                     switch (i) {
                         //电子公告
                         case 0:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, ElectronicNoticeActivity.class);
                             break;
                         //内部新闻
                         case 1:
