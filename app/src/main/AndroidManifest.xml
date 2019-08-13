@@ -353,6 +353,8 @@
         <activity android:name=".activity.LineCheckActivity2" />
         <activity android:name=".activity.TemporaryWeekActivity" />
         <activity android:name=".activity.TemporaryDayActivity" />
+        <activity android:name=".activity.WorkingLogActivity" />
+        <activity android:name=".activity.WorkingLogDetailActivity" />
     </application>
 
 </manifest>

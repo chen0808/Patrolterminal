@@ -122,4 +122,8 @@
     <color name="safe_check_tv_recheck_bg_pressed">#ffba08</color>
     <color name="safe_check_tv_nature_ins_bg_unpressed">#5897FF</color>
     <color name="safe_check_tv_nature_ins_bg_pressed">#057dff</color>
+
+    <color name="working_blue">#4FAEFE</color>
+    <color name="working_green">#3ADACE</color>
+    <color name="working_purple">#5C52D5</color>
 </resources>

@@ -13,6 +13,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.bumptech.glide.Glide;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.ThirdWTicketActivity;
+import com.patrol.terminal.activity.WorkingLogActivity;
 import com.patrol.terminal.bean.MapUserInfo;
 
 import java.util.List;
@@ -80,7 +81,7 @@ public class GridePagerAdapter extends PagerAdapter {
                             intent.setClass(context, ThirdWTicketActivity.class);
                             break;
                         case 4:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, WorkingLogActivity.class);
                             break;
                         case 5:
                             intent.setClass(context, ThirdWTicketActivity.class);
