@@ -15,6 +15,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.services.weather.LocalWeatherForecastResult;
+import com.amap.api.services.weather.LocalWeatherLive;
+import com.amap.api.services.weather.LocalWeatherLiveResult;
+import com.amap.api.services.weather.WeatherSearch;
+import com.amap.api.services.weather.WeatherSearchQuery;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.CheckActivity;
@@ -64,7 +73,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
-public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */ {
+public class HomeFragment extends BaseFragment implements WeatherSearch.OnWeatherSearchListener, AMapLocationListener /*implements IRfid.QueryCallbackListener, IRfid.CallbackListener */ {
 
 
     @BindView(R.id.iv_header)
@@ -167,6 +176,10 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     TextView rlTaskTv;
     @BindView(R.id.rjhw_tv)
     TextView rjhwTv;
+    @BindView(R.id.iv)
+    ImageView iv;
+    @BindView(R.id.home_weather)
+    TextView homeWeather;
 
     private List<PersonalTaskListBean> backLogData = new ArrayList<>();
     private List<PersonalTaskListBean> taskData = new ArrayList<>();
@@ -183,6 +196,13 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
     private PlanFinishRateAdapter planFinishRateAdapter;
     private BackLogTaskAdapter lastTaskAdapter;
     private Disposable refreshTodo;
+    private WeatherSearchQuery mquery;
+    private WeatherSearch mweathersearch;
+    //声明mlocationClient对象
+    public AMapLocationClient mlocationClient;
+    //声明mLocationOption对象
+    public AMapLocationClientOption mLocationOption = null;
+    private String city = "武汉";
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -253,6 +273,7 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
 //            }
 //        });
 //        initBackLog();
+        getCity();
         initTask();
         initLastTask();
         initPlanFinishRate();
@@ -288,6 +309,37 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
                 }
             }
         });
+    }
+
+    //獲取定位城市
+    private void getCity() {
+        mlocationClient = new AMapLocationClient(getContext());
+//初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+//设置定位监听
+        mlocationClient.setLocationListener(this);
+//设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+//设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(600000);
+//设置定位参数
+        mlocationClient.setLocationOption(mLocationOption);
+// 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+// 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+// 在定位结束后，在合适的生命周期调用onDestroy()方法
+// 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+//启动定位
+        mlocationClient.startLocation();
+
+    }
+
+    //获取天气
+    private void getWeather() {
+        mquery = new WeatherSearchQuery(city, WeatherSearchQuery.WEATHER_TYPE_LIVE);
+        mweathersearch = new WeatherSearch(getContext());
+        mweathersearch.setOnWeatherSearchListener(this);
+        mweathersearch.setQuery(mquery);
+        mweathersearch.searchWeatherAsyn(); //异步搜索
     }
 
     @Override
@@ -660,5 +712,36 @@ public class HomeFragment extends BaseFragment /*implements IRfid.QueryCallbackL
         }
     }
 
+
+    @Override
+    public void onWeatherLiveSearched(LocalWeatherLiveResult weatherLiveResult, int rCode) {
+        if (rCode == 1000) {
+            if (weatherLiveResult != null && weatherLiveResult.getLiveResult() != null) {
+                LocalWeatherLive weatherlive = weatherLiveResult.getLiveResult();
+                homeWeather.setText( weatherlive.getTemperature() + "°C   "+city + "   " +weatherlive.getWeather() );
+            } else {
+            }
+        }
+    }
+
+    @Override
+    public void onWeatherForecastSearched(LocalWeatherForecastResult localWeatherForecastResult, int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation amapLocation) {
+        if (amapLocation != null) {
+            if (amapLocation.getErrorCode() == 0) {
+                city = amapLocation.getCity();
+                getWeather();
+            } else {
+                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                Log.e("AmapError", "location Error, ErrCode:"
+                        + amapLocation.getErrorCode() + ", errInfo:"
+                        + amapLocation.getErrorInfo());
+            }
+        }
+    }
 
 }
