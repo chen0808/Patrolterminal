@@ -164,6 +164,18 @@ public class Constant {
     //隐患审核不关联特殊属性
     public static final String YH_BUGUANLIAN = "不关联属性";
 
+    //工程简报
+    public static final String GCJB_TYPE_STR = "GCJB_TYPE_STR";
+    public static final String GCJB_YZF_STR = "GCJB_YZF_STR";
+    public static final String GCJB_JLF_STR = "GCJB_JLF_STR";
+    public static final String GCJB_SGF_STR = "GCJB_SGF_STR";
+    public static final String GCJB_ADD_STR = "GCJB_ADD_STR";
+    public static boolean isEditStatus = false;
+//    public static final int GCJB_YZF = 1;
+//    public static final int GCJB_JLF = 2;
+//    public static final int GCJB_SGF = 3;
+    public static final int GCJB_ADD = 1;
+
 
     public static final String SWITCH_NAME = "switch_name";
     public static final String SWITCH_PWD = "switch_pwd";
@@ -220,7 +232,6 @@ public class Constant {
         list.add(bean22);
         list.add(bean23);
         list.add(bean24);
-
 
         return list;
     }

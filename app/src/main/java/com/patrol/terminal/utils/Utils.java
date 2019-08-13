@@ -7,8 +7,10 @@ import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.patrol.terminal.MyApp;
@@ -29,8 +31,11 @@ import com.patrol.terminal.bean.DefactTvModel;
 import com.patrol.terminal.bean.TodoBean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -311,8 +316,8 @@ public class Utils {
         if (scale < 0) {
             throw new IllegalAccessException("精确度不能小于0");
         }
-        int value=(int)(value1*10000/value2);
-        return value/10000.0;
+        int value = (int) (value1 * 10000 / value2);
+        return value / 10000.0;
     }
 
     /**
@@ -387,6 +392,31 @@ public class Utils {
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
             return requestBody;
         }
+    }
+
+    public static String listToStr(List<String> photoList) {
+        String path = "";
+        for (int j = 0; j < photoList.size(); j++) {
+            if (!TextUtils.isEmpty(path)) {
+                path = path + ";" + photoList.get(j);
+            } else {
+                path = photoList.get(j);
+            }
+        }
+        return path;
+    }
+
+    public static List<String> strToList(String photoList) {
+        List<String> list = new ArrayList<>();
+        String[] str = photoList.split(";");
+        for (int j = 0; j < str.length; j++) {
+            list.add(str[j]);
+        }
+        return list;
+    }
+
+    public static void hideSysInput(Activity activity) {
+        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
 }

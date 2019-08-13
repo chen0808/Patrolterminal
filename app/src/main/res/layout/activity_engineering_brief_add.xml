@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.EngineeringBriefActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/include_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout style="@style/defect_detail_item_ly">
+
+                <TextView
+                    style="@style/gcjb_item_left"
+                    android:text="简报编号" />
+
+                <TextView
+                    style="@style/gcjb_xin"
+                    android:text="*"
+                    android:textColor="@color/home_red" />
+
+                <TextView
+                    android:id="@+id/gcjb_add_bh"
+                    style="@style/defect_detail_item_right" />
+
+            </LinearLayout>
+
+            <View style="@style/line_gray" />
+
+            <LinearLayout style="@style/defect_detail_item_ly">
+
+                <TextView
+                    style="@style/gcjb_item_left"
+                    android:text="所属项目" />
+
+                <TextView
+                    style="@style/gcjb_xin"
+                    android:text="*"
+                    android:textColor="@color/home_red" />
+
+                <TextView
+                    android:id="@+id/gcjb_add_ssxm"
+                    style="@style/defect_detail_item_right" />
+
+            </LinearLayout>
+
+            <View style="@style/line_gray" />
+
+            <LinearLayout style="@style/defect_detail_item_ly">
+
+                <TextView
+                    style="@style/gcjb_item_left"
+                    android:text="填报人          " />
+
+                <TextView
+                    android:id="@+id/gcjb_add_tbr"
+                    style="@style/defect_detail_item_right" />
+
+            </LinearLayout>
+
+            <View style="@style/line_gray" />
+
+            <LinearLayout style="@style/defect_detail_item_ly">
+
+                <TextView
+                    style="@style/gcjb_item_left"
+                    android:text="简报类别" />
+
+                <TextView
+                    style="@style/gcjb_xin"
+                    android:text="*"
+                    android:textColor="@color/home_red" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/gcjb_add_jblb"
+                        style="@style/defect_detail_item_right" />
+
+                    <ImageView
+                        android:id="@+id/img_allow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:src="@mipmap/next" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <View style="@style/line_gray" />
+
+            <TextView
+                style="@style/gcjb_item_left"
+                android:text="施工情况" />
+
+            <EditText
+                android:id="@+id/gcjb_sgqk"
+                style="@style/gcjb_edit" />
+
+            <View style="@style/line_gray" />
+
+            <TextView
+                style="@style/gcjb_item_left"
+                android:text="管理情况" />
+
+            <EditText
+                android:id="@+id/gcjb_glqk"
+                style="@style/gcjb_edit" />
+
+            <View style="@style/line_gray" />
+
+            <TextView
+                style="@style/gcjb_item_left"
+                android:text="存在问题" />
+
+            <EditText
+                android:id="@+id/gcjb_czqk"
+                style="@style/gcjb_edit" />
+
+            <View style="@style/line_gray" />
+
+            <TextView
+                style="@style/gcjb_item_left"
+                android:text="进度计划" />
+
+            <EditText
+                android:id="@+id/gcjb_jdjh"
+                style="@style/gcjb_edit" />
+
+            <View style="@style/line_gray" />
+
+            <TextView
+                style="@style/gcjb_item_left"
+                android:text="备注" />
+
+            <EditText
+                android:id="@+id/gcjb_bz"
+                style="@style/gcjb_edit" />
+
+            <View style="@style/line_gray" />
+
+            <GridView
+                android:id="@+id/gcjb_photo"
+                style="@style/gridview_photo" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

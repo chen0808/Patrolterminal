@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.ControlCardTaizhangActivity;
+import com.patrol.terminal.activity.EngineeringBriefActivity;
 import com.patrol.terminal.activity.EqToolsReceiveActivity;
 import com.patrol.terminal.activity.MapActivity;
 import com.patrol.terminal.activity.MyPerformanceActivity;
@@ -67,7 +68,7 @@ public class MeFragement extends BaseFragment {
 
     }
 
-    @OnClick({R.id.rl_team_assessment, R.id.rl_my_performance, R.id.rl_send_car, R.id.rl_setting, R.id.rl_send_car_temporary, R.id.rl_my_position, R.id.toolReturn, R.id.toolRecordList, R.id.rl_eq_tools, R.id.rl_eq_tools_receive})
+    @OnClick({R.id.rl_team_assessment, R.id.rl_my_performance, R.id.rl_send_car, R.id.rl_setting, R.id.rl_send_car_temporary, R.id.rl_my_position, R.id.toolReturn, R.id.toolRecordList, R.id.rl_eq_tools, R.id.rl_eq_tools_receive,R.id.tool_gcjb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_team_assessment:
@@ -99,6 +100,10 @@ public class MeFragement extends BaseFragment {
                 break;
             case R.id.toolReturn:
                 startActivity(new Intent(getActivity(), ToolReturnActivity.class));
+                break;
+
+            case R.id.tool_gcjb:
+                startActivity(new Intent(getActivity(), EngineeringBriefActivity.class));
                 break;
         }
     }

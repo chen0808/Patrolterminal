@@ -73,6 +73,17 @@
         <activity android:name=".activity.BudgetActivity" />
         <activity android:name=".activity.ProjectPlanActivity" />
         <activity android:name=".activity.ProjectPlanListActivity" />
+        <activity android:name=".activity.EngineeringBriefActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.EngineeringBriefAddActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            />
+        <activity android:name=".activity.EngineeringBriefListActivity"
+            android:screenOrientation="portrait"
+            />
+
         <activity
             android:name=".activity.NewTaskActivity"
             android:screenOrientation="portrait" />

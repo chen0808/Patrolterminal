@@ -76,7 +76,8 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
                     Glide.with(mContext).load(new File(path)).into(holder.iv);
             }
 
-            if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2") || Constant.patrol_record_audit_status.equals("3")) {
+            if (Constant.patrol_record_audit_status.equals("1") || Constant.patrol_record_audit_status.equals("2")
+                    || Constant.patrol_record_audit_status.equals("3") || Constant.isEditStatus == true) {
                 holder.ivDelete.setVisibility(View.GONE);
             } else {
                 holder.ivDelete.setVisibility(View.VISIBLE);
