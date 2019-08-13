@@ -17,6 +17,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.services.weather.LocalWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherForecastResult;
 import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
@@ -83,7 +84,7 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
     public AMapLocationClient mlocationClient;
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
-    private String city="北京";
+    private String city = "武汉";
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -138,7 +139,7 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
 //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
 //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2000);
+        mLocationOption.setInterval(600000);
 //设置定位参数
         mlocationClient.setLocationOption(mLocationOption);
 // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
@@ -152,7 +153,7 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
 
     //获取天气
     private void getWeather() {
-        mquery = new WeatherSearchQuery("武汉市", WeatherSearchQuery.WEATHER_TYPE_FORECAST);
+        mquery = new WeatherSearchQuery(city, WeatherSearchQuery.WEATHER_TYPE_LIVE);
         mweathersearch = new WeatherSearch(getContext());
         mweathersearch.setOnWeatherSearchListener(this);
         mweathersearch.setQuery(mquery);
@@ -193,18 +194,24 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
         if (rCode == 1000) {
             if (weatherLiveResult != null && weatherLiveResult.getLiveResult() != null) {
                 LocalWeatherLive weatherlive = weatherLiveResult.getLiveResult();
-                placeAndTemp.setText(city + weatherlive.getTemperature() + "°C");
+                placeAndTemp.setText(city + "   " + weatherlive.getTemperature() + "°C");
                 jxHomeWeather.setText(weatherlive.getWeather() + "    " + weatherlive.getWindDirection() + "风     " + weatherlive.getWindPower() + "级");
-
+                if (weatherlive.getWeather().contains("雨")) {
+                    weatherIcon.setBackgroundResource(R.mipmap.jx_xiayu);
+                } else if (weatherlive.getWeather().contains("阳")) {
+                    weatherIcon.setBackgroundResource(R.mipmap.jx_taiyang);
+                } else if (weatherlive.getWeather().contains("云")) {
+                    weatherIcon.setBackgroundResource(R.mipmap.jx_duoyun);
+                } else if (weatherlive.getWeather().contains("阴")) {
+                    weatherIcon.setBackgroundResource(R.mipmap.jx_yin);
+                }
             } else {
             }
-        } else {
-
         }
     }
 
     @Override
-    public void onWeatherForecastSearched(LocalWeatherForecastResult localWeatherForecastResult, int i) {
+    public void onWeatherForecastSearched(LocalWeatherForecastResult weatherLiveResult, int rCode) {
 
     }
 
