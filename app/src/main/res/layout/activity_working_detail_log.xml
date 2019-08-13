@@ -129,6 +129,16 @@
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="16dp"
+                    android:textSize="14sp"
+                    />
+
             </LinearLayout>
 
             <View
@@ -160,6 +170,17 @@
                         android:text="*"
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="16dp"
+                    android:textSize="14sp"
+                    android:inputType="number"
+                    />
 
             </LinearLayout>
 
@@ -266,8 +287,10 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_compile_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
@@ -307,8 +330,10 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_occur_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
@@ -473,6 +498,7 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
+                    android:hint="请输入"
                     android:singleLine="false"/>
 
             </LinearLayout>
@@ -505,7 +531,8 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
-                    android:singleLine="false"/>
+                    android:singleLine="false"
+                    android:hint="请输入"/>
 
             </LinearLayout>
 
@@ -537,7 +564,8 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
-                    android:singleLine="false"/>
+                    android:singleLine="false"
+                    android:hint="请输入"/>
 
             </LinearLayout>
 
@@ -569,7 +597,8 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
-                    android:singleLine="false"/>
+                    android:singleLine="false"
+                    android:hint="请输入"/>
             </LinearLayout>
 
             <View
@@ -600,7 +629,8 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
-                    android:singleLine="false"/>
+                    android:singleLine="false"
+                    android:hint="请输入"/>
             </LinearLayout>
 
             <View
@@ -631,7 +661,8 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
-                    android:singleLine="false"/>
+                    android:singleLine="false"
+                    android:hint="请输入"/>
             </LinearLayout>
 
             <View
@@ -662,7 +693,8 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
-                    android:singleLine="false"/>
+                    android:singleLine="false"
+                    android:hint="请输入"/>
             </LinearLayout>
 
             <View
@@ -693,7 +725,8 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
-                    android:singleLine="false"/>
+                    android:singleLine="false"
+                    android:hint="请输入"/>
             </LinearLayout>
 
             <RelativeLayout
