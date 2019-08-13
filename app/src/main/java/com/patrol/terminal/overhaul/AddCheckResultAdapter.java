@@ -48,6 +48,15 @@ public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, Bas
             }
         });
 
+        viewHolder.setOnClickListener(R.id.delete_result_iv, new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                mData.remove(item);
+                notifyDataSetChanged();
+            }
+        });
+
 
         checkResultRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -56,13 +65,17 @@ public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, Bas
                 isRadioGroupShow = false;
 
                 switch (checkedId) {
-                    case R.id.check_result_approved_rb:
+                    case R.id.check_result_ok_rb:
                         viewHolder.setText(R.id.check_result_tv, "通过");
                         item.setCheckResult(0);
                         break;
-                    case R.id.check_result_not_approved_rb:
-                        viewHolder.setText(R.id.check_result_tv, "不通过");
+                    case R.id.check_result_verbal_warning_rb:
+                        viewHolder.setText(R.id.check_result_tv, "口头警告");
                         item.setCheckResult(1);
+                        break;
+                    case R.id.check_result_written_corrections_rb:
+                        viewHolder.setText(R.id.check_result_tv, "书面整改");
+                        item.setCheckResult(2);
                         break;
                 }
             }

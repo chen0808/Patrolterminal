@@ -18,6 +18,7 @@ import com.patrol.terminal.activity.WorkWeeklyListActivity;
 import com.patrol.terminal.activity.WorkingLogActivity;
 import com.patrol.terminal.bean.MapUserInfo;
 import com.patrol.terminal.overhaul.ElectronicNoticeActivity;
+import com.patrol.terminal.overhaul.SafeCheckMainActivity;
 
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class GridePagerAdapter extends PagerAdapter {
                             break;
                             //安全检查
                         case 7:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, SafeCheckMainActivity.class);
                             break;
                     }
                 } else if(position == 1){

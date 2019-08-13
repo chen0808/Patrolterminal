@@ -1,7 +1,10 @@
 package com.patrol.terminal.overhaul;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.bean.CheckProjectBean;
 import com.patrol.terminal.bean.CheckResultBean;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -21,8 +25,8 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,45 +42,18 @@ public class AddSafeCheckActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
-    @BindView(R.id.project_tv)
-    TextView projectTv;
-    @BindView(R.id.project_rl)
-    RelativeLayout projectRl;
-    @BindView(R.id.nature_tv)
-    TextView natureTv;
-    @BindView(R.id.nature_rl)
-    RelativeLayout natureRl;
-    @BindView(R.id.safe_construction_rb)
-    RadioButton safeConstructionRb;
-    @BindView(R.id.safe_education_rb)
-    RadioButton safeEducationRb;
-    @BindView(R.id.financial_audit_rb)
-    RadioButton financialAuditRb;
-    @BindView(R.id.other_rb)
-    RadioButton otherRb;
-    @BindView(R.id.nature_rg)
-    RadioGroup natureRg;
-    @BindView(R.id.date_tv)
-    TextView dateTv;
-    @BindView(R.id.date_rl)
-    RelativeLayout dateRl;
-    @BindView(R.id.check_person_tv)
-    TextView checkPersonTv;
-    @BindView(R.id.check_person_rl)
-    RelativeLayout checkPersonRl;
-    @BindView(R.id.check_items_tv)
-    TextView checkItemsTv;
-    @BindView(R.id.check_items_rl)
-    RelativeLayout checkItemsRl;
+    @BindView(R.id.title_item)
+    RelativeLayout titleItem;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView checkResultRv;
-    @BindView(R.id.record_person)
-    TextView recordPerson;
-    @BindView(R.id.add_check_result_rl)
-    LinearLayout addCheckResultRl;
 
+    private View header;
+    private View bottom;
     private AddCheckResultAdapter mAddCheckResultAdapter;
     private List<CheckResultBean> mCheckResult = new ArrayList<>();
+    private boolean isNatureShow = false;
+    private RadioGroup mNatureRg;
+    private TextView mProjectContentTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +65,23 @@ public class AddSafeCheckActivity extends BaseActivity {
 
     private void initView() {
         titleName.setText("新增安全检查");
+        titleSetting.setVisibility(View.VISIBLE);
+        titleSettingTv.setText("保存");
+
+        header = LayoutInflater.from(this).inflate(R.layout.add_safe_check_activity_top, null);
+        bottom = LayoutInflater.from(this).inflate(R.layout.add_safe_check_activity_bottom, null);
+
+        RelativeLayout projectRl = header.findViewById(R.id.project_rl);
+        mProjectContentTv = header.findViewById(R.id.project_content_tv);
+
+        projectRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(AddSafeCheckActivity.this, ProjectSearchActivity.class);
+                startActivityForResult(intent, 1001);
+            }
+        });
 
         // 设置监听器。
         checkResultRv.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -105,6 +99,92 @@ public class AddSafeCheckActivity extends BaseActivity {
 
         mAddCheckResultAdapter = new AddCheckResultAdapter(R.layout.add_check_result_item, mCheckResult);
         checkResultRv.setAdapter(mAddCheckResultAdapter);
+
+        ViewGroup parentViewGroup = (ViewGroup) header.getParent();
+        if (parentViewGroup != null) {
+            parentViewGroup.removeAllViews();
+        }
+        ViewGroup parentViewGroup1 = (ViewGroup) bottom.getParent();
+        if (parentViewGroup1 != null) {
+            parentViewGroup1.removeAllViews();
+        }
+        mAddCheckResultAdapter.addHeaderView(header);
+        mAddCheckResultAdapter.addFooterView(bottom);
+
+        mNatureRg = header.findViewById(R.id.nature_rg);
+        TextView natureContentTv = header.findViewById(R.id.nature_content_tv);
+        mNatureRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                mNatureRg.setVisibility(View.GONE);
+                isNatureShow = false;
+                String[] natureArray = getResources().getStringArray(R.array.safe_check_nature_array);
+                switch (checkedId) {
+                    case R.id.safe_construction_rb:
+                        natureContentTv.setText(natureArray[0]);
+                        break;
+
+                    case R.id.safe_education_rb:
+                        natureContentTv.setText(natureArray[1]);
+                        break;
+
+                    case R.id.financial_audit_rb:
+                        natureContentTv.setText(natureArray[2]);
+                        break;
+
+                    case R.id.other_rb:
+                        natureContentTv.setText(natureArray[3]);
+                        break;
+                }
+            }
+        });
+
+        RelativeLayout natureRl = header.findViewById(R.id.nature_rl);
+        natureRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isNatureShow) {
+                    mNatureRg.setVisibility(View.GONE);
+                    isNatureShow = false;
+                } else {
+                    mNatureRg.setVisibility(View.VISIBLE);
+                    isNatureShow = true;
+                }
+            }
+        });
+
+        LinearLayout addCheckResultRl = bottom.findViewById(R.id.add_check_result_rl);
+        addCheckResultRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //添加一条数据供填写
+                CheckResultBean checkResultBean = new CheckResultBean();
+                checkResultBean.setCheckResult(0);
+                checkResultBean.setCheckContent(null);
+                checkResultBean.setCheckPics(null);
+                mCheckResult.add(checkResultBean);
+
+                mAddCheckResultAdapter.setNewData(mCheckResult);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode) {
+            case 1001:
+                if (data != null) {
+                    CheckProjectBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                    if (clickedCheckProjectBean != null) {
+                        String name = clickedCheckProjectBean.getName();
+                        String projectId = clickedCheckProjectBean.getProject_id();   //备用  TODO
+                        mProjectContentTv.setText(name);
+                    }
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     // 创建菜单：
@@ -128,33 +208,16 @@ public class AddSafeCheckActivity extends BaseActivity {
         }
     };
 
-    @OnClick({R.id.title_back, R.id.title_setting, R.id.project_rl, R.id.nature_rl, R.id.date_rl, R.id.check_person_rl, R.id.add_check_result_rl})
+    @OnClick({R.id.title_back, R.id.title_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
             case R.id.title_setting:
+                finish();
                 break;
-            case R.id.project_rl:
-                break;
-            case R.id.nature_rl:
-                break;
-            case R.id.date_rl:
-                break;
-            case R.id.check_person_rl:
-                break;
-            case R.id.add_check_result_rl:
-                //添加一条数据供填写
-                CheckResultBean checkResultBean = new CheckResultBean();
-                checkResultBean.setCheckResult(0);
-                checkResultBean.setCheckContent(null);
-                checkResultBean.setCheckPics(null);
-                mCheckResult.add(checkResultBean);
 
-                mAddCheckResultAdapter.setNewData(mCheckResult);
-
-                break;
         }
     }
 

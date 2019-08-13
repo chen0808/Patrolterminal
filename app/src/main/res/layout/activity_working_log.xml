@@ -95,7 +95,7 @@
             android:id="@+id/tv_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/safe_check_add_img"
+            android:drawableLeft="@mipmap/gcjb_add"
             android:textColor="@color/white"
             />
     </LinearLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    android:orientation="horizontal"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toLeftOf="@+id/right_rl"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_above="@+id/bottom_line_iv">
+
+        <TextView
+            android:id="@+id/project_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/tv_black"></TextView>
+
+        <TextView
+            android:id="@+id/project_content_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"></TextView>
+
+        <TextView
+            android:id="@+id/project_create_person_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"></TextView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/right_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:layout_above="@+id/bottom_line_iv">
+
+        <ImageView
+            android:id="@+id/check_project_result_iv"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@mipmap/check_project_accepted"
+            android:layout_above="@+id/time_tv"
+            android:layout_centerHorizontal="true"
+            ></ImageView>
+
+        <TextView
+            android:id="@+id/time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019/08/01 14:58"
+            android:layout_alignParentBottom="true"></TextView>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/bottom_line_iv"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:src="@color/color_f2"
+        android:layout_alignParentBottom="true"></ImageView>
+
+
+
+</RelativeLayout>

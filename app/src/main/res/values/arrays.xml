@@ -1353,4 +1353,11 @@
         <item>（5）杆塔及拉线的基础变异，周围土壤突起或沉陷，基础裂纹、损坏、下沉或上拔，护基沉塌或被冲刷</item>
         <item>（6）基础保护帽上部塔材被埋入土或废弃物堆中，塔材锈蚀</item>
     </string-array>
+
+    <string-array name="safe_check_nature_array">
+        <item>安全施工</item>
+        <item>安全教育</item>
+        <item>财务审计</item>
+        <item>其它</item>
+    </string-array>
 </resources>

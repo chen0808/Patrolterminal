@@ -30,11 +30,20 @@
             android:layout_height="wrap_content"
             android:text="通过"
             android:textSize="18sp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp_10"
+            android:layout_toLeftOf="@+id/delete_result_iv"
+            android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
             android:drawableRight="@mipmap/icon_go"
             android:drawablePadding="@dimen/dp_10"></TextView>
+
+        <ImageView
+            android:id="@+id/delete_result_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/plan_delete"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"></ImageView>
 
     </RelativeLayout>
 
@@ -54,17 +63,23 @@
         android:visibility="gone">
 
         <RadioButton
-            android:id="@+id/check_result_approved_rb"
+            android:id="@+id/check_result_ok_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="通过"
             android:checked="true"></RadioButton>
 
         <RadioButton
-            android:id="@+id/check_result_not_approved_rb"
+            android:id="@+id/check_result_verbal_warning_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="不通过"></RadioButton>
+            android:text="口头警告"></RadioButton>
+
+        <RadioButton
+            android:id="@+id/check_result_written_corrections_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="书面整改"></RadioButton>
 
     </RadioGroup>
 
