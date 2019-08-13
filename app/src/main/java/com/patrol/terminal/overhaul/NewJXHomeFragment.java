@@ -111,12 +111,12 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        jxPoint1.setBackgroundResource(R.drawable.point);
-                        jxPoint2.setBackgroundResource(R.drawable.week_bg);
-                        break;
-                    case 1:
                         jxPoint1.setBackgroundResource(R.drawable.week_bg);
                         jxPoint2.setBackgroundResource(R.drawable.point);
+                        break;
+                    case 1:
+                        jxPoint1.setBackgroundResource(R.drawable.point);
+                        jxPoint2.setBackgroundResource(R.drawable.week_bg);
                         break;
                 }
             }

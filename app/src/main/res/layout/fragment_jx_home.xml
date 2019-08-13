@@ -132,14 +132,14 @@
                         android:id="@+id/jx_point1"
                         android:layout_width="@dimen/dp_10"
                         android:layout_height="@dimen/dp_10"
-                        android:background="@drawable/point" />
+                        android:background="@drawable/week_bg" />
 
                     <TextView
                         android:id="@+id/jx_point2"
                         android:layout_width="@dimen/dp_10"
                         android:layout_height="@dimen/dp_10"
                         android:layout_marginLeft="@dimen/dp_10"
-                        android:background="@drawable/week_bg" />
+                        android:background="@drawable/point" />
                 </LinearLayout>
             </LinearLayout>
 
