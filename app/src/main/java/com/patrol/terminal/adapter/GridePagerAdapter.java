@@ -12,6 +12,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.EngineeringBriefActivity;
+import com.patrol.terminal.activity.GraphicProgressActivity;
 import com.patrol.terminal.activity.ProjectBoardActivity;
 import com.patrol.terminal.activity.ThirdWTicketActivity;
 import com.patrol.terminal.activity.WorkingLogActivity;
@@ -75,7 +76,7 @@ public class GridePagerAdapter extends PagerAdapter {
                             break;
                             //形象进度
                         case 1:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, GraphicProgressActivity.class);
                             break;
                             //里程碑
                         case 2:

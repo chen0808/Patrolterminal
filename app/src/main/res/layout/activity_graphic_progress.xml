@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.GraphicProgressActivity">
+
+    <include layout="@layout/include_title" />
+
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+        android:id="@+id/graphic_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.yanzhenjie.recyclerview.SwipeRecyclerView>
+</LinearLayout>

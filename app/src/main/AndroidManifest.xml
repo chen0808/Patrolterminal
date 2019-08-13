@@ -32,7 +32,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.JXTotalActivity"></activity>
+        <activity android:name=".activity.GraphicProgressActivity"></activity>
+        <activity android:name=".activity.JXTotalActivity" />
         <activity android:name=".activity.DefectPlanActivity" />
         <activity android:name=".activity.DangerToPatrolActivity" />
         <activity android:name=".activity.DangerVerifyActivity" />
@@ -366,7 +367,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="69ef137e2112474f49cece1036dfc50b" /> <!-- 69ef137e2112474f49cece1036dfc50b -->
+            android:value="b29931cbdb7cb2cb027765cd556d2de6" /> <!-- 69ef137e2112474f49cece1036dfc50b -->
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />
 

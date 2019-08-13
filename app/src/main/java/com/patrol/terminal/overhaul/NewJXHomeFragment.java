@@ -35,6 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
+//检修新首页
 public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnWeatherSearchListener, AMapLocationListener {
 
     @BindView(R.id.title_back)
