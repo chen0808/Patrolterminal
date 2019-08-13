@@ -22,10 +22,7 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
     private List<String> mList = new ArrayList<>();
     private ViewHolder holder;
     private onDelPhotoAdapter onDelPhoto;
-
-    public TssxPhotoAdapter(Context context) {
-        this.mContext = context;
-    }
+    private boolean addStatus = true;
 
     public TssxPhotoAdapter(Context context, List<String> mList) {
         this.mContext = context;
@@ -40,7 +37,11 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
         if (count > Constant.MAX_SELECT_PIC_NUM) {
             return mList.size();
         } else {
-            return count;
+            if(addStatus)
+                return count;
+            else
+                return mList.size();
+
         }
 
     }
@@ -110,6 +111,10 @@ public class TssxPhotoAdapter extends android.widget.BaseAdapter {
         notifyDataSetChanged();
     }
 
+    //加号照片是否显示
+    public void setAddStatus(boolean status){
+        addStatus = status;
+    }
 
     public interface onDelPhotoAdapter {
         void onDelPhotoAdapterStr(String delPhotoStr);

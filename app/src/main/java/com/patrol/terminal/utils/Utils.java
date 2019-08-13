@@ -410,7 +410,8 @@ public class Utils {
         List<String> list = new ArrayList<>();
         String[] str = photoList.split(";");
         for (int j = 0; j < str.length; j++) {
-            list.add(str[j]);
+            if(!TextUtils.isEmpty(str[j]))
+                list.add(str[j]);
         }
         return list;
     }

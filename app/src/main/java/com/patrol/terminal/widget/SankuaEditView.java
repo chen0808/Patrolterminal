@@ -231,6 +231,7 @@ public class SankuaEditView extends LinearLayout {
      */
     public void  disableView(boolean disable)
     {
+//        photoAdapter.setAddStatus(disable);
         sk_gridview.setEnabled(disable);
         sankua_yhnr.setEnabled(disable);
         disableRadioGroup(disable);

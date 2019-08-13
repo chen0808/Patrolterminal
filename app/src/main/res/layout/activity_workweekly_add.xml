@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.EngineeringBriefActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/include_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout style="@style/defect_detail_item_ly">
+
+                <TextView
+                    style="@style/gcjb_item_left"
+                    android:text="姓名              " />
+
+                <TextView
+                    android:id="@+id/work_addname"
+                    style="@style/defect_detail_item_right" />
+
+            </LinearLayout>
+
+            <View style="@style/line_gray" />
+
+            <LinearLayout style="@style/defect_detail_item_ly">
+
+                <TextView
+                    style="@style/gcjb_item_left"
+                    android:text="填报日期      " />
+
+                <TextView
+                    android:id="@+id/work_add_date"
+                    style="@style/defect_detail_item_right" />
+
+            </LinearLayout>
+
+            <View style="@style/line_gray" />
+
+            <TextView
+                style="@style/gcjb_item_left"
+                android:text="本周总结" />
+
+            <EditText
+                android:id="@+id/work_zj"
+                style="@style/gcjb_edit" />
+
+            <View style="@style/line_gray" />
+
+            <TextView
+                style="@style/gcjb_item_left"
+                android:text="下周计划" />
+
+            <EditText
+                android:id="@+id/work_xzjh"
+                style="@style/gcjb_edit" />
+
+            <View style="@style/line_gray" />
+
+            <TextView
+                style="@style/gcjb_item_left"
+                android:text="协调内容" />
+
+            <EditText
+                android:id="@+id/work_xtnr"
+                style="@style/gcjb_edit" />
+
+            <View style="@style/line_gray" />
+
+            <TextView
+                style="@style/gcjb_item_left"
+                android:text="备注" />
+
+            <EditText
+                android:id="@+id/work_bz"
+                style="@style/gcjb_edit" />
+
+            <View style="@style/line_gray" />
+
+            <GridView
+                android:id="@+id/work_photo"
+                style="@style/gridview_photo" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

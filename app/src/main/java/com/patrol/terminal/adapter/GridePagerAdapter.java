@@ -14,6 +14,7 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.activity.EngineeringBriefActivity;
 import com.patrol.terminal.activity.ProjectBoardActivity;
 import com.patrol.terminal.activity.ThirdWTicketActivity;
+import com.patrol.terminal.activity.WorkWeeklyListActivity;
 import com.patrol.terminal.activity.WorkingLogActivity;
 import com.patrol.terminal.bean.MapUserInfo;
 import com.patrol.terminal.overhaul.ElectronicNoticeActivity;
@@ -94,7 +95,7 @@ public class GridePagerAdapter extends PagerAdapter {
                             break;
                             //工程周报
                         case 6:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, WorkWeeklyListActivity.class);
                             break;
                             //安全检查
                         case 7:

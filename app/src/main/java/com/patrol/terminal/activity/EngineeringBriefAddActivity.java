@@ -123,6 +123,7 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
             gcjb_bz.setText(item.getProject_bz());
 
             photoList.addAll(Utils.strToList(item.getProject_photo()));
+            photoAdapter.setAddStatus(false);
             photoAdapter.notifyDataSetChanged();
 
             gcjb_sgqk.setEnabled(false);
