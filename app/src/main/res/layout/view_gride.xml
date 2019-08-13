@@ -10,7 +10,10 @@
         android:layout_height="match_parent"
         android:numColumns="4"
         android:horizontalSpacing="15dp"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
         android:listSelector="@color/transparent"
+        android:overScrollMode="never"
         ></GridView>
 
 </RelativeLayout>

@@ -6,23 +6,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.viewpager.widget.ViewPager;
 
+import com.amap.api.services.weather.LocalWeatherForecastResult;
+import com.amap.api.services.weather.LocalWeatherLive;
+import com.amap.api.services.weather.LocalWeatherLiveResult;
+import com.amap.api.services.weather.WeatherSearch;
+import com.amap.api.services.weather.WeatherSearchQuery;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GridViewAdapter5;
 import com.patrol.terminal.adapter.GridePagerAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.bean.MapUserInfo;
+import com.patrol.terminal.utils.DateUatil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class NewJXHomeFragment extends BaseFragment {
+public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnWeatherSearchListener {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -48,13 +55,25 @@ public class NewJXHomeFragment extends BaseFragment {
     TextView jxPoint2;
     @BindView(R.id.paomadeng)
     TextView paomadeng;
+    @BindView(R.id.jx_home_date)
+    TextView jxHomeDate;
+    @BindView(R.id.ll_total)
+    LinearLayout llTotal;
+    @BindView(R.id.ll_ed)
+    LinearLayout llEd;
+    @BindView(R.id.ll_ing)
+    LinearLayout llIng;
+    @BindView(R.id.jx_home_weather)
+    TextView jxHomeWeather;
     private GridViewAdapter5 weekAdapter;
 
-    private String[] names1 = new String[]{"项目看板","形象进度","里程碑","质量检查","施工日志","工程简报","工程周报","安全检查"};
-    private int[] img1 = new int[]{R.mipmap.jx_home_icon1,R.mipmap.jx_home_icon2,R.mipmap.jx_home_icon3,R.mipmap.jx_home_icon4,R.mipmap.jx_home_icon5,R.mipmap.jx_home_icon6,R.mipmap.jx_home_icon7,R.mipmap.jx_home_icon8};
-    private String[] names2 = new String[]{"里程碑"};
-    private int[] img2 = new int[]{R.mipmap.todo2};
+    private String[] names1 = new String[]{"项目看板", "形象进度", "里程碑", "质量检查", "施工日志", "工程简报", "工程周报", "安全检查"};
+    private int[] img1 = new int[]{R.mipmap.jx_home_icon1, R.mipmap.jx_home_icon2, R.mipmap.jx_home_icon3, R.mipmap.jx_home_icon4, R.mipmap.jx_home_icon5, R.mipmap.jx_home_icon6, R.mipmap.jx_home_icon7, R.mipmap.jx_home_icon8};
+    private String[] names2 = new String[]{"电子公告", "内部新闻", "技术规范",};
+    private int[] img2 = new int[]{R.mipmap.jx_home_icon9, R.mipmap.jx_home_icon10, R.mipmap.jx_home_icon11};
     private List<List<MapUserInfo>> results = new ArrayList<>();
+    private WeatherSearchQuery mquery;
+    private WeatherSearch mweathersearch;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,10 +83,12 @@ public class NewJXHomeFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        titleBack.setGravity(View.GONE);
+        titleBack.setVisibility(View.GONE);
         titleName.setText("检修");
         paomadeng.setSelected(true);
         init();
+        getWeather();
+        jxHomeDate.setText(DateUatil.getTime() + "   " + DateUatil.getWeeks());
         GridePagerAdapter pagerAdapter = new GridePagerAdapter(getContext(), results);
         jxVpr.setAdapter(pagerAdapter);
         jxVpr.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -95,6 +116,14 @@ public class NewJXHomeFragment extends BaseFragment {
 
             }
         });
+    }
+//获取天气
+    private void getWeather() {
+        mquery = new WeatherSearchQuery("武汉市", WeatherSearchQuery.WEATHER_TYPE_FORECAST);
+        mweathersearch = new WeatherSearch(getContext());
+        mweathersearch.setOnWeatherSearchListener(this);
+        mweathersearch.setQuery(mquery);
+        mweathersearch.searchWeatherAsyn(); //异步搜索
     }
 
     private void init() {
@@ -124,5 +153,26 @@ public class NewJXHomeFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onWeatherLiveSearched(LocalWeatherLiveResult weatherLiveResult, int rCode) {
+        if (rCode == 1000) {
+            if (weatherLiveResult != null && weatherLiveResult.getLiveResult() != null) {
+                LocalWeatherLive weatherlive = weatherLiveResult.getLiveResult();
+
+                placeAndTemp.setText("武汉"+weatherlive.getTemperature() + "°C");
+                jxHomeWeather.setText(weatherlive.getWeather()+"    "+weatherlive.getWindDirection() + "风     " + weatherlive.getWindPower() + "级");
+
+            } else {
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onWeatherForecastSearched(LocalWeatherForecastResult localWeatherForecastResult, int i) {
+
     }
 }

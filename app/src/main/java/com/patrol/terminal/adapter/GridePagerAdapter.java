@@ -66,27 +66,35 @@ public class GridePagerAdapter extends PagerAdapter {
                 Intent intent = new Intent();
                 if (position == 0) {
                     switch (i) {
+                        //项目看板
                         case 0:
                             intent.setClass(context, ProjectBoardActivity.class);
                             break;
+                            //形象进度
                         case 1:
                             intent.setClass(context, ThirdWTicketActivity.class);
                             break;
+                            //里程碑
                         case 2:
                             intent.setClass(context, ThirdWTicketActivity.class);
                             break;
+                            //质量检查
                         case 3:
                             intent.setClass(context, ThirdWTicketActivity.class);
                             break;
+                            //施工日志
                         case 4:
                             intent.setClass(context, WorkingLogActivity.class);
                             break;
+                            //工程简报
                         case 5:
                             intent.setClass(context, ThirdWTicketActivity.class);
                             break;
+                            //工程周报
                         case 6:
                             intent.setClass(context, ThirdWTicketActivity.class);
                             break;
+                            //安全检查
                         case 7:
                             intent.setClass(context, ThirdWTicketActivity.class);
                             break;
