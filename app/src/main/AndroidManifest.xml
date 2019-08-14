@@ -398,6 +398,8 @@
         <activity android:name=".activity.ConstructionSideActivity" />
         <activity android:name=".overhaul.ElectronicNoticeActivity" />
         <activity android:name=".overhaul.ElectronicNoticeAddActivity" />
+        <activity android:name=".overhaul.InternalNewsActivity" />
+        <activity android:name=".overhaul.InternalNewsAddActivity" />
     </application>
 
 </manifest>
