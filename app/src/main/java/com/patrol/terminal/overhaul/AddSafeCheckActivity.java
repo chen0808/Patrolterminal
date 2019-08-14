@@ -123,7 +123,8 @@ public class AddSafeCheckActivity extends BaseActivity {
         checkResultBean.setCheckResultId(System.currentTimeMillis());
         checkResultBean.setCheckResult(0);
         checkResultBean.setCheckContent(null);
-        checkResultBean.setCheckPics(null);
+        List<CheckResultBean.PictureInfo> firstBitmapList = new ArrayList<>();
+        checkResultBean.setCheckPics(firstBitmapList);
         mCheckResult.add(checkResultBean);
 
         mAddCheckResultAdapter = new AddCheckResultAdapter(this, R.layout.add_check_result_item, mCheckResult);
@@ -195,7 +196,8 @@ public class AddSafeCheckActivity extends BaseActivity {
                 checkResultBean.setCheckResultId(System.currentTimeMillis());
                 checkResultBean.setCheckResult(0);
                 checkResultBean.setCheckContent(null);
-                checkResultBean.setCheckPics(null);
+                List<CheckResultBean.PictureInfo> addBitmapList = new ArrayList<>();
+                checkResultBean.setCheckPics(addBitmapList);
                 mCheckResult.add(checkResultBean);
 
                 mAddCheckResultAdapter.setNewData(mCheckResult);
@@ -260,8 +262,19 @@ public class AddSafeCheckActivity extends BaseActivity {
                 Bitmap bitmap = (Bitmap) bundle.get("data");
 //                String path = Environment.getExternalStorageDirectory().getPath()
 //                        + "/MyPhoto/" + Constant.CHECK_RESULT + "_" + Constant.checkResultId + "_" +  + ".jpg";
-                ImageView imageView = new ImageView(this);
-                imageView.setImageBitmap(bitmap);
+
+                for (int i = 0; i < mCheckResult.size(); i++) {
+                    long checkResultId = mCheckResult.get(i).getCheckResultId();
+                    if (Constant.checkResultId  == checkResultId) {
+
+                        CheckResultBean.PictureInfo pictureInfo = new CheckResultBean.PictureInfo();
+                        pictureInfo.setBitmap(bitmap);
+                        pictureInfo.setBitmapId(mCheckResult.get(i).getCheckPics().size());
+                        mCheckResult.get(i).getCheckPics().add(pictureInfo);
+                        Log.w("linmeng", "mCheckResult.get(i).getCheckPics().size():" + mCheckResult.get(i).getCheckPics().size());
+                        mAddCheckResultAdapter.setNewData(mCheckResult);
+                    }
+                }
 
                 break;
         }
