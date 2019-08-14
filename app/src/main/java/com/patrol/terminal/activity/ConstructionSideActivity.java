@@ -92,7 +92,7 @@ public class ConstructionSideActivity extends BaseActivity {
         }
 
         titleSetting.setVisibility(View.VISIBLE);
-        titleSettingIv.setImageResource(R.mipmap.add_black);
+        titleSettingIv.setImageResource(R.mipmap.add_white);
         titleSettingTv.setText("");
 
         LinearLayoutManager manager = new LinearLayoutManager(mContext);

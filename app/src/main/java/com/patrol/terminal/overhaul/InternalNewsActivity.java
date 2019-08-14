@@ -55,7 +55,7 @@ public class InternalNewsActivity extends BaseActivity {
     private void initview() {
         titleName.setText("内部新闻");
         titleSetting.setVisibility(View.VISIBLE);
-        titleSettingIv.setImageResource(R.mipmap.add_black);
+        titleSettingIv.setImageResource(R.mipmap.add_white);
         titleSettingTv.setText("");
 
         List<Fragment> fragmentList = new ArrayList<>();

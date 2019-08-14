@@ -21,6 +21,7 @@ import com.patrol.terminal.bean.MapUserInfo;
 import com.patrol.terminal.overhaul.ElectronicNoticeActivity;
 import com.patrol.terminal.overhaul.InternalNewsActivity;
 import com.patrol.terminal.overhaul.SafeCheckMainActivity;
+import com.patrol.terminal.overhaul.TechnicalSpecificationActivity;
 
 import java.util.List;
 
@@ -117,7 +118,7 @@ public class GridePagerAdapter extends PagerAdapter {
                             break;
                         //技术规范
                         case 2:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, TechnicalSpecificationActivity.class);
                             break;
                     }
                 }

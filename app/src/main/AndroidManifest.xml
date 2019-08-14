@@ -404,6 +404,9 @@
         <activity android:name=".overhaul.ElectronicNoticeAddActivity" />
         <activity android:name=".overhaul.InternalNewsActivity" />
         <activity android:name=".overhaul.InternalNewsAddActivity" />
+        <activity android:name=".overhaul.TechnicalSpecificationActivity" />
+        <activity android:name=".overhaul.TechnicalSpecificationAddActivity" />
+        <activity android:name=".overhaul.TechnicalInternationalAddActivity" />
     </application>
 
 </manifest>
