@@ -1,5 +1,6 @@
 package com.patrol.terminal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -70,6 +71,8 @@ public class GraphicProgressActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
+                Intent intent=new Intent(this,AddGraphicProgressActivity.class);
+                startActivity(intent);
                 break;
         }
     }

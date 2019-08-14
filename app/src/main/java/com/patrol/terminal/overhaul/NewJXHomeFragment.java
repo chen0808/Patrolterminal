@@ -76,8 +76,8 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
 
     private String[] names1 = new String[]{"项目看板", "形象进度", "里程碑", "质量检查", "施工日志", "工程简报", "工程周报", "安全检查"};
     private int[] img1 = new int[]{R.mipmap.jx_home_icon1, R.mipmap.jx_home_icon2, R.mipmap.jx_home_icon3, R.mipmap.jx_home_icon4, R.mipmap.jx_home_icon5, R.mipmap.jx_home_icon6, R.mipmap.jx_home_icon7, R.mipmap.jx_home_icon8};
-    private String[] names2 = new String[]{"电子公告", "内部新闻", "技术规范",};
-    private int[] img2 = new int[]{R.mipmap.jx_home_icon9, R.mipmap.jx_home_icon10, R.mipmap.jx_home_icon11};
+    private String[] names2 = new String[]{"项目立项","设计计划","电子公告", "内部新闻", "技术规范",};
+    private int[] img2 = new int[]{R.mipmap.jx_home_icon12,R.mipmap.jx_home_icon13,R.mipmap.jx_home_icon9, R.mipmap.jx_home_icon10, R.mipmap.jx_home_icon11};
     private List<List<MapUserInfo>> results = new ArrayList<>();
     private WeatherSearchQuery mquery;
     private WeatherSearch mweathersearch;

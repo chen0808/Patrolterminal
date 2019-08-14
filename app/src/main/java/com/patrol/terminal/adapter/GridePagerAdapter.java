@@ -87,7 +87,7 @@ public class GridePagerAdapter extends PagerAdapter {
                             break;
                             //质量检查
                         case 3:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, SafeCheckMainActivity.class);
                             break;
                             //施工日志
                         case 4:
@@ -108,16 +108,22 @@ public class GridePagerAdapter extends PagerAdapter {
                     }
                 } else if(position == 1){
                     switch (i) {
-                        //电子公告
+                        //项目立项
                         case 0:
+                            break;
+                        //设计计划
+                        case 1:
+                            break;
+                        //电子公告
+                        case 2:
                             intent.setClass(context, ElectronicNoticeActivity.class);
                             break;
                         //内部新闻
-                        case 1:
+                        case 3:
                             intent.setClass(context, InternalNewsActivity.class);
                             break;
                         //技术规范
-                        case 2:
+                        case 4:
                             intent.setClass(context, TechnicalSpecificationActivity.class);
                             break;
                     }
