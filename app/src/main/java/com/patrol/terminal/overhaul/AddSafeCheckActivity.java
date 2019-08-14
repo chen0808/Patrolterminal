@@ -1,28 +1,48 @@
 package com.patrol.terminal.overhaul;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.CheckPersonGridAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.CheckProjectBean;
 import com.patrol.terminal.bean.CheckResultBean;
+import com.patrol.terminal.bean.UserBean;
+import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.RxRefreshEvent;
+import com.patrol.terminal.utils.Utils;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -54,6 +74,14 @@ public class AddSafeCheckActivity extends BaseActivity {
     private boolean isNatureShow = false;
     private RadioGroup mNatureRg;
     private TextView mProjectContentTv;
+    private TextView mCheckPersonContentTv;
+    private TextView mTimeTv;
+    private EditText mCheckItemEt;
+    private long mTime;
+
+    private String mSelectProjectId;
+    private int mSelectNatureType = 0;
+    private String mSelectPersonId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +120,13 @@ public class AddSafeCheckActivity extends BaseActivity {
 
         //默认有一条数据供填写
         CheckResultBean checkResultBean = new CheckResultBean();
+        checkResultBean.setCheckResultId(System.currentTimeMillis());
         checkResultBean.setCheckResult(0);
         checkResultBean.setCheckContent(null);
         checkResultBean.setCheckPics(null);
         mCheckResult.add(checkResultBean);
 
-        mAddCheckResultAdapter = new AddCheckResultAdapter(R.layout.add_check_result_item, mCheckResult);
+        mAddCheckResultAdapter = new AddCheckResultAdapter(this, R.layout.add_check_result_item, mCheckResult);
         checkResultRv.setAdapter(mAddCheckResultAdapter);
 
         ViewGroup parentViewGroup = (ViewGroup) header.getParent();
@@ -122,18 +151,22 @@ public class AddSafeCheckActivity extends BaseActivity {
                 switch (checkedId) {
                     case R.id.safe_construction_rb:
                         natureContentTv.setText(natureArray[0]);
+                        mSelectNatureType = 1;
                         break;
 
                     case R.id.safe_education_rb:
                         natureContentTv.setText(natureArray[1]);
+                        mSelectNatureType = 2;
                         break;
 
                     case R.id.financial_audit_rb:
                         natureContentTv.setText(natureArray[2]);
+                        mSelectNatureType = 3;
                         break;
 
                     case R.id.other_rb:
                         natureContentTv.setText(natureArray[3]);
+                        mSelectNatureType = 4;
                         break;
                 }
             }
@@ -159,6 +192,7 @@ public class AddSafeCheckActivity extends BaseActivity {
             public void onClick(View view) {
                 //添加一条数据供填写
                 CheckResultBean checkResultBean = new CheckResultBean();
+                checkResultBean.setCheckResultId(System.currentTimeMillis());
                 checkResultBean.setCheckResult(0);
                 checkResultBean.setCheckContent(null);
                 checkResultBean.setCheckPics(null);
@@ -167,6 +201,31 @@ public class AddSafeCheckActivity extends BaseActivity {
                 mAddCheckResultAdapter.setNewData(mCheckResult);
             }
         });
+
+        mTimeTv = header.findViewById(R.id.time_tv);
+        mTime = System.currentTimeMillis();
+        mTimeTv.setText(DateUatil.getMinTime(mTime));   //默认显示当前时间
+        mTimeTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimePicker();
+
+            }
+        });
+
+        RelativeLayout checkPersonRl = header.findViewById(R.id.check_person_rl);
+        mCheckPersonContentTv = header.findViewById(R.id.check_person_content_tv);
+        checkPersonRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(AddSafeCheckActivity.this, CheckPersonSearchActivity.class);
+                startActivityForResult(intent, 1002);
+            }
+        });
+
+        mCheckItemEt = header.findViewById(R.id.check_item_et);
+
 
     }
 
@@ -177,11 +236,33 @@ public class AddSafeCheckActivity extends BaseActivity {
                 if (data != null) {
                     CheckProjectBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
+                        mSelectProjectId = clickedCheckProjectBean.getProject_id();   //备用  TODO
                         String name = clickedCheckProjectBean.getName();
-                        String projectId = clickedCheckProjectBean.getProject_id();   //备用  TODO
                         mProjectContentTv.setText(name);
                     }
                 }
+                break;
+
+            case 1002:
+                if (data != null) {
+                    UserBean clickedUserBean = data.getParcelableExtra("search_user_item");
+                    if (clickedUserBean != null) {
+                        mSelectPersonId = clickedUserBean.getId();   //备用  TODO
+                        String name = clickedUserBean.getName();
+                        mCheckPersonContentTv.setText(name);
+                    }
+                }
+                break;
+
+            case 1003:   //  照相机
+                Log.d("TAG", "success");
+                Bundle bundle = data.getExtras();
+                Bitmap bitmap = (Bitmap) bundle.get("data");
+//                String path = Environment.getExternalStorageDirectory().getPath()
+//                        + "/MyPhoto/" + Constant.CHECK_RESULT + "_" + Constant.checkResultId + "_" +  + ".jpg";
+                ImageView imageView = new ImageView(this);
+                imageView.setImageBitmap(bitmap);
+
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -215,10 +296,45 @@ public class AddSafeCheckActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
+                if (TextUtils.isEmpty(mSelectProjectId) || TextUtils.isEmpty(mSelectPersonId)
+                        || TextUtils.isEmpty(mCheckItemEt.getText().toString().trim()) || mSelectNatureType == 0) {
+                    Toast.makeText(AddSafeCheckActivity.this, "请填写完必填选项!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                //保存到本地数据库
+
                 finish();
                 break;
 
         }
+    }
+
+    public void showTimePicker() {
+        Calendar selectedDate = Calendar.getInstance();//系统当前时间
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(2018, 1, 23);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2028, 2, 28);
+        //时间选择器 ，自定义布局
+        TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                mTime = date.getTime();
+                mTimeTv.setText(DateUatil.getMinTime(mTime));
+            }
+        })
+                .setDate(selectedDate)
+                .setRangDate(startDate, endDate)
+                .setContentTextSize(18)
+                .setLineSpacingMultiplier(1.2f)
+                .setTextXOffset(0, 0, 0, 40, 0, -40)
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setDividerColor(0xFF24AD9D)
+                .setType(new boolean[]{true, true, true, true, true, false})
+                .setLabel("年", "月", "日", "时", "分", "秒")
+                .build();
+        Utils.hideClickStatus(this);
+        pvTime.show();
     }
 
 }

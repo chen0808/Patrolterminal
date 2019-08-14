@@ -15,7 +15,7 @@ public class CheckProjectBean implements Parcelable {
     private String create_person_id;
     private int project_result_status;  //0:通过,1:正常,2:待整改  根据项目里面检查结果去判断  全部通过为通过;一个不通过为正常,大于一个不通过为待整改
 
-    private int nature;  //性质
+    private int nature;  //性质  1,2,3,4
     private String time;
     private String check_person;
     private String check_person_id;

@@ -81,7 +81,7 @@ public class CheckProjectActivity extends BaseActivity implements TextWatcher {
         mCheckProject.add(checkProjectBean);
 
         CheckProjectBean checkProjectBean1 = new CheckProjectBean();
-        checkProjectBean.setProject_id("1");
+        checkProjectBean1.setProject_id("1");
         checkProjectBean1.setName("综合调控中心工程111");
         checkProjectBean1.setContent("杆塔倾斜");
         checkProjectBean1.setCreate_person_name("创建人:张三");
@@ -90,7 +90,7 @@ public class CheckProjectActivity extends BaseActivity implements TextWatcher {
         mCheckProject.add(checkProjectBean1);
 
         CheckProjectBean checkProjectBean2 = new CheckProjectBean();
-        checkProjectBean.setProject_id("2");
+        checkProjectBean2.setProject_id("2");
         checkProjectBean2.setName("丽水盆地");
         checkProjectBean2.setContent("杆塔倾斜");
         checkProjectBean2.setCreate_person_name("创建人:张三");

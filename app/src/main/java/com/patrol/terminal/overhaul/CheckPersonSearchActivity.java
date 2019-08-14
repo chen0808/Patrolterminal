@@ -13,8 +13,10 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
+import com.patrol.terminal.adapter.CheckPersonGridAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.CheckProjectBean;
+import com.patrol.terminal.bean.UserBean;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -29,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ProjectSearchActivity extends BaseActivity implements TextWatcher {
+public class CheckPersonSearchActivity extends BaseActivity implements TextWatcher {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -50,11 +52,11 @@ public class ProjectSearchActivity extends BaseActivity implements TextWatcher {
     @BindView(R.id.delete_iv)
     ImageView deleteIv;
     @BindView(R.id.project_rv)
-    SwipeRecyclerView projectRv;
+    SwipeRecyclerView personRv;
 
-    private CheckProjectAdapter mCheckProjectAdapter;
-    private List<CheckProjectBean> mCheckProject = new ArrayList<>();
-    private List<CheckProjectBean> mFilterCheckProject = new ArrayList<>();
+    private CheckPersonAdapter mCheckPersonAdapter;
+    private List<UserBean> mPersonList = new ArrayList<>();
+    private List<UserBean> mFilterPersonList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,49 +69,83 @@ public class ProjectSearchActivity extends BaseActivity implements TextWatcher {
 
     private void initView() {
         titleName.setText("项目选择");
+        projectSearchEt.setHint("检索人名");
 
         // 设置监听器。
-        projectRv.setSwipeMenuCreator(mSwipeMenuCreator);
+        personRv.setSwipeMenuCreator(mSwipeMenuCreator);
         // 菜单点击监听。
-        projectRv.setOnItemMenuClickListener(mItemMenuClickListener);
+        personRv.setOnItemMenuClickListener(mItemMenuClickListener);
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        projectRv.setLayoutManager(manager);
+        personRv.setLayoutManager(manager);
 
-        CheckProjectBean checkProjectBean = new CheckProjectBean();
-        checkProjectBean.setProject_id("0");
-        checkProjectBean.setName("综合调控中心工程");
-        checkProjectBean.setContent("杆塔倾斜");
-        checkProjectBean.setCreate_person_name("创建人:张三");
-        checkProjectBean.setProject_result_status(0);
-        checkProjectBean.setTime("2019-04-12 14:59");
-        mCheckProject.add(checkProjectBean);
+        UserBean userBean = new UserBean();
+        userBean.setId("0");
+        userBean.setName("叶怀刚");
+        mPersonList.add(userBean);
 
-        CheckProjectBean checkProjectBean1 = new CheckProjectBean();
-        checkProjectBean1.setProject_id("1");
-        checkProjectBean1.setName("综合调控中心工程111");
-        checkProjectBean1.setContent("杆塔倾斜");
-        checkProjectBean1.setCreate_person_name("创建人:张三");
-        checkProjectBean1.setProject_result_status(1);
-        checkProjectBean1.setTime("2019-04-12 14:59");
-        mCheckProject.add(checkProjectBean1);
+        UserBean userBean1 = new UserBean();
+        userBean1.setId("1");
+        userBean1.setName("林栋");
+        mPersonList.add(userBean1);
 
-        CheckProjectBean checkProjectBean2 = new CheckProjectBean();
-        checkProjectBean2.setProject_id("2");
-        checkProjectBean2.setName("丽水盆地");
-        checkProjectBean2.setContent("杆塔倾斜");
-        checkProjectBean2.setCreate_person_name("创建人:张三");
-        checkProjectBean2.setProject_result_status(2);
-        checkProjectBean2.setTime("2019-04-12 14:59");
-        mCheckProject.add(checkProjectBean2);
+        UserBean userBean2 = new UserBean();
+        userBean2.setId("2");
+        userBean2.setName("桑彦斌");
+        mPersonList.add(userBean2);
 
-        mCheckProjectAdapter = new CheckProjectAdapter(R.layout.project_search_item, mCheckProject, 1);
-        projectRv.setAdapter(mCheckProjectAdapter);
-        mCheckProjectAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        UserBean userBean3 = new UserBean();
+        userBean3.setId("3");
+        userBean3.setName("徐向军");
+        mPersonList.add(userBean3);
+
+        UserBean userBean4 = new UserBean();
+        userBean4.setId("4");
+        userBean4.setName("周星星");
+        mPersonList.add(userBean4);
+
+        UserBean userBean5 = new UserBean();
+        userBean5.setId("5");
+        userBean5.setName("鲍小蕾");
+        mPersonList.add(userBean5);
+
+        UserBean userBean6 = new UserBean();
+        userBean6.setId("6");
+        userBean6.setName("谭玉洁");
+        mPersonList.add(userBean6);
+
+        UserBean userBean7 = new UserBean();
+        userBean7.setId("7");
+        userBean7.setName("樊少皇");
+        mPersonList.add(userBean7);
+
+        UserBean userBean8 = new UserBean();
+        userBean8.setId("8");
+        userBean8.setName("王波");
+        mPersonList.add(userBean8);
+
+        UserBean userBean9 = new UserBean();
+        userBean9.setId("9");
+        userBean9.setName("徐泽");
+        mPersonList.add(userBean9);
+
+        UserBean userBean10 = new UserBean();
+        userBean10.setId("10");
+        userBean10.setName("何少军");
+        mPersonList.add(userBean10);
+
+        UserBean userBean11 = new UserBean();
+        userBean11.setId("11");
+        userBean11.setName("肖占喜");
+        mPersonList.add(userBean11);
+
+        mCheckPersonAdapter = new CheckPersonAdapter(R.layout.project_search_item, mPersonList);
+        personRv.setAdapter(mCheckPersonAdapter);
+        mCheckPersonAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                CheckProjectBean clickedCheckProjectBean = (CheckProjectBean) adapter.getItem(position);
+                UserBean clickUserBean = (UserBean) adapter.getItem(position);
                 Intent intent = new Intent();
-                intent.putExtra("search_project_item", clickedCheckProjectBean);
+                intent.putExtra("search_user_item", clickUserBean);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -169,16 +205,16 @@ public class ProjectSearchActivity extends BaseActivity implements TextWatcher {
 
         String editStr = projectSearchEt.getText().toString();
         if (TextUtils.isEmpty(editStr)) {
-            mCheckProjectAdapter.setNewData(mCheckProject);
+            mCheckPersonAdapter.setNewData(mPersonList);
         }else {
-            mFilterCheckProject.clear();
-            for (int i = 0; i < mCheckProject.size();i++) {
-                String name = mCheckProject.get(i).getName();
+            mFilterPersonList.clear();
+            for (int i = 0; i < mPersonList.size();i++) {
+                String name = mPersonList.get(i).getName();
                 if (name.contains(editStr)) {
-                    mFilterCheckProject.add(mCheckProject.get(i));
+                    mFilterPersonList.add(mPersonList.get(i));
                 }
             }
-            mCheckProjectAdapter.setNewData(mFilterCheckProject);
+            mCheckPersonAdapter.setNewData(mFilterPersonList);
         }
 
     }

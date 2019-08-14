@@ -5,9 +5,18 @@ import android.graphics.Bitmap;
 import java.util.List;
 
 public class CheckResultBean {
+    private long checkResultId;
     private int checkResult;   //0:正常   1:通过   2:待整改
     private String checkContent;
     private List<Bitmap> checkPics;
+
+    public long getCheckResultId() {
+        return checkResultId;
+    }
+
+    public void setCheckResultId(long checkResultId) {
+        this.checkResultId = checkResultId;
+    }
 
     public int getCheckResult() {
         return checkResult;
