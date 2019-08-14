@@ -58,4 +58,10 @@ public class GridViewAdapter2 extends android.widget.BaseAdapter {
         }
         return convertView;
     }
+
+    public void setdata(List<String> mPicList) {
+
+        mList=mPicList;
+        notifyDataSetChanged();
+    }
 }

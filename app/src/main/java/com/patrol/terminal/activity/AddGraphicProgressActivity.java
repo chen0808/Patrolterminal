@@ -1,6 +1,9 @@
 package com.patrol.terminal.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,18 +15,29 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
+import com.bumptech.glide.Glide;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GridViewAdapter2;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.bean.GraphicProgressBean;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.widget.PinchImageView;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,13 +107,11 @@ public class AddGraphicProgressActivity extends BaseActivity {
                     //如果“增加按钮形状的”图片的位置是最后一张，且添加了的图片的数量不超过5张，才能点击
                     if (mPicList.size() == Constant.MAX_SELECT_PIC_NUM) {
                         //最多添加5张图片
-//                        viewPluImg(position);
+                       showBigImage(mPicList.get(position));
                     } else {
                         //添加凭证图片    TODO By linmeng
                         //selectPic(Constant.MAX_SELECT_PIC_NUM - mPicList.size());
-
-                        photoUri = patrUri(System.currentTimeMillis() + "_" + parent.getChildCount());
-                        startCamera(1002, photoUri);
+                        startCamera();
 
                     }
                 } else {
@@ -131,21 +143,70 @@ public class AddGraphicProgressActivity extends BaseActivity {
                 new File(dir, strPhotoName));
     }
     //打开相机
-    private void startCamera(int requestCode, Uri photoUri) {
-        // TODO Auto-generated method stub
+    private void startCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-        startActivityForResult(intent, requestCode);
+        startActivityForResult(intent, Constant.PATROL_RECORD_REQUEST_CODE);
     }
 
-    @OnClick({R.id.title_back, R.id.belong_plan_rl})
+    @OnClick({R.id.title_back, R.id.belong_plan_rl,R.id.title_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
+                finish();
+            case R.id.title_setting:
+                String planName = belongPlanName.getText().toString();
+                String create_time = createTime.getText().toString();
+                String content = addGraphicGrogressContent.getText().toString();
+
+                String pics="";
+                for (int i = 0; i < mPicList.size(); i++) {
+                    if (i==0){
+                        pics=mPicList.get(i);
+                    }else {
+                        pics=pics+","+mPicList.get(i);
+                    }
+                }
+                GraphicProgressBean bean=new GraphicProgressBean();
+                bean.setId(System.currentTimeMillis()+"");
+                bean.setCreateName(SPUtil.getUserName(this));
+                bean.setCreateTime(create_time);
+                bean.setPlanName(planName);
+                bean.setProgressContent(content);
+                bean.setPicList(pics);
+                bean.save();
+                setResult(RESULT_OK);
+                Toast.makeText(this,"提交成功",Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case R.id.belong_plan_rl:
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode== Constant.PATROL_RECORD_REQUEST_CODE&&resultCode==RESULT_OK){
+            Bundle bundle = data.getExtras();
+            Bitmap bitmap = (Bitmap) bundle.get("data");
+            String path = Environment.getExternalStorageDirectory().getPath()
+                    + "/MyPhoto/" + System.currentTimeMillis()+ ".jpg";
+            try {
+                FileUtil.saveFile(bitmap, path);
+                mPicList.add(path);
+                mGridViewAddImgAdapter.setdata(mPicList);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+    //查看大图
+    private void showBigImage(String path) {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_big_image);
+        PinchImageView iv = dialog.findViewById(R.id.iv);
+        Glide.with(this).load(path).into(iv);
+        dialog.show();
     }
 }

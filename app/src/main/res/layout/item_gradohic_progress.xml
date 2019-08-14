@@ -5,6 +5,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 <TextView
+    android:id="@+id/item_progress_plan_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textSize="17sp"
@@ -15,19 +16,24 @@
     android:layout_marginTop="@dimen/dp_10"
     />
     <TextView
+        android:id="@+id/item_progress_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="目前已经施工完毕"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="@dimen/dp_20"
         />
-    <ImageView
-        android:layout_width="wrap_content"
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
         android:layout_height="wrap_content"
-        android:src="@mipmap/jx_home_top"
-        android:layout_marginLeft="@dimen/dp_10"
-        />
+        android:layout_marginTop="8dp"
+        android:columnWidth="50dp"
+        android:numColumns="auto_fit" />
     <TextView
+        android:id="@+id/item_progress_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2019年8月13日17:23:20"

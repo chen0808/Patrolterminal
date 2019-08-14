@@ -110,9 +110,11 @@ public class GridePagerAdapter extends PagerAdapter {
                     switch (i) {
                         //项目立项
                         case 0:
+                            intent.setClass(context, ElectronicNoticeActivity.class);
                             break;
                         //设计计划
                         case 1:
+                            intent.setClass(context, ElectronicNoticeActivity.class);
                             break;
                         //电子公告
                         case 2:
