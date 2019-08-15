@@ -20,7 +20,9 @@ import com.patrol.terminal.activity.WorkWeeklyListActivity;
 import com.patrol.terminal.activity.WorkingLogActivity;
 import com.patrol.terminal.bean.MapUserInfo;
 import com.patrol.terminal.overhaul.ElectronicNoticeActivity;
+import com.patrol.terminal.overhaul.InternalNewsActivity;
 import com.patrol.terminal.overhaul.SafeCheckMainActivity;
+import com.patrol.terminal.overhaul.TechnicalSpecificationActivity;
 
 import java.util.List;
 
@@ -86,7 +88,7 @@ public class GridePagerAdapter extends PagerAdapter {
                             break;
                             //质量检查
                         case 3:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, SafeCheckMainActivity.class);
                             break;
                             //施工日志
                         case 4:
@@ -107,17 +109,25 @@ public class GridePagerAdapter extends PagerAdapter {
                     }
                 } else if(position == 1){
                     switch (i) {
-                        //电子公告
+                        //项目立项
                         case 0:
                             intent.setClass(context, ElectronicNoticeActivity.class);
                             break;
-                        //内部新闻
+                        //设计计划
                         case 1:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                            intent.setClass(context, ElectronicNoticeActivity.class);
+                            break;
+                        //电子公告
+                        case 2:
+                            intent.setClass(context, ElectronicNoticeActivity.class);
+                            break;
+                        //内部新闻
+                        case 3:
+                            intent.setClass(context, InternalNewsActivity.class);
                             break;
                         //技术规范
-                        case 2:
-                            intent.setClass(context, ThirdWTicketActivity.class);
+                        case 4:
+                            intent.setClass(context, TechnicalSpecificationActivity.class);
                             break;
                     }
                 }

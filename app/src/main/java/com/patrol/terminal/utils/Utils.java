@@ -7,6 +7,7 @@ import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +44,12 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class Utils {
+
+    public static void startCamera(Activity activity, int requestCode) {
+        // TODO Auto-generated method stub
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        activity.startActivityForResult(intent, requestCode);
+    }
 
     public static String getJobName(String jobType) {
         String jobName = Constant.JOBS_NAME[0];

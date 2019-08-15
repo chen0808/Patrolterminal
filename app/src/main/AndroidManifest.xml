@@ -32,7 +32,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.GraphicProgressActivity"></activity>
+        <activity android:name=".activity.AddGraphicProgressActivity"></activity>
+        <activity android:name=".activity.GraphicProgressActivity" />
         <activity android:name=".activity.JXTotalActivity" />
         <activity android:name=".activity.DefectPlanActivity" />
         <activity android:name=".activity.DangerToPatrolActivity" />
@@ -74,17 +75,16 @@
         <activity android:name=".activity.BudgetActivity" />
         <activity android:name=".activity.ProjectPlanActivity" />
         <activity android:name=".activity.ProjectPlanListActivity" />
-        <activity android:name=".activity.EngineeringBriefActivity"
+        <activity
+            android:name=".activity.EngineeringBriefActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EngineeringBriefAddActivity"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.EngineeringBriefAddActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            />
-        <activity android:name=".activity.EngineeringBriefListActivity"
-            android:screenOrientation="portrait"
-            />
-
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activity.EngineeringBriefListActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.NewTaskActivity"
             android:screenOrientation="portrait" />
@@ -132,6 +132,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".overhaul.CheckPersonSearchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".overhaul.CheckProjectActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
@@ -139,7 +143,6 @@
             android:name=".overhaul.ProjectSearchActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.EqToolsReceiveActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -402,6 +405,11 @@
         <activity android:name=".activity.ConstructionSideActivity" />
         <activity android:name=".overhaul.ElectronicNoticeActivity" />
         <activity android:name=".overhaul.ElectronicNoticeAddActivity" />
+        <activity android:name=".overhaul.InternalNewsActivity" />
+        <activity android:name=".overhaul.InternalNewsAddActivity" />
+        <activity android:name=".overhaul.TechnicalSpecificationActivity" />
+        <activity android:name=".overhaul.TechnicalSpecificationAddActivity" />
+        <activity android:name=".overhaul.TechnicalInternationalAddActivity" />
     </application>
 
 </manifest>

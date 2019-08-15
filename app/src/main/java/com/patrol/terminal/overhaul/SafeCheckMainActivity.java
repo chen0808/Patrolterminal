@@ -60,6 +60,7 @@ public class SafeCheckMainActivity extends BaseActivity {
                 break;
             case R.id.check_ll:
                 intent.setClass(SafeCheckMainActivity.this, CheckProjectActivity.class);
+                startActivity(intent);
                 break;
             case R.id.reform_ll:
                 //break;
@@ -69,9 +70,10 @@ public class SafeCheckMainActivity extends BaseActivity {
                 //break;
             case R.id.add_iv:
                 intent.setClass(SafeCheckMainActivity.this, AddSafeCheckActivity.class);
+                startActivity(intent);
                 break;
 
         }
-        startActivity(intent);
+
     }
 }

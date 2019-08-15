@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
-import com.patrol.terminal.fragment.DefectNotRidFragment;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -24,8 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/*电子公告*/
-public class ElectronicNoticeActivity extends BaseActivity {
+/*技术规范*/
+public class TechnicalSpecificationActivity extends BaseActivity {
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)
@@ -45,16 +44,18 @@ public class ElectronicNoticeActivity extends BaseActivity {
     @BindView(R.id.defect_tab_rg)
     RadioGroup defectTabRg;
 
+    private int type = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_electronic_notice);
+        setContentView(R.layout.activity_technical_specification);
         ButterKnife.bind(this);
         initview();
     }
 
     private void initview() {
-        titleName.setText("电子公告");
+        titleName.setText("技术规范");
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingIv.setImageResource(R.mipmap.add_white);
         titleSettingTv.setText("");
@@ -72,9 +73,11 @@ public class ElectronicNoticeActivity extends BaseActivity {
                 switch (checkedId){
                     case R.id.defect_rb1:
                         defectTabVg.setCurrentItem(0);
+                        type = 0;
                         break;
                     case R.id.defect_rb2:
                         defectTabVg.setCurrentItem(1);
+                        type = 1;
                         break;
                 }
             }
@@ -83,12 +86,17 @@ public class ElectronicNoticeActivity extends BaseActivity {
 
     @OnClick({R.id.title_back, R.id.title_setting})
     public void onViewClicked(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
             case R.id.title_setting:
-                Intent intent = new Intent(this, ElectronicNoticeAddActivity.class);
+                if(type == 0){
+                    intent = new Intent(this, TechnicalSpecificationAddActivity.class);
+                } else {
+                    intent = new Intent(this, TechnicalInternationalAddActivity.class);
+                }
                 startActivity(intent);
                 break;
         }

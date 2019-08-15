@@ -48,7 +48,7 @@ public class GridViewAdapter2 extends android.widget.BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.grid_item2, parent,false);
-        ImageView iv = (ImageView) convertView.findViewById(R.id.pic_iv);
+        ImageView iv = (ImageView) convertView.findViewById(R.id.iv_pic);
         if (position < mList.size()) {
             //代表+号之前的需要正常显示图片
             String picUrl = mList.get(position); //图片路径
@@ -57,5 +57,11 @@ public class GridViewAdapter2 extends android.widget.BaseAdapter {
             iv.setImageResource(R.mipmap.zj);//最后一个显示加号图片
         }
         return convertView;
+    }
+
+    public void setdata(List<String> mPicList) {
+
+        mList=mPicList;
+        notifyDataSetChanged();
     }
 }

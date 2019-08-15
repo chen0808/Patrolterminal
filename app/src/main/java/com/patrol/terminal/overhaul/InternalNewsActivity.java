@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.MyFragmentPagerAdapter;
 import com.patrol.terminal.base.BaseActivity;
-import com.patrol.terminal.fragment.DefectNotRidFragment;
 import com.patrol.terminal.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -24,8 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/*电子公告*/
-public class ElectronicNoticeActivity extends BaseActivity {
+/*内部新闻*/
+public class InternalNewsActivity extends BaseActivity {
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
     @BindView(R.id.title_name)
@@ -48,20 +47,20 @@ public class ElectronicNoticeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_electronic_notice);
+        setContentView(R.layout.activity_internal_news);
         ButterKnife.bind(this);
         initview();
     }
 
     private void initview() {
-        titleName.setText("电子公告");
+        titleName.setText("内部新闻");
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingIv.setImageResource(R.mipmap.add_white);
         titleSettingTv.setText("");
 
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new InternalAnnounceFragment());
-        fragmentList.add(new InternalAnnounceFragment());
+        fragmentList.add(new InternalNewsFragment());
+        fragmentList.add(new InternalNewsFragment());
 
         MyFragmentPagerAdapter CardPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         defectTabVg.setAdapter(CardPagerAdapter);
@@ -88,7 +87,7 @@ public class ElectronicNoticeActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-                Intent intent = new Intent(this, ElectronicNoticeAddActivity.class);
+                Intent intent = new Intent(this, InternalNewsAddActivity.class);
                 startActivity(intent);
                 break;
         }
