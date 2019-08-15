@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -20,9 +20,14 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.bean.CheckProjectBean;
+import com.patrol.terminal.bean.LocalWorkingLogBean;
+import com.patrol.terminal.overhaul.ProjectSearchActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,10 +52,44 @@ public class WorkingLogDetailActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
+    @BindView(R.id.tv_log_num)
+    TextView tvLogNum;
+    @BindView(R.id.tv_project_name)
+    TextView tvProjectName;
+    @BindView(R.id.edit_working_name)
+    TextView editWorkingName;
+    @BindView(R.id.edit_working_num)
+    TextView editWorkingNum;
+    @BindView(R.id.edit_report_name)
+    TextView editReportName;
+    @BindView(R.id.edit_weather_status)
+    TextView editWeatherStatus;
     @BindView(R.id.tv_compile_date)
     TextView tvCompileDate;
-    @BindView(R.id.tv_occur_date)
+    @BindView(R.id.tv_occurrence_date)
     TextView tvOccurDate;
+    @BindView(R.id.edit_morning_temperature)
+    TextView editMorningTemperature;
+    @BindView(R.id.edit_middle_temperature)
+    TextView editMiddleTemperature;
+    @BindView(R.id.edit_afternoon_temperature)
+    TextView editAfternoonTemperature;
+    @BindView(R.id.edit_working_remark)
+    TextView editWorkingRemark;
+    @BindView(R.id.edit_emergency_remark)
+    TextView editEmergencyRemark;
+    @BindView(R.id.edit_content_remark)
+    TextView editContentRemark;
+    @BindView(R.id.edit_check_remark)
+    TextView editCheckRemark;
+    @BindView(R.id.edit_materials_remark)
+    TextView editMaterialsRemark;
+    @BindView(R.id.edit_visa_remark)
+    TextView editVisaRemark;
+    @BindView(R.id.edit_file_remark)
+    TextView editFileRemark;
+    @BindView(R.id.edit_other_remark)
+    TextView editOtherRemark;
     @BindView(R.id.defect_gridView)
     GridView defectGridView;
 
@@ -58,6 +97,10 @@ public class WorkingLogDetailActivity extends BaseActivity {
     private List<String> photoList = new ArrayList<>();
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
+    private String mSelectProjectId;
+    private LocalWorkingLogBean localWorkingLogBean;
+    private String userId;
+    private String userName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +112,11 @@ public class WorkingLogDetailActivity extends BaseActivity {
     }
 
     private void initData() {
+        userId = SPUtil.getUserId(this);
+        userName = SPUtil.getUserName(this);
+
         Intent intent = getIntent();
+        localWorkingLogBean = (LocalWorkingLogBean)intent.getSerializableExtra("LocalWorkingLogBean");
         logType = intent.getIntExtra("logType", 0);
         switch (logType) {
             case 1:
@@ -88,6 +135,28 @@ public class WorkingLogDetailActivity extends BaseActivity {
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("保存");
 
+        if(localWorkingLogBean != null){
+            tvLogNum.setText(localWorkingLogBean.getLog_num());
+            tvProjectName.setText(localWorkingLogBean.getProject_name());
+            editWorkingName.setText(localWorkingLogBean.getWorking_name());
+            editWorkingNum.setText(localWorkingLogBean.getWorking_num());
+            editReportName.setText(localWorkingLogBean.getReport_name());
+            editWeatherStatus.setText(localWorkingLogBean.getWeather_status());
+            tvCompileDate.setText(localWorkingLogBean.getCompile_date());
+            tvOccurDate.setText(localWorkingLogBean.getOccurrence_date());
+            editMorningTemperature.setText(localWorkingLogBean.getMorning_temperature());
+            editMiddleTemperature.setText(localWorkingLogBean.getMiddle_temperature());
+            editAfternoonTemperature.setText(localWorkingLogBean.getAfternoon_temperature());
+            editWorkingRemark.setText(localWorkingLogBean.getWorking_remark());
+            editEmergencyRemark.setText(localWorkingLogBean.getEmergency_remark());
+            editContentRemark.setText(localWorkingLogBean.getContent_remark());
+            editCheckRemark.setText(localWorkingLogBean.getCheck_remark());
+            editMaterialsRemark.setText(localWorkingLogBean.getMaterials_remark());
+            editVisaRemark.setText(localWorkingLogBean.getVisa_remark());
+            editFileRemark.setText(localWorkingLogBean.getFile_remark());
+            editOtherRemark.setText(localWorkingLogBean.getOther_remark());
+        }
+
         photoAdapter = new TssxPhotoAdapter(this, photoList);
         defectGridView.setAdapter(photoAdapter);
         defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -99,7 +168,7 @@ public class WorkingLogDetailActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.title_back, R.id.tv_compile_date, R.id.tv_occur_date})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.tv_compile_date, R.id.tv_occurrence_date, R.id.tv_project_name})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -108,8 +177,70 @@ public class WorkingLogDetailActivity extends BaseActivity {
             case R.id.tv_compile_date:
                 showDay(1);
                 break;
-            case R.id.tv_occur_date:
+            case R.id.tv_occurrence_date:
                 showDay(2);
+                break;
+            case R.id.tv_project_name:
+                Intent intent = new Intent();
+                intent.setClass(this, ProjectSearchActivity.class);
+                startActivityForResult(intent, 1001);
+                break;
+            case R.id.title_setting:
+                if(TextUtils.isEmpty(tvProjectName.getText().toString())){
+                    Utils.showToast("请选择所属项目");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(editWorkingName.getText().toString())){
+                    Utils.showToast("请填写施工人员");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(editWorkingNum.getText().toString())){
+                    Utils.showToast("请填写施工人数");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(tvCompileDate.getText().toString())){
+                    Utils.showToast("请选择编制日期");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(tvOccurDate.getText().toString())){
+                    Utils.showToast("请选择发生日期");
+                    break;
+                }
+
+                LocalWorkingLogBean bean = new LocalWorkingLogBean();
+                bean.setType(logType + "");
+                bean.setUser_id(userId);
+                bean.setUser_name(userName);
+                bean.setLog_num(tvLogNum.getText().toString());
+                bean.setProject_id(mSelectProjectId);
+                bean.setProject_name(tvProjectName.getText().toString());
+                bean.setWorking_name(editWorkingName.getText().toString());
+                bean.setWorking_num(editWorkingNum.getText().toString());
+                bean.setReport_name(editReportName.getText().toString());
+                bean.setWeather_status(editWeatherStatus.getText().toString());
+                bean.setCompile_date(tvCompileDate.getText().toString());
+                bean.setOccurrence_date(tvOccurDate.getText().toString());
+                bean.setMorning_temperature(editMorningTemperature.getText().toString());
+                bean.setMiddle_temperature(editMiddleTemperature.getText().toString());
+                bean.setAfternoon_temperature(editAfternoonTemperature.getText().toString());
+                bean.setWorking_remark(editWorkingRemark.getText().toString());
+                bean.setEmergency_remark(editEmergencyRemark.getText().toString());
+                bean.setContent_remark(editContentRemark.getText().toString());
+                bean.setCheck_remark(editCheckRemark.getText().toString());
+                bean.setMaterials_remark(editMaterialsRemark.getText().toString());
+                bean.setVisa_remark(editVisaRemark.getText().toString());
+                bean.setFile_remark(editFileRemark.getText().toString());
+                bean.setOther_remark(editOtherRemark.getText().toString());
+                bean.setProject_photo(Utils.listToStr(photoList));
+                bean.save();
+
+                Utils.showToast("提交成功");
+                setResult(RESULT_OK);
+                finish();
                 break;
         }
     }
@@ -190,6 +321,16 @@ public class WorkingLogDetailActivity extends BaseActivity {
                         photoAdapter.notifyDataSetChanged();
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
+                    break;
+                case 1001:
+                    if (data != null) {
+                        CheckProjectBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                        if (clickedCheckProjectBean != null) {
+                            mSelectProjectId = clickedCheckProjectBean.getProject_id();
+                            String name = clickedCheckProjectBean.getName();
+                            tvProjectName.setText(name);
+                        }
                     }
                     break;
             }

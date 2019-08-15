@@ -43,6 +43,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_log_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -87,14 +88,16 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
+
                     <TextView
+                        android:id="@+id/tv_project_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:hint="请选择"
-                        android:drawableRight="@mipmap/next"/>
+                        android:drawableRight="@mipmap/next"
+                        android:hint="请选择" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -130,6 +133,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_working_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -172,6 +176,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_working_num"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -209,6 +214,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_report_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -245,6 +251,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_weather_status"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -330,7 +337,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_occur_date"
+                    android:id="@+id/tv_occurrence_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -378,6 +385,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_morning_temperature"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
@@ -385,7 +393,8 @@
                     android:layout_marginRight="16dp"
                     android:background="@null"
                     android:hint="请输入"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:inputType="number"/>
 
             </LinearLayout>
 
@@ -414,6 +423,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_middle_temperature"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -421,7 +431,8 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
-                    android:hint="请输入"/>
+                    android:hint="请输入"
+                    android:inputType="number"/>
 
             </LinearLayout>
 
@@ -449,6 +460,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_afternoon_temperature"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -456,7 +468,8 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
-                    android:hint="请输入"/>
+                    android:hint="请输入"
+                    android:inputType="number"/>
 
             </LinearLayout>
 
@@ -489,6 +502,7 @@
                     android:layout_marginRight="16dp"
                     android:text="施工部分" />
                 <EditText
+                    android:id="@+id/edit_working_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -522,6 +536,7 @@
                     android:layout_marginRight="16dp"
                     android:text="突发事件" />
                 <EditText
+                    android:id="@+id/edit_emergency_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -555,6 +570,7 @@
                     android:layout_marginRight="16dp"
                     android:text="工作内容" />
                 <EditText
+                    android:id="@+id/edit_content_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -588,6 +604,7 @@
                     android:layout_marginRight="16dp"
                     android:text="检查、检验情况" />
                 <EditText
+                    android:id="@+id/edit_check_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -620,6 +637,7 @@
                     android:layout_marginRight="16dp"
                     android:text="材料、设备进场" />
                 <EditText
+                    android:id="@+id/edit_materials_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -652,6 +670,7 @@
                     android:layout_marginRight="16dp"
                     android:text="设计变更及工程签证" />
                 <EditText
+                    android:id="@+id/edit_visa_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -684,6 +703,7 @@
                     android:layout_marginRight="16dp"
                     android:text="工作联系单及往来文件记录" />
                 <EditText
+                    android:id="@+id/edit_file_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -716,6 +736,7 @@
                     android:layout_marginRight="16dp"
                     android:text="其他内容" />
                 <EditText
+                    android:id="@+id/edit_other_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
