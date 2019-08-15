@@ -58,7 +58,7 @@ public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, Bas
             @Override
             public void onClick(View view) {
                 mData.remove(item);
-                notifyDataSetChanged();
+                notifyItemRemoved(viewHolder.getAdapterPosition());
             }
         });
 
