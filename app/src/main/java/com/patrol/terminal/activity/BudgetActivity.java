@@ -1,6 +1,7 @@
 package com.patrol.terminal.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,8 +16,9 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.BudgetAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.ProjectBoardBean;
+import com.patrol.terminal.bean.ProjectBoardBean_Table;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,6 +48,20 @@ public class BudgetActivity extends BaseActivity {
     RecyclerView rvFinish;
     @BindView(R.id.ll_finish)
     LinearLayout llFinish;
+    @BindView(R.id.title_item)
+    RelativeLayout titleItem;
+    @BindView(R.id.tv_project_total)
+    TextView tvProjectTotal;
+    @BindView(R.id.tv_budget_total)
+    TextView tvBudgetTotal;
+    @BindView(R.id.tv_budget_ing)
+    TextView tvBudgetIng;
+    @BindView(R.id.tv_budget_ed)
+    TextView tvBudgetEd;
+    private double budgetIng = 0;
+    private double budgetEd = 0;
+    private List<ProjectBoardBean> projectBoardBeans1;
+    private List<ProjectBoardBean> projectBoardBeans2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,39 +72,58 @@ public class BudgetActivity extends BaseActivity {
 
         int type = getIntent().getIntExtra("type", 0);
         switch (type) {
+            case 0:
+                projectBoardBeans1 = init1();
+                projectBoardBeans2 = init2();
+                break;
             case 1:
                 llFinish.setVisibility(View.GONE);
+                projectBoardBeans1 = init1();
                 break;
             case 2:
                 llBuilding.setVisibility(View.GONE);
+                projectBoardBeans2 = init2();
                 break;
         }
 
+        tvProjectTotal.setText("项目总数:" + ((projectBoardBeans1 == null ? 0 : projectBoardBeans1.size()) + (projectBoardBeans2 == null ? 0 : projectBoardBeans2.size())));
+        tvBudgetTotal.setText("¥" + (budgetIng + budgetEd));
+    }
+
+
+    private List<ProjectBoardBean> init1() {
         List<ProjectBoardBean> projectBoardBeans1 = initData1();
+        for (int i = 0; i < projectBoardBeans1.size(); i++) {
+            budgetIng += projectBoardBeans1.get(i).getMoney();
+        }
+        tvBudgetIng.setText("¥" + budgetIng);
+        Log.d("tag", "budgetIng" + budgetIng);
         rvBuilding.setLayoutManager(new LinearLayoutManager(this));
         rvBuilding.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         rvBuilding.setAdapter(new BudgetAdapter(R.layout.item_budget, projectBoardBeans1));
+        return projectBoardBeans1;
+    }
 
+    private List<ProjectBoardBean> init2() {
         List<ProjectBoardBean> projectBoardBeans2 = initData2();
+        for (int i = 0; i < projectBoardBeans2.size(); i++) {
+            budgetEd += projectBoardBeans2.get(i).getMoney();
+        }
+        tvBudgetEd.setText("¥" + budgetEd);
+        Log.d("tag", "budgetEd" + budgetEd);
         rvFinish.setLayoutManager(new LinearLayoutManager(this));
         rvFinish.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         rvFinish.setAdapter(new BudgetAdapter(R.layout.item_budget, projectBoardBeans2));
+        return projectBoardBeans2;
     }
 
     private List<ProjectBoardBean> initData1() {
-        List<ProjectBoardBean> projectBoardBeans = new ArrayList<>();
-        projectBoardBeans.add(new ProjectBoardBean("秦皇岛市玉带湾居住小区(五期)工程", 1243535.00));
-        projectBoardBeans.add(new ProjectBoardBean("汕头市湖南区峡山污水处理厂二期厂网一体建设及一期提标改造PPP项目", 146300.15));
-        projectBoardBeans.add(new ProjectBoardBean("武汉核建中核城", 6354631.00));
-        projectBoardBeans.add(new ProjectBoardBean("三门县职业中等专业学校新校园迁建工程PPP项目", 41646.05));
-        projectBoardBeans.add(new ProjectBoardBean("丽水盆地易涝区防洪排涝好溪堰水系整治三阶段工程项目", 4643348.46));
+        List<ProjectBoardBean> projectBoardBeans = SQLite.select().from(ProjectBoardBean.class).where(ProjectBoardBean_Table.id.lessThan(3)).queryList();
         return projectBoardBeans;
     }
 
     private List<ProjectBoardBean> initData2() {
-        List<ProjectBoardBean> projectBoardBeans = new ArrayList<>();
-        projectBoardBeans.add(new ProjectBoardBean("秦皇岛市玉带湾居住小区(五期)工程", 1243535.00));
-        projectBoardBeans.add(new ProjectBoardBean("丽水盆地易涝区防洪排涝好溪堰水系整治三阶段工程项目", 4643348.46));
+        List<ProjectBoardBean> projectBoardBeans = SQLite.select().from(ProjectBoardBean.class).where(ProjectBoardBean_Table.id.greaterThan(2)).queryList();
         return projectBoardBeans;
     }
 

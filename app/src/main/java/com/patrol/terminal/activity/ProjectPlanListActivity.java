@@ -13,8 +13,8 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.ProjectPlanAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.ProjectBoardBean;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,12 +55,7 @@ public class ProjectPlanListActivity extends BaseActivity {
     }
 
     private List<ProjectBoardBean> initData() {
-        List<ProjectBoardBean> projectBoardBeans = new ArrayList<>();
-        projectBoardBeans.add(new ProjectBoardBean("秦皇岛市玉带湾居住小区(五期)工程", 366, 228));
-        projectBoardBeans.add(new ProjectBoardBean("汕头市湖南区峡山污水处理厂二期厂网一体建设及一期提标改造PPP项目", 17, 0));
-        projectBoardBeans.add(new ProjectBoardBean("武汉核建中核城", 665, 228));
-        projectBoardBeans.add(new ProjectBoardBean("三门县职业中等专业学校新校园迁建工程PPP项目", 1044, 0));
-        projectBoardBeans.add(new ProjectBoardBean("丽水盆地易涝区防洪排涝好溪堰水系整治三阶段工程项目", 396, 28));
+        List<ProjectBoardBean> projectBoardBeans = SQLite.select().from(ProjectBoardBean.class).queryList();
         return projectBoardBeans;
     }
 

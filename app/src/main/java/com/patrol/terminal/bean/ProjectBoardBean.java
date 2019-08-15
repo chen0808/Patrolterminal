@@ -1,26 +1,36 @@
 package com.patrol.terminal.bean;
 
+import com.patrol.terminal.sqlite.AppDataBase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 import java.io.Serializable;
 
 /**
  * 作者：陈飞
  * 时间：2019/08/12 10:29
  */
-public class ProjectBoardBean implements Serializable {
+@Table(database = AppDataBase.class)
+public class ProjectBoardBean extends BaseModel implements Serializable {
+    @PrimaryKey(autoincrement = true)
+    private int id;//项目id
+    @Column
     private String project_name;//项目名称
+    @Column
     private double money;//项目资金
+    @Column
     private int date_total;//项目总时间
+    @Column
     private int date_now;//已完成时间
 
-    public ProjectBoardBean(String project_name, double money) {
-        this.project_name = project_name;
-        this.money = money;
+    public int getId() {
+        return id;
     }
 
-    public ProjectBoardBean(String project_name, int date_total, int date_now) {
-        this.project_name = project_name;
-        this.date_total = date_total;
-        this.date_now = date_now;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getMoney() {

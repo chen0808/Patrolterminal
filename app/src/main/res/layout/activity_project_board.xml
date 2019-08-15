@@ -34,6 +34,7 @@
                 android:text="项目总数" />
 
             <TextView
+                android:id="@+id/tv_project_total"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="16dp"
@@ -57,6 +58,7 @@
                 android:textSize="10sp" />
 
             <TextView
+                android:id="@+id/tv_budget_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -90,6 +92,7 @@
                 android:text="建成项目" />
 
             <TextView
+                android:id="@+id/tv_project_ed"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="16dp"
@@ -113,6 +116,7 @@
                 android:textSize="10sp" />
 
             <TextView
+                android:id="@+id/tv_persent_ed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -146,6 +150,7 @@
                 android:text="在建项目" />
 
             <TextView
+                android:id="@+id/tv_project_ing"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="16dp"
@@ -169,6 +174,7 @@
                 android:textSize="10sp" />
 
             <TextView
+                android:id="@+id/tv_persent_ing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"

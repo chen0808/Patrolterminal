@@ -3,34 +3,32 @@ package com.patrol.terminal.overhaul;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.CheckPersonGridAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.CheckProjectBean;
 import com.patrol.terminal.bean.CheckResultBean;
 import com.patrol.terminal.bean.UserBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
-import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.Utils;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -38,15 +36,11 @@ import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -199,7 +193,6 @@ public class AddSafeCheckActivity extends BaseActivity {
                 List<CheckResultBean.PictureInfo> addBitmapList = new ArrayList<>();
                 checkResultBean.setCheckPics(addBitmapList);
                 mCheckResult.add(checkResultBean);
-
                 mAddCheckResultAdapter.setNewData(mCheckResult);
             }
         });

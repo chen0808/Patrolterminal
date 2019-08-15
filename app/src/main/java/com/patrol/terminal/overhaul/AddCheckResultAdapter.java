@@ -1,27 +1,23 @@
 package com.patrol.terminal.overhaul;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
+import androidx.annotation.Nullable;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.CheckResultBean;
-import com.patrol.terminal.bean.OverhaulYearBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.Utils;
 
 import java.util.List;
-
-import androidx.annotation.Nullable;
 
 public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, BaseViewHolder> {
     private boolean isRadioGroupShow = false;
@@ -113,11 +109,12 @@ public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, Bas
 
         if (bmpList != null && bmpList.size() > 0) {
             LinearLayout addPicLl =  viewHolder.getView(R.id.add_pic_ll);
+            addPicLl.removeAllViews();
             for (int i = 0; i < bmpList.size(); i++) {
                 Log.w("linmeng", "bmpList.size():" + bmpList.size());
-                if (i > 0) {
-                    addPicLl.removeViewAt(i);
-                }
+//                if (i > 0) {
+//                    addPicLl.removeViewAt(i);
+//                }
                 ImageView imageView = new ImageView(mActivity);
                 imageView.setImageBitmap(bmpList.get(i).getBitmap());
                 imageView.setTag(bmpList.get(i).getBitmapId());
