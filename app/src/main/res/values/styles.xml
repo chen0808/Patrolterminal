@@ -302,8 +302,8 @@
     </style>
     <!--里程碑-->
     <style name="lcb_probar">
-        <item name="android:layout_width">60dp</item>
-        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_width">65dp</item>
+        <item name="android:layout_height">65dp</item>
         <item name="android:layout_gravity">center</item>
     </style>
 
@@ -333,8 +333,8 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:background">@mipmap/changjiantou</item>
         <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
     </style>
 
     <style name="lcb_jiantou_left" parent="lcb_jiantou">

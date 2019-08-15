@@ -121,7 +121,7 @@ public class AddSafeCheckActivity extends BaseActivity {
         checkResultBean.setCheckPics(firstBitmapList);
         mCheckResult.add(checkResultBean);
 
-        mAddCheckResultAdapter = new AddCheckResultAdapter(this, R.layout.add_check_result_item, mCheckResult);
+        mAddCheckResultAdapter = new AddCheckResultAdapter(this, R.layout.add_check_result_item, mCheckResult, 0);
         checkResultRv.setAdapter(mAddCheckResultAdapter);
 
         ViewGroup parentViewGroup = (ViewGroup) header.getParent();

@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.WorkingLogAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.bean.LocalGcjbBean;
+import com.patrol.terminal.bean.LocalWorkingLogBean;
 import com.patrol.terminal.bean.WorkingLogBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -30,7 +32,6 @@ import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,7 +57,7 @@ public class ConstructionSideActivity extends BaseActivity {
     private int logType = 0;
     private Context mContext;
     private WorkingLogAdapter workingLogAdapter;
-    private List<WorkingLogBean> workingLogList = new ArrayList<>();
+    private List<LocalWorkingLogBean> workingLogList = new ArrayList<>();
     private int pageNum = 1;
     private int count = 10;
 
@@ -92,35 +93,38 @@ public class ConstructionSideActivity extends BaseActivity {
         titleSettingIv.setImageResource(R.mipmap.add_white);
         titleSettingTv.setText("");
 
-        String userName = SPUtil.getUserName(this);
-        String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+//        String userName = SPUtil.getUserName(this);
+//        String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
 
-        WorkingLogBean workingLogBean = new WorkingLogBean();
-        workingLogBean.setProject_name("定期巡视");
-        workingLogBean.setWorking_name(userName);
-        workingLogBean.setContent("杆塔倾斜");
-        workingLogBean.setReport_name(userName);
-        workingLogBean.setTime(time);
-        workingLogBean.setStatus(1);
-        workingLogList.add(workingLogBean);
+//        WorkingLogBean workingLogBean = new WorkingLogBean();
+//        workingLogBean.setProject_name("定期巡视");
+//        workingLogBean.setWorking_name(userName);
+//        workingLogBean.setContent("杆塔倾斜");
+//        workingLogBean.setReport_name(userName);
+//        workingLogBean.setTime(time);
+//        workingLogBean.setStatus(1);
+//        workingLogList.add(workingLogBean);
+//
+//        workingLogBean = new WorkingLogBean();
+//        workingLogBean.setProject_name("绝缘子检测");
+//        workingLogBean.setWorking_name(userName);
+//        workingLogBean.setContent("正常");
+//        workingLogBean.setReport_name(userName);
+//        workingLogBean.setTime(time);
+//        workingLogBean.setStatus(2);
+//        workingLogList.add(workingLogBean);
+//
+//        workingLogBean = new WorkingLogBean();
+//        workingLogBean.setProject_name("电阻检测");
+//        workingLogBean.setWorking_name(userName);
+//        workingLogBean.setContent("需要更换");
+//        workingLogBean.setReport_name(userName);
+//        workingLogBean.setTime(time);
+//        workingLogBean.setStatus(3);
+//        workingLogList.add(workingLogBean);
 
-        workingLogBean = new WorkingLogBean();
-        workingLogBean.setProject_name("绝缘子检测");
-        workingLogBean.setWorking_name(userName);
-        workingLogBean.setContent("正常");
-        workingLogBean.setReport_name(userName);
-        workingLogBean.setTime(time);
-        workingLogBean.setStatus(2);
-        workingLogList.add(workingLogBean);
-
-        workingLogBean = new WorkingLogBean();
-        workingLogBean.setProject_name("电阻检测");
-        workingLogBean.setWorking_name(userName);
-        workingLogBean.setContent("需要更换");
-        workingLogBean.setReport_name(userName);
-        workingLogBean.setTime(time);
-        workingLogBean.setStatus(3);
-        workingLogList.add(workingLogBean);
+        workingLogList.clear();
+        workingLogList.addAll(LocalWorkingLogBean.getWorkingLogList(logType + ""));
 
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         planRv.setLayoutManager(manager);
@@ -168,12 +172,11 @@ public class ConstructionSideActivity extends BaseActivity {
             @Override
             public void onLoadMore() {
                 pageNum++;
-//                getBanjiXLQx("", "");
             }
         });
 
-//        getBanjiXLQx("", "");
         workingLogAdapter.setNewData(workingLogList);
+
     }
 
     @OnClick({R.id.title_back, R.id.title_setting})
@@ -186,54 +189,21 @@ public class ConstructionSideActivity extends BaseActivity {
             case R.id.title_setting:
                 intent = new Intent(this, WorkingLogDetailActivity.class);
                 intent.putExtra("logType", logType);
-                startActivity(intent);
+                startActivityForResult(intent, 100);
                 break;
         }
     }
-
-    //班级线路缺陷
-//    public void getBanjiXLQx(String search_name, String line_id) {
-//        ProgressDialog.show(mContext, true, "正在加载中。。。。");
-//        BaseRequest.getInstance().getService()
-//                .getXLDefact(pageNum, count, line_id, search_name,"grade_sign desc,find_time desc", "3")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<List<DefectFragmentBean>>(mContext) {
-//                    @Override
-//                    protected void onSuccees(BaseResult<List<DefectFragmentBean>> t) throws Exception {
-//                        ProgressDialog.cancle();
-//                        if (t.isSuccess()) {
-//                            List<DefectFragmentBean> result = t.getResults();
-//                            if (result != null && result.size() > 0 && result.size() == 10) {
-//                                planRv.loadMoreFinish(false, true);
-//                            } else {
-//                                planRv.loadMoreFinish(true, false);
-//                            }
-//                            defectList.addAll(result);
-//                            setDataToList(result);
-//                        }
-//                    }
-//
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                        ProgressDialog.cancle();
-//                    }
-//                });
-//    }
-//
-//    private void setDataToList(List<DefectFragmentBean> beans) {
-//        if (pageNum == 1) {
-//            groupTaskAdapter.setNewData(beans);
-//        } else {
-//            groupTaskAdapter.addData(beans);
-//        }
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == Constant.REQUEST_CODE_ADDRESS_BOOK) {
+            switch (requestCode) {
+                case 100:
+                    workingLogList.clear();
+                    workingLogList.addAll(LocalWorkingLogBean.getWorkingLogList(logType + ""));
+                    workingLogAdapter.setNewData(workingLogList);
+                    break;
             }
         }
     }

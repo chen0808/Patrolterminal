@@ -9,15 +9,11 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.WorkWeeklyListAdapter;
-import com.patrol.terminal.bean.LocalWorkWeeklyBean;
+import com.patrol.terminal.bean.LocalLandMarkBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.widget.RoundProgressBar;
-import com.patrol.terminal.widget.SpaceItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,8 +67,7 @@ public class LandMarkActivity extends AppCompatActivity {
     @BindView(R.id.probar_bn)
     RoundProgressBar probar_bn;
 
-    private List<LocalWorkWeeklyBean> workList = new ArrayList<>();
-
+    private List<LocalLandMarkBean> landMarkList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,26 +86,45 @@ public class LandMarkActivity extends AppCompatActivity {
 
 
     public void initView() {
-//        workList.clear();
-//        workList.addAll(LocalWorkWeeklyBean.getAllLsit());
 
-        initProBar(probar_xmqq, 30);
-        initProBar(probar_xmlx, 0);
-        initProBar(probar_sjgl, 0);
-        initProBar(probar_zbgl, 0);
-        initProBar(probar_sszb, 0);
-        initProBar(probar_qq, 0);
-        initProBar(probar_jdgl, 0);
-        initProBar(probar_htgl, 0);
-        initProBar(probar_zj, 0);
-        initProBar(probar_thj, 0);
-        initProBar(probar_ys, 0);
-        initProBar(probar_jg, 0);
-        initProBar(probar_jc, 0);
-        initProBar(probar_bw, 0);
-        initProBar(probar_bn, 0);
+        landMarkList.clear();
+        landMarkList.addAll(LocalLandMarkBean.getAllLsit());
 
-
+        for (int i = 0; i < landMarkList.size(); i++) {
+            LocalLandMarkBean bean = landMarkList.get(i);
+            String sbjd = bean.getLandmark_sbjd();
+            if (sbjd.equals("项目前期")) {
+                initProBar(probar_xmqq, bean.getLandmark_jd());
+            } else if (sbjd.equals("项目立项")) {
+                initProBar(probar_xmlx, bean.getLandmark_jd());
+            } else if (sbjd.equals("设计管理")) {
+                initProBar(probar_sjgl, bean.getLandmark_jd());
+            } else if (sbjd.equals("招标管理")) {
+                initProBar(probar_zbgl, bean.getLandmark_jd());
+            } else if (sbjd.equals("合同管理")) {
+                initProBar(probar_htgl, bean.getLandmark_jd());
+            } else if (sbjd.equals("进度管理")) {
+                initProBar(probar_jdgl, bean.getLandmark_jd());
+            } else if (sbjd.equals("前期")) {
+                initProBar(probar_qq, bean.getLandmark_jd());
+            } else if (sbjd.equals("实施准备")) {
+                initProBar(probar_sszb, bean.getLandmark_jd());
+            } else if (sbjd.equals("在建")) {
+                initProBar(probar_zj, bean.getLandmark_jd());
+            } else if (sbjd.equals("停缓建")) {
+                initProBar(probar_thj, bean.getLandmark_jd());
+            } else if (sbjd.equals("验收")) {
+                initProBar(probar_ys, bean.getLandmark_jd());
+            } else if (sbjd.equals("竣工")) {
+                initProBar(probar_jg, bean.getLandmark_jd());
+            } else if (sbjd.equals("保内")) {
+                initProBar(probar_bn, bean.getLandmark_jd());
+            } else if (sbjd.equals("保外")) {
+                initProBar(probar_bw, bean.getLandmark_jd());
+            } else if (sbjd.equals("解除")) {
+                initProBar(probar_jc, bean.getLandmark_jd());
+            }
+        }
 
     }
 
@@ -125,23 +139,6 @@ public class LandMarkActivity extends AppCompatActivity {
         bar.setProgress(probar);
     }
 
-    @OnClick({R.id.title_back, R.id.title_setting})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.title_back:
-                finish();
-                break;
-            case R.id.title_setting:
-//                Intent intent = new Intent();
-//                intent.setClass(this,WorkWeeklyAddActivity.class);
-//                startActivityForResult(intent,Constant.GCJB_ADD);
-
-                break;
-
-        }
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -151,4 +148,36 @@ public class LandMarkActivity extends AppCompatActivity {
     }
 
 
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.probar_xmqq, R.id.probar_xmlx, R.id.probar_sjgl, R.id.probar_zbgl, R.id.probar_sszb, R.id.probar_qq, R.id.probar_jdgl, R.id.probar_htgl, R.id.probar_zj, R.id.probar_thj, R.id.probar_ys, R.id.probar_jg, R.id.probar_jc, R.id.probar_bw, R.id.probar_bn})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.title_back:
+                finish();
+                break;
+            case R.id.title_setting:
+                Intent intent = new Intent();
+                intent.setClass(this, LandMarkAddActivity.class);
+                startActivityForResult(intent, Constant.GCJB_ADD);
+                break;
+            case R.id.probar_xmqq:
+            case R.id.probar_xmlx:
+            case R.id.probar_sjgl:
+            case R.id.probar_zbgl:
+            case R.id.probar_sszb:
+            case R.id.probar_qq:
+            case R.id.probar_jdgl:
+            case R.id.probar_htgl:
+            case R.id.probar_zj:
+            case R.id.probar_thj:
+            case R.id.probar_ys:
+            case R.id.probar_jg:
+            case R.id.probar_jc:
+            case R.id.probar_bw:
+            case R.id.probar_bn:
+                Intent intent1 = new Intent();
+                intent1.setClass(this, LandMarkDetailActivity.class);
+                startActivity(intent1);
+                break;
+        }
+    }
 }

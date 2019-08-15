@@ -32,7 +32,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:text="日志编号" />
+                        android:text="项目名称" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -42,14 +42,15 @@
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_log_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_centerVertical="true"
+                    android:background="@null"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:text="20190807002" />
+                    android:textSize="14sp"
+                    android:hint="请输入项目名称" />
 
             </LinearLayout>
 
@@ -73,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:text="所属项目" />
+                        android:text="项目编号" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -88,16 +89,16 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
-
-                    <TextView
-                        android:id="@+id/tv_project_name"
+                    <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@null"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:drawableRight="@mipmap/next"
-                        android:hint="请选择" />
+                        android:textSize="14sp"
+                        android:hint="请输入项目编号"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
@@ -122,18 +123,10 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:text="施工人员" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="16dp"
-                        android:text="*"
-                        android:textColor="@color/write_red"/>
+                        android:text="计划投资" />
                 </LinearLayout>
 
                 <EditText
-                    android:id="@+id/edit_working_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -141,6 +134,7 @@
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
+                    android:hint="请输入计划投资"
                     />
 
             </LinearLayout>
@@ -165,7 +159,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:text="施工人数" />
+                        android:text="项目地点" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -175,16 +169,14 @@
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/edit_working_num"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@null"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
-                    android:inputType="number"
+                    android:drawableRight="@mipmap/next"
                     />
 
             </LinearLayout>
@@ -210,11 +202,10 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="记录人员" />
+                        android:text="详细地址" />
                 </LinearLayout>
 
                 <EditText
-                    android:id="@+id/edit_report_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -222,7 +213,7 @@
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
-                    android:hint="请输入"/>
+                    android:hint="请输入详细地址"/>
 
             </LinearLayout>
 
@@ -247,19 +238,25 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="气候状况" />
+                        android:text="立项部门" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:text="*"
+                        android:textColor="@color/write_red"/>
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/edit_weather_status"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@null"
+                    android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
-                    android:hint="请输入"/>
+                    android:text="集团公司"/>
 
             </LinearLayout>
 
@@ -283,7 +280,169 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:text="编制日期" />
+                        android:layout_marginRight="16dp"
+                        android:text="父项目" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="16dp"
+                    android:textSize="14sp"
+                    android:hint="请选择"
+                    android:drawableRight="@mipmap/next"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_gray"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="服务模式" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="16dp"
+                    android:textSize="14sp"
+                    android:hint="请选择"
+                    android:drawableRight="@mipmap/next"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_gray"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="项目状态" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:text="*"
+                        android:textColor="@color/write_red"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="16dp"
+                    android:textSize="14sp"
+                    android:hint="请选择"
+                    android:drawableRight="@mipmap/next"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_gray"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="工程类型" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:text="*"
+                        android:textColor="@color/write_red"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="16dp"
+                    android:textSize="14sp"
+                    android:hint="请选择"
+                    android:drawableRight="@mipmap/next"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_gray"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="计划开始" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -326,7 +485,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:text="发生日期" />
+                        android:text="计划结束" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -337,7 +496,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_occurrence_date"
+                    android:id="@+id/tv_occur_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -349,144 +508,6 @@
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:background="@color/bg_gray">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="32dp"
-                    android:text="天气"
-                    android:textColor="@color/black" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:text="上午温度" />
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/edit_morning_temperature"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@null"
-                    android:hint="请输入"
-                    android:textSize="14sp"
-                    android:inputType="number"/>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:text="午间温度" />
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/edit_middle_temperature"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:textSize="14sp"
-                    android:hint="请输入"
-                    android:inputType="number"/>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center_vertical">
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:text="下午温度" />
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/edit_afternoon_temperature"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:textSize="14sp"
-                    android:hint="请输入"
-                    android:inputType="number"/>
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:background="@color/bg_gray">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="32dp"
-                    android:text="进度"
-                    android:textColor="@color/black" />
-            </RelativeLayout>
-
             <LinearLayout
                 android:id="@+id/rl_team_assessment"
                 android:layout_width="match_parent"
@@ -494,15 +515,24 @@
                 android:orientation="vertical"
                 android:layout_margin="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="施工部分" />
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="工程概况" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="*"
+                        android:textColor="@color/write_red"/>
+                </LinearLayout>
+
                 <EditText
-                    android:id="@+id/edit_working_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -512,7 +542,7 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
-                    android:hint="请输入"
+                    android:hint="在此输入工程概况"
                     android:singleLine="false"/>
 
             </LinearLayout>
@@ -521,234 +551,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="vertical"
-                android:layout_margin="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="突发事件" />
-                <EditText
-                    android:id="@+id/edit_emergency_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/stoke_gray"
-                    android:textSize="16sp"
-                    android:singleLine="false"
-                    android:hint="请输入"/>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="vertical"
-                android:layout_margin="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="工作内容" />
-                <EditText
-                    android:id="@+id/edit_content_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/stoke_gray"
-                    android:textSize="16sp"
-                    android:singleLine="false"
-                    android:hint="请输入"/>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="vertical"
-                android:layout_margin="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="检查、检验情况" />
-                <EditText
-                    android:id="@+id/edit_check_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/stoke_gray"
-                    android:textSize="16sp"
-                    android:singleLine="false"
-                    android:hint="请输入"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="vertical"
-                android:layout_margin="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="材料、设备进场" />
-                <EditText
-                    android:id="@+id/edit_materials_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/stoke_gray"
-                    android:textSize="16sp"
-                    android:singleLine="false"
-                    android:hint="请输入"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="vertical"
-                android:layout_margin="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="设计变更及工程签证" />
-                <EditText
-                    android:id="@+id/edit_visa_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/stoke_gray"
-                    android:textSize="16sp"
-                    android:singleLine="false"
-                    android:hint="请输入"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="vertical"
-                android:layout_margin="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="工作联系单及往来文件记录" />
-                <EditText
-                    android:id="@+id/edit_file_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/stoke_gray"
-                    android:textSize="16sp"
-                    android:singleLine="false"
-                    android:hint="请输入"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="vertical"
-                android:layout_margin="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="其他内容" />
-                <EditText
-                    android:id="@+id/edit_other_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/stoke_gray"
-                    android:textSize="16sp"
-                    android:singleLine="false"
-                    android:hint="请输入"/>
-            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
