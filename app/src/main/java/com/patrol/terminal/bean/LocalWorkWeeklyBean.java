@@ -1,5 +1,7 @@
 package com.patrol.terminal.bean;
 
+import android.text.TextUtils;
+
 import com.patrol.terminal.sqlite.AppDataBase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -94,7 +96,7 @@ public class LocalWorkWeeklyBean extends BaseModel implements Serializable {
     }
 
     public String getWork_xtnr() {
-        return work_xtnr;
+        return TextUtils.isEmpty(work_xtnr) ? "无" : work_xtnr;
     }
 
     public void setWork_xtnr(String work_xtnr) {
@@ -102,7 +104,7 @@ public class LocalWorkWeeklyBean extends BaseModel implements Serializable {
     }
 
     public String getWork_bz() {
-        return work_bz;
+        return TextUtils.isEmpty(work_bz) ? "无" : work_bz;
     }
 
     public void setWork_bz(String work_bz) {

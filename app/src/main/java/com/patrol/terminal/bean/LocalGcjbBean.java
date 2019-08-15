@@ -1,5 +1,7 @@
 package com.patrol.terminal.bean;
 
+import android.text.TextUtils;
+
 import com.patrol.terminal.sqlite.AppDataBase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -65,7 +67,7 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     private String project_photo;//照片
 
 
-    public static List<LocalGcjbBean> getGcjbLsit(String type){
+    public static List<LocalGcjbBean> getGcjbLsit(String type) {
         return SQLite.select().from(LocalGcjbBean.class).where(LocalGcjbBean_Table.type.is(type)).queryList();
     }
 
@@ -175,7 +177,7 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     }
 
     public String getProject_czqt() {
-        return project_czqt;
+        return TextUtils.isEmpty(project_czqt) ? "无" : project_czqt;
     }
 
     public void setProject_czqt(String project_czqt) {
@@ -183,7 +185,7 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     }
 
     public String getProject_jdjh() {
-        return project_jdjh;
+        return TextUtils.isEmpty(project_jdjh) ? "无" : project_jdjh;
     }
 
     public void setProject_jdjh(String project_jdjh) {
@@ -191,7 +193,7 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     }
 
     public String getProject_bz() {
-        return project_bz;
+        return TextUtils.isEmpty(project_bz) ? "无" : project_bz;
     }
 
     public void setProject_bz(String project_bz) {
