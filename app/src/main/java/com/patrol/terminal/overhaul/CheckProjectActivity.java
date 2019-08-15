@@ -1,5 +1,6 @@
 package com.patrol.terminal.overhaul;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.CheckProjectBean;
@@ -100,6 +102,16 @@ public class CheckProjectActivity extends BaseActivity implements TextWatcher {
 
         mCheckProjectAdapter = new CheckProjectAdapter(R.layout.check_project_item, mCheckProject, 0);
         projectRv.setAdapter(mCheckProjectAdapter);
+        mCheckProjectAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent();
+                intent.setClass(CheckProjectActivity.this, ProjectDetailActivity.class);
+                CheckProjectBean clickCheckProjectBean = (CheckProjectBean)adapter.getItem(position);
+                startActivity(intent);
+
+            }
+        });
 
         projectSearchEt.addTextChangedListener(this);
 
