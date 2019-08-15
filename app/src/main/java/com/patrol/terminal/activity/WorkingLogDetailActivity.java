@@ -135,6 +135,16 @@ public class WorkingLogDetailActivity extends BaseActivity {
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("保存");
 
+        photoAdapter = new TssxPhotoAdapter(this, photoList);
+        defectGridView.setAdapter(photoAdapter);
+        defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                position = i;
+                startCamera();
+            }
+        });
+
         if(localWorkingLogBean != null){
             tvLogNum.setText(localWorkingLogBean.getLog_num());
             tvProjectName.setText(localWorkingLogBean.getProject_name());
@@ -155,17 +165,32 @@ public class WorkingLogDetailActivity extends BaseActivity {
             editVisaRemark.setText(localWorkingLogBean.getVisa_remark());
             editFileRemark.setText(localWorkingLogBean.getFile_remark());
             editOtherRemark.setText(localWorkingLogBean.getOther_remark());
-        }
 
-        photoAdapter = new TssxPhotoAdapter(this, photoList);
-        defectGridView.setAdapter(photoAdapter);
-        defectGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                position = i;
-                startCamera();
-            }
-        });
+            Constant.isEditStatus = true;
+            photoList.addAll(Utils.strToList(localWorkingLogBean.getProject_photo()));
+            photoAdapter.setAddStatus(false);
+            photoAdapter.notifyDataSetChanged();
+
+            editWorkingName.setEnabled(false);
+            editWorkingNum.setEnabled(false);
+            editReportName.setEnabled(false);
+            editWeatherStatus.setEnabled(false);
+            editMorningTemperature.setEnabled(false);
+            editMiddleTemperature.setEnabled(false);
+            editAfternoonTemperature.setEnabled(false);
+            editWorkingRemark.setEnabled(false);
+            editEmergencyRemark.setEnabled(false);
+            editContentRemark.setEnabled(false);
+            editCheckRemark.setEnabled(false);
+            editMaterialsRemark.setEnabled(false);
+            editVisaRemark.setEnabled(false);
+            editFileRemark.setEnabled(false);
+            editOtherRemark.setEnabled(false);
+
+            titleSetting.setVisibility(View.GONE);
+        } else {
+            Constant.isEditStatus = false;
+        }
     }
 
     @OnClick({R.id.title_back, R.id.title_setting, R.id.tv_compile_date, R.id.tv_occurrence_date, R.id.tv_project_name})
