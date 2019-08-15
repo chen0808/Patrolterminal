@@ -75,6 +75,7 @@
         <activity android:name=".activity.BudgetActivity" />
         <activity android:name=".activity.ProjectPlanActivity" />
         <activity android:name=".activity.ProjectPlanListActivity" />
+        <activity android:name=".activity.DesignPlanActivity" />
         <activity
             android:name=".activity.EngineeringBriefActivity"
             android:screenOrientation="portrait" />
@@ -372,8 +373,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WorkWeeklyAddActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.LandMarkActivity"
             android:screenOrientation="portrait" />

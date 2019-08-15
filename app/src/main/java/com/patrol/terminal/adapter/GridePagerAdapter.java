@@ -11,11 +11,11 @@ import android.widget.GridView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.DesignPlanActivity;
 import com.patrol.terminal.activity.EngineeringBriefActivity;
 import com.patrol.terminal.activity.GraphicProgressActivity;
 import com.patrol.terminal.activity.LandMarkActivity;
 import com.patrol.terminal.activity.ProjectBoardActivity;
-import com.patrol.terminal.activity.ThirdWTicketActivity;
 import com.patrol.terminal.activity.WorkWeeklyListActivity;
 import com.patrol.terminal.activity.WorkingLogActivity;
 import com.patrol.terminal.bean.MapUserInfo;
@@ -115,7 +115,7 @@ public class GridePagerAdapter extends PagerAdapter {
                             break;
                         //设计计划
                         case 1:
-                            intent.setClass(context, ElectronicNoticeActivity.class);
+                            intent.setClass(context, DesignPlanActivity.class);
                             break;
                         //电子公告
                         case 2:
