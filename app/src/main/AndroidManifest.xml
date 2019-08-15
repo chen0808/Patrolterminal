@@ -410,6 +410,8 @@
         <activity android:name=".overhaul.TechnicalSpecificationActivity" />
         <activity android:name=".overhaul.TechnicalSpecificationAddActivity" />
         <activity android:name=".overhaul.TechnicalInternationalAddActivity" />
+        <activity android:name=".overhaul.InitiateProjectActivity" />
+        <activity android:name=".overhaul.InitiateProjectAddActivity" />
     </application>
 
 </manifest>

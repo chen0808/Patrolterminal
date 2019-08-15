@@ -20,6 +20,7 @@ import com.patrol.terminal.activity.WorkWeeklyListActivity;
 import com.patrol.terminal.activity.WorkingLogActivity;
 import com.patrol.terminal.bean.MapUserInfo;
 import com.patrol.terminal.overhaul.ElectronicNoticeActivity;
+import com.patrol.terminal.overhaul.InitiateProjectActivity;
 import com.patrol.terminal.overhaul.InternalNewsActivity;
 import com.patrol.terminal.overhaul.SafeCheckMainActivity;
 import com.patrol.terminal.overhaul.TechnicalSpecificationActivity;
@@ -111,7 +112,7 @@ public class GridePagerAdapter extends PagerAdapter {
                     switch (i) {
                         //项目立项
                         case 0:
-                            intent.setClass(context, ElectronicNoticeActivity.class);
+                            intent.setClass(context, InitiateProjectActivity.class);
                             break;
                         //设计计划
                         case 1:
