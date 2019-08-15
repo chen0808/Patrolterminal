@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="检查结果"
+            android:textSize="18sp"
+            android:textColor="@color/bar_grey"></TextView>
+
+        <TextView android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="书面整改"
+            android:layout_marginLeft="10dp"></TextView>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="检查内容"
+            android:textSize="18sp"
+            android:textColor="@color/bar_grey"></TextView>
+
+        <TextView android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="通过"
+            android:layout_marginLeft="10dp"></TextView>
+    </LinearLayout>
+
+    <TextView android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="附件"
+        android:textColor="@color/bar_grey"
+        android:textSize="18sp"
+        android:gravity="center_vertical"></TextView>
+
+    <LinearLayout
+        android:id="@+id/pic_ll"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        >
+
+    </LinearLayout>
+
+</LinearLayout>
