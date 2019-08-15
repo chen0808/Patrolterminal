@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/et_bg"
+    android:orientation="vertical"
+    tools:context=".activity.EngineeringBriefActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/include_title" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/line1"
+            style="@style/lcb_ll_h">
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_xmqq"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="项目前期" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_xmlx"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="项目立项" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_sjgl"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="设计管理" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_zbgl"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="招标管理" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line1_down"
+            style="@style/lcb_jiantoudown"
+            android:layout_below="@id/line1"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp" />
+
+        <LinearLayout
+            android:id="@+id/line2"
+            style="@style/lcb_ll_h"
+            android:layout_below="@id/line1_down">
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_sszb"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="实施准备" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou_left" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_qq"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="前期" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou_left" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_jdgl"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="进度管理" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou_left" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_htgl"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="合同管理" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line2_down"
+            style="@style/lcb_jiantoudown"
+            android:layout_below="@id/line2"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp" />
+
+        <LinearLayout
+            android:id="@+id/line3"
+            style="@style/lcb_ll_h"
+            android:layout_below="@id/line2_down">
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_zj"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="在建" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_thj"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="停缓建" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_ys"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="验收" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_jg"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="竣工" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line3_down"
+            style="@style/lcb_jiantoudown"
+            android:layout_below="@id/line3"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp" />
+
+        <LinearLayout
+            style="@style/lcb_ll_h"
+            android:layout_below="@id/line3_down">
+
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@mipmap/flag_gray" />
+
+
+            </RelativeLayout>
+
+            <View style="@style/lcb_jiantou_left" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_jc"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="解除" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou_left" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_bw"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="保外" />
+
+            </LinearLayout>
+
+            <View style="@style/lcb_jiantou_left" />
+
+            <LinearLayout style="@style/lcb_ll_v">
+
+                <com.patrol.terminal.widget.RoundProgressBar
+                    android:id="@+id/probar_bn"
+                    style="@style/lcb_probar" />
+
+                <TextView
+                    style="@style/lcb_probar_tv"
+                    android:text="保内" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>
