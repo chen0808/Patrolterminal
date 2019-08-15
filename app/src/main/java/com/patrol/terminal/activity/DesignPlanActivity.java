@@ -35,6 +35,7 @@ public class DesignPlanActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_design_plan);
         ButterKnife.bind(this);
+        titleName.setText("设计计划");
     }
 
     @OnClick(R.id.title_back)
