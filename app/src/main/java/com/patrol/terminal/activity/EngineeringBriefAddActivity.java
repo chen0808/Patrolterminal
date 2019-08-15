@@ -8,6 +8,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -173,7 +174,7 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.title_back, R.id.title_setting,R.id.gcjb_add_jblb})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.gcjb_add_jblb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -198,10 +199,20 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
                 break;
             case R.id.title_setting:
 
-//                if(photoList.size()==0){
-//                    Utils.showToast("必须添加一张照片");
-//                    return;
-//                }
+                if (TextUtils.isEmpty(gcjb_sgqk.getText().toString().trim())) {
+                    Utils.showToast("请填写施工情况");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(gcjb_glqk.getText().toString().trim())) {
+                    Utils.showToast("请填写管理情况");
+                    return;
+                }
+
+                if (photoList.size() == 0) {
+                    Utils.showToast("至少添加一张照片");
+                    return;
+                }
 
                 LocalGcjbBean bean = new LocalGcjbBean();
                 bean.setType(type);

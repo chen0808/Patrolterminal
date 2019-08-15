@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:id="@+id/lichengbei_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lcb_year"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="right"
+            android:text="2019年"
+            android:textColor="@color/base_status_bar"
+            android:textSize="@dimen/sp_18" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="@mipmap/sanjiaoxia_lan" />
+
+        <ImageView
+            android:id="@+id/date_img"
+            android:layout_width="50dp"
+            android:layout_height="@dimen/dp_50"
+            android:layout_gravity="center"
+            android:background="@mipmap/lichengbei" />
+
+        <TextView
+            android:id="@+id/lcb_sbjd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:text="2019年"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/lichenbei_shuxian"
+        android:layout_width="46dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/lichengbei_1"
+        android:layout_marginLeft="@dimen/dp_110"
+        android:background="@mipmap/shuxian" />
+
+    <LinearLayout
+        android:id="@+id/lcb_qx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@+id/lichenbei_shuxian"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lichengbei_date"
+                android:layout_width="123dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="2019-07-01" />
+
+            <ImageView
+                android:id="@+id/lichenbei_yuanhuan"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_toRightOf="@id/lichengbei_date"
+                android:background="@mipmap/yuanhuan" />
+
+            <ImageView
+                android:layout_width="46dp"
+                android:layout_height="match_parent"
+                android:layout_below="@id/lichenbei_yuanhuan"
+                android:layout_marginLeft="@dimen/dp_110"
+                android:background="@mipmap/shuxian"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lcb_jd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="进度：45%" />
+
+            <TextView
+                android:id="@+id/lcb_qk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="情况：无" />
+
+            <TextView
+                android:id="@+id/lcb_bz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="备注：无" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
+

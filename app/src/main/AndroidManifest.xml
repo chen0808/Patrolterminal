@@ -381,6 +381,13 @@
         <activity
             android:name=".activity.LandMarkActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LandMarkAddActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LandMarkDetailActivity"
+            android:screenOrientation="portrait" />
 
 
         <meta-data
