@@ -5,8 +5,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,21 +22,34 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
-//施工日志
+//项目立项添加
 public class InitiateProjectAddActivity extends BaseActivity {
 
     @BindView(R.id.title_back)
@@ -47,17 +62,41 @@ public class InitiateProjectAddActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
-    @BindView(R.id.tv_compile_date)
-    TextView tvCompileDate;
-    @BindView(R.id.tv_occur_date)
-    TextView tvOccurDate;
+    @BindView(R.id.edit_name)
+    EditText editName;
+    @BindView(R.id.edit_project_no)
+    EditText editProjectNo;
+    @BindView(R.id.edit_total_money)
+    EditText editTotalMoney;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
+    @BindView(R.id.edit_detailed_address)
+    EditText editDetailedAddress;
+    @BindView(R.id.tv_dep_name)
+    TextView tvDepName;
+    @BindView(R.id.tv_parent_project)
+    TextView tvParentProject;
+    @BindView(R.id.tv_model)
+    TextView tvModel;
+    @BindView(R.id.tv_status)
+    TextView tvStatus;
+    @BindView(R.id.tv_type_sign)
+    TextView tvTypeSign;
+    @BindView(R.id.tv_start_time)
+    TextView tvStartTime;
+    @BindView(R.id.tv_end_time)
+    TextView tvEndTime;
+    @BindView(R.id.edit_content)
+    EditText editContent;
     @BindView(R.id.defect_gridView)
     GridView defectGridView;
 
-    private int logType = 0;
+    private int type = 0;
     private List<String> photoList = new ArrayList<>();
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
+    private Map<String, RequestBody> params = new HashMap<>();
+    private InitiateProjectBean initiateProjectBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +108,10 @@ public class InitiateProjectAddActivity extends BaseActivity {
     }
 
     private void initData() {
+        Intent intent = getIntent();
+        initiateProjectBean = (InitiateProjectBean)intent.getSerializableExtra("InitiateProjectBean");
+        type = intent.getIntExtra("type", 0);
+
         titleName.setText("项目");
         titleSetting.setVisibility(View.VISIBLE);
         titleSettingTv.setText("提交");
@@ -82,19 +125,164 @@ public class InitiateProjectAddActivity extends BaseActivity {
                 startCamera();
             }
         });
+
+        if(initiateProjectBean != null){
+            editName.setText(initiateProjectBean.getName());
+            editProjectNo.setText(initiateProjectBean.getProject_no());
+
+            if(initiateProjectBean.getTotal_money() != null){
+                editTotalMoney.setText(initiateProjectBean.getTotal_money() + "");
+            } else {
+                editTotalMoney.setText("");
+            }
+
+            tvAddress.setText(initiateProjectBean.getAddress());
+            editDetailedAddress.setText(initiateProjectBean.getDetailed_address());
+            tvDepName.setText(initiateProjectBean.getDep_name());
+            tvParentProject.setText(initiateProjectBean.getParent_project());
+            tvModel.setText(initiateProjectBean.getModel());
+            tvStatus.setText(initiateProjectBean.getStatus());
+            tvTypeSign.setText(initiateProjectBean.getType_sign());
+            tvStartTime.setText(initiateProjectBean.getStart_time());
+            tvEndTime.setText(initiateProjectBean.getEnd_time());
+            editContent.setText(initiateProjectBean.getContent());
+
+            Constant.isEditStatus = true;
+            if(initiateProjectBean.getTempProjectImgList() != null){
+                photoList.addAll(initiateProjectBean.getTempProjectImgList());
+                photoAdapter.setAddStatus(false);
+                photoAdapter.notifyDataSetChanged();
+            } else {
+                defectGridView.setVisibility(View.GONE);
+            }
+
+            editName.setEnabled(false);
+            editProjectNo.setEnabled(false);
+            editTotalMoney.setEnabled(false);
+            tvAddress.setEnabled(false);
+            editDetailedAddress.setEnabled(false);
+            tvDepName.setEnabled(false);
+            tvParentProject.setEnabled(false);
+            tvModel.setEnabled(false);
+            tvStatus.setEnabled(false);
+            tvTypeSign.setEnabled(false);
+            tvStartTime.setEnabled(false);
+            tvEndTime.setEnabled(false);
+            editContent.setEnabled(false);
+
+            editName.setHint("");
+            editProjectNo.setHint("");
+            editTotalMoney.setHint("");
+            editDetailedAddress.setHint("");
+            editContent.setHint("");
+            tvParentProject.setHint("");
+            tvModel.setHint("");
+            tvTypeSign.setHint("");
+            tvStartTime.setHint("");
+            tvEndTime.setHint("");
+
+            tvAddress.setCompoundDrawables(null, null, null, null);
+            tvDepName.setCompoundDrawables(null, null, null, null);
+            tvParentProject.setCompoundDrawables(null, null, null, null);
+            tvModel.setCompoundDrawables(null, null, null, null);
+            tvStatus.setCompoundDrawables(null, null, null, null);
+            tvTypeSign.setCompoundDrawables(null, null, null, null);
+            tvStartTime.setCompoundDrawables(null, null, null, null);
+            tvEndTime.setCompoundDrawables(null, null, null, null);
+
+            titleSetting.setVisibility(View.GONE);
+        } else {
+            Constant.isEditStatus = false;
+        }
     }
 
-    @OnClick({R.id.title_back, R.id.tv_compile_date, R.id.tv_occur_date})
+    public void projectSavePOST() {
+        ProgressDialog.show(this, false, "正在加载。。。。");
+        params.clear();
+        params.put("name", toRequestBody(editName.getText().toString()));
+        params.put("project_no", toRequestBody(editProjectNo.getText().toString()));
+        params.put("total_money", toRequestBody(editTotalMoney.getText().toString()));
+        params.put("address", toRequestBody(tvAddress.getText().toString()));
+        params.put("detailed_address", toRequestBody(editDetailedAddress.getText().toString()));
+        params.put("dep_name", toRequestBody(tvDepName.getText().toString()));
+        params.put("parent_project", toRequestBody(tvParentProject.getText().toString()));
+        params.put("model", toRequestBody(tvModel.getText().toString()));
+        params.put("status", toRequestBody(tvStatus.getText().toString()));
+        params.put("type_sign", toRequestBody(tvTypeSign.getText().toString()));
+        params.put("start_time", toRequestBody(tvStartTime.getText().toString()));
+        params.put("end_time", toRequestBody(tvEndTime.getText().toString()));
+        params.put("content", toRequestBody(editContent.getText().toString()));
+        for(int i=0;i<photoList.size();i++){
+            if(!photoList.get(i).equals("")){
+                File file = new File(photoList.get(i));
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                params.put("defect_file\"; filename=\"" + i + ".jpg", requestFile);
+            }
+        }
+
+        BaseRequest.getInstance().getService()
+                .projectSavePOST(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        if(t.getCode() == 1){
+                            Utils.showToast("提交成功");
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
+                    }
+
+                });
+    }
+
+    @OnClick({R.id.title_back, R.id.tv_start_time, R.id.tv_end_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
-            case R.id.tv_compile_date:
+            case R.id.tv_start_time:
                 showDay(1);
                 break;
-            case R.id.tv_occur_date:
+            case R.id.tv_end_time:
                 showDay(2);
+                break;
+            case R.id.title_setting:
+                if(TextUtils.isEmpty(editName.getText().toString())){
+                    Utils.showToast("请输入项目名称");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(editProjectNo.getText().toString())){
+                    Utils.showToast("请输入项目编号");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(tvAddress.getText().toString())){
+                    Utils.showToast("请选择项目地点");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(tvStartTime.getText().toString())){
+                    Utils.showToast("请选择计划开始时间");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(tvEndTime.getText().toString())){
+                    Utils.showToast("请选择计划结束时间");
+                    break;
+                }
+
+                projectSavePOST();
                 break;
         }
     }
@@ -128,9 +316,9 @@ public class InitiateProjectAddActivity extends BaseActivity {
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 String time = DateUatil.getDay(date);
                 if(type == 1){
-                    tvCompileDate.setText(time);
+                    tvStartTime.setText(time);
                 } else if(type == 2){
-                    tvOccurDate.setText(time);
+                    tvEndTime.setText(time);
                 }
             }
         })
@@ -151,6 +339,16 @@ public class InitiateProjectAddActivity extends BaseActivity {
     private void startCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, Constant.DEFECT_REQUEST_CODE);
+    }
+
+    public RequestBody toRequestBody(String value) {
+        if (value != null) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            return requestBody;
+        } else {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            return requestBody;
+        }
     }
 
     @Override

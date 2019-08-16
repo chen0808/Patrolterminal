@@ -43,6 +43,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
@@ -50,6 +51,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:hint="请输入项目名称" />
 
             </LinearLayout>
@@ -90,6 +92,7 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
                     <EditText
+                        android:id="@+id/edit_project_no"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
@@ -97,6 +100,7 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:textSize="14sp"
+                        android:textColor="@color/black"
                         android:hint="请输入项目编号"
                         />
                 </LinearLayout>
@@ -127,6 +131,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_total_money"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -134,6 +139,8 @@
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
+                    android:inputType="number"
+                    android:textColor="@color/black"
                     android:hint="请输入计划投资"
                     />
 
@@ -170,12 +177,14 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_address"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:drawableRight="@mipmap/next"
                     />
 
@@ -206,6 +215,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_detailed_address"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -213,6 +223,7 @@
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:hint="请输入详细地址"/>
 
             </LinearLayout>
@@ -249,6 +260,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_dep_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -256,6 +268,7 @@
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:text="集团公司"/>
 
             </LinearLayout>
@@ -285,6 +298,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_parent_project"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -293,6 +307,7 @@
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
                     android:hint="请选择"
+                    android:textColor="@color/black"
                     android:drawableRight="@mipmap/next"/>
 
             </LinearLayout>
@@ -322,6 +337,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_model"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -330,6 +346,7 @@
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
                     android:hint="请选择"
+                    android:textColor="@color/black"
                     android:drawableRight="@mipmap/next"/>
 
             </LinearLayout>
@@ -366,6 +383,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_status"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -374,6 +392,7 @@
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
                     android:hint="请选择"
+                    android:textColor="@color/black"
                     android:drawableRight="@mipmap/next"/>
 
             </LinearLayout>
@@ -410,6 +429,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_type_sign"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -418,6 +438,7 @@
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
                     android:hint="请选择"
+                    android:textColor="@color/black"
                     android:drawableRight="@mipmap/next"/>
 
             </LinearLayout>
@@ -453,7 +474,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_compile_date"
+                    android:id="@+id/tv_start_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -461,6 +482,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:hint="请选择"
+                    android:textColor="@color/black"
                     android:drawableRight="@mipmap/next"/>
 
             </LinearLayout>
@@ -496,7 +518,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_occur_date"
+                    android:id="@+id/tv_end_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -504,6 +526,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:hint="请选择"
+                    android:textColor="@color/black"
                     android:drawableRight="@mipmap/next"/>
 
             </LinearLayout>
@@ -533,6 +556,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -542,6 +566,7 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
+                    android:textColor="@color/black"
                     android:hint="在此输入工程概况"
                     android:singleLine="false"/>
 

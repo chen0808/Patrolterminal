@@ -24,6 +24,7 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="16dp"
                 android:gravity="center_vertical"
+                android:visibility="gone"
                 android:text="工程简报" />
 
             <RelativeLayout

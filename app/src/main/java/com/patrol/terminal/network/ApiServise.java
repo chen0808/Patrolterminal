@@ -1257,4 +1257,12 @@ public interface ApiServise {
     @POST("eq/tools/history/saveBatchPOST")
     Observable<BaseResult> getToolReceive(@Body List<EqToolsReceiveBean> list);
 
+    //项目立项添加
+    @Multipart
+    @POST("temp/project/savePOST")
+    Observable<BaseResult> projectSavePOST(@PartMap Map<String, RequestBody> params);
+
+    //获取项目列表
+    @GET("temp/project/pdaPageGET")
+    Observable<BaseResult<List<InitiateProjectBean>>> getProjectList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
 }
