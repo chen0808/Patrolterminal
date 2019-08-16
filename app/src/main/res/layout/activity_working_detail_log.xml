@@ -97,7 +97,9 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:drawableRight="@mipmap/next"
-                        android:hint="请选择" />
+                        android:textColor="@color/black"
+                        android:hint="请选择"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
@@ -132,16 +134,23 @@
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/edit_working_name"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@null"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="16dp"
-                    android:textSize="14sp"
-                    />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_working_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:drawableRight="@mipmap/next"
+                        android:textColor="@color/black"
+                        android:hint="请选择" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -185,6 +194,7 @@
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
                     android:inputType="number"
+                    android:textColor="@color/black"
                     />
 
             </LinearLayout>
@@ -213,16 +223,23 @@
                         android:text="记录人员" />
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/edit_report_name"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@null"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="16dp"
-                    android:textSize="14sp"
-                    android:hint="请输入"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_report_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:drawableRight="@mipmap/next"
+                        android:textColor="@color/black"
+                        android:hint="请选择" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -259,6 +276,7 @@
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:hint="请输入"/>
 
             </LinearLayout>
@@ -302,6 +320,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:hint="请选择"
+                    android:textColor="@color/black"
                     android:drawableRight="@mipmap/next"/>
 
             </LinearLayout>
@@ -345,6 +364,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:hint="请选择"
+                    android:textColor="@color/black"
                     android:drawableRight="@mipmap/next"/>
 
             </LinearLayout>
@@ -393,6 +413,7 @@
                     android:layout_marginRight="16dp"
                     android:background="@null"
                     android:hint="请输入"
+                    android:textColor="@color/black"
                     android:textSize="14sp"
                     android:inputType="number"/>
 
@@ -431,6 +452,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:hint="请输入"
                     android:inputType="number"/>
 
@@ -468,6 +490,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:hint="请输入"
                     android:inputType="number"/>
 
@@ -512,6 +535,7 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
+                    android:textColor="@color/black"
                     android:hint="请输入"
                     android:singleLine="false"/>
 
@@ -547,6 +571,7 @@
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
                     android:singleLine="false"
+                    android:textColor="@color/black"
                     android:hint="请输入"/>
 
             </LinearLayout>
@@ -581,6 +606,7 @@
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
                     android:singleLine="false"
+                    android:textColor="@color/black"
                     android:hint="请输入"/>
 
             </LinearLayout>
@@ -615,6 +641,7 @@
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
                     android:singleLine="false"
+                    android:textColor="@color/black"
                     android:hint="请输入"/>
             </LinearLayout>
 
@@ -648,6 +675,7 @@
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
                     android:singleLine="false"
+                    android:textColor="@color/black"
                     android:hint="请输入"/>
             </LinearLayout>
 
@@ -681,6 +709,7 @@
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
                     android:singleLine="false"
+                    android:textColor="@color/black"
                     android:hint="请输入"/>
             </LinearLayout>
 
@@ -714,6 +743,7 @@
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
                     android:singleLine="false"
+                    android:textColor="@color/black"
                     android:hint="请输入"/>
             </LinearLayout>
 
@@ -747,6 +777,7 @@
                     android:background="@drawable/stoke_gray"
                     android:textSize="16sp"
                     android:singleLine="false"
+                    android:textColor="@color/black"
                     android:hint="请输入"/>
             </LinearLayout>
 

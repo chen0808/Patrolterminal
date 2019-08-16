@@ -93,9 +93,13 @@ public class LocalWorkingLogBean extends BaseModel implements Serializable {
 
 
     public static List<LocalWorkingLogBean> getWorkingLogList(String type){
+
         return SQLite.select().from(LocalWorkingLogBean.class).where(LocalWorkingLogBean_Table.type.is(type)).queryList();
     }
 
+    public static void delete(Integer local_id) {
+        SQLite.delete().from(LocalWorkingLogBean.class).where(LocalWorkingLogBean_Table.local_id.eq(local_id)).execute();
+    }
 
     public int getLocal_id() {
         return local_id;

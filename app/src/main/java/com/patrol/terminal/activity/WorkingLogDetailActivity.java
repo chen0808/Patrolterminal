@@ -22,6 +22,8 @@ import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.CheckProjectBean;
 import com.patrol.terminal.bean.LocalWorkingLogBean;
+import com.patrol.terminal.bean.UserBean;
+import com.patrol.terminal.overhaul.CheckPersonSearchActivity;
 import com.patrol.terminal.overhaul.ProjectSearchActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -56,12 +58,12 @@ public class WorkingLogDetailActivity extends BaseActivity {
     TextView tvLogNum;
     @BindView(R.id.tv_project_name)
     TextView tvProjectName;
-    @BindView(R.id.edit_working_name)
-    TextView editWorkingName;
+    @BindView(R.id.tv_working_name)
+    TextView tvWorkingName;
     @BindView(R.id.edit_working_num)
     TextView editWorkingNum;
-    @BindView(R.id.edit_report_name)
-    TextView editReportName;
+    @BindView(R.id.tv_report_name)
+    TextView tvReportName;
     @BindView(R.id.edit_weather_status)
     TextView editWeatherStatus;
     @BindView(R.id.tv_compile_date)
@@ -98,6 +100,7 @@ public class WorkingLogDetailActivity extends BaseActivity {
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
     private String mSelectProjectId;
+    private String mSelectPersonId;
     private LocalWorkingLogBean localWorkingLogBean;
     private String userId;
     private String userName;
@@ -148,9 +151,9 @@ public class WorkingLogDetailActivity extends BaseActivity {
         if(localWorkingLogBean != null){
             tvLogNum.setText(localWorkingLogBean.getLog_num());
             tvProjectName.setText(localWorkingLogBean.getProject_name());
-            editWorkingName.setText(localWorkingLogBean.getWorking_name());
+            tvWorkingName.setText(localWorkingLogBean.getWorking_name());
             editWorkingNum.setText(localWorkingLogBean.getWorking_num());
-            editReportName.setText(localWorkingLogBean.getReport_name());
+            tvReportName.setText(localWorkingLogBean.getReport_name());
             editWeatherStatus.setText(localWorkingLogBean.getWeather_status());
             tvCompileDate.setText(localWorkingLogBean.getCompile_date());
             tvOccurDate.setText(localWorkingLogBean.getOccurrence_date());
@@ -171,9 +174,12 @@ public class WorkingLogDetailActivity extends BaseActivity {
             photoAdapter.setAddStatus(false);
             photoAdapter.notifyDataSetChanged();
 
-            editWorkingName.setEnabled(false);
+            tvProjectName.setEnabled(false);
+            tvWorkingName.setEnabled(false);
             editWorkingNum.setEnabled(false);
-            editReportName.setEnabled(false);
+            tvReportName.setEnabled(false);
+            tvCompileDate.setEnabled(false);
+            tvOccurDate.setEnabled(false);
             editWeatherStatus.setEnabled(false);
             editMorningTemperature.setEnabled(false);
             editMiddleTemperature.setEnabled(false);
@@ -187,14 +193,35 @@ public class WorkingLogDetailActivity extends BaseActivity {
             editFileRemark.setEnabled(false);
             editOtherRemark.setEnabled(false);
 
+            tvReportName.setHint("");
+            editWeatherStatus.setHint("");
+            editMorningTemperature.setHint("");
+            editMiddleTemperature.setHint("");
+            editAfternoonTemperature.setHint("");
+            editWorkingRemark.setHint("");
+            editEmergencyRemark.setHint("");
+            editContentRemark.setHint("");
+            editCheckRemark.setHint("");
+            editMaterialsRemark.setHint("");
+            editVisaRemark.setHint("");
+            editFileRemark.setHint("");
+            editOtherRemark.setHint("");
+
+            tvProjectName.setCompoundDrawables(null, null, null, null);
+            tvWorkingName.setCompoundDrawables(null, null, null, null);
+            tvReportName.setCompoundDrawables(null, null, null, null);
+            tvCompileDate.setCompoundDrawables(null, null, null, null);
+            tvOccurDate.setCompoundDrawables(null, null, null, null);
+
             titleSetting.setVisibility(View.GONE);
         } else {
             Constant.isEditStatus = false;
         }
     }
 
-    @OnClick({R.id.title_back, R.id.title_setting, R.id.tv_compile_date, R.id.tv_occurrence_date, R.id.tv_project_name})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.tv_compile_date, R.id.tv_occurrence_date, R.id.tv_project_name, R.id.tv_working_name, R.id.tv_report_name})
     public void onViewClicked(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
@@ -206,9 +233,19 @@ public class WorkingLogDetailActivity extends BaseActivity {
                 showDay(2);
                 break;
             case R.id.tv_project_name:
-                Intent intent = new Intent();
+                intent = new Intent();
                 intent.setClass(this, ProjectSearchActivity.class);
                 startActivityForResult(intent, 1001);
+                break;
+            case R.id.tv_working_name:
+                intent = new Intent();
+                intent.setClass(this, CheckPersonSearchActivity.class);
+                startActivityForResult(intent, 1002);
+                break;
+            case R.id.tv_report_name:
+                intent = new Intent();
+                intent.setClass(this, CheckPersonSearchActivity.class);
+                startActivityForResult(intent, 1003);
                 break;
             case R.id.title_setting:
                 if(TextUtils.isEmpty(tvProjectName.getText().toString())){
@@ -216,8 +253,8 @@ public class WorkingLogDetailActivity extends BaseActivity {
                     break;
                 }
 
-                if(TextUtils.isEmpty(editWorkingName.getText().toString())){
-                    Utils.showToast("请填写施工人员");
+                if(TextUtils.isEmpty(tvWorkingName.getText().toString())){
+                    Utils.showToast("请选择施工人员");
                     break;
                 }
 
@@ -243,9 +280,9 @@ public class WorkingLogDetailActivity extends BaseActivity {
                 bean.setLog_num(tvLogNum.getText().toString());
                 bean.setProject_id(mSelectProjectId);
                 bean.setProject_name(tvProjectName.getText().toString());
-                bean.setWorking_name(editWorkingName.getText().toString());
+                bean.setWorking_name(tvWorkingName.getText().toString());
                 bean.setWorking_num(editWorkingNum.getText().toString());
-                bean.setReport_name(editReportName.getText().toString());
+                bean.setReport_name(tvReportName.getText().toString());
                 bean.setWeather_status(editWeatherStatus.getText().toString());
                 bean.setCompile_date(tvCompileDate.getText().toString());
                 bean.setOccurrence_date(tvOccurDate.getText().toString());
@@ -355,6 +392,26 @@ public class WorkingLogDetailActivity extends BaseActivity {
                             mSelectProjectId = clickedCheckProjectBean.getProject_id();
                             String name = clickedCheckProjectBean.getName();
                             tvProjectName.setText(name);
+                        }
+                    }
+                    break;
+                case 1002:
+                    if (data != null) {
+                        UserBean clickedUserBean = data.getParcelableExtra("search_user_item");
+                        if (clickedUserBean != null) {
+                            mSelectPersonId = clickedUserBean.getId();
+                            String name = clickedUserBean.getName();
+                            tvWorkingName.setText(name);
+                        }
+                    }
+                    break;
+                case 1003:
+                    if (data != null) {
+                        UserBean clickedUserBean = data.getParcelableExtra("search_user_item");
+                        if (clickedUserBean != null) {
+                            mSelectPersonId = clickedUserBean.getId();
+                            String name = clickedUserBean.getName();
+                            tvReportName.setText(name);
                         }
                     }
                     break;

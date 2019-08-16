@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,12 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.WorkingLogAdapter;
 import com.patrol.terminal.base.BaseActivity;
-import com.patrol.terminal.bean.LocalGcjbBean;
 import com.patrol.terminal.bean.LocalWorkingLogBean;
-import com.patrol.terminal.bean.WorkingLogBean;
-import com.patrol.terminal.utils.Constant;
-import com.patrol.terminal.utils.DateUatil;
-import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.widget.SpaceItemDecoration;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -51,6 +49,10 @@ public class ConstructionSideActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
+    @BindView(R.id.tv_qx_content)
+    AutoCompleteTextView tvContent;
+    @BindView(R.id.search_delete)
+    ImageView searchDelete;
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
 
@@ -58,6 +60,8 @@ public class ConstructionSideActivity extends BaseActivity {
     private Context mContext;
     private WorkingLogAdapter workingLogAdapter;
     private List<LocalWorkingLogBean> workingLogList = new ArrayList<>();
+    private List<LocalWorkingLogBean> searchList = new ArrayList<>();
+    private String search_name = "";
     private int pageNum = 1;
     private int count = 10;
 
@@ -93,36 +97,6 @@ public class ConstructionSideActivity extends BaseActivity {
         titleSettingIv.setImageResource(R.mipmap.add_white);
         titleSettingTv.setText("");
 
-//        String userName = SPUtil.getUserName(this);
-//        String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
-
-//        WorkingLogBean workingLogBean = new WorkingLogBean();
-//        workingLogBean.setProject_name("定期巡视");
-//        workingLogBean.setWorking_name(userName);
-//        workingLogBean.setContent("杆塔倾斜");
-//        workingLogBean.setReport_name(userName);
-//        workingLogBean.setTime(time);
-//        workingLogBean.setStatus(1);
-//        workingLogList.add(workingLogBean);
-//
-//        workingLogBean = new WorkingLogBean();
-//        workingLogBean.setProject_name("绝缘子检测");
-//        workingLogBean.setWorking_name(userName);
-//        workingLogBean.setContent("正常");
-//        workingLogBean.setReport_name(userName);
-//        workingLogBean.setTime(time);
-//        workingLogBean.setStatus(2);
-//        workingLogList.add(workingLogBean);
-//
-//        workingLogBean = new WorkingLogBean();
-//        workingLogBean.setProject_name("电阻检测");
-//        workingLogBean.setWorking_name(userName);
-//        workingLogBean.setContent("需要更换");
-//        workingLogBean.setReport_name(userName);
-//        workingLogBean.setTime(time);
-//        workingLogBean.setStatus(3);
-//        workingLogList.add(workingLogBean);
-
         workingLogList.clear();
         workingLogList.addAll(LocalWorkingLogBean.getWorkingLogList(logType + ""));
 
@@ -156,9 +130,10 @@ public class ConstructionSideActivity extends BaseActivity {
             public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
                 // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
                 menuBridge.closeMenu();
-                int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
-                int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-                Toast.makeText(mContext, direction + " " + adapterPosition + " " + menuPosition, Toast.LENGTH_SHORT).show();
+
+                workingLogList.get(adapterPosition).delete();
+                workingLogList.remove(adapterPosition);
+                workingLogAdapter.setNewData(workingLogList);
             }
         };
 
@@ -177,9 +152,42 @@ public class ConstructionSideActivity extends BaseActivity {
 
         workingLogAdapter.setNewData(workingLogList);
 
+        tvContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                search_name = s.toString();
+                if (s.length() == 0) {
+                    searchDelete.setVisibility(View.GONE);
+                } else {
+                    searchDelete.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                search_name = tvContent.getText().toString();
+                if (TextUtils.isEmpty(search_name)) {
+                    workingLogAdapter.setNewData(workingLogList);
+                } else {
+                    searchList.clear();
+                    for (int i = 0; i < workingLogList.size(); i++) {
+                        if (workingLogList.get(i).getProject_name().contains(search_name)) {
+                            searchList.add(workingLogList.get(i));
+                        }
+                    }
+                    workingLogAdapter.setNewData(searchList);
+                }
+            }
+        });
+
     }
 
-    @OnClick({R.id.title_back, R.id.title_setting})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.search_delete})
     public void onViewClicked(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -190,6 +198,11 @@ public class ConstructionSideActivity extends BaseActivity {
                 intent = new Intent(this, WorkingLogDetailActivity.class);
                 intent.putExtra("logType", logType);
                 startActivityForResult(intent, 100);
+                break;
+            case R.id.search_delete:
+                searchDelete.setVisibility(View.GONE);
+                search_name = "";
+                tvContent.setText("");
                 break;
         }
     }
