@@ -20,7 +20,7 @@ public class BudgetAdapter extends BaseQuickAdapter<ProjectBoardBean, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, ProjectBoardBean item) {
-        helper.setText(R.id.tv_project_name, item.getProject_name())
-                .setText(R.id.tv_money, "¥" + item.getMoney());
+        helper.setText(R.id.tv_project_name, item.getName())
+                .setText(R.id.tv_money, "¥" + item.getTotal_money());
     }
 }

@@ -1257,6 +1257,9 @@ public interface ApiServise {
     @POST("eq/tools/history/saveBatchPOST")
     Observable<BaseResult> getToolReceive(@Body List<EqToolsReceiveBean> list);
 
+    //项目看板
+    @GET("temp/project/listGET")
+    Observable<BaseResult<List<ProjectBoardBean>>> getProjectBoardList(@Query("status") String status);
     //项目立项添加
     @Multipart
     @POST("temp/project/savePOST")
