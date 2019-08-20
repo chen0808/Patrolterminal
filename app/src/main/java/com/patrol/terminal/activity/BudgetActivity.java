@@ -15,15 +15,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.BudgetAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.ProjectBoardBean;
-import com.patrol.terminal.bean.ProjectBoardBean_Table;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 作者：陈飞
@@ -60,8 +64,6 @@ public class BudgetActivity extends BaseActivity {
     TextView tvBudgetEd;
     private double budgetIng = 0;
     private double budgetEd = 0;
-    private List<ProjectBoardBean> projectBoardBeans1;
-    private List<ProjectBoardBean> projectBoardBeans2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,61 +72,63 @@ public class BudgetActivity extends BaseActivity {
         ButterKnife.bind(this);
         titleName.setText("预算");
 
-        int type = getIntent().getIntExtra("type", 0);
-        switch (type) {
-            case 0:
-                projectBoardBeans1 = init1();
-                projectBoardBeans2 = init2();
-                break;
-            case 1:
-                llFinish.setVisibility(View.GONE);
-                projectBoardBeans1 = init1();
-                break;
-            case 2:
-                llBuilding.setVisibility(View.GONE);
-                projectBoardBeans2 = init2();
-                break;
+        String status = getIntent().getStringExtra("status");
+        initData(status);
+        if (status.equals("0")) {
+            llFinish.setVisibility(View.GONE);
+        } else if (status.equals("16")) {
+            llBuilding.setVisibility(View.GONE);
         }
-
-        tvProjectTotal.setText("项目总数:" + ((projectBoardBeans1 == null ? 0 : projectBoardBeans1.size()) + (projectBoardBeans2 == null ? 0 : projectBoardBeans2.size())));
-        tvBudgetTotal.setText("¥" + (budgetIng + budgetEd));
     }
 
+    private void initData(String status) {
+        BaseRequest.getInstance().getService()
+                .getProjectBoardList(status)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<ProjectBoardBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<ProjectBoardBean>> t) throws Exception {
+                        List<ProjectBoardBean> results = t.getResults();
+                        if (results != null && results.size() > 0) {
+                            setData(results);
+                        }
+                    }
 
-    private List<ProjectBoardBean> init1() {
-        List<ProjectBoardBean> projectBoardBeans1 = initData1();
-        for (int i = 0; i < projectBoardBeans1.size(); i++) {
-            budgetIng += projectBoardBeans1.get(i).getMoney();
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+    }
+
+    private void setData(List<ProjectBoardBean> results) {
+        List<ProjectBoardBean> buildingBean = new ArrayList<>();
+        List<ProjectBoardBean> finishBean = new ArrayList<>();
+        for (int i = 0; i < results.size(); i++) {
+            if (results.get(i).getStatus().equals("16")) {
+                budgetEd += results.get(i).getTotal_money();
+                finishBean.add(results.get(i));
+            } else {
+                budgetIng += results.get(i).getTotal_money();
+                buildingBean.add(results.get(i));
+            }
         }
         tvBudgetIng.setText("¥" + budgetIng);
         Log.d("tag", "budgetIng" + budgetIng);
+
+        tvBudgetEd.setText("¥" + budgetEd);
+
         rvBuilding.setLayoutManager(new LinearLayoutManager(this));
         rvBuilding.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        rvBuilding.setAdapter(new BudgetAdapter(R.layout.item_budget, projectBoardBeans1));
-        return projectBoardBeans1;
-    }
+        rvBuilding.setAdapter(new BudgetAdapter(R.layout.item_budget, buildingBean));
 
-    private List<ProjectBoardBean> init2() {
-        List<ProjectBoardBean> projectBoardBeans2 = initData2();
-        for (int i = 0; i < projectBoardBeans2.size(); i++) {
-            budgetEd += projectBoardBeans2.get(i).getMoney();
-        }
-        tvBudgetEd.setText("¥" + budgetEd);
-        Log.d("tag", "budgetEd" + budgetEd);
         rvFinish.setLayoutManager(new LinearLayoutManager(this));
         rvFinish.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        rvFinish.setAdapter(new BudgetAdapter(R.layout.item_budget, projectBoardBeans2));
-        return projectBoardBeans2;
-    }
+        rvFinish.setAdapter(new BudgetAdapter(R.layout.item_budget, finishBean));
 
-    private List<ProjectBoardBean> initData1() {
-        List<ProjectBoardBean> projectBoardBeans = SQLite.select().from(ProjectBoardBean.class).where(ProjectBoardBean_Table.id.lessThan(3)).queryList();
-        return projectBoardBeans;
-    }
-
-    private List<ProjectBoardBean> initData2() {
-        List<ProjectBoardBean> projectBoardBeans = SQLite.select().from(ProjectBoardBean.class).where(ProjectBoardBean_Table.id.greaterThan(2)).queryList();
-        return projectBoardBeans;
+        tvProjectTotal.setText("项目总数:" + (results == null ? 0 : results.size()));
+        tvBudgetTotal.setText("¥" + (budgetIng + budgetEd));
     }
 
     @OnClick({R.id.title_back, R.id.ll_building, R.id.ll_finish})

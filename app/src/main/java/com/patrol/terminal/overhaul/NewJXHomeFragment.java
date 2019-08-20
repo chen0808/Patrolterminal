@@ -17,23 +17,30 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.services.weather.LocalWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherForecastResult;
 import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.BudgetActivity;
 import com.patrol.terminal.adapter.GridViewAdapter5;
 import com.patrol.terminal.adapter.GridePagerAdapter;
 import com.patrol.terminal.base.BaseFragment;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.MapUserInfo;
+import com.patrol.terminal.bean.ProjectBoardBean;
 import com.patrol.terminal.utils.DateUatil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 //检修新首页
 public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnWeatherSearchListener, AMapLocationListener {
@@ -72,12 +79,24 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
     LinearLayout llIng;
     @BindView(R.id.jx_home_weather)
     TextView jxHomeWeather;
+    @BindView(R.id.tv_project_total)
+    TextView tvProjectTotal;
+    @BindView(R.id.tv_budget_total)
+    TextView tvBudgetTotal;
+    @BindView(R.id.tv_project_ed)
+    TextView tvProjectEd;
+    @BindView(R.id.tv_persent_ed)
+    TextView tvPersentEd;
+    @BindView(R.id.tv_project_ing)
+    TextView tvProjectIng;
+    @BindView(R.id.tv_persent_ing)
+    TextView tvPersentIng;
     private GridViewAdapter5 weekAdapter;
 
     private String[] names1 = new String[]{"项目看板", "形象进度", "里程碑", "质量检查", "施工日志", "工程简报", "工程周报", "安全检查"};
     private int[] img1 = new int[]{R.mipmap.jx_home_icon1, R.mipmap.jx_home_icon2, R.mipmap.jx_home_icon3, R.mipmap.jx_home_icon4, R.mipmap.jx_home_icon5, R.mipmap.jx_home_icon6, R.mipmap.jx_home_icon7, R.mipmap.jx_home_icon8};
-    private String[] names2 = new String[]{"项目立项","设计计划","电子公告", "内部新闻", "技术规范",};
-    private int[] img2 = new int[]{R.mipmap.jx_home_icon12,R.mipmap.jx_home_icon13,R.mipmap.jx_home_icon9, R.mipmap.jx_home_icon10, R.mipmap.jx_home_icon11};
+    private String[] names2 = new String[]{"项目立项", "设计计划", "电子公告", "内部新闻", "技术规范",};
+    private int[] img2 = new int[]{R.mipmap.jx_home_icon12, R.mipmap.jx_home_icon13, R.mipmap.jx_home_icon9, R.mipmap.jx_home_icon10, R.mipmap.jx_home_icon11};
     private List<List<MapUserInfo>> results = new ArrayList<>();
     private WeatherSearchQuery mquery;
     private WeatherSearch mweathersearch;
@@ -86,6 +105,7 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
     private String city = "武汉";
+    private double budgetTotal;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -128,6 +148,42 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
 
             }
         });
+
+        initProjectBoard();
+    }
+
+    private void initProjectBoard() {
+        BaseRequest.getInstance().getService()
+                .getProjectBoardList("")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<ProjectBoardBean>>(getActivity()) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<ProjectBoardBean>> t) throws Exception {
+                        List<ProjectBoardBean> results = t.getResults();
+                        if (results != null && results.size() > 0) {
+                            setData(results);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+
+                    }
+                });
+    }
+
+    private void setData(List<ProjectBoardBean> results) {
+        tvProjectTotal.setText("" + results.size());
+        for (int i = 0; i < results.size(); i++) {
+            budgetTotal += results.get(i).getTotal_money();
+        }
+        tvBudgetTotal.setText("" + budgetTotal / 10000.0);
+        tvProjectEd.setText("2");
+        int projectIng = results.size() - 2;
+        tvProjectIng.setText(String.valueOf(projectIng));
+        tvPersentEd.setText(2 * 100 / results.size() + "%");
+        tvPersentIng.setText(projectIng * 100 / results.size() + "%");
     }
 
     //獲取定位城市
@@ -228,6 +284,27 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
                         + amapLocation.getErrorCode() + ", errInfo:"
                         + amapLocation.getErrorInfo());
             }
+        }
+    }
+
+    @OnClick({R.id.ll_total, R.id.ll_ed, R.id.ll_ing})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ll_total:
+                Intent intent = new Intent(getActivity(), BudgetActivity.class);
+                intent.putExtra("status", "");
+                startActivity(intent);
+                break;
+            case R.id.ll_ing:
+                Intent intent2 = new Intent(getActivity(), BudgetActivity.class);
+                intent2.putExtra("status", "0");
+                startActivity(intent2);
+                break;
+            case R.id.ll_ed:
+                Intent intent1 = new Intent(getActivity(), BudgetActivity.class);
+                intent1.putExtra("status", "16");
+                startActivity(intent1);
+                break;
         }
     }
 }
