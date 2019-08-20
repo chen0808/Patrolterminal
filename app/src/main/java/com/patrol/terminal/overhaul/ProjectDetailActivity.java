@@ -1,6 +1,7 @@
 package com.patrol.terminal.overhaul;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.bean.CheckProjectServiceBean;
 import com.patrol.terminal.bean.CheckResultBean;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -48,11 +50,12 @@ public class ProjectDetailActivity extends BaseActivity {
     TextView checkItemTv;
     @BindView(R.id.check_result_rv)
     SwipeRecyclerView checkResultRv;
-    @BindView(R.id.rectify_people_tv)
-    TextView rectifyPeopleTv;
+    @BindView(R.id.state_tv)
+    TextView stateTv;
 
-    private List<CheckResultBean> mCheckResult = new ArrayList<>();
-    private AddCheckResultAdapter mAddCheckResultAdapter;
+    //private List<CheckResultBean> mCheckResult = new ArrayList<>();
+    private List<CheckProjectServiceBean.TempCheckResultListBean> checkResultList;
+    private ShowCheckResultAdapter mAddCheckResultAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,8 @@ public class ProjectDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
     }
+
+
 
     private void initView() {
         titleName.setText("安全查看");
@@ -73,8 +78,49 @@ public class ProjectDetailActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         checkResultRv.setLayoutManager(manager);
 
+        CheckProjectServiceBean checkProjectServiceBean = getIntent().getParcelableExtra("click_check_project_bean");
+        checkResultList = checkProjectServiceBean.getTempCheckResultList();
 
-        mAddCheckResultAdapter = new AddCheckResultAdapter(this, R.layout.show_check_result_item, mCheckResult, 1);
+        projectNameTv.setText(checkProjectServiceBean.getTemp_project_name());
+        switch (checkProjectServiceBean.getState_sign()) {
+            case "0":
+                stateTv.setText("通过");
+                break;
+
+            case "1":
+                stateTv.setText("正常");
+                break;
+
+            case "2":
+                stateTv.setText("待整改");
+                break;
+        }
+
+        String[] natureArray = getResources().getStringArray(R.array.safe_check_nature_array);
+        switch (checkProjectServiceBean.getType_sign()) {
+            case "0":
+                natureTv.setText(natureArray[0]);
+                break;
+
+            case "1":
+                natureTv.setText(natureArray[1]);
+                break;
+
+            case "2":
+                natureTv.setText(natureArray[2]);
+                break;
+
+            case "3":
+                natureTv.setText(natureArray[3]);
+                break;
+        }
+
+        dateTv.setText(checkProjectServiceBean.getTime());
+        checkPersonTv.setText(checkProjectServiceBean.getCheck_user_name());
+        checkItemTv.setText(checkProjectServiceBean.getCheck_project());
+
+        //从数据库获取检查结果  TODO
+        mAddCheckResultAdapter = new ShowCheckResultAdapter(this, R.layout.show_check_result_item, checkResultList);
         checkResultRv.setAdapter(mAddCheckResultAdapter);
 
     }

@@ -64,6 +64,7 @@ public class AddSafeCheckActivity extends BaseActivity {
     private View header;
     private View bottom;
     private AddCheckResultAdapter mAddCheckResultAdapter;
+
     private List<CheckResultBean> mCheckResult = new ArrayList<>();
     private boolean isNatureShow = false;
     private RadioGroup mNatureRg;
@@ -121,7 +122,7 @@ public class AddSafeCheckActivity extends BaseActivity {
         checkResultBean.setCheckPics(firstBitmapList);
         mCheckResult.add(checkResultBean);
 
-        mAddCheckResultAdapter = new AddCheckResultAdapter(this, R.layout.add_check_result_item, mCheckResult, 0);
+        mAddCheckResultAdapter = new AddCheckResultAdapter(this, R.layout.add_check_result_item, mCheckResult);
         checkResultRv.setAdapter(mAddCheckResultAdapter);
 
         ViewGroup parentViewGroup = (ViewGroup) header.getParent();
