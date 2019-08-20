@@ -190,10 +190,10 @@ public class WorkingLogDetailActivity extends BaseActivity {
             editOtherRemark.setText(workingLogBean.getOther_content());
 
             Constant.isEditStatus = true;
-            if (workingLogBean.getTempLogImgList() != null && workingLogBean.getTempLogImgList().size() > 0) {
+            if (workingLogBean.getTempImgList() != null && workingLogBean.getTempImgList().size() > 0) {
                 photoList.clear();
-                for (int i = 0; i < workingLogBean.getTempLogImgList().size(); i++) {
-                    String path = BaseUrl.BASE_URL + workingLogBean.getTempLogImgList().get(i).getFile_path() + workingLogBean.getTempLogImgList().get(i).getFilename();
+                for (int i = 0; i < workingLogBean.getTempImgList().size(); i++) {
+                    String path = BaseUrl.BASE_URL + workingLogBean.getTempImgList().get(i).getFile_path() + workingLogBean.getTempImgList().get(i).getFilename();
                     photoList.add(path);
                 }
                 photoAdapter.setAddStatus(false);
@@ -244,6 +244,7 @@ public class WorkingLogDetailActivity extends BaseActivity {
             titleSetting.setVisibility(View.GONE);
         } else {
             Constant.isEditStatus = false;
+            tvLogNum.setText(System.currentTimeMillis() + "");
             String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
             tvCompileDate.setText(time);
             tvOccurDate.setText(time);

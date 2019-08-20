@@ -20,7 +20,7 @@ public class InitiateProjectBean implements Serializable {
     private String start_time;
     private String end_time;
     private String content;
-    private List<FileBean> tempProjectImgList;
+    private List<FileBean> tempImgList;
 
     public String getName() {
         return name;
@@ -142,11 +142,11 @@ public class InitiateProjectBean implements Serializable {
         this.create_name = create_name;
     }
 
-    public List<FileBean> getTempProjectImgList() {
-        return tempProjectImgList;
+    public List<FileBean> getTempImgList() {
+        return tempImgList;
     }
 
-    public void setTempProjectImgList(List<FileBean> tempProjectImgList) {
-        this.tempProjectImgList = tempProjectImgList;
+    public void setTempImgList(List<FileBean> tempImgList) {
+        this.tempImgList = tempImgList;
     }
 }

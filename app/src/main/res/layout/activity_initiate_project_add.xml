@@ -91,16 +91,15 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
-                    <EditText
-                        android:id="@+id/edit_project_no"
+                    <TextView
+                        android:id="@+id/tv_project_no"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@null"
+                        android:gravity="center_vertical"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
                         android:hint="请输入项目编号"
                         />
                 </LinearLayout>

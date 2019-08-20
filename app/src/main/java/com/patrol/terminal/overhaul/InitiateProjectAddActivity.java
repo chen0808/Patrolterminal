@@ -69,24 +69,24 @@ public class InitiateProjectAddActivity extends BaseActivity {
     RelativeLayout titleSetting;
     @BindView(R.id.edit_name)
     EditText editName;
-    @BindView(R.id.edit_project_no)
-    EditText editProjectNo;
+    @BindView(R.id.tv_project_no)
+    TextView tvProjectNo;
     @BindView(R.id.edit_total_money)
     EditText editTotalMoney;
     @BindView(R.id.edit_address)
-    TextView editAddress;
+    EditText editAddress;
     @BindView(R.id.edit_detailed_address)
     EditText editDetailedAddress;
     @BindView(R.id.edit_dep_name)
-    TextView editDepName;
+    EditText editDepName;
     @BindView(R.id.edit_parent_project)
-    TextView editParentProject;
+    EditText editParentProject;
     @BindView(R.id.edit_model)
-    TextView editModel;
+    EditText editModel;
     @BindView(R.id.tv_status)
     TextView tvStatus;
     @BindView(R.id.edit_type_sign)
-    TextView editTypeSign;
+    EditText editTypeSign;
     @BindView(R.id.tv_start_time)
     TextView tvStartTime;
     @BindView(R.id.tv_end_time)
@@ -138,7 +138,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
 
         if(initiateProjectBean != null){
             editName.setText(initiateProjectBean.getName());
-            editProjectNo.setText(initiateProjectBean.getProject_no());
+            tvProjectNo.setText(initiateProjectBean.getProject_no());
 
             if(initiateProjectBean.getTotal_money() != null){
                 editTotalMoney.setText(initiateProjectBean.getTotal_money() + "");
@@ -164,10 +164,10 @@ public class InitiateProjectAddActivity extends BaseActivity {
             editContent.setText(initiateProjectBean.getContent());
 
             Constant.isEditStatus = true;
-            if (initiateProjectBean.getTempProjectImgList() != null && initiateProjectBean.getTempProjectImgList().size() > 0) {
+            if (initiateProjectBean.getTempImgList() != null && initiateProjectBean.getTempImgList().size() > 0) {
                 photoList.clear();
-                for (int i = 0; i < initiateProjectBean.getTempProjectImgList().size(); i++) {
-                    String path = BaseUrl.BASE_URL + initiateProjectBean.getTempProjectImgList().get(i).getFile_path() + initiateProjectBean.getTempProjectImgList().get(i).getFilename();
+                for (int i = 0; i < initiateProjectBean.getTempImgList().size(); i++) {
+                    String path = BaseUrl.BASE_URL + initiateProjectBean.getTempImgList().get(i).getFile_path() + initiateProjectBean.getTempImgList().get(i).getFilename();
                     photoList.add(path);
                 }
                 photoAdapter.setAddStatus(false);
@@ -177,7 +177,6 @@ public class InitiateProjectAddActivity extends BaseActivity {
             }
 
             editName.setEnabled(false);
-            editProjectNo.setEnabled(false);
             editTotalMoney.setEnabled(false);
             editAddress.setEnabled(false);
             editDetailedAddress.setEnabled(false);
@@ -191,7 +190,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
             editContent.setEnabled(false);
 
             editName.setHint("");
-            editProjectNo.setHint("");
+            tvProjectNo.setHint("");
             editTotalMoney.setHint("");
             editAddress.setHint("");
             editDetailedAddress.setHint("");
@@ -212,6 +211,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
             titleSetting.setVisibility(View.GONE);
         } else {
             Constant.isEditStatus = false;
+            tvProjectNo.setText(System.currentTimeMillis() + "");
             String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
             tvStartTime.setText(time);
             tvEndTime.setText(time);
@@ -222,7 +222,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
         ProgressDialog.show(this, false, "正在加载。。。。");
         params.clear();
         params.put("name", toRequestBody(editName.getText().toString()));
-        params.put("project_no", toRequestBody(editProjectNo.getText().toString()));
+        params.put("project_no", toRequestBody(tvProjectNo.getText().toString()));
         params.put("total_money", toRequestBody(editTotalMoney.getText().toString()));
         params.put("address", toRequestBody(editAddress.getText().toString()));
         params.put("detailed_address", toRequestBody(editDetailedAddress.getText().toString()));
@@ -290,7 +290,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
                     break;
                 }
 
-                if(TextUtils.isEmpty(editProjectNo.getText().toString())){
+                if(TextUtils.isEmpty(tvProjectNo.getText().toString())){
                     Utils.showToast("请输入项目编号");
                     break;
                 }

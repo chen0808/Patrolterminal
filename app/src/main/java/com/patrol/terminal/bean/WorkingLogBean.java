@@ -28,7 +28,7 @@ public class WorkingLogBean implements Serializable {
     private String contact_content;
     private String other_content;
     private String log_sign;
-    private List<FileBean> tempLogImgList;
+    private List<FileBean> tempImgList;
 
     public String getId() {
         return id;
@@ -214,11 +214,11 @@ public class WorkingLogBean implements Serializable {
         this.temperature_pm = temperature_pm;
     }
 
-    public List<FileBean> getTempLogImgList() {
-        return tempLogImgList;
+    public List<FileBean> getTempImgList() {
+        return tempImgList;
     }
 
-    public void setTempLogImgList(List<FileBean> tempLogImgList) {
-        this.tempLogImgList = tempLogImgList;
+    public void setTempImgList(List<FileBean> tempImgList) {
+        this.tempImgList = tempImgList;
     }
 }
