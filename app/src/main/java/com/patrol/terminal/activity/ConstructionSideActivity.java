@@ -24,6 +24,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.WorkingLogBean;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SpaceItemDecoration;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
@@ -153,6 +154,7 @@ public class ConstructionSideActivity extends BaseActivity {
             @Override
             public void onLoadMore() {
                 pageNum++;
+                getLogList(search_name);
             }
         });
 
@@ -221,6 +223,7 @@ public class ConstructionSideActivity extends BaseActivity {
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
                     }
                 });
     }

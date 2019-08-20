@@ -108,7 +108,7 @@ public class WorkingLogDetailActivity extends BaseActivity {
     GridView defectGridView;
 
     private int logType = 0;
-    private List<String> photoList = new ArrayList<>();
+    private ArrayList<String> photoList = new ArrayList<>();
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
     private String mSelectProjectId;
@@ -159,7 +159,12 @@ public class WorkingLogDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 position = i;
-                startCamera();
+                if(workingLogBean != null){
+                    viewPluImg(position);
+                } else {
+                    startCamera();
+                }
+
             }
         });
 
@@ -512,6 +517,15 @@ public class WorkingLogDetailActivity extends BaseActivity {
     private void startCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, Constant.DEFECT_REQUEST_CODE);
+    }
+
+    //查看大图
+    private void viewPluImg(int position) {
+        Intent intent = new Intent(this, PlusImageActivity.class);
+        intent.putStringArrayListExtra(Constant.IMG_LIST, photoList);
+        intent.putExtra("isDelPic", "0");
+        intent.putExtra(Constant.POSITION, position);
+        startActivityForResult(intent, Constant.REQUEST_CODE_MAIN);
     }
 
     public RequestBody toRequestBody(String value) {

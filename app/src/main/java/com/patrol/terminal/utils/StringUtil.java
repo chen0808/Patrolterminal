@@ -210,6 +210,45 @@ public class StringUtil {
         return "";
     }
 
+    //获取项目状态
+    public static String getProjectStatus(String status) {
+        switch (status) {
+            case "0":
+                return "项目前期";
+            case "1":
+                return "项目立项";
+            case "2":
+                return "设计管理";
+            case "3":
+                return "招标管理";
+            case "4":
+                return "合同管理";
+            case "5":
+                return "进度管理";
+            case "6":
+                return "前期";
+            case "7":
+                return "实施准备";
+            case "8":
+                return "在建";
+            case "9":
+                return "停缓期";
+            case "10":
+                return "验收";
+            case "11":
+                return "竣工";
+            case "12":
+                return "保内";
+            case "13":
+                return "保外";
+            case "14":
+                return "解除";
+            case "15":
+                return "完成";
+        }
+        return "";
+    }
+
     public static String getTypeSign(String sign) {
         String typeNmae = "";
         String[] split = sign.split(",");

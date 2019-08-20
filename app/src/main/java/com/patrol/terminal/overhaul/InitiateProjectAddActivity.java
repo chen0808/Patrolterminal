@@ -20,16 +20,20 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.PlusImageActivity;
 import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.CheckProjectBean;
+import com.patrol.terminal.bean.CheckProjectStatusBean;
 import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -73,16 +77,16 @@ public class InitiateProjectAddActivity extends BaseActivity {
     TextView editAddress;
     @BindView(R.id.edit_detailed_address)
     EditText editDetailedAddress;
-    @BindView(R.id.tv_dep_name)
-    TextView tvDepName;
-    @BindView(R.id.tv_parent_project)
-    TextView tvParentProject;
-    @BindView(R.id.tv_model)
-    TextView tvModel;
+    @BindView(R.id.edit_dep_name)
+    TextView editDepName;
+    @BindView(R.id.edit_parent_project)
+    TextView editParentProject;
+    @BindView(R.id.edit_model)
+    TextView editModel;
     @BindView(R.id.tv_status)
     TextView tvStatus;
-    @BindView(R.id.tv_type_sign)
-    TextView tvTypeSign;
+    @BindView(R.id.edit_type_sign)
+    TextView editTypeSign;
     @BindView(R.id.tv_start_time)
     TextView tvStartTime;
     @BindView(R.id.tv_end_time)
@@ -93,11 +97,12 @@ public class InitiateProjectAddActivity extends BaseActivity {
     GridView defectGridView;
 
     private int type = 0;
-    private List<String> photoList = new ArrayList<>();
+    private ArrayList<String> photoList = new ArrayList<>();
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
     private Map<String, RequestBody> params = new HashMap<>();
     private InitiateProjectBean initiateProjectBean;
+    private String mSelectProjectStatus;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,7 +128,11 @@ public class InitiateProjectAddActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 position = i;
-                startCamera();
+                if(initiateProjectBean != null){
+                    viewPluImg(position);
+                } else {
+                    startCamera();
+                }
             }
         });
 
@@ -139,11 +148,17 @@ public class InitiateProjectAddActivity extends BaseActivity {
 
             editAddress.setText(initiateProjectBean.getAddress());
             editDetailedAddress.setText(initiateProjectBean.getDetailed_address());
-            tvDepName.setText(initiateProjectBean.getDep_name());
-            tvParentProject.setText(initiateProjectBean.getParent_project());
-            tvModel.setText(initiateProjectBean.getModel());
-            tvStatus.setText(initiateProjectBean.getStatus());
-            tvTypeSign.setText(initiateProjectBean.getType_sign());
+            editDepName.setText(initiateProjectBean.getDep_name());
+            editParentProject.setText(initiateProjectBean.getParent_project());
+            editModel.setText(initiateProjectBean.getModel());
+
+            String status = initiateProjectBean.getStatus();
+            if(status == null){
+                status = "";
+            }
+            tvStatus.setText(StringUtil.getProjectStatus(status));
+
+            editTypeSign.setText(initiateProjectBean.getType_sign());
             tvStartTime.setText(initiateProjectBean.getStart_time());
             tvEndTime.setText(initiateProjectBean.getEnd_time());
             editContent.setText(initiateProjectBean.getContent());
@@ -166,11 +181,11 @@ public class InitiateProjectAddActivity extends BaseActivity {
             editTotalMoney.setEnabled(false);
             editAddress.setEnabled(false);
             editDetailedAddress.setEnabled(false);
-            tvDepName.setEnabled(false);
-            tvParentProject.setEnabled(false);
-            tvModel.setEnabled(false);
+            editDepName.setEnabled(false);
+            editParentProject.setEnabled(false);
+            editModel.setEnabled(false);
             tvStatus.setEnabled(false);
-            tvTypeSign.setEnabled(false);
+            editTypeSign.setEnabled(false);
             tvStartTime.setEnabled(false);
             tvEndTime.setEnabled(false);
             editContent.setEnabled(false);
@@ -181,17 +196,16 @@ public class InitiateProjectAddActivity extends BaseActivity {
             editAddress.setHint("");
             editDetailedAddress.setHint("");
             editContent.setHint("");
-            tvParentProject.setHint("");
-            tvModel.setHint("");
-            tvTypeSign.setHint("");
+            editDepName.setHint("");
+            editParentProject.setHint("");
+            tvStatus.setHint("");
+            editModel.setHint("");
+            editTypeSign.setHint("");
             tvStartTime.setHint("");
             tvEndTime.setHint("");
 
-            tvDepName.setCompoundDrawables(null, null, null, null);
-            tvParentProject.setCompoundDrawables(null, null, null, null);
-            tvModel.setCompoundDrawables(null, null, null, null);
+            editModel.setCompoundDrawables(null, null, null, null);
             tvStatus.setCompoundDrawables(null, null, null, null);
-            tvTypeSign.setCompoundDrawables(null, null, null, null);
             tvStartTime.setCompoundDrawables(null, null, null, null);
             tvEndTime.setCompoundDrawables(null, null, null, null);
 
@@ -209,11 +223,11 @@ public class InitiateProjectAddActivity extends BaseActivity {
         params.put("total_money", toRequestBody(editTotalMoney.getText().toString()));
         params.put("address", toRequestBody(editAddress.getText().toString()));
         params.put("detailed_address", toRequestBody(editDetailedAddress.getText().toString()));
-        params.put("dep_name", toRequestBody(tvDepName.getText().toString()));
-        params.put("parent_project", toRequestBody(tvParentProject.getText().toString()));
-        params.put("model", toRequestBody(tvModel.getText().toString()));
+        params.put("dep_name", toRequestBody(editDepName.getText().toString()));
+        params.put("parent_project", toRequestBody(editParentProject.getText().toString()));
+        params.put("model", toRequestBody(editModel.getText().toString()));
         params.put("status", toRequestBody(tvStatus.getText().toString()));
-        params.put("type_sign", toRequestBody(tvTypeSign.getText().toString()));
+        params.put("type_sign", toRequestBody(editTypeSign.getText().toString()));
         params.put("start_time", toRequestBody(tvStartTime.getText().toString()));
         params.put("end_time", toRequestBody(tvEndTime.getText().toString()));
         params.put("content", toRequestBody(editContent.getText().toString()));
@@ -236,6 +250,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
                         ProgressDialog.cancle();
                         if(t.getCode() == 1){
                             Utils.showToast("提交成功");
+                            setResult(RESULT_OK);
                             finish();
                         }
                     }
@@ -249,7 +264,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.title_back, R.id.title_setting, R.id.tv_start_time, R.id.tv_end_time})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.tv_start_time, R.id.tv_end_time, R.id.tv_status})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -260,6 +275,11 @@ public class InitiateProjectAddActivity extends BaseActivity {
                 break;
             case R.id.tv_end_time:
                 showDay(2);
+                break;
+            case R.id.tv_status:
+                Intent intent = new Intent();
+                intent.setClass(this, ProjectStatusSearchActivity.class);
+                startActivityForResult(intent, 1001);
                 break;
             case R.id.title_setting:
                 if(TextUtils.isEmpty(editName.getText().toString())){
@@ -272,8 +292,18 @@ public class InitiateProjectAddActivity extends BaseActivity {
                     break;
                 }
 
+                if(TextUtils.isEmpty(editTotalMoney.getText().toString())){
+                    Utils.showToast("请输入计划投资");
+                    break;
+                }
+
                 if(TextUtils.isEmpty(editAddress.getText().toString())){
                     Utils.showToast("请选择项目地点");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(tvStatus.getText().toString())){
+                    Utils.showToast("请选择项目状态");
                     break;
                 }
 
@@ -284,6 +314,16 @@ public class InitiateProjectAddActivity extends BaseActivity {
 
                 if(TextUtils.isEmpty(tvEndTime.getText().toString())){
                     Utils.showToast("请选择计划结束时间");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(editContent.getText().toString())){
+                    Utils.showToast("请输入工程概况");
+                    break;
+                }
+
+                if(photoList.size() == 0){
+                    Utils.showToast("请拍摄一张照片");
                     break;
                 }
 
@@ -346,6 +386,15 @@ public class InitiateProjectAddActivity extends BaseActivity {
         startActivityForResult(intent, Constant.DEFECT_REQUEST_CODE);
     }
 
+    //查看大图
+    private void viewPluImg(int position) {
+        Intent intent = new Intent(this, PlusImageActivity.class);
+        intent.putStringArrayListExtra(Constant.IMG_LIST, photoList);
+        intent.putExtra("isDelPic", "0");
+        intent.putExtra(Constant.POSITION, position);
+        startActivityForResult(intent, Constant.REQUEST_CODE_MAIN);
+    }
+
     public RequestBody toRequestBody(String value) {
         if (value != null) {
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
@@ -378,6 +427,16 @@ public class InitiateProjectAddActivity extends BaseActivity {
                         photoAdapter.notifyDataSetChanged();
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
+                    break;
+                case 1001:
+                    if (data != null) {
+                        CheckProjectStatusBean clickedCheckProjectStatusBean = (CheckProjectStatusBean)data.getSerializableExtra("search_project_status_item");
+                        if (clickedCheckProjectStatusBean != null) {
+                            mSelectProjectStatus = clickedCheckProjectStatusBean.getType();
+                            String name = clickedCheckProjectStatusBean.getName();
+                            tvStatus.setText(name);
+                        }
                     }
                     break;
             }

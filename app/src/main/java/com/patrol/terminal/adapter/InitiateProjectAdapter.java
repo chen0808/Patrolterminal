@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.overhaul.InitiateProjectAddActivity;
-import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.StringUtil;
 
 public class InitiateProjectAdapter extends BaseQuickAdapter<InitiateProjectBean, BaseViewHolder> {
     private int logType;
@@ -38,12 +38,10 @@ public class InitiateProjectAdapter extends BaseQuickAdapter<InitiateProjectBean
                 .setText(R.id.tv_create_name, item.getCreate_name())
                 .setText(R.id.tv_time, item.getStart_time());
 
-//        if (item.getStatus().equals("1")){
-//            viewHolder.setText(R.id.tv_status, "施工阶段");
-//        } else if (item.getStatus().equals("2")){
-//            viewHolder.setText(R.id.tv_status, "招采与建设准备阶段");
-//        } else if (item.getStatus().equals("3")){
-//            viewHolder.setText(R.id.tv_status, "竣工验收阶段");
-//        }
+        String status = item.getStatus();
+        if(status == null){
+            status = "";
+        }
+        viewHolder.setText(R.id.tv_status, StringUtil.getProjectStatus(status));
     }
 }

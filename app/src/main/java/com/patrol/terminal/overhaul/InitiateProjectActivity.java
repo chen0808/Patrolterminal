@@ -138,7 +138,7 @@ public class InitiateProjectActivity extends BaseActivity {
             case R.id.title_setting:
                 intent = new Intent(this, InitiateProjectAddActivity.class);
                 intent.putExtra("logType", logType);
-                startActivity(intent);
+                startActivityForResult(intent, 100);
                 break;
         }
     }
@@ -187,7 +187,10 @@ public class InitiateProjectActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == Constant.REQUEST_CODE_ADDRESS_BOOK) {
+            switch (requestCode) {
+                case 100:
+                    getProjectList(search_name);
+                    break;
             }
         }
     }
