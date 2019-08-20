@@ -244,6 +244,9 @@ public class WorkingLogDetailActivity extends BaseActivity {
             titleSetting.setVisibility(View.GONE);
         } else {
             Constant.isEditStatus = false;
+            String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+            tvCompileDate.setText(time);
+            tvOccurDate.setText(time);
         }
 
 //        if(localWorkingLogBean != null){

@@ -212,6 +212,9 @@ public class InitiateProjectAddActivity extends BaseActivity {
             titleSetting.setVisibility(View.GONE);
         } else {
             Constant.isEditStatus = false;
+            String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+            tvStartTime.setText(time);
+            tvEndTime.setText(time);
         }
     }
 

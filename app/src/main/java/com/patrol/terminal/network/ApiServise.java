@@ -1278,4 +1278,8 @@ public interface ApiServise {
     //获取施工日志列表
     @GET("temp/log/pdaPageGET")
     Observable<BaseResult<List<WorkingLogBean>>> getLogList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name,  @Query("log_sign") String log_sign);
+
+    //施工日志删除
+    @POST("temp/log/deletePOST")
+    Observable<BaseResult> deleteLog(@Query("id") String id);
 }

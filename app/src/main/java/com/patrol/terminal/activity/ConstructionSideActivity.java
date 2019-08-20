@@ -138,9 +138,7 @@ public class ConstructionSideActivity extends BaseActivity {
                 // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
                 menuBridge.closeMenu();
 
-//                workingLogList.get(adapterPosition).delete();
-                workingLogList.remove(adapterPosition);
-                workingLogAdapter.setNewData(workingLogList);
+                deleteLog(workingLogList.get(adapterPosition).getId(), adapterPosition);
             }
         };
 
@@ -196,7 +194,7 @@ public class ConstructionSideActivity extends BaseActivity {
         getLogList(search_name);
     }
 
-    //获取项目列表
+    //获取施工日志列表
     public void getLogList(String search_name) {
         ProgressDialog.show(mContext, true, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
@@ -217,6 +215,31 @@ public class ConstructionSideActivity extends BaseActivity {
                             workingLogList.clear();
                             workingLogList.addAll(result);
                             setDataToList(result);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
+                    }
+                });
+    }
+
+    //删除施工日志
+    public void deleteLog(String id, int position) {
+        ProgressDialog.show(mContext, true, "正在加载中。。。。");
+        BaseRequest.getInstance().getService()
+                .deleteLog(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.isSuccess()) {
+                            workingLogList.remove(position);
+                            workingLogAdapter.setNewData(workingLogList);
                         }
                     }
 
