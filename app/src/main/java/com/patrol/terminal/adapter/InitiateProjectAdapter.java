@@ -11,27 +11,36 @@ import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.overhaul.InitiateProjectAddActivity;
 import com.patrol.terminal.utils.StringUtil;
 
+import java.util.List;
+
 public class InitiateProjectAdapter extends BaseQuickAdapter<InitiateProjectBean, BaseViewHolder> {
-    private int logType;
+    private int logType=-1;
 
     public InitiateProjectAdapter(int layoutResId, int logType) {
         super(layoutResId);
         this.logType = logType;
     }
 
+    public InitiateProjectAdapter(int item_initiate_project, List<InitiateProjectBean> initiateProjectList) {
+        super(item_initiate_project, initiateProjectList);
+    }
+
     @Override
     protected void convert(BaseViewHolder viewHolder, InitiateProjectBean item) {
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, InitiateProjectAddActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable("InitiateProjectBean", item);
-                bundle.putInt("type", 1);
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);
-            }
-        });
+        if (logType!=-1){
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, InitiateProjectAddActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("InitiateProjectBean", item);
+                    bundle.putInt("type", 1);
+                    intent.putExtras(bundle);
+                    mContext.startActivity(intent);
+                }
+            });
+        }
+
 
         viewHolder.setText(R.id.tv_project_name, item.getName())
                 .setText(R.id.tv_code, item.getProject_no())

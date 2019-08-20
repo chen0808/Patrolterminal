@@ -25,7 +25,9 @@ import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GridViewAdapter2;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.GraphicProgressBean;
+import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.bean.PatrolLevel2;
+import com.patrol.terminal.bean.ProjectBoardBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
@@ -38,6 +40,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,7 +96,7 @@ public class AddGraphicProgressActivity extends BaseActivity {
         titleName.setText("添加形象进度");
         createName.setText(SPUtil.getUserName(this));
         createTime.setText(DateUatil.getDate(new Date(System.currentTimeMillis())));
-        belongPlanName.setText("兰州电网施工项目");
+
         initGridView ();
     }
     private void initGridView (){
@@ -153,11 +156,15 @@ public class AddGraphicProgressActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
+                break;
             case R.id.title_setting:
                 String planName = belongPlanName.getText().toString();
                 String create_time = createTime.getText().toString();
                 String content = addGraphicGrogressContent.getText().toString();
-
+                if ("".equals(planName)||"请选择".equals(planName)){
+                    Toast.makeText(this,"请选择项目",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String pics="";
                 for (int i = 0; i < mPicList.size(); i++) {
                     if (i==0){
@@ -179,6 +186,9 @@ public class AddGraphicProgressActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.belong_plan_rl:
+                Intent intent=new Intent();
+                intent.setClass(this,ProjectListActivity.class);
+                startActivityForResult(intent,247);
                 break;
         }
     }
@@ -199,6 +209,9 @@ public class AddGraphicProgressActivity extends BaseActivity {
                 e.printStackTrace();
             }
 
+        }else if (requestCode== 247&&resultCode==RESULT_OK){
+            InitiateProjectBean bean = (InitiateProjectBean) data.getSerializableExtra("bean");
+            belongPlanName.setText(bean.getName());
         }
     }
     //查看大图
