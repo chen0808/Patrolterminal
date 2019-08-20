@@ -25,6 +25,7 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
@@ -68,8 +69,8 @@ public class InitiateProjectAddActivity extends BaseActivity {
     EditText editProjectNo;
     @BindView(R.id.edit_total_money)
     EditText editTotalMoney;
-    @BindView(R.id.tv_address)
-    TextView tvAddress;
+    @BindView(R.id.edit_address)
+    TextView editAddress;
     @BindView(R.id.edit_detailed_address)
     EditText editDetailedAddress;
     @BindView(R.id.tv_dep_name)
@@ -136,7 +137,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
                 editTotalMoney.setText("");
             }
 
-            tvAddress.setText(initiateProjectBean.getAddress());
+            editAddress.setText(initiateProjectBean.getAddress());
             editDetailedAddress.setText(initiateProjectBean.getDetailed_address());
             tvDepName.setText(initiateProjectBean.getDep_name());
             tvParentProject.setText(initiateProjectBean.getParent_project());
@@ -148,8 +149,12 @@ public class InitiateProjectAddActivity extends BaseActivity {
             editContent.setText(initiateProjectBean.getContent());
 
             Constant.isEditStatus = true;
-            if(initiateProjectBean.getTempProjectImgList() != null){
-                photoList.addAll(initiateProjectBean.getTempProjectImgList());
+            if (initiateProjectBean.getTempProjectImgList() != null && initiateProjectBean.getTempProjectImgList().size() > 0) {
+                photoList.clear();
+                for (int i = 0; i < initiateProjectBean.getTempProjectImgList().size(); i++) {
+                    String path = BaseUrl.BASE_URL + initiateProjectBean.getTempProjectImgList().get(i).getFile_path() + initiateProjectBean.getTempProjectImgList().get(i).getFilename();
+                    photoList.add(path);
+                }
                 photoAdapter.setAddStatus(false);
                 photoAdapter.notifyDataSetChanged();
             } else {
@@ -159,7 +164,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
             editName.setEnabled(false);
             editProjectNo.setEnabled(false);
             editTotalMoney.setEnabled(false);
-            tvAddress.setEnabled(false);
+            editAddress.setEnabled(false);
             editDetailedAddress.setEnabled(false);
             tvDepName.setEnabled(false);
             tvParentProject.setEnabled(false);
@@ -173,6 +178,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
             editName.setHint("");
             editProjectNo.setHint("");
             editTotalMoney.setHint("");
+            editAddress.setHint("");
             editDetailedAddress.setHint("");
             editContent.setHint("");
             tvParentProject.setHint("");
@@ -181,7 +187,6 @@ public class InitiateProjectAddActivity extends BaseActivity {
             tvStartTime.setHint("");
             tvEndTime.setHint("");
 
-            tvAddress.setCompoundDrawables(null, null, null, null);
             tvDepName.setCompoundDrawables(null, null, null, null);
             tvParentProject.setCompoundDrawables(null, null, null, null);
             tvModel.setCompoundDrawables(null, null, null, null);
@@ -202,7 +207,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
         params.put("name", toRequestBody(editName.getText().toString()));
         params.put("project_no", toRequestBody(editProjectNo.getText().toString()));
         params.put("total_money", toRequestBody(editTotalMoney.getText().toString()));
-        params.put("address", toRequestBody(tvAddress.getText().toString()));
+        params.put("address", toRequestBody(editAddress.getText().toString()));
         params.put("detailed_address", toRequestBody(editDetailedAddress.getText().toString()));
         params.put("dep_name", toRequestBody(tvDepName.getText().toString()));
         params.put("parent_project", toRequestBody(tvParentProject.getText().toString()));
@@ -216,7 +221,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
             if(!photoList.get(i).equals("")){
                 File file = new File(photoList.get(i));
                 RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                params.put("defect_file\"; filename=\"" + i + ".jpg", requestFile);
+                params.put("files\"; filename=\"" + i + ".jpg", requestFile);
             }
         }
 
@@ -244,7 +249,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.title_back, R.id.tv_start_time, R.id.tv_end_time})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.tv_start_time, R.id.tv_end_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -267,7 +272,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
                     break;
                 }
 
-                if(TextUtils.isEmpty(tvAddress.getText().toString())){
+                if(TextUtils.isEmpty(editAddress.getText().toString())){
                     Utils.showToast("请选择项目地点");
                     break;
                 }

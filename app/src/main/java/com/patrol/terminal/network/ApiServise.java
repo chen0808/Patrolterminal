@@ -1260,6 +1260,7 @@ public interface ApiServise {
     //项目看板
     @GET("temp/project/listGET")
     Observable<BaseResult<List<ProjectBoardBean>>> getProjectBoardList(@Query("status") String status);
+
     //项目立项添加
     @Multipart
     @POST("temp/project/savePOST")
@@ -1268,4 +1269,13 @@ public interface ApiServise {
     //获取项目列表
     @GET("temp/project/pdaPageGET")
     Observable<BaseResult<List<InitiateProjectBean>>> getProjectList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
+
+    //施工日志添加
+    @Multipart
+    @POST("temp/log/savePOST")
+    Observable<BaseResult> logSavePOST(@PartMap Map<String, RequestBody> params);
+
+    //获取施工日志列表
+    @GET("temp/log/pdaPageGET")
+    Observable<BaseResult<List<WorkingLogBean>>> getLogList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name,  @Query("log_sign") String log_sign);
 }

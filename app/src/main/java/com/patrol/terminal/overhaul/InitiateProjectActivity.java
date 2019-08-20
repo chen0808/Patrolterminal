@@ -3,6 +3,7 @@ package com.patrol.terminal.overhaul;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,11 +18,11 @@ import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.DefectFragmentBean;
 import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SpaceItemDecoration;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -80,32 +81,32 @@ public class InitiateProjectActivity extends BaseActivity {
         String userName = SPUtil.getUserName(this);
         String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
 
-        InitiateProjectBean initiateProjectBean = new InitiateProjectBean();
-        initiateProjectBean.setName("定期巡视");
-        initiateProjectBean.setCreate_name(userName);
-        initiateProjectBean.setProject_no("378529");
-        initiateProjectBean.setContent("杆塔倾斜");
-        initiateProjectBean.setStart_time(time);
-        initiateProjectBean.setStatus(1+"");
-        initiateProjectList.add(initiateProjectBean);
-
-        initiateProjectBean = new InitiateProjectBean();
-        initiateProjectBean.setName("绝缘子检测");
-        initiateProjectBean.setCreate_name(userName);
-        initiateProjectBean.setProject_no("378457");
-        initiateProjectBean.setContent("正常");
-        initiateProjectBean.setStart_time(time);
-        initiateProjectBean.setStatus(2 + "");
-        initiateProjectList.add(initiateProjectBean);
-
-        initiateProjectBean = new InitiateProjectBean();
-        initiateProjectBean.setName("电阻检测");
-        initiateProjectBean.setCreate_name(userName);
-        initiateProjectBean.setProject_no("378555");
-        initiateProjectBean.setContent("需要更换");
-        initiateProjectBean.setStart_time(time);
-        initiateProjectBean.setStatus(3 + "");
-        initiateProjectList.add(initiateProjectBean);
+//        InitiateProjectBean initiateProjectBean = new InitiateProjectBean();
+//        initiateProjectBean.setName("定期巡视");
+//        initiateProjectBean.setCreate_name(userName);
+//        initiateProjectBean.setProject_no("378529");
+//        initiateProjectBean.setContent("杆塔倾斜");
+//        initiateProjectBean.setStart_time(time);
+//        initiateProjectBean.setStatus(1+"");
+//        initiateProjectList.add(initiateProjectBean);
+//
+//        initiateProjectBean = new InitiateProjectBean();
+//        initiateProjectBean.setName("绝缘子检测");
+//        initiateProjectBean.setCreate_name(userName);
+//        initiateProjectBean.setProject_no("378457");
+//        initiateProjectBean.setContent("正常");
+//        initiateProjectBean.setStart_time(time);
+//        initiateProjectBean.setStatus(2 + "");
+//        initiateProjectList.add(initiateProjectBean);
+//
+//        initiateProjectBean = new InitiateProjectBean();
+//        initiateProjectBean.setName("电阻检测");
+//        initiateProjectBean.setCreate_name(userName);
+//        initiateProjectBean.setProject_no("378555");
+//        initiateProjectBean.setContent("需要更换");
+//        initiateProjectBean.setStart_time(time);
+//        initiateProjectBean.setStatus(3 + "");
+//        initiateProjectList.add(initiateProjectBean);
 
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         planRv.setLayoutManager(manager);
@@ -122,7 +123,9 @@ public class InitiateProjectActivity extends BaseActivity {
             }
         });
 
-        initiateProjectAdapter.setNewData(initiateProjectList);
+//        initiateProjectAdapter.setNewData(initiateProjectList);
+
+        getProjectList(search_name);
     }
 
     @OnClick({R.id.title_back, R.id.title_setting})
@@ -167,6 +170,7 @@ public class InitiateProjectActivity extends BaseActivity {
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
                         ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
                     }
                 });
     }

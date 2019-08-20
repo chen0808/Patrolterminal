@@ -38,12 +38,12 @@ public class InitiateProjectAdapter extends BaseQuickAdapter<InitiateProjectBean
                 .setText(R.id.tv_create_name, item.getCreate_name())
                 .setText(R.id.tv_time, item.getStart_time());
 
-        if (item.getStatus().equals("1")){
-            viewHolder.setText(R.id.tv_status, "施工阶段");
-        } else if (item.getStatus().equals("2")){
-            viewHolder.setText(R.id.tv_status, "招采与建设准备阶段");
-        } else if (item.getStatus().equals("3")){
-            viewHolder.setText(R.id.tv_status, "竣工验收阶段");
-        }
+//        if (item.getStatus().equals("1")){
+//            viewHolder.setText(R.id.tv_status, "施工阶段");
+//        } else if (item.getStatus().equals("2")){
+//            viewHolder.setText(R.id.tv_status, "招采与建设准备阶段");
+//        } else if (item.getStatus().equals("3")){
+//            viewHolder.setText(R.id.tv_status, "竣工验收阶段");
+//        }
     }
 }

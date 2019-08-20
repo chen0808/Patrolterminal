@@ -176,16 +176,17 @@
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_address"
+                <EditText
+                    android:id="@+id/edit_address"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@null"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
                     android:textColor="@color/black"
-                    android:drawableRight="@mipmap/next"
+                    android:hint="请输入项目地点"
                     />
 
             </LinearLayout>
