@@ -73,15 +73,15 @@ public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, Bas
                 switch (checkedId) {
                     case R.id.check_result_ok_rb:
                         viewHolder.setText(R.id.check_result_tv, "通过");
-                        item.setCheckResult(0);
+                        item.setCheckResult(1);
                         break;
                     case R.id.check_result_verbal_warning_rb:
                         viewHolder.setText(R.id.check_result_tv, "口头警告");
-                        item.setCheckResult(1);
+                        item.setCheckResult(2);
                         break;
                     case R.id.check_result_written_corrections_rb:
                         viewHolder.setText(R.id.check_result_tv, "书面整改");
-                        item.setCheckResult(2);
+                        item.setCheckResult(3);
                         break;
                 }
             }

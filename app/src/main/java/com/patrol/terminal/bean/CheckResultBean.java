@@ -12,7 +12,7 @@ import java.util.List;
 
 public class CheckResultBean extends BaseModel{
     private long checkResultId;
-    private int checkResult;   //0:正常   1:通过   2:待整改
+    private int checkResult;
     private String checkContent;
     private List<PictureInfo> checkPics;
 

@@ -1261,6 +1261,9 @@ public interface ApiServise {
     @GET("temp/check/pdaPageGET")
     Observable<BaseResult<List<CheckProjectServiceBean>>> getProjectList(@Query("page_num") String page_num, @Query("page_size") String page_size, @Query("name") String name);
 
+    //检修添加项目信息项目列表
+    @POST("temp/check/savePOST")
+    Observable<BaseResult> addProjectInfo(@PartMap Map<String, RequestBody> params);
 
     //项目看板
     @GET("temp/project/listGET")

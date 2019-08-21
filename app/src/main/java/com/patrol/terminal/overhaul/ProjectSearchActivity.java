@@ -84,19 +84,7 @@ public class ProjectSearchActivity extends BaseActivity implements TextWatcher {
                     protected void onSuccees(BaseResult<List<CheckProjectServiceBean>> t) throws Exception {
                         if (t.isSuccess()) {
                             mCheckProject = t.getResults();
-                            mCheckProjectAdapter = new CheckProjectAdapter(R.layout.project_search_item, mCheckProject, 1);
-                            projectRv.setAdapter(mCheckProjectAdapter);
-
-                            mCheckProjectAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                                    CheckProjectBean clickedCheckProjectBean = (CheckProjectBean) adapter.getItem(position);
-                                    Intent intent = new Intent();
-                                    intent.putExtra("search_project_item", clickedCheckProjectBean);
-                                    setResult(RESULT_OK, intent);
-                                    finish();
-                                }
-                            });
+                            mCheckProjectAdapter.setNewData(mCheckProject);
                         }
                     }
 
@@ -118,35 +106,19 @@ public class ProjectSearchActivity extends BaseActivity implements TextWatcher {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         projectRv.setLayoutManager(manager);
 
-//        CheckProjectBean checkProjectBean = new CheckProjectBean();
-//        checkProjectBean.setProject_id("0");
-//        checkProjectBean.setName("综合调控中心工程");
-//        checkProjectBean.setContent("杆塔倾斜");
-//        checkProjectBean.setCreate_person_name("创建人:张三");
-//        checkProjectBean.setProject_result_status(0);
-//        checkProjectBean.setTime("2019-04-12 14:59");
-//        mCheckProject.add(checkProjectBean);
-//
-//        CheckProjectBean checkProjectBean1 = new CheckProjectBean();
-//        checkProjectBean1.setProject_id("1");
-//        checkProjectBean1.setName("综合调控中心工程111");
-//        checkProjectBean1.setContent("杆塔倾斜");
-//        checkProjectBean1.setCreate_person_name("创建人:张三");
-//        checkProjectBean1.setProject_result_status(1);
-//        checkProjectBean1.setTime("2019-04-12 14:59");
-//        mCheckProject.add(checkProjectBean1);
-//
-//        CheckProjectBean checkProjectBean2 = new CheckProjectBean();
-//        checkProjectBean2.setProject_id("2");
-//        checkProjectBean2.setName("丽水盆地");
-//        checkProjectBean2.setContent("杆塔倾斜");
-//        checkProjectBean2.setCreate_person_name("创建人:张三");
-//        checkProjectBean2.setProject_result_status(2);
-//        checkProjectBean2.setTime("2019-04-12 14:59");
-//        mCheckProject.add(checkProjectBean2);
+        mCheckProjectAdapter = new CheckProjectAdapter(R.layout.project_search_item, mCheckProject, 1);
+        projectRv.setAdapter(mCheckProjectAdapter);
 
-
-
+        mCheckProjectAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CheckProjectServiceBean clickedCheckProjectBean = (CheckProjectServiceBean) adapter.getItem(position);
+                Intent intent = new Intent();
+                intent.putExtra("search_project_item", clickedCheckProjectBean);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
 
         projectSearchEt.addTextChangedListener(this);
 

@@ -23,7 +23,7 @@ public class CheckProjectServiceBean implements Parcelable {
     private String id;
     private String temp_project_id;
     private String temp_project_name;
-    private String type_sign;
+    private String type_sign;  //1,2,3,4
     private String time;
     private String check_user_name;
     private String check_project;

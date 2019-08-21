@@ -3,6 +3,7 @@ package com.patrol.terminal.overhaul;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,29 +23,43 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.CheckProjectBean;
+import com.patrol.terminal.bean.CheckProjectServiceBean;
 import com.patrol.terminal.bean.CheckResultBean;
 import com.patrol.terminal.bean.UserBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
+/*新增安全检查*/
 public class AddSafeCheckActivity extends BaseActivity {
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -74,17 +89,55 @@ public class AddSafeCheckActivity extends BaseActivity {
     private EditText mCheckItemEt;
     private long mTime;
 
-    private String mSelectProjectId;
-    private int mSelectNatureType = 0;
-    private String mSelectPersonId;
+    private String mSelectProjectId;   //选中的项目ID
+    private String mSelectProjectName;
+    private String mSelectNatureType = "0";
+    private String mSelectPersonId;   //选择人人物ID
+    private String mSelectPersonName;
+
+//    private String[] mProjectNames;
+//    private String[] mProjectIds;
+
+    private Map<String, RequestBody> params = new HashMap<>();
+
+    private HashMap<Long,List<String>> mPhotoMap =new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_safe_check_activity);
         ButterKnife.bind(this);
+        //initData();
         initView();
     }
+
+//    private void initData() {
+//        BaseRequest.getInstance().getService()
+//                .getProjectList("0", "0", "")
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<List<CheckProjectServiceBean>>(this) {
+//                    @Override
+//                    protected void onSuccees(BaseResult<List<CheckProjectServiceBean>> t) throws Exception {
+//                        if (t.isSuccess()) {
+//                            List<CheckProjectServiceBean> mProjectBeans = t.getResults();
+//                            for (int i = 0; i < mProjectBeans.size(); i++) {
+//                                String projectId = mProjectBeans.get(i).getTemp_project_id();
+//                                String projectName = mProjectBeans.get(i).getTemp_project_name();
+//
+//                                mProjectIds[i] = projectId;
+//                                mProjectNames[i] = projectName;
+//
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+//                        ProgressDialog.cancle();
+//                    }
+//                });
+//    }
 
     private void initView() {
         titleName.setText("新增安全检查");
@@ -102,6 +155,8 @@ public class AddSafeCheckActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(AddSafeCheckActivity.this, ProjectSearchActivity.class);
+//                intent.putExtra("project_ids", mProjectIds);
+//                intent.putExtra("project_names", mProjectNames);
                 startActivityForResult(intent, 1001);
             }
         });
@@ -116,7 +171,7 @@ public class AddSafeCheckActivity extends BaseActivity {
         //默认有一条数据供填写
         CheckResultBean checkResultBean = new CheckResultBean();
         checkResultBean.setCheckResultId(System.currentTimeMillis());
-        checkResultBean.setCheckResult(0);
+        checkResultBean.setCheckResult(1);
         checkResultBean.setCheckContent(null);
         List<CheckResultBean.PictureInfo> firstBitmapList = new ArrayList<>();
         checkResultBean.setCheckPics(firstBitmapList);
@@ -147,22 +202,22 @@ public class AddSafeCheckActivity extends BaseActivity {
                 switch (checkedId) {
                     case R.id.safe_construction_rb:
                         natureContentTv.setText(natureArray[0]);
-                        mSelectNatureType = 1;
+                        mSelectNatureType = "1";
                         break;
 
                     case R.id.safe_education_rb:
                         natureContentTv.setText(natureArray[1]);
-                        mSelectNatureType = 2;
+                        mSelectNatureType = "2";
                         break;
 
                     case R.id.financial_audit_rb:
                         natureContentTv.setText(natureArray[2]);
-                        mSelectNatureType = 3;
+                        mSelectNatureType = "3";
                         break;
 
                     case R.id.other_rb:
                         natureContentTv.setText(natureArray[3]);
-                        mSelectNatureType = 4;
+                        mSelectNatureType = "4";
                         break;
                 }
             }
@@ -189,7 +244,7 @@ public class AddSafeCheckActivity extends BaseActivity {
                 //添加一条数据供填写
                 CheckResultBean checkResultBean = new CheckResultBean();
                 checkResultBean.setCheckResultId(System.currentTimeMillis());
-                checkResultBean.setCheckResult(0);
+                checkResultBean.setCheckResult(1);
                 checkResultBean.setCheckContent(null);
                 List<CheckResultBean.PictureInfo> addBitmapList = new ArrayList<>();
                 checkResultBean.setCheckPics(addBitmapList);
@@ -230,11 +285,11 @@ public class AddSafeCheckActivity extends BaseActivity {
         switch (requestCode) {
             case 1001:
                 if (data != null) {
-                    CheckProjectBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                    CheckProjectServiceBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
-                        mSelectProjectId = clickedCheckProjectBean.getProject_id();   //备用  TODO
-                        String name = clickedCheckProjectBean.getName();
-                        mProjectContentTv.setText(name);
+                        mSelectProjectId = clickedCheckProjectBean.getTemp_project_id();   //备用  TODO
+                        mSelectProjectName = clickedCheckProjectBean.getTemp_project_name();
+                        mProjectContentTv.setText(mSelectProjectName);
                     }
                 }
                 break;
@@ -244,18 +299,24 @@ public class AddSafeCheckActivity extends BaseActivity {
                     UserBean clickedUserBean = data.getParcelableExtra("search_user_item");
                     if (clickedUserBean != null) {
                         mSelectPersonId = clickedUserBean.getId();   //备用  TODO
-                        String name = clickedUserBean.getName();
-                        mCheckPersonContentTv.setText(name);
+                        mSelectPersonName = clickedUserBean.getName();
+                        mCheckPersonContentTv.setText(mSelectPersonName);
                     }
                 }
                 break;
 
             case 1003:   //  照相机
+               List<String> list= mPhotoMap.get(Constant.checkResultId);
+               if (list==null){
+                   list=new ArrayList<>();
+                   mPhotoMap.put(Constant.checkResultId,list);
+               }
                 Log.d("TAG", "success");
                 Bundle bundle = data.getExtras();
                 Bitmap bitmap = (Bitmap) bundle.get("data");
-//                String path = Environment.getExternalStorageDirectory().getPath()
-//                        + "/MyPhoto/" + Constant.CHECK_RESULT + "_" + Constant.checkResultId + "_" +  + ".jpg";
+                String path = Environment.getExternalStorageDirectory().getPath()
+                        + "/MyPhoto/" + Constant.CHECK_RESULT + "_" + Constant.checkResultId + "_" + System.currentTimeMillis() + ".jpg";
+                list.add(path);
 
                 for (int i = 0; i < mCheckResult.size(); i++) {
                     long checkResultId = mCheckResult.get(i).getCheckResultId();
@@ -304,13 +365,13 @@ public class AddSafeCheckActivity extends BaseActivity {
                 break;
             case R.id.title_setting:
                 if (TextUtils.isEmpty(mSelectProjectId) || TextUtils.isEmpty(mSelectPersonId)
-                        || TextUtils.isEmpty(mCheckItemEt.getText().toString().trim()) || mSelectNatureType == 0) {
+                        || TextUtils.isEmpty(mCheckItemEt.getText().toString().trim()) || mSelectNatureType.equals("0")) {
                     Toast.makeText(AddSafeCheckActivity.this, "请填写完必填选项!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //保存到本地数据库
 
-                finish();
+                addProjectInfo();
                 break;
 
         }
@@ -343,5 +404,97 @@ public class AddSafeCheckActivity extends BaseActivity {
         Utils.hideClickStatus(this);
         pvTime.show();
     }
+
+  /*  private void addProjectInfo() {
+        CheckProjectServiceBean checkProjectServiceBean = new CheckProjectServiceBean();
+        checkProjectServiceBean.setTemp_project_id(mSelectProjectId);
+        checkProjectServiceBean.setTemp_project_name(mSelectProjectName);
+        checkProjectServiceBean.setType_sign(mSelectNatureType);
+        checkProjectServiceBean.setTime(DateUatil.getMinTime(mTime));
+        checkProjectServiceBean.setCheck_user_name(mSelectPersonName);
+        checkProjectServiceBean.setCheck_project(mCheckItemEt.getText().toString());
+
+        List<CheckProjectServiceBean.TempCheckResultListBean> tempResultList = new ArrayList<>();
+        for (int i = 0; i < mCheckResult.size(); i++) {
+            CheckProjectServiceBean.TempCheckResultListBean resultBean = new CheckProjectServiceBean.TempCheckResultListBean();
+            int result = mCheckResult.get(i).getCheckResult();
+            resultBean.setResult(String.valueOf(result));
+            resultBean.setContent(mCheckResult.get(i).getCheckContent());
+            resultBean.setTemp_check_id(String .valueOf(mCheckResult.get(i).getCheckResultId()));
+
+            List<CheckProjectServiceBean.TempCheckResultListBean.TempImgListBean> imgList = new ArrayList<>();
+            CheckProjectServiceBean.TempCheckResultListBean.TempImgListBean tempImgListBean = new CheckProjectServiceBean.TempCheckResultListBean.TempImgListBean();
+            tempImgListBean.set
+
+            imgList.add()
+            resultBean.setTempImgList(imgList);
+
+            tempResultList.add(resultBean);
+
+        }
+        checkProjectServiceBean.setTempCheckResultList(tempResultList);
+    }*/
+
+
+    public RequestBody toRequestBody(String value) {
+        if (value != null) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            return requestBody;
+        } else {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            return requestBody;
+        }
+    }
+
+
+    public void addProjectInfo() {
+        //ProgressDialog.show(this, false, "正在加载。。。。");
+        params.clear();
+        params.put("temp_project_id", toRequestBody(mSelectProjectId));
+        params.put("temp_project_name", toRequestBody(mSelectProjectName));
+        params.put("type_sign", toRequestBody(mSelectNatureType));
+        params.put("time", toRequestBody(DateUatil.getMinTime(mTime)));
+        params.put("check_user_name", toRequestBody(mSelectPersonName));
+        params.put("check_project", toRequestBody(mCheckItemEt.getText().toString()));
+
+        for (int k = 0 ; k < mCheckResult.size(); k++) {
+            params.put("tempCheckResultList["+k+"].result", toRequestBody(String.valueOf(mCheckResult.get(k).getCheckResult())));
+            params.put("tempCheckResultList["+k+"].content", toRequestBody(mCheckResult.get(k).getCheckContent()));
+            long  checkid= mCheckResult.get( k).getCheckResultId();
+            List<String>  photoList= mPhotoMap.get(checkid);
+            for(int i = 0;i<photoList.size();i++){
+                if(!photoList.get(i).equals("")){
+                    File file = new File(photoList.get(i));
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                    params.put("tempCheckResultList["+k+"].files\"; filename=\"" + i + ".jpg", requestFile);
+                }
+            }
+        }
+
+        BaseRequest.getInstance().getService()
+                .addProjectInfo(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        if(t.getCode() == 1){
+                            Utils.showToast("提交成功");
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
+                    }
+
+                });
+    }
+
 
 }
