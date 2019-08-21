@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,21 +19,36 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
+import com.patrol.terminal.activity.PlusImageActivity;
 import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.base.BaseUrl;
+import com.patrol.terminal.bean.NoticeBean;
+import com.patrol.terminal.bean.UserBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 //发布电子公告
 public class ElectronicNoticeAddActivity extends BaseActivity {
@@ -47,16 +63,23 @@ public class ElectronicNoticeAddActivity extends BaseActivity {
     TextView titleSettingTv;
     @BindView(R.id.title_setting)
     RelativeLayout titleSetting;
-    @BindView(R.id.tv_compile_date)
-    TextView tvCompileDate;
-    @BindView(R.id.tv_occur_date)
-    TextView tvOccurDate;
+    @BindView(R.id.edit_title)
+    TextView editTitle;
+    @BindView(R.id.tv_announce_user)
+    TextView tvAnnounceUser;
+    @BindView(R.id.edit_content)
+    TextView editContent;
+    @BindView(R.id.tv_end_time)
+    TextView tvEndTime;
     @BindView(R.id.defect_gridView)
     GridView defectGridView;
 
-    private List<String> photoList = new ArrayList<>();
+    private ArrayList<String> photoList = new ArrayList<>();
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
+    private Map<String, RequestBody> params = new HashMap<>();
+    private NoticeBean noticeBean;
+    private String mSelectPersonId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +91,9 @@ public class ElectronicNoticeAddActivity extends BaseActivity {
     }
 
     private void initData() {
+        Intent intent = getIntent();
+        noticeBean = (NoticeBean)intent.getSerializableExtra("NoticeBean");
+
         titleName.setText("电子公告");
 
         titleSetting.setVisibility(View.VISIBLE);
@@ -79,27 +105,150 @@ public class ElectronicNoticeAddActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 position = i;
-                startCamera();
+                if(noticeBean != null){
+                    viewPluImg(position);
+                } else {
+                    startCamera();
+                }
             }
         });
+
+        if(noticeBean != null){
+            editTitle.setText(noticeBean.getTitle());
+            tvAnnounceUser.setText(noticeBean.getAnnounce_user());
+            editContent.setText(noticeBean.getContent());
+            tvEndTime.setText(noticeBean.getEnd_time());
+
+            Constant.isEditStatus = true;
+            if (noticeBean.getTempImgList() != null && noticeBean.getTempImgList().size() > 0) {
+                photoList.clear();
+                for (int i = 0; i < noticeBean.getTempImgList().size(); i++) {
+                    String path = BaseUrl.BASE_URL + noticeBean.getTempImgList().get(i).getFile_path() + noticeBean.getTempImgList().get(i).getFilename();
+                    photoList.add(path);
+                }
+                photoAdapter.setAddStatus(false);
+                photoAdapter.notifyDataSetChanged();
+            } else {
+                defectGridView.setVisibility(View.GONE);
+            }
+
+            editTitle.setEnabled(false);
+            tvAnnounceUser.setEnabled(false);
+            editContent.setEnabled(false);
+            tvEndTime.setEnabled(false);
+
+            editTitle.setHint("");
+            tvAnnounceUser.setHint("");
+            editContent.setHint("");
+            tvEndTime.setHint("");
+
+            tvAnnounceUser.setCompoundDrawables(null, null, null, null);
+            tvEndTime.setCompoundDrawables(null, null, null, null);
+
+            titleSetting.setVisibility(View.GONE);
+        } else {
+            Constant.isEditStatus = false;
+            String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+            tvEndTime.setText(time);
+        }
     }
 
-    @OnClick({R.id.title_back, R.id.tv_compile_date, R.id.tv_occur_date})
+    public void noticeSavePOST() {
+        ProgressDialog.show(this, false, "正在加载。。。。");
+        params.clear();
+        params.put("title", toRequestBody(editTitle.getText().toString()));
+        params.put("announce_user", toRequestBody(tvAnnounceUser.getText().toString()));
+        params.put("content", toRequestBody(editContent.getText().toString()));
+        params.put("end_time", toRequestBody(tvEndTime.getText().toString()));
+        for(int i=0;i<photoList.size();i++){
+            if(!photoList.get(i).equals("")){
+                File file = new File(photoList.get(i));
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                params.put("files\"; filename=\"" + i + ".jpg", requestFile);
+            }
+        }
+
+        BaseRequest.getInstance().getService()
+                .noticeSavePOST(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        if(t.getCode() == 1){
+                            Utils.showToast("提交成功");
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
+                    }
+
+                });
+    }
+
+    public RequestBody toRequestBody(String value) {
+        if (value != null) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            return requestBody;
+        } else {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            return requestBody;
+        }
+    }
+
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.tv_announce_user, R.id.tv_end_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
                 break;
-            case R.id.tv_compile_date:
-                showDay(1);
+            case R.id.tv_end_time:
+                showDay();
                 break;
-            case R.id.tv_occur_date:
-                showDay(2);
+            case R.id.tv_announce_user:
+                Intent intent = new Intent();
+                intent.setClass(this, CheckPersonSearchActivity.class);
+                startActivityForResult(intent, 1001);
+                break;
+            case R.id.title_setting:
+                if(TextUtils.isEmpty(editTitle.getText().toString())){
+                    Utils.showToast("请输入标题");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(tvAnnounceUser.getText().toString())){
+                    Utils.showToast("请选择发布人");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(editContent.getText().toString())){
+                    Utils.showToast("请输入内容");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(tvEndTime.getText().toString())){
+                    Utils.showToast("请选择失效日期");
+                    break;
+                }
+
+                if(photoList.size() == 0){
+                    Utils.showToast("请拍摄一张照片");
+                    break;
+                }
+
+                noticeSavePOST();
                 break;
         }
     }
 
-    public void showDay(int type) {
+    public void showDay() {
         String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
         String[] years = time.split("年");
         String[] months = years[1].split("月");
@@ -127,11 +276,7 @@ public class ElectronicNoticeAddActivity extends BaseActivity {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 String time = DateUatil.getDay(date);
-                if(type == 1){
-                    tvCompileDate.setText(time);
-                } else if(type == 2){
-                    tvOccurDate.setText(time);
-                }
+                tvEndTime.setText(time);
             }
         })
                 .setDate(selectedDate)
@@ -151,6 +296,15 @@ public class ElectronicNoticeAddActivity extends BaseActivity {
     private void startCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, Constant.DEFECT_REQUEST_CODE);
+    }
+
+    //查看大图
+    private void viewPluImg(int position) {
+        Intent intent = new Intent(this, PlusImageActivity.class);
+        intent.putStringArrayListExtra(Constant.IMG_LIST, photoList);
+        intent.putExtra("isDelPic", "0");
+        intent.putExtra(Constant.POSITION, position);
+        startActivityForResult(intent, Constant.REQUEST_CODE_MAIN);
     }
 
     @Override
@@ -175,6 +329,16 @@ public class ElectronicNoticeAddActivity extends BaseActivity {
                         photoAdapter.notifyDataSetChanged();
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
+                    break;
+                case 1001:
+                    if (data != null) {
+                        UserBean clickedUserBean = data.getParcelableExtra("search_user_item");
+                        if (clickedUserBean != null) {
+                            mSelectPersonId = clickedUserBean.getId();
+                            String name = clickedUserBean.getName();
+                            tvAnnounceUser.setText(name);
+                        }
                     }
                     break;
             }

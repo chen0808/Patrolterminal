@@ -1323,4 +1323,17 @@ public interface ApiServise {
     //施工日志删除
     @POST("temp/log/deletePOST")
     Observable<BaseResult> deleteLog(@Query("id") String id);
+
+    //电子公告添加
+    @Multipart
+    @POST("temp/notice/savePOST")
+    Observable<BaseResult> noticeSavePOST(@PartMap Map<String, RequestBody> params);
+
+    //获取电子公告列表
+    @GET("temp/notice/pdaPageGET")
+    Observable<BaseResult<List<NoticeBean>>> getNoticeList(@Query("page_num") int page_num, @Query("page_size") int page_size);
+
+    //获取电子公告详情
+    @GET("temp/notice/byIdGET")
+    Observable<BaseResult<NoticeBean>> getNoticeDetail(@Query("id") String id);
 }

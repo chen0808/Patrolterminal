@@ -10,14 +10,11 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.DefectIngTabAdapter;
 import com.patrol.terminal.adapter.NoticeAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.DefectFragmentBean;
-import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.bean.NoticeBean;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -32,8 +29,8 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-//内部公告
-public class InternalAnnounceFragment extends BaseFragment {
+//公告回执
+public class AnnounceReceiptFragment extends BaseFragment {
     @BindView(R.id.plan_rv)
     SwipeRecyclerView planRv;
 
@@ -69,7 +66,7 @@ public class InternalAnnounceFragment extends BaseFragment {
             }
         });
 
-        getNoticeList(search_name);
+//        getNoticeList(search_name);
     }
 
     //获取项目列表

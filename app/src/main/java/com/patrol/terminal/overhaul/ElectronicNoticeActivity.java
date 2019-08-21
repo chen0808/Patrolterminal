@@ -61,7 +61,7 @@ public class ElectronicNoticeActivity extends BaseActivity {
 
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new InternalAnnounceFragment());
-        fragmentList.add(new InternalAnnounceFragment());
+        fragmentList.add(new AnnounceReceiptFragment());
 
         MyFragmentPagerAdapter CardPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         defectTabVg.setAdapter(CardPagerAdapter);
