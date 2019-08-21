@@ -148,7 +148,7 @@ public class WorkWeeklyListActivity extends AppCompatActivity {
                     protected void onSuccees(BaseResult<List<LocalWorkWeeklyBean>> t) throws Exception {
                         ProgressDialog.cancle();
                         if (t.isSuccess()) {
-                            workList.clear();
+//                            workList.clear();
                             workList.addAll(t.getResults());
                             adapter.notifyDataSetChanged();
                             if (workList.size() == 0) {
@@ -161,7 +161,7 @@ public class WorkWeeklyListActivity extends AppCompatActivity {
                             } else {
                                 gclb_lsit.loadMoreFinish(true, false);
                             }
-                            workList.addAll(result);
+
                             if (pageNum == 1) {
                                 if (result.size() == 0) {
                                     Utils.showToast("暂无该项目简报");

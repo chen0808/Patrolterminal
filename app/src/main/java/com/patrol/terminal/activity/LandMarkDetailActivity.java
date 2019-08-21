@@ -42,12 +42,8 @@ public class LandMarkDetailActivity extends AppCompatActivity {
     @BindView(R.id.scroView)
     ScrollView scroView;
 
-
-    String[] lcbList = new String[]{"项目前期", "项目立项", "设计管理", "招标管理", "合同管理", "进度管理", "前期", "实施准备",
-            "在建", "停缓建", "验收", "竣工", "保内", "保外", "解除"};
-
     HashMap<String,View> map = new HashMap<>();
-    private List<LocalLandMarkBean> landMarkList = new ArrayList<>();
+    private List<LocalLandMarkBean> landMarkList;// = new ArrayList<>()
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +53,14 @@ public class LandMarkDetailActivity extends AppCompatActivity {
 
         titleName.setText("里程碑");
 
-        initView();
 
         String marks = getIntent().getStringExtra("marks");
-        scroTo(marks);
+        landMarkList = (List<LocalLandMarkBean>) getIntent().getSerializableExtra("list");
+
+        if(landMarkList != null){
+            initView();
+            scroTo(marks);
+        }
 
     }
 
@@ -95,20 +95,19 @@ public class LandMarkDetailActivity extends AppCompatActivity {
 
 
     public void initView() {
-        landMarkList.clear();
-        landMarkList.addAll(LocalLandMarkBean.getAllLsit());
 
-        for (int i = 0; i < lcbList.length; i++) {
-            String sbjd = lcbList[i];
+        for (int i = 0; i < Constant.lcbList.length; i++) {
+            String sbjd = Constant.lcbList[i];
             View view = View.inflate(this, R.layout.activity_landmark_detail_item, null);
             initData2(sbjd, view);
             for (int j = 0; j < landMarkList.size(); j++) {
                 LocalLandMarkBean bean = landMarkList.get(j);
-                if (sbjd.equals(bean.getLandmark_sbjd())) {
+                if (i == bean.getLandmark_sbjd()) {
                     initData3(bean, view);
                 }
             }
         }
+
     }
 
     @OnClick({R.id.title_back})

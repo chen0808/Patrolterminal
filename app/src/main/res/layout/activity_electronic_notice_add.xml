@@ -43,11 +43,13 @@
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/edit_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:textColor="@color/black"
                     android:background="@null"
                     android:textSize="14sp"/>
 
@@ -88,16 +90,17 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
-                    <EditText
+
+                    <TextView
+                        android:id="@+id/tv_announce_user"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:textSize="14sp"
+                        android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="集团公司"
-                        />
+                        android:drawableRight="@mipmap/next"
+                        android:textColor="@color/black"
+                        android:hint="请选择" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -114,39 +117,6 @@
                 android:orientation="vertical"
                 android:layout_margin="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="施工部分" />
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/stoke_gray"
-                    android:textSize="16sp"
-                    android:hint="请输入"
-                    android:singleLine="false"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center_vertical">
-
                 <LinearLayout
                     android:layout_width="100dp"
                     android:layout_height="wrap_content">
@@ -155,7 +125,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:text="发布范围" />
+                        android:text="内容" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -165,16 +135,20 @@
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
 
-                <TextView
+                <EditText
+                    android:id="@+id/edit_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:layout_centerVertical="true"
+                    android:gravity="top"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:hint="请选择"
-                    android:drawableRight="@mipmap/next"/>
-
+                    android:background="@drawable/stoke_gray"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:hint="请输入"
+                    android:singleLine="false"/>
             </LinearLayout>
 
             <View
@@ -182,41 +156,49 @@
                 android:layout_height="1dp"
                 android:background="@color/bg_gray"></View>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center_vertical">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="48dp"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginRight="16dp"-->
+                <!--android:gravity="center_vertical">-->
 
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="16dp"
-                        android:text="短信发送" />
-                </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:layout_width="100dp"-->
+                    <!--android:layout_height="wrap_content">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:layout_marginLeft="16dp"-->
+                        <!--android:text="发布范围" />-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:layout_marginRight="16dp"-->
+                        <!--android:text="*"-->
+                        <!--android:textColor="@color/write_red"/>-->
+                <!--</LinearLayout>-->
 
-                <TextView
-                    android:id="@+id/tv_compile_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:hint="请选择"
-                    android:drawableRight="@mipmap/next"/>
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_notice_user"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:layout_marginRight="16dp"-->
+                    <!--android:hint="请选择"-->
+                    <!--android:drawableRight="@mipmap/next"/>-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/bg_gray"></View>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -244,19 +226,20 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_occur_date"
+                    android:id="@+id/tv_end_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:textColor="@color/black"
                     android:hint="请选择"
                     android:drawableRight="@mipmap/next"/>
 
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:background="@color/bg_gray">
@@ -264,11 +247,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="32dp"
                     android:text="附件"
                     android:textColor="@color/black" />
-            </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="16dp"
+                    android:text="*"
+                    android:textColor="@color/write_red"/>
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -291,11 +281,6 @@
                     android:verticalSpacing="5dp" />
 
             </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bg_gray"></View>
 
         </LinearLayout>
     </ScrollView>

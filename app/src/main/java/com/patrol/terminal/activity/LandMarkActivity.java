@@ -17,15 +17,18 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.CheckProjectBean;
 import com.patrol.terminal.bean.CheckProjectServiceBean;
+import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.bean.LocalGcjbBean;
 import com.patrol.terminal.bean.LocalLandMarkBean;
 import com.patrol.terminal.bean.LocalWorkWeeklyBean;
 import com.patrol.terminal.overhaul.ProjectSearchActivity;
+import com.patrol.terminal.overhaul.ProjectSearchActivityNew;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.RoundProgressBar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,14 +108,15 @@ public class LandMarkActivity extends AppCompatActivity {
     }
 
 
-    public void initView() {
+    public void initView(List<LocalLandMarkBean> result) {
 
         landMarkList.clear();
-        landMarkList.addAll(LocalLandMarkBean.getAllLsit());
+        landMarkList.addAll(result);
 
         for (int i = 0; i < landMarkList.size(); i++) {
             LocalLandMarkBean bean = landMarkList.get(i);
-            String sbjd = bean.getLandmark_sbjd();
+            String sbjd = Constant.lcbList[bean.getLandmark_sbjd()];//bean.getLandmark_sbjd();
+
             if (sbjd.equals("项目前期")) {
                 initProBar(probar_xmqq, bean.getLandmark_jd());
             } else if (sbjd.equals("项目立项")) {
@@ -148,23 +152,18 @@ public class LandMarkActivity extends AppCompatActivity {
 
     }
 
-    public void quesyList(String project) {
+    public void quesyList(String temp_project_id) {
         ProgressDialog.show(this);
         BaseRequest.getInstance().getService()
-                .getLcbGET(pageNum + "", count + "", project)
+                .queryLcbGET(temp_project_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<LocalWorkWeeklyBean>>(this) {
+                .subscribe(new BaseObserver<List<LocalLandMarkBean>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<LocalWorkWeeklyBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<LocalLandMarkBean>> t) throws Exception {
                         ProgressDialog.cancle();
                         if (t.isSuccess()) {
-//                            gcjbList.clear();
-//                            gcjbList.addAll(t.getResults());
-//                            adapter.notifyDataSetChanged();
-//                            if(gcjbList.size()==0){
-//                                Utils.showToast("暂无该项目简报");
-//                            }
+                            initView(t.getResults());
                         }
                     }
 
@@ -181,24 +180,19 @@ public class LandMarkActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constant.GCJB_ADD:
-                    initView();
-                    break;
                 case Constant.GCJB_ADD_PROJECT:
 
-                    CheckProjectServiceBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                    InitiateProjectBean2 clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
-                        titleQxContent.setText(clickedCheckProjectBean.getTemp_project_name());
+                        titleQxContent.setText(clickedCheckProjectBean.getName());
 
+                        quesyList(clickedCheckProjectBean.getName());
                         landmarkView.setVisibility(View.VISIBLE);
-//                        initView();
                     }
                     break;
             }
         }
     }
-
-    String[] lcbList = new String[]{"项目前期", "项目立项", "设计管理", "招标管理", "合同管理", "进度管理", "前期", "实施准备",
-            "在建", "停缓建", "验收", "竣工", "保内", "保外", "解除"};
 
     @OnClick({R.id.title_back, R.id.title_setting, R.id.probar_xmqq, R.id.probar_xmlx,
             R.id.probar_sjgl, R.id.probar_zbgl, R.id.probar_sszb, R.id.probar_qq,
@@ -248,13 +242,14 @@ public class LandMarkActivity extends AppCompatActivity {
             case R.id.probar_bn:
 //                marks = 15;
                 Intent intent1 = new Intent();
-                intent1.putExtra("marks",lcbList[marks]);
+                intent1.putExtra("marks",Constant.lcbList[marks]);
+                intent1.putExtra("list",(Serializable)landMarkList);
                 intent1.setClass(this, LandMarkDetailActivity.class);
                 startActivity(intent1);
                 break;
             case R.id.title_qx_content:
                 intent = new Intent();
-                intent.setClass(this, ProjectSearchActivity.class);
+                intent.setClass(this, ProjectSearchActivityNew.class);
                 startActivityForResult(intent, Constant.GCJB_ADD_PROJECT);
                 break;
         }

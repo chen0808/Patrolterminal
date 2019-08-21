@@ -29,6 +29,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.CheckProjectBean;
 import com.patrol.terminal.bean.CheckProjectServiceBean;
+import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.LocalGcjbBean;
 import com.patrol.terminal.bean.TSSXBean;
@@ -36,6 +37,7 @@ import com.patrol.terminal.bean.TSSXLocalBean;
 import com.patrol.terminal.bean.TSSXLocalBean_Table;
 import com.patrol.terminal.bean.TssxToEqTowerWares;
 import com.patrol.terminal.overhaul.ProjectSearchActivity;
+import com.patrol.terminal.overhaul.ProjectSearchActivityNew;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
@@ -112,6 +114,7 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
     private String type;
+    private InitiateProjectBean2 clickedCheckProjectBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +135,7 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
         title_setting.setVisibility(View.VISIBLE);
 
         initView();
+
         localData();
 
 
@@ -186,7 +190,7 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
         }
 
         gcjb_add_bh.setText(format1);
-        gcjb_add_ssxm.setText(name + format1);
+        gcjb_add_ssxm.setText("请选择");
         gcjb_add_tbr.setText("马宝龙");
         gcjb_add_jblb.setText("初步设计图");
 
@@ -208,7 +212,7 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.gcjb_add_ssxm:
                 Intent intent = new Intent();
-                intent.setClass(this, ProjectSearchActivity.class);
+                intent.setClass(this, ProjectSearchActivityNew.class);
                 startActivityForResult(intent, Constant.GCJB_ADD_PROJECT);
                 break;
             case R.id.title_back:
@@ -230,6 +234,12 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
                 typeDialog.show();
                 break;
             case R.id.title_setting:
+
+                if (gcjb_add_ssxm.getText().toString().trim().equals("请选择")) {
+                    Utils.showToast("请先选择项目");
+                    return;
+                }
+
 
                 if (TextUtils.isEmpty(gcjb_sgqk.getText().toString().trim())) {
                     Utils.showToast("请填写施工情况");
@@ -257,7 +267,7 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
 
                 params.put("brief_no",Utils.toRequestBody(gcjb_add_bh.getText().toString()));//
                 params.put("brief_sign",Utils.toRequestBody(type));
-                params.put("temp_project_id",Utils.toRequestBody("111111112222222"));
+                params.put("temp_project_id",Utils.toRequestBody(clickedCheckProjectBean.getProject_no()));
                 params.put("temp_project_name",Utils.toRequestBody(gcjb_add_ssxm.getText().toString()));//
                 params.put("user_name",Utils.toRequestBody(SPUtil.getUserName(this)));
                 params.put("brief_type",Utils.toRequestBody(Utils.typetoBriefConversion(gcjb_add_jblb.getText().toString())));
@@ -326,9 +336,9 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
 
                     break;
                 case Constant.GCJB_ADD_PROJECT:
-                    CheckProjectServiceBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                    clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
-                        gcjb_add_ssxm.setText(clickedCheckProjectBean.getTemp_project_name());
+                        gcjb_add_ssxm.setText(clickedCheckProjectBean.getName());
                     }
                     break;
             }

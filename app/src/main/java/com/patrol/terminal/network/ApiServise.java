@@ -1301,15 +1301,13 @@ public interface ApiServise {
     @GET("temp/weekly/pdaPageGET")
     Observable<BaseResult<List<LocalWorkWeeklyBean>>> queryWorklyGET(@Query("page_num") String page_num,@Query("page_size") String page_size);
 
+    //里程碑  添加
+    @POST("temp/milestone/updatePOST")
+    Observable<BaseResult> saveLcbPOST(@Body LocalLandMarkBean2 params);
+
     //里程碑  列表
-    @GET("temp/project/pdaPageGET")
-    Observable<BaseResult<List<LocalWorkWeeklyBean>>> getLcbGET(@Query("page_num") String page_num,@Query("page_size") String page_size,@Query("name") String name);
-
-    //工程周报
-    @Multipart
-    @POST("temp/weekly/savePOST")
-    Observable<BaseResult> saveWorklyPOST2(@Body RequestBody  params);
-
+    @GET("temp/milestone/listGET")
+    Observable<BaseResult<List<LocalLandMarkBean>>> queryLcbGET(@Query("temp_project_id") String temp_project_id);
 
     //施工日志添加
     @Multipart
@@ -1323,4 +1321,17 @@ public interface ApiServise {
     //施工日志删除
     @POST("temp/log/deletePOST")
     Observable<BaseResult> deleteLog(@Query("id") String id);
+
+    //电子公告添加
+    @Multipart
+    @POST("temp/notice/savePOST")
+    Observable<BaseResult> noticeSavePOST(@PartMap Map<String, RequestBody> params);
+
+    //获取电子公告列表
+    @GET("temp/notice/pdaPageGET")
+    Observable<BaseResult<List<NoticeBean>>> getNoticeList(@Query("page_num") int page_num, @Query("page_size") int page_size);
+
+    //获取电子公告详情
+    @GET("temp/notice/byIdGET")
+    Observable<BaseResult<NoticeBean>> getNoticeDetail(@Query("id") String id);
 }

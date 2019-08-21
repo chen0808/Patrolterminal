@@ -25,10 +25,13 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.CheckProjectBean;
+import com.patrol.terminal.bean.CheckProjectServiceBean;
+import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.bean.UserBean;
 import com.patrol.terminal.bean.WorkingLogBean;
 import com.patrol.terminal.overhaul.CheckPersonSearchActivity;
 import com.patrol.terminal.overhaul.ProjectSearchActivity;
+import com.patrol.terminal.overhaul.ProjectSearchActivityNew;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
@@ -394,7 +397,7 @@ public class WorkingLogDetailActivity extends BaseActivity {
                 break;
             case R.id.tv_project_name:
                 intent = new Intent();
-                intent.setClass(this, ProjectSearchActivity.class);
+                intent.setClass(this, ProjectSearchActivityNew.class);
                 startActivityForResult(intent, 1001);
                 break;
             case R.id.tv_working_name:
@@ -583,9 +586,9 @@ public class WorkingLogDetailActivity extends BaseActivity {
                     break;
                 case 1001:
                     if (data != null) {
-                        CheckProjectBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                        InitiateProjectBean2 clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                         if (clickedCheckProjectBean != null) {
-                            mSelectProjectId = clickedCheckProjectBean.getProject_id();
+                            mSelectProjectId = clickedCheckProjectBean.getId();
                             String name = clickedCheckProjectBean.getName();
                             tvProjectName.setText(name);
                         }
