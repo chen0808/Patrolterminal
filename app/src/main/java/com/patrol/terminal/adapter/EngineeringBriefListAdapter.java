@@ -16,6 +16,7 @@ import com.patrol.terminal.bean.LocalGcjbBean;
 import com.patrol.terminal.bean.TroubleFragmentBean;
 import com.patrol.terminal.utils.AdapterUtils;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.Utils;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class EngineeringBriefListAdapter extends BaseQuickAdapter<LocalGcjbBean,
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, EngineeringBriefAddActivity.class);
                 Constant.isEditStatus = true;
-                intent.putExtra(Constant.GCJB_TYPE_STR,item.getType());
+                intent.putExtra(Constant.GCJB_TYPE_STR,item.getBrief_sign());
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("gclbBean",item);
                 intent.putExtras(bundle);
@@ -43,10 +44,10 @@ public class EngineeringBriefListAdapter extends BaseQuickAdapter<LocalGcjbBean,
             }
         });
 
-        helper.setText(R.id.project_name,   item.getProject_name())
-                .setText(R.id.project_num,  item.getProject_bgnum())
-                .setText(R.id.project_type,  item.getProject_type())
-                .setText(R.id.project_tbr,  item.getProject_tbr())
+        helper.setText(R.id.project_name,   item.getTemp_project_name())
+                .setText(R.id.project_num,  item.getBrief_no())
+                .setText(R.id.project_type, Utils.briefTypeConversion(item.getBrief_type()))
+                .setText(R.id.project_tbr,  item.getUser_name())
                 .setText(R.id.project_date,  item.getProject_date());
     }
 }

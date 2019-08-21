@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,11 +28,11 @@ public class EngineeringBriefActivity extends AppCompatActivity {
     TextView titleName;
 
     @BindView(R.id.gcjb_yzf)
-    TextView gcjb_yzf;
+    LinearLayout gcjb_yzf;
     @BindView(R.id.gcjb_jlf)
-    TextView gcjb_jlf;
+    LinearLayout gcjb_jlf;
     @BindView(R.id.gcjb_sgf)
-    TextView gcjb_sgf;
+    LinearLayout gcjb_sgf;
     @BindView(R.id.gcjb_add)
     ImageButton gcjb_add;
 
@@ -44,8 +45,6 @@ public class EngineeringBriefActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         titleName.setText("工程简报");
-
-
 
     }
 

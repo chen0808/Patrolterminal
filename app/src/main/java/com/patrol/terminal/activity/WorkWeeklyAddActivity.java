@@ -22,22 +22,34 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.TssxPhotoAdapter;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.LocalGcjbBean;
 import com.patrol.terminal.bean.LocalWorkWeeklyBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * 工作周报  添加
@@ -100,7 +112,7 @@ public class WorkWeeklyAddActivity extends AppCompatActivity {
             work_xtnr.setText(item.getWork_xtnr());
             work_bz.setText(item.getWork_bz());
 
-            photoList.addAll(Utils.strToList(item.getWork_photo()));
+            photoList.addAll(Utils.photoToList(item.getTempWeeklyImgList()));
             photoAdapter.setAddStatus(false);
             photoAdapter.notifyDataSetChanged();
 
@@ -121,7 +133,7 @@ public class WorkWeeklyAddActivity extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String format1 = format.format(new Date(System.currentTimeMillis()));
 
-        work_addname.setText("马宝龙");
+        work_addname.setText(SPUtil.getUserName(this));
         work_add_date.setText(format1);
 
         photoAdapter = new TssxPhotoAdapter(this, photoList);
@@ -162,21 +174,49 @@ public class WorkWeeklyAddActivity extends AppCompatActivity {
                     return;
                 }
 
-                LocalWorkWeeklyBean bean = new LocalWorkWeeklyBean();
-                bean.setUser_name("马宝龙");
-                bean.setWork_date(work_add_date.getText().toString());
-                bean.setWork_bzzj(bzzj);
-                bean.setWork_xzjh(xzjh);
-                bean.setWork_xtnr(work_xtnr.getText().toString().trim());
-                bean.setWork_bz(work_bz.getText().toString().trim());
-                bean.setWork_photo(Utils.listToStr(photoList));
-                bean.save();
-                Utils.showToast("提交成功");
-                setResult(RESULT_OK);
-                finish();
+                Map<String, RequestBody> params = new HashMap<>();
+                for (int i = 0; i < photoList.size(); i++) {
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(photoList.get(i)));
+                    String[] split = photoList.get(i).split("/");
+                    String name = split[split.length - 1];
+                    params.put("files\"; filename=\"" + name, requestFile);
+                }
+                params.put("user_id",Utils.toRequestBody(SPUtil.getUserId(this)));//
+                params.put("user_name",Utils.toRequestBody(SPUtil.getUserName(this)));
+                params.put("created_date",Utils.toRequestBody(work_add_date.getText().toString()));
+                params.put("conclusion_content",Utils.toRequestBody(bzzj));
+                params.put("plan_content",Utils.toRequestBody(xzjh));
+                params.put("coordination_content",Utils.toRequestBody(work_xtnr.getText().toString().trim()));
+                params.put("remarks",Utils.toRequestBody(work_bz.getText().toString().trim()));
+                saveWorkly(params);
                 break;
 
         }
+    }
+
+    public void saveWorkly(Map<String, RequestBody> params ) {
+        ProgressDialog.show(this);
+        BaseRequest.getInstance().getService()
+                .saveWorklyPOST(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast("提交成功");
+
+                        Intent intent = new Intent();
+                        intent.putExtra("projectname", "");
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
     }
 
     @Override
@@ -220,5 +260,6 @@ public class WorkWeeklyAddActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Constant.isEditStatus = false;
+        Utils.hideSysInput(this);
     }
 }

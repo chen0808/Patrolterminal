@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.patrol.terminal.bean.LocalLandMarkBean;
 import com.patrol.terminal.utils.Constant;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,10 +39,14 @@ public class LandMarkDetailActivity extends AppCompatActivity {
     RelativeLayout title_setting;
     @BindView(R.id.lcb_list)
     LinearLayout lcbLL;
+    @BindView(R.id.scroView)
+    ScrollView scroView;
+
 
     String[] lcbList = new String[]{"项目前期", "项目立项", "设计管理", "招标管理", "合同管理", "进度管理", "前期", "实施准备",
             "在建", "停缓建", "验收", "竣工", "保内", "保外", "解除"};
 
+    HashMap<String,View> map = new HashMap<>();
     private List<LocalLandMarkBean> landMarkList = new ArrayList<>();
 
     @Override
@@ -52,9 +58,19 @@ public class LandMarkDetailActivity extends AppCompatActivity {
         titleName.setText("里程碑");
 
         initView();
+
+        String marks = getIntent().getStringExtra("marks");
+        scroTo(marks);
+
+    }
+
+    public void scroTo(String mark){
+        View view = map.get(mark);
+        scroView.scrollTo(0,view.getScrollY());
     }
 
     public void initData2(String sbjd, View view) {
+        map.put(sbjd,view);
         TextView lcb_year = view.findViewById(R.id.lcb_year);
         TextView lcb_sbjd = view.findViewById(R.id.lcb_sbjd);
         lcb_year.setText("2019年");

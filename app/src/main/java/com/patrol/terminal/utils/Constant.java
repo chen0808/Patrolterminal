@@ -169,15 +169,16 @@ public class Constant {
 
     //工程简报
     public static final String GCJB_TYPE_STR = "GCJB_TYPE_STR";
-    public static final String GCJB_YZF_STR = "GCJB_YZF_STR";
-    public static final String GCJB_JLF_STR = "GCJB_JLF_STR";
-    public static final String GCJB_SGF_STR = "GCJB_SGF_STR";
-    public static final String GCJB_ADD_STR = "GCJB_ADD_STR";
+    public static final String GCJB_YZF_STR = "3";//建设方
+    public static final String GCJB_JLF_STR = "2";//监理方
+    public static final String GCJB_SGF_STR = "1";//施工方
+    public static final String GCJB_ADD_STR = GCJB_SGF_STR;//默认添加施工方
     public static boolean isEditStatus = false;
 //    public static final int GCJB_YZF = 1;
 //    public static final int GCJB_JLF = 2;
 //    public static final int GCJB_SGF = 3;
-    public static final int GCJB_ADD = 1;
+    public static final int GCJB_ADD = 10001;
+    public static final int GCJB_ADD_PROJECT = 10002;
 
 
     public static final String SWITCH_NAME = "switch_name";

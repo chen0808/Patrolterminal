@@ -12,7 +12,11 @@
         android:id="@+id/include"
         layout="@layout/include_title" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <include
+        android:id="@+id/title_edit"
+        layout="@layout/include_title_edit"/>
+
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
         android:id="@+id/gclb_lsit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
