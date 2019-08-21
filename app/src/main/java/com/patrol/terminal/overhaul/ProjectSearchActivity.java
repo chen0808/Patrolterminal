@@ -90,7 +90,7 @@ public class ProjectSearchActivity extends BaseActivity implements TextWatcher {
                             mCheckProjectAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                                    CheckProjectBean clickedCheckProjectBean = (CheckProjectBean) adapter.getItem(position);
+                                    CheckProjectServiceBean clickedCheckProjectBean = (CheckProjectServiceBean) adapter.getItem(position);
                                     Intent intent = new Intent();
                                     intent.putExtra("search_project_item", clickedCheckProjectBean);
                                     setResult(RESULT_OK, intent);

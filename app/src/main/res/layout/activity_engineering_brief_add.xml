@@ -50,9 +50,26 @@
                     android:text="*"
                     android:textColor="@color/home_red" />
 
-                <TextView
-                    android:id="@+id/gcjb_add_ssxm"
-                    style="@style/defect_detail_item_right" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/gcjb_add_ssxm"
+                        style="@style/defect_detail_item_right" />
+
+                    <ImageView
+                        android:id="@+id/img_allow_ssxm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:src="@mipmap/next" />
+                </RelativeLayout>
+
+
+
 
             </LinearLayout>
 

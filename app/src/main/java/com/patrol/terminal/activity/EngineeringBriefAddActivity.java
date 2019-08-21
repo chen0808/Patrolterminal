@@ -24,24 +24,46 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.TssxPhotoAdapter;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.CheckProjectBean;
+import com.patrol.terminal.bean.CheckProjectServiceBean;
 import com.patrol.terminal.bean.LineTypeBean;
 import com.patrol.terminal.bean.LocalGcjbBean;
+import com.patrol.terminal.bean.TSSXBean;
+import com.patrol.terminal.bean.TSSXLocalBean;
+import com.patrol.terminal.bean.TSSXLocalBean_Table;
+import com.patrol.terminal.bean.TssxToEqTowerWares;
+import com.patrol.terminal.overhaul.ProjectSearchActivity;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.StringUtil;
 import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.internal.Util;
 
 /**
  * 工程简报 添加
@@ -79,6 +101,9 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
 
     @BindView(R.id.img_allow)
     ImageView img_allow;
+    @BindView(R.id.img_allow_ssxm)
+    ImageView img_allow_ssxm;
+
 
     @BindView(R.id.gcjb_photo)
     GridView gcjb_photo;
@@ -108,22 +133,25 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
 
         initView();
         localData();
+
+
     }
 
     public void localData() {
         LocalGcjbBean item = (LocalGcjbBean) getIntent().getSerializableExtra("gclbBean");
-        if (item != null) {
-            gcjb_add_bh.setText(item.getProject_bgnum());
-            gcjb_add_ssxm.setText(item.getProject_ssxm());
-            gcjb_add_tbr.setText(item.getProject_tbr());
-            gcjb_add_jblb.setText(item.getProject_type());
-            gcjb_sgqk.setText(item.getProject_sgqk());
-            gcjb_glqk.setText(item.getProject_glqk());
-            gcjb_czqk.setText(item.getProject_czqt());
-            gcjb_jdjh.setText(item.getProject_jdjh());
-            gcjb_bz.setText(item.getProject_bz());
 
-            photoList.addAll(Utils.strToList(item.getProject_photo()));
+        if (item != null) {
+            gcjb_add_bh.setText(item.getBrief_no());
+            gcjb_add_ssxm.setText(item.getTemp_project_name());
+            gcjb_add_tbr.setText(item.getUser_name());
+            gcjb_add_jblb.setText(Utils.briefTypeConversion(item.getBrief_type()));
+            gcjb_sgqk.setText(item.getConstruction_content());
+            gcjb_glqk.setText(item.getManagement_content());
+            gcjb_czqk.setText(item.getQuestion_content());
+            gcjb_jdjh.setText(item.getPlan_content());
+            gcjb_bz.setText(item.getRemark());
+            photoList.addAll(Utils.photoToList(item.getTempBriefImgList()));
+
             photoAdapter.setAddStatus(false);
             photoAdapter.notifyDataSetChanged();
 
@@ -134,18 +162,19 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
             gcjb_bz.setEnabled(false);
             gcjb_photo.setEnabled(false);
             gcjb_add_jblb.setEnabled(false);
+            gcjb_add_ssxm.setEnabled(false);
 
             title_setting.setVisibility(View.GONE);
             title_setting_tv.setVisibility(View.GONE);
             img_allow.setVisibility(View.GONE);
-
+            img_allow_ssxm.setVisibility(View.GONE);
         }
 
     }
 
     public void initView() {
         long l = System.currentTimeMillis();
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat format = new SimpleDateFormat("MMddHHmmss");
         String format1 = format.format(new Date(l));
         String name = "";
         if (type.equals(Constant.GCJB_YZF_STR)) {
@@ -156,7 +185,7 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
             name = "施工方";
         }
 
-        gcjb_add_bh.setText("00" + format1);
+        gcjb_add_bh.setText(format1);
         gcjb_add_ssxm.setText(name + format1);
         gcjb_add_tbr.setText("马宝龙");
         gcjb_add_jblb.setText("初步设计图");
@@ -174,13 +203,17 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.title_back, R.id.title_setting, R.id.gcjb_add_jblb})
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.gcjb_add_jblb,R.id.gcjb_add_ssxm})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.gcjb_add_ssxm:
+                Intent intent = new Intent();
+                intent.setClass(this, ProjectSearchActivity.class);
+                startActivityForResult(intent, Constant.GCJB_ADD_PROJECT);
+                break;
             case R.id.title_back:
                 finish();
                 break;
-
             case R.id.gcjb_add_jblb:
                 String[] types = new String[]{"初步设计", "方案设计", "施工期", "竣工"};
                 int checkedItem = 0;
@@ -189,7 +222,6 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
                 alertBuilder.setSingleChoiceItems(types, checkedItem, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int options1) {
-//                        checkedItem = options1;
                         gcjb_add_jblb.setText(types[options1]);
                         dialog.dismiss();
                     }
@@ -214,29 +246,56 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
                     return;
                 }
 
-                LocalGcjbBean bean = new LocalGcjbBean();
-                bean.setType(type);
+                Map<String, RequestBody> params = new HashMap<>();
+//                for (int i = 0; i < photoList.size(); i++) {
+//                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(photoList.get(i)));
+//                    String[] split = photoList.get(i).split("/");
+//                    String name = split[split.length - 1];
+//                    params.put("files\"; filename=\"" + name, requestFile);
+//                }
+                Utils.toFileRequestBody("files",params,photoList);
 
-                bean.setProject_name(gcjb_add_ssxm.getText().toString());
-                bean.setProject_ssxm(gcjb_add_ssxm.getText().toString());
-                bean.setProject_bgnum(gcjb_add_bh.getText().toString());
-                bean.setProject_tbr(gcjb_add_tbr.getText().toString());
-                bean.setProject_type(gcjb_add_jblb.getText().toString());
-                bean.setProject_date(DateUatil.getMin());
-                bean.setProject_sgqk(gcjb_sgqk.getText().toString().trim());
-                bean.setProject_glqk(gcjb_glqk.getText().toString().trim());
-                bean.setProject_czqt(gcjb_czqk.getText().toString().trim());
-                bean.setProject_jdjh(gcjb_jdjh.getText().toString().trim());
-                bean.setProject_bz(gcjb_bz.getText().toString().trim());
-                bean.setProject_photo(Utils.listToStr(photoList));
-                bean.save();
-
-                Utils.showToast("提交成功");
-                setResult(RESULT_OK);
-                finish();
+                params.put("brief_no",Utils.toRequestBody(gcjb_add_bh.getText().toString()));//
+                params.put("brief_sign",Utils.toRequestBody(type));
+                params.put("temp_project_id",Utils.toRequestBody("111111112222222"));
+                params.put("temp_project_name",Utils.toRequestBody(gcjb_add_ssxm.getText().toString()));//
+                params.put("user_name",Utils.toRequestBody(SPUtil.getUserName(this)));
+                params.put("brief_type",Utils.toRequestBody(Utils.typetoBriefConversion(gcjb_add_jblb.getText().toString())));
+                params.put("construction_content",Utils.toRequestBody(gcjb_sgqk.getText().toString().trim()));
+                params.put("management_content",Utils.toRequestBody(gcjb_glqk.getText().toString().trim()));
+                params.put("question_content",Utils.toRequestBody(gcjb_czqk.getText().toString().trim()));
+                params.put("plan_content",Utils.toRequestBody(gcjb_jdjh.getText().toString().trim()));
+                params.put("remarks",Utils.toRequestBody(gcjb_bz.getText().toString().trim()));
+                saveBerif(params);
                 break;
 
         }
+    }
+
+    public void saveBerif(Map<String, RequestBody> params ) {
+        ProgressDialog.show(this);
+        BaseRequest.getInstance().getService()
+                .briefSavePOST(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast("提交成功");
+
+                        Intent intent = new Intent();
+                        intent.putExtra("projectname",gcjb_add_ssxm.getText().toString());
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+
     }
 
     @Override
@@ -265,6 +324,12 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                    break;
+                case Constant.GCJB_ADD_PROJECT:
+                    CheckProjectServiceBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                    if (clickedCheckProjectBean != null) {
+                        gcjb_add_ssxm.setText(clickedCheckProjectBean.getTemp_project_name());
+                    }
                     break;
             }
         }

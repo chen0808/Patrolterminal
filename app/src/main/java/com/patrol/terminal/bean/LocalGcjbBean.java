@@ -1,7 +1,8 @@
 package com.patrol.terminal.bean;
 
-import android.text.TextUtils;
-
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import com.patrol.terminal.sqlite.AppDataBase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -10,14 +11,22 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(database = AppDataBase.class)
 public class LocalGcjbBean extends BaseModel implements Serializable {
 
+    /**
+     * id : 660D24FDA2E3493B8ABD80AAE74CA76B
+     * files : null
+     * tempBriefImgList : [{"id":"F0A9445DC17E40B6B576E54DAD386796","temp_brief_id":"660D24FDA2E3493B8ABD80AAE74CA76B","upload_time":"2019-08-20 11:02:20","filename":"49d53dcc-71ae-461c-95d8-afa981f46255.jpg","file_path":"/upload.folder/"}]
+     */
+
+
     @PrimaryKey(autoincrement = true)
     private int local_id;
-
     @Column
     private String user_id;
 
@@ -25,19 +34,22 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     private String user_name;
 
     @Column
-    private String type;//填写人类型  区分业主方，监理方，施工方
+    private String brief_sign;//标识（1：施工方，2：监理方，3：建设方）
 
     @Column
-    private String project_name;//项目名
+    private String temp_project_name;//项目名
 
     @Column
-    private String project_num;//简报编号
+    private String temp_project_id;//项目ID
 
     @Column
-    private String project_bgnum;//报告编号
+    private String brief_no;//简报编号
+
+//    @Column
+//    private String project_bgnum;//报告编号
 
     @Column
-    private String project_type;//简报类型  初步设计图
+    private String brief_type;//简报类型  简报类型（0：初级设计，1：方案设计，2：施工期，3：竣工）
 
     @Column
     private String project_date;//填报时间
@@ -45,39 +57,60 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     @Column
     private String project_tbr;//填报人
 
-    @Column
-    private String project_ssxm;//所属项目
+//    @Column
+//    private String project_ssxm;//所属项目
 
     @Column
-    private String project_sgqk;//施工情况
+    private String construction_content;//施工情况
 
     @Column
-    private String project_glqk;//管理情况
+    private String management_content;//管理情况
 
     @Column
-    private String project_czqt;//存在问题
+    private String question_content;//存在问题
 
     @Column
-    private String project_jdjh;//进度计划
+    private String plan_content;//进度计划
 
+    @SerializedName("remarks")
     @Column
-    private String project_bz;//备注
+    private String remark;//备注
 
-    @Column
-    private String project_photo;//照片
+    //    @Column
+//    private String project_photo;//照片
+    private String[] files;
 
+    @SerializedName("id")
+    private String id;
+    @SerializedName("tempImgList")
+    private List<PhotoBean> tempBriefImgList;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public List<PhotoBean> getTempBriefImgList() {
+        return tempBriefImgList;
+    }
+
+    public void setTempBriefImgList(List<PhotoBean> tempBriefImgList) {
+        this.tempBriefImgList = tempBriefImgList;
+    }
 
     public static List<LocalGcjbBean> getGcjbLsit(String type) {
-        return SQLite.select().from(LocalGcjbBean.class).where(LocalGcjbBean_Table.type.is(type)).queryList();
+        return SQLite.select().from(LocalGcjbBean.class).queryList();
     }
 
+    public static List<LocalGcjbBean> arrayLocalGcjbBeanFromData(String str) {
 
-    public String getType() {
-        return type;
-    }
+        Type listType = new TypeToken<ArrayList<LocalGcjbBean>>() {
+        }.getType();
 
-    public void setType(String type) {
-        this.type = type;
+        return new Gson().fromJson(str, listType);
     }
 
     public int getLocal_id() {
@@ -104,36 +137,44 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
         this.user_name = user_name;
     }
 
-    public String getProject_name() {
-        return project_name;
+    public String getBrief_sign() {
+        return brief_sign;
     }
 
-    public void setProject_name(String project_name) {
-        this.project_name = project_name;
+    public void setBrief_sign(String brief_sign) {
+        this.brief_sign = brief_sign;
     }
 
-    public String getProject_num() {
-        return project_num;
+    public String getTemp_project_name() {
+        return temp_project_name;
     }
 
-    public void setProject_num(String project_num) {
-        this.project_num = project_num;
+    public void setTemp_project_name(String temp_project_name) {
+        this.temp_project_name = temp_project_name;
     }
 
-    public String getProject_bgnum() {
-        return project_bgnum;
+    public String getTemp_project_id() {
+        return temp_project_id;
     }
 
-    public void setProject_bgnum(String project_bgnum) {
-        this.project_bgnum = project_bgnum;
+    public void setTemp_project_id(String temp_project_id) {
+        this.temp_project_id = temp_project_id;
     }
 
-    public String getProject_type() {
-        return project_type;
+    public String getBrief_no() {
+        return brief_no;
     }
 
-    public void setProject_type(String project_type) {
-        this.project_type = project_type;
+    public void setBrief_no(String brief_no) {
+        this.brief_no = brief_no;
+    }
+
+    public String getBrief_type() {
+        return brief_type;
+    }
+
+    public void setBrief_type(String brief_type) {
+        this.brief_type = brief_type;
     }
 
     public String getProject_date() {
@@ -152,59 +193,53 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
         this.project_tbr = project_tbr;
     }
 
-    public String getProject_ssxm() {
-        return project_ssxm;
+    public String getConstruction_content() {
+        return construction_content;
     }
 
-    public void setProject_ssxm(String project_ssxm) {
-        this.project_ssxm = project_ssxm;
+    public void setConstruction_content(String construction_content) {
+        this.construction_content = construction_content;
     }
 
-    public String getProject_sgqk() {
-        return project_sgqk;
+    public String getManagement_content() {
+        return management_content;
     }
 
-    public void setProject_sgqk(String project_sgqk) {
-        this.project_sgqk = project_sgqk;
+    public void setManagement_content(String management_content) {
+        this.management_content = management_content;
     }
 
-    public String getProject_glqk() {
-        return project_glqk;
+    public String getQuestion_content() {
+        return question_content;
     }
 
-    public void setProject_glqk(String project_glqk) {
-        this.project_glqk = project_glqk;
+    public void setQuestion_content(String question_content) {
+        this.question_content = question_content;
     }
 
-    public String getProject_czqt() {
-        return TextUtils.isEmpty(project_czqt) ? "无" : project_czqt;
+    public String getPlan_content() {
+        return plan_content;
     }
 
-    public void setProject_czqt(String project_czqt) {
-        this.project_czqt = project_czqt;
+    public void setPlan_content(String plan_content) {
+        this.plan_content = plan_content;
     }
 
-    public String getProject_jdjh() {
-        return TextUtils.isEmpty(project_jdjh) ? "无" : project_jdjh;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setProject_jdjh(String project_jdjh) {
-        this.project_jdjh = project_jdjh;
+    public void setRemark(String remarks) {
+        this.remark = remarks;
     }
 
-    public String getProject_bz() {
-        return TextUtils.isEmpty(project_bz) ? "无" : project_bz;
+    public String[] getFiles() {
+        return files;
     }
 
-    public void setProject_bz(String project_bz) {
-        this.project_bz = project_bz;
+    public void setFiles(String[] files) {
+        this.files = files;
     }
 
-    public String getProject_photo() {
-        return project_photo;
-    }
 
-    public void setProject_photo(String project_photo) {
-        this.project_photo = project_photo;
-    }
 }

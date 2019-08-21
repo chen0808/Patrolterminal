@@ -2,6 +2,7 @@ package com.patrol.terminal.bean;
 
 import android.text.TextUtils;
 
+import com.google.gson.annotations.SerializedName;
 import com.patrol.terminal.sqlite.AppDataBase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -24,24 +25,35 @@ public class LocalWorkWeeklyBean extends BaseModel implements Serializable {
     @Column
     private String user_name;
 
+    @SerializedName("created_date")
     @Column
     private String work_date;//填报时间
 
+    @SerializedName("conclusion_content")
     @Column
     private String work_bzzj;//本周总结
-
+    @SerializedName("plan_content")
     @Column
     private String work_xzjh;//下周计划
-
+    @SerializedName("coordination_content")
     @Column
     private String work_xtnr;//协调内容
-
+    @SerializedName("remarks")
     @Column
     private String work_bz;//备注
 
     @Column
     private String work_photo;//照片
 
+    private List<PhotoBean> tempImgList;
+
+    public List<PhotoBean> getTempWeeklyImgList() {
+        return tempImgList;
+    }
+
+    public void setTempWeeklyImgList(List<PhotoBean> tempWeeklyImgList) {
+        this.tempImgList = tempWeeklyImgList;
+    }
 
     public static List<LocalWorkWeeklyBean> getAllLsit(){
         return SQLite.select().from(LocalWorkWeeklyBean.class).queryList();

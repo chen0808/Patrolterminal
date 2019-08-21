@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -11,8 +12,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.patrol.terminal.R;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.CheckProjectBean;
+import com.patrol.terminal.bean.CheckProjectServiceBean;
+import com.patrol.terminal.bean.LocalGcjbBean;
 import com.patrol.terminal.bean.LocalLandMarkBean;
+import com.patrol.terminal.bean.LocalWorkWeeklyBean;
+import com.patrol.terminal.overhaul.ProjectSearchActivity;
 import com.patrol.terminal.utils.Constant;
+import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.RoundProgressBar;
 
 import java.util.ArrayList;
@@ -21,6 +32,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 里程碑
@@ -67,7 +80,14 @@ public class LandMarkActivity extends AppCompatActivity {
     @BindView(R.id.probar_bn)
     RoundProgressBar probar_bn;
 
+    @BindView(R.id.title_qx_content)
+    EditText titleQxContent;
+    @BindView(R.id.landmark_view)
+    RelativeLayout landmarkView;
+
     private List<LocalLandMarkBean> landMarkList = new ArrayList<>();
+    private int pageNum = 1;
+    private int count = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +100,8 @@ public class LandMarkActivity extends AppCompatActivity {
         title_setting_tv.setText("添加");
         title_setting.setVisibility(View.VISIBLE);
 
-
-        initView();
+        titleQxContent.setFocusable(false);
+//        initView();
     }
 
 
@@ -128,6 +148,118 @@ public class LandMarkActivity extends AppCompatActivity {
 
     }
 
+    public void quesyList(String project) {
+        ProgressDialog.show(this);
+        BaseRequest.getInstance().getService()
+                .getLcbGET(pageNum + "", count + "", project)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<LocalWorkWeeklyBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<LocalWorkWeeklyBean>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.isSuccess()) {
+//                            gcjbList.clear();
+//                            gcjbList.addAll(t.getResults());
+//                            adapter.notifyDataSetChanged();
+//                            if(gcjbList.size()==0){
+//                                Utils.showToast("暂无该项目简报");
+//                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case Constant.GCJB_ADD:
+                    initView();
+                    break;
+                case Constant.GCJB_ADD_PROJECT:
+
+                    CheckProjectServiceBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                    if (clickedCheckProjectBean != null) {
+                        titleQxContent.setText(clickedCheckProjectBean.getTemp_project_name());
+
+                        landmarkView.setVisibility(View.VISIBLE);
+//                        initView();
+                    }
+                    break;
+            }
+        }
+    }
+
+    String[] lcbList = new String[]{"项目前期", "项目立项", "设计管理", "招标管理", "合同管理", "进度管理", "前期", "实施准备",
+            "在建", "停缓建", "验收", "竣工", "保内", "保外", "解除"};
+
+    @OnClick({R.id.title_back, R.id.title_setting, R.id.probar_xmqq, R.id.probar_xmlx,
+            R.id.probar_sjgl, R.id.probar_zbgl, R.id.probar_sszb, R.id.probar_qq,
+            R.id.probar_jdgl, R.id.probar_htgl, R.id.probar_zj, R.id.probar_thj,
+            R.id.probar_ys, R.id.probar_jg, R.id.probar_jc, R.id.probar_bw,
+            R.id.probar_bn, R.id.title_qx_content})
+    public void onViewClicked(View view) {
+        int marks = 5;
+        switch (view.getId()) {
+            case R.id.title_back:
+                finish();
+                break;
+            case R.id.title_setting:
+                Intent intent = new Intent();
+                intent.setClass(this, LandMarkAddActivity.class);
+                startActivityForResult(intent, Constant.GCJB_ADD);
+                break;
+
+            case R.id.probar_xmqq:
+                marks = 1;
+            case R.id.probar_xmlx:
+                marks = 2;
+            case R.id.probar_sjgl:
+                marks = 3;
+            case R.id.probar_zbgl:
+                marks = 4;
+            case R.id.probar_sszb:
+                marks = 5;
+            case R.id.probar_qq:
+                marks = 6;
+            case R.id.probar_jdgl:
+                marks = 7;
+            case R.id.probar_htgl:
+                marks = 8;
+            case R.id.probar_zj:
+                marks= 9;
+            case R.id.probar_thj:
+                marks = 10;
+            case R.id.probar_ys:
+                marks = 11;
+            case R.id.probar_jg:
+                marks = 12;
+            case R.id.probar_jc:
+//                marks = 13;
+            case R.id.probar_bw:
+//                marks = 14;
+            case R.id.probar_bn:
+//                marks = 15;
+                Intent intent1 = new Intent();
+                intent1.putExtra("marks",lcbList[marks]);
+                intent1.setClass(this, LandMarkDetailActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.title_qx_content:
+                intent = new Intent();
+                intent.setClass(this, ProjectSearchActivity.class);
+                startActivityForResult(intent, Constant.GCJB_ADD_PROJECT);
+                break;
+        }
+    }
+
     public void initProBar(RoundProgressBar bar, int probar) {
         int color = getResources().getColor(R.color.base_status_bar);
         bar.setCircleProgressColor(color);
@@ -139,45 +271,5 @@ public class LandMarkActivity extends AppCompatActivity {
         bar.setProgress(probar);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == Constant.GCJB_ADD) {
-            initView();
-        }
-    }
 
-
-    @OnClick({R.id.title_back, R.id.title_setting, R.id.probar_xmqq, R.id.probar_xmlx, R.id.probar_sjgl, R.id.probar_zbgl, R.id.probar_sszb, R.id.probar_qq, R.id.probar_jdgl, R.id.probar_htgl, R.id.probar_zj, R.id.probar_thj, R.id.probar_ys, R.id.probar_jg, R.id.probar_jc, R.id.probar_bw, R.id.probar_bn})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.title_back:
-                finish();
-                break;
-            case R.id.title_setting:
-                Intent intent = new Intent();
-                intent.setClass(this, LandMarkAddActivity.class);
-                startActivityForResult(intent, Constant.GCJB_ADD);
-                break;
-            case R.id.probar_xmqq:
-            case R.id.probar_xmlx:
-            case R.id.probar_sjgl:
-            case R.id.probar_zbgl:
-            case R.id.probar_sszb:
-            case R.id.probar_qq:
-            case R.id.probar_jdgl:
-            case R.id.probar_htgl:
-            case R.id.probar_zj:
-            case R.id.probar_thj:
-            case R.id.probar_ys:
-            case R.id.probar_jg:
-            case R.id.probar_jc:
-            case R.id.probar_bw:
-            case R.id.probar_bn:
-                Intent intent1 = new Intent();
-                intent1.setClass(this, LandMarkDetailActivity.class);
-                startActivity(intent1);
-                break;
-        }
-    }
 }

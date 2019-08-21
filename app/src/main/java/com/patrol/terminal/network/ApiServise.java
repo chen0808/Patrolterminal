@@ -1275,6 +1275,34 @@ public interface ApiServise {
     @GET("temp/project/pdaPageGET")
     Observable<BaseResult<List<InitiateProjectBean>>> getProjectList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
 
+    //工程简报
+    @Multipart
+    @POST("temp/brief/savePOST")
+    Observable<BaseResult> briefSavePOST(@PartMap Map<String, RequestBody> params);
+
+    //工程简报  列表
+    @GET("temp/brief/pdaPageGET")
+    Observable<BaseResult<List<LocalGcjbBean>>> queryListPOST(@Query("page_num") String page_num,@Query("page_size") String page_size,@Query("name") String name,@Query("brief_sign") String brief_sign);
+
+    //工程周报
+    @Multipart
+    @POST("temp/weekly/savePOST")
+    Observable<BaseResult> saveWorklyPOST(@PartMap Map<String, RequestBody> params);
+
+    //工程周报  列表
+    @GET("temp/weekly/pdaPageGET")
+    Observable<BaseResult<List<LocalWorkWeeklyBean>>> queryWorklyGET(@Query("page_num") String page_num,@Query("page_size") String page_size);
+
+    //里程碑  列表
+    @GET("temp/project/pdaPageGET")
+    Observable<BaseResult<List<LocalWorkWeeklyBean>>> getLcbGET(@Query("page_num") String page_num,@Query("page_size") String page_size,@Query("name") String name);
+
+    //工程周报
+    @Multipart
+    @POST("temp/weekly/savePOST")
+    Observable<BaseResult> saveWorklyPOST2(@Body RequestBody  params);
+
+
     //施工日志添加
     @Multipart
     @POST("temp/log/savePOST")

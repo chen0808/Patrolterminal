@@ -28,15 +28,20 @@ import com.patrol.terminal.activity.NextMonthPlanActivity;
 import com.patrol.terminal.activity.NextWeekPlanActivity;
 import com.patrol.terminal.activity.PatrolRecordActivity;
 import com.patrol.terminal.activity.XieGanTaQingXieCeWenActivity;
+import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.DefactTvModel;
+import com.patrol.terminal.bean.LocalGcjbBean;
+import com.patrol.terminal.bean.PhotoBean;
 import com.patrol.terminal.bean.TodoBean;
 import com.patrol.terminal.overhaul.OverhaulPlanActivity;
 
+import java.io.File;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -391,7 +396,7 @@ public class Utils {
         Toast.makeText(MyApp.getAppContext(), msg, Toast.LENGTH_LONG).show();
     }
 
-    public RequestBody toRequestBody(String value) {
+    public static RequestBody toRequestBody(String value) {
         if (value != null) {
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
             return requestBody;
@@ -399,6 +404,20 @@ public class Utils {
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
             return requestBody;
         }
+    }
+
+    /**
+     * 文件上传地址转换
+     * filePartName 文件参数名
+     */
+    public static Map<String, RequestBody> toFileRequestBody(String filePartName, Map<String, RequestBody> params, List<String> photoList) {
+        for (int i = 0; i < photoList.size(); i++) {
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(photoList.get(i)));
+            String[] split = photoList.get(i).split("/");
+            String name = split[split.length - 1];
+            params.put(filePartName + "\"; filename=\"" + name, requestFile);
+        }
+        return params;
     }
 
     public static String listToStr(List<String> photoList) {
@@ -423,8 +442,60 @@ public class Utils {
         return list;
     }
 
+    public static List<String> szToList(String[] photoList) {
+        List<String> list = new ArrayList<>();
+        for (int j = 0; j < photoList.length; j++) {
+            if(!TextUtils.isEmpty(photoList[j]))
+                list.add(photoList[j]);
+        }
+        return list;
+    }
+
+    public static String[] listToSz( List<String> list) {
+        String[] sz = new String[list.size()];
+        for (int j = 0; j < list.size(); j++) {
+            sz[j] = list.get(j);
+        }
+        return sz;
+    }
+
+    public static List<String> photoToList( List<PhotoBean> list) {
+        List photoList = new ArrayList(list.size());
+        for (int j = 0; j < list.size(); j++) {
+            photoList.add(BaseUrl.BASE_URL+list.get(j).filePath+list.get(j).filename);
+        }
+        return photoList;
+    }
+
     public static void hideSysInput(Activity activity) {
         ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    //0：初级设计，1：方案设计，2：施工期，3：竣工
+    public static String briefTypeConversion(String type){
+        if(type.equals("0")){
+            return "初级设计";
+        }else if(type.equals("1")){
+            return "方案设计";
+        }else if(type.equals("2")){
+            return "施工期";
+        }else if(type.equals("3")){
+            return "竣工";
+        }
+        return "数据错误";
+    }
+
+    public static String typetoBriefConversion(String type){
+        if(type.contains("初步设计")){
+            return "0";
+        }else if(type.contains("方案设计")){
+            return "1";
+        }else if(type.contains("施工期")){
+            return "2";
+        }else if(type.contains("竣工")){
+            return "3";
+        }
+        return "数据错误";
     }
 
 }
