@@ -26,23 +26,19 @@ public class LocalLandMarkBean extends BaseModel implements Serializable {
     private String user_name;
 
     private String temp_project_id;
+
     private String temp_project_name;
 
     @SerializedName("status")
-    @Column
     private String landmark_sbjd;//上报阶段
 
     @SerializedName("plan")
-    @Column
     private String landmark_jd;//进度
     @SerializedName("content")
-    @Column
     private String landmark_qkms;//情况描述
     @SerializedName("remarks")
-    @Column
     private String landmark_bz;//备注
     @SerializedName("created_date")
-    @Column
     private String date;//添加时间
 
     public String getTemp_project_id() {
@@ -64,15 +60,6 @@ public class LocalLandMarkBean extends BaseModel implements Serializable {
     public static List<LocalLandMarkBean> getAllLsit() {
         return SQLite.select().from(LocalLandMarkBean.class).queryList();
     }
-
-    public static Boolean addStatus(String landmark_sbjd) {
-        LocalLandMarkBean bean = SQLite.select().from(LocalLandMarkBean.class).where(LocalLandMarkBean_Table.landmark_sbjd.is(landmark_sbjd)).querySingle();
-        if (bean == null)
-            return false;
-        else
-            return true;
-    }
-
 
     public String getDate() {
         return date;

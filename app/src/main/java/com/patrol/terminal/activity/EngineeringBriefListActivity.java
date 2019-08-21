@@ -24,8 +24,10 @@ import com.patrol.terminal.bean.CheckProjectBean;
 import com.patrol.terminal.bean.CheckProjectServiceBean;
 import com.patrol.terminal.bean.DefectFragmentBean;
 import com.patrol.terminal.bean.InitiateProjectBean;
+import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.bean.LocalGcjbBean;
 import com.patrol.terminal.overhaul.ProjectSearchActivity;
+import com.patrol.terminal.overhaul.ProjectSearchActivityNew;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -167,7 +169,7 @@ public class EngineeringBriefListActivity extends AppCompatActivity {
                 break;
             case R.id.title_qx_content:
                 Intent intent2 = new Intent();
-                intent2.setClass(this, ProjectSearchActivity.class);
+                intent2.setClass(this, ProjectSearchActivityNew.class);
                 startActivityForResult(intent2, Constant.GCJB_ADD_PROJECT);
                 break;
         }
@@ -185,10 +187,10 @@ public class EngineeringBriefListActivity extends AppCompatActivity {
                     quesyList();
                     break;
                 case Constant.GCJB_ADD_PROJECT:
-                    CheckProjectServiceBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                    InitiateProjectBean2 clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
-                        titleQxContent.setText(clickedCheckProjectBean.getTemp_project_name());
-                        projectName = clickedCheckProjectBean.getTemp_project_name();
+                        titleQxContent.setText(clickedCheckProjectBean.getName());
+                        projectName = clickedCheckProjectBean.getName();
                         pageNum = 1;
                         quesyList();
                     }

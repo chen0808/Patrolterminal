@@ -17,10 +17,12 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.CheckProjectBean;
 import com.patrol.terminal.bean.CheckProjectServiceBean;
+import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.bean.LocalGcjbBean;
 import com.patrol.terminal.bean.LocalLandMarkBean;
 import com.patrol.terminal.bean.LocalWorkWeeklyBean;
 import com.patrol.terminal.overhaul.ProjectSearchActivity;
+import com.patrol.terminal.overhaul.ProjectSearchActivityNew;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -191,11 +193,11 @@ public class LandMarkActivity extends AppCompatActivity {
 //                    break;
                 case Constant.GCJB_ADD_PROJECT:
 
-                    CheckProjectServiceBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                    InitiateProjectBean2 clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
-                        titleQxContent.setText(clickedCheckProjectBean.getTemp_project_name());
+                        titleQxContent.setText(clickedCheckProjectBean.getName());
 
-                        quesyList(clickedCheckProjectBean.getTemp_project_id());
+                        quesyList(clickedCheckProjectBean.getName());
                         landmarkView.setVisibility(View.VISIBLE);
 //                        initView();
                     }
@@ -203,9 +205,6 @@ public class LandMarkActivity extends AppCompatActivity {
             }
         }
     }
-
-    String[] lcbList = new String[]{"项目前期", "项目立项", "设计管理", "招标管理", "合同管理", "进度管理", "前期", "实施准备",
-            "在建", "停缓建", "验收", "竣工", "保内", "保外", "解除"};
 
     @OnClick({R.id.title_back, R.id.title_setting, R.id.probar_xmqq, R.id.probar_xmlx,
             R.id.probar_sjgl, R.id.probar_zbgl, R.id.probar_sszb, R.id.probar_qq,
@@ -255,14 +254,14 @@ public class LandMarkActivity extends AppCompatActivity {
             case R.id.probar_bn:
 //                marks = 15;
                 Intent intent1 = new Intent();
-                intent1.putExtra("marks",lcbList[marks]);
+                intent1.putExtra("marks",Constant.lcbList[marks]);
                 intent1.putExtra("list",(Serializable)landMarkList);
                 intent1.setClass(this, LandMarkDetailActivity.class);
                 startActivity(intent1);
                 break;
             case R.id.title_qx_content:
                 intent = new Intent();
-                intent.setClass(this, ProjectSearchActivity.class);
+                intent.setClass(this, ProjectSearchActivityNew.class);
                 startActivityForResult(intent, Constant.GCJB_ADD_PROJECT);
                 break;
         }

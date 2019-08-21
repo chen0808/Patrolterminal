@@ -24,9 +24,11 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.CheckProjectServiceBean;
+import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.bean.LocalLandMarkBean;
 import com.patrol.terminal.bean.LocalWorkWeeklyBean;
 import com.patrol.terminal.overhaul.ProjectSearchActivity;
+import com.patrol.terminal.overhaul.ProjectSearchActivityNew;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
@@ -79,7 +81,7 @@ public class LandMarkAddActivity extends AppCompatActivity {
 
     private int probar;
     private boolean addStatus = false;
-    private CheckProjectServiceBean clickedCheckProjectBean;
+    private InitiateProjectBean2 clickedCheckProjectBean;
     private int checkedItem = 0;//上报阶段  项目状态（0：项目前期，1：项目立项，2：设计管理，3：招标管理，4：合同管理，5：进度管理，6：前期，7：实施准备，8：在建，9：停缓期，10：验收，11：验收，12：竣工，13：保内，14：保外，15：解除，16：完成）
 
     @Override
@@ -99,17 +101,14 @@ public class LandMarkAddActivity extends AppCompatActivity {
         landmark_add_jblb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] types = new String[]{"项目前期", "项目立项", "设计管理", "招标管理",
-                        "合同管理","进度管理","前期","实施准备","在建","停缓建","验收","竣工",
-                        "保内","保外","解除"};
 
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(LandMarkAddActivity.this);
                 alertBuilder.setTitle("选择上报阶段");
-                alertBuilder.setSingleChoiceItems(types, checkedItem, new DialogInterface.OnClickListener() {
+                alertBuilder.setSingleChoiceItems(Constant.lcbList, checkedItem, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int options1) {
                         checkedItem = options1;
-                        landmark_add_jblb.setText(types[options1]);
+                        landmark_add_jblb.setText(Constant.lcbList[options1]);
                         dialog.dismiss();
 //                        if(LocalLandMarkBean.addStatus(types[options1])){
 //                            Utils.showToast("该阶段已上报");
@@ -154,13 +153,13 @@ public class LandMarkAddActivity extends AppCompatActivity {
                 break;
             case R.id.landmark_add_ssxm:
                 Intent intent = new Intent();
-                intent.setClass(this, ProjectSearchActivity.class);
+                intent.setClass(this, ProjectSearchActivityNew.class);
                 startActivityForResult(intent, Constant.GCJB_ADD_PROJECT);
                 break;
             case R.id.landmark_save:
 
                 if(clickedCheckProjectBean == null){
-                    Utils.showToast("请选择项目");
+                    Utils.showToast("请选择上报项目");
                     return;
                 }
 
@@ -195,8 +194,8 @@ public class LandMarkAddActivity extends AppCompatActivity {
 //                bean.setRemarks(landmarkBz.getText().toString().trim());
 //                bean.setCreated_date(DateUatil.getTime());
                 Map<String, RequestBody> params = new HashMap<>();
-                params.put("temp_project_id",Utils.toRequestBody(clickedCheckProjectBean.getTemp_project_id()));
-                params.put("temp_project_name",Utils.toRequestBody(clickedCheckProjectBean.getTemp_project_name()));
+                params.put("temp_project_id",Utils.toRequestBody(clickedCheckProjectBean.getProject_no()));
+                params.put("temp_project_name",Utils.toRequestBody(clickedCheckProjectBean.getName()));
                 params.put("status",Utils.toRequestBody(String.valueOf(checkedItem+1)));
                 params.put("plan",Utils.toRequestBody(probar+""));
                 params.put("content",Utils.toRequestBody(qkms));
@@ -250,7 +249,7 @@ public class LandMarkAddActivity extends AppCompatActivity {
                 case Constant.GCJB_ADD_PROJECT:
                     clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
-                        landmark_add_ssxm.setText(clickedCheckProjectBean.getTemp_project_name());
+                        landmark_add_ssxm.setText(clickedCheckProjectBean.getName());
                     }
                     break;
             }

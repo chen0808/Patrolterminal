@@ -25,16 +25,6 @@
             android:scaleType="center"
             android:src="@mipmap/search" />
 
-        <ImageView
-            android:id="@+id/title_search_delete"
-            android:layout_width="@dimen/dp_40"
-            android:layout_height="@dimen/dp_40"
-            android:layout_alignRight="@id/title_qx_content"
-            android:layout_centerVertical="true"
-            android:scaleType="center"
-            android:src="@mipmap/search_delete"
-            android:visibility="gone" />
-
         <EditText
             android:id="@+id/title_qx_content"
             android:layout_width="match_parent"
@@ -48,6 +38,16 @@
             android:padding="2dp"
             android:textColor="@color/black" />
 
+        <ImageView
+            android:id="@+id/title_search_delete"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_alignRight="@id/title_qx_content"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:scaleType="center"
+            android:src="@mipmap/search_delete"
+            android:visibility="gone" />
 
     </RelativeLayout>
 </RelativeLayout>

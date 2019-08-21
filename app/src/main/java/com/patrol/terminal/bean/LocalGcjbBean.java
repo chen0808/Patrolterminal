@@ -1,5 +1,7 @@
 package com.patrol.terminal.bean;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -9,6 +11,8 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -202,7 +206,10 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     }
 
     public String getManagement_content() {
-        return management_content;
+        if (TextUtils.isEmpty(management_content))
+            return "无";
+        else
+            return management_content;
     }
 
     public void setManagement_content(String management_content) {
@@ -210,7 +217,10 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     }
 
     public String getQuestion_content() {
-        return question_content;
+        if (TextUtils.isEmpty(question_content))
+            return "无";
+        else
+            return question_content;
     }
 
     public void setQuestion_content(String question_content) {
@@ -218,7 +228,10 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     }
 
     public String getPlan_content() {
-        return plan_content;
+        if (TextUtils.isEmpty(plan_content))
+            return "无";
+        else
+            return plan_content;
     }
 
     public void setPlan_content(String plan_content) {
@@ -226,7 +239,10 @@ public class LocalGcjbBean extends BaseModel implements Serializable {
     }
 
     public String getRemark() {
-        return remark;
+        if (TextUtils.isEmpty(remark))
+            return "无";
+        else
+            return remark;
     }
 
     public void setRemark(String remarks) {

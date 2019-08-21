@@ -1302,6 +1302,7 @@ public interface ApiServise {
     Observable<BaseResult<List<LocalWorkWeeklyBean>>> queryWorklyGET(@Query("page_num") String page_num,@Query("page_size") String page_size);
 
     //里程碑  添加
+    @Multipart
     @POST("temp/milestone/updatePOST")
     Observable<BaseResult> saveLcbPOST(@PartMap Map<String, RequestBody> params);
 
