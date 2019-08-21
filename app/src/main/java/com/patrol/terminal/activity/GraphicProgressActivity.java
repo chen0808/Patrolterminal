@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+//形象进度列表
 public class GraphicProgressActivity extends BaseActivity {
 
     @BindView(R.id.title_back)

@@ -36,9 +36,12 @@ public class GradohicProgressAdapter extends BaseQuickAdapter<GraphicProgressBea
         String picList = item.getPicList();
         List<String> list=new ArrayList<>();
         String[] split = picList.split(",");
-        for (int i = 0; i < split.length; i++) {
-            list.add(split[i]);
+        if (!"".equals(picList)){
+            for (int i = 0; i < split.length; i++) {
+                list.add(split[i]);
+            }
         }
+
         GridViewAdapter4  mGridViewAddImgAdapter = new GridViewAdapter4(mContext, list);
         gridView.setAdapter(mGridViewAddImgAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
