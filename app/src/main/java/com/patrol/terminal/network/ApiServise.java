@@ -1278,6 +1278,11 @@ public interface ApiServise {
     @GET("temp/project/pdaPageGET")
     Observable<BaseResult<List<InitiateProjectBean>>> getProjectList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
 
+    //获取项目列表2
+    @GET("temp/project/pdaPageGET")
+    Observable<BaseResult<List<InitiateProjectBean2>>> getProjectList2(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
+
+
     //工程简报
     @Multipart
     @POST("temp/brief/savePOST")

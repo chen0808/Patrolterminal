@@ -3,11 +3,12 @@ package com.patrol.terminal.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InitiateProjectBean implements Serializable{
+public class InitiateProjectBean2 implements Parcelable {
+
+
     private String id;
     private String name;
     private String create_name;
@@ -23,7 +24,7 @@ public class InitiateProjectBean implements Serializable{
     private String start_time;
     private String end_time;
     private String content;
-    private List<FileBean> tempImgList;
+    private List<FileBean2> tempImgList;
 
     public String getName() {
         return name;
@@ -145,15 +146,70 @@ public class InitiateProjectBean implements Serializable{
         this.create_name = create_name;
     }
 
-    public List<FileBean> getTempImgList() {
+    public List<FileBean2> getTempImgList() {
         return tempImgList;
     }
 
-    public void setTempImgList(List<FileBean> tempImgList) {
+    public void setTempImgList(List<FileBean2> tempImgList) {
         this.tempImgList = tempImgList;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.create_name);
+        dest.writeString(this.project_no);
+        dest.writeValue(this.total_money);
+        dest.writeString(this.address);
+        dest.writeString(this.detailed_address);
+        dest.writeString(this.dep_name);
+        dest.writeString(this.parent_project);
+        dest.writeString(this.model);
+        dest.writeString(this.status);
+        dest.writeString(this.type_sign);
+        dest.writeString(this.start_time);
+        dest.writeString(this.end_time);
+        dest.writeString(this.content);
+        dest.writeTypedList(this.tempImgList);
+    }
 
+    public InitiateProjectBean2() {
+    }
 
+    protected InitiateProjectBean2(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.create_name = in.readString();
+        this.project_no = in.readString();
+        this.total_money = (Double) in.readValue(Double.class.getClassLoader());
+        this.address = in.readString();
+        this.detailed_address = in.readString();
+        this.dep_name = in.readString();
+        this.parent_project = in.readString();
+        this.model = in.readString();
+        this.status = in.readString();
+        this.type_sign = in.readString();
+        this.start_time = in.readString();
+        this.end_time = in.readString();
+        this.content = in.readString();
+        this.tempImgList = in.createTypedArrayList(FileBean2.CREATOR);
+    }
+
+    public static final Parcelable.Creator<InitiateProjectBean2> CREATOR = new Parcelable.Creator<InitiateProjectBean2>() {
+        @Override
+        public InitiateProjectBean2 createFromParcel(Parcel source) {
+            return new InitiateProjectBean2(source);
+        }
+
+        @Override
+        public InitiateProjectBean2[] newArray(int size) {
+            return new InitiateProjectBean2[size];
+        }
+    };
 }

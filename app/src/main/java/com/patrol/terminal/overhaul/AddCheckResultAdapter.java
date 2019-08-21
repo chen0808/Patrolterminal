@@ -1,6 +1,10 @@
 package com.patrol.terminal.overhaul;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -18,12 +23,15 @@ import com.patrol.terminal.bean.CheckResultBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.Utils;
 
+import java.io.File;
 import java.util.List;
 
 public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, BaseViewHolder> {
     private boolean isRadioGroupShow = false;
     private List<CheckResultBean> mData;
     private Activity mActivity;
+    Uri photoUri;
+    String filePath;
 
     /*  public AddCheckResultAdapter(int layoutResId, @Nullable List<CheckResultBean> data, String year, String month) {
           super(layoutResId, data);
@@ -90,16 +98,19 @@ public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, Bas
         EditText checkContentEt = viewHolder.getView(R.id.check_content_et);
         item.setCheckContent(checkContentEt.getText().toString());
 
+        LinearLayout addPicLl = viewHolder.getView(R.id.add_pic_ll);
+        ImageView addPicIv = viewHolder.getView(R.id.add_pic_iv);
         viewHolder.setOnClickListener(R.id.add_pic_iv, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.startCamera(mActivity, 1003);
+                //photoUri = patrUri(item.getCheckResultId() + "_" + addPicLl.getChildCount());
+                startCamera(mActivity, 1003);
                 Constant.checkResultId = item.getCheckResultId();
             }
         });
 
         //设置图片  TODO
-        ImageView addPicIv = viewHolder.getView(R.id.add_pic_iv);
+
         List<CheckResultBean.PictureInfo> bmpList = item.getCheckPics();
         Log.w("linmeng", "bmpList.size():" + bmpList.size());
         if (bmpList.size() > 4) {
@@ -109,7 +120,6 @@ public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, Bas
         }
 
         if (bmpList != null && bmpList.size() > 0) {
-            LinearLayout addPicLl = viewHolder.getView(R.id.add_pic_ll);
             addPicLl.removeAllViews();
             for (int i = 0; i < bmpList.size(); i++) {
                 Log.w("linmeng", "bmpList.size():" + bmpList.size());
@@ -126,6 +136,38 @@ public class AddCheckResultAdapter extends BaseQuickAdapter<CheckResultBean, Bas
         }
 
 
+    }
+
+    //打开相机
+    private void startCamera(Activity activity, int requestCode/*, Uri photoUri*/) {
+        // TODO Auto-generated method stub
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+
+    /**
+     * 图片保存路径  这里是在SD卡目录下创建了MyPhoto文件夹
+     *
+     * @param fileName
+     * @return
+     */
+    private Uri patrUri(String fileName) {  //指定了图片的名字，可以使用时间来命名
+        // TODO Auto-generated method stub
+        String strPhotoName = fileName + ".jpg";
+        String savePath = Environment.getExternalStorageDirectory().getPath()
+                + "/MyPhoto/";
+        File dir = new File(savePath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        filePath = savePath + strPhotoName;
+
+        return FileProvider.getUriForFile(mContext.getApplicationContext(),
+                "com.patrol.terminal.fileprovider",
+                new File(dir, strPhotoName));
     }
 
 }

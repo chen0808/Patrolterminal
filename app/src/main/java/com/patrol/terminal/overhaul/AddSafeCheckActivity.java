@@ -32,9 +32,12 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.CheckProjectBean;
 import com.patrol.terminal.bean.CheckProjectServiceBean;
 import com.patrol.terminal.bean.CheckResultBean;
+import com.patrol.terminal.bean.InitiateProjectBean;
+import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.bean.UserBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
+import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
@@ -44,6 +47,7 @@ import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -154,7 +158,7 @@ public class AddSafeCheckActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setClass(AddSafeCheckActivity.this, ProjectSearchActivity.class);
+                intent.setClass(AddSafeCheckActivity.this, ProjectSearchActivityNew.class);
 //                intent.putExtra("project_ids", mProjectIds);
 //                intent.putExtra("project_names", mProjectNames);
                 startActivityForResult(intent, 1001);
@@ -285,10 +289,11 @@ public class AddSafeCheckActivity extends BaseActivity {
         switch (requestCode) {
             case 1001:
                 if (data != null) {
-                    CheckProjectServiceBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
+                    InitiateProjectBean2 clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
-                        mSelectProjectId = clickedCheckProjectBean.getTemp_project_id();   //备用  TODO
-                        mSelectProjectName = clickedCheckProjectBean.getTemp_project_name();
+                        mSelectProjectId = clickedCheckProjectBean.getId();   //备用  TODO
+                        Log.w("linmeng", "onActivityResult clickedCheckProjectBean.getName():" + clickedCheckProjectBean.getName());
+                        mSelectProjectName = clickedCheckProjectBean.getName();
                         mProjectContentTv.setText(mSelectProjectName);
                     }
                 }
@@ -314,9 +319,16 @@ public class AddSafeCheckActivity extends BaseActivity {
                 Log.d("TAG", "success");
                 Bundle bundle = data.getExtras();
                 Bitmap bitmap = (Bitmap) bundle.get("data");
+
                 String path = Environment.getExternalStorageDirectory().getPath()
                         + "/MyPhoto/" + Constant.CHECK_RESULT + "_" + Constant.checkResultId + "_" + System.currentTimeMillis() + ".jpg";
-                list.add(path);
+                try {
+                    FileUtil.saveFile(bitmap, path);
+                    list.add(path);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 
                 for (int i = 0; i < mCheckResult.size(); i++) {
                     long checkResultId = mCheckResult.get(i).getCheckResultId();

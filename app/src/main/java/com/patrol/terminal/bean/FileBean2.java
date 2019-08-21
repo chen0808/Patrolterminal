@@ -3,9 +3,7 @@ package com.patrol.terminal.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
-public class FileBean implements Serializable {
+public class FileBean2 implements Parcelable {
 
 
     /**
@@ -112,4 +110,50 @@ public class FileBean implements Serializable {
         this.upload_time = upload_time;
     }
 
+    public FileBean2() {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.data_id);
+        dest.writeString(this.filename);
+        dest.writeString(this.old_name);
+        dest.writeString(this.file_type);
+        dest.writeString(this.file_path);
+        dest.writeString(this.file_size);
+        dest.writeString(this.repair_type);
+        dest.writeString(this.content);
+        dest.writeString(this.upload_time);
+    }
+
+    protected FileBean2(Parcel in) {
+        this.id = in.readString();
+        this.data_id = in.readString();
+        this.filename = in.readString();
+        this.old_name = in.readString();
+        this.file_type = in.readString();
+        this.file_path = in.readString();
+        this.file_size = in.readString();
+        this.repair_type = in.readString();
+        this.content = in.readString();
+        this.upload_time = in.readString();
+    }
+
+    public static final Creator<FileBean2> CREATOR = new Creator<FileBean2>() {
+        @Override
+        public FileBean2 createFromParcel(Parcel source) {
+            return new FileBean2(source);
+        }
+
+        @Override
+        public FileBean2[] newArray(int size) {
+            return new FileBean2[size];
+        }
+    };
 }
