@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/llcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--存放时间的TextView-->
+            <LinearLayout
+                android:id="@+id/llshijian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#000000"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:id="@+id/llprogress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!--放入相对布局-->
+                    <!--相对布局中放入，进度条-->
+                    <!--相对布局中放入文字-->
+                    <!--<ProgressBar-->
+
+                    <!--style="@android:style/Widget.ProgressBar.Horizontal"-->
+                    <!--android:progressDrawable="@drawable/progressbar"-->
+                    <!--android:layout_width="500dp"-->
+                    <!--android:layout_height="45dp"-->
+                    <!--android:max="100"-->
+                    <!--android:progress="20"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:layout_marginLeft="0dp"-->
+                    <!--/>-->
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>

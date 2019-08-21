@@ -3,6 +3,7 @@ package com.patrol.terminal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,6 +42,10 @@ public class ProjectPlanActivity extends BaseActivity {
     RelativeLayout rlPast;
     @BindView(R.id.rl_finish)
     RelativeLayout rlFinish;
+    @BindView(R.id.title_item)
+    RelativeLayout titleItem;
+    @BindView(R.id.btn_gantt)
+    Button btnGantt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +55,7 @@ public class ProjectPlanActivity extends BaseActivity {
         titleName.setText("计划");
     }
 
-    @OnClick({R.id.title_back, R.id.rl_ready, R.id.rl_ing, R.id.rl_past, R.id.rl_finish})
+    @OnClick({R.id.title_back, R.id.rl_ready, R.id.rl_ing, R.id.rl_past, R.id.rl_finish, R.id.btn_gantt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -71,6 +76,10 @@ public class ProjectPlanActivity extends BaseActivity {
             case R.id.rl_finish:
                 Intent intent4 = new Intent(this, ProjectPlanListActivity.class);
                 startActivity(intent4);
+                break;
+            case R.id.btn_gantt:
+                Intent intent5 = new Intent(this, GanttActivity.class);
+                startActivity(intent5);
                 break;
         }
     }
