@@ -1301,15 +1301,13 @@ public interface ApiServise {
     @GET("temp/weekly/pdaPageGET")
     Observable<BaseResult<List<LocalWorkWeeklyBean>>> queryWorklyGET(@Query("page_num") String page_num,@Query("page_size") String page_size);
 
+    //里程碑  添加
+    @POST("temp/milestone/updatePOST")
+    Observable<BaseResult> saveLcbPOST(@PartMap Map<String, RequestBody> params);
+
     //里程碑  列表
-    @GET("temp/project/pdaPageGET")
-    Observable<BaseResult<List<LocalWorkWeeklyBean>>> getLcbGET(@Query("page_num") String page_num,@Query("page_size") String page_size,@Query("name") String name);
-
-    //工程周报
-    @Multipart
-    @POST("temp/weekly/savePOST")
-    Observable<BaseResult> saveWorklyPOST2(@Body RequestBody  params);
-
+    @GET("temp/milestone/listGET")
+    Observable<BaseResult<List<LocalLandMarkBean>>> queryLcbGET(@Query("temp_project_id") String temp_project_id);
 
     //施工日志添加
     @Multipart

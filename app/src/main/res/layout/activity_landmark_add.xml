@@ -16,6 +16,41 @@
 
         <TextView
             style="@style/gcjb_item_left"
+            android:text="所属项目" />
+
+        <TextView
+            style="@style/gcjb_xin"
+            android:text="*"
+            android:textColor="@color/home_red" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/landmark_add_ssxm"
+                android:text="请选择"
+                android:gravity="center_vertical|right"
+                android:paddingRight="@dimen/dp_40"
+                style="@style/defect_detail_item_right" />
+
+            <ImageView
+                android:id="@+id/img_allow_ssxm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:src="@mipmap/next" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/defect_detail_item_ly">
+
+        <TextView
+            style="@style/gcjb_item_left"
             android:text="上报阶段" />
 
         <TextView
@@ -52,8 +87,8 @@
 
         <TextView
             android:id="@+id/gcjb_jd_tv"
-            android:layout_width="@dimen/dp_90"
             style="@style/gcjb_item_left"
+            android:layout_width="@dimen/dp_90"
             android:text="进度（ 0%）" />
 
         <TextView
@@ -66,8 +101,7 @@
             android:id="@+id/landmark_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            />
+            android:layout_gravity="center_vertical" />
 
 
     </LinearLayout>

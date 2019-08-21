@@ -26,6 +26,7 @@ import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.RoundProgressBar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,14 +106,15 @@ public class LandMarkActivity extends AppCompatActivity {
     }
 
 
-    public void initView() {
+    public void initView(List<LocalLandMarkBean> result) {
 
         landMarkList.clear();
-        landMarkList.addAll(LocalLandMarkBean.getAllLsit());
+        landMarkList.addAll(result);
 
         for (int i = 0; i < landMarkList.size(); i++) {
             LocalLandMarkBean bean = landMarkList.get(i);
-            String sbjd = bean.getLandmark_sbjd();
+            String sbjd = Constant.lcbList[i];//bean.getLandmark_sbjd();
+
             if (sbjd.equals("项目前期")) {
                 initProBar(probar_xmqq, bean.getLandmark_jd());
             } else if (sbjd.equals("项目立项")) {
@@ -148,17 +150,18 @@ public class LandMarkActivity extends AppCompatActivity {
 
     }
 
-    public void quesyList(String project) {
+    public void quesyList(String temp_project_id) {
         ProgressDialog.show(this);
         BaseRequest.getInstance().getService()
-                .getLcbGET(pageNum + "", count + "", project)
+                .queryLcbGET(temp_project_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<List<LocalWorkWeeklyBean>>(this) {
+                .subscribe(new BaseObserver<List<LocalLandMarkBean>>(this) {
                     @Override
-                    protected void onSuccees(BaseResult<List<LocalWorkWeeklyBean>> t) throws Exception {
+                    protected void onSuccees(BaseResult<List<LocalLandMarkBean>> t) throws Exception {
                         ProgressDialog.cancle();
                         if (t.isSuccess()) {
+                            initView(t.getResults());
 //                            gcjbList.clear();
 //                            gcjbList.addAll(t.getResults());
 //                            adapter.notifyDataSetChanged();
@@ -181,14 +184,18 @@ public class LandMarkActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constant.GCJB_ADD:
-                    initView();
-                    break;
+//                    CheckProjectServiceBean clickedCheckProjectBean2 = data.getParcelableExtra("search_project_item");
+//                    if (clickedCheckProjectBean2 != null) {
+//                        quesyList(clickedCheckProjectBean2.getTemp_project_id());
+//                    }
+//                    break;
                 case Constant.GCJB_ADD_PROJECT:
 
                     CheckProjectServiceBean clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
                         titleQxContent.setText(clickedCheckProjectBean.getTemp_project_name());
 
+                        quesyList(clickedCheckProjectBean.getTemp_project_id());
                         landmarkView.setVisibility(View.VISIBLE);
 //                        initView();
                     }
@@ -249,6 +256,7 @@ public class LandMarkActivity extends AppCompatActivity {
 //                marks = 15;
                 Intent intent1 = new Intent();
                 intent1.putExtra("marks",lcbList[marks]);
+                intent1.putExtra("list",(Serializable)landMarkList);
                 intent1.setClass(this, LandMarkDetailActivity.class);
                 startActivity(intent1);
                 break;

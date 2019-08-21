@@ -2,6 +2,7 @@ package com.patrol.terminal.bean;
 
 import android.text.TextUtils;
 
+import com.google.gson.annotations.SerializedName;
 import com.patrol.terminal.sqlite.AppDataBase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -24,24 +25,41 @@ public class LocalLandMarkBean extends BaseModel implements Serializable {
     @Column
     private String user_name;
 
+    private String temp_project_id;
+    private String temp_project_name;
+
+    @SerializedName("status")
     @Column
     private String landmark_sbjd;//上报阶段
 
+    @SerializedName("plan")
     @Column
-    private int landmark_jd;//进度
-
+    private String landmark_jd;//进度
+    @SerializedName("content")
     @Column
     private String landmark_qkms;//情况描述
-
+    @SerializedName("remarks")
     @Column
     private String landmark_bz;//备注
-
+    @SerializedName("created_date")
     @Column
     private String date;//添加时间
 
-    @Column
-    private String year;//添加时间年
+    public String getTemp_project_id() {
+        return temp_project_id;
+    }
 
+    public void setTemp_project_id(String temp_project_id) {
+        this.temp_project_id = temp_project_id;
+    }
+
+    public String getTemp_project_name() {
+        return temp_project_name;
+    }
+
+    public void setTemp_project_name(String temp_project_name) {
+        this.temp_project_name = temp_project_name;
+    }
 
     public static List<LocalLandMarkBean> getAllLsit() {
         return SQLite.select().from(LocalLandMarkBean.class).queryList();
@@ -55,13 +73,6 @@ public class LocalLandMarkBean extends BaseModel implements Serializable {
             return true;
     }
 
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
 
     public String getDate() {
         return date;
@@ -95,8 +106,8 @@ public class LocalLandMarkBean extends BaseModel implements Serializable {
         this.user_name = user_name;
     }
 
-    public String getLandmark_sbjd() {
-        return landmark_sbjd;
+    public int getLandmark_sbjd() {
+        return Integer.valueOf(landmark_sbjd);
     }
 
     public void setLandmark_sbjd(String landmark_sbjd) {
@@ -104,10 +115,10 @@ public class LocalLandMarkBean extends BaseModel implements Serializable {
     }
 
     public int getLandmark_jd() {
-        return landmark_jd;
+        return Integer.valueOf(landmark_jd);
     }
 
-    public void setLandmark_jd(int landmark_jd) {
+    public void setLandmark_jd(String landmark_jd) {
         this.landmark_jd = landmark_jd;
     }
 

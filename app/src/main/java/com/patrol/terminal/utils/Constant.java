@@ -180,6 +180,8 @@ public class Constant {
     public static final int GCJB_ADD = 10001;
     public static final int GCJB_ADD_PROJECT = 10002;
 
+    public static final String[] lcbList = new String[]{"项目前期", "项目立项", "设计管理", "招标管理", "合同管理", "进度管理", "前期", "实施准备",
+            "在建", "停缓建", "验收", "竣工", "保内", "保外", "解除"};
 
     public static final String SWITCH_NAME = "switch_name";
     public static final String SWITCH_PWD = "switch_pwd";

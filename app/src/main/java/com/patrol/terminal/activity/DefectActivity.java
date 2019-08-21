@@ -202,6 +202,7 @@ public class DefectActivity extends BaseActivity {
         lv_xianlu.setAdapter(banjixlAdapter);
         groupTaskAdapter = new DefectIngAdapter(R.layout.fragment_defect_item, 0);
         planRv.setAdapter(groupTaskAdapter);
+
         planRv.useDefaultLoadMore();
         planRv.setLoadMoreListener(new SwipeRecyclerView.LoadMoreListener() {
             @Override
