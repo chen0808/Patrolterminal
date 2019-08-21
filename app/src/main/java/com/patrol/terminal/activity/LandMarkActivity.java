@@ -115,7 +115,7 @@ public class LandMarkActivity extends AppCompatActivity {
 
         for (int i = 0; i < landMarkList.size(); i++) {
             LocalLandMarkBean bean = landMarkList.get(i);
-            String sbjd = Constant.lcbList[i];//bean.getLandmark_sbjd();
+            String sbjd = Constant.lcbList[bean.getLandmark_sbjd()];//bean.getLandmark_sbjd();
 
             if (sbjd.equals("项目前期")) {
                 initProBar(probar_xmqq, bean.getLandmark_jd());
@@ -164,12 +164,6 @@ public class LandMarkActivity extends AppCompatActivity {
                         ProgressDialog.cancle();
                         if (t.isSuccess()) {
                             initView(t.getResults());
-//                            gcjbList.clear();
-//                            gcjbList.addAll(t.getResults());
-//                            adapter.notifyDataSetChanged();
-//                            if(gcjbList.size()==0){
-//                                Utils.showToast("暂无该项目简报");
-//                            }
                         }
                     }
 
@@ -186,11 +180,6 @@ public class LandMarkActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constant.GCJB_ADD:
-//                    CheckProjectServiceBean clickedCheckProjectBean2 = data.getParcelableExtra("search_project_item");
-//                    if (clickedCheckProjectBean2 != null) {
-//                        quesyList(clickedCheckProjectBean2.getTemp_project_id());
-//                    }
-//                    break;
                 case Constant.GCJB_ADD_PROJECT:
 
                     InitiateProjectBean2 clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
@@ -199,7 +188,6 @@ public class LandMarkActivity extends AppCompatActivity {
 
                         quesyList(clickedCheckProjectBean.getName());
                         landmarkView.setVisibility(View.VISIBLE);
-//                        initView();
                     }
                     break;
             }

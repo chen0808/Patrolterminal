@@ -26,6 +26,7 @@ import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.CheckProjectServiceBean;
 import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.bean.LocalLandMarkBean;
+import com.patrol.terminal.bean.LocalLandMarkBean2;
 import com.patrol.terminal.bean.LocalWorkWeeklyBean;
 import com.patrol.terminal.overhaul.ProjectSearchActivity;
 import com.patrol.terminal.overhaul.ProjectSearchActivityNew;
@@ -36,6 +37,8 @@ import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.TimeUtil;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -184,41 +187,26 @@ public class LandMarkAddActivity extends AppCompatActivity {
                     return;
                 }
 
-//                LocalLandMarkBean bean = new LocalLandMarkBean();
-//                bean.setUser_name(SPUtil.getUserName(this));
-//                bean.setTemp_project_id(clickedCheckProjectBean.getTemp_project_id());
-//                bean.setTemp_project_name(clickedCheckProjectBean.getTemp_project_name());
-//                bean.setContent(qkms);
-//                bean.setStatus(String.valueOf(checkedItem+1));
-//                bean.setPlan(probar+"");
-//                bean.setRemarks(landmarkBz.getText().toString().trim());
-//                bean.setCreated_date(DateUatil.getTime());
-                Map<String, RequestBody> params = new HashMap<>();
-                params.put("temp_project_id",Utils.toRequestBody(clickedCheckProjectBean.getProject_no()));
-                params.put("temp_project_name",Utils.toRequestBody(clickedCheckProjectBean.getName()));
-                params.put("status",Utils.toRequestBody(String.valueOf(checkedItem+1)));
-                params.put("plan",Utils.toRequestBody(probar+""));
-                params.put("content",Utils.toRequestBody(qkms));
-                params.put("remarks",Utils.toRequestBody(landmarkBz.getText().toString().trim()));
-                params.put("created_date",Utils.toRequestBody(DateUatil.getTime()));
+                LocalLandMarkBean2 bean = new LocalLandMarkBean2();
+                bean.setUser_name(SPUtil.getUserName(this));
+                bean.setTemp_project_id(clickedCheckProjectBean.getName());
+                bean.setTemp_project_name(clickedCheckProjectBean.getProject_no());
+                bean.setContent(qkms);
+                bean.setStatus(String.valueOf(checkedItem));
+                bean.setPlan(probar+"");
+                bean.setRemarks(landmarkBz.getText().toString().trim());
+                bean.setCreated_date(DateUatil.getTime());
 
-                saveLcb(params);
-//                bean.save();
-//                setResult(RESULT_OK);
-//                Utils.showToast("保存成功");
-//                finish();
-
-
-
+                saveLcb(bean);
                 break;
 
         }
     }
 
-    public void saveLcb(Map<String, RequestBody> params ) {
+    public void saveLcb(LocalLandMarkBean2 bean) {
         ProgressDialog.show(this);
         BaseRequest.getInstance().getService()
-                .saveLcbPOST(params)
+                .saveLcbPOST(bean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver(this) {
