@@ -1334,4 +1334,21 @@ public interface ApiServise {
     //获取电子公告详情
     @GET("temp/notice/byIdGET")
     Observable<BaseResult<NoticeBean>> getNoticeDetail(@Query("id") String id);
+
+    //添加设计计划
+    @Multipart
+    @POST("temp/plan/savePOST")
+    Observable<BaseResult> planSavePOST(@PartMap Map<String, RequestBody> params);
+
+    //计划列表
+    @GET("temp/plan/pdaPageGET")
+    Observable<BaseResult<List<ProjectPlanBean>>> getProjectPlanList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
+
+    //计划详情
+    @GET("temp/plan/byIdGET")
+    Observable<BaseResult<ProjectPlanBean>> getProjectPlanDetail(@Query("id") String id);
+
+    //获取项目下的计划
+    @GET("temp/plan/listGET")
+    Observable<BaseResult<List<ProjectPlanBean>>> getProjectPlan(@Query("temp_project_id") String temp_project_id);
 }

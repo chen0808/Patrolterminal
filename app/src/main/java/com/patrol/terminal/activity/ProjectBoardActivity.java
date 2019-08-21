@@ -20,6 +20,7 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.ProjectBoardBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,6 +67,8 @@ public class ProjectBoardActivity extends BaseActivity {
     @BindView(R.id.tv_budget_total)
     TextView tvBudgetTotal;
     private double budgetTotal = 0;
+    private List<ProjectBoardBean> projectBoardEd = new ArrayList<>();
+    private List<ProjectBoardBean> projectBoardIng = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +101,20 @@ public class ProjectBoardActivity extends BaseActivity {
     }
 
     private void setData(List<ProjectBoardBean> results) {
+        projectBoardEd.clear();
+        projectBoardIng.clear();
         tvProjectTotal.setText("" + results.size());
         for (int i = 0; i < results.size(); i++) {
             budgetTotal += results.get(i).getTotal_money();
+            if (results.get(i).getStatus().equals("16")) {
+                projectBoardEd.add(results.get(i));
+            } else {
+                projectBoardIng.add(results.get(i));
+            }
         }
         tvBudgetTotal.setText("" + budgetTotal / 10000.0);
-        tvProjectEd.setText("2");
-        int projectIng = results.size() - 2;
+        tvProjectEd.setText("" + projectBoardEd.size());
+        int projectIng = projectBoardIng.size();
         tvProjectIng.setText(String.valueOf(projectIng));
         tvPersentEd.setText(2 * 100 / results.size() + "%");
         tvPersentIng.setText(projectIng * 100 / results.size() + "%");
@@ -114,7 +124,9 @@ public class ProjectBoardActivity extends BaseActivity {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                startActivity(new Intent(ProjectBoardActivity.this, ProjectPlanActivity.class));
+                Intent intent = new Intent(ProjectBoardActivity.this, ProjectPlanActivity.class);
+                intent.putExtra("bean", results.get(position));
+                startActivity(intent);
             }
         });
     }

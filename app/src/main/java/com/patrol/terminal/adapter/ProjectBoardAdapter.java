@@ -31,11 +31,11 @@ public class ProjectBoardAdapter extends BaseQuickAdapter<ProjectBoardBean, Base
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void convert(BaseViewHolder helper, ProjectBoardBean item) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
         try {
             long startTime = sdf.parse(item.getStart_time()).getTime();
             long endTime = sdf.parse(item.getEnd_time()).getTime();
-            daysTotal = endTime / 24 / 60 / 60 / 1000 - startTime / 24 / 60 / 60 / 1000;
+            daysTotal = endTime / 24 / 60 / 60 / 1000 - startTime / 24 / 60 / 60 / 1000 + 1;
             daysIng = System.currentTimeMillis() / 24 / 60 / 60 / 1000 - startTime / 24 / 60 / 60 / 1000;
         } catch (ParseException e) {
             e.printStackTrace();

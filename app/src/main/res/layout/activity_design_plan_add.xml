@@ -42,15 +42,16 @@
                         android:textColor="@color/write_red" />
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/et_project_name"
+                <TextView
+                    android:id="@+id/tv_project_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:background="@null"
-                    android:hint="请输入项目名称"
+                    android:gravity="center_vertical"
+                    android:hint="请选择项目"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
