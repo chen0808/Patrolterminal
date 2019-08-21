@@ -77,6 +77,10 @@
         <activity android:name=".activity.ProjectPlanActivity" />
         <activity android:name=".activity.ProjectPlanListActivity" />
         <activity android:name=".activity.DesignPlanActivity" />
+        <activity android:name=".activity.DesignPlanAddActivity" />
+        <activity
+            android:name=".activity.GanttActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activity.EngineeringBriefActivity"
             android:screenOrientation="portrait" />

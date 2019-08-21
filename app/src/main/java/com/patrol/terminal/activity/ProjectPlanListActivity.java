@@ -5,12 +5,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.patrol.terminal.R;
-import com.patrol.terminal.adapter.ProjectPlanAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.bean.ProjectBoardBean;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -46,12 +43,12 @@ public class ProjectPlanListActivity extends BaseActivity {
         ButterKnife.bind(this);
         titleName.setText("未开始的计划");
 
-        List<ProjectBoardBean> projectBoardBeans = initData();
-
-        rvProjectPlan.setLayoutManager(new LinearLayoutManager(this));
-        ProjectPlanAdapter adapter = new ProjectPlanAdapter(R.layout.item_project_plan, projectBoardBeans);
-        rvProjectPlan.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        rvProjectPlan.setAdapter(adapter);
+//        List<ProjectBoardBean> projectBoardBeans = initData();
+//
+//        rvProjectPlan.setLayoutManager(new LinearLayoutManager(this));
+//        ProjectPlanAdapter adapter = new ProjectPlanAdapter(R.layout.item_project_plan, projectBoardBeans);
+//        rvProjectPlan.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        rvProjectPlan.setAdapter(adapter);
     }
 
     private List<ProjectBoardBean> initData() {

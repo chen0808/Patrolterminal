@@ -433,6 +433,21 @@ public class WorkingLogDetailActivity extends BaseActivity {
                     break;
                 }
 
+                if(TextUtils.isEmpty(editMorningTemperature.getText().toString())){
+                    Utils.showToast("请输入上午温度");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(editMiddleTemperature.getText().toString())){
+                    Utils.showToast("请输入午间温度");
+                    break;
+                }
+
+                if(TextUtils.isEmpty(editAfternoonTemperature.getText().toString())){
+                    Utils.showToast("请输入下午温度");
+                    break;
+                }
+
                 projectSavePOST();
 
 //                LocalWorkingLogBean bean = new LocalWorkingLogBean();
