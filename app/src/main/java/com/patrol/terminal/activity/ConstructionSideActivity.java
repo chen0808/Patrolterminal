@@ -20,7 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.WorkingLogAdapter;
 import com.patrol.terminal.base.BaseActivity;
-import com.patrol.terminal.bean.LocalWorkingLogBean;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.WorkingLogBean;
+import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SpaceItemDecoration;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -35,6 +40,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 //施工方日志
 public class ConstructionSideActivity extends BaseActivity {
@@ -59,8 +66,8 @@ public class ConstructionSideActivity extends BaseActivity {
     private int logType = 0;
     private Context mContext;
     private WorkingLogAdapter workingLogAdapter;
-    private List<LocalWorkingLogBean> workingLogList = new ArrayList<>();
-    private List<LocalWorkingLogBean> searchList = new ArrayList<>();
+    private List<WorkingLogBean> workingLogList = new ArrayList<>();
+    private List<WorkingLogBean> searchList = new ArrayList<>();
     private String search_name = "";
     private int pageNum = 1;
     private int count = 10;
@@ -97,8 +104,8 @@ public class ConstructionSideActivity extends BaseActivity {
         titleSettingIv.setImageResource(R.mipmap.add_white);
         titleSettingTv.setText("");
 
-        workingLogList.clear();
-        workingLogList.addAll(LocalWorkingLogBean.getWorkingLogList(logType + ""));
+//        workingLogList.clear();
+//        workingLogList.addAll(LocalWorkingLogBean.getWorkingLogList(logType + ""));
 
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         planRv.setLayoutManager(manager);
@@ -131,9 +138,7 @@ public class ConstructionSideActivity extends BaseActivity {
                 // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
                 menuBridge.closeMenu();
 
-                workingLogList.get(adapterPosition).delete();
-                workingLogList.remove(adapterPosition);
-                workingLogAdapter.setNewData(workingLogList);
+                deleteLog(workingLogList.get(adapterPosition).getId(), adapterPosition);
             }
         };
 
@@ -147,6 +152,7 @@ public class ConstructionSideActivity extends BaseActivity {
             @Override
             public void onLoadMore() {
                 pageNum++;
+                getLogList(search_name);
             }
         });
 
@@ -176,7 +182,7 @@ public class ConstructionSideActivity extends BaseActivity {
                 } else {
                     searchList.clear();
                     for (int i = 0; i < workingLogList.size(); i++) {
-                        if (workingLogList.get(i).getProject_name().contains(search_name)) {
+                        if (workingLogList.get(i).getTemp_project_name().contains(search_name)) {
                             searchList.add(workingLogList.get(i));
                         }
                     }
@@ -185,6 +191,64 @@ public class ConstructionSideActivity extends BaseActivity {
             }
         });
 
+        getLogList(search_name);
+    }
+
+    //获取施工日志列表
+    public void getLogList(String search_name) {
+        ProgressDialog.show(mContext, true, "正在加载中。。。。");
+        BaseRequest.getInstance().getService()
+                .getLogList(pageNum, count, search_name, logType + "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<WorkingLogBean>>(mContext) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<WorkingLogBean>> t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.isSuccess()) {
+                            List<WorkingLogBean> result = t.getResults();
+                            if (result != null && result.size() > 0 && result.size() == 10) {
+                                planRv.loadMoreFinish(false, true);
+                            } else {
+                                planRv.loadMoreFinish(true, false);
+                            }
+                            workingLogList.clear();
+                            workingLogList.addAll(result);
+                            setDataToList(result);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
+                    }
+                });
+    }
+
+    //删除施工日志
+    public void deleteLog(String id, int position) {
+        ProgressDialog.show(mContext, true, "正在加载中。。。。");
+        BaseRequest.getInstance().getService()
+                .deleteLog(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        if (t.isSuccess()) {
+                            workingLogList.remove(position);
+                            workingLogAdapter.setNewData(workingLogList);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
+                    }
+                });
     }
 
     @OnClick({R.id.title_back, R.id.title_setting, R.id.search_delete})
@@ -207,15 +271,25 @@ public class ConstructionSideActivity extends BaseActivity {
         }
     }
 
+    private void setDataToList(List<WorkingLogBean> beans) {
+        if (pageNum == 1) {
+            workingLogAdapter.setNewData(beans);
+        } else {
+            workingLogAdapter.addData(beans);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 100:
-                    workingLogList.clear();
-                    workingLogList.addAll(LocalWorkingLogBean.getWorkingLogList(logType + ""));
-                    workingLogAdapter.setNewData(workingLogList);
+//                    workingLogList.clear();
+//                    workingLogList.addAll(LocalWorkingLogBean.getWorkingLogList(logType + ""));
+//                    workingLogAdapter.setNewData(workingLogList);
+
+                    getLogList(search_name);
                     break;
             }
         }

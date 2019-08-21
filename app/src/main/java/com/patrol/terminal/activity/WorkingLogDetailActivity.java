@@ -20,9 +20,13 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.TssxPhotoAdapter;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.base.BaseUrl;
 import com.patrol.terminal.bean.CheckProjectBean;
-import com.patrol.terminal.bean.LocalWorkingLogBean;
 import com.patrol.terminal.bean.UserBean;
+import com.patrol.terminal.bean.WorkingLogBean;
 import com.patrol.terminal.overhaul.CheckPersonSearchActivity;
 import com.patrol.terminal.overhaul.ProjectSearchActivity;
 import com.patrol.terminal.utils.Constant;
@@ -30,16 +34,24 @@ import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 //施工日志
 public class WorkingLogDetailActivity extends BaseActivity {
@@ -96,14 +108,16 @@ public class WorkingLogDetailActivity extends BaseActivity {
     GridView defectGridView;
 
     private int logType = 0;
-    private List<String> photoList = new ArrayList<>();
+    private ArrayList<String> photoList = new ArrayList<>();
     private TssxPhotoAdapter photoAdapter;
     private int position;//点击图片项
     private String mSelectProjectId;
     private String mSelectPersonId;
-    private LocalWorkingLogBean localWorkingLogBean;
+//    private LocalWorkingLogBean localWorkingLogBean;
     private String userId;
     private String userName;
+    private Map<String, RequestBody> params = new HashMap<>();
+    private WorkingLogBean workingLogBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,7 +133,8 @@ public class WorkingLogDetailActivity extends BaseActivity {
         userName = SPUtil.getUserName(this);
 
         Intent intent = getIntent();
-        localWorkingLogBean = (LocalWorkingLogBean)intent.getSerializableExtra("LocalWorkingLogBean");
+//        localWorkingLogBean = (LocalWorkingLogBean)intent.getSerializableExtra("LocalWorkingLogBean");
+        workingLogBean = (WorkingLogBean) intent.getSerializableExtra("WorkingLogBean");
         logType = intent.getIntExtra("logType", 0);
         switch (logType) {
             case 1:
@@ -144,35 +159,48 @@ public class WorkingLogDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 position = i;
-                startCamera();
+                if(workingLogBean != null){
+                    viewPluImg(position);
+                } else {
+                    startCamera();
+                }
+
             }
         });
 
-        if(localWorkingLogBean != null){
-            tvLogNum.setText(localWorkingLogBean.getLog_num());
-            tvProjectName.setText(localWorkingLogBean.getProject_name());
-            tvWorkingName.setText(localWorkingLogBean.getWorking_name());
-            editWorkingNum.setText(localWorkingLogBean.getWorking_num());
-            tvReportName.setText(localWorkingLogBean.getReport_name());
-            editWeatherStatus.setText(localWorkingLogBean.getWeather_status());
-            tvCompileDate.setText(localWorkingLogBean.getCompile_date());
-            tvOccurDate.setText(localWorkingLogBean.getOccurrence_date());
-            editMorningTemperature.setText(localWorkingLogBean.getMorning_temperature());
-            editMiddleTemperature.setText(localWorkingLogBean.getMiddle_temperature());
-            editAfternoonTemperature.setText(localWorkingLogBean.getAfternoon_temperature());
-            editWorkingRemark.setText(localWorkingLogBean.getWorking_remark());
-            editEmergencyRemark.setText(localWorkingLogBean.getEmergency_remark());
-            editContentRemark.setText(localWorkingLogBean.getContent_remark());
-            editCheckRemark.setText(localWorkingLogBean.getCheck_remark());
-            editMaterialsRemark.setText(localWorkingLogBean.getMaterials_remark());
-            editVisaRemark.setText(localWorkingLogBean.getVisa_remark());
-            editFileRemark.setText(localWorkingLogBean.getFile_remark());
-            editOtherRemark.setText(localWorkingLogBean.getOther_remark());
+        if(workingLogBean != null){
+            tvLogNum.setText(workingLogBean.getLog_no());
+            tvProjectName.setText(workingLogBean.getTemp_project_name());
+            tvWorkingName.setText(workingLogBean.getUser_name());
+            editWorkingNum.setText(workingLogBean.getUser_number() + "");
+            tvReportName.setText(workingLogBean.getCreated_user_name());
+            editWeatherStatus.setText(workingLogBean.getWeather());
+            tvCompileDate.setText(workingLogBean.getCreated_date());
+            tvOccurDate.setText(workingLogBean.getHappen_date());
+            editMorningTemperature.setText(workingLogBean.getTemperature_am() + "");
+            editMiddleTemperature.setText(workingLogBean.getTemperature_noon() + "");
+            editAfternoonTemperature.setText(workingLogBean.getTemperature_pm() + "");
+            editWorkingRemark.setText(workingLogBean.getConstruction_content());
+            editEmergencyRemark.setText(workingLogBean.getEmergency_content());
+            editContentRemark.setText(workingLogBean.getWork_content());
+            editCheckRemark.setText(workingLogBean.getCheck_content());
+            editMaterialsRemark.setText(workingLogBean.getTool_content());
+            editVisaRemark.setText(workingLogBean.getPermit_content());
+            editFileRemark.setText(workingLogBean.getContact_content());
+            editOtherRemark.setText(workingLogBean.getOther_content());
 
             Constant.isEditStatus = true;
-            photoList.addAll(Utils.strToList(localWorkingLogBean.getProject_photo()));
-            photoAdapter.setAddStatus(false);
-            photoAdapter.notifyDataSetChanged();
+            if (workingLogBean.getTempImgList() != null && workingLogBean.getTempImgList().size() > 0) {
+                photoList.clear();
+                for (int i = 0; i < workingLogBean.getTempImgList().size(); i++) {
+                    String path = BaseUrl.BASE_URL + workingLogBean.getTempImgList().get(i).getFile_path() + workingLogBean.getTempImgList().get(i).getFilename();
+                    photoList.add(path);
+                }
+                photoAdapter.setAddStatus(false);
+                photoAdapter.notifyDataSetChanged();
+            } else {
+                defectGridView.setVisibility(View.GONE);
+            }
 
             tvProjectName.setEnabled(false);
             tvWorkingName.setEnabled(false);
@@ -216,7 +244,139 @@ public class WorkingLogDetailActivity extends BaseActivity {
             titleSetting.setVisibility(View.GONE);
         } else {
             Constant.isEditStatus = false;
+            tvLogNum.setText(System.currentTimeMillis() + "");
+            String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
+            tvCompileDate.setText(time);
+            tvOccurDate.setText(time);
         }
+
+//        if(localWorkingLogBean != null){
+//            tvLogNum.setText(localWorkingLogBean.getLog_num());
+//            tvProjectName.setText(localWorkingLogBean.getProject_name());
+//            tvWorkingName.setText(localWorkingLogBean.getWorking_name());
+//            editWorkingNum.setText(localWorkingLogBean.getWorking_num());
+//            tvReportName.setText(localWorkingLogBean.getReport_name());
+//            editWeatherStatus.setText(localWorkingLogBean.getWeather_status());
+//            tvCompileDate.setText(localWorkingLogBean.getCompile_date());
+//            tvOccurDate.setText(localWorkingLogBean.getOccurrence_date());
+//            editMorningTemperature.setText(localWorkingLogBean.getMorning_temperature());
+//            editMiddleTemperature.setText(localWorkingLogBean.getMiddle_temperature());
+//            editAfternoonTemperature.setText(localWorkingLogBean.getAfternoon_temperature());
+//            editWorkingRemark.setText(localWorkingLogBean.getWorking_remark());
+//            editEmergencyRemark.setText(localWorkingLogBean.getEmergency_remark());
+//            editContentRemark.setText(localWorkingLogBean.getContent_remark());
+//            editCheckRemark.setText(localWorkingLogBean.getCheck_remark());
+//            editMaterialsRemark.setText(localWorkingLogBean.getMaterials_remark());
+//            editVisaRemark.setText(localWorkingLogBean.getVisa_remark());
+//            editFileRemark.setText(localWorkingLogBean.getFile_remark());
+//            editOtherRemark.setText(localWorkingLogBean.getOther_remark());
+//
+//            Constant.isEditStatus = true;
+//            photoList.addAll(Utils.strToList(localWorkingLogBean.getProject_photo()));
+//            photoAdapter.setAddStatus(false);
+//            photoAdapter.notifyDataSetChanged();
+//
+//            tvProjectName.setEnabled(false);
+//            tvWorkingName.setEnabled(false);
+//            editWorkingNum.setEnabled(false);
+//            tvReportName.setEnabled(false);
+//            tvCompileDate.setEnabled(false);
+//            tvOccurDate.setEnabled(false);
+//            editWeatherStatus.setEnabled(false);
+//            editMorningTemperature.setEnabled(false);
+//            editMiddleTemperature.setEnabled(false);
+//            editAfternoonTemperature.setEnabled(false);
+//            editWorkingRemark.setEnabled(false);
+//            editEmergencyRemark.setEnabled(false);
+//            editContentRemark.setEnabled(false);
+//            editCheckRemark.setEnabled(false);
+//            editMaterialsRemark.setEnabled(false);
+//            editVisaRemark.setEnabled(false);
+//            editFileRemark.setEnabled(false);
+//            editOtherRemark.setEnabled(false);
+//
+//            tvReportName.setHint("");
+//            editWeatherStatus.setHint("");
+//            editMorningTemperature.setHint("");
+//            editMiddleTemperature.setHint("");
+//            editAfternoonTemperature.setHint("");
+//            editWorkingRemark.setHint("");
+//            editEmergencyRemark.setHint("");
+//            editContentRemark.setHint("");
+//            editCheckRemark.setHint("");
+//            editMaterialsRemark.setHint("");
+//            editVisaRemark.setHint("");
+//            editFileRemark.setHint("");
+//            editOtherRemark.setHint("");
+//
+//            tvProjectName.setCompoundDrawables(null, null, null, null);
+//            tvWorkingName.setCompoundDrawables(null, null, null, null);
+//            tvReportName.setCompoundDrawables(null, null, null, null);
+//            tvCompileDate.setCompoundDrawables(null, null, null, null);
+//            tvOccurDate.setCompoundDrawables(null, null, null, null);
+//
+//            titleSetting.setVisibility(View.GONE);
+//        } else {
+//            Constant.isEditStatus = false;
+//        }
+    }
+
+    public void projectSavePOST() {
+        ProgressDialog.show(this, false, "正在加载。。。。");
+        params.clear();
+        params.put("log_no", toRequestBody(tvLogNum.getText().toString()));
+        params.put("temp_project_id", toRequestBody(mSelectProjectId));
+        params.put("temp_project_name", toRequestBody(tvProjectName.getText().toString()));
+        params.put("user_name", toRequestBody(tvWorkingName.getText().toString()));
+        params.put("user_number", toRequestBody(editWorkingNum.getText().toString()));
+        params.put("created_user_id", toRequestBody(""));
+        params.put("created_user_name", toRequestBody(tvReportName.getText().toString()));
+        params.put("weather", toRequestBody(editWeatherStatus.getText().toString()));
+        params.put("created_date", toRequestBody(tvCompileDate.getText().toString()));
+        params.put("happen_date", toRequestBody(tvOccurDate.getText().toString()));
+        params.put("temperature_am", toRequestBody(editMorningTemperature.getText().toString()));
+        params.put("temperature_noon", toRequestBody(editMiddleTemperature.getText().toString()));
+        params.put("temperature_pm", toRequestBody(editAfternoonTemperature.getText().toString()));
+        params.put("construction_content", toRequestBody(editWorkingRemark.getText().toString()));
+        params.put("emergency_content", toRequestBody(editEmergencyRemark.getText().toString()));
+        params.put("work_content", toRequestBody(editContentRemark.getText().toString()));
+        params.put("check_content", toRequestBody(editCheckRemark.getText().toString()));
+        params.put("tool_content", toRequestBody(editMaterialsRemark.getText().toString()));
+        params.put("permit_content", toRequestBody(editVisaRemark.getText().toString()));
+        params.put("contact_content", toRequestBody(editFileRemark.getText().toString()));
+        params.put("other_content", toRequestBody(editOtherRemark.getText().toString()));
+        params.put("log_sign", toRequestBody(logType + ""));
+        for(int i=0;i<photoList.size();i++){
+            if(!photoList.get(i).equals("")){
+                File file = new File(photoList.get(i));
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                params.put("files\"; filename=\"" + i + ".jpg", requestFile);
+            }
+        }
+
+        BaseRequest.getInstance().getService()
+                .logSavePOST(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        if(t.getCode() == 1){
+                            Utils.showToast("提交成功");
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
+                    }
+
+                });
     }
 
     @OnClick({R.id.title_back, R.id.title_setting, R.id.tv_compile_date, R.id.tv_occurrence_date, R.id.tv_project_name, R.id.tv_working_name, R.id.tv_report_name})
@@ -273,36 +433,38 @@ public class WorkingLogDetailActivity extends BaseActivity {
                     break;
                 }
 
-                LocalWorkingLogBean bean = new LocalWorkingLogBean();
-                bean.setType(logType + "");
-                bean.setUser_id(userId);
-                bean.setUser_name(userName);
-                bean.setLog_num(tvLogNum.getText().toString());
-                bean.setProject_id(mSelectProjectId);
-                bean.setProject_name(tvProjectName.getText().toString());
-                bean.setWorking_name(tvWorkingName.getText().toString());
-                bean.setWorking_num(editWorkingNum.getText().toString());
-                bean.setReport_name(tvReportName.getText().toString());
-                bean.setWeather_status(editWeatherStatus.getText().toString());
-                bean.setCompile_date(tvCompileDate.getText().toString());
-                bean.setOccurrence_date(tvOccurDate.getText().toString());
-                bean.setMorning_temperature(editMorningTemperature.getText().toString());
-                bean.setMiddle_temperature(editMiddleTemperature.getText().toString());
-                bean.setAfternoon_temperature(editAfternoonTemperature.getText().toString());
-                bean.setWorking_remark(editWorkingRemark.getText().toString());
-                bean.setEmergency_remark(editEmergencyRemark.getText().toString());
-                bean.setContent_remark(editContentRemark.getText().toString());
-                bean.setCheck_remark(editCheckRemark.getText().toString());
-                bean.setMaterials_remark(editMaterialsRemark.getText().toString());
-                bean.setVisa_remark(editVisaRemark.getText().toString());
-                bean.setFile_remark(editFileRemark.getText().toString());
-                bean.setOther_remark(editOtherRemark.getText().toString());
-                bean.setProject_photo(Utils.listToStr(photoList));
-                bean.save();
+                projectSavePOST();
 
-                Utils.showToast("提交成功");
-                setResult(RESULT_OK);
-                finish();
+//                LocalWorkingLogBean bean = new LocalWorkingLogBean();
+//                bean.setType(logType + "");
+//                bean.setUser_id(userId);
+//                bean.setUser_name(userName);
+//                bean.setLog_num(tvLogNum.getText().toString());
+//                bean.setProject_id(mSelectProjectId);
+//                bean.setProject_name(tvProjectName.getText().toString());
+//                bean.setWorking_name(tvWorkingName.getText().toString());
+//                bean.setWorking_num(editWorkingNum.getText().toString());
+//                bean.setReport_name(tvReportName.getText().toString());
+//                bean.setWeather_status(editWeatherStatus.getText().toString());
+//                bean.setCompile_date(tvCompileDate.getText().toString());
+//                bean.setOccurrence_date(tvOccurDate.getText().toString());
+//                bean.setMorning_temperature(editMorningTemperature.getText().toString());
+//                bean.setMiddle_temperature(editMiddleTemperature.getText().toString());
+//                bean.setAfternoon_temperature(editAfternoonTemperature.getText().toString());
+//                bean.setWorking_remark(editWorkingRemark.getText().toString());
+//                bean.setEmergency_remark(editEmergencyRemark.getText().toString());
+//                bean.setContent_remark(editContentRemark.getText().toString());
+//                bean.setCheck_remark(editCheckRemark.getText().toString());
+//                bean.setMaterials_remark(editMaterialsRemark.getText().toString());
+//                bean.setVisa_remark(editVisaRemark.getText().toString());
+//                bean.setFile_remark(editFileRemark.getText().toString());
+//                bean.setOther_remark(editOtherRemark.getText().toString());
+//                bean.setProject_photo(Utils.listToStr(photoList));
+//                bean.save();
+//
+//                Utils.showToast("提交成功");
+//                setResult(RESULT_OK);
+//                finish();
                 break;
         }
     }
@@ -359,6 +521,25 @@ public class WorkingLogDetailActivity extends BaseActivity {
     private void startCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, Constant.DEFECT_REQUEST_CODE);
+    }
+
+    //查看大图
+    private void viewPluImg(int position) {
+        Intent intent = new Intent(this, PlusImageActivity.class);
+        intent.putStringArrayListExtra(Constant.IMG_LIST, photoList);
+        intent.putExtra("isDelPic", "0");
+        intent.putExtra(Constant.POSITION, position);
+        startActivityForResult(intent, Constant.REQUEST_CODE_MAIN);
+    }
+
+    public RequestBody toRequestBody(String value) {
+        if (value != null) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            return requestBody;
+        } else {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            return requestBody;
+        }
     }
 
     @Override

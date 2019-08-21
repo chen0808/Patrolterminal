@@ -17,7 +17,9 @@
             android:textSize="18sp"
             android:textColor="@color/bar_grey"></TextView>
 
-        <TextView android:layout_width="75dp"
+        <TextView
+            android:id="@+id/check_result_tv"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:text="书面整改"
             android:layout_marginLeft="10dp"></TextView>
@@ -34,7 +36,9 @@
             android:textSize="18sp"
             android:textColor="@color/bar_grey"></TextView>
 
-        <TextView android:layout_width="75dp"
+        <TextView
+            android:id="@+id/check_result_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:text="通过"
             android:layout_marginLeft="10dp"></TextView>
@@ -57,5 +61,9 @@
         >
 
     </LinearLayout>
+
+    <ImageView android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:src="@color/color_f2"></ImageView>
 
 </LinearLayout>

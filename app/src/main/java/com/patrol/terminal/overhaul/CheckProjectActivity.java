@@ -14,7 +14,15 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.CheckProjectBean;
+import com.patrol.terminal.bean.CheckProjectServiceBean;
+import com.patrol.terminal.bean.EqToolsOut;
+import com.patrol.terminal.network.ApiServise;
+import com.patrol.terminal.utils.Utils;
+import com.patrol.terminal.widget.ProgressDialog;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -28,6 +36,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class CheckProjectActivity extends BaseActivity implements TextWatcher {
     @BindView(R.id.title_back)
@@ -52,15 +62,51 @@ public class CheckProjectActivity extends BaseActivity implements TextWatcher {
     SwipeRecyclerView projectRv;
 
     private CheckProjectAdapter mCheckProjectAdapter;
-    private List<CheckProjectBean> mCheckProject = new ArrayList<>();
-    private List<CheckProjectBean> mFilterCheckProject = new ArrayList<>();
+    private List<CheckProjectServiceBean> mCheckProject = new ArrayList<>();
+    private List<CheckProjectServiceBean> mFilterCheckProject = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.check_project_activity_layout);
         ButterKnife.bind(this);
+        initData();
         initView();
+    }
+
+    private void initData() {
+        BaseRequest.getInstance().getService()
+                .getProjectList("0", "0", "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<CheckProjectServiceBean>>(this) {
+                    @Override
+                    protected void onSuccees(BaseResult<List<CheckProjectServiceBean>> t) throws Exception {
+                        if (t.isSuccess()) {
+                            mCheckProject = t.getResults();
+                            mCheckProjectAdapter = new CheckProjectAdapter(R.layout.check_project_item, mCheckProject, 0);
+                            projectRv.setAdapter(mCheckProjectAdapter);
+
+                            mCheckProjectAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                                    Intent intent = new Intent();
+                                    intent.setClass(CheckProjectActivity.this, ProjectDetailActivity.class);
+                                    CheckProjectServiceBean clickCheckProjectBean = (CheckProjectServiceBean)adapter.getItem(position);
+                                    intent.putExtra("click_check_project_bean", clickCheckProjectBean);
+                                    startActivity(intent);
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                    }
+                });
+
     }
 
     private void initView() {
@@ -73,45 +119,35 @@ public class CheckProjectActivity extends BaseActivity implements TextWatcher {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         projectRv.setLayoutManager(manager);
 
-        CheckProjectBean checkProjectBean = new CheckProjectBean();
-        checkProjectBean.setProject_id("0");
-        checkProjectBean.setName("综合调控中心工程");
-        checkProjectBean.setContent("杆塔倾斜");
-        checkProjectBean.setCreate_person_name("创建人:张三");
-        checkProjectBean.setProject_result_status(0);
-        checkProjectBean.setTime("2019-04-12 14:59");
-        mCheckProject.add(checkProjectBean);
+//        CheckProjectBean checkProjectBean = new CheckProjectBean();
+//        checkProjectBean.setProject_id("0");
+//        checkProjectBean.setName("综合调控中心工程");
+//        checkProjectBean.setContent("杆塔倾斜");
+//        checkProjectBean.setCreate_person_name("创建人:张三");
+//        checkProjectBean.setProject_result_status(0);
+//        checkProjectBean.setTime("2019-04-12 14:59");
+//        mCheckProject.add(checkProjectBean);
+//
+//        CheckProjectBean checkProjectBean1 = new CheckProjectBean();
+//        checkProjectBean1.setProject_id("1");
+//        checkProjectBean1.setName("综合调控中心工程111");
+//        checkProjectBean1.setContent("杆塔倾斜");
+//        checkProjectBean1.setCreate_person_name("创建人:张三");
+//        checkProjectBean1.setProject_result_status(1);
+//        checkProjectBean1.setTime("2019-04-12 14:59");
+//        mCheckProject.add(checkProjectBean1);
+//
+//        CheckProjectBean checkProjectBean2 = new CheckProjectBean();
+//        checkProjectBean2.setProject_id("2");
+//        checkProjectBean2.setName("丽水盆地");
+//        checkProjectBean2.setContent("杆塔倾斜");
+//        checkProjectBean2.setCreate_person_name("创建人:张三");
+//        checkProjectBean2.setProject_result_status(2);
+//        checkProjectBean2.setTime("2019-04-12 14:59");
+//        mCheckProject.add(checkProjectBean2);
 
-        CheckProjectBean checkProjectBean1 = new CheckProjectBean();
-        checkProjectBean1.setProject_id("1");
-        checkProjectBean1.setName("综合调控中心工程111");
-        checkProjectBean1.setContent("杆塔倾斜");
-        checkProjectBean1.setCreate_person_name("创建人:张三");
-        checkProjectBean1.setProject_result_status(1);
-        checkProjectBean1.setTime("2019-04-12 14:59");
-        mCheckProject.add(checkProjectBean1);
 
-        CheckProjectBean checkProjectBean2 = new CheckProjectBean();
-        checkProjectBean2.setProject_id("2");
-        checkProjectBean2.setName("丽水盆地");
-        checkProjectBean2.setContent("杆塔倾斜");
-        checkProjectBean2.setCreate_person_name("创建人:张三");
-        checkProjectBean2.setProject_result_status(2);
-        checkProjectBean2.setTime("2019-04-12 14:59");
-        mCheckProject.add(checkProjectBean2);
 
-        mCheckProjectAdapter = new CheckProjectAdapter(R.layout.check_project_item, mCheckProject, 0);
-        projectRv.setAdapter(mCheckProjectAdapter);
-        mCheckProjectAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent();
-                intent.setClass(CheckProjectActivity.this, ProjectDetailActivity.class);
-                CheckProjectBean clickCheckProjectBean = (CheckProjectBean)adapter.getItem(position);
-                startActivity(intent);
-
-            }
-        });
 
         projectSearchEt.addTextChangedListener(this);
 
@@ -172,7 +208,7 @@ public class CheckProjectActivity extends BaseActivity implements TextWatcher {
         }else {
             mFilterCheckProject.clear();
             for (int i = 0; i < mCheckProject.size();i++) {
-                String name = mCheckProject.get(i).getName();
+                String name = mCheckProject.get(i).getTemp_project_name();
                 if (name.contains(editStr)) {
                     mFilterCheckProject.add(mCheckProject.get(i));
                 }

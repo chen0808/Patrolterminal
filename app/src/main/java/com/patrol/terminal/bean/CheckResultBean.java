@@ -2,9 +2,15 @@ package com.patrol.terminal.bean;
 
 import android.graphics.Bitmap;
 
+import com.patrol.terminal.sqlite.AppDataBase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 import java.util.List;
 
-public class CheckResultBean {
+public class CheckResultBean extends BaseModel{
     private long checkResultId;
     private int checkResult;   //0:正常   1:通过   2:待整改
     private String checkContent;

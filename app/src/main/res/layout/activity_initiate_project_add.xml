@@ -91,16 +91,15 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
-                    <EditText
-                        android:id="@+id/edit_project_no"
+                    <TextView
+                        android:id="@+id/tv_project_no"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@null"
+                        android:gravity="center_vertical"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black"
                         android:hint="请输入项目编号"
                         />
                 </LinearLayout>
@@ -128,6 +127,13 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
                         android:text="计划投资" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:text="*"
+                        android:textColor="@color/write_red"/>
                 </LinearLayout>
 
                 <EditText
@@ -176,16 +182,17 @@
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_address"
+                <EditText
+                    android:id="@+id/edit_address"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@null"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
                     android:textSize="14sp"
                     android:textColor="@color/black"
-                    android:drawableRight="@mipmap/next"
+                    android:hint="请输入项目地点"
                     />
 
             </LinearLayout>
@@ -259,17 +266,18 @@
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_dep_name"
+                <EditText
+                    android:id="@+id/edit_dep_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
+                    android:background="@null"
                     android:textSize="14sp"
                     android:textColor="@color/black"
-                    android:text="集团公司"/>
+                    android:hint="请输入立项部门"/>
 
             </LinearLayout>
 
@@ -297,18 +305,19 @@
                         android:text="父项目" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_parent_project"
+                <EditText
+                    android:id="@+id/edit_parent_project"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
+                    android:background="@null"
                     android:textSize="14sp"
-                    android:hint="请选择"
+                    android:hint="请输入父项目"
                     android:textColor="@color/black"
-                    android:drawableRight="@mipmap/next"/>
+                    />
 
             </LinearLayout>
 
@@ -336,18 +345,19 @@
                         android:text="服务模式" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_model"
+                <EditText
+                    android:id="@+id/edit_model"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
+                    android:background="@null"
                     android:textSize="14sp"
-                    android:hint="请选择"
+                    android:hint="请输入服务模式"
                     android:textColor="@color/black"
-                    android:drawableRight="@mipmap/next"/>
+                    />
 
             </LinearLayout>
 
@@ -371,7 +381,6 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
                         android:text="项目状态" />
                     <TextView
                         android:layout_width="wrap_content"
@@ -428,18 +437,19 @@
                         android:textColor="@color/write_red"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_type_sign"
+                <EditText
+                    android:id="@+id/edit_type_sign"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="16dp"
+                    android:background="@null"
                     android:textSize="14sp"
-                    android:hint="请选择"
+                    android:hint="请输入工程类型"
                     android:textColor="@color/black"
-                    android:drawableRight="@mipmap/next"/>
+                    />
 
             </LinearLayout>
 
