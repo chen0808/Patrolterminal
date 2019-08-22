@@ -1,5 +1,6 @@
 package com.patrol.terminal.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.patrol.terminal.R;
+import com.patrol.terminal.widget.PinchImageView;
 
 import java.util.List;
 
@@ -51,4 +53,6 @@ public class GroProPicAdapter extends android.widget.BaseAdapter {
 
         return convertView;
     }
+
+
 }

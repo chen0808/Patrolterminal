@@ -29,8 +29,10 @@ import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GraphicProgressBean;
 import com.patrol.terminal.bean.InitiateProjectBean;
+import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.bean.PatrolLevel2;
 import com.patrol.terminal.bean.ProjectBoardBean;
+import com.patrol.terminal.overhaul.ProjectSearchActivityNew;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
@@ -93,7 +95,7 @@ public class AddGraphicProgressActivity extends BaseActivity {
     private List<String> mPicList=new ArrayList<>();
     private Uri photoUri;
     private String filePath;
-    private InitiateProjectBean initiateProjectBean;
+    private InitiateProjectBean2 initiateProjectBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,7 +247,7 @@ public class AddGraphicProgressActivity extends BaseActivity {
                 break;
             case R.id.belong_plan_rl:
                 Intent intent=new Intent();
-                intent.setClass(this,ProjectListActivity.class);
+                intent.setClass(this, ProjectSearchActivityNew.class);
                 startActivityForResult(intent,247);
                 break;
         }
@@ -268,7 +270,7 @@ public class AddGraphicProgressActivity extends BaseActivity {
             }
 
         }else if (requestCode== 247&&resultCode==RESULT_OK){
-            initiateProjectBean = (InitiateProjectBean) data.getSerializableExtra("bean");
+            initiateProjectBean = data.getParcelableExtra("search_project_item");
             belongPlanName.setText(initiateProjectBean.getName());
         }
     }

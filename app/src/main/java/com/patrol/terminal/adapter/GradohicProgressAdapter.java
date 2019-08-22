@@ -44,21 +44,8 @@ public class GradohicProgressAdapter extends BaseQuickAdapter<GraphicProgressBea
 
         GroProPicAdapter mGridViewAddImgAdapter = new GroProPicAdapter(mContext, list);
         gridView.setAdapter(mGridViewAddImgAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                showBigImage(list.get(position));
-            }
-        });
+
     }
 
-    //查看大图
-    private void showBigImage(String path) {
-        Dialog dialog = new Dialog(mContext);
-        dialog.setContentView(R.layout.dialog_big_image);
-        PinchImageView iv = dialog.findViewById(R.id.iv);
-        Glide.with(mContext).load(path).into(iv);
-        dialog.show();
-    }
+
 }

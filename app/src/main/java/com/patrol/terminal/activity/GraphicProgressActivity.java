@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GradohicProgressAdapter;
 import com.patrol.terminal.base.BaseActivity;
@@ -88,6 +89,16 @@ public class GraphicProgressActivity extends BaseActivity {
         adapter = new GradohicProgressAdapter(R.layout.item_gradohic_progress
                 ,list);
         graphicProgress.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                GraphicProgressBean bean = list.get(position);
+                Intent intent=new Intent(GraphicProgressActivity.this,GraphicProDetailActivity.class);
+                intent.putExtra("bean",bean);
+                startActivity(intent);
+
+            }
+        });
 
     }
     // 创建菜单：

@@ -6,9 +6,10 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GraphicProgressBean  {
+public class GraphicProgressBean  implements Serializable {
 
     /**
      * id : 4E3F591435CD4E3A9A5F8AA546DCA504
@@ -111,7 +112,7 @@ public class GraphicProgressBean  {
     public void setTempImgList(List<TempImgListBean> tempImgList) {
         this.tempImgList = tempImgList;
     }
-    public static class TempImgListBean extends BaseModel{
+    public static class TempImgListBean  implements Serializable{
         /**
          * id : 9C8140295F91442298574E7B70814438
          * data_id : 4E3F591435CD4E3A9A5F8AA546DCA504

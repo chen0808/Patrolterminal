@@ -32,7 +32,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ProjectListActivity"></activity>
+        <activity android:name=".activity.GraphicProDetailActivity"></activity>
+        <activity android:name=".activity.ProjectListActivity" />
         <activity android:name=".activity.AddGraphicProgressActivity" />
         <activity android:name=".activity.GraphicProgressActivity" />
         <activity android:name=".activity.JXTotalActivity" />
