@@ -2,6 +2,7 @@ package com.patrol.terminal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.LocalLandMarkBean;
 import com.patrol.terminal.utils.Constant;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,14 +62,22 @@ public class LandMarkDetailActivity extends AppCompatActivity {
 
         if(landMarkList != null){
             initView();
-            scroTo(marks);
+            if(!TextUtils.isEmpty(marks))
+                scroTo(marks);
         }
 
     }
 
     public void scroTo(String mark){
-        View view = map.get(mark);
-        scroView.scrollTo(0,view.getScrollY());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                View view = map.get(mark);
+                int[] location = new int[2];
+                view.getLocationOnScreen(location);
+                scroView.scrollTo(0,location[1]);
+            }
+        }, 500);
     }
 
     public void initData2(String sbjd, View view) {

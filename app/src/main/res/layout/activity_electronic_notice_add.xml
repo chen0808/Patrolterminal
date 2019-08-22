@@ -51,7 +51,8 @@
                     android:layout_marginRight="16dp"
                     android:textColor="@color/black"
                     android:background="@null"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    android:hint="请输入标题"/>
 
             </LinearLayout>
 
