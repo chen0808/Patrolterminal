@@ -24,6 +24,9 @@ import com.bumptech.glide.Glide;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.GridViewAdapter2;
 import com.patrol.terminal.base.BaseActivity;
+import com.patrol.terminal.base.BaseObserver;
+import com.patrol.terminal.base.BaseRequest;
+import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GraphicProgressBean;
 import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.bean.PatrolLevel2;
@@ -32,7 +35,9 @@ import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
 import com.patrol.terminal.utils.SPUtil;
+import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.PinchImageView;
+import com.patrol.terminal.widget.ProgressDialog;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -43,11 +48,17 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 //添加形象进度
 public class AddGraphicProgressActivity extends BaseActivity {
@@ -82,6 +93,8 @@ public class AddGraphicProgressActivity extends BaseActivity {
     private List<String> mPicList=new ArrayList<>();
     private Uri photoUri;
     private String filePath;
+    private InitiateProjectBean initiateProjectBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +123,7 @@ public class AddGraphicProgressActivity extends BaseActivity {
                     //如果“增加按钮形状的”图片的位置是最后一张，且添加了的图片的数量不超过5张，才能点击
                     if (mPicList.size() == Constant.MAX_SELECT_PIC_NUM) {
                         //最多添加5张图片
-                       showBigImage(mPicList.get(position));
+                        showBigImage(mPicList.get(position));
                     } else {
                         //添加凭证图片    TODO By linmeng
                         //selectPic(Constant.MAX_SELECT_PIC_NUM - mPicList.size());
@@ -122,6 +135,75 @@ public class AddGraphicProgressActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    public  void saveData(){
+        ProgressDialog.show(this, false, "正在加载。。。。");
+        String planName = belongPlanName.getText().toString();
+        String create_time = createTime.getText().toString();
+        String content = addGraphicGrogressContent.getText().toString();
+        if ("".equals(planName)||"请选择".equals(planName)){
+            Toast.makeText(this,"请选择项目",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String pics="";
+        for (int i = 0; i < mPicList.size(); i++) {
+            if (i==0){
+                pics=mPicList.get(i);
+            }else {
+                pics=pics+","+mPicList.get(i);
+            }
+        }
+
+        Map<String, RequestBody> params = new HashMap<>();
+        params.put("temp_project_id", toRequestBody(initiateProjectBean.getId()));
+        params.put("temp_project_name", toRequestBody(initiateProjectBean.getName()));
+        params.put("user_id", toRequestBody(SPUtil.getUserId(this)));
+        params.put("user_name", toRequestBody(SPUtil.getUserName(this)));
+        params.put("upload_time ", toRequestBody(create_time));
+        params.put("plan_desc", toRequestBody(content));
+
+        for(int i=0;i<mPicList.size();i++){
+            if(!mPicList.get(i).equals("")){
+                File file = new File(mPicList.get(i));
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                params.put("files\"; filename=\"" + i + ".jpg", requestFile);
+            }
+        }
+
+        BaseRequest.getInstance().getService()
+                .addGraPro(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(this) {
+
+                    @Override
+                    protected void onSuccees(BaseResult t) throws Exception {
+                        ProgressDialog.cancle();
+                        if(t.getCode() == 1){
+                            Utils.showToast("提交成功");
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ProgressDialog.cancle();
+                        Utils.showToast(e.getMessage());
+                    }
+
+                });
+    }
+
+    public RequestBody toRequestBody(String value) {
+        if (value != null) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+            return requestBody;
+        } else {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            return requestBody;
+        }
     }
     /**
      * 图片保存路径  这里是在SD卡目录下创建了MyPhoto文件夹
@@ -158,32 +240,8 @@ public class AddGraphicProgressActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-                String planName = belongPlanName.getText().toString();
-                String create_time = createTime.getText().toString();
-                String content = addGraphicGrogressContent.getText().toString();
-                if ("".equals(planName)||"请选择".equals(planName)){
-                    Toast.makeText(this,"请选择项目",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String pics="";
-                for (int i = 0; i < mPicList.size(); i++) {
-                    if (i==0){
-                        pics=mPicList.get(i);
-                    }else {
-                        pics=pics+","+mPicList.get(i);
-                    }
-                }
-                GraphicProgressBean bean=new GraphicProgressBean();
-                bean.setId(System.currentTimeMillis()+"");
-                bean.setCreateName(SPUtil.getUserName(this));
-                bean.setCreateTime(create_time);
-                bean.setPlanName(planName);
-                bean.setProgressContent(content);
-                bean.setPicList(pics);
-                bean.save();
-                setResult(RESULT_OK);
-                Toast.makeText(this,"提交成功",Toast.LENGTH_SHORT).show();
-                finish();
+                saveData();
+
                 break;
             case R.id.belong_plan_rl:
                 Intent intent=new Intent();
@@ -210,8 +268,8 @@ public class AddGraphicProgressActivity extends BaseActivity {
             }
 
         }else if (requestCode== 247&&resultCode==RESULT_OK){
-            InitiateProjectBean bean = (InitiateProjectBean) data.getSerializableExtra("bean");
-            belongPlanName.setText(bean.getName());
+            initiateProjectBean = (InitiateProjectBean) data.getSerializableExtra("bean");
+            belongPlanName.setText(initiateProjectBean.getName());
         }
     }
     //查看大图

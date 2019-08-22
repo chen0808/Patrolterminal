@@ -1351,4 +1351,17 @@ public interface ApiServise {
     //获取项目下的计划
     @GET("temp/plan/listGET")
     Observable<BaseResult<List<ProjectPlanBean>>> getProjectPlan(@Query("temp_project_id") String temp_project_id);
+
+    //添加形象进度
+    @Multipart
+    @POST("temp/figure/savePOST")
+    Observable<BaseResult> addGraPro(@PartMap Map<String, RequestBody> params);
+
+    //获取形象进度列表
+    @GET("temp/figure/pdaPageGET")
+    Observable<BaseResult<List<GraphicProgressBean>>> getGraPro(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
+
+    //施工日志删除
+    @POST("temp/figure/deletePOST")
+    Observable<BaseResult> deleteGraPro(@Query("id") String id);
 }

@@ -22,6 +22,7 @@ import com.patrol.terminal.bean.MapUserInfo;
 import com.patrol.terminal.overhaul.ElectronicNoticeActivity;
 import com.patrol.terminal.overhaul.InitiateProjectActivity;
 import com.patrol.terminal.overhaul.InternalNewsActivity;
+import com.patrol.terminal.overhaul.QulityCheckMainActivity;
 import com.patrol.terminal.overhaul.SafeCheckMainActivity;
 import com.patrol.terminal.overhaul.TechnicalSpecificationActivity;
 
@@ -79,31 +80,31 @@ public class GridePagerAdapter extends PagerAdapter {
                         case 0:
                             intent.setClass(context, ProjectBoardActivity.class);
                             break;
-                            //形象进度
+                        //形象进度
                         case 1:
                             intent.setClass(context, GraphicProgressActivity.class);
                             break;
-                            //里程碑
+                        //里程碑
                         case 2:
                             intent.setClass(context, LandMarkActivity.class);
                             break;
-                            //质量检查
+                        //质量检查
                         case 3:
-                            intent.setClass(context, SafeCheckMainActivity.class);
+                            intent.setClass(context, QulityCheckMainActivity.class);
                             break;
-                            //施工日志
+                        //施工日志
                         case 4:
                             intent.setClass(context, WorkingLogActivity.class);
                             break;
-                            //工程简报
+                        //工程简报
                         case 5:
                             intent.setClass(context, EngineeringBriefActivity.class);
                             break;
-                            //工程周报
+                        //工程周报
                         case 6:
                             intent.setClass(context, WorkWeeklyListActivity.class);
                             break;
-                            //安全检查
+                        //安全检查
                         case 7:
                             intent.setClass(context, SafeCheckMainActivity.class);
                             break;
