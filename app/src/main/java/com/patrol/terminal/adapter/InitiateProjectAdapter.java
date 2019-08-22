@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.patrol.terminal.R;
 import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.overhaul.InitiateProjectAddActivity;
+import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.StringUtil;
 
 import java.util.List;
@@ -44,8 +45,8 @@ public class InitiateProjectAdapter extends BaseQuickAdapter<InitiateProjectBean
 
         viewHolder.setText(R.id.tv_project_name, item.getName())
                 .setText(R.id.tv_code, item.getProject_no())
-                .setText(R.id.tv_create_name, item.getCreate_name())
-                .setText(R.id.tv_time, item.getStart_time());
+                .setText(R.id.tv_create_name, SPUtil.getUserName(mContext))
+                .setText(R.id.tv_time, item.getStart_time() + "-" + item.getEnd_time());
 
         String status = item.getStatus();
         if(status == null){

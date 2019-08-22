@@ -229,7 +229,7 @@ public class InitiateProjectAddActivity extends BaseActivity {
         params.put("dep_name", toRequestBody(editDepName.getText().toString()));
         params.put("parent_project", toRequestBody(editParentProject.getText().toString()));
         params.put("model", toRequestBody(editModel.getText().toString()));
-        params.put("status", toRequestBody(tvStatus.getText().toString()));
+        params.put("status", toRequestBody(mSelectProjectStatus));
         params.put("type_sign", toRequestBody(editTypeSign.getText().toString()));
         params.put("start_time", toRequestBody(tvStartTime.getText().toString()));
         params.put("end_time", toRequestBody(tvEndTime.getText().toString()));
