@@ -116,7 +116,7 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
     @Override
     protected void initData() {
         titleBack.setVisibility(View.GONE);
-        titleName.setText("检修");
+        titleName.setText("电力检修工程管理");
         paomadeng.setSelected(true);
         init();
         getCity();
