@@ -541,6 +541,11 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_gray"></View>
+
             <LinearLayout
                 android:id="@+id/rl_team_assessment"
                 android:layout_width="match_parent"
