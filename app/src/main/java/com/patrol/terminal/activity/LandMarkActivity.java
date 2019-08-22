@@ -89,8 +89,6 @@ public class LandMarkActivity extends AppCompatActivity {
     RelativeLayout landmarkView;
 
     private List<LocalLandMarkBean> landMarkList = new ArrayList<>();
-    private int pageNum = 1;
-    private int count = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +102,6 @@ public class LandMarkActivity extends AppCompatActivity {
         title_setting.setVisibility(View.VISIBLE);
 
         titleQxContent.setFocusable(false);
-//        initView();
     }
 
 
@@ -200,7 +197,6 @@ public class LandMarkActivity extends AppCompatActivity {
             R.id.probar_ys, R.id.probar_jg, R.id.probar_jc, R.id.probar_bw,
             R.id.probar_bn, R.id.title_qx_content})
     public void onViewClicked(View view) {
-        int marks = 5;
         switch (view.getId()) {
             case R.id.title_back:
                 finish();
@@ -212,40 +208,49 @@ public class LandMarkActivity extends AppCompatActivity {
                 break;
 
             case R.id.probar_xmqq:
-                marks = 1;
+                jumpDetail(1);
+                break;
             case R.id.probar_xmlx:
-                marks = 2;
+                jumpDetail(2);
+                break;
             case R.id.probar_sjgl:
-                marks = 3;
+                jumpDetail(3);
+                break;
             case R.id.probar_zbgl:
-                marks = 4;
+                jumpDetail(4);
+                break;
             case R.id.probar_sszb:
-                marks = 5;
+                jumpDetail(8);
+                break;
             case R.id.probar_qq:
-                marks = 6;
+                jumpDetail(7);
+                break;
             case R.id.probar_jdgl:
-                marks = 7;
+                jumpDetail(6);
+                break;
             case R.id.probar_htgl:
-                marks = 8;
+                jumpDetail(5);
+                break;
             case R.id.probar_zj:
-                marks= 9;
+                jumpDetail(9);
+                break;
             case R.id.probar_thj:
-                marks = 10;
+                jumpDetail(10);
+                break;
             case R.id.probar_ys:
-                marks = 11;
+                jumpDetail(11);
+                break;
             case R.id.probar_jg:
-                marks = 12;
+                jumpDetail(12);
+                break;
             case R.id.probar_jc:
-//                marks = 13;
+                jumpDetail(15);
+                break;
             case R.id.probar_bw:
-//                marks = 14;
+                jumpDetail(14);
+                break;
             case R.id.probar_bn:
-//                marks = 15;
-                Intent intent1 = new Intent();
-                intent1.putExtra("marks",Constant.lcbList[marks]);
-                intent1.putExtra("list",(Serializable)landMarkList);
-                intent1.setClass(this, LandMarkDetailActivity.class);
-                startActivity(intent1);
+                jumpDetail(13);
                 break;
             case R.id.title_qx_content:
                 intent = new Intent();
@@ -253,6 +258,19 @@ public class LandMarkActivity extends AppCompatActivity {
                 startActivityForResult(intent, Constant.GCJB_ADD_PROJECT);
                 break;
         }
+    }
+
+    public void jumpDetail(int index){
+        Intent intent1 = new Intent();
+        if(index<5){
+            intent1.putExtra("marks","");
+        }else{
+            intent1.putExtra("marks",Constant.lcbList[index-2]);
+        }
+
+        intent1.putExtra("list",(Serializable)landMarkList);
+        intent1.setClass(this, LandMarkDetailActivity.class);
+        startActivity(intent1);
     }
 
     public void initProBar(RoundProgressBar bar, int probar) {

@@ -113,13 +113,6 @@ public class LandMarkAddActivity extends AppCompatActivity {
                         checkedItem = options1;
                         landmark_add_jblb.setText(Constant.lcbList[options1]);
                         dialog.dismiss();
-//                        if(LocalLandMarkBean.addStatus(types[options1])){
-//                            Utils.showToast("该阶段已上报");
-//                            addStatus = true;
-//                            return;
-//                        }else{
-//                            addStatus = false;
-//                        }
                     }
                 });
                 AlertDialog typeDialog = alertBuilder.create();
@@ -131,7 +124,7 @@ public class LandMarkAddActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 probar = progress;
-                gcjb_jd_tv.setText("进度（"+progress+"%）");
+                gcjb_jd_tv.setText("进度（" + progress + "%）");
             }
 
             @Override
@@ -148,7 +141,7 @@ public class LandMarkAddActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.title_back,R.id.landmark_save,R.id.landmark_add_ssxm})
+    @OnClick({R.id.title_back, R.id.landmark_save, R.id.landmark_add_ssxm})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -161,28 +154,28 @@ public class LandMarkAddActivity extends AppCompatActivity {
                 break;
             case R.id.landmark_save:
 
-                if(clickedCheckProjectBean == null){
+                if (clickedCheckProjectBean == null) {
                     Utils.showToast("请选择上报项目");
                     return;
                 }
 
                 String jblb = landmark_add_jblb.getText().toString();
                 String qkms = landmarkSgqk.getText().toString().trim();
-                if(jblb.equals("请选择")){
-                   Utils.showToast("请选择上报阶段");
+                if (jblb.equals("请选择")) {
+                    Utils.showToast("请选择上报阶段");
                     return;
                 }
 
-                if(addStatus){
+                if (addStatus) {
                     Utils.showToast("该阶段已上报,请重新选择");
                     return;
                 }
 
-                if(TextUtils.isEmpty(qkms)){
+                if (TextUtils.isEmpty(qkms)) {
                     Utils.showToast("请填写情况描述");
                     return;
                 }
-                if(probar == 0){
+                if (probar == 0) {
                     Utils.showToast("请选择阶段进度");
                     return;
                 }
@@ -193,7 +186,7 @@ public class LandMarkAddActivity extends AppCompatActivity {
                 bean.setTemp_project_name(clickedCheckProjectBean.getProject_no());
                 bean.setContent(qkms);
                 bean.setStatus(String.valueOf(checkedItem));
-                bean.setPlan(probar+"");
+                bean.setPlan(probar + "");
                 bean.setRemarks(landmarkBz.getText().toString().trim());
                 bean.setCreated_date(DateUatil.getTime());
 
