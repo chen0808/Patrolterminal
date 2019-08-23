@@ -2,7 +2,6 @@ package com.patrol.terminal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -138,8 +137,7 @@ public class DesignPlanAddActivity extends BaseActivity {
                 if (data != null) {
                     InitiateProjectBean2 clickedCheckProjectBean = data.getParcelableExtra("search_project_item");
                     if (clickedCheckProjectBean != null) {
-                        project_id = clickedCheckProjectBean.getId();   //备用  TODO
-                        Log.w("linmeng", "onActivityResult clickedCheckProjectBean.getName():" + clickedCheckProjectBean.getName());
+                        project_id = clickedCheckProjectBean.getId();
                         project_name = clickedCheckProjectBean.getName();
                         tvProjectName.setText(project_name);
                     }

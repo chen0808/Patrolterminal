@@ -222,103 +222,103 @@ public class GanttActivity extends BaseActivity {
     private List<MyTask> listMyTask() {
         List<MyTask> list = new ArrayList<>();
         MyTask myTask1 = new MyTask();
-        myTask1.startTask = "12.2";
-        myTask1.endTask = "12.6";
+        myTask1.startTask = "8.2";
+        myTask1.endTask = "8.6";
         myTask1.jindu = 60;
 
         MyTask myTask2 = new MyTask();
-        myTask2.startTask = "12.3";
-        myTask2.endTask = "12.4";
+        myTask2.startTask = "8.3";
+        myTask2.endTask = "8.4";
         myTask2.jindu = 30;
 
         MyTask myTask3 = new MyTask();
-        myTask3.startTask = "12.4";
-        myTask3.endTask = "12.9";
+        myTask3.startTask = "8.4";
+        myTask3.endTask = "8.9";
         myTask3.jindu = 80;
 
         MyTask myTask4 = new MyTask();
-        myTask4.startTask = "12.5";
-        myTask4.endTask = "12.9";
+        myTask4.startTask = "8.5";
+        myTask4.endTask = "8.9";
         myTask4.jindu = 15;
 
         MyTask myTask5 = new MyTask();
-        myTask5.startTask = "12.6";
-        myTask5.endTask = "12.7";
+        myTask5.startTask = "8.6";
+        myTask5.endTask = "8.7";
         myTask5.jindu = 70;
 
         MyTask myTask6 = new MyTask();
-        myTask6.startTask = "12.3";
-        myTask6.endTask = "12.5";
+        myTask6.startTask = "8.3";
+        myTask6.endTask = "8.5";
         myTask6.jindu = 60;
 
         MyTask myTask7 = new MyTask();
-        myTask7.startTask = "12.1";
-        myTask7.endTask = "12.3";
+        myTask7.startTask = "8.1";
+        myTask7.endTask = "8.3";
         myTask7.jindu = 10;
 
         MyTask myTask8 = new MyTask();
-        myTask8.startTask = "12.5";
-        myTask8.endTask = "12.10";
+        myTask8.startTask = "8.5";
+        myTask8.endTask = "8.10";
         myTask8.jindu = 90;
 
         MyTask myTask9 = new MyTask();
-        myTask9.startTask = "12.1";
-        myTask9.endTask = "12.5";
+        myTask9.startTask = "8.1";
+        myTask9.endTask = "8.5";
         myTask9.jindu = 70;
 
         MyTask myTask10 = new MyTask();
-        myTask10.startTask = "12.2";
-        myTask10.endTask = "12.9";
+        myTask10.startTask = "8.2";
+        myTask10.endTask = "8.9";
         myTask10.jindu = 50;
 
         MyTask myTask11 = new MyTask();
-        myTask11.startTask = "12.3";
-        myTask11.endTask = "12.7";
+        myTask11.startTask = "8.3";
+        myTask11.endTask = "8.7";
         myTask11.jindu = 30;
 
         MyTask myTask12 = new MyTask();
-        myTask12.startTask = "12.1";
-        myTask12.endTask = "12.8";
+        myTask12.startTask = "8.1";
+        myTask12.endTask = "8.8";
         myTask12.jindu = 20;
 
         MyTask myTask13 = new MyTask();
-        myTask13.startTask = "12.2";
-        myTask13.endTask = "12.10";
+        myTask13.startTask = "8.2";
+        myTask13.endTask = "8.10";
         myTask13.jindu = 60;
 
         MyTask myTask14 = new MyTask();
-        myTask14.startTask = "12.5";
-        myTask14.endTask = "12.13";
+        myTask14.startTask = "8.5";
+        myTask14.endTask = "8.13";
         myTask14.jindu = 60;
 
         MyTask myTask15 = new MyTask();
-        myTask15.startTask = "12.5";
-        myTask15.endTask = "12.10";
+        myTask15.startTask = "8.5";
+        myTask15.endTask = "8.10";
         myTask15.jindu = 60;
 
         MyTask myTask16 = new MyTask();
-        myTask16.startTask = "12.1";
-        myTask16.endTask = "12.6";
+        myTask16.startTask = "8.1";
+        myTask16.endTask = "8.6";
         myTask16.jindu = 60;
 
         MyTask myTask17 = new MyTask();
-        myTask17.startTask = "12.5";
-        myTask17.endTask = "12.15";
+        myTask17.startTask = "8.5";
+        myTask17.endTask = "8.15";
         myTask17.jindu = 60;
 
         MyTask myTask18 = new MyTask();
-        myTask18.startTask = "12.3";
-        myTask18.endTask = "12.10";
+        myTask18.startTask = "8.3";
+        myTask18.endTask = "8.10";
         myTask18.jindu = 60;
 
         MyTask myTask19 = new MyTask();
-        myTask19.startTask = "12.2";
-        myTask19.endTask = "12.11";
+        myTask19.startTask = "8.2";
+        myTask19.endTask = "8.11";
         myTask19.jindu = 60;
 
         MyTask myTask20 = new MyTask();
-        myTask20.startTask = "12.1";
-        myTask20.endTask = "12.16";
+        myTask20.startTask = "8.1";
+        myTask20.endTask = "8.16";
         myTask20.jindu = 60;
 
         list.add(myTask1);
