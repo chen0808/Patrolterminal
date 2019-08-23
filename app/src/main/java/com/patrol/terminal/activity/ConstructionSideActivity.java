@@ -198,7 +198,7 @@ public class ConstructionSideActivity extends BaseActivity {
     public void getLogList(String search_name) {
         ProgressDialog.show(mContext, true, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getLogList(pageNum, count, search_name, logType + "")
+                .getLogList(pageNum, count, "created_date desc", search_name, logType + "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<WorkingLogBean>>(mContext) {
