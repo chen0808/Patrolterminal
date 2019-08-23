@@ -474,6 +474,15 @@ public class Utils {
         ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    // 隐藏软键盘
+    public static void hideKeyBoard(Activity activity,View view) {
+        //
+        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(view.getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+
     //0：初级设计，1：方案设计，2：施工期，3：竣工
     public static String briefTypeConversion(String type){
         if(type.equals("0")){

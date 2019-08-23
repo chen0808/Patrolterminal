@@ -102,7 +102,16 @@ public class LandMarkActivity extends AppCompatActivity {
         title_setting.setVisibility(View.VISIBLE);
 
         titleQxContent.setFocusable(false);
+
+        InitiateProjectBean2 clickedCheckProjectBean = getIntent().getParcelableExtra("search_project_item");
+        if (clickedCheckProjectBean != null) {
+            titleQxContent.setText(clickedCheckProjectBean.getName());
+
+            quesyList(clickedCheckProjectBean.getName());
+            landmarkView.setVisibility(View.VISIBLE);
+        }
     }
+
 
 
     public void initView(List<LocalLandMarkBean> result) {
@@ -112,7 +121,7 @@ public class LandMarkActivity extends AppCompatActivity {
 
         for (int i = 0; i < landMarkList.size(); i++) {
             LocalLandMarkBean bean = landMarkList.get(i);
-            String sbjd = Constant.lcbList[bean.getLandmark_sbjd()];//bean.getLandmark_sbjd();
+            String sbjd = Constant.lcbList[bean.getLandmark_sbjd()];
 
             if (sbjd.equals("项目前期")) {
                 initProBar(probar_xmqq, bean.getLandmark_jd());
@@ -202,7 +211,9 @@ public class LandMarkActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.title_setting:
+                InitiateProjectBean2 clickedCheckProjectBean = getIntent().getParcelableExtra("search_project_item");
                 Intent intent = new Intent();
+                intent.putExtra("search_project_item", clickedCheckProjectBean);
                 intent.setClass(this, LandMarkAddActivity.class);
                 startActivityForResult(intent, Constant.GCJB_ADD);
                 break;

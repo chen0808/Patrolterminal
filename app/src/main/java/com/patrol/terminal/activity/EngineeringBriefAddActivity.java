@@ -122,23 +122,24 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_engineering_brief_add);
         ButterKnife.bind(this);
 
-        type = getIntent().getStringExtra(Constant.GCJB_TYPE_STR);
-        if (type.equals(Constant.GCJB_YZF_STR)) {
-            titleName.setText("业主方");
-        } else if (type.equals(Constant.GCJB_JLF_STR)) {
-            titleName.setText("监理方");
-        } else if (type.equals(Constant.GCJB_SGF_STR) || type.equals(Constant.GCJB_ADD_STR)) {
-            titleName.setText("施工方");
-        }
+//        titleName.setText("添加简报");
 
         title_setting_tv.setText("提交");
         title_setting.setVisibility(View.VISIBLE);
 
+        type = getIntent().getStringExtra(Constant.GCJB_TYPE_STR);
+        String name = "";
+        if (type.equals(Constant.GCJB_YZF_STR)) {
+            name = "业主方";
+        } else if (type.equals(Constant.GCJB_JLF_STR)) {
+            name = "监理方";
+        } else if (type.equals(Constant.GCJB_SGF_STR) || type.equals(Constant.GCJB_ADD_STR)) {
+            name = "施工方";
+        }
+        titleName.setText(name+"简报");
+
         initView();
-
         localData();
-
-
     }
 
     public void localData() {
@@ -173,26 +174,23 @@ public class EngineeringBriefAddActivity extends AppCompatActivity {
             img_allow.setVisibility(View.GONE);
             img_allow_ssxm.setVisibility(View.GONE);
         }
-
     }
 
     public void initView() {
         long l = System.currentTimeMillis();
         SimpleDateFormat format = new SimpleDateFormat("MMddHHmmss");
         String format1 = format.format(new Date(l));
-        String name = "";
-        if (type.equals(Constant.GCJB_YZF_STR)) {
-            name = "业主方";
-        } else if (type.equals(Constant.GCJB_JLF_STR)) {
-            name = "监理方";
-        } else if (type.equals(Constant.GCJB_SGF_STR) || type.equals(Constant.GCJB_ADD_STR)) {
-            name = "施工方";
+
+        clickedCheckProjectBean = getIntent().getParcelableExtra("search_project_item");
+        if (clickedCheckProjectBean != null) {
+            gcjb_add_ssxm.setText(clickedCheckProjectBean.getName());
+        }else{
+            gcjb_add_ssxm.setText("请选择");
         }
 
         gcjb_add_bh.setText(format1);
-        gcjb_add_ssxm.setText("请选择");
-        gcjb_add_tbr.setText("马宝龙");
-        gcjb_add_jblb.setText("初步设计图");
+        gcjb_add_tbr.setText(SPUtil.getUserName(this));
+        gcjb_add_jblb.setText("初步设计");
 
         photoAdapter = new TssxPhotoAdapter(this, photoList);
         gcjb_photo.setAdapter(photoAdapter);
