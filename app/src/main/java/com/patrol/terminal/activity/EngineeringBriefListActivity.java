@@ -136,7 +136,7 @@ public class EngineeringBriefListActivity extends AppCompatActivity {
                         if (t.isSuccess()) {
 
                             List<LocalGcjbBean> result = t.getResults();
-                            if (result != null && result.size() > 0 && result.size() == pageNum) {
+                            if (result != null && result.size() > 0 && result.size() == count) {
                                 gclb_lsit.loadMoreFinish(false, true);
                             } else {
                                 gclb_lsit.loadMoreFinish(true, false);
