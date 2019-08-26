@@ -7,35 +7,22 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.adapter.InitiateProjectAdapter;
-import com.patrol.terminal.adapter.ProjectBoardAdapter;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.InitiateProjectBean;
-import com.patrol.terminal.bean.ProjectBoardBean;
-import com.patrol.terminal.sqlite.AppDataBase;
-import com.patrol.terminal.utils.DateUatil;
-import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SpaceItemDecoration;
-import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
-import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
-import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -97,7 +84,7 @@ public class ProjectListActivity extends BaseActivity {
     public void getProjectList(String search_name) {
         ProgressDialog.show(this, true, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getProjectList(pageNum, count, search_name)
+                .getProjectList(pageNum, count, search_name, "start_time desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<InitiateProjectBean>>(this) {

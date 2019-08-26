@@ -1277,11 +1277,11 @@ public interface ApiServise {
 
     //获取项目列表
     @GET("temp/project/pdaPageGET")
-    Observable<BaseResult<List<InitiateProjectBean>>> getProjectList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
+    Observable<BaseResult<List<InitiateProjectBean>>> getProjectList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name, @Query("order") String order);
 
     //获取项目列表2
     @GET("temp/project/pdaPageGET")
-    Observable<BaseResult<List<InitiateProjectBean2>>> getProjectList2(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
+    Observable<BaseResult<List<InitiateProjectBean2>>> getProjectList2(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name, @Query("order") String order);
 
 
     //工程简报

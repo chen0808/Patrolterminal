@@ -11,14 +11,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.base.BaseActivity;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
-import com.patrol.terminal.bean.CheckProjectServiceBean;
-import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
@@ -31,7 +31,6 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -78,7 +77,7 @@ public class ProjectSearchActivityNew extends BaseActivity implements TextWatche
 
     private void initData() {
         BaseRequest.getInstance().getService()
-                .getProjectList2(0, 0, "")
+                .getProjectList2(0, 0, "", "start_time desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<InitiateProjectBean2>>(this) {
