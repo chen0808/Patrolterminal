@@ -19,7 +19,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.ControlCardTaizhangActivity;
 import com.patrol.terminal.activity.DefectTabActivity;
-import com.patrol.terminal.activity.JXTotalActivity;
 import com.patrol.terminal.activity.LoginActivity;
 import com.patrol.terminal.activity.MapActivity;
 import com.patrol.terminal.activity.MyPerformanceActivity;
@@ -428,9 +427,7 @@ public class JXHomeFragment extends BaseFragment /*implements IRfid.QueryCallbac
                 }
 
                 break;
-            case R.id.rl_task:
-                startActivity(new Intent(getActivity(), JXTotalActivity.class));
-                break;
+
             case R.id.rl_defact:
                 startActivity(new Intent(getActivity(), DefectTabActivity.class));
                 break;

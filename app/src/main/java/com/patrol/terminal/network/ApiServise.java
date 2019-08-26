@@ -1360,7 +1360,7 @@ public interface ApiServise {
 
     //获取形象进度列表
     @GET("temp/figure/pdaPageGET")
-    Observable<BaseResult<List<GraphicProgressBean>>> getGraPro(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
+    Observable<BaseResult<List<GraphicProgressBean>>> getGraPro(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name, @Query("order") String order);
 
     //施工日志删除
     @POST("temp/figure/deletePOST")

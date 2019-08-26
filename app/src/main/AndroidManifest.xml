@@ -36,7 +36,6 @@
         <activity android:name=".activity.ProjectListActivity" />
         <activity android:name=".activity.AddGraphicProgressActivity" />
         <activity android:name=".activity.GraphicProgressActivity" />
-        <activity android:name=".activity.JXTotalActivity" />
         <activity android:name=".activity.DefectPlanActivity" />
         <activity android:name=".activity.DangerToPatrolActivity" />
         <activity android:name=".activity.DangerVerifyActivity" />
