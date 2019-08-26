@@ -77,7 +77,7 @@ public class ProjectSearchActivityNew extends BaseActivity implements TextWatche
 
     private void initData() {
         BaseRequest.getInstance().getService()
-                .getProjectList2(0, 0, "", "start_time desc")
+                .getProjectList2(0, 0, "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<InitiateProjectBean2>>(this) {
