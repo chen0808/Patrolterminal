@@ -1277,11 +1277,11 @@ public interface ApiServise {
 
     //获取项目列表
     @GET("temp/project/pdaPageGET")
-    Observable<BaseResult<List<InitiateProjectBean>>> getProjectList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name, @Query("order") String order);
+    Observable<BaseResult<List<InitiateProjectBean>>> getProjectList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("order") String order, @Query("name") String name);
 
     //获取项目列表2
     @GET("temp/project/pdaPageGET")
-    Observable<BaseResult<List<InitiateProjectBean2>>> getProjectList2(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name, @Query("order") String order);
+    Observable<BaseResult<List<InitiateProjectBean2>>> getProjectList2(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
 
 
     //工程简报
@@ -1291,7 +1291,7 @@ public interface ApiServise {
 
     //工程简报  列表
     @GET("temp/brief/pdaPageGET")
-    Observable<BaseResult<List<LocalGcjbBean>>> queryListPOST(@Query("page_num") String page_num,@Query("page_size") String page_size,@Query("name") String name,@Query("brief_sign") String brief_sign);
+    Observable<BaseResult<List<LocalGcjbBean>>> queryListPOST(@Query("page_num") String page_num,@Query("page_size") String page_size,@Query("name") String name,@Query("brief_sign") String brief_sign,@Query("order") String order);
 
     //工程周报
     @Multipart
@@ -1300,7 +1300,7 @@ public interface ApiServise {
 
     //工程周报  列表
     @GET("temp/weekly/pdaPageGET")
-    Observable<BaseResult<List<LocalWorkWeeklyBean>>> queryWorklyGET(@Query("page_num") String page_num,@Query("page_size") String page_size);
+    Observable<BaseResult<List<LocalWorkWeeklyBean>>> queryWorklyGET(@Query("page_num") String page_num,@Query("page_size") String page_size,@Query("order") String order);
 
     //里程碑  添加
     @POST("temp/milestone/updatePOST")
@@ -1317,7 +1317,7 @@ public interface ApiServise {
 
     //获取施工日志列表
     @GET("temp/log/pdaPageGET")
-    Observable<BaseResult<List<WorkingLogBean>>> getLogList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name,  @Query("log_sign") String log_sign);
+    Observable<BaseResult<List<WorkingLogBean>>> getLogList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("order") String order, @Query("name") String name,  @Query("log_sign") String log_sign);
 
     //施工日志删除
     @POST("temp/log/deletePOST")
@@ -1330,7 +1330,7 @@ public interface ApiServise {
 
     //获取电子公告列表
     @GET("temp/notice/pdaPageGET")
-    Observable<BaseResult<List<NoticeBean>>> getNoticeList(@Query("page_num") int page_num, @Query("page_size") int page_size);
+    Observable<BaseResult<List<NoticeBean>>> getNoticeList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("order") String order);
 
     //获取电子公告详情
     @GET("temp/notice/byIdGET")

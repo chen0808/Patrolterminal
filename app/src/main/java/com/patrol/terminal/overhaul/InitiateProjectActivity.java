@@ -3,6 +3,7 @@ package com.patrol.terminal.overhaul;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,6 +19,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.InitiateProjectBean;
+import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.SPUtil;
 import com.patrol.terminal.utils.Utils;
@@ -145,7 +147,7 @@ public class InitiateProjectActivity extends BaseActivity {
     public void getProjectList(String search_name) {
         ProgressDialog.show(mContext, true, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getProjectList(pageNum, count, search_name, "start_time desc")
+                .getProjectList(pageNum, count, "start_time desc", search_name)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<InitiateProjectBean>>(mContext) {

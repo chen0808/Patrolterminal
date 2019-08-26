@@ -140,7 +140,7 @@ public class WorkWeeklyListActivity extends AppCompatActivity {
     public void quesyList() {
         ProgressDialog.show(this);
         BaseRequest.getInstance().getService()
-                .queryWorklyGET(pageNum + "", count + "")
+                .queryWorklyGET(pageNum + "", count + "","created_date desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LocalWorkWeeklyBean>>(this) {
@@ -156,7 +156,7 @@ public class WorkWeeklyListActivity extends AppCompatActivity {
                             }
 
                             List<LocalWorkWeeklyBean> result = t.getResults();
-                            if (result != null && result.size() > 0 && result.size() == pageNum) {
+                            if (result != null && result.size() > 0 && result.size() == count) {
                                 gclb_lsit.loadMoreFinish(false, true);
                             } else {
                                 gclb_lsit.loadMoreFinish(true, false);

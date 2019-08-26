@@ -95,6 +95,11 @@ public class LandMarkAddActivity extends AppCompatActivity {
 
         titleName.setText("里程碑");
 
+        clickedCheckProjectBean = getIntent().getParcelableExtra("search_project_item");
+        if (clickedCheckProjectBean != null) {
+            landmark_add_ssxm.setText(clickedCheckProjectBean.getName());
+        }
+
         initView();
     }
 
@@ -147,11 +152,11 @@ public class LandMarkAddActivity extends AppCompatActivity {
             case R.id.title_back:
                 finish();
                 break;
-            case R.id.landmark_add_ssxm:
-                Intent intent = new Intent();
-                intent.setClass(this, ProjectSearchActivityNew.class);
-                startActivityForResult(intent, Constant.GCJB_ADD_PROJECT);
-                break;
+//            case R.id.landmark_add_ssxm:
+//                Intent intent = new Intent();
+//                intent.setClass(this, ProjectSearchActivityNew.class);
+//                startActivityForResult(intent, Constant.GCJB_ADD_PROJECT);
+//                break;
             case R.id.landmark_save:
 
                 if (clickedCheckProjectBean == null) {

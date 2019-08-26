@@ -73,7 +73,7 @@ public class AnnounceReceiptFragment extends BaseFragment {
     public void getNoticeList(String search_name) {
 //        ProgressDialog.show(mContext, true, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getNoticeList(pageNum, count)
+                .getNoticeList(pageNum, count, "end_time desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<NoticeBean>>(mContext) {

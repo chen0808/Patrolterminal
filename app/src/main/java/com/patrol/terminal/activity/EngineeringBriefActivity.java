@@ -50,7 +50,7 @@ public class EngineeringBriefActivity extends AppCompatActivity {
 
     @OnClick({R.id.title_back, R.id.gcjb_yzf, R.id.gcjb_jlf, R.id.gcjb_sgf, R.id.gcjb_add})
     public void onViewClicked(View view) {
-        Intent intent = new Intent(EngineeringBriefActivity.this,EngineeringBriefListActivity.class);
+        Intent intent = new Intent(EngineeringBriefActivity.this,LandMarkProjectSearchActivity.class);
 
         switch (view.getId()) {
             case R.id.title_back:
@@ -70,7 +70,7 @@ public class EngineeringBriefActivity extends AppCompatActivity {
                 break;
             case R.id.gcjb_add:
                 Intent intent2 = new Intent(EngineeringBriefActivity.this,EngineeringBriefAddActivity.class);
-                intent2.putExtra(Constant.GCJB_TYPE_STR,Constant.GCJB_SGF_STR);
+                intent2.putExtra(Constant.GCJB_TYPE_STR,Constant.GCJB_ADD_STR);
                 startActivity(intent2);
                 break;
 

@@ -73,7 +73,7 @@ public class EngineeringBriefListActivity extends AppCompatActivity {
     private int pageNum = 1;
     private final int count = 10;
     private String projectName;
-
+    private InitiateProjectBean2 clickedCheckProjectBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,14 @@ public class EngineeringBriefListActivity extends AppCompatActivity {
 
         title_setting_tv.setText("添加");
         title_setting.setVisibility(View.VISIBLE);
+
+        clickedCheckProjectBean = getIntent().getParcelableExtra("search_project_item");
+        if (clickedCheckProjectBean != null) {
+            titleQxContent.setText(clickedCheckProjectBean.getName());
+            projectName = clickedCheckProjectBean.getName();
+            pageNum = 1;
+            quesyList();
+        }
 
         initView();
     }
@@ -118,7 +126,7 @@ public class EngineeringBriefListActivity extends AppCompatActivity {
     public void quesyList() {
         ProgressDialog.show(this);
         BaseRequest.getInstance().getService()
-                .queryListPOST(pageNum + "", count + "", projectName, type)
+                .queryListPOST(pageNum + "", count + "", projectName, type,"created_time desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<LocalGcjbBean>>(this) {
@@ -128,7 +136,7 @@ public class EngineeringBriefListActivity extends AppCompatActivity {
                         if (t.isSuccess()) {
 
                             List<LocalGcjbBean> result = t.getResults();
-                            if (result != null && result.size() > 0 && result.size() == pageNum) {
+                            if (result != null && result.size() > 0 && result.size() == count) {
                                 gclb_lsit.loadMoreFinish(false, true);
                             } else {
                                 gclb_lsit.loadMoreFinish(true, false);
@@ -164,6 +172,7 @@ public class EngineeringBriefListActivity extends AppCompatActivity {
             case R.id.title_setting:
                 Intent intent = new Intent();
                 intent.setClass(this, EngineeringBriefAddActivity.class);
+                intent.putExtra("search_project_item", clickedCheckProjectBean);
                 intent.putExtra(Constant.GCJB_TYPE_STR, type);
                 startActivityForResult(intent, Constant.GCJB_ADD);
                 break;

@@ -84,7 +84,7 @@ public class ProjectListActivity extends BaseActivity {
     public void getProjectList(String search_name) {
         ProgressDialog.show(this, true, "正在加载中。。。。");
         BaseRequest.getInstance().getService()
-                .getProjectList(pageNum, count, search_name, "start_time desc")
+                .getProjectList(pageNum, count, "start_time desc", search_name)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<InitiateProjectBean>>(this) {

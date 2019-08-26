@@ -15,6 +15,7 @@ import com.patrol.terminal.activity.DesignPlanActivity;
 import com.patrol.terminal.activity.EngineeringBriefActivity;
 import com.patrol.terminal.activity.GraphicProgressActivity;
 import com.patrol.terminal.activity.LandMarkActivity;
+import com.patrol.terminal.activity.LandMarkProjectSearchActivity;
 import com.patrol.terminal.activity.ProjectBoardActivity;
 import com.patrol.terminal.activity.WorkWeeklyListActivity;
 import com.patrol.terminal.activity.WorkingLogActivity;
@@ -86,7 +87,7 @@ public class GridePagerAdapter extends PagerAdapter {
                             break;
                         //里程碑
                         case 2:
-                            intent.setClass(context, LandMarkActivity.class);
+                            intent.setClass(context, LandMarkProjectSearchActivity.class);
                             break;
                         //质量检查
                         case 3:

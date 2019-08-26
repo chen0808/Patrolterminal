@@ -12,7 +12,9 @@
         android:id="@+id/include"
         layout="@layout/include_title" />
 
-    <include layout="@layout/include_title_edit" />
+    <include layout="@layout/include_title_edit"
+        android:visibility="gone"
+        />
 
     <com.patrol.terminal.widget.HVScrollView
         android:layout_width="wrap_content"
@@ -292,5 +294,7 @@
 
             </LinearLayout>
         </RelativeLayout>
+
     </com.patrol.terminal.widget.HVScrollView>
+
 </LinearLayout>
