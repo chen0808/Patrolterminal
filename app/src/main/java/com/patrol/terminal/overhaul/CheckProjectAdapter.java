@@ -46,15 +46,20 @@ public class CheckProjectAdapter extends BaseQuickAdapter<CheckProjectServiceBea
 
 
             List<CheckProjectServiceBean.TempCheckResultListBean> checkResultList = item.getTempCheckResultList();
-
-            boolean isSuccess = true;
-            for (int i = 0; i < checkResultList.size(); i++) {
-                String result = checkResultList.get(i).getResult();
-                if ("1".equals(result)) {  //有需要整改的
-                }else {
-                    isSuccess = false;
-                }
+            if (checkResultList==null){
+               checkResultList = item.getTempQualityResultList();
             }
+            boolean isSuccess = true;
+
+                for (int i = 0; i < checkResultList.size(); i++) {
+                    String result = checkResultList.get(i).getResult();
+                    if ("1".equals(result)) {  //有需要整改的
+                    }else {
+                        isSuccess = false;
+                    }
+                }
+
+
 
             if (isSuccess) {
                 viewHolder.setImageResource(R.id.check_project_result_iv, R.mipmap.check_project_ok);   //通过

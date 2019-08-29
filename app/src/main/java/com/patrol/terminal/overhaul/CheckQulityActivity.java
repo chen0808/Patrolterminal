@@ -73,7 +73,7 @@ public class CheckQulityActivity extends BaseActivity implements TextWatcher {
 
     private void initData() {
         BaseRequest.getInstance().getService()
-                .getProjectList("0", "0", "")
+                .getQualityList("0", "0", "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<CheckProjectServiceBean>>(this) {

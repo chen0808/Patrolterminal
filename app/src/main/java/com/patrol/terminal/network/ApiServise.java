@@ -1257,14 +1257,22 @@ public interface ApiServise {
     @POST("eq/tools/history/saveBatchPOST")
     Observable<BaseResult> getToolReceive(@Body List<EqToolsReceiveBean> list);
 
-    //检修获取项目列表
+    //安全检查列表
     @GET("temp/check/pdaPageGET")
     Observable<BaseResult<List<CheckProjectServiceBean>>> getProjectList(@Query("page_num") String page_num, @Query("page_size") String page_size, @Query("name") String name);
 
-    //检修添加项目信息项目列表
+    //质量检查列表
+    @GET("temp/quality/pdaPageGET")
+    Observable<BaseResult<List<CheckProjectServiceBean>>> getQualityList(@Query("page_num") String page_num, @Query("page_size") String page_size, @Query("name") String name);
+    //添加安全检查
     @Multipart
     @POST("temp/check/savePOST")
     Observable<BaseResult> addProjectInfo(@PartMap Map<String, RequestBody> params);
+
+    //添加质量检查
+    @Multipart
+    @POST("temp/quality/savePOST")
+    Observable<BaseResult> addQualityInfo(@PartMap Map<String, RequestBody> params);
 
     //项目看板
     @GET("temp/project/listGET")
@@ -1343,7 +1351,7 @@ public interface ApiServise {
 
     //计划列表
     @GET("temp/plan/pdaPageGET")
-    Observable<BaseResult<List<ProjectPlanBean>>> getProjectPlanList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name);
+    Observable<BaseResult<List<ProjectPlanBean>>> getProjectPlanList(@Query("page_num") int page_num, @Query("page_size") int page_size, @Query("name") String name, @Query("order") String order);
 
     //计划详情
     @GET("temp/plan/byIdGET")

@@ -466,21 +466,21 @@ public class AddQulityCheckActivity extends BaseActivity {
         params.put("check_project", toRequestBody(mCheckItemEt.getText().toString()));
 
         for (int k = 0 ; k < mCheckResult.size(); k++) {
-            params.put("tempCheckResultList["+k+"].result", toRequestBody(String.valueOf(mCheckResult.get(k).getCheckResult())));
-            params.put("tempCheckResultList["+k+"].content", toRequestBody(mCheckResult.get(k).getCheckContent()));
+            params.put("tempQualityResultList["+k+"].result", toRequestBody(String.valueOf(mCheckResult.get(k).getCheckResult())));
+            params.put("tempQualityResultList["+k+"].content", toRequestBody(mCheckResult.get(k).getCheckContent()));
             long  checkid= mCheckResult.get( k).getCheckResultId();
             List<String>  photoList= mPhotoMap.get(checkid);
             for(int i = 0;i<photoList.size();i++){
                 if(!photoList.get(i).equals("")){
                     File file = new File(photoList.get(i));
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                    params.put("tempCheckResultList["+k+"].files\"; filename=\"" + i + ".jpg", requestFile);
+                    params.put("tempQualityResultList["+k+"].files\"; filename=\"" + i + ".jpg", requestFile);
                 }
             }
         }
 
         BaseRequest.getInstance().getService()
-                .addProjectInfo(params)
+                .addQualityInfo(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver(this) {

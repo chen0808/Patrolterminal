@@ -167,7 +167,7 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
 //        } else if (jobType.contains("yx")) {//运行专责
 //            mFragments.add(new HomeFragment());
 //        } else {
-            mFragments.add(new NewJXHomeFragment());
+
 //        }
 
         //分配每个职位进来的待办
@@ -182,9 +182,13 @@ public class NewMainActivity extends BaseActivity /*implements IRfid.CallbackLis
         mainExameRb.setVisibility(View.VISIBLE);
 
         if (jobType.contains("yx")) {   //运行待办
+            mFragments.add(new HomeFragment());
             mFragments.add(new YXTodosManageFragment());
+
         } else {   //其他角色待办
+            mFragments.add(new NewJXHomeFragment());
             mFragments.add(new TodosManageFragment());
+
         }
 //        }
 
