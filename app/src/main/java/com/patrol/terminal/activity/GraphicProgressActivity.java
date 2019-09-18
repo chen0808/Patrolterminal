@@ -3,10 +3,13 @@ package com.patrol.terminal.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,12 +24,7 @@ import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
 import com.patrol.terminal.bean.GraphicProgressBean;
-import com.patrol.terminal.bean.GroupTaskBean;
-import com.patrol.terminal.utils.RxRefreshEvent;
-import com.patrol.terminal.utils.SPUtil;
-import com.patrol.terminal.utils.Utils;
-import com.patrol.terminal.widget.ProgressDialog;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.patrol.terminal.bean.InitiateProjectBean2;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -44,7 +42,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 //形象进度列表
-public class GraphicProgressActivity extends BaseActivity {
+public class GraphicProgressActivity extends BaseActivity implements TextWatcher {
 
     @BindView(R.id.title_back)
     RelativeLayout titleBack;
@@ -60,9 +58,17 @@ public class GraphicProgressActivity extends BaseActivity {
     RelativeLayout titleItem;
     @BindView(R.id.graphic_progress)
     SwipeRecyclerView graphicProgress;
+    @BindView(R.id.search_iv)
+    ImageView searchIv;
+    @BindView(R.id.project_search_et)
+    EditText projectSearchEt;
+    @BindView(R.id.delete_iv)
+    ImageView deleteIv;
 
-    private List<GraphicProgressBean> list=new ArrayList<>();
+    private List<GraphicProgressBean> list = new ArrayList<>();
+    private List<GraphicProgressBean> mFilterCheckProject = new ArrayList<>();
     private GradohicProgressAdapter adapter;
+    private String search="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +85,7 @@ public class GraphicProgressActivity extends BaseActivity {
         titleSettingIv.setVisibility(View.VISIBLE);
         titleSettingTv.setVisibility(View.GONE);
         titleSettingIv.setImageResource(R.mipmap.add_white);
-        LinearLayoutManager manager=new LinearLayoutManager(this);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
         graphicProgress.setLayoutManager(manager);
         // 设置监听器。
         graphicProgress.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -87,20 +93,21 @@ public class GraphicProgressActivity extends BaseActivity {
         // 菜单点击监听。
         graphicProgress.setOnItemMenuClickListener(mItemMenuClickListener);
         adapter = new GradohicProgressAdapter(R.layout.item_gradohic_progress
-                ,list);
+                , list);
         graphicProgress.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GraphicProgressBean bean = list.get(position);
-                Intent intent=new Intent(GraphicProgressActivity.this,GraphicProDetailActivity.class);
-                intent.putExtra("bean",bean);
+                Intent intent = new Intent(GraphicProgressActivity.this, GraphicProDetailActivity.class);
+                intent.putExtra("bean", bean);
                 startActivity(intent);
 
             }
         });
-
+        projectSearchEt.addTextChangedListener(this);
     }
+
     // 创建菜单：
     SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
         @Override
@@ -146,8 +153,8 @@ public class GraphicProgressActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.title_setting:
-                Intent intent=new Intent(this,AddGraphicProgressActivity.class);
-                startActivityForResult(intent,245);
+                Intent intent = new Intent(this, AddGraphicProgressActivity.class);
+                startActivityForResult(intent, 245);
                 break;
         }
     }
@@ -155,15 +162,15 @@ public class GraphicProgressActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==245&&resultCode==RESULT_OK){
+        if (requestCode == 245 && resultCode == RESULT_OK) {
             getGraPro();
         }
     }
 
-    //获取小组任务列表
+    //获取形象进度列表
     public void getGraPro() {
         BaseRequest.getInstance().getService()
-                .getGraPro(1,100,null)
+                .getGraPro(1, 100, search, "upload_time desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GraphicProgressBean>>(this) {
@@ -181,8 +188,8 @@ public class GraphicProgressActivity extends BaseActivity {
                 });
     }
 
-    //获取小组任务列表
-    public void deleteGraPro(String id,int position) {
+    //删除形象进度
+    public void deleteGraPro(String id, int position) {
         BaseRequest.getInstance().getService()
                 .deleteGraPro(id)
                 .subscribeOn(Schedulers.io())
@@ -199,5 +206,32 @@ public class GraphicProgressActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        String editStr = projectSearchEt.getText().toString();
+        if (TextUtils.isEmpty(editStr)) {
+            adapter.setNewData(list);
+        }else {
+            mFilterCheckProject.clear();
+            for (int i = 0; i < list.size();i++) {
+                String name = list.get(i).getTemp_project_name();
+                if (name.contains(editStr)) {
+                    mFilterCheckProject.add(list.get(i));
+                }
+            }
+            adapter.setNewData(mFilterCheckProject);
+        }
     }
 }

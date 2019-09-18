@@ -104,7 +104,7 @@ public class DesignPlanActivity extends BaseActivity {
 
     private void getProjectList(String search_name) {
         BaseRequest.getInstance().getService()
-                .getProjectPlanList(pageNum, count, search_name)
+                .getProjectPlanList(pageNum, count, search_name,"start_date desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<ProjectPlanBean>>(mContext) {

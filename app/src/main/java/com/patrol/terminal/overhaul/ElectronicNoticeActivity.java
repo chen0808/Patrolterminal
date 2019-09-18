@@ -9,6 +9,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.patrol.terminal.R;
@@ -93,4 +94,6 @@ public class ElectronicNoticeActivity extends BaseActivity {
                 break;
         }
     }
+
+
 }

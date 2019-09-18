@@ -36,7 +36,6 @@
         <activity android:name=".activity.ProjectListActivity" />
         <activity android:name=".activity.AddGraphicProgressActivity" />
         <activity android:name=".activity.GraphicProgressActivity" />
-        <activity android:name=".activity.JXTotalActivity" />
         <activity android:name=".activity.DefectPlanActivity" />
         <activity android:name=".activity.DangerToPatrolActivity" />
         <activity android:name=".activity.DangerVerifyActivity" />
@@ -80,6 +79,7 @@
         <activity android:name=".activity.ProjectPlanDetailActivity" />
         <activity android:name=".activity.DesignPlanActivity" />
         <activity android:name=".activity.DesignPlanAddActivity" />
+        <activity android:name=".overhaul.ProjectQulityDetailActivity" />
         <activity
             android:name=".activity.GanttActivity"
             android:screenOrientation="landscape" />
@@ -411,7 +411,12 @@
             android:name=".activity.LandMarkProjectSearchActivity"
             android:screenOrientation="portrait" />
 
-
+        <activity
+            android:name=".overhaul.CheckQulityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".overhaul.AddQulityCheckActivity"
+            android:screenOrientation="portrait" />
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="b29931cbdb7cb2cb027765cd556d2de6" /> <!-- 69ef137e2112474f49cece1036dfc50b -->

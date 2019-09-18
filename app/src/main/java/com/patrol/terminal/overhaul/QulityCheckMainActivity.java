@@ -61,7 +61,7 @@ public class QulityCheckMainActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.check_ll:
-                intent.setClass(QulityCheckMainActivity.this, CheckProjectActivity.class);
+                intent.setClass(QulityCheckMainActivity.this, CheckQulityActivity.class);
                 startActivity(intent);
                 break;
             case R.id.reform_ll:
@@ -71,7 +71,7 @@ public class QulityCheckMainActivity extends BaseActivity {
             case R.id.nature_of_inspection_ll:
                 //break;
             case R.id.add_iv:
-                intent.setClass(QulityCheckMainActivity.this, AddSafeCheckActivity.class);
+                intent.setClass(QulityCheckMainActivity.this, AddQulityCheckActivity.class);
                 startActivity(intent);
                 break;
 

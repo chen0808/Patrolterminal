@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.patrol.terminal.R;
@@ -16,9 +17,11 @@ import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
 import com.patrol.terminal.base.BaseResult;
+import com.patrol.terminal.bean.DayOfWeekBean;
 import com.patrol.terminal.bean.DefectFragmentBean;
 import com.patrol.terminal.bean.InitiateProjectBean;
 import com.patrol.terminal.bean.NoticeBean;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 import com.patrol.terminal.widget.SpaceItemDecoration;
@@ -30,7 +33,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.app.Activity.RESULT_OK;
 
 //内部公告
 public class InternalAnnounceFragment extends BaseFragment {
@@ -43,6 +50,7 @@ public class InternalAnnounceFragment extends BaseFragment {
     private int count = 10;
     private String search_name = "";
     private Context mContext;
+    private Disposable subscribe;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,6 +78,16 @@ public class InternalAnnounceFragment extends BaseFragment {
         });
 
         getNoticeList(search_name);
+
+        subscribe = RxRefreshEvent.getObservable().subscribe(new Consumer<String>() {
+
+            @Override
+            public void accept(String type) throws Exception {
+                if (type.equals("电子公告")) {
+                    getNoticeList(search_name);
+                }
+            }
+        });
     }
 
     //获取项目列表
@@ -126,6 +144,14 @@ public class InternalAnnounceFragment extends BaseFragment {
                 case 10:
                     break;
             }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (subscribe!=null){
+            subscribe.dispose();
         }
     }
 }

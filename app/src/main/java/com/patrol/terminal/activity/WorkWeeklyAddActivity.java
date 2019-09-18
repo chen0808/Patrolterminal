@@ -260,6 +260,6 @@ public class WorkWeeklyAddActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Constant.isEditStatus = false;
-        Utils.hideSysInput(this);
+//        Utils.hideSysInput(this);
     }
 }

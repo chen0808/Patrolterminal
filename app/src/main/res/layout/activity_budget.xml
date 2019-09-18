@@ -59,7 +59,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="32dp"
-                android:text="¥52339"
+                android:text="¥0"
                 android:textColor="@color/base_status_bar" />
 
             <View
@@ -100,7 +100,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="32dp"
-                android:text="¥52339"
+                android:text="¥0"
                 android:textColor="@color/base_status_bar" />
 
             <View

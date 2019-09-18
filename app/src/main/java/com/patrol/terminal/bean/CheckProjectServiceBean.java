@@ -29,6 +29,15 @@ public class CheckProjectServiceBean implements Parcelable {
     private String check_project;
     private String state_sign;
     private List<TempCheckResultListBean> tempCheckResultList;
+    private List<TempCheckResultListBean> tempQualityResultList;
+
+    public List<TempCheckResultListBean> getTempQualityResultList() {
+        return tempQualityResultList;
+    }
+
+    public void setTempQualityResultList(List<TempCheckResultListBean> tempQualityResultList) {
+        this.tempQualityResultList = tempQualityResultList;
+    }
 
     public String getState_sign() {
         return state_sign;
@@ -300,8 +309,6 @@ public class CheckProjectServiceBean implements Parcelable {
         };
     }
 
-    public CheckProjectServiceBean() {
-    }
 
     @Override
     public int describeContents() {
@@ -318,7 +325,11 @@ public class CheckProjectServiceBean implements Parcelable {
         dest.writeString(this.check_user_name);
         dest.writeString(this.check_project);
         dest.writeString(this.state_sign);
-        dest.writeList(this.tempCheckResultList);
+        dest.writeTypedList(this.tempCheckResultList);
+        dest.writeTypedList(this.tempQualityResultList);
+    }
+
+    public CheckProjectServiceBean() {
     }
 
     protected CheckProjectServiceBean(Parcel in) {
@@ -330,8 +341,8 @@ public class CheckProjectServiceBean implements Parcelable {
         this.check_user_name = in.readString();
         this.check_project = in.readString();
         this.state_sign = in.readString();
-        this.tempCheckResultList = new ArrayList<TempCheckResultListBean>();
-        in.readList(this.tempCheckResultList, TempCheckResultListBean.class.getClassLoader());
+        this.tempCheckResultList = in.createTypedArrayList(TempCheckResultListBean.CREATOR);
+        this.tempQualityResultList = in.createTypedArrayList(TempCheckResultListBean.CREATOR);
     }
 
     public static final Creator<CheckProjectServiceBean> CREATOR = new Creator<CheckProjectServiceBean>() {
