@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:text="总工期:336 进度:63%"
+            android:text="总工期:0 进度:0%"
             android:textColor="@color/white" />
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"
-            android:text="开始:2015.05.06 截至:2016.05.06"
+            android:text="开始:2019.05.06 截至:2019.05.06"
             android:textColor="@color/white" />
     </RelativeLayout>
 
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="16dp"
-                    android:text="5"
+                    android:text="0"
                     android:textColor="@color/project_total_ed"
                     android:textSize="20sp" />
 
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="16dp"
-                    android:text="5"
+                    android:text="0"
                     android:textColor="@color/project_total_ing"
                     android:textSize="20sp" />
 
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="16dp"
-                    android:text="5"
+                    android:text="0"
                     android:textColor="@color/project_total"
                     android:textSize="20sp" />
 
@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="16dp"
-                    android:text="5"
+                    android:text="0"
                     android:textColor="@color/black_gray"
                     android:textSize="20sp" />
 
@@ -184,7 +184,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:text="366天" />
+                android:text="0天" />
         </RelativeLayout>
 
         <View
@@ -212,7 +212,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:text="366天" />
+                android:text="0天" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -233,7 +233,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:text="366天" />
+                android:text="0天" />
         </RelativeLayout>
     </LinearLayout>
 
