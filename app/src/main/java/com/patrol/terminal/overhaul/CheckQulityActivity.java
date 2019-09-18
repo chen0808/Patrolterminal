@@ -110,7 +110,7 @@ public class CheckQulityActivity extends BaseActivity implements TextWatcher {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent();
-                intent.setClass(CheckQulityActivity.this, ProjectDetailActivity.class);
+                intent.setClass(CheckQulityActivity.this, ProjectQulityDetailActivity.class);
                 CheckProjectServiceBean clickCheckProjectBean = (CheckProjectServiceBean)adapter.getItem(position);
                 intent.putExtra("click_check_project_bean", clickCheckProjectBean);
                 startActivity(intent);

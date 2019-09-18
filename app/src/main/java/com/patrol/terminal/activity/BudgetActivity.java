@@ -73,12 +73,14 @@ public class BudgetActivity extends BaseActivity {
         titleName.setText("预算");
 
         String status = getIntent().getStringExtra("status");
-        initData(status);
-        if (status.equals("0")) {
-            llFinish.setVisibility(View.GONE);
-        } else if (status.equals("16")) {
+
+        if (status.equals("16")) {
             llBuilding.setVisibility(View.GONE);
+        } else if (status.equals("在建")) {
+            status="";
+            llFinish.setVisibility(View.GONE);
         }
+        initData(status);
     }
 
     private void initData(String status) {

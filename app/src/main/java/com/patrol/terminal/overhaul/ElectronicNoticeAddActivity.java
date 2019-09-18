@@ -31,6 +31,7 @@ import com.patrol.terminal.bean.UserBean;
 import com.patrol.terminal.utils.Constant;
 import com.patrol.terminal.utils.DateUatil;
 import com.patrol.terminal.utils.FileUtil;
+import com.patrol.terminal.utils.RxRefreshEvent;
 import com.patrol.terminal.utils.Utils;
 import com.patrol.terminal.widget.ProgressDialog;
 
@@ -151,6 +152,7 @@ public class ElectronicNoticeAddActivity extends BaseActivity {
             String time = DateUatil.getDay(new Date(System.currentTimeMillis()));
             tvEndTime.setText(time);
         }
+
     }
 
     public void noticeSavePOST() {
@@ -177,6 +179,7 @@ public class ElectronicNoticeAddActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseResult t) throws Exception {
                         ProgressDialog.cancle();
+                        RxRefreshEvent.publish("电子公告");
                         if(t.getCode() == 1){
                             Utils.showToast("提交成功");
                             setResult(RESULT_OK);

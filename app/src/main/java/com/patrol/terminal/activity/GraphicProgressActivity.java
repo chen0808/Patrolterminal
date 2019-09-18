@@ -170,7 +170,7 @@ public class GraphicProgressActivity extends BaseActivity implements TextWatcher
     //获取形象进度列表
     public void getGraPro() {
         BaseRequest.getInstance().getService()
-                .getGraPro(1, 100, search, "start_time desc")
+                .getGraPro(1, 100, search, "upload_time desc")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<GraphicProgressBean>>(this) {

@@ -79,6 +79,7 @@
         <activity android:name=".activity.ProjectPlanDetailActivity" />
         <activity android:name=".activity.DesignPlanActivity" />
         <activity android:name=".activity.DesignPlanAddActivity" />
+        <activity android:name=".overhaul.ProjectQulityDetailActivity" />
         <activity
             android:name=".activity.GanttActivity"
             android:screenOrientation="landscape" />

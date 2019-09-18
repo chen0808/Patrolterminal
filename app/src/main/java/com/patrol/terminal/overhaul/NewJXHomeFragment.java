@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.amap.api.location.AMapLocation;
@@ -22,10 +23,14 @@ import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.patrol.terminal.R;
 import com.patrol.terminal.activity.BudgetActivity;
+import com.patrol.terminal.activity.ProjectBoardActivity;
+import com.patrol.terminal.activity.ProjectPlanActivity;
 import com.patrol.terminal.adapter.GridViewAdapter5;
 import com.patrol.terminal.adapter.GridePagerAdapter;
+import com.patrol.terminal.adapter.ProjectBoardAdapter;
 import com.patrol.terminal.base.BaseFragment;
 import com.patrol.terminal.base.BaseObserver;
 import com.patrol.terminal.base.BaseRequest;
@@ -106,7 +111,8 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
     public AMapLocationClientOption mLocationOption = null;
     private String city = "武汉";
     private double budgetTotal;
-
+    private List<ProjectBoardBean> projectBoardEd = new ArrayList<>();
+    private List<ProjectBoardBean> projectBoardIng = new ArrayList<>();
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_jx_home, container, false);
@@ -173,19 +179,39 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
                 });
     }
 
+//    private void setData(List<ProjectBoardBean> results) {
+//        tvProjectTotal.setText("" + results.size());
+//        for (int i = 0; i < results.size(); i++) {
+//            budgetTotal += results.get(i).getTotal_money();
+//        }
+//        tvBudgetTotal.setText("" + budgetTotal / 10000.0);
+//        tvProjectEd.setText("2");
+//        int projectIng = results.size() - 2;
+//        tvProjectIng.setText(String.valueOf(projectIng));
+//        tvPersentEd.setText(2 * 100 / results.size() + "%");
+//        tvPersentIng.setText(projectIng * 100 / results.size() + "%");
+//    }
+
     private void setData(List<ProjectBoardBean> results) {
+        projectBoardEd.clear();
+        projectBoardIng.clear();
         tvProjectTotal.setText("" + results.size());
         for (int i = 0; i < results.size(); i++) {
             budgetTotal += results.get(i).getTotal_money();
+            if (results.get(i).getStatus().equals("16")) {
+                projectBoardEd.add(results.get(i));
+            } else {
+                projectBoardIng.add(results.get(i));
+            }
         }
         tvBudgetTotal.setText("" + budgetTotal / 10000.0);
-        tvProjectEd.setText("2");
-        int projectIng = results.size() - 2;
+        tvProjectEd.setText("" + projectBoardEd.size());
+        int projectIng = projectBoardIng.size();
         tvProjectIng.setText(String.valueOf(projectIng));
         tvPersentEd.setText(2 * 100 / results.size() + "%");
         tvPersentIng.setText(projectIng * 100 / results.size() + "%");
-    }
 
+    }
     //獲取定位城市
     private void getCity() {
         mlocationClient = new AMapLocationClient(getContext());
@@ -297,7 +323,7 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
                 break;
             case R.id.ll_ing:
                 Intent intent2 = new Intent(getActivity(), BudgetActivity.class);
-                intent2.putExtra("status", "0");
+                intent2.putExtra("status", "在建");
                 startActivity(intent2);
                 break;
             case R.id.ll_ed:
@@ -307,4 +333,7 @@ public class NewJXHomeFragment extends BaseFragment implements WeatherSearch.OnW
                 break;
         }
     }
+
+
+
 }

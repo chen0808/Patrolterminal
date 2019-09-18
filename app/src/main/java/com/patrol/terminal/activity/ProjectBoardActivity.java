@@ -144,7 +144,7 @@ public class ProjectBoardActivity extends BaseActivity {
                 break;
             case R.id.ll_ing:
                 Intent intent2 = new Intent(this, BudgetActivity.class);
-                intent2.putExtra("status", "0");
+                intent2.putExtra("status", "再见");
                 startActivity(intent2);
                 break;
             case R.id.ll_ed:
